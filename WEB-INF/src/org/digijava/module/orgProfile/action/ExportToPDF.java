@@ -96,8 +96,7 @@ public class ExportToPDF extends Action {
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
             doc.add(new Paragraph(" "));
-            PdfPTable mainLayout = new PdfPTable(1);
-            mainLayout.setWidthPercentage(100);
+     
             AmpOrganisation organization = filter.getOrganization();
             String multipleSelected = TranslatorWorker.translateText("Multiple Organizations Selected", langCode, siteId);
             String all = TranslatorWorker.translateText("All", langCode, siteId);
@@ -185,7 +184,7 @@ public class ExportToPDF extends Action {
                     if (rendertype.size() > 0) {
                         Long type = (Long) rendertype.get(0);
                         ChartOption opt = new ChartOption();
-                        opt.setWidth(380);
+                        opt.setWidth(500);
                         opt.setHeight(350);
                         opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
@@ -343,7 +342,7 @@ public class ExportToPDF extends Action {
                                     if (filter.getTransactionType() == 2) {
                                         FilterHelper newFilter = new FilterHelper(filter);
                                         newFilter.setTransactionType(Constants.COMMITMENT);
-                                        chart = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_ODA_PROFILE);
+                                        chart = ChartWidgetUtil.getBarChart(opt, newFilter,WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
                                         chartDisb = ChartWidgetUtil.getBarChart(opt, newFilter, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY);
                                     } else {
@@ -722,7 +721,12 @@ public class ExportToPDF extends Action {
                                         PdfPCell title = new PdfPCell(new Paragraph(fullTitle, OrgProfileUtil.PLAINFONT));
                                         PdfPCell amount = new PdfPCell(new Paragraph(project.getAmount(), OrgProfileUtil.PLAINFONT));
                                         PdfPCell disbAmount = new PdfPCell(new Paragraph(project.getDisbAmount(), OrgProfileUtil.PLAINFONT));
-                                        PdfPCell sectorsCell = new PdfPCell(new Paragraph(project.getSectorNames(), OrgProfileUtil.PLAINFONT));
+                                        PdfPCell sectorsCell = new PdfPCell();
+                                        if (project.getSectorNames() != null) {
+                                            for (String sectorName : project.getSectorNames()) {
+                                                sectorsCell.addElement(new Paragraph(sectorName, OrgProfileUtil.PLAINFONT));
+                                            }
+                                        }
                                         if (count % 2 == 0) {
                                             title.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                             amount.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
@@ -939,10 +943,15 @@ public class ExportToPDF extends Action {
 
                         }
                         Font font = new Font(null, 0, 24);
+                        PdfPTable chartTable = null;
+                        PdfPTable chartTableDisb = null;
+                        PdfPTable chartSecondarySecTable=null;
+                        PdfPTable chartDisbSecondarySecTable=null;
                         if (chart != null) {
+                            chartTable = new PdfPTable(1);
+                            chartTable.setWidthPercentage(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
-
                             plot.setNoDataMessageFont(font);
 
                             ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
@@ -958,8 +967,10 @@ public class ExportToPDF extends Action {
                             PdfPCell chartCell = new PdfPCell(img);
                             chartCell.setPadding(4);
                             chartCell.setBorder(PdfPCell.NO_BORDER);
-                            mainLayout.addCell(chartCell);
+                            chartTable.addCell(img);
                             if (chartDisb != null) {
+                                 chartTableDisb = new PdfPTable(1);
+                                 chartTableDisb.setWidthPercentage(100);
                                 Plot plotDisb = chartDisb.getPlot();
                                 plotDisb.setNoDataMessage("No Data Available");
                                 plotDisb.setNoDataMessageFont(font);
@@ -976,11 +987,13 @@ public class ExportToPDF extends Action {
                                 PdfPCell chartDisbCell = new PdfPCell(imgDisb);
                                 chartDisbCell.setPadding(4);
                                 chartDisbCell.setBorder(PdfPCell.NO_BORDER);
-                                mainLayout.addCell(chartDisbCell);
+                                chartTableDisb.addCell(chartDisbCell);
 
                             }
                         }
                         if (chartDisbSecondaryScheme != null) {
+                            chartDisbSecondarySecTable = new PdfPTable(1);
+                            chartDisbSecondarySecTable.setWidthPercentage(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
@@ -998,9 +1011,11 @@ public class ExportToPDF extends Action {
                             PdfPCell chartDisbCell = new PdfPCell(imgDisb);
                             chartDisbCell.setPadding(4);
                             chartDisbCell.setBorder(PdfPCell.NO_BORDER);
-                            mainLayout.addCell(chartDisbCell);
+                            chartDisbSecondarySecTable.addCell(chartDisbCell);
                         }
                         if (chartSecondaryScheme != null) {
+                            chartSecondarySecTable = new PdfPTable(1);
+                            chartSecondarySecTable.setWidthPercentage(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
@@ -1018,56 +1033,80 @@ public class ExportToPDF extends Action {
                             PdfPCell chartCell = new PdfPCell(img);
                             chartCell.setPadding(4);
                             chartCell.setBorder(PdfPCell.NO_BORDER);
-                            mainLayout.addCell(chartCell);
+                            chartSecondarySecTable.addCell(chartCell);
                         }
-                        PdfPCell tableCell = new PdfPCell();
-                        tableCell.setBorder(PdfPCell.NO_BORDER);
+                        if (chartTable != null) {
+                            chartTable.setSplitRows(false);
+                            doc.add(chartTable);
+                            doc.add(new Paragraph(" "));
+                        }
+                        if (chartTableDisb != null) {
+                            
+                            doc.add(chartTableDisb);
+                            doc.add(new Paragraph(" "));
+                        }
+                        if (chartSecondarySecTable != null) {
+                          
+                            doc.add(chartSecondarySecTable);
+                            doc.add(new Paragraph(" "));
+                        }
+                        if (chartDisbSecondarySecTable != null) {
+                            
+                            doc.add(chartDisbSecondarySecTable);
+                            doc.add(new Paragraph(" "));
+                        }
+                      
 
                         if (orgSummaryTbl != null) {
-                            tableCell.addElement(orgSummaryTbl);
-                            tableCell.addElement(new Paragraph(" "));
+                            doc.add(orgSummaryTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (orgContactsTbl != null) {
-                            tableCell.addElement(orgContactsTbl);
-                            tableCell.addElement(new Paragraph(" "));
+                            doc.add(orgContactsTbl);
+                            doc.add(new Paragraph(" "));
 
                         }
                         if (largetsProjectsTbl != null) {
-                            tableCell.addElement(largetsProjectsTbl);
-                            tableCell.addElement(new Paragraph(" "));
+                            doc.add(largetsProjectsTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (parisDecTbl != null) {
-                            tableCell.addElement(parisDecTbl);
+                            doc.add(parisDecTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (typeOfAidTbl != null) {
-                            tableCell.addElement(typeOfAidTbl);
+                            doc.add(typeOfAidTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (odaProfileTbl != null) {
-                            tableCell.addElement(odaProfileTbl);
+                            doc.add(odaProfileTbl);
+                            doc.add(new Paragraph(" "));
                         }
 
                         if (pledgesCommDisbTbl != null) {
-                            tableCell.addElement(pledgesCommDisbTbl);
+                            doc.add(pledgesCommDisbTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (sectorTbl != null) {
-                            tableCell.addElement(sectorTbl);
-                            tableCell.addElement(new Paragraph(" "));
+                            doc.add(sectorTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (secondarySectorTbl != null) {
-                            tableCell.addElement(secondarySectorTbl);
+                            doc.add(secondarySectorTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (regionTbl != null) {
-                            tableCell.addElement(regionTbl);
+                            doc.add(regionTbl);
+                            doc.add(new Paragraph(" "));
                         }
                         if (aidPredTable != null) {
-                            tableCell.addElement(aidPredTable);
+                            doc.add(aidPredTable);
+                            doc.add(new Paragraph(" "));
                         }
-                        mainLayout.addCell(tableCell);
                     }
                 }
             }
             //   mainLayout.writeSelectedRows(0, -1, 50, 50, writer.getDirectContent());
-            doc.add(mainLayout);
             doc.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();

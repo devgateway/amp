@@ -41,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
@@ -527,14 +528,26 @@ public class OrgProfileUtil {
                 Project project = new Project();
                 Set<AmpActivitySector> sectors = activity.getSectors();
                 Iterator<AmpActivitySector> sectorIter = sectors.iterator();
-                String sectorsName = "";
+                project.setSectorNames(new ArrayList<String>());
                 while (sectorIter.hasNext()) {
-                    sectorsName += " " + sectorIter.next().getSectorId().getName() + ",";
+                    String sectorsName = "";
+                    AmpActivitySector actSector=sectorIter.next();
+                    AmpSector sector=actSector.getSectorId();
+                    AmpSector parentSector=sector.getParentSectorId();
+                    sectorsName +=  sector.getAmpSecSchemeId().getSecSchemeName()+" -> ";
+
+                    if(parentSector!=null){
+                        if(parentSector.getParentSectorId()!=null){
+                            sectorsName+=parentSector.getParentSectorId().getName()+" -> ";
+                        }
+                        sectorsName+=parentSector.getName()+" -> ";
+                    }
+                    sectorsName +=sector.getName();
+                    project.getSectorNames().add(sectorsName);
+
                 }
-                if (sectorsName.length() > 0) {
-                    sectorsName = sectorsName.substring(0, sectorsName.length() - 1);
-                }
-                project.setSectorNames(sectorsName);
+               
+                //project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
 

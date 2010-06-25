@@ -1,5 +1,7 @@
 package org.digijava.module.orgProfile.helper;
 
+import java.util.List;
+
 /**
  * Project helper bean.
  * @author medea
@@ -9,7 +11,7 @@ public class Project {
     private String title;
     private String fullTitle;
     private String amount;
-    private String sectorNames;
+    private List<String> sectorNames;
     private Long activityId;
     private  String disbAmount;
 
@@ -21,13 +23,14 @@ public class Project {
         this.disbAmount = disbAmount;
     }
 
-    public String getSectorNames() {
+    public List<String> getSectorNames() {
         return sectorNames;
     }
 
-    public void setSectorNames(String sectorNames) {
+    public void setSectorNames(List<String> sectorNames) {
         this.sectorNames = sectorNames;
     }
+
 
     public Long getActivityId() {
         return activityId;

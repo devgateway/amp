@@ -391,12 +391,12 @@ public class ChartWidgetUtil {
                 subTitle = new TextTitle(filter.getCurrName(), subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
-                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
+                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, false);
                 trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
                 subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
-                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, false);
+                dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
                 trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
                 subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
                 break;

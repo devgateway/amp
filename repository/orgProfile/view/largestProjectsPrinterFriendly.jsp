@@ -149,7 +149,13 @@
             <td align="center">${project.disbAmount}</td>
             </c:if>
             <td>
-                ${project.sectorNames}
+                <ul>
+                    <c:forEach items="${project.sectorNames}" var="sectorName">
+                        <li>
+                            ${sectorName}
+                        </li>
+                    </c:forEach>
+                </ul>
             </td>
         </tr>
     </c:forEach>

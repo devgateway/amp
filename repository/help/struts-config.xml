@@ -4,6 +4,8 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="helpForm" type="org.digijava.module.help.form.HelpForm" />
+		
+		<form-bean name="glossaryForm" type="org.digijava.module.help.form.GlossaryForm" />
 	</form-beans>	
 	<global-forwards>
     	<forward name="help" path="/showLayout.do?layout=helpLayout"/>
@@ -19,5 +21,19 @@
 		</action>
 		<action forward="/showLayout.do?layout=helpLayout"  name="helpForm" path="/help/help"/>
 		<action name="helpForm" path="/help/viewHelpTopics" type="org.digijava.module.help.action.ViewHelpTopics"/>
+		
+		<action name="glossaryForm" path="/help/glossary" scope="request" type="org.digijava.module.help.action.ShowGlossary" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=glossaryMain"/>
+		</action>
+		<action name="glossaryForm" path="/help/showAddGlossary" scope="request" type="org.digijava.module.help.action.ShowAddNewGlossary" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=glossaryAdd"/>
+		</action>
+		<action name="glossaryForm" path="/help/addGlossary" scope="request" type="org.digijava.module.help.action.AddGlossaryTopic" validate="false">
+			<forward redirect="true" name="forward" path="/help/glossary.do"/>
+		</action>
+		<action name="helpForm" path="/help/topicBody" scope="request" type="org.digijava.module.help.action.GetHelpBodyHtml" validate="false" />
+		<action name="helpForm" path="/help/deleteTopic" scope="request" type="org.digijava.module.help.action.DeleteGlossaryTopic" validate="false" />
+		<action name="glossaryForm" path="/help/searchGlossary" scope="request" type="org.digijava.module.help.action.SearchGlossary" validate="false" />
+		
 	</action-mappings>
 </struts-config>

@@ -9,7 +9,7 @@
 <digi:instance property="editorForm" />
 
 <digi:errors property="editor"/>
-	<logic:present name="editorForm" property="key"/>
+	<logic:present name="editorForm" property="key">
 	<table border="0" width="100%">
 		<tr>
 			<td>

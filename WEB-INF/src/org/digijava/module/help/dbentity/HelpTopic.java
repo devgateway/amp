@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class HelpTopic implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private Long helpTopicId=null;
 	private String keywordsTrnKey=null;
 	private String titleTrnKey=null;
@@ -12,6 +13,8 @@ public class HelpTopic implements Serializable{
 	private String siteId=null;
 	private String moduleInstance=null;
 	private String topicKey;
+	private Integer topicType;	
+	
 	public String getBodyEditKey() {
 		return bodyEditKey;
 	}
@@ -60,6 +63,12 @@ public class HelpTopic implements Serializable{
 	}
 	public void setTitleTrnKey(String titleTrnKey) {
 		this.titleTrnKey = titleTrnKey;
+	}
+	public void setTopicType(Integer topicType) {
+		this.topicType = topicType;
+	}
+	public Integer getTopicType() {
+		return topicType;
 	}
 
 

@@ -13,6 +13,7 @@
 		<property name="topicKey" column="topicKey" type="java.lang.String" unique="true" />
 		<property name="bodyEditKey" column="bodyEditKey" type="java.lang.String" />
 		<property name="siteId" column="siteId" type="java.lang.String" not-null="true" />
+		<property name="topicType" column="topic_type" type="java.lang.Integer" not-null="false" />
 		<property name="moduleInstance" column="moduleInstance" type="java.lang.String"
 			not-null="true" />
 		<many-to-one name="parent" column="parent_Id"

@@ -3,6 +3,7 @@ package org.digijava.module.help.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,13 +29,11 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.help.jaxbi.AmpHelpType;
+import org.digijava.module.help.jaxbi.HelpLang;
 import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.help.jaxbi.HelpLang;
-import org.digijava.kernel.translator.TranslatorWorker;
-import java.util.Date;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -49,11 +48,13 @@ public class HelpUtil {
 	 * @returns List<HelpTopic> helpTopics
 	 * @throws AimException
 	 */
-	public static Collection getHelpTopicsTree(String siteId,
+	public static Collection<HelpTopicsTreeItem> getHelpTopicsTree(String siteId,
 			String moduleInstance) throws AimException {
 		List<HelpTopic> helpTopics= getHelpTopics(siteId, moduleInstance,null, null);
-		Collection themeTree = CollectionUtils.getHierarchy(helpTopics,
-                new HelpTopicHierarchyDefinition(), new HelpTopicTreeItemFactory());
+		Collection<HelpTopicsTreeItem> themeTree = CollectionUtils.getHierarchy(
+				helpTopics,
+                new HelpTopicHierarchyDefinition(), 
+                new HelpTopicTreeItemFactory());
 		return themeTree;
 	}
 	
@@ -109,13 +110,13 @@ public class HelpUtil {
 			if ((keyWords == null || keyWords.equals(""))&&(locale==null)) {
 				String queryString = "from "
 						+ HelpTopic.class.getName()
-						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance)";
+						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance) and (topics.topicType=NULL)";
 				query = session.createQuery(queryString);
 			} else {
 				String queryString = "select distinct t from "
 						+ HelpTopic.class.getName()+ " t, "+ Message.class.getName()+ " msg "
 						+"where (t.titleTrnKey=msg.key or t.keywordsTrnKey=msg.key) "
-						+ "and t.siteId=:siteId and t.moduleInstance=:moduleInstance "
+						+ "and t.siteId=:siteId  and t.topicType=NULL and t.moduleInstance=:moduleInstance "
 						+ "and msg.locale=:locale and msg.message like '%"+ keyWords+ "%'";
 				query = session.createQuery(queryString);
 				query.setParameter("locale", locale);
@@ -324,7 +325,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()
-			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent is null)";
+			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent is null) and (topic.topicType=NULL)";
 			query = session.createQuery(queryString);			
 			query.setParameter("siteId", siteId);
 			query.setParameter("moduleInstance", moduleInstance);
@@ -353,7 +354,7 @@ public class HelpUtil {
 		String queryString=null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null";
+			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null and topic.topicType=NULL";
 			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
 			helpTopics = query.list();
@@ -371,7 +372,7 @@ public class HelpUtil {
 		String queryString=null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.moduleInstance=:moduleInstance and topic.parent is null";
+			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.moduleInstance=:moduleInstance and topic.parent is null and topic.topicType=NULL";
 			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
             query.setParameter("moduleInstance", moduleInstance);
@@ -399,7 +400,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()
-			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent.helpTopicId=:id)";
+			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent.helpTopicId=:id) and (topic.topicType=NULL)";
 			query = session.createQuery(queryString);			
 			query.setParameter("siteId", siteId);
 			query.setParameter("moduleInstance", moduleInstance);
@@ -421,7 +422,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()
-			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id)";
+			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id)  and (topic.topicType=NULL)";
 			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
         	query.setParameter("id", parentId);
@@ -470,7 +471,7 @@ System.out.println("lang:"+lang);
 		session = PersistenceManager.getRequestDBSession();
 		String queryString = "select e from "
 			+ HelpTopic.class.getName()+ " t, "+ Editor.class.getName()+ " e "
-			+"where (t.bodyEditKey=e.editorKey) order by e.lastModDate";
+			+"where (t.bodyEditKey=e.editorKey) and (t.topicType=NULL) order by e.lastModDate";
 		 query = session.createQuery(queryString);
 
 		Iterator itr = query.list().iterator();
@@ -593,7 +594,7 @@ System.out.println("lang:"+lang);
 			 HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
 			 HelpTopic topic = (HelpTopic) item.getMember();
 		
-			 if(topic.getTopicKey().length() != 0 ){
+			 if(topic.getTopicKey() != null && topic.getTopicKey().length() != 0 ){
 				   
 				    String article = getTrn(topic.getTopicKey(), request);
 				    String newCode = HTMLEntityEncode(article);
@@ -735,7 +736,7 @@ System.out.println("lang:"+lang);
 		 List<HelpTopic> topics=null;
 		 try {
 			 session=PersistenceManager.getRequestDBSession();
-			 qryStr="select t from "+HelpTopic.class.getName()+" t";
+			 qryStr="select t from "+HelpTopic.class.getName()+" t where t.topicType=NULL";
 			 query=session.createQuery(qryStr);
 			 topics=query.list();
 		} catch (Exception e) {

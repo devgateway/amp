@@ -92,6 +92,38 @@ public class DbUtil {
         return items;
     }
 
+    /**
+     * Returns editors of all language with soecified key and siteId
+     * Useful when want to remove or update some other bean, and its editors in all language.
+     * @param editorKey
+     * @param siteId
+     * @return
+     * @throws EditorException
+     */
+	@SuppressWarnings("unchecked")
+	public static List<Editor> getEditorList(String editorKey,String siteId) throws EditorException {
+
+		Session session = null;
+		List<Editor> items = new ArrayList<Editor>();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			Query q = session.createQuery("from "
+							+ Editor.class.getName()
+							+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+
+			q.setString("siteId", siteId);
+			q.setString("editorKey", editorKey);
+
+			items = q.list();
+		} catch (Exception ex) {
+			logger.debug("Unable to get editor item from database ", ex);
+			throw new EditorException(
+					"Unable to get editor item from database", ex);
+		}
+
+		return items;
+	}    
+    
     public static void deleteEditor(Editor ed) throws
         EditorException {
         Transaction tx = null;

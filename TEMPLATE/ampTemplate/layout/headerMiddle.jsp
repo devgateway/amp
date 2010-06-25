@@ -265,6 +265,13 @@ function adminHelp(){
                                         </a>
                                         </li>
 										</feature:display>
+
+										<feature:display name="Glossary" module="HELP">
+                                        <li>	
+                                        	<a href="/help/glossary.do"><digi:trn>Glossary</digi:trn></a>
+                                        </li>
+										</feature:display>
+
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>	
                                         <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
@@ -733,6 +740,13 @@ function adminHelp(){
                                         </a>
                                         </li>
 										</feature:display>
+										
+										<feature:display name="Glossary" module="HELP">
+                                        <li>	
+                                        	<a href="/help/glossary.do"><digi:trn>Glossary</digi:trn></a>
+                                        </li>
+										</feature:display>
+										
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/" target="_blank">

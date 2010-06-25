@@ -2,6 +2,8 @@ package org.dgfoundation.amp.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -234,5 +236,152 @@ public class AmpCollectionUtils {
 		
 		return deleted;
 	}
+	
+	
+	//========TREE=============
+	
+	
+	/**
+	 * Worker for building trees from flat lists.
+	 * Notations: element - objects in source (flat) list, node - objects in tree.
+	 * Both have same ID's: ID of element will also go to its corresponding node.
+	 * This interface extends {@link KeyResolver} and method that comes 
+	 * from it {@link #resolveKey(Object)} should resolve ID of source list element.
+	 * Basically implementations of this interface should 
+	 * "know" which methods to call on E and N. 
+	 * N can extend E to have less code, it also can be same 
+	 * class or from completely different class hierarchy.
+	 * @author Irakli Kobiashvili ikobiashvili@dgfoundation.org
+	 *
+	 * @param <K> type of elements ID (Primary Key for example - Long usually)
+	 * @param <E> type of elements in source list
+	 * @param <N> type of element nodes
+	 */
+	public static interface NodeWorker<K,E,N> extends KeyResolver<K, E>{
+		
+		/**
+		 * Retrieves nodes children list.
+		 * Should not be null because the list returned will be used to add found children.
+		 * Calls getter for children list on node.
+		 * @param node
+		 * @return
+		 */
+		List<N> getNodeChildren(N node);
+		
+		/**
+		 * Connects child to parent.
+		 * Calls setter on child and passes parent to it.
+		 * @param child
+		 * @param Parent
+		 */
+		void setNodeParent(N child, N Parent);
+		
+		/**
+		 * Converts list element to tree node.
+		 * Or creates tree node from list element.
+		 * @param element flat (source) list element.
+		 * @return tree node
+		 */
+		N createTreeNode(E element);
+		
+		/**
+		 * Returns ID of parent node.
+		 * Node can "remember" this value from element it was created from, 
+		 * or can delegate to stored initial element.
+		 * If node has no parent - it is top level node - then NULL value should be returned. 
+		 * @param node child node who's parent ID we want to get.
+		 * @return parent ID of type K or NULL value if node has no parent.
+		 */
+		K getParentNodeId(N node);
+	}
+	
+	
+	/**
+	 * Create tree from flat list using parent ID's of elements in the list.
+	 * Each element in source list may have parent ID. 
+	 * These IDs are used to build hierarchy (tree) from source.
+	 * If elements do not have parent id (NULL value for parent id) 
+	 * then they are considered as top level nodes in resulting tree.
+	 * How to retrieve parent ID, children, and how to set parents are "known" to
+	 * NodeWorker implementation passed as parameter to the method.
+	 * So method gets list of E, worker of K,E and N. Result is list of N.
+	 * Each E in source list will have corresponding N in 
+	 * resulting tree, and their IDs will be same.
+	 * It may be useful to make N subclass of E or N to have field of E type. 
+	 * But it is also possible E and N to be same type or completely different.   
+	 * @param <E> type of element in source (flat) list.
+	 * @param <N> type of nodes in tree.
+	 * @param <K> type of node and element IDs, usually Long.
+	 * @param source list from which we want to build tree.
+	 * @param worker NodeWorker implementation which "knows" some details about elements in list and nodes in tree.
+	 * @return list of top level nodes. Each node will contain children if they have.
+	 */
+	public static <E,N,K> List<N> createTree(List<E> source, NodeWorker<K, E, N> worker){
+		Map<K, E> elementsMap = createMap(source, worker);
+		Map<K, N> nodesMap = new HashMap<K, N>();
+		List<N> topLevelNodes = new ArrayList<N>();
+		for (E element : source) {
+			K elementId = worker.resolveKey(element);
+			//try to find corresponding node. If already processed as parent below then we may find it here.
+			N node = nodesMap.get(elementId);
+			if (node == null){
+				//if not found create new and store in map
+				node = worker.createTreeNode(element);
+				nodesMap.put(elementId, node);
+			}
+			//retrieve parent id
+			K parentId = worker.getParentNodeId(node);
+			if (parentId == null){
+				//if parent id is null then this is top level node
+				topLevelNodes.add(node);
+			}else{
+				//try to find parent Node.
+				N parent = nodesMap.get(parentId);
+				if (parent==null){
+					//not found means that it has not been yet converted to Node. Convert and store
+					E parentElement = elementsMap.get(parentId);
+					//if we have NulPointerExcepion below then this means that in db we have 
+					//wrong parent ID and this error should not be fixed ere, 
+					//but in deletion code or somewhere else
+					parent = worker.createTreeNode(parentElement);
+					nodesMap.put(parentId, parent);
+				}
+				//connect child and parent
+				worker.getNodeChildren(parent).add(node);
+				worker.setNodeParent(node, parent);
+			}
+		}
+		return topLevelNodes;
+	}
+	
+	/**
+	 * Sorts tree nodes.
+	 * Sorts each level separately using provided comparator.
+	 * K and E types come from worker and are not used in this sorting method  BUT
+	 * NOTE that comparator and list should be same type and should match node type N in worker.
+	 * Example: 
+	 * <code>
+	 * 	List<OrgNode> tree = ...
+	 * 	Comparator<OrgNode> comparator = ...
+	 * 	NodeWorker<Long, Prod, OrgNode> worker = ...
+	 * 	sortTree(tree, worker, comparator);
+	 * </code> 
+	 * @param <K> Type of node ID. Not used.
+	 * @param <E> Type of Elements in flat list. Not Used.
+	 * @param <N> Type of nodes in tree and in comparator. This one is used and list and comparator should be of this type.
+	 * @param tree list of top level nodes in tree. Node type is N and is built by {@link #createTree(List, NodeWorker)} method.
+	 * @param worker same worker class that was used to build tree.
+	 * @param comparator node comparator. It should be of type N - node type.
+	 */
+	public static <K,E,N> void sortTree(List<N> tree,NodeWorker<K, E, N> worker,Comparator<N> comparator){
+		Collections.sort(tree,comparator);
+		for (N node : tree) {
+			List<N> children = worker.getNodeChildren(node);
+			if (children != null && children.size()>0){
+				sortTree(children, worker, comparator);
+			}
+		}
+	}
+	
 	
 }

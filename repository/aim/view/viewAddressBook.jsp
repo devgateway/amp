@@ -18,15 +18,15 @@
 
 
 <script type="text/javascript" src="<digi:file src="script/yui/new/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/element-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/connection-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/dragdrop-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/event-min.js"/>"></script>
-        
-        <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/new/menu-amp-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/new/container-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/new/container_core-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/element-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/connection-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/dragdrop-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/event-min.js"/>"></script>
+
+<!-- Source File -->
+<script type="text/javascript" src="<digi:file src="script/yui/new/menu-amp-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/container-min.js"/>"></script> 
 
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
@@ -245,7 +245,8 @@ html>body #main {
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/event-min.js"></script> 
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/paginator-min.js"></script>
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/container-min.js"></script>
-
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datasource-min.js"></script>
+ 
 
 	
 

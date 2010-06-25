@@ -17,7 +17,6 @@
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <%@include file="addDocumentPanel.jsp" %>
-<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <digi:errors />
 
@@ -217,25 +216,25 @@ function setHoveredTable(tableId, hasHeaders) {
 				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">
 			        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
-			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
 			        	</c:if>
 			        	<c:if  test="${selectedType!='private' && selectedType!='version'}">
-			        		<li id="tab1"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        		<li id="tab1"><a href="#my_res"><div><digi:trn>My Resources</digi:trn></div></a></li>
 			        	</c:if>
 			        </feature:display>
 			        <feature:display name="Team Resources" module="Resources">
 			        	<c:if  test="${selectedType=='team'}">
-			        		<li id="tab2" class="selected"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+			        		<li id="tab2" class="selected"><a href="#team_res"><div><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
 			        	<c:if  test="${selectedType!='team'}">
-			        		<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+			        		<li id="tab2"><a href="#team_res"><div><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
 					</feature:display>
 					
 					<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
 					
 					<feature:display name="Public Resources" module="Resources">
-			        	<li id="tab4"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
+			        	<li id="tab4"><a href="#public_res"><div><digi:trn>Public Resources</digi:trn></div></a></li>
 			       </feature:display>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
@@ -337,24 +336,24 @@ function setHoveredTable(tableId, hasHeaders) {
 					<table cellpadding="3" cellspacing="3" border="0">
 						<tr>
 							<td> 
-								<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
+								<digi:trn>Document</digi:trn>
 								<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
 							</td>
 							<td> 
-								<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
+								<digi:trn>URL</digi:trn>
 								<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
 							</td>
 						</tr>
 						<tr>
-							<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
+							<td><strong><digi:trn>Title:</digi:trn></strong><font color="red">*</font></td>
 							<td><html:text property="docTitle" size="30" /></td>
 						</tr>
 						<tr>
-							<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
+							<td><strong><digi:trn>Description:</digi:trn></strong></td>
 							<td><html:textarea property="docDescription" cols="28"/></td>
 						</tr>
 						<tr>
-							<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
+							<td><strong><digi:trn>Notes:</digi:trn></strong></td>
 							<td><html:textarea property="docNotes" cols="28" /></td>
 						</tr>						
 						<tr>
@@ -372,7 +371,7 @@ function setHoveredTable(tableId, hasHeaders) {
 		                </tr>
 						
 						<tr>
-							<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
+							<td><strong><digi:trn>Type:</digi:trn></strong></td>
 							<td>
 								<c:set var="translation">
 									<digi:trn>Please select a type from below</digi:trn>
@@ -389,7 +388,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			               </td>
 						</tr>
 						<tr style="display: none" id="tr_url">
-							<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
+							<td><strong><digi:trn>URL:</digi:trn><font color="red">*</font></strong></td>
 							<td><html:text property="webLink" size="32"></html:text></td>
 						</tr>												
 						<tr>
@@ -398,9 +397,8 @@ function setHoveredTable(tableId, hasHeaders) {
 							</td>
 							<td align="left">
 								&nbsp;
-								<button class="dr-menu buton" type="button" style="padding-bottom: 1px; padding-top: 1px;"  
-								onClick="hidePanel(0)">
-									<digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn>
+								<button class="dr-menu buton" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
+									<digi:trn>Cancel</digi:trn>
 								</button>
 							</td>
 						</tr>

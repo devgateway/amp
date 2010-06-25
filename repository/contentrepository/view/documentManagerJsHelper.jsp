@@ -322,7 +322,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     var options					= {
     	    						pageCurrent:1,
 									rowsPerPage:10,
-							        pageLinksLength:2												        
+							        pageLinksLength:2
 	                			  };
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 	dataTable.width='2000px';

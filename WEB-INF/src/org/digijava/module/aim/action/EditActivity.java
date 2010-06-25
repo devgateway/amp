@@ -778,6 +778,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       	if(activity.getChapter()!=null) {
       		eaForm.getIdentification().setChapterCode(activity.getChapter().getCode());
       		eaForm.getIdentification().setChapterYear(activity.getChapter().getYear());
+      		eaForm.getIdentification().setChapterForPreview(activity.getChapter());
+      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getCode());
+      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getImputations().size());
+      		//
+//      		Iterator it = activity.getChapter().getImputations().iterator();
+//      		while (it.hasNext()) {
+//      			
+//      		}
       	}
         
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());

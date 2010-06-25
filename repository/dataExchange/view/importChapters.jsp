@@ -26,7 +26,7 @@
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -53,11 +53,11 @@
 			<logic:equal name="importChaptersForm" property="importPerform" value="true">
 			<p></p>
 			<b>
-			Import results:
+			<digi:trn>Import results:</digi:trn>
 			</b>
 			<table>
 			<logic:notEmpty name="importChaptersForm" property="chaptersInserted">
-			<tr><td>New Chapters Inserted</td>
+			<tr><td><digi:trn>New Chapters Inserted</digi:trn></td>
 			<td>
 				<bean:write name="importChaptersForm" property="chaptersInserted"/>
 			</td>
@@ -65,7 +65,7 @@
 			</logic:notEmpty>
 			
 			<logic:notEmpty name="importChaptersForm" property="chaptersUpdated">
-			<tr><td>Chapters Updated</td>
+			<tr><td><digi:trn>Chapters Updated</digi:trn></td>
 			<td>
 				<bean:write name="importChaptersForm" property="chaptersUpdated"/>
 			</td>
@@ -73,7 +73,7 @@
 			</logic:notEmpty>
 			
 			<logic:notEmpty name="importChaptersForm" property="imputationsInserted">
-			<tr><td>New Imputations Inserted</td>
+			<tr><td><digi:trn>New Imputations Inserted</digi:trn></td>
 			<td>
 				<bean:write name="importChaptersForm" property="imputationsInserted"/>
 			</td>
@@ -81,14 +81,14 @@
 			</logic:notEmpty>
 			
 			<logic:notEmpty name="importChaptersForm" property="imputationsUpdated">
-			<tr><td>Imputations Updated</td>
+			<tr><td><digi:trn>Imputations Updated</digi:trn></td>
 			<td>
 				<bean:write name="importChaptersForm" property="imputationsUpdated"/>
 			</td>
 			</tr>
 			</logic:notEmpty>
 			<logic:notEmpty name="importChaptersForm" property="errorNumber">
-			<tr><td>Errors</td>
+			<tr><td><digi:trn>Errors</digi:trn></td>
 			<td>
 				<bean:write name="importChaptersForm" property="errorNumber"/>
 			</td>

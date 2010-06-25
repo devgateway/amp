@@ -14,6 +14,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;
@@ -33,7 +37,13 @@ public class DeleteAllReports extends Action {
 							HttpServletResponse response) throws java.lang.Exception {
 		  	
 		  	ReportsForm repForm = (ReportsForm) form;
-
+		  	String siteId;
+			String locale;
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+					
+			siteId = site.getId()+"";
+			locale = navigationLanguage.getCode();	
 		  	HttpSession session = request.getSession();
 		  	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		  	AmpReports ampReport=null;
@@ -78,11 +88,11 @@ public class DeleteAllReports extends Action {
 										 if (deleted) {
 											 if (request.getParameter("isTab") != null) {
 												 if(request.getParameter("isTab").equals("1")){
-													 errors.add("title", new ActionError("error.aim.deleteTabs.tabDeleted"));
+													 errors.add("title", new ActionError("error.aim.deleteTabs.tabDeleted", TranslatorWorker.translateText("Tab Deleted", locale, siteId)));
 													 saveErrors(request,errors);								
 													 logger.debug("Tab deleted"); 
 												 } else {
-													 errors.add("title", new ActionError("error.aim.deleteReports.reportDeleted"));
+													 errors.add("title", new ActionError("error.aim.deleteReports.reportDeleted", TranslatorWorker.translateText("Report Deleted",locale,siteId)));
 													 saveErrors(request,errors);								
 													 logger.debug("Report deleted");
 												 } 
@@ -93,7 +103,7 @@ public class DeleteAllReports extends Action {
 						 }
 				 }else {
 					 errors.add("title", new ActionError(
-						"error.aim.deleteReports.reportNotDeleted"));
+						"error.aim.deleteReports.reportNotDeleted", TranslatorWorker.translateText("Report Not Deleted",locale,siteId)));
 					saveErrors(request,errors);
 		
 					logger.debug("Report could not be deleted! ");

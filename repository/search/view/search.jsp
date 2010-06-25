@@ -144,7 +144,7 @@ $(document).ready(function(){
 						<c:set var="translation">
 							<digi:trn>Click here to view MyDesktop</digi:trn>
 						</c:set>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" contextPath="/aim">
                         <digi:trn>My Desktop</digi:trn>
 						</digi:link>
                         &nbsp;&gt;&nbsp;

@@ -743,7 +743,7 @@ function collapseAll() {
 										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code"/> - 
 										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.description"/>
 										<p/>
-										<digi:trn>Imputations</digi:trn>:
+										<digi:trn>Imputations</digi:trn>:<br/>
 										<logic:iterate id="imputation" name="aimEditActivityForm" property="identification.chapterForPreview.imputations">
 										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.year"/> -
 										<bean:write name="imputation" property="code"/> -

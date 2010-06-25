@@ -109,7 +109,7 @@ function showFilter(){
 	</digi:trn>
 </c:set>
 <html:hidden property="defaultProgram" styleId="defaultProgram"/>
-<script language="javascript" type="text/javascript">
+<script language="javascript" type="text/javascript"><!--
 
 	var ptree;
 	var curProgId;
@@ -1262,9 +1262,9 @@ function showFilter(){
 	/* Adds listeners for all elemets in the tree */
 	function addEventListeners () {
 		for(var j=1;j<=numOfPrograms;j++){
-							var n	= document.getElementById('ygtvlabelel'+j);
+							/*var n	= document.getElementById('ygtvlabelel'+j);
 							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
-							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
+							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);*/
 		}
 	}
 	/* Function that is executed when mouse over an element */
@@ -1340,7 +1340,7 @@ function showFilter(){
 
  	}
 	window.onload=loadInitial;
-</script>
+--></script>
 <script language="javascript" type="text/javascript">
     <c:forEach var="theme" items="${aimNPDForm.allThemes}">
     <c:set var="name">

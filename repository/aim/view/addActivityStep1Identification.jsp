@@ -667,7 +667,7 @@ target.style.cursor = "default"
 											 <td>
 											<field:display name="Code Chapitre" feature="Budget">										
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
-											 	<html:option value="0">Select Code Year</html:option>
+											 	<html:option value="0"><digi:trn>Select Code Year</digi:trn></html:option>
 											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
 											 

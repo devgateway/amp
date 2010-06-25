@@ -1945,29 +1945,21 @@ public class ProgramUtil {
 		return retVal;
 	}
 
-	 public static String getTrn(String key, String defResult, HttpServletRequest request){
+	 public static String getTrn(String key, String defResult, HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //return CategoryManagerUtil.translate(key, request, defResult);
 		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
 		Long	siteId	= RequestUtils.getSite(request).getId();
-		
-		Message m = null;
+		String text = "";
 		
 		try {
-			m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
-		} catch (DgException e) {
+			text = TranslatorWorker.translateText(defResult, lang, siteId+"");
+		} catch (WorkerException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
+			return defResult;
 		}
-		 if (m == null)
-		 {
-			 return defResult;
-		 }
-		 else
-		 {
-			 return m.getMessage();
-		 }
-		 
+		return text;		 
 	 }
 	 
     public static String getLevelImage(int level){

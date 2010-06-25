@@ -106,7 +106,7 @@ function validateFunding() {
 
 	if (fundId.length == 0) {
 
-		alert ("Funding Id not entered");
+		alert (fundingNotEntered());
 
 		document.getElementById("orgFundingId").focus();
 
@@ -125,7 +125,9 @@ function validateFunding() {
 
 	if (numComm == 0) {
 
-		var noCommitsWarn = confirm("No commitments have been added. Continue?");
+		var messageconf=noCommitmentsAdded();
+		
+		var noCommitsWarn = confirm(messageconf);
 		
 		if (noCommitsWarn==false) return false;
 	}
@@ -216,7 +218,9 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgI
 
 	if (numComm == 0) {
 
-		var noCommitsWarn = confirm("No commitments have been added. Continue?");
+		var messageconf= noCommitmentsAdded();
+		
+		var noCommitsWarn = confirm(messageconf);
 		
 		if (noCommitsWarn==false) return false;
 	}

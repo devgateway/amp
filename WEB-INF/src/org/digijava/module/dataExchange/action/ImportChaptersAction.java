@@ -25,6 +25,8 @@ import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.util.ChapterUtil;
 import org.digijava.module.dataExchange.form.ImportChaptersForm;
 
+import com.ibm.wsdl.OutputImpl;
+
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
@@ -37,6 +39,7 @@ public class ImportChaptersAction extends Action {
 		ImportChaptersForm icform = (ImportChaptersForm) form;
 		if (request.getParameter("importPerform") != null && icform.getUploadedFile()!=null && icform.getUploadedFile().getFileSize()>0) {
 			InputStream inp = icform.getUploadedFile().getInputStream();
+			
 			POIFSFileSystem poifs = new POIFSFileSystem(inp);
 			HSSFWorkbook wb = new HSSFWorkbook(poifs);
 			Sheet sheet = wb.getSheetAt(0);

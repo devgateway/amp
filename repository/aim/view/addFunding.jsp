@@ -32,6 +32,14 @@
 
 <script language="JavaScript">
 
+	// these functions are used in addfunding.js
+	// 
+	function fundingNotEntered() {
+		alert("<digi:trn>Funding Id not entered</digi:trn>");
+	}
+	function noCommitmentsAdded() {
+		return "<digi:trn>No commitments have been added. Continue?</digi:trn>";
+	}
 	//this map will store only the funding items that got changed - they require re-validation
 	var forValidation = {};
 

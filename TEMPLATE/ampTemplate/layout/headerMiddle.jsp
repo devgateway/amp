@@ -468,12 +468,13 @@ function adminHelp(){
                                                     </a>
                                                 </li>
                                         </feature:display>
-                                        
+                                        <feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
                                         	<li class="yuiampmenuitem" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
                                             	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
                                                 	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
 												</a>
                                            </li>
+                                        </feature:display>
                                     </ul>
                                   </div>
                               </div>                    

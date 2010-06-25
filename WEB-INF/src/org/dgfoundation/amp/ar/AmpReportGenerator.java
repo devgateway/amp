@@ -53,7 +53,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
 	private boolean pledgereport=false;
-	
+
 
 	/**
 	 * returns categories for a given column. If the column has no categories,

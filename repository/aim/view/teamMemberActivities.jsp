@@ -76,8 +76,8 @@
 
 	function confirmDelete() {
 		var valid = validate();
-		if (valid == true) {
-			var flag = confirm("Are you sure you want to remove the selected activities");
+		if (valid == true) {			
+			var flag = confirm("<digi:trn>Are you sure you want to remove the selected activities</digi:trn>");
 			if(flag == false)
 				return false;
 			else 

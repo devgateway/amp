@@ -10,6 +10,8 @@
       <form-property name="templateFeatures" type="java.util.Collection" />
       <form-property name="templateFeaturesNotActive" type="java.util.Collection" /> 
     </form-bean>
+    
+    <form-bean name="addressbookForm" type="org.digijava.module.aim.form.AddressBookForm"/>
 
 	<form-bean name="aimWelcomePageForm" type="org.digijava.module.aim.form.WelcomePageForm" />
     <form-bean name="aimViewAhSurveisForm" type="org.digijava.module.aim.form.ViewAhSurveisForm" />
@@ -1790,6 +1792,11 @@
     <action name="aimEditActivityForm"  path="/aim/activityContactInfo" scope="session" type="org.digijava.module.aim.action.ActivityContactInformationAction" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=addActivityContactInfo" />    	
       	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>      
+   </action>
+
+   <action path="/aim/addressBook" name="addressbookForm" scope="session" parameter="actionType" type="org.digijava.module.aim.action.AddressBookActions">
+     	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
+     	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
    </action>
 
     

@@ -18,6 +18,25 @@
 </div>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+
+<script type="text/javascript" src="<digi:file src="script/yui/new/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/container_core-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/element-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/connection-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/dragdrop-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/new/event-min.js"/>"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datatable-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/json-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/event-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/paginator-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/container-min.js"></script>
+
+	
+	
 <script type="text/javascript">
     <!--
 
@@ -438,7 +457,7 @@ html>body #mainEmpty {
         }
         
 		// hide loading image
-        addLoadEvent(delBody);
+//        addLoadEvent(delBody);
 </script>
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	

@@ -702,6 +702,13 @@ function adminHelp(){
                                         <digi:trn key="aim:search">Search</digi:trn>
                                         </a>
                                         </li>
+                                        
+                                        <li>
+	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true">
+	                                        	<digi:trn>Address Book</digi:trn>
+	                                        </a>
+                                        </li>
+                                        
                                       </ul>
                                   </div>
                               </div>                    

@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <config>
 <secondary-pages>
+	
 
-    <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
+	<page name="allContacts" page="viewAddressBook" title="Address Book"/>
+	<page name="addContact" page="addEditAmpContact" title="Add/Edit Contact"/>
+
+	<page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="Add Sector" />
 

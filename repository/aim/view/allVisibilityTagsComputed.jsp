@@ -720,7 +720,6 @@
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
-<feature:display name="Other Resources" module="Resources"></feature:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

@@ -93,18 +93,20 @@ public class SavePledge extends Action {
     		plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
 
     		for (int i = 0; i < funds.length; i++) {
-    			String token[] = funds[i].split("_");
-     			FundingPledgesDetails fpd = new FundingPledgesDetails();
-     			if (token[0].length()>0){
-     				fpd.setId(Long.parseLong(token[0]));
-     			}
-    			fpd.setPledgetypeid(Long.parseLong(token[1]));
-    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
-    			fpd.setAmount(Double.parseDouble(token[3]));
-    			fpd.setCurrencycode(token[4]);
-    			fpd.setFundingDate(token[5]);
-    			fpd.setAidmodalityid(Long.parseLong(token[6]));
-    			plForm.getFundingPledgesDetails().add(fpd);
+    			if (funds[i].length()>1){
+	    			String token[] = funds[i].split("_");
+	     			FundingPledgesDetails fpd = new FundingPledgesDetails();
+	     			if (token[0].length()>0){
+	     				fpd.setId(Long.parseLong(token[0]));
+	     			}
+	    			fpd.setPledgetypeid(Long.parseLong(token[1]));
+	    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
+	    			fpd.setAmount(Double.parseDouble(token[3]));
+	    			fpd.setCurrencycode(token[4]);
+	    			fpd.setFundingDate(token[5]);
+	    			fpd.setAidmodalityid(Long.parseLong(token[6]));
+	    			plForm.getFundingPledgesDetails().add(fpd);
+    			}
 			}
     		
     		/*

@@ -275,10 +275,10 @@ function validateData(){
 	</c:set>
 	i = 0;
 
-	if (tempFund==0){
-		alert ("${addFunding}")
-		return false;
-	}
+	//if (tempFund==0){
+	//	alert ("${addFunding}")
+	//	return false;
+	//}
 	
 	<c:set var="insertAmount">
 	  <digi:trn key="aim:insertAmount">
@@ -530,7 +530,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<td align="left" width="70%">
 													<div id="my_autoComplete"> 
 													    <html:text property="pledgeTitle" styleId="my_input" style="width:320px;font-size:100%"></html:text>	
-													    <div id="my_container" style="width:320px;z-index: 100"></div>																		    	
+													    <div id="my_container" style="width:320px;z-index: 100"></div>	
+														<html:hidden property="pledgeTitle" styleId="myHidden"/>																	    	
 													</div> 
 												</td>											
 											</tr>
@@ -1084,7 +1085,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									        <!-- contents -->
 									        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 									        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
-									        <FONT color="red">*</FONT>
+									        
 									    </td>
 							        </tr>
 						            <tr><td>&nbsp;</td></tr>
@@ -1430,20 +1431,48 @@ var myArray = [
   	]; 
 
 
-YAHOO.example.ACJSArray = new function() {
-	// Instantiate JS Array DataSource
-    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
-    // Instantiate AutoComplete
-    this.oAutoComp2 = new YAHOO.widget.AutoComplete('my_input','my_container', this.oACDS2);
-    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-    this.oAutoComp2.useShadow = true;
-    this.oAutoComp2.forceSelection = true;
-        this.oAutoComp2.maxResultsDisplayed = myArray.length;
-    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-        var sMarkup = oResultItem[0];
-        return (sMarkup);
+YAHOO.example.ItemSelectHandler = function() {
+    // Use a LocalDataSource
+    var oDS = new YAHOO.util.LocalDataSource(myArray);
+    oDS.responseSchema = {fields : ["name"]};
+
+    // Instantiate the AutoComplete
+    var oAC = new YAHOO.widget.AutoComplete("my_input", "my_container", oDS);
+    oAC.resultTypeList = false;
+    
+    // Define an event handler to populate a hidden form field
+    // when an item gets selected
+    var myHiddenField = YAHOO.util.Dom.get("myHidden");
+    var myHandler = function(sType, aArgs) {
+        var myAC = aArgs[0]; // reference back to the AC instance
+        var elLI = aArgs[1]; // reference to the selected LI element
+        var oData = aArgs[2]; // object literal of selected item's result data
+        
+        // update hidden form field with the selected item's fullname	        
+        myHiddenField.value = oData.name;
+    };	   
+    oAC.itemSelectEvent.subscribe(myHandler);	    
+
+    return {
+        oDS: oDS,
+        oAC: oAC
     };
-};
+}();    
+
+//YAHOO.example.ACJSArray = new function() {
+	// Instantiate JS Array DataSource
+//    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
+    // Instantiate AutoComplete
+//    this.oAutoComp2 = new YAHOO.widget.AutoComplete('my_input','my_container', this.oACDS2);
+//    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+//    this.oAutoComp2.useShadow = true;
+//    this.oAutoComp2.forceSelection = true;
+//        this.oAutoComp2.maxResultsDisplayed = myArray.length;
+//    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
+//        var sMarkup = oResultItem[0];
+//        return (sMarkup);
+//    };
+//};
 
 
 </script>

@@ -283,7 +283,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
-		if (request.getParameter("ampReportId")!=null){
+		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){

@@ -311,25 +311,27 @@ public final class ARUtil {
 				periods.add( minfo.getValue() );
 			}
 	
-		
-			Object prevPeriod					= null;
-			Object first							= periods.first();
-			Object last								= periods.last();
-			Iterator periodIter					= periods.iterator();
-			while ( periodIter.hasNext() ) {
-				Object period			= periodIter.next();
-				System.out.println("Year found:" + period );
-				int difference			= 0;
-				if ( prevPeriod != null && 
-						(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
-					for (int i=1; i< difference; i++) {
-						Comparable comparable	= ARUtil.getFuturePeriod(type, prevPeriod, i, first, last);
-						if (comparable != null)
-							destMetaSet.add( new MetaInfo(type, comparable) );
+			if (periods!=null && periods.size()>0) {
+				Object prevPeriod					= null;
+				Object first							= periods.first();
+				Object last								= periods.last();
+				Iterator periodIter					= periods.iterator();
+				while ( periodIter.hasNext() ) {
+					Object period			= periodIter.next();
+					System.out.println("Year found:" + period );
+					int difference			= 0;
+					if ( prevPeriod != null && 
+							(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
+						for (int i=1; i< difference; i++) {
+							Comparable comparable	= ARUtil.getFuturePeriod(type, prevPeriod, i, first, last);
+							if (comparable != null)
+								destMetaSet.add( new MetaInfo(type, comparable) );
+						}
+						
 					}
-					
+					prevPeriod		= period;
 				}
-				prevPeriod		= period;
+			
 			}
 		}
 		catch (Exception e) {

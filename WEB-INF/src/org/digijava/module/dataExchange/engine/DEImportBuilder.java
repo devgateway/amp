@@ -310,10 +310,10 @@ public class DEImportBuilder {
 	private void processStep6(AmpActivity activity, ActivityType actType, Boolean update) {
 		// TODO Auto-generated method stub
 		if(isFieldSelected("activity.documents"))
-			processDocuments(activity, actType);
+			;//processDocuments(activity, actType);
 
 		if(isFieldSelected("activity.relatedLinks"))
-			processRelatedLinks(activity, actType);
+			;//processRelatedLinks(activity, actType);
 	}
 
 	//process step 7 from activity form
@@ -503,6 +503,10 @@ public class DEImportBuilder {
 				}
 			}
 			AmpCategoryValue acv = getAmpCategoryValueFromCVT(actType.getStatus(), Constants.CATEG_VALUE_ACTIVITY_STATUS);
+			if (activity.getCategories() == null) {
+				activity.setCategories( new HashSet() );
+			}
+				
 			if(acv!=null)
 				activity.getCategories().add(acv);
 		}
@@ -1127,7 +1131,7 @@ public class DEImportBuilder {
 						cvt.setCode(mtef.getType());
 						cvt.setValue(mtef.getType());
 						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
-						if(acv!=null)
+						if(acv==null)
 							logger.getItems().add(new DEMTEFMissingLog(cvt));
 							//errors.add(toStringCVT(cvt));
 					}
@@ -1193,7 +1197,7 @@ public class DEImportBuilder {
 			for (Iterator it = ids.iterator(); it.hasNext();) {
 				Id id = (Id) it.next();
 				AmpOrganisation org = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,id.getAssigningOrg());
-				if(org != null){
+				if(org == null){
 					//errors.add(toStringCVT(id.getAssigningOrg()));
 					logger.getItems().add(new DEOrgMissingLog(id.getAssigningOrg()));
 				}
@@ -1203,7 +1207,7 @@ public class DEImportBuilder {
 		//status
 		if(actType.getStatus() != null){
 			AmpCategoryValue acv = getAmpCategoryValueFromCVT(actType.getStatus(), Constants.CATEG_VALUE_ACTIVITY_STATUS);
-			if(acv!=null)
+			if(acv==null)
 				//errors.add(toStringCVT(actType.getStatus()));
 				logger.getItems().add(new DEStatusMissingLog(actType.getStatus()));
 		}
@@ -1582,6 +1586,7 @@ public class DEImportBuilder {
 	
 	//generating the HashMap with the selected fields from UI
 	public void generateFieldHashMap(){
+		this.setHashFields(new HashMap<String,Boolean>());
 		for (Iterator it = this.getDESourceSetting().getFields().iterator(); it.hasNext();) {
 			String field = (String) it.next();
 			this.getHashFields().put(field, new Boolean(true));
@@ -1657,6 +1662,8 @@ public class DEImportBuilder {
 	private void setTeamMember(HttpServletRequest request, String email, Long teamId){
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		if(teamMember == null)
+			teamMember = new TeamMember();
 		teamMember.setEmail(email);
 		teamMember.setTeamId(teamId);
 		//httpSession.setAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER,teamMember);
@@ -1711,6 +1718,7 @@ public class DEImportBuilder {
 		boolean ok 	 =	checkInputString(execLog.getDescription());
 		iLog.saveObject(this.getDESourceSetting());
 		if(!ok) return;
+		generateFieldHashMap();
 		processFeed(execLog, iLog);
 		
 	}
@@ -1738,12 +1746,17 @@ public class DEImportBuilder {
 //				//TODO write in log that this activity was skipped
 //				continue;
 			
-			if(contentLogger.getItems() != null || contentLogger.getItems().size() > 0)
+			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
 				item.setDescription(contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				item.setDeLogPerExecution(log);
+				//iLog.saveObject(item);
+				if(log.getLogItems() == null) 
+					log.setLogItems(new ArrayList());
+				log.getLogItems().add(item);
 				iLog.saveObject(item);
+				//iLog.saveObject(log);
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
@@ -1778,7 +1791,11 @@ public class DEImportBuilder {
 				item.setDescription(e.getMessage());
 			}
 			item.setDeLogPerExecution(log);
+			//iLog.saveObject(item);
+			if(log.getLogItems() == null) 
+				log.setLogItems(new ArrayList());
 			iLog.saveObject(item);
+			//iLog.saveObject(log);
 		}
 	}	
 	

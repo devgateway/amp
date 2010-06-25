@@ -50,7 +50,7 @@ public class Constants {
 	
 	public static final String JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
 	//this.getServlet().getServletContext().getRealPath("/")+
-	public static final String IDML_SCHEMA_LOCATION = "/doc/IDML2.0.xsd";
+	public static final String IDML_SCHEMA_LOCATION = "/doc/iati/schemas/IDML2.0.xsd";
 	
 	public static final String FIELD_ACTIVITY="activity";
 	public static final String FIELD_ACTIVITY_STATUS="activity.status";

@@ -67,6 +67,7 @@ public class ManageSourceAction extends MultiAction {
 			return null;
 		}
 		if ( "execute".equals( msForm.getAction() ) ) {
+			request.setAttribute("htmlView","true");
 			modeExecuteSource(mapping, msForm, request, response);
 		}
 		

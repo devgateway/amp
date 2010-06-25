@@ -19,6 +19,7 @@
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 

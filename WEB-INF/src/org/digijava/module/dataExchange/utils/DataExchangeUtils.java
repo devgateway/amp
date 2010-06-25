@@ -632,10 +632,10 @@ public class DataExchangeUtils {
         try {
             sess = PersistenceManager.getRequestDBSession();
             queryString = "select o from " + AmpSector.class.getName()
-                + " o where (TRIM(o.name)=:sectorName) and (TRIM(o.sectorCode)=:sectorCode)";
+                + " o where (LOWER(TRIM(o.name))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode)";
             qry = sess.createQuery(queryString);
-            qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
-            qry.setParameter("sectorCode", code.trim(), Hibernate.STRING);
+            qry.setParameter("sectorName", name.trim().toLowerCase(), Hibernate.STRING);
+            qry.setParameter("sectorCode", code.trim().toLowerCase(), Hibernate.STRING);
 
             List  result=qry.list();
             if (result.size() > 0){

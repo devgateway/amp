@@ -55,7 +55,9 @@ public class GlobalSettingsConstants {
     
     public static final String AMP_SERVER_NAME= "AMP Server Name";
     
-    public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";    
+    public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";
+    
+    public static  final String  SECURE_SERVER= "Secure Server";
     
     public static final String BASE_CURRENCY= "Base Currency";
     

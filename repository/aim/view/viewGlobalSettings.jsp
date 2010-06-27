@@ -67,7 +67,7 @@
 function saveClicked() {
 
   <digi:context name="preview" property="context/module/moduleinstance/GlobalSettings.do?action=save" />
-  document.aimGlobalSettingsForm.action = "<%= preview %>";
+  document.aimGlobalSettingsForm.action = "<%=preview%>";
   document.aimGlobalSettingsForm.target = "_self";
   document.aimGlobalSettingsForm.submit();
 
@@ -270,7 +270,7 @@ function setIndex(index){
 										<c:set var="key" scope="page"><digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn></c:set>
 										<jsp:useBean id="key" class="java.lang.String" scope="page"/>
 										<%
-											sortedglobalSett.put(key,globalSett);
+											sortedglobalSett.put(key, globalSett);
 										%>
 									</logic:iterate>
 									</logic:notEmpty>
@@ -297,7 +297,9 @@ function setIndex(index){
 		                            			   type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
 		 
 									<logic:equal name="globalSett" property="section" value="${sectionName}">
-									    <%int g_range=0, g_year=0; %>
+									    <%
+									    	int g_range = 0, g_year = 0;
+									    %>
 			                            <tr>
 			                               <td width="60%">
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
@@ -312,24 +314,38 @@ function setIndex(index){
 											
 											 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
 										
-			                                  <% 
-			                                  	String possibleValues 	= "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; 
-			                                  	String gsType			= globalSett.getGlobalSettingsPossibleValues();
-			                                  %>
+			                                  <%
+													                                  	String possibleValues = "possibleValues("
+													                                  								+ globalSett.getGlobalSettingsName()
+													                                  								+ ")";
+													                                  						String gsType = globalSett
+													                                  								.getGlobalSettingsPossibleValues();
+													                                  %>
 			
 			
 			                                  <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 											
-			                                    <%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) { %>
+			                                    <%
+														                                    	if (globalSett.getGlobalSettingsName()
+														                                    									.trim().equalsIgnoreCase(
+														                                    											"Default Country".trim())) {
+														                                    %>
 			                                    <html:select property="gsfValue" styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>' >
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 			                                        <html:option value="${global.key}">${global.value}</html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
-			                                    <%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Number Format".trim())) {%>
+			                                    <%
+			                                    	} else if (globalSett
+			                                    									.getGlobalSettingsName().trim()
+			                                    									.equalsIgnoreCase(
+			                                    											"Default Number Format"
+			                                    													.trim())) {
+			                                    %>
 			                                  	
 			                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text;width:100%" 
-			                                  	value='<%= globalSett.getGlobalSettingsValue()%>'>
+			                                  	value='<%=globalSett
+																.getGlobalSettingsValue()%>'>
 			                                      <option value="noselection"><digi:trn key="aim:gloablSetting:selectFormat">(Select Format)</digi:trn> </option>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 			                                        <option value="${global.key}">${global.value}</option>
@@ -340,20 +356,37 @@ function setIndex(index){
 			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
 			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn>
 
- 												<%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {%>
+ 												<%
+ 													} else if (globalSett
+ 																					.getGlobalSettingsName().trim()
+ 																					.equalsIgnoreCase(
+ 																							"Budget Support for PI 9"
+ 																									.trim())) {
+ 												%>
 													<html:select property="listOfValues" styleClass="inp-text;width:100%" multiple="true" name="globalSett">
 														<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
 															<html:option value="${global.key}">${global.value}</html:option>
 														</logic:iterate>
 													</html:select> 	
-			                                    <%}else { %>
+			                                    <%
+ 				                                    	} else {
+ 				                                    %>
 			                                    
 			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
-			                                      	<% String key2	= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + global.getValue(); %>
-			                                      	<%if (key2.length()>100){
-			                                      		key2 = key2.substring(0,50);	
-			                                      	}%>
+			                                      	<%
+			                                      		String key2 = "aim:globalSettings:"
+			                                      													+ globalSett
+			                                      															.getGlobalSettingsName()
+			                                      													+ ":"
+			                                      													+ global.getValue();
+			                                      	%>
+			                                      	<%
+			                                      		if (key2.length() > 100) {
+			                                      												key2 = key2
+			                                      														.substring(0, 50);
+			                                      											}
+			                                      	%>
 			                                      	<c:set var="newKey"><%=key2%></c:set>
 			                                        <c:set var="globSettings">
 			                                          	<digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
@@ -362,257 +395,305 @@ function setIndex(index){
 			                                        <html:option value="${global.key}"><digi:trn key='aim:globalsettings:${fn:replace(fn:substring(global.value, 0, 50), " ", "_")}'>${global.value}</digi:trn></html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
-			                                    <%} %>										
+			                                    <%
+			                                    	}
+			                                    %>										
 			                                    </logic:notEmpty>
 			                                    <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 			                                    	<c:set var="type" value="<%=gsType %>" />
 			                                    	<c:choose>
 				                                    	<c:when test='${type == "t_Date_No_Year"}'>
-				                                    		<% 
-				                                    			String monthId		= "month" + globalSett.getGlobalId() ;
-					                                    		String dayId		= "day" + globalSett.getGlobalId() ;
-					                                    		String [] dateValues	= globalSett.getGlobalSettingsValue().split("/") ;
-					                                    		int monthNum		= Integer.parseInt(dateValues[1]);
+				                                    		<%
+				                                    			String monthId = "month"
+				                                    													+ globalSett.getGlobalId();
+				                                    											String dayId = "day"
+				                                    													+ globalSett.getGlobalId();
+				                                    											String[] dateValues = globalSett
+				                                    													.getGlobalSettingsValue()
+				                                    													.split("/");
+				                                    											int monthNum = Integer
+				                                    													.parseInt(dateValues[1]);
 				                                    		%>
 				                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
 				                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>: 
-				                                    		<select styleClass="inp-text" id="<%= monthId %>" onchange="populateWithDays('<%=monthId %>','<%=dayId %>');createDateString('<%=monthId %>','<%=dayId %>')">
-				                                    			<% for (int k=1; k<=12; k++) {
-				                                    					if ( k == monthNum ) {
-				                                    			%>
-				                                    					<option selected="selected" value="<%=k %>"><%=k %></option>
+				                                    		<select styleClass="inp-text" id="<%=monthId%>" onchange="populateWithDays('<%=monthId%>','<%=dayId%>');createDateString('<%=monthId%>','<%=dayId%>')">
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option  value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 1; k <= 12; k++) {
+				                                    													if (k == monthNum) {
 				                                    			%>
+				                                    					<option selected="selected" value="<%=k%>"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option  value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>: 
-				                                    		<select styleClass="inp-text" id="<%= dayId %>" onchange="createDateString('<%=monthId %>','<%=dayId %>');">
-				                                    			<% for (int k=1; k<=org.digijava.module.aim.action.GlobalSettings.numOfDaysInMonth(monthNum); k++) {
-				                                    					if ( k == Integer.parseInt(dateValues[0]) ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+				                                    		<select styleClass="inp-text" id="<%=dayId%>" onchange="createDateString('<%=monthId%>','<%=dayId%>');">
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 1; k <= org.digijava.module.aim.action.GlobalSettings
+				                                    														.numOfDaysInMonth(monthNum); k++) {
+				                                    													if (k == Integer
+				                                    															.parseInt(dateValues[0])) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    	</c:when>	
 				                                    	<c:when test='${type == "t_daily_currency_update_hour"}'>
-				                                    		<% 
-				                                    			String hourId		= "hour" + globalSett.getGlobalId() ;
-					                                    		String minId		= "min" + globalSett.getGlobalId() ;
-					                                    		String ampmId       = "ampm"+ globalSett.getGlobalId() ;
-					                                    		String [] timeValues    = globalSett.getGlobalSettingsValue().split(" ") ;
-					                                    		String [] hourValues	= timeValues[0].split(":") ;
-					                                    		int hourNum		= Integer.parseInt(hourValues[0]);
-					                                    		int minNum      = Integer.parseInt(hourValues[1]);
-					                                    		String ampmNum  = timeValues[1];
+				                                    		<%
+				                                    			String hourId = "hour"
+				                                    													+ globalSett.getGlobalId();
+				                                    											String minId = "min"
+				                                    													+ globalSett.getGlobalId();
+				                                    											String ampmId = "ampm"
+				                                    													+ globalSett.getGlobalId();
+				                                    											String[] timeValues = globalSett
+				                                    													.getGlobalSettingsValue()
+				                                    													.split(" ");
+				                                    											String[] hourValues = timeValues[0]
+				                                    													.split(":");
+				                                    											int hourNum = Integer
+				                                    													.parseInt(hourValues[0]);
+				                                    											int minNum = Integer
+				                                    													.parseInt(hourValues[1]);
+				                                    											String ampmNum = timeValues[1];
 				                                    		%>
 				                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
 				                                    		<digi:trn key="aim:globalSettings:hour">Hour</digi:trn>: 
-				                                    		<select styleClass="inp-text" id="<%= hourId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
-				                                    			<% for (int k=1; k<=12; k++) {
-				                                    					String val = (k<10)? "0"+k : String.valueOf(k);
-				                                    					if ( k == hourNum ) {
-				                                    			%>
-				                                    					<option selected="selected" value="<%=k %>"><%=val %></option>
+				                                    		<select styleClass="inp-text" id="<%=hourId%>" onchange="createHourString('<%=hourId%>','<%=minId%>','<%=ampmId%>');">
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option  value="<%=k %>"><%=val %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 1; k <= 12; k++) {
+				                                    													String val = (k < 10) ? "0" + k
+				                                    															: String.valueOf(k);
+				                                    													if (k == hourNum) {
 				                                    			%>
+				                                    					<option selected="selected" value="<%=k%>"><%=val%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option  value="<%=k%>"><%=val%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    		<digi:trn key="aim:globalSettings:min">Min</digi:trn>: 
-				                                    		<select styleClass="inp-text" id="<%= minId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
-				                                    			<% for (int k=0; k<60; k+=5) {
-				                                    				    String val = (k<10)? "0"+k : String.valueOf(k);
-				                                    					if ( k == minNum ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=val %></option>
+				                                    		<select styleClass="inp-text" id="<%=minId%>" onchange="createHourString('<%=hourId%>','<%=minId%>','<%=ampmId%>');">
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=val %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 0; k < 60; k += 5) {
+				                                    													String val = (k < 10) ? "0" + k
+				                                    															: String.valueOf(k);
+				                                    													if (k == minNum) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=val%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=val%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
-				                                    		<select styleClass="inp-text" id="<%= ampmId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
+				                                    		<select styleClass="inp-text" id="<%=ampmId%>" onchange="createHourString('<%=hourId%>','<%=minId%>','<%=ampmId%>');">
 				                                    			<%
-				                                    				String[] ampm={"AM","PM"}; 
-				                                    				for (int k=0; k<=1; k++) {
-				                                    					if ( ampm[k].compareToIgnoreCase(ampmNum)==0 ) {
+				                                    				String[] ampm = { "AM", "PM" };
+				                                    												for (int k = 0; k <= 1; k++) {
+				                                    													if (ampm[k]
+				                                    															.compareToIgnoreCase(ampmNum) == 0) {
 				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=ampm[k] %></option>
+				                                    					<option value="<%=k%>" selected="selected"><%=ampm[k]%></option>
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=ampm[k] %></option>
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=ampm[k]%></option>
 					                                    		<%
-					                                    				}
-				                                    				} 
-				                                    			%>
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    		<br/>
 				                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp; 
-				                                    		<% java.text.DateFormat formatter = new java.text.SimpleDateFormat("hh:mm:ss a"); 
-				                                    		   String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(new java.util.Date());
-						                                    %> 
-						                                    <%= sdate +" "+formatter.format( new java.util.Date() ) %>  
+				                                    		<%
+ 				                                    			java.text.DateFormat formatter = new java.text.SimpleDateFormat(
+ 				                                    													"hh:mm:ss a");
+ 				                                    											String sdate = org.digijava.module.common.util.DateTimeUtil
+ 				                                    													.formatDate(new java.util.Date());
+ 				                                    		%> 
+						                                    <%=sdate
+															+ " "
+															+ formatter
+																	.format(new java.util.Date())%>  
 				                                    	
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
-				                                            <% 
-					                                    		String timeoutValue	= globalSett.getGlobalSettingsValue();
-					                                    		int timeout		= Integer.parseInt(timeoutValue);
-					                                    		//g_range=timeout;
-				                                    		%>
+				                                            <%
+				                                            	String timeoutValue = globalSett
+				                                            											.getGlobalSettingsValue();
+				                                            									int timeout = Integer
+				                                            											.parseInt(timeoutValue);
+				                                            									//g_range=timeout;
+				                                            %>
 				                                    		
 				                                    		<select styleClass="inp-text" name="gsfValue">
-				                                    			<% 
-				                                    			int [] min_array = {1,2,3,4,5,6,7,8,9,10,15,20,25,30};
-				                                    				for (int k: min_array) {
-				                                    					if ( k == timeout ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				int[] min_array = { 1, 2, 3, 4, 5,
+				                                    														6, 7, 8, 9, 10, 15, 20, 25,
+				                                    														30 };
+				                                    												for (int k : min_array) {
+				                                    													if (k == timeout) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    			
 				                                    		</select>
 				                                    	    <digi:trn key="aim:globalSettings:minutes">(Minutes)</digi:trn>
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_static_range"}'>
-				                                    		<% 
-					                                    		String dateValues	= globalSett.getGlobalSettingsValue();
-					                                    		int range		= Integer.parseInt(dateValues);
-					                                    		g_range=range;
+				                                    		<%
+				                                    			String dateValues = globalSett
+				                                    													.getGlobalSettingsValue();
+				                                    											int range = Integer
+				                                    													.parseInt(dateValues);
+				                                    											g_range = range;
 				                                    		%>
 				                                    		<select styleClass="inp-text" name="gsfValue">
-				                                    			<% for (int k=10; k<=100; k+=10) {
-				                                    					if ( k == range ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 10; k <= 100; k += 10) {
+				                                    													if (k == range) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
 				                                    	
 				                                    	<c:when test='${type == "t_static_year"}'>
-				                                    		<% 
-					                                    		String dateValues	= globalSett.getGlobalSettingsValue();
-				                                    		    int year				= Integer.parseInt(dateValues);
-				                                    		    g_year = year;
+				                                    		<%
+				                                    			String dateValues = globalSett
+				                                    													.getGlobalSettingsValue();
+				                                    											int year = Integer
+				                                    													.parseInt(dateValues);
+				                                    											g_year = year;
 				                                    		%>
 				                                    		<select styleClass="inp-text" name="gsfValue">
-				                                    			<% for (int k=1980; k<=2020; k++) {
-				                                    					if ( k == year ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = 1980; k <= 2020; k++) {
+				                                    													if (k == year) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
 														
 														<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
-				                                    		<% 
-				                                    	
-				                                    		g_year=Integer.parseInt( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START));
-				                                    		g_range=Integer.parseInt( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE));
-				                                    		int default_year		= Integer.parseInt(globalSett.getGlobalSettingsValue());
+				                                    		<%
+				                                    			g_year = Integer
+				                                    													.parseInt(FeaturesUtil
+				                                    															.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START));
+				                                    											g_range = Integer
+				                                    													.parseInt(FeaturesUtil
+				                                    															.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE));
+				                                    											int default_year = Integer
+				                                    													.parseInt(globalSett
+				                                    															.getGlobalSettingsValue());
 				                                    		%>
 				                                    		<select styleClass="inp-text" name="gsfValue">
 				                                    		    <option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
-				                                    			<% for (int k=g_year; k<=g_year+g_range; k++) {
-				                                    					if ( k == default_year ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %></option>
-					                                    		<%
-					                                    				}
-				                                    				} 
+				                                    				for (int k = g_year; k <= g_year
+				                                    														+ g_range; k++) {
+				                                    													if (k == default_year) {
 				                                    			%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%></option>
+					                                    		<%
+					                                    			}
+					                                    											}
+					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_audit_trial_clenaup"}'>
-				                                    	<% 
-					                                    	String peridiodvalues	= globalSett.getGlobalSettingsValue();
-					                                    	int selected		= Integer.parseInt(peridiodvalues);
+				                                    	<%
+				                                    		String peridiodvalues = globalSett
+				                                    												.getGlobalSettingsValue();
+				                                    										int selected = Integer
+				                                    												.parseInt(peridiodvalues);
 				                                    	%>
 															<select styleClass="inp-text" name="gsfValue">
 															<option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
-															<% for (int k=30; k<=90; k+=30) {
-				                                    					if ( k == selected ) {
-				                                    			%>
-				                                    					<option value="<%=k %>" selected="selected"><%=k %>
+															<%
+																for (int k = 30; k <= 90; k += 30) {
+																									if (k == selected) {
+															%>
+				                                    					<option value="<%=k%>" selected="selected"><%=k%>
 				                                    						<digi:trn key="aim:globalSettings:Days"> 
 				                                    							Days
 				                                    						</digi:trn>
 				                                    					</option>
 				                                    						 
 				                                    			<%
-					                                    				}
-					                                    				else {
-					                                    		%>
-					                                    				<option value="<%=k %>"><%=k %>
+				                                    						 				                                    				} else {
+				                                    						 				                                    			%>
+					                                    				<option value="<%=k%>"><%=k%>
 					                                    					<digi:trn key="aim:globalSettings:Days"> 
 				                                    							Days
 				                                    						</digi:trn>
 					                                    				</option>
 					                                    		<%
-					                                    				}
-				                                    				} 
-				                                    		%>
+					                                    			}
+					                                    											}
+					                                    		%>
 															</select>
 															<%
-															if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1")){
-																String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(AuditCleaner.getInstance().getNextcleanup()); %>
+																if (!globalSett
+																										.getGlobalSettingsValue()
+																										.equalsIgnoreCase("-1")) {
+																									String sdate = org.digijava.module.common.util.DateTimeUtil
+																											.formatDate(AuditCleaner
+																													.getInstance()
+																													.getNextcleanup());
+															%>
 																<br>
 																<digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn>
 																<%=" " + sdate%>
-															<%}%>
+															<%
+																}
+															%>
 														</c:when>
 				                                    	
 														<c:when test='${type == "t_components_sort"}'>
@@ -631,7 +712,21 @@ function setIndex(index){
 				                                    			<html:option value="false"><digi:trn key="aim:globalsettings:false">false</digi:trn></html:option>
 				                                    		</html:select>
 				                                    	</c:when>
-				                                    	<c:otherwise>
+														<c:when test='${type == "t_secure_values"}'>
+															<html:select property="gsfValue" styleClass="inp-text"
+																value='<%= globalSett.getGlobalSettingsValue() %>'>
+																<html:option value="off">
+																	<digi:trn key="aim:globalsettings:secure:off">off</digi:trn>
+																</html:option>
+																<html:option value="login-only">
+																	<digi:trn key="aim:globalsettings:secure:login-only">login-only</digi:trn>
+																</html:option>
+																<html:option value="everything">
+																	<digi:trn key="aim:globalsettings:secure:everything">everything</digi:trn>
+																</html:option>
+															</html:select>
+														</c:when>
+														<c:otherwise>
 				                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 				                                      	</c:otherwise>
 			                                      	</c:choose>

@@ -346,6 +346,9 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/site-domain", "path", "path");
         digester.addBeanPropertySetter("digi-config/site-domain", "content");
 
+        digester.addBeanPropertySetter("digi-config/http-port", "httpPort");
+        digester.addBeanPropertySetter("digi-config/https-port", "httpsPort");
+        
         digester.addBeanPropertySetter("digi-config/ecsDisable", "ecsDisable");
         digester.addBeanPropertySetter("digi-config/ecsServerName", "ecsServerName");
         digester.addBeanPropertySetter("digi-config/propertiesFile", "propertiesFile");

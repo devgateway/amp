@@ -1,1 +1,0 @@
-DELETE from dg_message where message_key is null;

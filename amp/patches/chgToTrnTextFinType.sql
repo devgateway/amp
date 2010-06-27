@@ -1,2 +1,0 @@
-update amp_columns SET cellType ='org.dgfoundation.amp.ar.cell.TrnTextCell' where columnName="Financing Instrument";
-update amp_columns SET cellType ='org.dgfoundation.amp.ar.cell.TrnTextCell' where columnName="Type Of Assistance";

@@ -1,8 +1,0 @@
-DELETE FROM off_line_reports;
-INSERT INTO `off_line_reports` (`id`, `name`, `query`, `teamid`, `ispublic`, `measures`, `columns`, `ownerId`, `creationdate`) VALUES 
-  (1, 'Report by Sectors', 'select NON EMPTY {[Measures].[Actual Commitments], [Measures].[Actual Disbursements], [Measures].[Actual Expenditures]} ON COLUMNS,\r\n  NON EMPTY {([Primary Sector].[All Primary Sectors], [Activity].[All Activities])} ON ROWS \r\nfrom [Donor Funding]', NULL, True, 'Actual Commitments,Actual Disbursements,Actual Expenditures,sector Percentage ', 'Primary Sector,Primary Sectors,Activities', NULL, NULL),
-  (2, 'Report by Financing Instrument and Donor Information', 'select NON EMPTY Crossjoin({[Donor Dates]}, {[Measures].[Actual Commitments]}) ON COLUMNS,\r\n  NON EMPTY Crossjoin({[Financing Instrument]}, Crossjoin({[Terms of Assistance]}, Crossjoin({[Donor]}, Crossjoin({[Primary Sector]}, {[Activity]})))) ON ROWS\r\n from [Donor Funding]', NULL, True, 'Donor Dates,Raw Actual Commitments', 'Financing Instrument,Terms of Assistance,Donor,Primary Sector', NULL, NULL),
-  (3, 'Report by Donors', 'select NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\n  {[Donor]} ON ROWS\r\n from [Donor Funding]', NULL, False, 'Raw Actual Commitments', 'Donor', NULL, NULL),
-  (4, 'Report by funding years', 'select NON EMPTY {[Measures].[Actual Commitments], [Measures].[Actual Disbursements], [Measures].[Planned Commitments], [Measures].[Planned Disbursements]} ON COLUMNS,\r\n  {[Donor Dates].[All Periods]} ON ROWS\r\n from [Donor Funding]', NULL, False, 'Raw Actual Commitments,Raw Actual Disbursements,Raw Planned Commitments,Raw Planned Disbursements', 'Donor Dates', NULL, NULL);
-
-COMMIT;

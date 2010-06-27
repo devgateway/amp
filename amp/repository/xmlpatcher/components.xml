@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<secondary-pages>
-		<page page="listPatches" name="xmlPatcherListPatches" title="List XML Patches"/>
-	
-	</secondary-pages>
-</config>

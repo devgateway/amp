@@ -1,2 +1,0 @@
-delete from amp_fields_templates where  field in (select id from amp_fields_visibility where name="Add Component Disbursements Button" );
-delete from  amp_fields_visibility where name="Add Component Disbursements Button";

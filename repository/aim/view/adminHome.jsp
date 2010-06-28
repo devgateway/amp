@@ -317,7 +317,7 @@
 	                              <c:set var="translation">
 	                                <digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
 	                              </c:set>
-	                              <digi:link href="/currencyManager.do" title="${translation}" >
+	                              <digi:link href="/currencyManager.do~clean=true" title="${translation}" >
 	                                <digi:trn key="aim:currencyManager">Currency Manager</digi:trn>
 	                              </digi:link>
 	                            </td>

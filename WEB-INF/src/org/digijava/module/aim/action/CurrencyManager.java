@@ -40,6 +40,10 @@ public class CurrencyManager extends Action {
 		}
 
 		CurrencyForm crForm = (CurrencyForm) form;
+		String reset = request.getParameter("clean");
+		if(reset !=null ){
+			crForm.setFilterByCurrency("");			
+		}
 			crForm.setPagesToShow(10);
 		try {
 			int page = crForm.getPage();

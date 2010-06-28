@@ -237,6 +237,9 @@
             document.aimAddOrgForm.submit();
         }
         function setStyle(table,hasTitle){
+        	
+//        	alert (table)
+        	
             if(table!=null){
                 table.className += " tableElement";
                 setStripsTable(table.id, "tableEven", "tableOdd");
@@ -1123,39 +1126,64 @@ window.onload=initScripts();
                                                                     </td>
                                                                 </tr>
                                                                 <!-- contact info -->
+                                                                
                                                                 <tr>
-																	<td align="right" class="tdBoldClass">
-																		<digi:trn>Contact Person Name</digi:trn>
-																	</td>
-																	<td>
-																		<html:text property="contactPersonName" size="35" styleId="contactPersonName"/></td>
-																</tr>
-																<tr>
-																	<td align="right" class="tdBoldClass">
-																		<digi:trn>Contact Person Title</digi:trn>
-																	</td>
-																	<td>
-																		<html:text	property="contactPersonTitle" size="20" styleId="contactPersonTitle"/>
-																	</td>
-																</tr>
-																<tr>
-																	<td align="right" class="tdBoldClass">
-																		<digi:trn>Contact Phone</digi:trn>
-																	</td>
-																	<td><html:text property="phone" size="35" styleId="phone"/></td>
-																</tr>
-																<tr>
-																	<td align="right" class="tdBoldClass">
-																		<digi:trn>Contact Fax</digi:trn>
-																	</td>
-																	<td><html:text property="fax" size="35" styleId="fax"/></td>
-																</tr>
-																<tr>
-																	<td align="right" class="tdBoldClass">
-																		<digi:trn>Contact Email</digi:trn>
-																	</td>
-																	<td><html:text property="email" size="35" styleId="email"/></td>
-																</tr>
+																																	<td></td>
+																																	<td></td>
+																																</tr>
+																																<tr>
+																																	<td></td>
+																																	<td></td>
+																																</tr>
+																																<tr>
+																																	<td></td>
+																																	<td></td>
+																																</tr>
+																																<tr>
+																																	<td></td>
+																																	<td></td>
+																																</tr>
+																																<tr>
+																																	<td></td>
+																																	<td></td>
+																																</tr>
+                                                                
+                                                                <%--
+                                                                <tr>
+																																	<td align="right" class="tdBoldClass">
+																																		<digi:trn>Contact Person Name</digi:trn>
+																																	</td>
+																																	<td>
+																																		<html:text property="contactPersonName" size="35" styleId="contactPersonName"/></td>
+																																</tr>
+																																<tr>
+																																	<td align="right" class="tdBoldClass">
+																																		<digi:trn>Contact Person Title</digi:trn>
+																																	</td>
+																																	<td>
+																																		<html:text	property="contactPersonTitle" size="20" styleId="contactPersonTitle"/>
+																																	</td>
+																																</tr>
+																																<tr>
+																																	<td align="right" class="tdBoldClass">
+																																		<digi:trn>Contact Phone</digi:trn>
+																																	</td>
+																																	<td><html:text property="phone" size="35" styleId="phone"/></td>
+																																</tr>
+																																<tr>
+																																	<td align="right" class="tdBoldClass">
+																																		<digi:trn>Contact Fax</digi:trn>
+																																	</td>
+																																	<td><html:text property="fax" size="35" styleId="fax"/></td>
+																																</tr>
+																																<tr>
+																																	<td align="right" class="tdBoldClass">
+																																		<digi:trn>Contact Email</digi:trn>
+																																	</td>
+																																	<td><html:text property="email" size="35" styleId="email"/></td>
+																																</tr>
+																																--%>
+																																
 
                                                                 <tr>
                                                                     <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Organization website</digi:trn></td>
@@ -2104,9 +2132,11 @@ window.onload=initScripts();
 </table>
 
 </digi:form>
+
+
 <script language="javascript"  type="text/javascript">
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
+    setStyle(document.getElementById("table_contact_content"),true);
     $("#otherInformation").charCounter(256,{format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",pulse: false});
-
 </script>

@@ -81,6 +81,7 @@
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
+<feature:display name="Shared Resources" module="Resources"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 

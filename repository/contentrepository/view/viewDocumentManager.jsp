@@ -230,8 +230,9 @@ function setHoveredTable(tableId, hasHeaders) {
 			        		<li id="tab2"><a href="#team_res"><div><digi:trn>Team Resources</digi:trn></div></a></li>
 			        	</c:if>
 					</feature:display>
-					
-					<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+					<feature:display name="Shared Resources" module="Resources">
+						<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+					</feature:display>					
 					
 					<feature:display name="Public Resources" module="Resources">
 			        	<li id="tab4"><a href="#public_res"><div><digi:trn>Public Resources</digi:trn></div></a></li>
@@ -291,20 +292,23 @@ function setHoveredTable(tableId, hasHeaders) {
 					</feature:display>					
 					
 					<!-- Shared Resources Start  -->
-					<div id="shared_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
-						<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
-							<tr>
-								<td>
-									<br />
-									<div id="shared_markup" align="left" class="all_markup">
-											<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-											<jsp:include page="documentTable.jsp" flush="true" />
-									</div>
-									<br />
-								</td>
-							</tr>
-						</table>	        
-			        </div>
+					<feature:display name="Shared Resources" module="Resources">
+						<div id="shared_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
+								<tr>
+									<td>
+										<br />
+										<div id="shared_markup" align="left" class="all_markup">
+												<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+												<jsp:include page="documentTable.jsp" flush="true" />
+										</div>
+										<br />
+									</td>
+								</tr>
+							</table>	        
+				        </div>
+					</feature:display>
+					
 					<!-- Shared Resources end  -->
 					
 					<!-- Public resources -->

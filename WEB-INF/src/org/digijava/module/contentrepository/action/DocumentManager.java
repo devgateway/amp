@@ -109,7 +109,7 @@ public class DocumentManager extends Action {
 				e.printStackTrace();
 			}
 		}
-		if (myForm.getDocListInSession() != null) { //<--- aq rodis shemodis ?
+		if (myForm.getDocListInSession() != null) {
 			HashSet<String> UUIDs				= SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), true);
 			Collection<DocumentData> tempCol	= TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
 			if (UUIDs != null)
@@ -161,7 +161,7 @@ public class DocumentManager extends Action {
 		}
 		//shared documents
 		if(myForm.getShowSharedDocs()!=null){
-			myForm.setOtherDocuments( this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest));
+			myForm.setOtherDocuments( this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,showActionsButtons));
 		}
 		return false;
 	}
@@ -224,7 +224,7 @@ public class DocumentManager extends Action {
 			myForm.setYearOfPublication(null);
 			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
 			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
-			myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request));
+			myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request,true));
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			
@@ -301,12 +301,12 @@ public class DocumentManager extends Action {
 		return retVal;
 	}
 	
-	private Collection getSharedDocuments(TeamMember teamMember, HttpServletRequest request) {
+	private Collection getSharedDocuments(TeamMember teamMember, HttpServletRequest request,boolean showActionButtons) {
 		Collection<DocumentData> sharedDocs=null;		
 		//get all nodes that are shared to this team
 		List<String> allSharedDocsIds = DocumentManagerUtil.getSharedNodeUUIDs(teamMember.getTeamId(), CrConstants.SHARED_AMONG_WORKSPACES);		
 		if(allSharedDocsIds!=null){
-			sharedDocs=getDocuments(allSharedDocsIds,request,CrConstants.SHARED_DOCS_TAB,false,true);
+			sharedDocs=getDocuments(allSharedDocsIds,request,CrConstants.SHARED_DOCS_TAB,false,showActionButtons);
 		}
 		return sharedDocs;
 	}
@@ -556,7 +556,7 @@ public class DocumentManager extends Action {
 		}
 		Iterator iterator			= documents.iterator();
 		if(tabName!=null && tabName.equals(CrConstants.SHARED_DOCS_TAB)){
-			return getSharedDocuments(iterator, myRequest);
+			return getSharedDocuments(iterator, myRequest,showActionsButton);
 		}else{
 			return getDocuments(iterator, myRequest,tabName,isPending,showActionsButton);
 		}	
@@ -564,7 +564,7 @@ public class DocumentManager extends Action {
 	}
 	
 	//for shared Docs tab
-	private Collection<DocumentData> getSharedDocuments(Iterator nodeIterator, HttpServletRequest request) {
+	private Collection<DocumentData> getSharedDocuments(Iterator nodeIterator, HttpServletRequest request,boolean showActionsButton) {
 		ArrayList<DocumentData> documents	= new ArrayList<DocumentData>();
 		try {
 			while ( nodeIterator.hasNext() ) {
@@ -601,8 +601,9 @@ public class DocumentManager extends Action {
 				documentData.process(request);
 				documentData.computeIconPath(true);
 				
-				
-				documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, CrConstants.SHARED_DOCS_TAB));
+				if(showActionsButton){
+					documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, CrConstants.SHARED_DOCS_TAB));
+				}				
 				documentData.setIsShared(true);
 				
 				documentData.setShowVersionHistory(false);				

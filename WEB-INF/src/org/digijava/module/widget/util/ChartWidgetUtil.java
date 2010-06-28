@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -117,6 +118,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.TextAnchor;
 import org.jfree.ui.VerticalAlignment;
+import org.jfree.util.SortOrder;
 
 /**
  * Chart widgets util.
@@ -819,6 +821,7 @@ public class ChartWidgetUtil {
 			break;
 		}
         String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
+        dataset.sortByKeys(SortOrder.ASCENDING);
         chart = ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
 		chart.setBackgroundPaint(new Color(255,255,255,0));
 		TextTitle title = chart.getTitle();

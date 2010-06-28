@@ -214,6 +214,8 @@ en:
         historic_funding: Historic Funding
     contracted_agency:
       prompt: Please select
+    government_counterpart:
+      prompt: Please select
     geo_relevance:
       prompt: Please select
       all_districts: All districts

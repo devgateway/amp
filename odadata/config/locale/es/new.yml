@@ -214,6 +214,8 @@ es:
         historic_funding: Financiamento Histórico
     contracted_agency:
       prompt: Por favor seleccione
+    government_counterpart:
+      prompt: Por favor seleccione
     geo_relevance:
       prompt: Por favor seleccione
       all_districts: Todos os distritos

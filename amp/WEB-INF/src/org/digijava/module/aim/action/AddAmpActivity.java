@@ -169,6 +169,12 @@ public class AddAmpActivity extends Action {
     	eaForm.setStep(reqStep);
     //END
     
+    String draftStep = (String) session.getAttribute("draftStep");
+	if (draftStep != null) {
+		eaForm.setStep(draftStep);
+		session.setAttribute("draftStep", null);
+	}
+    
     if(eaForm.getFunding().getFundingOrganizations()!=null){
     	eaForm.getFunding().setFundingDetails(new ArrayList());
 	    for (Iterator itOrg = eaForm.getFunding().getFundingOrganizations().iterator(); itOrg.hasNext();) {

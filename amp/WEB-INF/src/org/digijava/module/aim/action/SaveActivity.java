@@ -2131,7 +2131,7 @@ public class SaveActivity extends Action {
 				session.removeAttribute(Constants.MY_TASKS);
 			}
 		}
-		
+		session.setAttribute("draftStep", null);
 	}
 	
 	private Long switchSave(RecoverySaveParameters rsp)
@@ -2672,6 +2672,7 @@ public class SaveActivity extends Action {
 		/**
 		 *  Perform session & form cleanup
 		 */
+		String auxStep = eaForm.getStep();
 		cleanup(eaForm, session, request, mapping, actId, tm);
 
 		//OLD!!!
@@ -2680,6 +2681,8 @@ public class SaveActivity extends Action {
 		if(eaForm.getMessages() != null) {
 			eaForm.getMessages().clear();
 		}
+		
+		session.setAttribute("draftStep", null);
 		
 		if (temp == 0)
 			return mapping.findForward("adminHome");
@@ -2700,6 +2703,7 @@ public class SaveActivity extends Action {
 						// Set to 1 or next time will be -1 and will fail some checks.
 						eaForm.setPageId(1);
 						eaForm.addMessage("message.aim.draftSavedSuccesfully", "Your changes have been saved successfully.");
+						session.setAttribute("draftStep", auxStep);
 						return mapping.findForward("saveDraft");
 					}
 				}

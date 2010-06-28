@@ -180,9 +180,10 @@ function save() {
    /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
   	showLoadingSave();
   	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
-    document.aimEditActivityForm.action = "<%= save %>?edit=true";
+    document.aimEditActivityForm.action = "<%= save %>?edit=true~step="+document.aimEditActivityForm.step.value;
+    //alert(document.aimEditActivityForm.action);
     document.aimEditActivityForm.target = "_self";
-
+    //alert(document.aimEditActivityForm.step.value);
     document.aimEditActivityForm.submit();
   }
 }

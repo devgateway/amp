@@ -106,6 +106,10 @@ public class SelectDocumentDM extends Action {
 			}
 			TemporaryDocumentData.refreshTemporaryUuids(request);
 			
+			if(request.getParameter("reloadOrgDocs")!=null){	//get organization documents from db or not			
+				request.getSession().setAttribute("reloadOrgDocsFromDb", new Boolean(false));
+			}
+			
 			return null; 
 		}
 		
@@ -113,7 +117,7 @@ public class SelectDocumentDM extends Action {
 		
 		TeamInformationBeanDM teamInfo			= DocumentManagerUtil.getTeamInformationBeanDM( request.getSession() );
 		
-		selectDocumentForm.setTeamInformationBeanDM(teamInfo);
+		selectDocumentForm.setTeamInformationBeanDM(teamInfo);		
 		
 		return mapping.findForward("forwardDM");
 	}

@@ -12,7 +12,8 @@
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript">
@@ -530,19 +531,91 @@
     	}
     	   
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
-            if (showTheFollowingDocuments==null){
-                showTheFollowingDocuments="ALL";
-            }
-            var url		= "/contentrepository/selectDocumentDM.do?documentsType="+documentsType+"&showTheFollowingDocuments="+showTheFollowingDocuments;
-            var popupName	= 'my_popup';
-            window.open(url, popupName, 'width=900, height=300');
-            document.forms[0].action=url;
-            document.forms[0].target=popupName;
-            document.forms[0].submit();
+        	//submit organization parameters first
+           	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
+           	var url="${getInf}";
+           	var params= getParams();
+
+           	var callback = {
+       					success:function(o) {
+								if (showTheFollowingDocuments==null){
+									showTheFollowingDocuments="ALL";
+								}
+								var url		= "/contentrepository/selectDocumentDM.do?documentsType="+documentsType+"&showTheFollowingDocuments="+showTheFollowingDocuments;
+								var popupName	= 'my_popup';
+								window.open(url, popupName, 'width=900, height=300');
+								document.forms[0].action=url;
+								document.forms[0].target=popupName;
+								document.forms[0].submit();
+						}
+       		};
+       	
+       		YAHOO.util.Connect.asyncRequest("POST",url, callback, params );         
+            
         }
+
+
+        function getParams(){
+        	var params="";
+        	if(document.getElementById('orgName')!=null){
+        		params+="name="+document.getElementById('orgName').value;
+        	}
+        	if(document.getElementById('acronym')!=null){
+        		 params+="&acronym="+document.getElementById('acronym').value;
+        	}
+        	if(document.getElementById('orgGroup')!=null){
+        		params+="&ampOrgGrpId="+document.getElementById('orgGroup').value;
+        	}
+        	if(document.getElementById('dacOrgCode')!=null){
+        		params+="&dacOrgCode="+document.getElementById('dacOrgCode').value;
+        	}
+        	if(document.getElementById('orgIsoCode')!=null){
+        		params+="&orgIsoCode="+document.getElementById('orgIsoCode').value;
+        	}
+        	if(document.getElementById('orgCode')!=null){
+        		params+="&orgCode="+document.getElementById('orgCode').value;
+        	}
+        	if(document.getElementById('budgetOrgCode')!=null){
+        		params+="&budgetOrgCode="+document.getElementById('budgetOrgCode').value;
+        	}
+        	if(document.getElementById('fiscalCalId')!=null){
+        		params+="&fiscalCalId="+document.getElementById('fiscalCalId').value;
+        	}
+        	if(document.getElementById('ampSecSchemeId')!=null){
+        		params+="&ampSecSchemeId="+document.getElementById('ampSecSchemeId').value;
+        	}
+        	if(document.getElementById('contactPersonName')!=null){
+        		params+="&contactPersonName="+document.getElementById('contactPersonName').value;
+        	}
+        	if(document.getElementById('contactPersonTitle')!=null){
+        		params+="&contactPersonTitle="+document.getElementById('contactPersonTitle').value;
+        	}
+        	if(document.getElementById('phone')!=null){
+        		params+="&phone="+document.getElementById('phone').value;
+        	}
+        	if(document.getElementById('fax')!=null){
+        		params+="&fax="+document.getElementById('fax').value;
+        	}
+        	if(document.getElementById('email')!=null){
+        		params+="&email="+document.getElementById('email').value;
+        	}
+        	if(document.getElementById('orgUrl')!=null){
+        		params+="&orgUrl="+document.getElementById('orgUrl').value;
+        	}
+        	if(document.getElementById('address')!=null){
+        		params+="&address="+document.getElementById('address').value;
+        	}
+        	if(document.getElementById('description')!=null){
+        		params+="&description="+document.getElementById('description').value;
+        	}                            
+            return params;
+            
+        }
+
+        
         function validateSaveOrg() {
             if(check()){
-    <digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
+    			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${delete}";
                 document.aimAddOrgForm.actionFlag.value = "save";
                 document.aimAddOrgForm.submit();
@@ -654,7 +727,7 @@
 
             }
 
-              function getGeneralInfoParams(){
+            function getGeneralInfoParams(){
                       var params="";
                       params+="name="+document.getElementById('orgName').value;
                       if(document.getElementById('regNumbMinPlan')!=null){
@@ -986,7 +1059,7 @@ window.onload=initScripts();
                                                                 <tr>
                                                                     <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Sectors Scheme</digi:trn><font color="red">*</font></td>
                                                                     <td>
-                                                                        <html:select property="ampSecSchemeId" styleClass="selectStyle">
+                                                                        <html:select property="ampSecSchemeId" styleClass="selectStyle" styleId="ampSecSchemeId">
                                                                             <c:set var="translation">
                                                                                 <digi:trn>Sectors Scheme</digi:trn>
                                                                             </c:set>
@@ -1954,14 +2027,36 @@ window.onload=initScripts();
         </td>
     </tr>
     
-
+	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
+		<tr>
+			<td></td>
+			<td>
+				<table width="60%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white" align="center">
+					<tr>									
+						<td>
+							<bean:define toScope="request" id="showRemoveButton" value="true" />
+							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
+							<bean:define toScope="request" id="versioningRights" value="false" />
+							<bean:define toScope="request" id="viewAllRights" value="true" />
+							<bean:define toScope="request" id="makePublicRights" value="false" />
+							<bean:define toScope="request" id="showVersionsRights" value="false" />
+							<bean:define toScope="request" id="deleteRights" value="false" />
+							<bean:define toScope="request" id="crRights" value="true" />
+							<bean:define toScope="request" id="checkBoxToHide" value="false" />
+							<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+						</td>
+					</tr>
+				</table>				
+			</td>
+			<td></td>
+		</tr>
+	</module:display>
     <tr>
-        <td colspan="2" align="center"><c:set
-                var="showTheFollowingDocuments" value="PUBLIC" /> <c:set
-            var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
-            <html:button styleClass="dr-menu" property="submitButton"
-                         onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
-                <digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
+        <td colspan="2" align="center">
+        	<c:set var="showTheFollowingDocuments" value="PUBLIC" /> 
+        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>        	
+            <html:button styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
+                <digi:trn>Add Documents From Repository</digi:trn>
             </html:button> <br />
             <br />
         </td>

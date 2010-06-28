@@ -101,7 +101,9 @@ public class EditOrganisation extends DispatchAction {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
-      clean(editForm);
+      if(request.getParameter("skipReset")==null){
+    	  clean(editForm);
+      }      
       this.putDocumentsInSession(request, new AmpOrganisation());
       return mapping.findForward("forward");
   }
@@ -234,7 +236,12 @@ public class EditOrganisation extends DispatchAction {
           editForm.setAmpOrgGrpId(null);
           editForm.setType(null);
       }
-      this.putDocumentsInSession(request, organization);
+      if(request.getSession().getAttribute("reloadOrgDocsFromDb")!=null){
+    	  request.getSession().removeAttribute("reloadOrgDocsFromDb");
+      }else{
+    	  this.putDocumentsInSession(request, organization);
+      }
+      
       editForm.setOrgUrl(organization.getOrgUrl());
       editForm.setAddress(organization.getAddress());
 

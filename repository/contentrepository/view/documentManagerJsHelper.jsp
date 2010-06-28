@@ -640,11 +640,11 @@ function saveSelectedDocuments() {
 	doSelectedDocuments('set');
 }
 
-function removeSelectedDocuments() {
-	doSelectedDocuments('remove');
+function removeSelectedDocuments(removeFrom) {
+	doSelectedDocuments('remove',removeFrom);
 }
 
-function doSelectedDocuments(action) {
+function doSelectedDocuments(action,removeFrom) {
 	
 	var trEls=$("#team_table").find("input.selDocs:checked");
 	var result= new Array();
@@ -672,25 +672,33 @@ function doSelectedDocuments(action) {
 											urlstr = urlstr.replace('~addSector=true',"");
 											urlstr = urlstr.replace('~delPledge=true',"");
 											urlstr = urlstr.replace('~addPledge=true',"");
-											urlstr = urlstr.replace('~remSectors=true',"");
-											//alert(urlstr);
-											window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true"); 
+											urlstr = urlstr.replace('~remSectors=true',"");											
+											if(urlstr.indexOf('?')!=-1 || urlstr.indexOf('~')!=-1){
+												window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true");
+											}else{
+												window.opener.location.replace(urlstr+"?actionFlag=create&skipReset=false&"+updatedDocsAction+"=true");
+											}
+											//window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true"); 
 											window.close();
 											}
 							};
 	}
 	if (action == 'remove') {
 		callback	= {
-						success:function(o) {
-									window.location.replace(window.location.href);						
+						success:function(o) {									
+									window.location.replace(window.location.href);
 								},
 						failure:function(o){
 									alert("${translation_remove_failed}");
 								}
 						}
 	}
-	
-	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/selectDocumentDM.do", callback, postString );
+
+	var url="/contentrepository/selectDocumentDM.do";
+	if(removeFrom=='ORGANISATION_DOCUMENTS'){
+		url+='?reloadOrgDocs=doNotReload';
+	}
+	YAHOO.util.Connect.asyncRequest("POST",url, callback, postString );
 }
 
 function createPostString(selectedDocs, action) {

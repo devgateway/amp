@@ -22,32 +22,32 @@
 <%@include file="documentManagerDivHelper.jsp" %>
 <% String documentsType = (String)pageContext.findAttribute("documentsType"); %>
 <logic:notEmpty scope="session" name="<%= org.digijava.module.contentrepository.action.SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>">
-	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session"
-			property="<%=documentsType %>">
-	<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" 
-			property="<%=documentsType %>"  id="relDocs" scope="session" toScope="page"/>
+
+	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session" property="<%=documentsType %>">		
+		<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" property="<%=documentsType %>"  id="relDocs" scope="session" toScope="page"/>
+		<c:set var="removeFrom">'<%=documentsType %>'</c:set>
 	</logic:notEmpty>
 	
-	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session"
-			property="<%=ActivityDocumentsConstants.TEMPORARY_DOCUMENTS %>">
-	<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" 
-			property="<%=ActivityDocumentsConstants.TEMPORARY_DOCUMENTS %>"  id="tempDocs" scope="session" toScope="page"/>
+	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session" property="<%=documentsType %>">		
+		<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" property="<%=documentsType %>"  id="relDocs" scope="session" toScope="page"/>
 	</logic:notEmpty>
+	
+	
 	<c:if test="${viewAllRights==null}">
 		<c:set var="viewAllRights" value="false"/>
 	</c:if>
 
 	<logic:empty name="windowName">
 		<c:set var="windowName" target="request">&nbsp;</c:set>
-	</logic:empty>
+	</logic:empty>	
+	
 	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
-
 		<div id="selDocumentsDiv"></div>
 		<field:display name="Remove Documents Button" feature="Related Documents">
 		<logic:notEmpty name="showRemoveButton" >
 			<logic:equal name="showRemoveButton" value="true">
 		&nbsp;&nbsp;&nbsp;&nbsp;
-			<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelectedDocuments()">
+			<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelectedDocuments(${removeFrom})">
 				<digi:trn key="btn:remove">Remove</digi:trn>
 			</html:button>
 			</logic:equal>

@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+
 <digi:instance property="parisIndicatorForm"/>
 <bean:define id="sy" name="parisIndicatorForm" property="startYears" type="int[]"></bean:define>
 <bean:define id="ey" name="parisIndicatorForm" property="endYears" type="int[]"></bean:define>
@@ -26,7 +28,7 @@
             </li>
         </ul>
         <div class="yui-content" style="background-color: #EEEEEE">
-            <div id="keyword" >
+            <div id="keyword" class="yui-tab-content">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr valign="top">
@@ -109,7 +111,7 @@
                         </tr>
                 </table>
             </div>
-            <div id="financing">
+            <div id="financing" class="yui-hidden">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr>
@@ -142,7 +144,7 @@
                         </tr>
                 </table>
             </div>
-            <div id="sectorsgroups">
+            <div id="sectorsgroups" class="yui-hidden">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr valign="top">

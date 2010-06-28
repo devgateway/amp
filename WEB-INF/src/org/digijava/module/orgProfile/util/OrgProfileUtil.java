@@ -8,9 +8,12 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.table.RtfCell;
 import java.awt.Color;
 import java.math.BigDecimal;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -1229,4 +1232,16 @@ public class OrgProfileUtil {
 
         return date;
     }
+    
+      public static class NameValueYearHelperComparatorByName implements Comparator<NameValueYearHelper> {
+        private Collator collator;
+        public NameValueYearHelperComparatorByName(Collator collator) {
+            this.collator = collator;
+
+        }
+        public int compare(NameValueYearHelper o1, NameValueYearHelper o2) {
+            return collator.compare(o1.getName(), o2.getName());
+        }
+    }
+
 }

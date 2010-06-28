@@ -604,7 +604,7 @@ html>body #mainEmpty {
                                                                                                                     	<td colspan="2" align="center">
                                                                                                                         	<c:choose>
                                                                                                                             	<c:when test="${empty addressbookForm.organizations}">
-                                                                                                                                	<aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                	<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                                                                                 </c:when>
                                                                                                                                 <c:otherwise>
                                                                                                                                 	<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">

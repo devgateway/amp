@@ -67,12 +67,13 @@ border-right:1px solid white;
                 <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
                 </digi:link>
             </li>
-<!--            <feature:display name="Public Documents" module="Document Management">-->
-<!--            <li class="yuiampmenuitem">-->
-<!--                <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			-->
-<!--                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>-->
-<!--            </li>-->
-<!--            </feature:display>-->
+<!--            <feature:display name="Public Documents" module="Document Management">
+	            <li class="yuiampmenuitem">
+	                <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">
+	                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
+	            </li>
+	            </feature:display>
+-->
             <li class="yuiampmenuitem">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
                 <digi:trn key="aim:newUserRegistration">
@@ -124,30 +125,29 @@ border-right:1px solid white;
                 </digi:trn>
 	            </digi:link>
             </li>
-			--%>
-			
-		<li class="yuiampmenuitem">
- 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="/viewTeamreports.do?tabs=false">
- 	 			<digi:trn key="">reports</digi:trn>
- 	 		</a>
- 	 	</li>
- 	 	<li class="yuiampmenuitem">
- 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
- 	 			<digi:trn key="">resources</digi:trn>
- 	 		</a>
- 	 	</li>
- 	 	<li class="yuiampmenuitem">
- 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
- 	 			<digi:trn key="">projects</digi:trn>
- 	 		</a>
- 	 	</li>
+			<li class="yuiampmenuitem">
+	 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="/viewTeamreports.do?tabs=false">
+	 	 			<digi:trn key="">reports</digi:trn>
+	 	 		</a>
+	 	 	</li>
+	 	 	<li class="yuiampmenuitem">
+	 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
+	 	 			<digi:trn key="">resources</digi:trn>
+	 	 		</a>
+	 	 	</li>
+	 	 	<li class="yuiampmenuitem">
+	 	 		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px" href="#">
+	 	 			<digi:trn key="">projects</digi:trn>
+	 	 		</a>
+	 	 	</li>
+ 	 	--%>
  	 	<module:display name="HELP">
  	 		<li class="yuiampmenuitem">
  	 			<span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right:0px">
  	 				<digi:trn key="help:help">HELP</digi:trn>
  	 			</span>
  	 			<a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
- 	 				<img src="/TEMPLATE/ampTemplate/imagesSource/common/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+ 	 				<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
  	 			</a>
  	 			<div id="help" class="yuiampmenu" style="opacity:0.9;">
  	 				<div class="bd">

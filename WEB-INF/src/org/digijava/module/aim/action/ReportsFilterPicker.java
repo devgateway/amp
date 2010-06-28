@@ -177,17 +177,10 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.getSectorElements().add(sectorsElement);
  	 	filterForm.getSectorElements().add(secondarySectorsElement);
+ 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
  	 	
-	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
-		
- 	 	AmpActivityProgramSettings natPlanSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
- 	 	AmpTheme nationalPlanningProg = null;
-		if (natPlanSetting!=null) {
-			nationalPlanningProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
-	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj");
-	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-		}
-
+ 	 	AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+ 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
 		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
 		if (primaryPrgSetting!=null) {
@@ -195,14 +188,16 @@ public class ReportsFilterPicker extends MultiAction {
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 			filterForm.getProgramElements().add(primaryProgElement);
 	 	}
-
- 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
 		AmpTheme secondaryProg = null;
+ 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
  	 	if (secondaryPrg!=null) {
 			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 			filterForm.getProgramElements().add(secondaryProgElement);
 		}
+ 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj");
+ 	 	
+ 	 	filterForm.getProgramElements().add(natPlanProgElement);
  	 	
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
@@ -926,6 +921,21 @@ public class ReportsFilterPicker extends MultiAction {
 		//	arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
 		//					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
 		
+		Set selectedRegions = null;
+		if (filterForm.getRegionSelected() != null){
+			if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
+				selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
+			}
+		}
+		
+		if (selectedRegions != null && selectedRegions.size() > 0) {
+			arf.setLocationSelected(new HashSet());
+			arf.getLocationSelected().addAll(selectedRegions);
+		} else {
+			arf.setLocationSelected(null);
+			arf.setRelatedLocations(null);
+		}
+		
 		if (!all.equals(filterForm.getApprovalStatusSelected())){
 			if(filterForm.getApprovalStatusSelected() != null){
 				ArrayList<String> appvals = new ArrayList<String>();
@@ -1070,7 +1080,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
-		if (arf.isPublicView() && arf.isWidget() )
+		if (arf.isPublicView())
 			return mapping.findForward("publicView");
 		return mapping.findForward(arf.isWidget() ? "mydesktop" : "reportView");
 	}

@@ -70,7 +70,7 @@ public class DocumentManagerRights {
 	}
 	
 	public static Boolean hasAddParticipatingOrgRights(Node node, HttpServletRequest request) {
-		return true && isOwnerOrTeamLeader(node, request);
+		return true && (isOwnerOrTeamLeader(node, request) || isCreator(node, request));
 	}
 	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {

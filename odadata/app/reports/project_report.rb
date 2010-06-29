@@ -138,10 +138,10 @@ module Reports
       OFFSET_TOP = 0
       OFFSET_LEFT = 0
       
-      format_column(:implementing_agencies) { |r| r.map(&:name).join(', ') }
-      format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') }
-      format_column(:government_counterparts) { |r| r.map(&:name).join(', ') }
-      format_column(:mdgs) { |r| r.map(&:name).join(', ') }
+      format_column(:implementing_agencies) { |r| r.map(&:name).join(', ') rescue nil }
+      format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') rescue nil }
+      format_column(:government_counterparts) { |r| r.map(&:name).join(', ') rescue nil }
+      format_column(:mdgs) { |r| r.map(&:name).join(', ') rescue nil }
       format_column(:country_strategy) { |r| r.strategy_number }
       format_column(:sector_relevances) do |r| 
         r.map { |sr| "#{sr.sector.name_with_code} (#{number_to_percentage(sr.amount, :precision => 1)}%)" }.join(', ')

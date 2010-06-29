@@ -40,7 +40,7 @@ function showUser(email){
 		previewWorkspaceframe("${information}",param);
 	}
 	else{
-		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>'
+		var trasnlation = '<digi:trn key="aim:userblankmail" jsFriendly="true">The user does not have a valid email address</digi:trn>'
 		alert (trasnlation);
 	}
 }

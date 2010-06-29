@@ -237,9 +237,9 @@ public class GroupColumn extends Column {
             else
                {
             	if(category.equalsIgnoreCase(ArConstants.YEAR)){
-            		cc = new AmountCellColumn( yearMapping.get(element.getValue().toString()));
+            		cc = new AmountCellColumn(element.getValue().toString());
             	}else if(category.equalsIgnoreCase(ArConstants.MONTH)){
-                		cc = new AmountCellColumn( monthMapping.get(element.getValue().toString()));
+            		cc = new AmountCellColumn(element.getValue().toString());
                 	}
             	else{
             	cc = new AmountCellColumn( element.getValue().toString());

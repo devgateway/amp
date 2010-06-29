@@ -26,7 +26,7 @@
 
 	.tableOdd {
 		background-color:#FFFFFF;
-		font-size:8pt;!important
+		font-size:8pt !important;
 		padding:2px;
 	}
 		 
@@ -39,7 +39,7 @@
 </style>
 
 <!-- for auto complete -->
-<style>
+<style type="text/css">
 <!--
 
 .yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}
@@ -58,9 +58,6 @@
     max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
     _height:16em; /* ie6 */ 
 }
-
-<style  type="text/css">
-<!--
 
 .contentbox_border{
         border: 1px solid black;
@@ -209,7 +206,6 @@ html>body #main {
 }
 </style>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/datatable.css" />
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/paginator.css" />
 
@@ -610,7 +606,7 @@ html>body #main {
 	    //oAC.itemSelectEvent.subscribe(myHandler);	    
 
 	    return {
-	        oDS: oDS,
+	        oDS: oDS
 	      
 	    };
 	}();    

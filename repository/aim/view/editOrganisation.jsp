@@ -507,16 +507,20 @@
 
             }
             //phone, fax
-            var phoneNum=document.getElementById('phone').value;
-            if(checkNumber(phoneNum)==false){
-                alert('enter correct phone number');
-                return false;
-            }
-            var fax=document.getElementById('fax').value;
-            if(checkNumber(fax)==false){
-            	alert('enter correct fax');
-                return false;
-            }
+            
+            if (document.getElementById('phone') != null) {
+	            var phoneNum=document.getElementById('phone').value;
+	            if(checkNumber(phoneNum)==false){
+	                alert('enter correct phone number');
+	                return false;
+	            }
+	            var fax=document.getElementById('fax').value;
+	            if(checkNumber(fax)==false){
+	            	alert('enter correct fax');
+	                return false;
+	            }
+	          }
+	          
             return true;
 
         }     

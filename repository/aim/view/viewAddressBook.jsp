@@ -8,26 +8,6 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
-<%--
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
---%>
-
-
-<script type="text/javascript" src="<digi:file src="script/yui/new/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/container_core-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/element-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/connection-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/dragdrop-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/event-min.js"/>"></script>
-
-<!-- Source File -->
-<script type="text/javascript" src="<digi:file src="script/yui/new/menu-amp-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/new/container-min.js"/>"></script> 
-
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -248,11 +228,6 @@ html>body #main {
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datasource-min.js"></script>
  
 
-	
-
-
-
-
 	<style>
 		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
 		color:#000000;
@@ -278,9 +253,7 @@ html>body #main {
 	
 <script language="JavaScript">
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
-		function initDynamicTable1() {			
-				
-				
+		function initDynamicTable1() {	
 				
 		    YAHOO.example.XHR_JSON = new function() {
 
@@ -602,8 +575,8 @@ html>body #main {
 		</tr>
 	</table>
 
-<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/datasource-min.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/autocomplete-min.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/new/datasource-min.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/new/autocomplete-min.js"/>"></script>
 
 
 <script type="text/javascript">
@@ -618,11 +591,10 @@ html>body #main {
 	    var oDS = new YAHOO.util.LocalDataSource(myArray);
 	    oDS.responseSchema = {fields : ["name"]};
 
-	    // Instantiate the AutoComplete
-	    /*
+	    // Instantiate the AutoComplete	    
 	    var oAC = new YAHOO.widget.AutoComplete("myInput", "myContainer", oDS);
 	    oAC.resultTypeList = false;
-	    */
+	    
 	    
 	    // Define an event handler to populate a hidden form field
 	    // when an item gets selected

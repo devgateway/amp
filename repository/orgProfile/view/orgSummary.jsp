@@ -265,7 +265,7 @@
             </c:if>
             <c:if test="${orgsCount==1}">
                 <c:choose>
-                    <c:when test="${orgGroup.orgType.classification=='NGO'}">
+                    <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
                     </table>
                     <br/>
                     <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">

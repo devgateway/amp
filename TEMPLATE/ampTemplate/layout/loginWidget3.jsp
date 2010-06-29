@@ -70,7 +70,7 @@
               </c:set>
               
               <span title="${translation}">
-                <a href="javascript:showUserProfile('${teamMember.email}')" class="header_text">
+                <a href="javascript:showUserProfile('${teamMember.memberId}')" class="header_text">
                 	${teamMember.memberName}
                 </a>
               </span>

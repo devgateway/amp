@@ -91,7 +91,7 @@
 		  }
 		}
 	}
-
+	
 
 
     function initScripts() {
@@ -101,7 +101,7 @@
 			initContactScript();
     }
     addLoadEvent(initScripts);
-  
+
     function refreshPage(){     
         document.aimAddOrgForm.actionFlag.value='reload'
         document.aimAddOrgForm.submit();
@@ -541,7 +541,7 @@
         	//submit organization parameters first
            	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
            	var url="${getInf}";
-           	var params= getParams();
+           	var params=getResourceParams();
 
            	var callback = {
        					success:function(o) {
@@ -562,7 +562,7 @@
         }
 
 
-        function getParams(){
+        function getResourceParams(){
         	var params="";
         	if(document.getElementById('orgName')!=null){
         		params+="name="+document.getElementById('orgName').value;
@@ -817,7 +817,6 @@
 
 
 
-window.onload=initScripts();
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
@@ -1011,8 +1010,8 @@ window.onload=initScripts();
                                                     </a>
                                                 </div>
                                                         <fieldset><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
-                                                      	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
-                                						<img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"  onclick="collapse('general')"/>
+                                                      	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
+                                						<img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
                                 <div id="div_container_general">
                                     <table width="100%" cellpadding="5" cellspacing="5">
                                                     <tr>
@@ -1379,8 +1378,8 @@ window.onload=initScripts();
                          </div>
                         <fieldset>
                             <legend align="left" class="tdBoldClass" style="font-size:13px;color:#0000FF; "><digi:trn>Staff Information</digi:trn></legend>
-                            <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
-                            <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"   onclick="collapse('staff')"/>
+                            <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
+                            <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
                             <table cellpadding="2" cellspacing="0" border="0">
                                 <c:if test="${not empty aimAddOrgForm.staff}">
@@ -1467,8 +1466,8 @@ window.onload=initScripts();
                          </div>
                         <fieldset>
                             <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
-                                <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
-                                <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"  onclick="collapse('budget')"/>
+                                <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
+                                <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
                                 <table cellpadding="2" cellspacing="0" border="0">
                                
@@ -1600,8 +1599,8 @@ window.onload=initScripts();
 								        </div>
 								        <fieldset>
 								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
-								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
-								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow_down.gif"   onclick="collapse('contact')"/>
+								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
+								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
 								                <div id="div_container_contact">
 								                <table cellpadding="2" cellspacing="0" border="0" width="100%">
 								                <c:if test="${not empty aimAddOrgForm.orgContacts}">

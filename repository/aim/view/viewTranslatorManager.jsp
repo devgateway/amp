@@ -215,10 +215,19 @@ div.fakefile2 input{
 	}
 
 	function changeDivsVisibility(){
-		var whatToDoWithTrns=document.getElementById('firstSelect').value;
+		var whatToDoWithTrns=document.getElementsByTagName('select');//firstSelect
 		var whatToDoWithKeywords=document.getElementById('mySelect').value;
-		
-		if(whatToDoWithTrns=='nonexisting'){
+		var hideOptions = true;
+		for ( var i = 0; i < whatToDoWithTrns.length; i++) {
+			var name = whatToDoWithTrns[i].name.substring(0,5);
+			if(name=='LANG:'){
+				if(whatToDoWithTrns[i].value!='nonexisting'){
+					hideOptions = false;
+	
+				}
+			}
+		}
+		if(hideOptions == true){
 			document.getElementById('mySelectsTextDiv').style.display='none';
 			document.getElementById('mySelect').style.display='none';
 			showOrHideKeywordsDiv(false);

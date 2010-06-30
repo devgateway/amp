@@ -91,6 +91,9 @@ public class DeleteSector extends Action {
 			}
 			deleteSectorForm.setSectorName(aSector.getName());
 			deleteSectorForm.setSectorCode(aSector.getSectorCode());
+  			if(deleteSectorForm.getSectorId()==null)
+  				deleteSectorForm.setSectorId(new Long(schemeId));
+			
     		 /* }
     		  else {
     		    	ActionErrors errors = new ActionErrors();
@@ -119,6 +122,10 @@ public class DeleteSector extends Action {
     			}
         	deleteSectorForm.setSectorName(aSector.getParentSectorId().getName());
   			deleteSectorForm.setSectorCode(aSector.getParentSectorId().getSectorCode());
+  			deleteSectorForm.setSectorCodeOfficial(aSector.getParentSectorId().getSectorCodeOfficial());
+  			if(deleteSectorForm.getSectorId()==null)
+  				deleteSectorForm.setSectorId(new Long(schemeId));
+  			
     	/*	  }
     		  else {
   		    	ActionErrors errors = new ActionErrors();
@@ -147,6 +154,9 @@ public class DeleteSector extends Action {
     			}
         	deleteSectorForm.setSectorName(aSector.getParentSectorId().getName());
   			deleteSectorForm.setSectorCode(aSector.getParentSectorId().getSectorCode());
+  			deleteSectorForm.setSectorCodeOfficial(aSector.getParentSectorId().getSectorCodeOfficial());
+  			if(deleteSectorForm.getSectorId()==null)
+  				deleteSectorForm.setSectorId(new Long(schemeId));
     	/*	  }
     		  else {
     		    	ActionErrors errors = new ActionErrors();

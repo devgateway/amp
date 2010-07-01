@@ -55,11 +55,11 @@ public class AmpMessageForm extends ActionForm {
 	private String lastPage;
 	private int pagesToShow;
 	private int offset;
-        private String removeStateIds;
+    private String removeStateIds;
         
-        private int hiddenMsgCount;
+    private int hiddenMsgCount;
 
-      
+    private String[] contacts;    
 	
 	/**
 	 * used to separate different kinds of messages
@@ -562,6 +562,14 @@ public class AmpMessageForm extends ActionForm {
 
 				public void setFileUploaded(FormFile fileUploaded) {
 					this.fileUploaded = fileUploaded;
+				}
+
+				public String[] getContacts() {
+					return contacts;
+				}
+
+				public void setContacts(String[] contacts) {
+					this.contacts = contacts;
 				}
 
 

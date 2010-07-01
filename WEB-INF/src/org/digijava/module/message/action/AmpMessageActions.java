@@ -61,7 +61,9 @@ public class AmpMessageActions extends DispatchAction {
     	if(request.getParameter("editingMessage").equals("false")){
     		//load activities
         	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
-    		setDefaultValues(messageForm);
+        	String[] conts=AmpMessageUtil.buildExternalReceiversFromContacts();
+        	messageForm.setContacts(conts);
+        	setDefaultValues(messageForm);
     	}else {
     		Long id=new Long(request.getParameter("msgStateId"));
         	AmpMessageState state=AmpMessageUtil.getMessageState(id);
@@ -369,6 +371,25 @@ public class AmpMessageActions extends DispatchAction {
             messagesForm.getReceivesrsNameMail().add(recName);
             i+=2;
 
+        }
+        
+      //external people
+        if(message.getExternalReceivers()!=null && message.getExternalReceivers().length()>0){        	
+            String externalPeople=temp[temp.length-1];
+            String[] externalReceivers=externalPeople.split(",");
+            for(int j=0;j<externalReceivers.length;j++){
+            	ReciverName recName = new ReciverName();
+            	String receiverName=externalReceivers[j];
+            	if(j!=externalReceivers.length-1){
+            		receiverName+=",";
+            	}
+                recName.setUserNeme(receiverName);
+                recName.setTeamName("");
+                if(messagesForm.getReceivesrsNameMail()==null){
+                	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
+                }
+                messagesForm.getReceivesrsNameMail().add(recName);
+            }
         }
 
         return mapping.findForward("viewMessage");
@@ -746,7 +767,7 @@ public class AmpMessageActions extends DispatchAction {
 //				statesMemberIds.add(mId.getMemberId());
 //			}
 //    	}
-        if (messageReceivers != null && messageReceivers.length > 0) {
+    	if (messageReceivers != null && messageReceivers.length > 0) {
             Collection<InternetAddress> addrCol=new ArrayList<InternetAddress>();
             for (String receiver : messageReceivers) {
                 if (receiver.startsWith("m")) {
@@ -925,7 +946,7 @@ public class AmpMessageActions extends DispatchAction {
              }
 
 
-			 form.setReceivers(getMessageRecipients(message.getId()));
+			 form.setReceivers(getMessageRecipients(message));
 			 form.setSelectedAct(null);
 			 //getting related activity if exists
 			 if(message.getRelatedActivityId()!=null){
@@ -1052,7 +1073,7 @@ public class AmpMessageActions extends DispatchAction {
      	 msgHelper.setObjectURL(msg.getObjectURL());
      	 if(msgHelper.getReceivers()==null){
      		msgHelper.setReceivers(new ArrayList<String>());
-     		List<LabelValueBean> receivers=getMessageRecipients(msg.getId());
+     		List<LabelValueBean> receivers=getMessageRecipients(msg);
      		for (LabelValueBean lvb : receivers) {
  				msgHelper.getReceivers().add(lvb.getLabel());
  			}
@@ -1065,45 +1086,43 @@ public class AmpMessageActions extends DispatchAction {
 	 /**
 	  * used to get message recipients, which will be shown on edit Message Page
 	  */
-	 private static List<LabelValueBean> getMessageRecipients(Long messageId) throws Exception{
-	 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(messageId);
-		List<LabelValueBean> members=null;
-		if(msgStates!=null && msgStates.size()>0){
-			members=new ArrayList<LabelValueBean>();
-			Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
-			Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
-			for (AmpMessageState state : msgStates) {
-//				if(state.getMemberId()!=null){
-//                                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-//                                    if (teamMember != null) {
-//                                        AmpTeam team = teamMember.getAmpTeam();
-//                                        if (!teamList.contains(team)) {
-//                                            teamList.add(team);
-//                                        }
-//                                        memberList.add(teamMember);
-//                                    }
-//
-//				}
-				if(state.getReceiver()!=null){
-					AmpTeamMember teamMember=state.getReceiver();
-					AmpTeam team=teamMember.getAmpTeam();
-					if(!teamList.contains(team)){
-						teamList.add(team);
+	 private static List<LabelValueBean> getMessageRecipients(AmpMessage message) throws Exception{
+		 List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(message.getId());
+			List<LabelValueBean> allReceivers=null;
+			//team members
+			if(msgStates!=null && msgStates.size()>0){
+				allReceivers=new ArrayList<LabelValueBean>();
+				Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
+				Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
+				for (AmpMessageState state : msgStates) {
+					if(state.getReceiver()!=null){
+						AmpTeamMember teamMember=state.getReceiver();
+						AmpTeam team=teamMember.getAmpTeam();
+						if(!teamList.contains(team)){
+							teamList.add(team);
+						}
+						 memberList.add(teamMember);
 					}
-					 memberList.add(teamMember);
 				}
-			}
-			for(AmpTeam team : teamList){
-				LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
-				members.add(teamLabel);
-				for(AmpTeamMember member : memberList){
-					if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
-						LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());
-						members.add(tm);
+				for(AmpTeam team : teamList){
+					LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
+					allReceivers.add(teamLabel);
+					for(AmpTeamMember member : memberList){
+						if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
+							LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());
+							allReceivers.add(tm);
+						}
 					}
 				}
 			}
-		}
-		return members;
+			//contacts and external people
+			if(message.getExternalReceivers()!=null){
+				String[] externalReceivers=message.getExternalReceivers().split(",");
+				for (int i = 0; i < externalReceivers.length; i++) {
+					LabelValueBean receiver=new LabelValueBean(externalReceivers[i],"c:" + externalReceivers[i]);
+					allReceivers.add(receiver);
+				}
+			}
+			return allReceivers;
 	 }
 }

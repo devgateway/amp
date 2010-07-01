@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -919,5 +920,41 @@ public class AmpMessageUtil {
 			logger.error("couldn't load Email Receiver" + e.getMessage());	
 		}
 		return email;
+	}
+	
+	public static String[] buildExternalReceiversFromContacts() throws Exception{ //used in add message form
+		String[] retVal=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List contacts=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
+					" and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!=''";
+			query=session.createQuery(queryString);
+			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
+			contacts=query.list();
+		} catch (Exception ex) {
+			logger.error("couldn't load Contacts " + ex.getMessage());	
+			ex.printStackTrace(); 
+		}
+		
+		if(contacts!=null){
+			retVal=new String[contacts.size()];
+			int i=0;
+			for (Object contRow : contacts) {
+				Object[] row = (Object[])contRow;
+				String contact=(String)row[0];
+				String contEmail=(String)row[1];
+				
+				if(contact!=null){
+					retVal[i]=contact+ " <" + contEmail + ">";
+				}
+				i++;
+			}
+		}
+		
+		return retVal;
 	}
 }

@@ -222,33 +222,48 @@
 	background-color: #ffffff;
 }
 
-#statesautocomplete ul {
+#statesAutoComplete ul,
+{
 	list-style: square;
 	padding-right: 0px;
 	padding-bottom: 2px;
 }
 
-#statesautocomplete div {
+#contactsAutocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesAutoComplete div{
 	padding: 0px;
 	margin: 0px; 
 }
 
+#contactsAutocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
 
-
-#statesautocomplete,
-#statesautocomplete2 {
+#statesAutoComplete,
+#contactsAutocomplete {
     width:15em; /* set width here */
     padding-bottom:2em;
 }
-#statesautocomplete {
+#statesAutoComplete,contactsAutocomplete {
     z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
 }
-#statesinput,
-#statesinput2 {
+#statesInput,
+#contactInput {
     _position:absolute; /* abs pos needed for ie quirks */
 }
 .charcounter {
     display: block;
+}
+
+#statesAutoComplete {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
 }
 #myImage {
     position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
@@ -374,7 +389,7 @@
 																	 </field:display>
 																	</tr>
 																	<tr>
-																	   <field:display name="Related Activity Dropdown" feature="Create Message Form">
+																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left"  nowrap="nowrap">
                                                                             <div>
@@ -448,17 +463,33 @@
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
-															                                		<div id="contactsAutocomplete">
-															                                			<input type="text" id="contactInput" style="width:200px;font-size:100%">																                                			     
-																										<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
-												                                						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
-																										<div id="contactsContainer" style="width:220px;"></div>		
-																									</div>																													
-																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="10" styleClass="inp-text" style="width:200px">
-																                                    	<c:if test="${!empty messageForm.receivers}">
-																	                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
-																	                                    </c:if>                
-																                                    </html:select>  
+															                                		<table>
+																                                		<tr height="25px">
+																                                			<td>
+																                                				<div style="width:220px;">
+																			                                		<div id="contactsAutocomplete"">
+																			                                			<input type="text" id="contactInput" style="width:220px;font-size:100%">																                                			     
+																														<div id="contactsContainer" style="width:220px;"></div>																				 
+																													</div>																													
+																			                                	</div>
+																                                			</td>
+																                                			<td nowrap="nowrap">
+																                                				<html:button property="" onclick="addContact(document.getElementById('contactInput'))">Add</html:button>
+																                                				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,extraReceivers],Style[15])" onmouseout="htm()"/>
+																                                			</td>
+																                                		</tr>
+																                                		<tr height="75px">
+																                                			<td colspan="2">
+																                                				<div>
+																			                                		<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="10" styleClass="inp-text" style="width:220px">
+																				                                    	<c:if test="${!empty messageForm.receivers}">
+																					                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
+																					                                    </c:if>                
+																				                                    </html:select>
+																			                                	</div>
+																                                			</td>
+																                                		</tr>
+																                                	</table>  
 																                                </td>
 																                            </tr>
 																                        </table>
@@ -547,13 +578,42 @@
 	        return (sMarkup);
 	    };
 	    };
+
+	    var contactsArray= [
+	    	<c:forEach var="cont" items="${messageForm.contacts}">
+	        	"<bean:write name="cont" filter="true"/>",
+	        </c:forEach>
+	   ];
+
+	   YAHOO.example.ACJSArray = new function() {
+		   	for(var i=0;i<contactsArray.length;i++){
+		    	if(contactsArray[i]!= undefined ){
+		        	contactsArray[i]=contactsArray[i].replace("&lt;","<");
+		            contactsArray[i]=contactsArray[i].replace("&gt;",">");	
+		        }
+		    }
+	        // Instantiate JS Array DataSource
+	        this.oACDS2 = new YAHOO.widget.DS_JSArray(contactsArray);
+	        // Instantiate AutoComplete
+	        this.oAutoComp2 = new YAHOO.widget.AutoComplete('contactInput','contactsContainer', this.oACDS2);
+	        this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+	        this.oAutoComp2.useShadow = true;
+	        //this.oAutoComp2.forceSelection = true;
+	        this.oAutoComp2.maxResultsDisplayed = contactsArray.length;
+	        this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
+		        var sMarkup = oResultItem[0];
+		        sMarkup=sMarkup.replace("<","&lt;");
+		        sMarkup=sMarkup.replace(">","&gt;");
+		        return (sMarkup);
+		    };
+	    };
      
         // attach character counters
         $("#titleMax").charCounter(50,{
-	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+	format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 	pulse: false});
         $("#descMax").charCounter(500,{
-	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+	format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 	pulse: false});
         
 

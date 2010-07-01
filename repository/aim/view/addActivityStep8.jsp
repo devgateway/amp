@@ -44,25 +44,6 @@
 <script type="text/javascript">
 <!--
 
-	function addLoadEvent(func) {
-	  var oldonload = window.onload;
-	  if (typeof window.onload != 'function') {
-	    window.onload = func;
-	  } else {
-	    window.onload = function() {
-	      if (oldonload) {
-	        oldonload();
-	      }
-	      func();
-	    }
-	  }
-	}
-
-
-
-//    addLoadEvent(initScripts);
-
-
 
 		YAHOO.namespace("YAHOO.amp");
 
@@ -990,8 +971,4 @@ function resetAll()
 </table>
 </digi:form>
 
-<script language="javascript">
-	
-			initContactScript();
-			initContactInfoScript();
-	</script>
+

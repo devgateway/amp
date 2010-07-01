@@ -21,13 +21,11 @@
 	<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 
 	<set name="activityContacts" inverse="true" cascade="delete" lazy="false">
-		<cache usage="read-write" />
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 	</set>
 	
 	<set name="properties" inverse="true" cascade="all-delete-orphan" lazy="false">
-		<cache usage="read-write" />
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpContactProperty" />
 	</set>

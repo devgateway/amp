@@ -333,9 +333,14 @@ public class AddContactComponent extends DispatchAction{
 		}
 		if(createForm.getPhones()!=null){
 			contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(createForm.getPhones()));
-		}        
-		contact.setProperties(contactProperties);
-        
+		} 
+         if (contact.getProperties() != null) {
+             contact.getProperties().clear();
+             contact.getProperties().addAll(contactProperties);
+         } else {
+             contact.setProperties(contactProperties);
+         }
+
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
         //activity form side

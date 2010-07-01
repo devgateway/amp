@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config>
-<secondary-pages>
-	<page name="mainreports" title="Off Line Reports List"/>
-	<page name="showreport" title="Off Line Report"/>
-	<page name="savehtml" title=""/>
-</secondary-pages>
-</config>

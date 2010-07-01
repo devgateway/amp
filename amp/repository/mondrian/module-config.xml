@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>mondrian</name>
+	<security login-required="true" default="READ">
+	<action login-required="false" pattern="/mainreports"/>
+	<action login-required="false" pattern="/showreport"/>
+	<action login-required="true" pattern="/savehtml"/>
+	</security>
+	
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.mondrian.dbentity.OffLineReports</hibernate-class>
+	</hibernate-classes>
+</module-config>
+

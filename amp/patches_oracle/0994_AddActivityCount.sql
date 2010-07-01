@@ -1,0 +1,1 @@
+INSERT INTO amp_columns (columnName, aliasName, cellType, extractorView, relatedContentPersisterClass, totalExpression, filterRetrievable, description) VALUES ('Activity Count', NULL, 'org.dgfoundation.amp.ar.cell.ComputedAmountCell', null, NULL, 'numberOfProjects', NULL,'Count Of Activities under the current hierarchy' );

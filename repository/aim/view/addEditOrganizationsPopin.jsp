@@ -421,5 +421,13 @@ function showPanelLoading(msg){
         showContent();
    
 }
+function myclose(){
+    myPanel.hide();
+    panelStart=1;
+
+}
+function closeWindow() {
+    myclose();
+}
 -->
 </script>

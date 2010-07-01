@@ -184,7 +184,7 @@ var validationCallback =
 		ret="";
 		ret+="&selectedOrganisationFromPages="+document.getElementsByName('selectedOrganisationFromPages')[0].value+
 		"&keyword="+document.getElementById('keyword').value +
-		"&ampOrgTypeId="+document.getElementById('ampOrgTypeId').value +
+		"&ampOrgTypeId="+ document.aimSelectOrganizationForm.ampOrgTypeId.value +
 		"&tempNumResults="+document.getElementById('tempNumResults').value;
 		//else if (type==3){//add sectors chosen from the list
 		if(document.getElementsByName("selOrganisations")!=null){

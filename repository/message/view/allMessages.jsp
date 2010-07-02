@@ -97,31 +97,31 @@ background-color:yellow;
 <script langauage="JavaScript">
 
     var  selectedMessagePanel;
-    var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
-    var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
-    var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
-    var noEvents="<digi:trn key='message:noUpcomingEvents'>No Upcoming Events</digi:trn>";
-   	var from='<digi:trn key="message:from">From</digi:trn>';
-    var to='<digi:trn key="message:to">To</digi:trn>';
-	var date='<digi:trn key="message:date">Date</digi:trn>';
-	var prLevel='<digi:trn key="message:priority">Priority</digi:trn>';
-	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
-	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
-	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
-	var deleteBtn='<digi:trn key="message:delete">Delete</digi:trn>';
-	var pagesTrn='<digi:trn key="message:pages">Pages</digi:trn>';
-	var ofTrn='<digi:trn key="message:of">of</digi:trn>';
-	var firstPage='<digi:trn key="message:firstPage">click here to go to first page</digi:trn>';
-	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
-	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
-	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
-	var referenceURL='<digi:trn key="message:referenceURL">Reference URL</digi:trn>';
-    var forwardClick='<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>';
-    var editClick='<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>';
+    var noMsgs="<digi:trn>No Messages Present</digi:trn>";
+    var noAlerts="<digi:trn>No Alerts Present</digi:trn>";
+    var noApprovals="<digi:trn>No Pending Approvals</digi:trn>";
+    var noEvents="<digi:trn>No Upcoming Events</digi:trn>";
+   	var from='<digi:trn>From</digi:trn>';
+    var to='<digi:trn>To</digi:trn>';
+	var date='<digi:trn>Date</digi:trn>';
+	var prLevel='<digi:trn>Priority</digi:trn>';
+	var desc='<digi:trn>Message Details</digi:trn>';
+	var editBtn='<digi:trn>Edit</digi:trn>';
+	var fwdBtn='<digi:trn>Forward</digi:trn>';
+	var deleteBtn='<digi:trn>Delete</digi:trn>';
+	var pagesTrn='<digi:trn>Pages</digi:trn>';
+	var ofTrn='<digi:trn>of</digi:trn>';
+	var firstPage='<digi:trn>click here to go to first page</digi:trn>';
+	var prevPage='<digi:trn>click here to go to previous page</digi:trn>';
+	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
+	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
+	var referenceURL='<digi:trn>Reference URL</digi:trn>';
+    var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
+    var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
     var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
-    var deleteClick='<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>';
-    var viewMessage='<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>';
-    var viewDetails='<digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn>';
+    var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
+    var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
+    var viewDetails='<digi:trn>Click here to view details</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -260,7 +260,7 @@ background-color:yellow;
 
 	function getSelectedMessagesIds() {
 		var msgIds='';
-		$("input[@id^='delChkbox_']:checked").each(function(){
+		$("input[id^='delChkbox_']:checked").each(function(){
 	        msgIds+=this.value+',';
 	    })            
 		if(msgIds.length>0){
@@ -970,7 +970,7 @@ background-color:yellow;
 	}
        
 	function selectAllCheckboxes(){
-		var allChkboxes=$("input[@id^='delChkbox_']");
+		var allChkboxes=$("input[id^='delChkbox_']");
 		if(allChkboxes!=null && allChkboxes.length>0){
 			for(var i=0;i<allChkboxes.length;i++){
 				allChkboxes[i].checked=true;
@@ -978,7 +978,7 @@ background-color:yellow;
 		}
 	}
 	function deselectAllCheckboxes(){
-		var allChkboxes=$("input[@id^='delChkbox_']");
+		var allChkboxes=$("input[id^='delChkbox_']");
 		if(allChkboxes!=null && allChkboxes.length>0){
 			for(var i=0;i<allChkboxes.length;i++){
 				allChkboxes[i].checked=false;

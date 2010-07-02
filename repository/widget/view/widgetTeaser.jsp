@@ -103,9 +103,11 @@
                         YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
                     }
                     function  hideDataSource_${gisWidgetTeaserForm.type}(){
+                        if(${gisWidgetTeaserForm.type}==5){
                         $(".sectorChart").each(function(index) {
                             var lastTimeStamp = new Date().getTime();
                             var newsrc=this.src;
+                            this.src="images/amploading.gif";
                             var index=newsrc.indexOf("&sectorClassConfigId=");
                             if(index!=-1){
                                 newsrc=newsrc.substring(0, index)
@@ -117,6 +119,7 @@
                             newsrc+="&sectorClassConfigId="+configId+"&lastTimeStamp="+lastTimeStamp;
                             this.src=newsrc;
                         });
+                        }
                         $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
                             this.style.display="block";
                         });
@@ -184,6 +187,7 @@
                                 $(".sectorChart").each(function(index) {
                                     var lastTimeStamp = new Date().getTime();
                                     var newsrc=this.src;
+                                    this.src="images/amploading.gif";
                                     var index=newsrc.indexOf("&sectorClassConfigId=");
                                     if(index!=-1){
                                         newsrc=newsrc.substring(0, index)

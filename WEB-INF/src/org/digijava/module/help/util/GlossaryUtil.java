@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -50,13 +51,17 @@ public class GlossaryUtil {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<HelpTopic> searchGlossary(String keyWord, String moduleInstance, String siteId) throws DgException{
 		
 		List<HelpTopic> result = null;
-		String oql = " from " + HelpTopic.class.getName()+ " as ht where ht.topicType=:GLOSS_TYPE";
-		if (keyWord != null){
-			oql += " and ht.topicKey like '%"+keyWord+"%'";
-		}
+		String oql = "select ht from "; 
+		oql += HelpTopic.class.getName()+ " as ht, ";
+		oql += Editor.class.getName()+" as e ";
+		oql += " where ht.topicType=:GLOSS_TYPE";
+		oql += " and ht.bodyEditKey = e.editorKey";
+		oql += " and (ht.topicKey like :KEY_WORD";
+		oql += " or e.body like :KEY_WORD)";
 		if (moduleInstance != null){
 			oql += " and ht.moduleInstance=:MOD_INST";
 		}
@@ -66,6 +71,7 @@ public class GlossaryUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session.createQuery(oql);
 		query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
+		query.setString("KEY_WORD", "%"+keyWord+"%");
 		if (moduleInstance != null){
 			query.setString("MOD_INST", moduleInstance);
 		}

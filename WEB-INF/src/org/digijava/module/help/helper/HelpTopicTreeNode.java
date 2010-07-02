@@ -82,11 +82,21 @@ public class HelpTopicTreeNode {
 		return buf.toString();
 	}
 	
-	public String getNodeHtml(){
+	/**
+	 * Generates search result links.
+	 * @return
+	 */
+	public String getSearchResultLink(){
 		StringBuffer buff = new StringBuffer("\n");
 		buff.append("<div id=\"AMP_HelpNodeDiv_");
 		buff.append(this.origin.getHelpTopicId());
-		buff.append("\">\n\t<a href=\"#\">");
+		buff.append("\">\n\t<a href=\"javascript:showGlossary(");
+		buff.append(this.origin.getHelpTopicId());
+		buff.append(",'");
+		buff.append(this.origin.getTopicKey());
+		buff.append("','");
+		buff.append(this.origin.getBodyEditKey());
+		buff.append("')\">");
 		buff.append(this.origin.getTopicKey());
 		buff.append("</a>\n</div>\n");
 		return buff.toString();

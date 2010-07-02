@@ -44,17 +44,16 @@ public class SearchGlossary extends Action {
 			StringBuffer buf = new StringBuffer();
 			for (HelpTopic helpTopic : helpTopics) {
 				HelpTopicTreeNode node = new HelpTopicTreeNode(helpTopic);
-				buf.append(node.getNodeHtml());
+				buf.append(node.getSearchResultLink());
 			}
 			result = buf.toString();
 		}
-		System.out.println(result);
 		
 		//setup response for UTF-8
 		response.setContentType("text/html");
 		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 		PrintWriter out = new PrintWriter(outputStream, true);
-		//write o response and close.
+		//write to response and close.
 		out.println(result);
 		out.close();
 		

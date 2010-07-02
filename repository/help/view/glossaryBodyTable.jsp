@@ -220,31 +220,9 @@
 		);
 		
 		tree.subscribe('clickEvent',function(event){
-	
-			$('div#nodeEditorLinkDiv').html('');
-			var resp=$.ajax({
-				   type: 'POST',
-				   url: getBodyURL,
-				   data: ({helpTopicId : event.node.data.ampHelpTopicId}),
-				   cache : false,
-				   success: function(data,msg){
-						$('div#nodeContentDiv').html(data);
-						$('div#nodeTitle').html(event.node.label);
-						<digi:secure group="Help Administrators">
-							var key = event.node.data.ampEditorKey;
-							var lang = '${requestScope["org.digijava.kernel.navigation_language"].code}';
-							var linkWithParams = editorLink + '?id=' + key + '&lang=' + lang + '&referrer=' + window.location;
-							var linkEdit = '<a href="'+linkWithParams+'">Edit text</a>';
-							var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+event.node.data.ampHelpTopicId+'">Add child</a>';
-							var linkDeleteNode = '<a href="javascript:deleteNode('+event.node.data.ampHelpTopicId+')">Delete node</a>';
-							$('div#nodeEditorLinkDiv').html(linkEdit+'&nbsp;&nbsp;'+linkAddChild+'&nbsp;&nbsp;'+linkDeleteNode);
-						</digi:secure>
-
-						
-				   },
-			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot load glossary topic.');} 
-			}).responseText;
+			showGlossary(event.node.data.ampHelpTopicId, event.node.label, event.node.data.ampEditorKey);
 		});
+		
 		tree.render();
 
 		$('input#btnSearchGlossary').click(function(e){
@@ -257,6 +235,32 @@
 		
 	});
 
+	function showGlossary(glossId,glossName,editorKey){
+		$('div#nodeEditorLinkDiv').html('');
+		var resp=$.ajax({
+			   type: 'POST',
+			   url: getBodyURL,
+			   data: ({helpTopicId : glossId}),
+			   cache : false,
+			   success: function(data,msg){
+					$('div#nodeContentDiv').html(data);
+					$('div#nodeTitle').html(glossName);
+					<digi:secure group="Help Administrators">
+						var key = editorKey;//event.node.data.ampEditorKey;
+						var lang = '${requestScope["org.digijava.kernel.navigation_language"].code}';
+						var linkWithParams = editorLink + '?id=' + key + '&lang=' + lang + '&referrer=' + window.location;
+						var linkEdit = '<a href="'+linkWithParams+'">Edit text</a>';
+						var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+glossId+'">Add child</a>';
+						var linkDeleteNode = '<a href="javascript:deleteNode('+glossId+')">Delete node</a>';
+						$('div#nodeEditorLinkDiv').html(linkEdit+'&nbsp;&nbsp;'+linkAddChild+'&nbsp;&nbsp;'+linkDeleteNode);
+					</digi:secure>
+			   },
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){
+			   	   	alert('Error, cannot load glossary topic.');
+			   } 
+		}).responseText;
+	}
+	
 	function doSearch(term){
 		var resp=$.ajax({
 			   type: 'POST',

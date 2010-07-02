@@ -163,7 +163,6 @@ public class ReportWizardAction extends MultiAction {
 			typereport = new Integer(request.getParameter("type"));
 			if (typereport==ArConstants.PLEDGES_TYPE){
 				myForm.setReportType("pledge");
-				myForm.setHideActivities(true);
 			}
 		}
 		if (myForm.getReportType().equalsIgnoreCase("pledge") && typereport != ArConstants.PLEDGES_TYPE){

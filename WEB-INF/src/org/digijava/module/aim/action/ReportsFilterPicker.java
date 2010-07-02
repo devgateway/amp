@@ -177,27 +177,71 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.getSectorElements().add(sectorsElement);
  	 	filterForm.getSectorElements().add(secondarySectorsElement);
- 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>());
+ 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
- 	 	AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
- 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
-		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+		
+ 	 	AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
-		if (primaryPrgSetting!=null) {
-			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+		List<AmpTheme> primaryPrograms;		
+		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
+			primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 			filterForm.getProgramElements().add(primaryProgElement);
-	 	}
+		} else {
+			primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+			for (AmpTheme ampTheme : primaryPrograms) {
+				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", ampTheme, "selectedPrimaryPrograms");
+				filterForm.getProgramElements().add(primaryProgElement);
+			}
+		}	
+		
+//		if (primaryPrgSetting!=null) {
+//			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
+//			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
+//			filterForm.getProgramElements().add(primaryProgElement);
+//	 	}
+		
 		AmpTheme secondaryProg = null;
  	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
- 	 	if (secondaryPrg!=null) {
-			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+ 	 	List<AmpTheme> secondaryPrograms;		
+		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
+			secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 			filterForm.getProgramElements().add(secondaryProgElement);
+		} else {
+			secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+			for (AmpTheme ampTheme : secondaryPrograms) {
+				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", ampTheme, "selectedSecondaryPrograms");
+				filterForm.getProgramElements().add(secondaryProgElement);
+			}
 		}
- 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj");
+// 	 	if (secondaryPrg!=null) {
+//			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
+//			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
+//			filterForm.getProgramElements().add(secondaryProgElement);
+//		}
  	 	
- 	 	filterForm.getProgramElements().add(natPlanProgElement);
+ 	 	
+ 	 	
+ 	 	
+		AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+// 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
+// 	 	
+// 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
+// 	 	filterForm.getProgramElements().add(natPlanProgElement);
+ 	 	
+		List<AmpTheme> nationalPlanningObjectives;
+ 	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
+ 	 		AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy()); 	 	 	
+ 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
+ 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
+		} else {
+			nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+			for (AmpTheme ampTheme : nationalPlanningObjectives) {
+				GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", ampTheme, "selectedNatPlanObj"); 	 	
+	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
+			}
+		}
  	 	
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());

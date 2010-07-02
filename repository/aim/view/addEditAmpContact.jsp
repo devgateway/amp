@@ -622,7 +622,7 @@ html>body #mainEmpty {
                                                                                                                                         </c:forEach>
                                                                                                                                         <tr>
                                                                                                                                             <td colspan="2">
-                                                                                                                                                 <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                                 <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                                                                                                  <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
                                                                                                                                         	</td>
                                                                                                                                     	</tr>

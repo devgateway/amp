@@ -9,6 +9,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -16,6 +17,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.form.DocToOrgForm;
@@ -108,10 +111,13 @@ public class DocToOrgAction extends MultiAction {
 		DocToOrgForm docToOrgForm	= (DocToOrgForm) form;
 		
 		docToOrgForm.setHasAddParticipatingOrgRights(false);
-		Node n		= DocumentManagerUtil.getReadNode(uuid, request);
-		if (n != null) {
-			docToOrgForm.setHasAddParticipatingOrgRights( DocumentManagerRights.hasAddParticipatingOrgRights(n, request) );
+		if(isLoggeedIn(request)){
+			Node n		= DocumentManagerUtil.getReadNode(uuid, request);
+			if (n != null) {
+				docToOrgForm.setHasAddParticipatingOrgRights( DocumentManagerRights.hasAddParticipatingOrgRights(n, request) );
+			}
 		}
+		
 		
 		docToOrgForm.setOrgs(new ArrayList<AmpOrganisation>() );
 		if (uuid != null) {
@@ -127,5 +133,15 @@ public class DocToOrgAction extends MultiAction {
 	}
 
 	
+	private boolean isLoggeedIn(HttpServletRequest request) {
+		if ( getCurrentTeamMember(request) != null) 
+			return true;
+		return false;
+	}
 	
+	private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
+		HttpSession httpSession		= request.getSession();
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		return teamMember;
+	}
 }

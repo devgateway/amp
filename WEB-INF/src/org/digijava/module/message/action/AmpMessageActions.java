@@ -198,7 +198,7 @@ public class AmpMessageActions extends DispatchAction {
     	List<AmpMessageState> allMessages=null; //all messages
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
         int maxStorage = 0;
-        if (settings.getMsgStoragePerMsgType() != null) {
+        if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
             maxStorage = settings.getMsgStoragePerMsgType().intValue();
         }
 
@@ -450,7 +450,7 @@ public class AmpMessageActions extends DispatchAction {
 		int calEventType=0;
                 AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
                 int maxStorage = 0;
-                if (settings.getMsgStoragePerMsgType() != null) {
+                if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
                     maxStorage = settings.getMsgStoragePerMsgType().intValue();
                 }
 		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);

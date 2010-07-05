@@ -39,10 +39,10 @@
         }
 
         var additionalInfoResponseSuccess = function(o){
-            <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=false" />
-                document.orgProfOrgProfileFilterForm.action="${url}";
-                document.orgProfOrgProfileFilterForm.target="_self";
-                document.orgProfOrgProfileFilterForm.submit();
+    <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=false" />
+            document.orgProfOrgProfileFilterForm.action="${url}";
+            document.orgProfOrgProfileFilterForm.target="_self";
+            document.orgProfOrgProfileFilterForm.submit();
         }
 
         var additionalInfoResponseFailure = function(o){
@@ -139,15 +139,11 @@
         </div>
     </UL>
 </DIV>
-<div class="topBorder contentbox_border chartPlaceCss tab_organization_profile_selected">
+<div class="topBorder contentbox_border chartPlaceCss tab_organization_profile_selected" style="height: 98%">
     <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
     <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
     <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
-    <digi:instance property="orgSummaryForm" />
-    <digi:form action="/showOrgSummary.do" method="post">
-        <html:hidden property="action" styleId="orgSummaryActionId"/>
-        <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
-
+   
         <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="4">
             <tr>
                 <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
@@ -267,7 +263,19 @@
                 <c:choose>
                     <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
                     </table>
-                    <br/>
+                    <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
+                    <digi:instance property="orgSummaryForm" />
+                    <digi:form action="/showOrgSummary.do" method="post">
+                        <html:hidden property="action" styleId="orgSummaryActionId"/>
+                        <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
+                        <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height: 200px">
+                            <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
+                                <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
+                                <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
+                                <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
+                            </table>
+                        </div>
+                    </digi:form>
                     <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
                         <thead>
                             <tr>
@@ -360,18 +368,7 @@
             </c:otherwise>
         </c:choose>
     </c:if>
-
-    <c:if test="${orgsCount==1}">
-        <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
-        <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height:200px;z-index:3">
-            <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
-                <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
-                <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
-                <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
-            </table>
-        </div>
-    </c:if>
-</digi:form>
+&nbsp;
 </div>
 <div class="tab_organization_profile_unselected contentbox_border chartPlaceCss" style="display:none">
     <div style="float:left">

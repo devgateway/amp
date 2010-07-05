@@ -42,6 +42,36 @@ public class OrgProfileWidgetUtil {
 		}
     	return result;
     }
+
+    /**
+     * Returns true if such organization profile widget already exists.
+     * @return
+     * @throws DgException
+     */
+    public static boolean orgProfileWidgetExists(Long type, Long widgetId) throws DgException {
+        boolean exists = false;
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpWidgetOrgProfile> result = null;
+        try {
+            String queryString = "from " + AmpWidgetOrgProfile.class.getName() + " opw where opw.type=:type ";
+            if (widgetId != null) {
+                queryString += " and opw.id!=:id";
+            }
+            Query query = session.createQuery(queryString);
+            query.setLong("type", type);
+            if (widgetId != null) {
+            query.setLong("id", widgetId);
+            }
+            result = query.list();
+            if(result!=null&&result.size()>0){
+                exists=true;
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(e);
+        }
+        return exists;
+    }
     
       /**
      * Loads  widget by ID.

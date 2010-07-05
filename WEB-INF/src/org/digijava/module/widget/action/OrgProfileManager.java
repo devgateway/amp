@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -121,6 +123,12 @@ public class OrgProfileManager  extends DispatchAction {
                     case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY: name="Aid predictability"; break;
         }
         orgProfWidget.setName(name);
+        if (OrgProfileWidgetUtil.orgProfileWidgetExists(orgProfWidget.getType(), orgProfWidget.getId())) {
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
+            saveErrors(request, errors);
+            return mapping.findForward("create");
+        }
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);
         if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
             newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());

@@ -79,12 +79,13 @@
                             <html:select name="widgetOrgProfileWidgetForm" property="type">
                                 <html:option value="1"><digi:trn>Summary</digi:trn></html:option>
                                 <html:option value="2"><digi:trn>Type of Aid</digi:trn></html:option>
-                                <html:option value="3"><digi:trn>Pledges/Comm/Disb</digi:trn></html:option>
                                 <html:option value="4"><digi:trn>ODA Profile</digi:trn></html:option>
+                                <html:option value="3"><digi:trn>Pledges/Comm/Disb</digi:trn></html:option>
+                                <html:option value="8"><digi:trn>Aid predictability</digi:trn></html:option>
                                 <html:option value="5"><digi:trn>Sector Breakdown</digi:trn></html:option>
                                 <html:option value="6"><digi:trn>Regional Breakdown</digi:trn></html:option>
                                 <html:option value="7"><digi:trn>Paris Declaration</digi:trn></html:option>
-                                 <html:option value="8"><digi:trn>Aid predictability</digi:trn></html:option>
+                                
                             </html:select>
                             
                                                        

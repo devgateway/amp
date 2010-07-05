@@ -266,6 +266,7 @@ public class PledgesEntityHelper {
 					} else {
 						fundingPledgesSector.setPledgeid(pledge);
 						session.save(fundingPledgesSector);
+						fpsl.add(fundingPledgesSector);
 					}
 				}
 			} else {
@@ -273,8 +274,9 @@ public class PledgesEntityHelper {
 					FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
 					session.delete(fundingPledgesSector);
 				}
+				fpsl = null;
 			}
-			fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
+			
 			if(fpsl!=null && fpsl.size()>0){
 				for (Iterator iterator = fpsl.iterator(); iterator.hasNext();) {
 					FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
@@ -293,6 +295,7 @@ public class PledgesEntityHelper {
 					} else {
 						fundingPledgesDetails.setPledgeid(pledge);
 						session.save(fundingPledgesDetails);
+						fpdl.add(fundingPledgesDetails);
 					}
 				}
 			} else {
@@ -300,8 +303,9 @@ public class PledgesEntityHelper {
 					FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
 					session.delete(fundingPledgesDetails);
 				}
+				fpdl = null;
 			}
-			fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
+			
 			if(fpdl!=null && fpdl.size()>0){
 				for (Iterator iterator = fpdl.iterator(); iterator.hasNext();) {
 					FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
@@ -319,16 +323,17 @@ public class PledgesEntityHelper {
 					} else {
 						fundingPledgesloc.setPledgeid(pledge);
 						session.save(fundingPledgesloc);
+						fpll.add(fundingPledgesloc);
 					}
-					
 				}
 			} else {
 				for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
 					FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
 					session.delete(fundingPledgesloc);
 				}
+				fpll = null;
 			}
-			fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			
 			if(fpll!=null && fpll.size()>0){
 				for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
 					FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();

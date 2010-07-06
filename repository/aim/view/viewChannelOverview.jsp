@@ -62,10 +62,10 @@ function fnDeleteProject()
 	}
 }
 
-function commentWin(val) {
+function commentWin(val, commentId) {
 	openNewWindow(600, 400);
 	<digi:context name="commurl" property="context/module/moduleinstance/viewComment.do" />
-	url = "<%=commurl %>~comment=viewccd~previus=vco~actId=" + val;
+	url = "<%=commurl %>~comment=view" + commentId + "~previus=vco~actId=" + val;
 	document.aimChannelOverviewForm.action = url;
 	document.aimChannelOverviewForm.currUrl1.value = "<%=commurl%>";
 	document.aimChannelOverviewForm.target = popupPointer.name;
@@ -1875,7 +1875,9 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:FinalDateForDisbursments">
-																			Final Date for Disbursments</digi:trn> : <aim:formatDate value="${activity.disbursmentsDate}" /></TD>
+																			Final Date for Disbursments</digi:trn> : <aim:formatDate value="${activity.disbursmentsDate}" />&nbsp; <a
+																				href="javascript:commentWin('<c:out value="${activity.ampActivityId}" />', 'fdd')">
+																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Current Completion Date"
@@ -1884,7 +1886,7 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:currentCompletionDate">
 																			Current Completion Date</digi:trn> : <aim:formatDate value="${activity.actualCompletionDate}" /> &nbsp; <a
-																				href="javascript:commentWin('<c:out value="${activity.ampActivityId}" />')">
+																				href="javascript:commentWin('<c:out value="${activity.ampActivityId}" />', 'ccd')">
 																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>

@@ -226,7 +226,7 @@ function closeWindow() {
         <table border="0">
           <tr id="trName">
             <td>
-            <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
+            <b style="color: red;">*</b> <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             </td>
             <td>
               <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
@@ -244,9 +244,7 @@ function closeWindow() {
           </tr>
           <tr>
             <td>
-            <digi:trn key="admin:indicatorcode">
-            	Indicator code:
-            	</digi:trn>
+            <b style="color: red;">*</b> <digi:trn key="admin:indicatorcode">Indicator code:</digi:trn>
             </td>
             <td>
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
@@ -265,9 +263,7 @@ function closeWindow() {
           <tr id="trCategory">
           </tr>
           <tr>
-            <td><digi:trn key="admin:sectors">
-          	Sectors
-          </digi:trn></td>
+            <td><b style="color: red;">*</b> <digi:trn key="admin:sectors">Sectors</digi:trn></td>
              <td>
               <jsp:include page="addIndicatorSector.jsp"/>
             </td>

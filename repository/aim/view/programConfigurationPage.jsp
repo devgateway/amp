@@ -13,6 +13,22 @@
 	return true;
 
    }
+   function validateSave(){
+        var valid=false;
+        var hierarchyIDs=$("select[name$='.defaultHierarchyId']");
+        if(hierarchyIDs!=null){
+            for(var i=0;i < hierarchyIDs.length; i++){
+                for(var j=i+1;j<hierarchyIDs.length;j++){
+                    if(hierarchyIDs[i].value==hierarchyIDs[j].value && hierarchyIDs[j].value!=-1){
+                        alert('<digi:trn jsFriendly="true">two or more porgrams with same hierarchy!</digi:trn>');
+                        return valid;
+                    }
+                }
+            }
+        }
+        valid=true;
+        return valid;
+    }
 
 </script>
 
@@ -135,7 +151,7 @@ Default Hierarchy
 <tr>
 <td colspan="2">
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}"/>
+<html:submit property="save" value="${trn}" onclick="return validateSave()"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" value="${resetTrn}" />

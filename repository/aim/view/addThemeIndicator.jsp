@@ -351,7 +351,7 @@ function closeWindow(){
 					 </tr>
 					 
 				<logic:notEmpty name="aimThemeForm" property="programIndicators">
-				 <tr>
+				<tr>
 					<td>
 						<table  bgColor="#d7eafd" cellPadding=5 cellSpacing=1 border="0" align="center" width=772>
 						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.programIndicators}">
@@ -367,7 +367,7 @@ function closeWindow(){
 									<td align="left" width="60%" bgcolor="#f4f4f2">
 										<b>${prgIndicatorItr.indicator.name}</b>
 									</td>
-					                 <td  height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap">
+					                <td  height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap">
 										  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="prgIndicatorId">
 														${prgIndicatorItr.indicatorThemeId}
@@ -390,7 +390,8 @@ function closeWindow(){
 									 </html:multibox>
 									</td>
 								</tr>
-									<td width="25" height="15" bgcolor="#f4f4f2" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none">
+                                <tr>
+									<td width="25" height="15" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none; background-color:#f4f4f2;">
 										 <table border="0" width="70%" class="box-border">
 											<tr bgcolor="white">
 													  <td  width="20%"></td>
@@ -402,53 +403,54 @@ function closeWindow(){
     												</td>
   											</tr>
 											<tr bgcolor="#003366" class="textalb">
-													     <td align="center" valign="middle" width="75">
-													      <b><font color="white"><digi:trn key="aim:addtheme:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
-													     </td>
-													     <td align="center" valign="middle" width="120">
-													       <b><font color="white"><digi:trn key="aim:addtheme:totalamount">Total Amount</digi:trn></font></b>
-													     </td>
-													     <td align="center" valign="middle" width="120">
-													       <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
-													     </td>
-													     <td align="center" valign="middle" width="120" colspan="3">
-													       <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
-													     </td>
-													</tr>
-														<logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
-														   <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
-																<tr bgcolor="#ffffff">
-																	<td width="40" bgcolor="#f4f4f2" align="center">																		
-																		<c:if test="${prgIndicatorValues.valueType=='0'}"><digi:trn key="aim:addeditdata:target">Target</digi:trn></c:if>
-																		<c:if test="${prgIndicatorValues.valueType=='1'}"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></c:if>
-																		<c:if test="${prgIndicatorValues.valueType=='2'}"><digi:trn key="aim:addeditdata:base">Base</digi:trn></c:if>
-																	</td>
-																	<td align="center" width="10%" bgcolor="#f4f4f2"><b>
-																		<bean:write name="prgIndicatorValues" property="valAmount"/></b>
-																	</td>
-																	<td bgcolor="#f4f4f2" align="center">
-																		<bean:write name="prgIndicatorValues" property="creationDate"/></b>
-																	</td>
-																	<td bgcolor="#f4f4f2" align="center">
-																		<c:if test="${not empty prgIndicatorValues.location}">
-																			<bean:define id="loc" name="prgIndicatorValues" property="location"></bean:define>
-																			<c:if test="${!empty loc.location.name}">
-															                	[${loc.location.name}]
-															                </c:if>
-																		</c:if>
-																		<c:if test="${empty prgIndicatorValues.location}">
-																			<span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>
-																		</c:if>
-																	</td>
-																</tr>
-															</logic:iterate>
-														</logic:notEmpty>
-												</table>
-											</span>
+                                                 <td align="center" valign="middle" width="75">
+                                                  <b><font color="white"><digi:trn key="aim:addtheme:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
+                                                 </td>
+                                                 <td align="center" valign="middle" width="120">
+                                                   <b><font color="white"><digi:trn key="aim:addtheme:totalamount">Total Amount</digi:trn></font></b>
+                                                 </td>
+                                                 <td align="center" valign="middle" width="120">
+                                                   <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
+                                                 </td>
+                                                 <td align="center" valign="middle" width="120" colspan="3">
+                                                   <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
+                                                 </td>
+                                            </tr>
+                                        <logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
+                                           <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
+                                            <tr bgcolor="#ffffff">
+                                                <td width="40" bgcolor="#f4f4f2" align="center">																		
+                                                    <c:if test="${prgIndicatorValues.valueType=='0'}"><digi:trn key="aim:addeditdata:target">Target</digi:trn></c:if>
+                                                    <c:if test="${prgIndicatorValues.valueType=='1'}"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></c:if>
+                                                    <c:if test="${prgIndicatorValues.valueType=='2'}"><digi:trn key="aim:addeditdata:base">Base</digi:trn></c:if>
+                                                </td>
+                                                <td align="center" width="10%" bgcolor="#f4f4f2"><b>
+                                                    <bean:write name="prgIndicatorValues" property="valAmount"/></b>
+                                                </td>
+                                                <td bgcolor="#f4f4f2" align="center">
+                                                    <bean:write name="prgIndicatorValues" property="creationDate"/></b>
+                                                </td>
+                                                <td bgcolor="#f4f4f2" align="center">
+                                                    <c:if test="${not empty prgIndicatorValues.location}">
+                                                        <bean:define id="loc" name="prgIndicatorValues" property="location"></bean:define>
+                                                        <c:if test="${!empty loc.location.name}">
+                                                            [${loc.location.name}]
+                                                        </c:if>
+                                                    </c:if>
+                                                    <c:if test="${empty prgIndicatorValues.location}">
+                                                        <span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>
+                                                    </c:if>
+                                                </td>
+                                            </tr>
+                                            </logic:iterate>
+                                        </logic:notEmpty>
+										</table>
+	                                </td>
+                                </tr>
 								</c:forEach>
-						 	</table>
-						 </td>
-					</tr>
+						 </table>
+					</td>
+				</tr>
 				</logic:notEmpty>
 				<logic:empty name="aimThemeForm" property="programIndicators">
 						<tr align="center" bgcolor="#ffffff"><td><b>

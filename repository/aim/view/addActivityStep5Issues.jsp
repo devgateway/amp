@@ -116,7 +116,7 @@
       																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Edit this measure">Edit measure</button>
       																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Delete this measure">Delete measure</button>
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
+																				<button class="buton" onclick="addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Add Actors"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
 																			</field:display>
 																		</td>
 																	</tr>

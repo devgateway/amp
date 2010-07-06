@@ -736,3 +736,8 @@
 <field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
 <field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>
+<field:display name="Budget Classification" feature="Budget"></field:display>
+<field:display name="Budget Department" feature="Budget"></field:display>
+<field:display name="Budget Sector" feature="Budget"></field:display>
+<field:display name="Budget Organization" feature="Budget"></field:display>
+<field:display name="Budget Program" feature="Budget"></field:display>

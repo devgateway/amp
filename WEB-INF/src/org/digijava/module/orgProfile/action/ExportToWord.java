@@ -167,6 +167,10 @@ public class ExportToWord extends Action {
             }
             while (placeIter.hasNext()) {
                 AmpDaWidgetPlace place = placeIter.next();
+               if(!FeaturesUtil.isVisibleFeature(place.getName(), ampContext)){
+                   continue;
+               }
+
                 AmpWidget wd = place.getAssignedWidget();
                 if (wd != null) {
                     final ArrayList rendertype = new ArrayList();

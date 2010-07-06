@@ -223,154 +223,90 @@
                                             <TBODY>
                                                 <TR>
                                                     <TD VALIGN="TOP" colspan="2">
-                                                <c:set var="stylePlace1">
-                                                    display: none;
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place1" module="Org Profile">
-                                                    <c:set var="stylePlace1">
-                                                        z-index: 1000;
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace1}">
-                                                    <digi:insert attribute="chart1">
-                                                        <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
-                                                    </digi:insert>
-                                                </div>
-                                                </TD>
-                                        </TR>
-                                        <TR>
-                                                <TD  VALIGN="TOP">
-                                                <c:set var="stylePlace2">
-                                                    display: none; z-index: 1000
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place2" module="Org Profile">
-                                                    <c:set var="stylePlace2">
-                                                        z-index: 1000
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace2}">
-                                                    <digi:insert attribute="chart2">
-                                                        <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
-                                                    </digi:insert>
-                                                </div>
-                                            </TD>
-                                            <TD  VALIGN="TOP">
-                                            <c:set var="stylePlace3">
-                                                display: none; z-index: 1000
-                                            </c:set>
-                                            <feature:display name="orgprof_chart_place3" module="Org Profile">
-                                                <c:set var="stylePlace3">
-                                                    z-index: 1000
-                                                </c:set>
-                                            </feature:display>
-                                            <div style="${stylePlace3}">
-                                                <digi:insert attribute="chart3">
-                                                    <digi:put name="widget-teaser-param">orgprof_chart_place3</digi:put>
-                                                </digi:insert>
-                                            </div>
-                                            </TD>
-                                        </TR>
-                                        <TR>
-                                            <TD   VALIGN="TOP" style="width: 50%">
-                                                <c:set var="stylePlace4">
-                                                    display: none; z-index: 1000
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place4" module="Org Profile">
-                                                    <c:set var="stylePlace4">
-                                                        z-index: 1000
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace3}">
-                                                    <digi:insert attribute="chart4">
-                                                        <digi:put name="widget-teaser-param">orgprof_chart_place4</digi:put>
-                                                    </digi:insert>
-                                                </div>
-                                            </TD>
-                                            <TD  VALIGN="TOP">
-                                                <c:set var="stylePlace5">
-                                                    display: none; z-index: 1000
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place5" module="Org Profile">
-                                                    <c:set var="stylePlace5">
-                                                        z-index: 1000
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace5}">
-                                                    <digi:insert attribute="chart5">
-                                                        <digi:put name="widget-teaser-param">orgprof_chart_place5</digi:put>
-                                                    </digi:insert>
-                                                </div>
-                                            </TD>
-                                        </TR>
-                                        <TR>
-                                            <TD  VALIGN="TOP"  style="width: 50%" >
-                                                <c:set var="stylePlace6">
-                                                    display: none; z-index: 1000
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place6" module="Org Profile">
-                                                    <c:set var="stylePlace6">
-                                                        z-index: 1000
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace6}"
-                                                     <digi:insert attribute="chart6">
-                                                         <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
-                                                     </digi:insert>
-                                            </div>
-                                        </TD>
-                                        <TD  VALIGN="TOP">
-                                                <c:set var="stylePlace7">
-                                                    display: none; z-index: 1000
-                                                </c:set>
-                                                <feature:display name="orgprof_chart_place7" module="Org Profile">
-                                                    <c:set var="stylePlace7">
-                                                        z-index: 1000
-                                                    </c:set>
-                                                </feature:display>
-                                                <div style="${stylePlace7}"
-                                                     <digi:insert attribute="chart7">
-                                                         <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
-                                                     </digi:insert>
-                                            </div>
-                                        </TD>
-                                    </TR>
-                                    <TR>
-                                        <TD VALIGN="TOP" colspan="2"   >
-                                            <c:set var="stylePlace8">
-                                                display: none; z-index: 1000
-                                            </c:set>
-                                            <feature:display name="orgprof_chart_place8" module="Org Profile">
-                                                <c:set var="stylePlace8">
-                                                    z-index: 1000
-                                                </c:set>
-                                            </feature:display>
-                                            <div style="${stylePlace8}">
-                                                <digi:insert attribute="chart8">
-                                                    <digi:put name="widget-teaser-param">orgprof_chart_place8</digi:put>
-                                                </digi:insert>
-                                            </div>
-                                </TD>
-                            </TR>
-                        </TBODY>
-                    </TABLE>
-                </TD>
-            </TR>
-                </TBODY>
-            </TABLE>
-        </TD>
-    </TR>
-            <TR>
-                <TD width="100%" >
-                    <digi:insert attribute="footer" />
-                </TD>
-            </TR>
-    </TABLE>
-    <script language="javascript" type="text/javascript">
-        setStripsTable("tableEven", "tableOdd");
-        setHoveredTable();
-        showOrgProfileToolbar();
-    </script>
-</BODY>
+                                                        <feature:display name="orgprof_chart_place1" module="Org Profile">
+                                                            <digi:insert attribute="chart1">
+                                                                <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                </TR>
+                                                <TR>
+                                                    <TD  VALIGN="TOP">
+                                                        <feature:display name="orgprof_chart_place2" module="Org Profile">
+                                                            <digi:insert attribute="chart2" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place2</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                    <TD  VALIGN="TOP">
+                                                        <feature:display name="orgprof_chart_place3" module="Org Profile">
+                                                            <digi:insert attribute="chart3" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place3</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                </TR>
+                                                <TR>
+                                                    <TD   VALIGN="TOP" style="width: 50%">
+                                                        <feature:display name="orgprof_chart_place4" module="Org Profile">
+                                                            <digi:insert attribute="chart4" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place4</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                    <TD  VALIGN="TOP">
+                                                        <feature:display name="orgprof_chart_place5" module="Org Profile">
+                                                            <digi:insert attribute="chart5" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place5</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                </TR>
+                                                <TR>
+                                                    <TD  VALIGN="TOP"  style="width: 50%" >
+                                                        <feature:display name="orgprof_chart_place6" module="Org Profile">
+                                                            <digi:insert attribute="chart6" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place6</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                    <TD  VALIGN="TOP">
+                                                        <feature:display name="orgprof_chart_place7" module="Org Profile">
+                                                            <digi:insert attribute="chart7" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place7</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                </TR>
+                                                <TR>
+                                                    <TD VALIGN="TOP" colspan="2"   >
+                                                        <feature:display name="orgprof_chart_place8" module="Org Profile">
+                                                            <digi:insert attribute="chart8" flush="false">
+                                                                <digi:put name="widget-teaser-param">orgprof_chart_place8</digi:put>
+                                                            </digi:insert>
+                                                        </feature:display>
+                                                    </TD>
+                                                </TR>
+                                            </TBODY>
+                                        </TABLE>
+                                    </TD>
+                                </TR>
+                            </TBODY>
+                        </TABLE>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width="100%" >
+                        <digi:insert attribute="footer" />
+                    </TD>
+                </TR>
+        </TABLE>
+        <script language="javascript" type="text/javascript">
+            setStripsTable("tableEven", "tableOdd");
+            setHoveredTable();
+            showOrgProfileToolbar();
+        </script>
+    </BODY>
 </HTML>
 
 

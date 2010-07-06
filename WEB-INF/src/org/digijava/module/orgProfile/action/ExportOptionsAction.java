@@ -7,6 +7,7 @@ package org.digijava.module.orgProfile.action;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.form.OrgProfileExportOptionsForm;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
@@ -37,11 +39,15 @@ public class ExportOptionsAction extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         OrgProfileExportOptionsForm orgForm = (OrgProfileExportOptionsForm) form;
+        ServletContext ampContext = getServlet().getServletContext();
         List<AmpDaWidgetPlace> orgPlaces = WidgetUtil.getAllOrgProfilePlaces();
         List<ExportSettingHelper>  helpers = new ArrayList<ExportSettingHelper>();
         Iterator<AmpDaWidgetPlace> placeIter = orgPlaces.iterator();
             while (placeIter.hasNext()) {
                 AmpDaWidgetPlace place = placeIter.next();
+                 if (!FeaturesUtil.isVisibleFeature(place.getName(), ampContext)) {
+                    continue;
+                }
                 AmpWidget wd = place.getAssignedWidget();
                 final ArrayList<ExportSettingHelper>  widgetHelpers= new ArrayList<ExportSettingHelper>();
                 if (wd != null) {

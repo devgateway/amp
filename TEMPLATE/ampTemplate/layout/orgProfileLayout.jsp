@@ -224,7 +224,7 @@
                                                 <TR>
                                                     <TD VALIGN="TOP" colspan="2">
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">
-                                                            <digi:insert attribute="chart1">
+                                                            <digi:insert attribute="chart1" flush="false">
                                                                 <digi:put name="widget-teaser-param" >orgprof_chart_place1</digi:put>
                                                             </digi:insert>
                                                         </feature:display>

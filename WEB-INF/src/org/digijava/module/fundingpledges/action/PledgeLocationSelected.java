@@ -37,10 +37,17 @@ public class PledgeLocationSelected extends Action {
 				AmpCategoryValueLocations ampCVLocation		= DynLocationManagerUtil.getLocation( userSelectedLocs[i], false);
 				FundingPledgesLocation fpl = new FundingPledgesLocation();
 				fpl.setLocation(ampCVLocation);
-				if ( plForm.getSelectedLocs() == null )
+				if ( plForm.getSelectedLocs() == null ){
 					plForm.setSelectedLocs( new ArrayList<FundingPledgesLocation>() );
-				if ( !plForm.getSelectedLocs().contains(fpl) )
+				}
+				if ( !plForm.getSelectedLocs().contains(fpl) ){
+					if (plForm.getSelectedLocs().size()==0) {
+						fpl.setLocationpercentage(100f);
+					} else {
+						fpl.setLocationpercentage(0f);
+					}
 					plForm.getSelectedLocs().add(fpl);
+				}
 			}
 		}
 		

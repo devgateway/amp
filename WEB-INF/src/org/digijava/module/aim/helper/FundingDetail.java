@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+import org.digijava.module.fundingpledges.form.PledgeForm;
 /**
  * @author jose
  *
@@ -30,14 +33,31 @@ public class FundingDetail implements Serializable, Comparable
 	private boolean useFixedRate;
 	private String fixedExchangeRate;
 	private Long ampComponentFundingId;
+	
+
 	private Long fundDetId;
     private String disbOrderId;
     private IPAContract contract;
     private Boolean disbursementOrderRejected;        
     private Long pledge;
-    
+    private String pledgename="";
        
-	public Long getPledge() {
+	
+    
+    
+	public String getPledgename() {
+		if (this.pledge!=null && !this.pledge.equals(0L)){
+			FundingPledges pledge = PledgesEntityHelper.getPledgesById(this.pledge);
+			return pledge.getTitle();
+		}
+		return pledgename;
+	}
+
+	public void setPledgename(String pledgename) {
+		this.pledgename = pledgename;
+	}
+    
+    public Long getPledge() {
 		if (pledge!=null){
 			return pledge;
 		}else{
@@ -299,7 +319,6 @@ public class FundingDetail implements Serializable, Comparable
 		public Boolean getDisbursementOrderRejected() {
 			return disbursementOrderRejected;
 		}
-       
-        
+      
         
 }

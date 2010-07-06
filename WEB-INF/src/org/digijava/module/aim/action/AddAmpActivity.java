@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.RepositoryException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +24,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -232,8 +229,9 @@ public class AddAmpActivity extends Action {
 			if(org.getFundings()!=null)
 	         for (Iterator itFD = org.getFundings().iterator(); itFD.hasNext();) {
 	        	 org.digijava.module.aim.helper.Funding funding = (org.digijava.module.aim.helper.Funding) itFD.next();
-					if(funding!=null && funding.getFundingDetails()!=null) 
+					if(funding!=null && funding.getFundingDetails()!=null){ 
 						eaForm.getFunding().getFundingDetails().addAll(funding.getFundingDetails());
+					}
 	         }
 		}
     }

@@ -765,12 +765,21 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                         </td>
                                                                                         <td width="70">
                                                                                        	 	<field:display name="Date Commitment" feature="Commitments"></field:display>
-                                                                                          		<bean:write name="fundingDetail" property="transactionDate"/>
+                                                                                          	<bean:write name="fundingDetail" property="transactionDate"/>
                                                                                         </td>
                                                                                         <td>
                                                                                         </td>
                                                                                       </tr>
-
+                                                                                       <logic:notEqual name="fundingDetail" property="pledgename" value="">
+                                                                                      <tr>
+                                                                                      	<td colspan="5">
+                                                                                       	 	<field:display name="Related Pledge" feature="Commitments">
+                                                                                       	 	<digi:trn>Related Pledge</digi:trn> :
+                                                                                       	 	<bean:write name="fundingDetail" property="pledgename"/>
+                                                                                       	 	</field:display>
+                                                                                        </td>
+                                                                                      </tr>
+																					</logic:notEqual>
 
                                                                                 </logic:equal>
                                                                               </logic:iterate>
@@ -875,6 +884,16 @@ ${fn:replace(message,quote,escapedQuote)}
 			                                                                                                   </c:if>
 																										</td>																							
 																									</tr>
+																									 <logic:notEqual name="fundingDetail" property="pledgename" value="">
+																									 <tr>
+                                                                                      					<td  colspan="5">
+                                                                                       	 					<field:display name="Related Pledge" feature="Disbursement">
+                                                                                       	 						<digi:trn>Related Pledge</digi:trn> :
+                                                                                       	 						<bean:write name="fundingDetail" property="pledgename"/>
+                                                                                       	 					</field:display>
+                                                                                        				</td>
+                                                                                      				</tr>
+                                                                                      				</logic:notEqual>
 																						</logic:equal>
 																					</logic:iterate>
                                                                                  </c:if>

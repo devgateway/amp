@@ -110,39 +110,37 @@
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
  
- 	function expandProgram(progId){
-		var imgId='#img_'+progId;
-		var imghId='#imgh_'+progId;
-		var divId='#div_theme_'+progId;
-		$(imghId).show();
-		$(imgId).hide();
-		$(divId).show('fast');
-	}       
-	
-	function collapseProgram(progId){
-		var imgId='#img_'+progId;
-		var imghId='#imgh_'+progId;
-		var divId='#div_theme_'+progId;
-		$(imghId).hide();
-		$(imgId).show();
-		$(divId).hide('fast');
-	}       
-       
-	function expandAll(){
-                $("img[@id^='img_']"+':visible').slideUp('fast');
-		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
-		$("div[@id^='div_theme_']").slideDown('fast');
-               
-         }
-         function collapseAll(){
-              $("img[@id^='imgh_']"+':visible').slideUp('fast');
-              $("img[@id^='img_']"+':hidden').slideDown('fast');
-	      $("div[@id^='div_theme_']"+':visible').slideUp('fast');
-         }
+        function expandProgram(progId){
+            var imgId='#img_'+progId;
+            var imghId='#imgh_'+progId;
+            var divId='#div_theme_'+progId;
+            $(imghId).show();
+            $(imgId).hide();
+            $(divId).show('fast');
+        }       
         
+        function collapseProgram(progId){
+            var imgId='#img_'+progId;
+            var imghId='#imgh_'+progId;
+            var divId='#div_theme_'+progId;
+            $(imghId).hide();
+            $(imgId).show();
+            $(divId).hide();
+        }
+         
+        function expandAll(){
+            $("img[id^='img_']").hide();
+            $("img[id^='imgh_']").show('fast');;
+            $("div[id^='div_theme_']").show('fast');
 
+        }
+             function collapseAll(){
+            $("img[id^='imgh_']").hide();
+            $("img[id^='img_']").show('fast');
+            $("div[id^='div_theme_']").hide();
+        } 
 
-	-->
+    -->
 </script>
 
 <digi:errors/>
@@ -286,7 +284,7 @@
 											<tr>
 											
 												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
-												<img src= "../ampTemplate/images/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
+												<img src= "../ampTemplate/images/tree_plus.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
 												<img src= "../ampTemplate/images/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
 												<img src= "../ampTemplate/images/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
 												<img src= "../ampTemplate/images/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,

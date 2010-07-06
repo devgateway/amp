@@ -1868,28 +1868,29 @@ public class ProgramUtil {
 
 
     
-	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
+    public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //String noProgPresent = "aim:noProgramsPresent"; not used any more cos hash key translation
 		 Site site = RequestUtils.getSite(request);
 		 //
 		 //requirements for translation purposes
 		 TranslatorWorker translator = TranslatorWorker.getInstance();
-		 String siteId = site.getSiteId();
+		 Long siteId = site.getId();
 		 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		 String translatedText = null;
 		 try {
 			logger.info("siteID : "+siteId);
 			logger.info("locale : "+locale);
-			translatedText = TranslatorWorker.translateText("No Programs present", locale, siteId);
+			translatedText = TranslatorWorker.translateText("No Programs present", locale, siteId.toString());
 		 } catch (WorkerException e) {
 			e.printStackTrace();
 		 }
 		 if (themes == null || themes.size() == 0)
 			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
-		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"1\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
+		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
+		int rc = 0;
 		while (iter.hasNext()) {
 			TreeItem item = (TreeItem) iter.next();
 			AmpTheme theme = (AmpTheme) item.getMember();
@@ -1899,18 +1900,18 @@ public class ProgramUtil {
 			// visible div start
 			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
 			retVal += " <table width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
-			if (level == 1){
-			retVal += "<tr bgcolor=\"#ffcccc\" width=\"100%\">";
+			if (rc++%2 == 0){
+				retVal += "<tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
 			}else{
-			retVal += "<tr bgcolor=\"#f4f4f2\">";
+				retVal += "<tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
 			}
 			retVal += "   <td width=\"1%\" >";
-			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_right.gif\"/>\n";
-			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_down.gif\"  style=\"display : none;\"/>\n";
+			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n";
+			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
 			retVal += "   </td>";
 			if (level>1){
 				retVal += "   <td width=\"1%\">";
-				retVal += "     <img src=\"../ampTemplate/images/link_out_bot.gif\"/>\n";
+				retVal += "     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n";
 				retVal += "   </td>";
 				retVal += "   <td width=\"1%\">";
 				retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
@@ -1927,7 +1928,7 @@ public class ProgramUtil {
 			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
 			retVal += "   </td>";
 			retVal += "   <td width=\"12\">";
-			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
 			retVal += "   </td>";
 			retVal += " </tr></table>";
 			retVal += "</div>\n";
@@ -1943,7 +1944,7 @@ public class ProgramUtil {
 		}
 		retVal += "</table>\n";
 		return retVal;
-	}
+    }
 
 	 public static String getTrn(String key, String defResult, HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();

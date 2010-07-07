@@ -28,7 +28,7 @@
 					<c:set var="checked" scope="page" >checked='checked'</c:set>
 				</c:if>
 			</c:forEach>
-			<li>
+			<li style="margin-left: -20px; ">
 				<table>
 					<tr>
 						<td valign="top"><input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>

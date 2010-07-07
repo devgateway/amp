@@ -865,7 +865,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ampContact.setOfficeaddress(contact.getOfficeaddress());
     			ampContact.setFunction(contact.getFunction());
 
-    			
+
     			/*
     			//remove old properties
     			List<AmpContactProperty> dbProperties=ContactInfoUtil.getContactProperties(ampContact);
@@ -3963,7 +3963,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             
             AmpModulesVisibility step11=FeaturesUtil.getModuleByName("M & E", "MONITORING AND EVALUATING", templId);
             AmpFeaturesVisibility step12=FeaturesUtil.getFeatureByName("Costing", "Activity Costing", templId);
-            AmpFeaturesVisibility step13=FeaturesUtil.getFeatureByName("Level Links", "Activity Levels", templId);
             AmpFeaturesVisibility step14=FeaturesUtil.getFeatureByName("Contracting", "Contracting", templId);
             
             if(step1!=null||step1_1!=null){
@@ -4048,13 +4047,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 steps.add(newStep12);
                 
             }
-             if(step13!=null){
-                Step newStep13=new Step();
-                newStep13.setStepActualNumber(steps.size()+1);
-                newStep13.setStepNumber("12");
-                steps.add(newStep13);
-                
-            }
+           
             
               if(step14!=null){
                 Step newStep14=new Step();

@@ -15,7 +15,6 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -157,7 +156,6 @@
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Issues" module="Issues"></feature:display> 
 <feature:display name="Job Manager" module="ADMIN"></feature:display> 
-<feature:display name="Level Links" module="Activity Levels"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>

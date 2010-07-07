@@ -768,40 +768,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				</feature:display>
 			
 			
-				<!-- Level Linker -->
-				<feature:display name="Level Links" module="Activity Levels">
-				<tr>
-					<c:if test="${aimEditActivityForm.step != 12}">
-					<td nowrap="nowrap">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-						<c:set var="translation">
-							<digi:trn key="aim:levelLinksTitle">Link an activity level to another level</digi:trn>
-						</c:set>
-						<a href="javascript:gotoStep(12)" class="menu" title="${translation}">
-							<digi:trn key="aim:levelLinks">Level Links</digi:trn>
-						</a>
-					</td>
-					</c:if>
-					<c:if test="${aimEditActivityForm.step == 12}">
-					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
-							<tr>
-								<td width="10" height="19" background="module/aim/images/left-arc.gif">
-								</td>
-								<td bgcolor="#3399ff" height="19">
-						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-						<span class="textalb">
-							<digi:trn key="aim:levelLinks">Level Links</digi:trn>
-						</span>
-								</td>
-								<td width="10" height="19"  background="module/aim/images/right-arc.gif">
-								</td>
-							</tr>
-						</table>
-					</td>
-					</c:if>
-				</tr>
-				</feature:display>
+				
 			<field:display name="Add IPA Contract" feature="Contracting">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 13}">

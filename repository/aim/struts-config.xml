@@ -167,6 +167,7 @@
     <form-bean name="EditDepartmentForm" type="org.digijava.module.aim.form.EditDepartmentForm" />
     
     <form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
+    <form-bean name="exportTableForm" type="org.digijava.module.aim.form.ExportTableForm"/>
     
 </form-beans>
 
@@ -1798,6 +1799,9 @@
      	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
      	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
    </action>
+
+
+   <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
 
     
   </action-mappings>

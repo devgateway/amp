@@ -391,9 +391,9 @@ function commentWin(val, commentId) {
 																			</TD>
 																		</TR>
 																		<TR>
-																			<TD bgcolor="#ffffff"><c:if
-																				test="${activity.budget==1}">
+																			<TD bgcolor="#ffffff">
 																				<table>
+																				<c:if test="${activity.budget==1}">
 																					<field:display name="On/Off Budget" feature="Budget">
 																						<tr>
 																							<td>
@@ -504,6 +504,7 @@ function commentWin(val, commentId) {
 																									<digi:trn key="aim:yes">Yes</digi:trn>
 																								</c:if></td></tr>
 																					</field:display>
+																					</c:if> 
 																					<field:display name="Budget Classification" feature="Budget">
 																						<tr>
 																							<td style="margin-top: 10px;">
@@ -514,18 +515,25 @@ function commentWin(val, commentId) {
 																						</tr>
 																						<tr>
 																							<td>
-																								<li style="margin-left: 10px"> ${aimChannelOverviewForm.budgetsector}</li>
-																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 20px"/>
-																								${aimChannelOverviewForm.budgetorganization}<br>
-																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 30px"/>
-																								${aimChannelOverviewForm.budgetdepartment}<br>
-																								<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 40px"/>
-																								${aimChannelOverviewForm.budgetprogram}<br>
+																								<logic:notEmpty property="budgetsector" name="aimChannelOverviewForm">
+																									<li style="margin-left: 10px"> ${aimChannelOverviewForm.budgetsector}</li>
+																								</logic:notEmpty>
+																								<logic:notEmpty property="budgetorganization" name="aimChannelOverviewForm">
+																									<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 20px"/>
+																									${aimChannelOverviewForm.budgetorganization}<br>
+																								</logic:notEmpty>
+																								<logic:notEmpty property="budgetdepartment" name="aimChannelOverviewForm">
+																									<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 30px"/>
+																									${aimChannelOverviewForm.budgetdepartment}<br>
+																								</logic:notEmpty>
+																								<logic:notEmpty property="budgetprogram" name="aimChannelOverviewForm">
+																									<IMG src="../ampTemplate/images/link_out_bot.gif" style="margin-left: 40px"/>
+																									${aimChannelOverviewForm.budgetprogram}<br>
+																								</logic:notEmpty>
 																							</td>
 																						</tr>
 																					</field:display>
 																				</table>
-																			</c:if> 
 																			<field:display name="On/Off Budget" feature="Budget">
 																			<c:if test="${activity.budget==0}">
 																				<digi:trn>Activity is Off Budget</digi:trn>

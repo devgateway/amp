@@ -700,7 +700,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           
         //Budget classification
       	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
-      	eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
+      	eaForm.getIdentification().setSelectedorg(ActivityUtil.getBudgetOrganization(eaForm.getActivityId()));
       	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
       	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
       	

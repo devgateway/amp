@@ -46,7 +46,6 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
@@ -486,19 +485,19 @@ public class ViewChannelOverview extends TilesAction {
 
 
 					//Budget Classification
-					if (activity.getBudgetsector()!=null){
+					if (activity.getBudgetsector()!=null && !activity.getBudgetsector().equals(0L)){
 						AmpBudgetSector bsector = BudgetDbUtil.getBudgetSectorById(activity.getBudgetsector());
 						formBean.setBudgetsector(bsector.getCode() + " - " + bsector.getSectorname());
 					}
-					if (activity.getBudgetorganization()!=null){
+					if (activity.getBudgetorganization()!=null && !activity.getBudgetorganization().equals(0L)){
 						AmpOrganisation org = DbUtil.getOrganisation(activity.getBudgetorganization());
 						formBean.setBudgetorganization(org.getBudgetOrgCode() + " - " + org.getName());
 					}
-					if (activity.getBudgetdepartment()!=null){
+					if (activity.getBudgetdepartment()!=null && !activity.getBudgetdepartment().equals(0L)){
 						AmpDepartments dep = BudgetDbUtil.getBudgetDepartmentById(activity.getBudgetdepartment());
 						formBean.setBudgetdepartment(dep.getCode()+ " - " + dep.getName());
 					}
-					if (activity.getBudgetprogram()!=null){
+					if (activity.getBudgetprogram()!=null && !activity.getBudgetprogram().equals(0L)){
 						AmpTheme prog;
 						try {
 							prog = ProgramUtil.getThemeById(activity.getBudgetprogram());

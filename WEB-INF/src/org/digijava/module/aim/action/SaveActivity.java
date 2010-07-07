@@ -385,17 +385,17 @@ public class SaveActivity extends Action {
 			activity.setBudgetCodeProjectID(eaForm.getIdentification().getBudgetCodeProjectID());
 		
 		//Budget sector classification
-		if (eaForm.getIdentification().getSelectedbudgedsector() != null && !eaForm.getIdentification().getSelectedbudgedsector().equals(0)){
+		if (eaForm.getIdentification().getSelectedbudgedsector() != null){
 			activity.setBudgetsector(eaForm.getIdentification().getSelectedbudgedsector());
 		}
-		if (eaForm.getIdentification().getSelectedorg() != null && !eaForm.getIdentification().getSelectedorg().equals(0)){
+		if (eaForm.getIdentification().getSelectedorg() != null){
 			activity.setBudgetorganization(eaForm.getIdentification().getSelectedorg());
 		}
 		if(eaForm.getIdentification().getBudget() != null && (eaForm.getIdentification().getBudget().intValue()!=-1 || eaForm.getIdentification().getBudget().intValue()!=0 )){
-			if (!eaForm.getIdentification().getSelecteddepartment().equals(0)){
+			if (eaForm.getIdentification().getSelecteddepartment()!=null){
 				activity.setBudgetdepartment(eaForm.getIdentification().getSelecteddepartment());
 			}
-			if (!eaForm.getIdentification().getSelectedprogram().equals(0)){
+			if (eaForm.getIdentification().getSelectedprogram()!=null){
 				activity.setBudgetprogram(eaForm.getIdentification().getSelectedprogram());
 			}
 		}

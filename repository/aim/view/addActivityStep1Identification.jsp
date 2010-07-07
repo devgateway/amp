@@ -82,6 +82,10 @@ var responseSuccessRetrive = function(o){
 	 */
 	 		
 	var text=o.responseText;
+	if (text=='null'){
+			removeOptionSelected('budgetorg');
+			document.getElementById("budgetorg").options[0] = new Option('Select', '0');
+		}
 	//Split the document
 	var returnelements=text.split("||")
 	//Process each of the elements
@@ -89,8 +93,8 @@ var responseSuccessRetrive = function(o){
 		removeOptionSelected('budgetorg');
 		for ( var i=1; i<returnelements.length; i++ ){
 			valueLabelPair = returnelements[i].split("|")
-			document.getElementById("budgetorg").disabled=false;
 			document.getElementById("budgetorg").options[i-1] = new Option(valueLabelPair[1], valueLabelPair[0]);
+			document.getElementById("budgetorg").disabled=false;
 		}
 	}else if (returnelements[0]=='2'){
 		removeOptionSelected('budgetdepart');
@@ -136,6 +140,7 @@ function getBudgetOptions(id,type)
 	var params = "id="+ id + "&optionstype=" + type
 	var url= "<%=retrivevalues%>";
 	YAHOOAmp.util.Connect.asyncRequest('POST',url,RetriveCallback,params);
+	
 	document.getElementById("budgetdepart").disabled=true;
 	document.getElementById("budgetorg").disabled=true;
 	document.getElementById("budgetprog").disabled=true;

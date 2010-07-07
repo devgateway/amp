@@ -1382,9 +1382,10 @@ public class EditOrganisation extends DispatchAction {
           form.setDepartments(BudgetDbUtil.getDepartments());
           form.setSelectedbudgetsectors(null);
           form.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
+          form.setOrgContacts(null);
       } catch (Exception ex) {
           logger.error("error",ex);
-          new DgException(ex);
+          throw new DgException(ex);
       }
   }
 

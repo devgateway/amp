@@ -4935,7 +4935,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct aot.* from amp_org_type aot " +
-					            "inner join amp_organisation ao on (ao.org_type_id = aot.amp_org_type_id) " +
+                    "inner join amp_org_group aog on (aot.amp_org_type_id=aog.org_type ) "+
+					            "inner join amp_organisation ao on (aog.amp_org_grp_id=ao.org_grp_id ) " +
 					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
 					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) ";                       
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);

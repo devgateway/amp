@@ -109,7 +109,7 @@ public class ExportUtil {
             }
 
             if ((donorTypes != null && donorTypes.length > 0)){
-            	donorTypesWhere = new StringBuffer(" ( aOrg.orgTypeId.ampOrgTypeId in ( ");
+            	donorTypesWhere = new StringBuffer(" ( aOrg.orgGrpId.orgType.ampOrgTypeId in ( ");
             	for (Long elem : donorTypes) {
             		donorTypesWhere.append(elem);
             		donorTypesWhere.append(", ");

@@ -24,9 +24,11 @@ import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
@@ -299,7 +301,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
     public ActionForward exportContactInfo(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        AddOrgForm editForm = (AddOrgForm) form;
+       AddOrgForm editForm = (AddOrgForm) form;
         Site site = RequestUtils.getSite(request);
         String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -351,7 +353,98 @@ public class ExportOrganizationToExcel extends DispatchAction {
         header.applyFont(fontHeader);
         cell.setCellValue(header);
         cell.setCellStyle(style);
-       
+
+
+        if (editForm.getOrgContacts()!= null &&editForm.getOrgContacts().size() > 0) {
+
+            // table header
+            row = sheet.createRow(rowNum++);
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("LAST NAME", locale, siteId);
+            HSSFRichTextString headerlLastname = new HSSFRichTextString(headerPrefix);
+            headerlLastname.applyFont(fontSubHeader);
+            cell.setCellValue(headerlLastname);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("FIRST NAME", locale, siteId);
+            HSSFRichTextString headerFirstName = new HSSFRichTextString(headerPrefix);
+            headerFirstName.applyFont(fontSubHeader);
+            cell.setCellValue(headerFirstName);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("EMAIL", locale, siteId);
+            HSSFRichTextString headerEmail = new HSSFRichTextString(headerPrefix);
+            headerEmail.applyFont(fontSubHeader);
+            cell.setCellValue(headerEmail);
+            cell.setCellStyle(style);
+
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("TELEPHONE", locale, siteId);
+            HSSFRichTextString headerTele = new HSSFRichTextString(headerPrefix);
+            headerTele.applyFont(fontSubHeader);
+            cell.setCellValue(headerTele);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("FAX", locale, siteId);
+            HSSFRichTextString headerFax = new HSSFRichTextString(headerPrefix);
+            headerFax.applyFont(fontSubHeader);
+            cell.setCellValue(headerFax);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("TITLE", locale, siteId);
+            HSSFRichTextString headerTitle = new HSSFRichTextString(headerPrefix);
+            headerTitle.applyFont(fontSubHeader);
+            cell.setCellValue(headerTitle);
+            cell.setCellStyle(style);
+
+            Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
+            while (contactInfoIter.hasNext()) {
+            	AmpOrganisationContact orgContact = contactInfoIter.next();
+                cellNum = 0;
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getLastname()));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getName()));
+                cell.setCellStyle(style);
+                String emails="";
+                String phones="";
+                String faxes="";
+                for (AmpContactProperty property : orgContact.getContact().getProperties()) {
+					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+						emails+=property.getValue()+";\n";
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+						phones+=property.getValue()+";\n";
+					}else{
+						faxes+=property.getValue()+";\n";
+					}
+				}
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(emails));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(phones));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(new HSSFRichTextString(faxes));
+                cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                String title="";
+                if(orgContact.getContact().getTitle()!=null){
+                    title=orgContact.getContact().getTitle().getValue();
+                }
+                cell.setCellValue(new HSSFRichTextString(title));
+                cell.setCellStyle(style);
+
+            }
+        }
         wb.write(response.getOutputStream());
         return null;
 

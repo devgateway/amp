@@ -50,11 +50,17 @@ public class DynLocationSelected extends Action {
 				location.setLocId( ampCVLocation.getId() );
 				location.setPercent("");
 				
-				if ( eaForm.getLocation().getSelectedLocs() == null )
+				if ( eaForm.getLocation().getSelectedLocs() == null ){
 					eaForm.getLocation().setSelectedLocs( new ArrayList<Location>() );
-				if ( !eaForm.getLocation().getSelectedLocs().contains(location) )
+				}
+				if ( !eaForm.getLocation().getSelectedLocs().contains(location) ){
+					if (eaForm.getLocation().getSelectedLocs().size()==0) {
+						location.setPercent("100");
+					} else {
+						location.setPercent("0");
+					}
 					eaForm.getLocation().getSelectedLocs().add(location);
-				
+				}
 				AmpCategoryValueLocations ampRegion			= DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, 
 																CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 				if ( ampRegion != null ){

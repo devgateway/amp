@@ -2,7 +2,11 @@ package org.digijava.module.dataExchange.dbentity;
 
 import java.sql.Timestamp;
 
-public class DELogPerItem {
+import org.digijava.module.dataExchange.util.WrapperLogPerItem;
+import org.digijava.module.dataExchange.util.XmlWrappable;
+import org.digijava.module.dataExchange.util.XmlWrapper;
+
+public class DELogPerItem implements XmlWrappable{
 	public static final String LOG_TYPE_INFO	= "INFO";
 	public static final String LOG_TYPE_WARN	= "WARN";
 	public static final String LOG_TYPE_ERROR	= "ERROR";
@@ -120,6 +124,11 @@ public class DELogPerItem {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public XmlWrapper getXmlWrapperInstance() {
+		return new WrapperLogPerItem(this);
 	}
 	
 	

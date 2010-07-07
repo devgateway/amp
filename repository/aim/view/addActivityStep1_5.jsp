@@ -95,6 +95,10 @@ function toggleDiv(num){
 
 <digi:form action="/addActivity.do" method="post">
 
+    <c:set var="stepNm">
+        ${aimEditActivityForm.stepNumberOnPage}
+    </c:set>
+
 <html:hidden property="step"/>
 <html:hidden property="editKey"/>
 <html:hidden property="editAct"/>

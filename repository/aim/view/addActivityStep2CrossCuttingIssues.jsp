@@ -14,14 +14,13 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-function edit(key) {
-	document.aimEditActivityForm.step.value = "2.2";
-    document.aimEditActivityForm.submit();
-	document.aimEditActivityForm.action = "/editor/showEditText.do?id=" + key + "&referrer=/aim/addActivity.do?edit=true";
+function edit(key,fieldName) {
+    <digi:context name="nextStep" property="context/module/moduleinstance/addActivity.do"/>
+	document.aimEditActivityForm.action = "<%= nextStep %>?fieldName="+fieldName;
+	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.editKey.value = key;
-	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.step.value = "2.2";
 	document.aimEditActivityForm.submit();
-
 }
 
 </script>
@@ -71,74 +70,73 @@ function edit(key) {
                                                       <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.equalOpportunity}" >
-                                                                                                                            <bean:define id="eqOppKey">
-																	   <c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
-																</bean:define>
+														<bean:define id="eqOppKey">
+															<c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
+														</bean:define>
+														<bean:define id="eqOppTextKey" toScope="request">
+															<digi:trn>Equal Opportunity</digi:trn>
+														</bean:define>
                                                         <tr>
 															<td>
 															  <digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
 															</td>
-															
 															<td>
-																
-																<a href="javascript:edit('<%=eqOppKey%>')">
+																<a href="javascript:edit('<%=eqOppKey%>', '<%=eqOppTextKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
 															</td>
-                                                                                                                         <td>
-																
+                                                            <td>
 																<digi:edit key="<%=eqOppKey%>"/>
 															</td>
 														</tr>
 														</c:if>
-														</field:display>
-														<field:display name="Environment" feature="Cross Cutting Issues">
+													  </field:display>
+													  <field:display name="Environment" feature="Cross Cutting Issues">
 														<c:if test="${!empty aimEditActivityForm.crossIssues.environment}" >
-                                                        <tr>                                                                    <bean:define id="envKey">
-																	<c:out value="${aimEditActivityForm.crossIssues.environment}"/>
-																</bean:define>
-															<td>
-															 <digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
-															</td>
-															
-															<td>
-																<a href="javascript:edit('<%=envKey%>')">
-																	<digi:trn key="aim:edit">Edit</digi:trn>
-																</a>
-															</td>
-                                                                                                                         <td>
-																
-																<digi:edit key="<%=envKey%>"/>
-															
-															</td>
-														</tr>
-														</c:if>
-														</field:display>
-														
-														<field:display name="Minorities" feature="Cross Cutting Issues">
-														<c:if test="${!empty aimEditActivityForm.crossIssues.minorities}" >
-                                                                                                                     <bean:define id="minKey">
-																	<c:out value="${aimEditActivityForm.crossIssues.minorities}"/>
-																</bean:define>
-																
+                                                       	<bean:define id="envKey">
+															<c:out value="${aimEditActivityForm.crossIssues.environment}"/>
+														</bean:define>
+														<bean:define id="envTextKey" toScope="request">
+															<digi:trn>Environment</digi:trn>
+														</bean:define>
                                                         <tr>
 															<td>
-															  <digi:trn key="aim:monitories"> Minorities:</digi:trn>
+															 <digi:trn>Environment:</digi:trn>&nbsp;&nbsp;
 															</td>
-									
 															<td>
-																<a href="javascript:edit('<%=minKey%>')">
+																<a href="javascript:edit('<%=envKey%>', '<%=envTextKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
-                                                                                                                               
-                                                                                                                                 
 															</td>
-                                                                                                                        <td>
-                                                                                                                          <digi:edit key="<%=minKey%>"/>
-                                                                                                                      </td>
+															<td>
+																<digi:edit key="<%=envKey%>"/>
+															</td>
 														</tr>
 														</c:if>
-														</field:display>
+													  </field:display>
+													  <field:display name="Minorities" feature="Cross Cutting Issues">
+														<c:if test="${!empty aimEditActivityForm.crossIssues.minorities}" >
+                                                        <bean:define id="minKey">
+															<c:out value="${aimEditActivityForm.crossIssues.minorities}"/>
+														</bean:define>
+														<bean:define id="minTextKey" toScope="request">
+															<digi:trn>Minorities</digi:trn>
+														</bean:define>
+                                                        <tr>
+															<td>
+															  <digi:trn key="aim:monitories">Minorities:</digi:trn>
+															</td>
+															<td>
+																<a href="javascript:edit('<%=minKey%>', '<%=minTextKey%>')">
+																	<digi:trn key="aim:edit">Edit</digi:trn>
+																</a>
+															</td>
+                                                            <td>
+                                                               <digi:edit key="<%=minKey%>"/>
+															</td>
+														</tr>
+														</c:if>
+													  </field:display>
                                                       </table>
                                                     </td>
                                                   </tr>

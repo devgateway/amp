@@ -537,8 +537,12 @@ public class AddAmpActivity extends Action {
 
         return showStep1(mapping, request, teamMember, eaForm);
       }
-      else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
-        eaForm.setStep("1");
+      else if (eaForm.getStep().equals("1.1") || eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
+    	if (eaForm.getStep().equals("1.1"))  
+    		eaForm.setStep("1");
+    	else
+    		eaForm.setStep("2");
+    		
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
         session.setAttribute("activityName", eaForm.getIdentification().getTitle());
         session.setAttribute("activityFieldName", request.getParameter("fieldName"));
@@ -549,16 +553,6 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.
           return mapping.findForward("addActivityStep1_5");
       }
-      else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
-          eaForm.setStep("2");
-          // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
-          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
-                        getNavigationLanguage(request).
-                        getCode()+
-              "&referrer=" + eaForm.getContext() +
-              "/aim/addActivity.do?edit=true";
-          response.sendRedirect(eaForm.getContext() + url);
-        }
       else if (eaForm.getStep().equals("2")) { // show the step 2 page.
      	  return showStep2(mapping, request, session, teamMember, eaForm);
       }

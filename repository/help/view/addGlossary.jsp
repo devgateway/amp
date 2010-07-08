@@ -9,7 +9,27 @@
 
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
-
+ <script type="text/javascript">
+     function validateItemTitle() {
+         var title=document.glossaryForm.nodeName.value;
+         title=title.replace(/^\s+|\s+$/g, '');
+         var valid=false;
+         if(title!=''){
+             valid=true;
+         }
+         else{
+             alert("<digi:trn>Please enter title</digi:trn>");
+         }
+         return valid;
+     }
+     function cancelTopicCreation(){
+     <digi:context name="cancel" property="context/module/moduleinstance/glossary.do" />
+             document.glossaryForm.action = "${cancel}";
+             document.glossaryForm.target = "_self";
+             document.glossaryForm.submit();
+             
+         }
+  </script>
 <digi:form action="/addGlossary.do">
 <html:hidden name="glossaryForm" property="parentNodeId"/>
 <div>
@@ -46,10 +66,10 @@
 					</tr>
 					<tr>
 						<td align="right" width="30%">
-							<input type="button" value="Cancel" onclick="">
+							<input type="button" value="Cancel" onclick="cancelTopicCreation()">
 						</td>
 						<td>
-							<html:submit>Ok</html:submit>
+                            <html:submit onclick="return validateItemTitle()">Ok</html:submit>
 						</td>
 					</tr>
 				</table>

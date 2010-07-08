@@ -55,13 +55,15 @@ background: #FFF;
 											<tr>
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
-														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
-															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
-																${messageForm.messageName}
-															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
-														</tr>
+                                                        <tr>
+                                                            <td colspan="3" id="demo">
+                                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
+                                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
+                                                                <div   class="longTab" >
+                                                                   ${messageForm.messageName}
+                                                                 </div>
+                                                            </td>
+                                                            </tr>
 													</table>
 												</td>
 											</tr>

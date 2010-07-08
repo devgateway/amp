@@ -244,16 +244,15 @@
     <tr>
         <td colspan="2">
             <span>
-                <digi:trn key="gis:minmax:message">
-                Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
+                <digi:trn key="gis:minmax:message_fin">
+                Regions with the lowest (MIN) values for the selected funding type are shaded dark green. 
                 Regions with the highest (MAX) value are shaded light green. 
-                For some indicators (such as mortality rates), having the MAX value indicates the lowest performance.
                 </digi:trn>
             </span>
             <br>
             <br>
-            <digi:trn key="gis:datasource:message">
-                Data Source: Dev Info
+            <digi:trn key="gis:datasource:message_fin">
+                Data Source AMP
             </digi:trn>
         </td>
     </tr>

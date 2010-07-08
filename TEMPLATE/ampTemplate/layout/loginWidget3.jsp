@@ -127,37 +127,27 @@
 					
 
 						<c:if test="${param['loginError'] != null}">
-						  <bean:message key="errors.header" />
-						  <bean:message key="errors.prefix" />
-
-                                                  <c:if test="${param['loginError'] == 'invalidLogin'}">
-                                                     <c:set var="errorDisplayed">true</c:set>
-           					     <bean:message key="error.aim.invalidLogin" />
-                                                  </c:if>
-
-                                                  <c:if test="${param['loginError'] == 'userBanned'}">
-                                                     <c:set var="errorDisplayed">true</c:set>
-           					     <bean:message key="error.aim.userBanned" />
-                                                  </c:if>
-
-
-                                                  <c:if test="${param['loginError'] == 'noTeamMember'}">
-                                                     <c:set var="errorDisplayed">true</c:set>
-                                                    
-                                                     <digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login into AMP because you are not assigned to a workspace</digi:trn>
-           					     				</c:if>
-                                                  
-                                                  <c:if test="${param['loginError'] == 'invalidUser'}">
-                                                     <c:set var="errorDisplayed">true</c:set>
-           					     <bean:message key="error.aim.userInvalid" />
-                                                  </c:if>
-
-                                                  <c:if test="${errorDisplayed == null}">
-           					     <bean:message key="error.aim.loginFailed" />
-                                                  </c:if>
-
-						  <bean:message key="errors.suffix" />
-						  <bean:message key="errors.footer" />
+						<div style="padding:5px 5px 5px 5px;text-align:left;font-weight:bold;">
+							<c:if test="${param['loginError'] == 'invalidLogin'}">
+								<c:set var="errorDisplayed">true</c:set>
+								<bean:message key="error.aim.invalidLogin" />
+							</c:if>
+							<c:if test="${param['loginError'] == 'userBanned'}">
+								<c:set var="errorDisplayed">true</c:set>
+								<bean:message key="error.aim.userBanned" />
+							</c:if>
+							<c:if test="${param['loginError'] == 'noTeamMember'}">
+								<c:set var="errorDisplayed">true</c:set>
+								<digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login into AMP because you are not assigned to a workspace</digi:trn>
+							</c:if>
+							<c:if test="${param['loginError'] == 'invalidUser'}">
+								<c:set var="errorDisplayed">true</c:set>
+								<bean:message key="error.aim.userInvalid" />
+							</c:if>
+							<c:if test="${errorDisplayed == null}">
+								<bean:message key="error.aim.loginFailed" />
+							</c:if>
+						</div>
 						</c:if>
 					
 				 	

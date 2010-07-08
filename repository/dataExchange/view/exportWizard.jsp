@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>

@@ -707,6 +707,21 @@ function validateFormat(){
 			window.setTimeout(call,200);
 		}
 
+
+	function cleanformat() {
+		aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
+		aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
+		aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
+		aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>;
+		aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
+		aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true";
+		aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
+		aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
+		aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
+		aimReportsFilterPickerForm3.customGroupSize.value = 3;
+		initFormatPopup();
+	}
+		
 </script>
 <style type="text/css">
 .mask {

@@ -12,26 +12,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" />
-
-
-<script type="text/javascript">
-
-function myReset() {
-	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
-	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
-	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
-	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
-	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
-	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
-	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
-	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
-	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
-	aimReportsFilterPickerForm3.customGroupSize.value = 3;
-	initFormatPopup();
-}
-</script>
+	type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
@@ -107,18 +88,17 @@ function myReset() {
 	          </div></td>
       </tr>
 			<tr>
-			<td height="40" colspan="6" align="center"><html:hidden
-				property="ampReportId" /> 
-				
-			<html:submit styleClass="dr-menu"  property="applyFormat">
-				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
-			</html:submit>&nbsp; 
-			
+			<td height="40" colspan="6" align="center">
+				<html:hidden property="ampReportId" /> 
+				<html:submit styleClass="dr-menu"  property="applyFormat">
+					<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
+				</html:submit>&nbsp; 
 				<input type="hidden" name="apply" value="true">
 				<html:hidden property="resetFormat" value="false"/>
-				<html:button styleClass="dr-menu" onclick="myReset();" property="applyFormat">
-				<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
-			</html:button></td>
+				<html:button styleClass="dr-menu" onclick="JavaScript:cleanformat();" property="applyFormat">
+					<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
+				</html:button>
+			</td>
 		</tr>
 	</table>
 </digi:form>

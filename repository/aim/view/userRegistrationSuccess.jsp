@@ -10,7 +10,7 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width="100%">
 	<tr>
 		<td width=14>&nbsp;
 		</td>

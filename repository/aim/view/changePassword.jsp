@@ -14,11 +14,11 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=100%>
 	<tr>
-		<td width=14>&nbsp;
+		<td width="5%">&nbsp;
 		</td>
-		<td align=left vAlign=top width=520><br>
+		<td align=left vAlign=top width="60%"><br>
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td width="3">&nbsp;</td>
@@ -108,19 +108,16 @@
 
 			</table>
 		</td>
-		<td bgcolor="#dbe5f1" vAlign=top>
+		<td width="5%">&nbsp;
+		</td>
+		<td bgcolor="#dbe5f1" vAlign=top width="30%">
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
-      		 <tr>
-		        <td vAlign=top><br/>
-		          	<jsp:include page="countriesLnk.jsp" flush="true" />		          
-					<BR/><BR/><BR/>
-      	     	</td>
-        		</tr>
         		<tr>
 		          <td vAlign=top>&nbsp;</td>
         		</tr>
         		<tr>
 	          	<td vAlign=top>
+                <strong>
 						<digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for
         			    official business. You have been granted the right to access these
@@ -129,13 +126,13 @@
 						 responsibility. Do not share them with anyone.
 						 </digi:trn>
 						<BR><BR>
+				</strong>
           		</td>
   				</tr>
         		<tr>
           		<td vAlign=top>&nbsp;</td>
   				</tr>
 	      </table>
-		  <TR>
 		</td>
 	</tr>
 </table>

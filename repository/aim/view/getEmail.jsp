@@ -12,12 +12,12 @@
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width="100%">
 	<tr>
-		<td width=14>&nbsp;
+		<td width="5%">&nbsp;
 		</td>
-		<td align=left vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left vAlign=top width="60%"><br>
+			<table border=0 cellPadding=5 cellSpacing=0 width="60%">
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td colspan="2">
@@ -47,14 +47,10 @@
 				</tr>
 			</table>
 		</td>
-		<td bgcolor="#dbe5f1" vAlign=top>
+		<td width="5%">&nbsp;
+		</td>
+		<td bgcolor="#dbe5f1" vAlign=top width="30%">
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
-      		 <tr>
-		          <td vAlign=top><br/>
-		          <jsp:include page="countriesLnk.jsp" flush="true" />
-						<BR/><BR/><BR/>
-      	     	</td>
-        		</tr>
         		<tr>
 		          <td vAlign=top>&nbsp;</td>
         		</tr>

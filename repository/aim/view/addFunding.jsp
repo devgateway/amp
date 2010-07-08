@@ -1358,7 +1358,7 @@
 			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
-			<table width="100%" cellpadding="0" cellspacing="0" border="1">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
  						<a title="<digi:trn key='aim:ExpenditureofFund'>Amount effectively spent by the implementing agency</digi:trn>"><digi:trn key="aim:expenditures">Expenditures</digi:trn></a>

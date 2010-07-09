@@ -33,6 +33,8 @@ import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
 
 
 
@@ -71,7 +73,12 @@ public class ExportBuilder {
 		
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
 			if (elem.canExport()){
-				buildActivityType(retValue, elem);
+                try {
+                    buildActivityType(retValue, elem);
+                } catch (EditorException ex) {
+                    throw new  AmpExportException(ex.getMessage());
+
+                }
 			}
 		}
 
@@ -79,7 +86,7 @@ public class ExportBuilder {
 	}
 
 
-	private void buildActivityType(ActivityType parent, AmpColumnEntry ampColumnEntry) throws AmpExportException{
+	private void buildActivityType(ActivityType parent, AmpColumnEntry ampColumnEntry) throws AmpExportException, EditorException{
 		String path = ampColumnEntry.getPath();
 
 		if (path.equalsIgnoreCase("activity.id")){
@@ -102,15 +109,20 @@ public class ExportBuilder {
 				
 		} else if (path.equalsIgnoreCase("activity.objective")){
 			if (ampActivity.getObjective() != null){
-				for (Message msg : ExportHelper.getTranslations(ampActivity.getObjective(),ampActivity.getObjective(), siteId)) {
-					parent.getObjective().add(buildFreeText(msg));
-				}
+                    for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getObjective(), siteId)) {
+                        if(editor.getBody()!=null&&!editor.getBody().trim().equals("")){
+                        parent.getObjective().add(buildFreeText(editor.getLanguage(), editor.getBody()));
+                        }
+                    }
+              
 			}
 		} else if (path.equalsIgnoreCase("activity.description")){
 			if (ampActivity.getDescription() != null){
-				for (Message msg : ExportHelper.getTranslations(ampActivity.getDescription(),ampActivity.getDescription(), siteId)) {
-					parent.getDescription().add(buildFreeText(msg));
-				}
+				 for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getDescription(), siteId)) {
+                        if(editor.getBody()!=null&&!editor.getBody().trim().equals("")){
+                        parent.getObjective().add(buildFreeText(editor.getLanguage(), editor.getBody()));
+                        }
+                    }
 			}
 		} else if (path.equalsIgnoreCase("activity.implementationLevels")){
 			parent.setImplementationLevels(buildImplementationLevel());

@@ -170,7 +170,7 @@ public class AddressBookActions extends DispatchAction {
 				}
 				jcontact.put("email", emails);
 				
-				if(contact.getOrganizationContacts()!=null || contact.getOrganisationName()!=null){
+				if((contact.getOrganizationContacts()!=null && contact.getOrganizationContacts().size()>0) || (contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0)){
 					orgs+="<ul>";
 					if(contact.getOrganisationName()!=null && contact.getOrganisationName().length()>0){
 						orgs+="<li>"+contact.getOrganisationName()+"</li>";

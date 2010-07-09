@@ -349,16 +349,22 @@ html>body #main {
 					if (column.key == 'name' || column.key == 'email' || column.key == 'organizations' || column.key == 'phones' || column.key == 'faxes') {
 						var record = this.getRecord(target);
 						var tooltipText = record.getData(column.key);
-						var xy = [parseInt(oArgs.event.clientX,10) + 10 ,parseInt(oArgs.event.clientY,10) + 10 ];
+						
+						if(tooltipText!=null && tooltipText.length > 0){
 
-						showTimer = window.setTimeout(function() {
-							tt.setBody(tooltipText);
-							tt.cfg.setProperty('xy',xy);
-							tt.show();
-							hideTimer = window.setTimeout(function() {
-								tt.hide();
-							},5000);
-						},500);
+							var xy = [parseInt(oArgs.event.clientX,10) + 10 ,parseInt(oArgs.event.clientY,10) + 10 ];
+
+							showTimer = window.setTimeout(function() {
+								tt.setBody(tooltipText);
+								tt.cfg.setProperty('xy',xy);
+								tt.show();
+								hideTimer = window.setTimeout(function() {
+									tt.hide();
+								},5000);
+							},500);
+								
+						}
+						
 					}
 				});
 				

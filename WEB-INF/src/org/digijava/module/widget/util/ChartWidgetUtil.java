@@ -768,9 +768,9 @@ public class ChartWidgetUtil {
 			lt.setItemFont(plainFont);
 			lt.setFrame(BlockBorder.NONE);
 			lt.setMargin(10, 5, 5, 10);
-			lt.setPosition(RectangleEdge.RIGHT);
+			lt.setPosition(RectangleEdge.BOTTOM);
 			lt.setVerticalAlignment(VerticalAlignment.CENTER);
-			lt.setHorizontalAlignment(HorizontalAlignment.LEFT);
+			lt.setHorizontalAlignment(HorizontalAlignment.CENTER);
 			lt.setBackgroundPaint(new Color(255,255,255,0));
 
 		}

@@ -120,7 +120,7 @@ public class ExportBuilder {
 			if (ampActivity.getDescription() != null){
 				 for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getDescription(), siteId)) {
                         if(editor.getBody()!=null&&!editor.getBody().trim().equals("")){
-                        parent.getObjective().add(buildFreeText(editor.getLanguage(), editor.getBody()));
+                        parent.getDescription().add(buildFreeText(editor.getLanguage(), editor.getBody()));
                         }
                     }
 			}

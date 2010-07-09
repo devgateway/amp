@@ -119,7 +119,7 @@ public class getNPDgraph extends Action {
 
 
     // TODO This method should be moved to NPD or chart util.
-    private CategoryDataset createPercentsDataset(AmpTheme currentTheme,
+    public CategoryDataset createPercentsDataset(AmpTheme currentTheme,
                                                   long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
             throws AimException {
 

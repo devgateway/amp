@@ -1,20 +1,14 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -30,11 +24,18 @@ import org.digijava.kernel.util.RequestUtils;
 
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.IndicatorGridItem;
 import org.digijava.module.aim.helper.IndicatorGridRow;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.*;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.data.category.CategoryDataset;
 
 /**
  * Creates Excel file from Indicators list
@@ -61,6 +62,9 @@ public class ExportIndicators2XSLAction extends Action {
 		//XLSExporter.resetStyles();
 
 		HSSFWorkbook wb = new HSSFWorkbook();
+
+        int pictureIndex = wb.addPicture(getGraphBytes(request, npdForm), HSSFWorkbook.PICTURE_TYPE_PNG);
+
 		String sheetName = mainProg.getName();
 		if (sheetName.length() > 31){
 			sheetName = sheetName.substring(0, 31);
@@ -189,10 +193,82 @@ public class ExportIndicators2XSLAction extends Action {
 			}
 		}
 
+
+
+
+        //HSSFPictureData imgData =  wb.getAllPictures().get(0);
+
+         HSSFPatriarch patriarch = sheet.createDrawingPatriarch();
+        HSSFPicture pic1 =  patriarch.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum+2, (short)1, rowNum+3),
+                pictureIndex);
+
+        pic1.resize();
+
 		wb.write(response.getOutputStream());
 
 		return null;
 	}
+
+    private byte[] getGraphBytes (HttpServletRequest request, NpdForm npdForm) {
+        byte[] retVal = null;
+
+        getNPDgraph getNPDgraphObj = new getNPDgraph();
+
+        try {
+
+
+
+
+
+            Long currentThemeId = npdForm.getProgramId();
+            long[] selIndicators = npdForm.getSelIndicators();
+            String[] selYears = npdForm.getSelYears();
+            
+            if (selYears!=null){
+                Arrays.sort(selYears);
+            }
+
+            //session for storing latest map for graph
+            HttpSession session = request.getSession();
+
+            CategoryDataset dataset = null;
+            if (currentThemeId != null && currentThemeId.longValue() > 0) {
+                AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
+
+
+                dataset = getNPDgraphObj.createPercentsDataset(currentTheme, selIndicators, selYears,request);
+            }
+            JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR);
+            ChartRenderingInfo info = new ChartRenderingInfo();
+
+    		Long teamId= TeamUtil.getCurrentTeam(request).getAmpTeamId();
+    		NpdSettings npdSettings= NpdUtil.getCurrentSettings(teamId);
+            Double angle=null;
+
+            if(npdSettings.getAngle()!=null){
+        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+                CategoryAxis categoryaxis = categoryplot.getDomainAxis();
+            	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
+                categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
+            }
+
+            ByteArrayOutputStream ostr = new ByteArrayOutputStream();
+
+    		ChartUtilities.writeChartAsPNG(ostr, chart, npdSettings.getWidth().intValue(),
+            		npdSettings.getHeight().intValue(), info);
+
+            retVal =  ostr.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        return retVal;
+    }
+
 
 	private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years) throws DgException{
 		List<IndicatorGridRow> result = null;

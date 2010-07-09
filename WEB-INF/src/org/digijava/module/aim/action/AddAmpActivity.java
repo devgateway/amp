@@ -259,7 +259,7 @@ public class AddAmpActivity extends Action {
 
      //set the contracts, if available
      //eaForm.getCurrCode()
-    if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null)){
+    if(eaForm.getActivityId()!=null){
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
            eaForm.getContracts().setContracts(contracts);
      }

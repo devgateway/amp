@@ -119,10 +119,11 @@
 		failure:responseFailure 
 	};
 
-	function commentWin(commentId){
+	function commentWin(commentwinHeader,commentId){
 		delCommentContent=false;
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
+		myPanel.setHeader('\n' + commentwinHeader); //set header to popin
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 

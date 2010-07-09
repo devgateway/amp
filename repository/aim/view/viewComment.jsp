@@ -42,8 +42,7 @@
 							<td align=left vAlign=top>						
 							<table width="100%" cellPadding=3>
 								<c:set value="1" var="sno" />
-								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" 
-									type="org.digijava.module.aim.dbentity.AmpComments">
+								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" type="org.digijava.module.aim.dbentity.AmpComments">
 										<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.comments.field.ampFieldId}"> 
 											<tr>
 												<td bgcolor=#ECF3FD width="5%">
@@ -63,7 +62,7 @@
 													<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
 														<TR>
 															<TD width="100%">
-																<c:out value="${comment.comment}" />
+																<html:textarea name="comment" property="comment" cols="60" rows="3" readonly="true" style="border:0px"/>
 																<br>
 																[<a href="javascript:message('edit','<c:out value="${sno}" />')"><digi:trn key="aim:editComment">Edit</digi:trn></a>]
 																[<a href="javascript:message('delete','<c:out value="${sno}" />')"><digi:trn key="aim:deleteComment">Delete</digi:trn></a>]

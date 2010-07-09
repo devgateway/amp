@@ -292,36 +292,39 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</field:display>
 											
 											<field:display name="Final Date for Disbursements" feature="Planning">
-											<tr>
-												<td width=200 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">&nbsp;
-													<digi:trn key="aim:disbursementsDate">Final Date for Disbursements</digi:trn>
-													</a>
-												</td>
-												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
-														<tr>
-															<td>
-																<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.disbursementsDate" size="10"
-																styleId="disbursementsDate" styleClass="inp-text" readonly="true"/>
-																</a>
-															</td>
-															<td align="left" vAlign="center">&nbsp;
-																<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.disbursementsDate, 'clear6')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
-																</a>
-																<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
-																</a>
-															</td>
-															<td>&nbsp;
-																<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('fdd')">
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>	
+												<c:set var="trn">
+													<digi:trn>Final Date for Disbursements</digi:trn>
+												</c:set>
+												<tr>
+													<td width=200 bgcolor="#ffffff">
+														<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">&nbsp;
+															${trn}
+														</a>
+													</td>
+													<td bgcolor="#ffffff">
+														<table cellPadding=0 cellSpacing=0>
+															<tr>
+																<td>
+																	<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">
+																	<html:text name="aimEditActivityForm" property="planning.disbursementsDate" size="10"
+																	styleId="disbursementsDate" styleClass="inp-text" readonly="true"/>
+																	</a>
+																</td>
+																<td align="left" vAlign="center">&nbsp;
+																	<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.disbursementsDate, 'clear6')">
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																	</a>
+																	<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	</a>
+																</td>
+																<td>&nbsp;
+																	<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('Add Comments For ${trn}','fdd')">
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>	
 											</field:display>
 											
 											<field:display name="Proposed Completion Date" feature="Planning">
@@ -355,36 +358,39 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</field:display>
 											
 											<field:display name="Current Completion Date" feature="Planning">
-											<tr>
-												<td width=200 bgcolor="#ffffff">&nbsp;
-												<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-												<digi:trn key="aim:currentCompletionDate">Current Completion Date</digi:trn>
-												</a>
-												</td>
-												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
-														<tr>
-															<td>
-																<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.currentCompDate" size="10"
-																styleId="currentCompDate" styleClass="inp-text" readonly="true"/>
-																</a>
-															</td>
-															<td align="left" vAlign="center">&nbsp;
-																<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.currentCompDate, 'clear8')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
-																</a>
-																<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
-																</a>
-															</td>
-															<td>&nbsp;
-																<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('ccd')">
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
+												<c:set var="trn">
+													<digi:trn>Current Completion Date</digi:trn>
+												</c:set>
+												<tr>
+													<td width=200 bgcolor="#ffffff">&nbsp;
+													<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
+														${trn}
+													</a>
+													</td>
+													<td bgcolor="#ffffff">
+														<table cellPadding=0 cellSpacing=0>
+															<tr>
+																<td>
+																	<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
+																	<html:text name="aimEditActivityForm" property="planning.currentCompDate" size="10"
+																	styleId="currentCompDate" styleClass="inp-text" readonly="true"/>
+																	</a>
+																</td>
+																<td align="left" vAlign="center">&nbsp;
+																	<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.currentCompDate, 'clear8')">
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																	</a>
+																	<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	</a>
+																</td>
+																<td>&nbsp;
+																	<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('Add Comments For ${trn}','ccd')">
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
 											</field:display>
 											
 											<field:display name="Status" feature="Planning"></field:display>

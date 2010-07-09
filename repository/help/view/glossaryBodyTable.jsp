@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
 <style type="text/css">
@@ -91,7 +91,7 @@
 			</li>
 		</ul>
 	<div class="yui-content" style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
-	<div style="padding: 2; text-align: center">
+	<div style="padding: 2;">
 						
 						
 							<div id="treeDiv">

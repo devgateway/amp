@@ -89,7 +89,7 @@ public class SavePledge extends Action {
 	    		//pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
     		}
     		String fundings = request.getParameter("fundings");
-    		String funds[] = fundings.split("-");
+    		String funds[] = fundings.split(";");
     		plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
 
     		for (int i = 0; i < funds.length; i++) {

@@ -873,5 +873,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Pledge Sector Button" feature="Pledge Sector"></field:display>
 <field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
+<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding"></field:display>
+<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding"></field:display>
 <field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
 <field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>

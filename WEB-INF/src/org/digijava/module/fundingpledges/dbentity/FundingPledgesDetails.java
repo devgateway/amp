@@ -89,14 +89,22 @@ public class FundingPledgesDetails {
 	}
 	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistance) {
 		this.typeOfAssistance = typeOfAssistance;
-		this.typeOfAssistanceid = typeOfAssistance.getId();
+		if (typeOfAssistance == null) {
+			this.typeOfAssistanceid = -1l;
+		} else {
+			this.typeOfAssistanceid = typeOfAssistance.getId();
+		}
 	}
 	public AmpCategoryValue getAidmodality() {
 		return aidmodality;
 	}
 	public void setAidmodality(AmpCategoryValue aidmodality) {
 		this.aidmodality = aidmodality;
-		this.aidmodalityid = aidmodality.getId();
+		if (aidmodality == null) {
+			this.aidmodalityid = -1l;
+		} else {
+			this.aidmodalityid = aidmodality.getId();
+		}
 	}
 	public Double getAmount() {
 		return amount;

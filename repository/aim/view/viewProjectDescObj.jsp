@@ -106,7 +106,7 @@
 	</c:if>
 	<tr bgcolor="#ffffff" height="20">
 		<td align="center">
-			<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="window.close()">
+			<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="myPanelOverviewframe.hide()">
 		</td>
 	</tr>
 </table>

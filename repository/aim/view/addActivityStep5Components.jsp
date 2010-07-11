@@ -16,6 +16,12 @@
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
 
+<c:set var="trnAddComponents">
+    <digi:trn>Add Components</digi:trn>
+</c:set>
+<c:set var="trnRemoveComponents">
+    <digi:trn>Remove Components</digi:trn>
+</c:set>
 								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -351,13 +357,13 @@
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
 														<field:display name="Add Components Button" feature="Activity - Component Step">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()" title="${trnAddComponents}">
 															<digi:trn key="btn:addComponents">Add Components</digi:trn>
 														</html:button>
 														</field:display>
 														 &nbsp;&nbsp;&nbsp;
 														 <field:display name="Remove Components Button" feature="Activity - Component Step">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelComponents()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelComponents()" title="${trnRemoveComponents}">
 															<digi:trn key="btn:removeComponents">Remove Components</digi:trn>
 														</html:button>
 														</field:display>
@@ -372,7 +378,7 @@
 									<field:display name="Add Components Button" feature="Activity - Component Step">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>
-												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
+												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()" title="${trnAddComponents}">
 														<digi:trn key="btn:addComponents">Add Components</digi:trn>
 												</html:button>
 											</td></tr>

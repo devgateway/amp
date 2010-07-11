@@ -29,7 +29,15 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 
-
+<c:set var="trnAddIssues">
+    <digi:trn>Add Issues</digi:trn>
+</c:set>
+<c:set var="trnEditActor">
+    <digi:trn>Edit Actor</digi:trn>
+</c:set>
+<c:set var="trnDeleteActor">
+    <digi:trn>Delete Actor</digi:trn>
+</c:set>
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -76,15 +84,15 @@
 																</field:display>
 																<br/>
 																</div>
-																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title="Edit this issue"  class="buton"><digi:trn>Edit issue</digi:trn></button>
-																<button onclick="removeIssue('${issues.id}');return false;" title="Delete this issue" class="buton"><digi:trn>Delete issue</digi:trn></button>
+																<button onclick="updateIssues('<c:out value="${issues.id}"/>');return false;" title='<digi:trn>Edit this issue</digi:trn>' class="buton"><digi:trn>Edit issue</digi:trn></button>
+																<button onclick="removeIssue('${issues.id}');return false;" title='<digi:trn>Delete this issue</digi:trn>' class="buton"><digi:trn>Delete issue</digi:trn></button>
 <!--
 																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')"  title="Edit this issue"><digi:img src="../ampTemplate/images/application_edit.png" border="0"/></a>
 																<a href="javascript:removeIssue('${issues.id}')" title="Delete this issue"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
 -->
 																<field:display feature="Issues" name="Measures Taken">
 																	<field:display name="Add Measures Link" feature="Issues">
-																		<button onclick="javascript:addMeasures('<c:out value="${issues.id}"/>'); return false;" class="buton">
+																		<button onclick="javascript:addMeasures('<c:out value="${issues.id}"/>'); return false;" class="buton" title='<digi:trn>Add Measures</digi:trn>'>
 																			<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
 																		</button>
 																	</field:display>													
@@ -113,10 +121,10 @@
       																<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" title="Delete this measure"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
 -->
       																</div>
-      																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Edit this measure">Edit measure</button>
-      																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Delete this measure">Delete measure</button>
+      																<button class="buton" onclick="updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Edit this measure</digi:trn>'><digi:trn>Edit measure</digi:trn></button>
+      																<button class="buton" onclick="removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Delete this measure</digi:trn>'><digi:trn>Delete measure</digi:trn></button>
 																			<field:display name="Add Actors Link" feature="Issues">
-																				<button class="buton" onclick="addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title="Add Actors"><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
+																				<button class="buton" onclick="addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Add Actors</digi:trn>'><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
 																			</field:display>
 																		</td>
 																	</tr>
@@ -139,8 +147,8 @@
 																						<c:out value="${actor.name}"/>
 																						</div>
 																						<br/>
-																						<button class="buton" onclick="updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Edit actor</button>
-																						<button class="buton" onclick="removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;">Delete actor</button>
+																						<button class="buton" onclick="updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;" title="${trnEditActor}"><digi:trn>Edit actor</digi:trn></button>
+																						<button class="buton" onclick="removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>');return false;" title="${trnDeleteActor}"><digi:trn>Delete actor</digi:trn></button>
 																					</td>
 																				</tr>
 																				</logic:iterate>
@@ -163,7 +171,7 @@
 															
 															<field:display name="Add Issues Button" feature="Issues">
 
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()" title="${trnAddIssues}">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 																</html:button>
 
@@ -177,7 +185,7 @@
 											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()" title="${trnAddIssues}">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 													</html:button>
 

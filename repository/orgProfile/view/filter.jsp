@@ -285,7 +285,7 @@
                             </c:if>
                             <c:if test="${!orgProfOrgProfileFilterForm.workspaceOnly}">
                                 <digi:trn>No</digi:trn>
-                            </c:if>| <digi:trn>Date Range Bar Graph 3 years</digi:trn>| <digi:trn>Date Range Tables: 5 Years</digi:trn>
+                            </c:if>| <digi:trn>Number of years in time series</digi:trn>: ${orgProfOrgProfileFilterForm.yearsInRange}
                         </td>
 
                         </tbody>

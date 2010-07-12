@@ -350,7 +350,7 @@
 																	<input type="button" value="<digi:trn>...</digi:trn>" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="acronym" />')" />
 																</logic:equal>
 																<logic:equal name="aimSelectOrganizationForm" property="useAcronym" value="false">
-																	<input type="button" value="<digi:trn>...</digi:trn>" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="name" />')" />
+																	<input type="button" value="<digi:trn>...</digi:trn>" onclick='setValues(<bean:write name="organisations" property="ampOrgId" />,"<bean:write name="organisations" property="name" />")' />
 																</logic:equal>
 															</logic:equal>
 														</td>

@@ -7,12 +7,11 @@ layers:
     type: MapServer
     mapfile: app/map/odamap.map
     layers: NIC2,NIC1
-    maxresolution: 0.01991484375
+    maxresolution: 0.0468748232421875
     levels: 5
     extension: png
     metatile: true
-    metabuffer: 0, 0
-    bbox: 21, -27, 49, -10
+    metabuffer: 256, 256
   report:
     type: MapServer
     mapfile: app/map/reports.map

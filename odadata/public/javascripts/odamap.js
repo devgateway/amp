@@ -193,9 +193,9 @@ var initAttributeSliders = function() {
 var initMap = function() {
 	var options = {
 		controls: [new OpenLayers.Control.MouseDefaults()],
-		maxExtent: new OpenLayers.Bounds(21, -27, 49, -10),
-		maxResolution: 0.01991484375,
-		numZoomLevels: 5
+		maxExtent: new OpenLayers.Bounds(26.684477, -27.278632, 44.372215, -9),
+		resolutions: [0.0468748232421875, 0.0234374116210938, 0.0117187058105469, 0.00585935290527344, 0.00292967645263672],
+		center: new OpenLayers.LonLat(34.95, -18,20)
 	}
 
 

@@ -206,6 +206,13 @@ function showFilter(){
 				params += pd + 'selYears=' + selYear[y];
 			}
 		}
+		
+		if (selIndicatorIDs != null) {
+			for (var y=0; y<selIndicatorIDs.length; y++){
+				params += pd + 'selIndicators=' + selIndicatorIDs[y];
+			}
+		}
+		
 		return params;
 	}
 

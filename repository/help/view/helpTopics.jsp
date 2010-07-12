@@ -148,8 +148,7 @@ if (typeof DOMParser == "undefined") {
 		}
 	  if (str.length==0){
 			 	document.getElementById("bodyhelp").innerHTML="";
-
-			 	document.getElementById("bodyhelp").style.border="1px";
+				document.getElementById("bodyhelp").style.border="1px";
 		 	return
 		 }
 
@@ -159,10 +158,10 @@ if (typeof DOMParser == "undefined") {
 	 		return
 	 	}
 	 	$("#bodyhelp").show();
-
-	 	var urlact="/help/helpActions.do?actionType=getbody"
-		urlact=urlact+"&body="+str
-		xmlHttp.open("GET",urlact,true)
+	 	var timestamp = Number(new Date());
+		var urlact="/help/helpActions.do?actionType=getbody"
+		urlact=urlact+"&body="+str+"&nocahe="+timestamp ;
+		xmlHttp.open("GET",urlact,true)	
 		xmlHttp.onreadystatechange=stateChange
 		xmlHttp.send(null)
 }

@@ -194,22 +194,21 @@
 
 
        function exportActivity(){
-//        getCheckedNodes();
-          var selTeamId = document.getElementById('teamId');
+                    //        getCheckedNodes();
+                    var selTeamId = document.getElementById('teamId');
 
-          if (selTeamId.value != "-1"){
-            var form = document.getElementById('form');
+                    if (selTeamId.value != "-1"){
+                      var form = document.getElementById('form');
             form.action = "/dataExchange/exportWizard.do?method=export";
             form.target="_self"
             form.submit();
-            window.setTimeout(null,10000,"JavaScript");
-            enableLogButton();
-          } else {
-              alert('please select one team');
-          }
-      }
+            window.setTimeout("enableLogButton()",5000,"JavaScript");
+                  } else {
+                      alert('please select one team');
+                  }
+              }
 
-       
+
       function exportLog(){
           var form = document.getElementById('form');
           form.action = "/dataExchange/exportWizard.do?method=log";

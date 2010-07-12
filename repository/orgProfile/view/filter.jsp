@@ -396,14 +396,6 @@
                         </html:select>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2">
-                        <font style="color:red;font-weight:bold"><digi:trn>Note: fiscal year will affect the data range for the graps as follows:</digi:trn></font>
-                        <p>
-                            <digi:trn>
-                                *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years) </digi:trn> *** <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration will display  data of the previous fiscal year</digi:trn></p>
-                        </td>
-                    </tr>
                     <tr>
                         <td colspan="2">
                             &nbsp;

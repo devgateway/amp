@@ -57,7 +57,12 @@ function validate(){
 	return true;
 }
 
-
+function cancelText(){
+	<digi:context name="url" property="context/module/moduleinstance/cancelText.do" />
+	editorForm.action="${url}";
+	editorForm.target = "_self";
+	editorForm.submit();
+}
 
 </script>
 	
@@ -108,6 +113,8 @@ function validate(){
 	
 	<c:set var="trn"><digi:trn key="editor:savebutton">Save now</digi:trn> </c:set>
 	<html:submit value="${trn}" style="BACKGROUND: #f1efed url('images/editor/grad-btn.gif') repeat-x;cursor: hand"/>&nbsp;
+	
+	<html:button property="" onclick="cancelText()">Cancel</html:button>
 	<!-- 
 	<html:select property="lang" onchange="ChangeLanguage(this)">
 

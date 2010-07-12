@@ -10,6 +10,8 @@
       <forward name="forward" path="/showLayout.do?layout=editor_editText" />
     </action>
     <action name="editorForm" type="org.digijava.module.editor.action.SaveText" scope="session" path="/editor/saveText" />
+    <action path="/editor/cancelText" name="editorForm" type="org.digijava.module.editor.action.CancelText" scope="session"  />
+    
     <action name="editorForm" type="org.digijava.module.editor.action.ShowInEnglish" scope="session" path="/editor/showInEnglish">
       <forward name="forward" path="/showLayout.do?layout=editor_viewEng" />
     </action>

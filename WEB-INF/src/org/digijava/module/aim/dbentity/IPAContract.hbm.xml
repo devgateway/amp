@@ -73,10 +73,10 @@
 		<property access="field" name="totalPrivateContribAmount"
 			column="total_private_contrib_amount" type="java.lang.Double" />
 
-		<set name="organizations" cascade="none" table="AMP_IPA_CONTRACTING_ORGANIZATI">
+		<set name="organizations" cascade="none" table="AMP_IPA_CONTRACTING_ORGANIZATI" lazy="false">
 			<key column="ipa_contract_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
-				column="organization" />
+				column="organization" lazy="false"/>
 		</set>
 
 		<set name="disbursements" cascade="all-delete-orphan">

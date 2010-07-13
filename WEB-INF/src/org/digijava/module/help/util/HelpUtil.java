@@ -553,18 +553,24 @@ System.out.println("lang:"+lang);
     }
     
 	 public static String renderLevelGroup(Collection topics) {
-		String retVal="";
-		Iterator iter = topics.iterator();
-		while (iter.hasNext()) {
-			HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
-			HelpTopic theme = (HelpTopic) item.getMember();
-			retVal += "<option value="+theme.getHelpTopicId()+">"+theme.getTitleTrnKey()+"</option>\n";
-			if (item.getChildren() != null || item.getChildren().size() > 0) {
-				retVal += renderLevelGroup(item.getChildren());
+		 return renderLeveledItems(topics, "");
+	 }
+	 
+	 public static String renderLeveledItems(Collection topics,String prefix) {
+			String retVal="";
+			if (topics != null && topics.size()>0){
+				Iterator iter = topics.iterator();
+				while (iter.hasNext()) {
+					HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
+					HelpTopic theme = (HelpTopic) item.getMember();
+					retVal += "<option value="+theme.getHelpTopicId()+">"+ prefix + theme.getTopicKey()+"</option>\n";
+					if (item.getChildren() != null || item.getChildren().size() > 0) {
+						retVal += renderLeveledItems(item.getChildren(),prefix+"&nbsp;&nbsp;");
+					}
+				}
 			}
+			return retVal;
 		}
-		return retVal;
-	}
 	
 	 public static String renderTopicsTree(Collection topics,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();

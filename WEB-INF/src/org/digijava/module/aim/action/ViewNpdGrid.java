@@ -46,7 +46,15 @@ public class ViewNpdGrid extends Action {
 				//generate row objects from each connection for specified years.
 				for (IndicatorTheme connection : indicatorsList) {
 					IndicatorGridRow row = new IndicatorGridRow(connection,npdForm.getSelYears());
-					result.add(row);
+
+                    if (npdForm.getSelIndicators() != null) {
+                        for (Long selIndId : npdForm.getSelIndicators()){
+                            if (selIndId.equals(row.getId())) {
+                                result.add(row);
+                                break;
+                            }
+                        }
+                    }
 				}
 				npdForm.setIndicators(result);
 			}

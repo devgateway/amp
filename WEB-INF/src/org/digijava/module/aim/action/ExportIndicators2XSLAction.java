@@ -57,7 +57,7 @@ public class ExportIndicators2XSLAction extends Action {
 
 		AmpTheme mainProg = ProgramUtil.getThemeObject(npdForm.getProgramId());
 		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
-				.getSelYears());
+				.getSelYears(), npdForm.getSelIndicators());
 
 		//XLSExporter.resetStyles();
 
@@ -181,7 +181,7 @@ public class ExportIndicators2XSLAction extends Action {
 					List<IndicatorGridItem> values = indic.getValues();
 					if (values!=null){
 						for (IndicatorGridItem item: values) {
-                                                        cell = row.createCell(cellNum++);
+                            cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getBaseValue());
 							cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getActualValue());
@@ -211,15 +211,9 @@ public class ExportIndicators2XSLAction extends Action {
 
     private byte[] getGraphBytes (HttpServletRequest request, NpdForm npdForm) {
         byte[] retVal = null;
-
         getNPDgraph getNPDgraphObj = new getNPDgraph();
 
         try {
-
-
-
-
-
             Long currentThemeId = npdForm.getProgramId();
             long[] selIndicators = npdForm.getSelIndicators();
             String[] selYears = npdForm.getSelYears();
@@ -270,7 +264,7 @@ public class ExportIndicators2XSLAction extends Action {
     }
 
 
-	private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years) throws DgException{
+	private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years, long[] inds) throws DgException{
 		List<IndicatorGridRow> result = null;
 		if (prog != null && prog.getAmpThemeId() != null) {
 			//get all indicators and if recursive=true then all sub indicators too 
@@ -284,7 +278,14 @@ public class ExportIndicators2XSLAction extends Action {
 				//create row object for each indicator connection
 				for (IndicatorTheme connection : indicatorsList) {
 					IndicatorGridRow row = new IndicatorGridRow(connection,years);
-					result.add(row);
+					if (inds != null) {
+                        for (long selIndId : inds){
+                            if (selIndId == row.getId().longValue()) {
+                                result.add(row);
+                                break;
+                            }
+                        }
+                    }
 				}
 			}
 		}

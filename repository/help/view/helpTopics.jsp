@@ -73,7 +73,7 @@
  
 <script type="text/javascript">
 
-
+var selectedTopicId;
 
 // DOMParser for IE
 if (typeof DOMParser == "undefined") {
@@ -103,8 +103,8 @@ if (typeof DOMParser == "undefined") {
 			if(id != null){
 					var id = tree.getSelectedItemId();
 					show(id);
-			 	}
-			}
+			 }
+	}
 	
             var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
@@ -133,11 +133,12 @@ if (typeof DOMParser == "undefined") {
 		    
 		    		     
           tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
-            if(sid){
-                var contextTreeXml = tree.serializeTree();
-                document.getElementById("xmlString").value = contextTreeXml;
-             return true;
-            }});
+	            if(sid){
+    	            var contextTreeXml = tree.serializeTree();
+        	        document.getElementById("xmlString").value = contextTreeXml;
+            		return true;
+            	}
+           });
 
            
 
@@ -170,10 +171,13 @@ function stateChange(){
 	 if (xmlHttp.readyState==4)
   {
 		
-		 
-	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
-     document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
-     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+		 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("_editor_key_="));
+	     document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("_editor_key_=")+12,xmlHttp.responseText.indexOf("_topic_db_id_="));
+	     selectedTopicId = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("_topic_db_id_=")+14);
+	     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+//	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
+//     document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
+//     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
 
    }
 

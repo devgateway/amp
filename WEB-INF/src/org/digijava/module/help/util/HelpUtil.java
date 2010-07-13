@@ -25,6 +25,7 @@ import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
@@ -303,6 +304,14 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
+			if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
+				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+				if (editors!=null && editors.size()>0){
+					for (Editor editor : editors) {
+						session.delete(editor);
+					}
+				}
+			}
 			session.delete(topic);			
 			tx.commit();
 		} catch (Exception e) {

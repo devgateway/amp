@@ -62,7 +62,7 @@ function toggleSettings(){
 }
 
 // show filter window
-function showFilter(){
+function initFilterPanel(){
     var filterDiv = document.getElementById('filter');
     filterDiv.style.display="block";
     filterDiv.stytelvisibility="visible";
@@ -73,11 +73,14 @@ function showFilter(){
             Underlay:"shadow",
             modal: true,
             close:true,
-            visible:true,
+            visible:false,
             draggable:true} );
     filter.render();
 }
 
+function showFilter(){
+  filter.show();
+}
 
 
 </script>
@@ -1243,7 +1246,7 @@ function showFilter(){
 	}
 
 	function loadInitial(){
-
+        initFilterPanel();
 		setupYears();
 		initTree();
 	}
@@ -1270,9 +1273,9 @@ function showFilter(){
 	/* Adds listeners for all elemets in the tree */
 	function addEventListeners () {
 		for(var j=1;j<=numOfPrograms;j++){
-							/*var n	= document.getElementById('ygtvlabelel'+j);
+							var n	= document.getElementById('ygtvlabelel'+j);
 							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
-							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);*/
+							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
 		}
 	}
 	/* Function that is executed when mouse over an element */

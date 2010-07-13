@@ -163,6 +163,7 @@ function showFilter(){
 
 
 	function changeOptions(indics,years,locations){
+		
         selIndicatorIDs=new Array();
         for (var i = 0; i < indics.length; i++) {
           selIndicatorIDs[i]=indics[i];

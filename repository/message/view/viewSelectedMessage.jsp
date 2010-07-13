@@ -41,7 +41,7 @@ background: #FFF;
 </script>
 
 <digi:form action="/messageActions.do">
-			<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
+			<table cellspacing="0"  width="100%" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
 					<td class="r-dotted-lg" width="10"/>
 					<td class="r-dotted-lg" valign="top" align="left">
@@ -56,7 +56,7 @@ background: #FFF;
 												<td width="100%">
 													<table width="100%" cellspacing="0" cellpadding="0" border="0">
                                                         <tr>
-                                                            <td colspan="3" id="demo">
+                                                            <td colspan="3" id="demo" nowrap>
                                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
                                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
                                                                 <div   class="longTab" >

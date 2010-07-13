@@ -63,7 +63,7 @@
 
 .trEven{
 	background-color:#FFFFFF;
-	font-size:8pt;!important
+	font-size:8pt !important;
 	padding:2px;
 }
 .contentbox_border{
@@ -78,6 +78,9 @@
 
 .userMsg{
 background-color:yellow;
+}
+.scrollable {
+    height: 400px; overflow: auto; width:100%;
 }
 
 -->
@@ -184,51 +187,52 @@ background-color:yellow;
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
 	
-    function loadSelectedMessage(id){
+     function loadSelectedMessage(id){
         if(selectedMessagePanel!=null){
             selectedMessagePanel.destroy();
         }
-        /* 
-         * some messages need long time to load, 
+        /*
+         * some messages need long time to load,
          * that is why we create blank panel here, so user will see blank panel
          * before function call is completed
          */
-        
+
         //create div to hold selected message
         var div=document.createElement('DIV');
         div.id="selectedMessagePanel";
         document.body.appendChild(div);
-	
+
         // create body div to hold selected message
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
-        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>';
+        divBody.className='scrollable'
+        divBody.innerHTML='<digi:img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
-            x:"20",
-            y:"20",
-            constraintoviewport: true, 
-            Underlay:"shadow", 
+            width: 600,
+            constraintoviewport: true,
+            fixedcenter: true,
+            Underlay:"shadow",
             modal: true,
-            close:true, 
-            visible:true, 
+            close:true,
+            visible:true,
             draggable:true} );
         selectedMessagePanel.render();
         var url;
         var ind=id.indexOf('_fId');
         if(ind!=-1){
             var msgId=id.substring(0,ind);
-            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId='+msgId); 
+            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId='+msgId);
         }
         else{
-            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id); 
-            markMsgeAsRead(id);            
-        }			
+            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id);
+            markMsgeAsRead(id);
+        }
         var async=new Asynchronous();
         async.complete=viewMsg;
         async.call(url);
-        
+
     }
 	
 	function openObjectURL(url){

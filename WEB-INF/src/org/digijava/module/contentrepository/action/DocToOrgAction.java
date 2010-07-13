@@ -97,7 +97,12 @@ public class DocToOrgAction extends MultiAction {
 		
 		DocToOrgForm docToOrgForm			= (DocToOrgForm) form;
 		
-		DocToOrgDAO.deleteDocToOrgObjs(docToOrgForm.getRemovingUuid(), docToOrgForm.getRemovingOrgId() );
+		if(isLoggeedIn(request)){
+			Node n		= DocumentManagerUtil.getReadNode(docToOrgForm.getRemovingUuid(), request);
+			if (n != null && DocumentManagerRights.hasAddParticipatingOrgRights(n, request)) {
+				DocToOrgDAO.deleteDocToOrgObjs(docToOrgForm.getRemovingUuid(), docToOrgForm.getRemovingOrgId() );
+			}
+		}
 		
 		docToOrgForm.setRemovingUuid(null);
 		docToOrgForm.setRemovingOrgId(null);

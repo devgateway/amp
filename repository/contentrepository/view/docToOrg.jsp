@@ -16,9 +16,11 @@
 		<c:forEach var="org" items="${myForm.orgs}">
 			<li>
 				${org.acronym} ( ${org.name} )
+				<c:if test="${myForm.hasAddParticipatingOrgRights}">
 					<img onClick="deleteDocToOrgObj('${myForm.uuidForOrgsShown}', ${org.ampOrgId});"  style="cursor:pointer; text-decoration:underline;"
 					title="<digi:trn>Click here to remove this organisation</digi:trn>"
 					hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border="0" />
+				</c:if>
 			</li>
 		</c:forEach>
 	</ul>

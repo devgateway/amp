@@ -103,10 +103,10 @@ else {
 				return false;
 			}
 		} else { // many reg fund present
-			var length = document.aimEditActivityForm.selRegFundings.length;
+			var length = document.aimEditActivityForm.elements["funding.selRegFundings"].length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
-				if (document.aimEditActivityForm.selRegFundings[i].checked == true) {
+				if (document.aimEditActivityForm.elements["funding.selRegFundings"][i].checked == true) {
 					flag = 1;
 					break;
 				}

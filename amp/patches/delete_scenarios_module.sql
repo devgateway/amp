@@ -1,1 +1,0 @@
-DELETE FROM amp_modules_visibility WHERE name = 'Scenarios';

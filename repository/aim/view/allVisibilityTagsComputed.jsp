@@ -728,6 +728,7 @@
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
+<field:display feature="Pledges Columns" name="Related Projects"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
 <field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding"></field:display>
 <field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding"></field:display>

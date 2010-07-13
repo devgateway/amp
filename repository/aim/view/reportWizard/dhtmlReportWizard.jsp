@@ -350,33 +350,47 @@
 										<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
 									</span>
 									<div align="center" id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
-										<br />
-										<html:checkbox property="hideActivities" value="true">
-											${summary}
-										</html:checkbox>
-										<br /><br />
-										<html:radio property="reportPeriod" value="A">
-											<digi:trn key="aim:AnnualReport">
-												Annual Report
-											</digi:trn>
-										</html:radio>								
-										<html:radio property="reportPeriod" value="Q">
-											<digi:trn key="aim:QuarterlyReport">
-												Quarterly Report
-											</digi:trn>
-										</html:radio>
-										<html:radio property="reportPeriod" value="M">
-											<digi:trn key="aim:MonthlyReport">
-												Monthly Report
-											</digi:trn>
-										</html:radio>
-										
-										<html:radio property="reportPeriod" value="N">
-											<digi:trn>
-												No Grouping
-											</digi:trn>
-										</html:radio>
-										<br /><br />
+										<table>
+										<tr>
+											<td colspan="4" align="center" style="margin-bottom: 2px;margin-top: 2px">
+												<html:checkbox property="hideActivities" value="true">
+													${summary}
+												</html:checkbox>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<html:radio property="reportPeriod" value="A">
+													<digi:trn key="aim:AnnualReport">
+														Annual Report
+													</digi:trn>
+												</html:radio>
+											</td>
+											<td>								
+												<html:radio property="reportPeriod" value="Q">
+													<digi:trn key="aim:QuarterlyReport">
+														Quarterly Report
+													</digi:trn>
+												</html:radio>
+											</td>
+											<td>
+												<html:radio property="reportPeriod" value="M">
+													<digi:trn key="aim:MonthlyReport">
+														Monthly Report
+													</digi:trn>
+												</html:radio>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="4" style="margin-top: 5px;margin-bottom: 5px">
+												<html:radio property="reportPeriod" value="N">
+												<digi:trn>
+													Totals Only
+												</digi:trn>
+											</html:radio>
+											</td>
+										</tr>
+										</table>
 									</div>
 								</c:if>
 								

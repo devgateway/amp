@@ -183,10 +183,10 @@
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
+<feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
+<feature:display name="Pledge Sector and Location" module="Pledges"></feature:display> 
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
 <feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
-<feature:display name="Pledge Location" module="Pledges"></feature:display> 
-<feature:display name="Pledge Sector" module="Pledges"></feature:display> 
 <feature:display name="Pledge Funding" module="Pledges"></feature:display> 
 <feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
@@ -868,13 +868,35 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
-<field:display name="Add Pledge Location Button" feature="Pledge Location"></field:display>
-<field:display name="Remove Pledge Location Button" feature="Pledge Location"></field:display>
-<field:display name="Add Pledge Sector Button" feature="Pledge Sector"></field:display>
-<field:display name="Remove Pledge Sector Button" feature="Pledge Sector"></field:display>
+
+<field:display name="Who Authorized Pledge" feature="Pledge Donor Information"></field:display>
+<field:display name="Further Approval Needed" feature="Pledge Donor Information"></field:display>
+
+<field:display name="Pledge Location" feature="Pledge Sector and Location"></field:display>
+<field:display name="Add Pledge Location Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Pledge Sector" feature="Pledge Sector and Location"></field:display>
+<field:display name="Add Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding"></field:display>
 <field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding"></field:display>
-<field:display name="Alternate Contact 1" feature="Pledge Contact 1"></field:display>
-<field:display name="Alternate Contact 2" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Title" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Organization" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Address" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Telephone" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Email" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Fax" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 1 - Alternate Contact" feature="Pledge Contact 1"></field:display>
+<field:display name="Pledge Contact 2 - Name" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Organization" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Address" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Telephone" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2"></field:display>
+<field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2"></field:display>

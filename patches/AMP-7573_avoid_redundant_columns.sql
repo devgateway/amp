@@ -15,7 +15,7 @@ INSERT INTO `amp_columns_filters` (SELECT * FROM `temp_table2`);
 
 DROP TABLE IF EXISTS temp_table2;
 CREATE TABLE temp_table2 LIKE `amp_report_hierarchy`;
-INSERT INTO `temp_table2` (SELECT colTable.amp_report_id, temp.columnId AS columnId, colTable.cv_level_id, colTable.levelId FROM `temp_table` temp JOIN
+INSERT INTO `temp_table2`(amp_report_id,columnId,cv_level_id,levelId) (SELECT colTable.amp_report_id, temp.columnId AS columnId, colTable.cv_level_id, colTable.levelId FROM `temp_table` temp JOIN
 (SELECT columnName, colRep.*  FROM `amp_columns` col JOIN `amp_report_hierarchy` colRep 
 WHERE colRep.`columnId` = col.`columnId`) AS colTable 
 WHERE `temp`.`columnName` = colTable.columnName);
@@ -26,7 +26,7 @@ INSERT INTO `amp_report_hierarchy` (SELECT * FROM `temp_table2`);
 
 DROP TABLE IF EXISTS temp_table2;
 CREATE TABLE temp_table2 LIKE `amp_report_column`;
-INSERT INTO `temp_table2` (SELECT colTable.amp_report_id, temp.columnId AS columnId, colTable.cv_level_id, colTable.order_id FROM `temp_table` temp JOIN
+INSERT INTO `temp_table2`(amp_report_id,columnId,cv_level_id,order_id) (SELECT colTable.amp_report_id, temp.columnId AS columnId, colTable.cv_level_id, colTable.order_id FROM `temp_table` temp JOIN
 (SELECT columnName, colRep.*  FROM `amp_columns` col JOIN `amp_report_column` colRep 
 WHERE colRep.`columnId` = col.`columnId`) AS colTable 
 WHERE `temp`.`columnName` = colTable.columnName);

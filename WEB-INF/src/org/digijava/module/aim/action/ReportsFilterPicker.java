@@ -187,13 +187,13 @@ public class ReportsFilterPicker extends MultiAction {
 			primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 			filterForm.getProgramElements().add(primaryProgElement);
-		} else {
+		} /*else {
 			primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
 			for (AmpTheme ampTheme : primaryPrograms) {
 				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", ampTheme, "selectedPrimaryPrograms");
 				filterForm.getProgramElements().add(primaryProgElement);
 			}
-		}	
+		}	*/
 		
 //		if (primaryPrgSetting!=null) {
 //			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
@@ -208,13 +208,13 @@ public class ReportsFilterPicker extends MultiAction {
 			secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 			filterForm.getProgramElements().add(secondaryProgElement);
-		} else {
+		}/* else {
 			secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
 			for (AmpTheme ampTheme : secondaryPrograms) {
 				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", ampTheme, "selectedSecondaryPrograms");
 				filterForm.getProgramElements().add(secondaryProgElement);
 			}
-		}
+		}*/
 // 	 	if (secondaryPrg!=null) {
 //			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 //			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
@@ -235,13 +235,13 @@ public class ReportsFilterPicker extends MultiAction {
  	 		AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy()); 	 	 	
  	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
  	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-		} else {
+		}/* else {
 			nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
 			for (AmpTheme ampTheme : nationalPlanningObjectives) {
 				GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", ampTheme, "selectedNatPlanObj"); 	 	
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
 			}
-		}
+		}*/
  	 	
  	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());

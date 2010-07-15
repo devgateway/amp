@@ -450,7 +450,7 @@
 					 }%>		
 				</select>
 			</td>
-			<td><input type='text' name='comm_@@_4' id='comm_@@_4' size='10' class='inp-text'></td>
+			<td><input type='text' name='comm_@@_4' id='comm_@@_4' size='10' class='inp-text' readonly='true'></td>
 			<td><a id='date1comm_@@_4' href="javascript:pickDateById_divContent('comm_@@_4','comm_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='comm_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
@@ -491,7 +491,7 @@
 					 }%>		
 				</select>
 			</td>
-			<td><input type='text' name='disb_@@_4' id='disb_@@_4' size='10' class='inp-text'></td>
+			<td><input type='text' name='disb_@@_4' id='disb_@@_4' size='10' class='inp-text' readonly='true'></td>
 			<td><a id='date1disb_@@_4' href="javascript:pickDateById_divContent('disb_@@_4','disb_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='disb_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
@@ -532,7 +532,7 @@
 					 }%>		
 				</select>
 			</td>
-			<td><input type='text' name='expn_@@_4' id='expn_@@_4' size='10' class='inp-text'></td>
+			<td><input type='text' name='expn_@@_4' id='expn_@@_4' size='10' class='inp-text' readonly='true'></td>
 			<td><a id='date1expn_@@_4' href="javascript:pickDateById_divContent('expn_@@_4','expn_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='expn_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>

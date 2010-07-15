@@ -143,174 +143,162 @@
     <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
     <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
     <c:set var="orgsCount" scope="request" value="${fn:length(sessionScope.orgProfileFilter.orgIds)}"/>
-   
-        <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="4">
-            <tr>
-                <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Type</digi:trn>:</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${orgsCount==1}">
-                            ${organization.orgGrpId.orgType}
-                        </c:when>
-                        <c:when test="${empty orgGroup&&orgsCount==0}">
-                            <digi:trn>All</digi:trn>
-                        </c:when>
-                        <c:when test="${orgsCount>0}">
-                            <digi:trn>Multiple Organizations Selected</digi:trn>
-                        </c:when>
-                        <c:otherwise>
-                            <digi:trn>${orgGroup.orgType}</digi:trn>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Organization Name</digi:trn>:</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${orgsCount>1}">
-                            <digi:trn>Multiple Organizations Selected</digi:trn>
-                        </c:when>
-                        <c:when test="${orgsCount==1}">
-                            <c:if test="${empty organization.name}">
-                                <digi:trn>Not Available</digi:trn>
-                            </c:if>
-                            ${organization.name}
-                        </c:when>
-                        <c:otherwise>
-                            <digi:trn>Not Applicable</digi:trn>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Organization Acronym</digi:trn>:</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${orgsCount>1}">
-                            <digi:trn>Multiple Organizations Selected</digi:trn>
-                        </c:when>
-                        <c:when test="${orgsCount==1}">
-                            <c:if test="${empty organization.acronym}">
-                                <digi:trn>Not Available</digi:trn>
-                            </c:if>
-                            ${organization.acronym}
-                        </c:when>
-                        <c:otherwise>
-                            <digi:trn>Not Applicable</digi:trn>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Donor Group</digi:trn>:</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${orgsCount==1}">
-                            ${organization.orgGrpId.orgGrpName}
-                        </c:when>
-                        <c:when test="${empty orgGroup&&orgsCount==0}">
-                            <digi:trn>All</digi:trn>
-                        </c:when>
-                        <c:when test="${orgsCount>0}">
-                            <digi:trn>Multiple Organizations Selected</digi:trn>
-                        </c:when>
-                        <c:otherwise>
-                            ${orgGroup.orgGrpName}
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Web Link</digi:trn>:</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${orgsCount>1}">
-                            <digi:trn>Multiple Organizations Selected</digi:trn>
-                        </c:when>
-                        <c:when test="${orgsCount==1}">
-                            <c:if test="${empty organization.orgUrl}">
-                                <digi:trn>Not Available</digi:trn>
-                            </c:if>
-                            ${organization.orgUrl}
-                        </c:when>
-                        <c:otherwise>
-                            <digi:trn>Not Applicable</digi:trn>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <c:if test="${orgsCount!=1}">
-                <tr>
-                    <td width="30%"><digi:trn>Contact</digi:trn>:</td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${orgsCount>1}">
-                                <digi:trn>Multiple Organizations Selected</digi:trn>
-                            </c:when>
-                            <c:otherwise>
-                                <digi:trn>Not Applicable</digi:trn>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-            </table>
-            </c:if>
-            <c:if test="${orgsCount==1}">
+
+    <table class="tableElement" border="0" width="100%" cellspacing="0" cellpadding="4">
+        <tr>
+            <th colspan="2" class="tableHeaderCls"><digi:trn>Organization Profile</digi:trn></th>
+        </tr>
+        <tr>
+            <td width="30%"><digi:trn>Type</digi:trn>:</td>
+            <td>
                 <c:choose>
-                    <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
-                    </table>
-                    <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
-                    <digi:instance property="orgSummaryForm" />
-                    <digi:form action="/showOrgSummary.do" method="post">
-                        <html:hidden property="action" styleId="orgSummaryActionId"/>
-                        <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
-                        <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height: 200px">
-                            <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
-                                <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
-                                <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
-                                <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
-                            </table>
-                        </div>
-                    </digi:form>
-                    <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
-                        <thead>
-                            <tr>
-                                <th colspan="6" class="tableHeaderCls"><digi:trn>Contact Information</digi:trn></th>
-                            </tr>
-                            <tr>
-                                <th class="tableHeaderCls">
-                                    <digi:trn>LAST NAME</digi:trn>
-                                </th>
-                                <th class="tableHeaderCls">
-                                    <digi:trn>FIRST NAME</digi:trn>
-                                </th>
-                                <th class="tableHeaderCls">
-                                    <digi:trn>EMAIL </digi:trn>
-                                </th>
-                                <th class="tableHeaderCls">
-                                    <digi:trn> TELEPHONE </digi:trn>
-                                </th>
-                                <th class="tableHeaderCls">
-                                    <digi:trn> FAX </digi:trn>
-                                </th>
-                                <th class="tableHeaderCls">
-                                    <digi:trn>TITLE </digi:trn>
-                                </th>
-                            </tr>
-                        </thead>
-                        <c:forEach var="orgContact" items="${organization.organizationContacts}">
-                            <c:if test="${not empty orgContact.primaryContact && orgContact.primaryContact==true}">
-                                <tr>
-                                    <td class="tdClass" nowrap>
-                                        ${orgContact.contact.lastname}
-                                    </td>
-                                    <td class="tdClass" nowrap>
-                                        ${orgContact.contact.name}
-                                    </td>
+                    <c:when test="${orgsCount==1}">
+                        ${organization.orgGrpId.orgType}
+                    </c:when>
+                    <c:when test="${empty orgGroup&&orgsCount==0}">
+                        <digi:trn>All</digi:trn>
+                    </c:when>
+                    <c:when test="${orgsCount>0}">
+                        <digi:trn>Multiple Organizations Selected</digi:trn>
+                    </c:when>
+                    <c:otherwise>
+                        <digi:trn>${orgGroup.orgType}</digi:trn>
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%"><digi:trn>Organization Name</digi:trn>:</td>
+            <td>
+                <c:choose>
+                    <c:when test="${orgsCount>1}">
+                        <digi:trn>Multiple Organizations Selected</digi:trn>
+                    </c:when>
+                    <c:when test="${orgsCount==1}">
+                        <c:if test="${empty organization.name}">
+                            <digi:trn>Not Available</digi:trn>
+                        </c:if>
+                        ${organization.name}
+                    </c:when>
+                    <c:otherwise>
+                        <digi:trn>Not Applicable</digi:trn>
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%"><digi:trn>Organization Acronym</digi:trn>:</td>
+            <td>
+                <c:choose>
+                    <c:when test="${orgsCount>1}">
+                        <digi:trn>Multiple Organizations Selected</digi:trn>
+                    </c:when>
+                    <c:when test="${orgsCount==1}">
+                        <c:if test="${empty organization.acronym}">
+                            <digi:trn>Not Available</digi:trn>
+                        </c:if>
+                        ${organization.acronym}
+                    </c:when>
+                    <c:otherwise>
+                        <digi:trn>Not Applicable</digi:trn>
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%"><digi:trn>Donor Group</digi:trn>:</td>
+            <td>
+                <c:choose>
+                    <c:when test="${orgsCount==1}">
+                        ${organization.orgGrpId.orgGrpName}
+                    </c:when>
+                    <c:when test="${empty orgGroup&&orgsCount==0}">
+                        <digi:trn>All</digi:trn>
+                    </c:when>
+                    <c:when test="${orgsCount>0}">
+                        <digi:trn>Multiple Organizations Selected</digi:trn>
+                    </c:when>
+                    <c:otherwise>
+                        ${orgGroup.orgGrpName}
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%"><digi:trn>Web Link</digi:trn>:</td>
+            <td>
+                <c:choose>
+                    <c:when test="${orgsCount>1}">
+                        <digi:trn>Multiple Organizations Selected</digi:trn>
+                    </c:when>
+                    <c:when test="${orgsCount==1}">
+                        <c:if test="${empty organization.orgUrl}">
+                            <digi:trn>Not Available</digi:trn>
+                        </c:if>
+                        ${organization.orgUrl}
+                    </c:when>
+                    <c:otherwise>
+                        <digi:trn>Not Applicable</digi:trn>
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+        <c:if test="${orgsCount!=1}">
+            <tr>
+                <td width="30%"><digi:trn>Contact</digi:trn>:</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${orgsCount>1}">
+                            <digi:trn>Multiple Organizations Selected</digi:trn>
+                        </c:when>
+                        <c:otherwise>
+                            <digi:trn>Not Applicable</digi:trn>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+    </c:if>
+    <c:if test="${orgsCount==1}">
+        <c:choose>
+            <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
+            </table>
+            <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
+            <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="tableHeaderCls"><digi:trn>Contact Information</digi:trn></th>
+                    </tr>
+                    <tr>
+                        <th class="tableHeaderCls">
+                            <digi:trn>LAST NAME</digi:trn>
+                        </th>
+                        <th class="tableHeaderCls">
+                            <digi:trn>FIRST NAME</digi:trn>
+                        </th>
+                        <th class="tableHeaderCls">
+                            <digi:trn>EMAIL </digi:trn>
+                        </th>
+                        <th class="tableHeaderCls">
+                            <digi:trn> TELEPHONE </digi:trn>
+                        </th>
+                        <th class="tableHeaderCls">
+                            <digi:trn> FAX </digi:trn>
+                        </th>
+                        <th class="tableHeaderCls">
+                            <digi:trn>TITLE </digi:trn>
+                        </th>
+                    </tr>
+                </thead>
+                <c:forEach var="orgContact" items="${organization.organizationContacts}">
+                    <c:if test="${not empty orgContact.primaryContact && orgContact.primaryContact==true}">
+                        <tr>
+                            <td class="tdClass" nowrap>
+                                ${orgContact.contact.lastname}
+                            </td>
+                            <td class="tdClass" nowrap>
+                                ${orgContact.contact.name}
+                            </td>
                                     <td class="tdClass" nowrap>
                                         <c:forEach var="property" items="${orgContact.contact.properties}">
                                             <c:if test="${property.name=='contact email'}">
@@ -318,7 +306,7 @@
                                             </c:if>
                                         </c:forEach>
                                     </td>
-                                    <td class="tdClass">
+                            <td class="tdClass">
                                         <c:forEach var="property" items="${orgContact.contact.properties}">
                                             <c:if test="${property.name=='contact phone'}">
                                                 <div>${property.value}</div>
@@ -333,41 +321,54 @@
                                         </c:forEach>
                                     </td>
                                     <td class="tdClass">
-                                        ${orgContact.contact.title}&nbsp;
-                                    </td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </table>
-                </c:when>
-                <c:otherwise>
-                    <tr>
-                        <td width="30%"><digi:trn>Contact Name</digi:trn>:</td>
-                        <td>
-                            <c:if test="${empty organization.contactPersonName}">
-                                <digi:trn>Not Available</digi:trn>
-                            </c:if>${organization.contactPersonName}&nbsp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="30%"><digi:trn>Contact Phone</digi:trn>:</td>
-                        <td>
-                            <c:if test="${empty organization.phone}">
-                                <digi:trn>Not Available</digi:trn>
-                            </c:if>
-                            ${organization.phone}&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td width="30%"><digi:trn>Contact Email</digi:trn>:</td>
-                        <td>
-                            <c:if test="${empty organization.phone}"><digi:trn>Not Available</digi:trn></c:if>
-                            ${organization.email}&nbsp;
-                        </td>
-                    </tr>
-                </table>
-            </c:otherwise>
-        </c:choose>
-    </c:if>
+                                ${orgContact.contact.title}&nbsp;
+                            </td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td width="30%"><digi:trn>Contact Name</digi:trn>:</td>
+                <td>
+                    <c:if test="${empty organization.contactPersonName}">
+                        <digi:trn>Not Available</digi:trn>
+                    </c:if>${organization.contactPersonName}&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td width="30%"><digi:trn>Contact Phone</digi:trn>:</td>
+                <td>
+                    <c:if test="${empty organization.phone}">
+                        <digi:trn>Not Available</digi:trn>
+                    </c:if>
+                    ${organization.phone}&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="30%"><digi:trn>Contact Email</digi:trn>:</td>
+                <td>
+                    <c:if test="${empty organization.phone}"><digi:trn>Not Available</digi:trn></c:if>
+                    ${organization.email}&nbsp;
+                </td>
+            </tr>
+        </table>
+        <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
+    </c:otherwise>
+</c:choose>
+<digi:instance property="orgSummaryForm" />
+<digi:form action="/showOrgSummary.do" method="post">
+    <html:hidden property="action" styleId="orgSummaryActionId"/>
+    <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
+    <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height: 200px">
+        <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
+            <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
+            <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
+            <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
+        </table>
+    </div>
+</digi:form>
+</c:if>
 &nbsp;
 </div>
 <div class="tab_organization_profile_unselected contentbox_border chartPlaceCss" style="display:none">

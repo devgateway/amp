@@ -122,6 +122,11 @@
             exportSettingsPanel.hide();
         }
 
+        function resetToDefault(){
+             <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=true" />
+             document.location.href="${url}";
+        }
+
         function checkAllSeleceted(){
             var valid=true;
             var allSelected=false;
@@ -404,6 +409,7 @@
                     <tr>
                         <td align="center" colspan="2">
                             <input type="button" class="button" onclick="checkAllSeleceted();" value="<digi:trn key="orgProfile:filer:Apply">Apply</digi:trn>">
+                             <input type="button" class="button" onclick="resetToDefault();" value="<digi:trn>Reset to Default Settings</digi:trn>">
                     </td>
                 </tr>
             </table>

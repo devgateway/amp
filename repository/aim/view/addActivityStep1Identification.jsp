@@ -695,7 +695,7 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-													<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center">
+													<table width="100%" bord	er="0" cellspacing="2" cellpadding="2" align="center">
                                                   		<tr>
 		                                                    <td>
 		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" >
@@ -703,7 +703,9 @@ target.style.cursor = "default"
 		                                                    		<html:optionsCollection name="aimEditActivityForm" property="identification.budgetsectors" value="idsector" label="sectorname"/>
 		                                                    	</html:select>
 		                                                    </td>
-		                                                    <td>
+		                                                 </tr>
+		                                                 <tr>
+		                                                 	<td>
 		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedorg" styleId="budgetorg" onchange="getBudgetOptions(this.value,'depselect')">
       																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetorgs" value="ampOrgId" label="name"/>
@@ -717,7 +719,9 @@ target.style.cursor = "default"
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetdepartments" value="id" label="name"/>
     															</html:select>
     														</td>
-		                                                    <td>
+    													</tr>
+    													<tr>
+    														<td>
 		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedprogram" styleId="budgetprog">
       																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetprograms" value="ampThemeId" label="name"/>

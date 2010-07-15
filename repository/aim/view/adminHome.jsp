@@ -229,33 +229,7 @@
                                 </td>
                             </tr>
                            </module:display>
-                            <!-- 
-                            
-                            <tr>
-                              <td class="f-names" nowrap="nowrap">
-                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                <c:set var="trn">
-                                  <digi:trn key="message:viewSettings">Click here to view TemplateAlerts Manager</digi:trn>
-                                </c:set>
-                                <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
-                                  <digi:trn key="message:templatesManager">TemplateAlerts Manager</digi:trn>
-                                </digi:link>
-                              </td>
-                            </tr>
-                              -->
-                              <!-- 
-                            <tr>
-                              <td class="f-names" nowrap="nowrap">
-                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                <c:set var="trn">
-                                  <digi:trn key="aim:viewSettings">Click here to view Job Manager</digi:trn>
-                                </c:set>
-                                <digi:link module="message" href="/quartzJobManager.do" title="${trn}">
-                                  <digi:trn key="aim:jobManager">Job Manager</digi:trn>
-                                </digi:link>
-                              </td>
-                            </tr>
-                            -->
+                          
                          <tr>
 	                         <td class="f-names" nowrap="nowrap">
  	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -677,7 +651,7 @@
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
 							   <digi:link href="/export.do" title="" >
-							      <digi:trn key="dataexchange:exporter">Exporter</digi:trn>
+							      <digi:trn>Budget Code Exporter</digi:trn>
 							   </digi:link>
                             </td>
                           </tr>

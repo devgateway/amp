@@ -184,19 +184,24 @@
                               </td>
                             </tr>
                           </feature:display>
-                          <module:display name="Message Manager" parentModule="ADMINISTRATIVE SECTION">
-                          	<tr>
-                          		<td class="f-names" nowrap="nowrap">
-                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                <c:set var="trn">
-                                  <digi:trn key="message:viewSettings">Click here to view Message Settings</digi:trn>
-                                </c:set>
-                               <digi:link module="message" href="/msgSettings.do?actionType=getSettings" title="${trn}">
-                                  <digi:trn key="message:messagesManager">Message Manager</digi:trn>
-                                </digi:link>
-                              </td>
-                          	</tr>
+                          
+                                                    
+                          <module:display name="ADMIN" parentModule="Messaging System">
+                          	<feature:display name="Message Manager" module="ADMIN">
+                          		<tr>
+	                          		<td class="f-names" nowrap="nowrap">
+	                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+	                                <c:set var="trn">
+	                                  <digi:trn>Click here to view Message Settings</digi:trn>
+	                                </c:set>
+	                               <digi:link module="message" href="/msgSettings.do?actionType=getSettings" title="${trn}">
+	                                  <digi:trn>Message Manager</digi:trn>
+	                                </digi:link>
+	                              </td>
+	                          	</tr>
+                          	</feature:display>
                           </module:display>
+                          
                           	<feature:display name="Admin Topics Help" module="HELP">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">

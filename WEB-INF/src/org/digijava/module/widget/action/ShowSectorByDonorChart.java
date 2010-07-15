@@ -121,7 +121,7 @@ public class ShowSectorByDonorChart extends Action {
         }
         //HEIGHT
         if (form.getImageHeight() == null) {
-            opt.setHeight(new Integer(400));
+            opt.setHeight(new Integer(480));
         } else {
             opt.setHeight(form.getImageHeight());
         }

@@ -889,13 +889,15 @@
                                         &nbsp;
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td  align="right" colspan="2">
-                                        <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
-                                        <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
-                                    </td>
+                                <c:if test="${aimAddOrgForm.type=='NGO'}">
+                                    <tr>
+                                        <td  align="right" colspan="2">
+                                            <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
+                                            <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
+                                        </td>
 
-                                </tr>
+                                    </tr>
+                                </c:if>
                                  <tr>
                                     <td  align="right" colspan="2">
                                         &nbsp;

@@ -653,68 +653,47 @@ public class LuceneUtil implements Serializable {
 		}
 	}
 	
-    public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id){
+    public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id) {
 		logger.info("Updating activity!");
-		
-		ServletContext sc = request.getSession().getServletContext();
-		
-		if (update){
-			deleteActivity(sc.getRealPath("/") + activityIndexDirectory, idField, String.valueOf(id));
-		}
-		
-		IndexWriter indexWriter = null;
 		try {
-			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		AmpActivity act = ActivityUtil.getAmpActivity(id);
-		
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		//Util.getEditorBody(site,act.getDescription(),navigationLanguage);
-		Document doc = null;
-		try {
-			String projectid = act.getAmpId();
-			
-			ArrayList<String> componentsCode=new ArrayList<String>();
-		 	Collection<AmpComponent> componentsList=act.getComponents();
-
-		 	if(componentsList!=null){
-			 	for(AmpComponent c:componentsList){
-			 	   componentsCode.add(c.getCode());
-			 	}
-		 	}
-				
-			
-			doc = activity2Document(
-					String.valueOf(act.getAmpActivityId()), 
-					projectid, 
-					String.valueOf(act.getName()), 
-					Util.getEditorBody(site,act.getDescription(),navigationLanguage), 
-					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
-					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
-					Util.getEditorBody(site,act.getResults(),navigationLanguage),
-					Util.getEditorBody(site,act.getContactName(),navigationLanguage),
-			 	 	componentsCode,
-			 	 	act.getCrisNumber(),
-			 	 	act.getBudgetCodeProjectID()
-			);
-		} catch (EditorException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		if (doc != null){
-			try {
-				indexWriter.addDocument(doc);
-				indexWriter.optimize();
-				indexWriter.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			ServletContext sc = request.getSession().getServletContext();
+			if (update) {
+				deleteActivity(sc.getRealPath("/") + activityIndexDirectory, idField, String.valueOf(id));
 			}
+			IndexWriter indexWriter = null;
+			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
+			AmpActivity act = ActivityUtil.getAmpActivity(id);
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
+			Document doc = null;
+			String projectid = act.getAmpId();
+			ArrayList<String> componentsCode = new ArrayList<String>();
+			Collection<AmpComponent> componentsList = act.getComponents();
+			if (componentsList != null) {
+				for (AmpComponent c : componentsList) {
+					componentsCode.add(c.getCode());
+				}
+			}
+			doc = activity2Document(String.valueOf(act.getAmpActivityId()), projectid, String.valueOf(act.getName()),
+					Util.getEditorBody(site, act.getDescription(), navigationLanguage), Util.getEditorBody(site, act
+							.getObjective(), navigationLanguage), Util.getEditorBody(site, act.getPurpose(),
+							navigationLanguage), Util.getEditorBody(site, act.getResults(), navigationLanguage), Util
+							.getEditorBody(site, act.getContactName(), navigationLanguage), componentsCode, act
+							.getCrisNumber(), act.getBudgetCodeProjectID());
+
+			if (doc != null) {
+				try {
+					indexWriter.addDocument(doc);
+					indexWriter.optimize();
+					indexWriter.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e);
 		}
-		
 	}
 	
 	/**

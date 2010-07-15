@@ -413,6 +413,11 @@ function confirmFunc() {
                                         else if (report.getType()!=null && report.getType().equals(new Long(4))){
 	                                  %>
                                           <digi:trn key="aim:contributionType">contribution</digi:trn>
+                                       <%
+                                        }
+                                        else if (report.getType()!=null && report.getType().equals(new Long(5))){
+	                                  %>
+	                                  	 <digi:trn>pledge</digi:trn>
 	                                  <%}%>
 	                              </li>
                                   <logic:equal name="report" property="drilldownTab" value="true">

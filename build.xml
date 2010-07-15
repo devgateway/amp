@@ -476,6 +476,7 @@
 			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
 			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
 			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
+			<transaction>INSERT IGNORE off_line_reports (SELECT * from ${clean.source}.off_line_reports)</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>

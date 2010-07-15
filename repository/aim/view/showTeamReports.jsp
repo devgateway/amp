@@ -498,7 +498,7 @@ function confirmFunc() {
 	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn>Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;
 	                                </span>
                                 
-	                                <div style='position:relative;display:none;' id='measure-<bean:write name="report" property="measures"/>'> 
+	                                <div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'> 
 	                                  <logic:iterate name="report" property="measures" id="measure" indexId="index"  >
 	                                    <li>
 	                                    	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
@@ -508,7 +508,7 @@ function confirmFunc() {
 	                                  </logic:iterate>
 	                                </div>
 	                                
-	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
                                 </td>
                                 <td align="center">

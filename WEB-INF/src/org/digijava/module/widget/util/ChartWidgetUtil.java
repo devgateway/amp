@@ -412,6 +412,7 @@ public class ChartWidgetUtil {
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
 		toolTipformat.setMaximumFractionDigits(3);
+        toolTipformat.setMinimumIntegerDigits(1);
 		format.setMaximumFractionDigits(0);
 		String pattern = "{0} {2} ({1})";
 		if (opt.getLabelPattern() != null) {
@@ -849,6 +850,7 @@ public class ChartWidgetUtil {
 
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		format.setMaximumFractionDigits(3);
+        format.setMinimumIntegerDigits(1);
 		PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
 		plot.setLabelGenerator(gen);
 		plot.setSimpleLabels(true);

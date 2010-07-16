@@ -46,6 +46,8 @@
 					<digi:instance property="importChaptersForm" />
 
 <digi:form action="/importChapters.do" enctype="multipart/form-data" method="POST">
+            <digi:errors/>
+            <p/>
 			<html:file property="uploadedFile"/>
 			<p/>
 			<html:submit property="importPerform">Import</html:submit>

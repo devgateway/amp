@@ -27,6 +27,8 @@ import org.digijava.module.dataExchange.form.ImportChaptersForm;
 
 import com.ibm.wsdl.OutputImpl;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
@@ -39,10 +41,22 @@ public class ImportChaptersAction extends Action {
 		ImportChaptersForm icform = (ImportChaptersForm) form;
 		if (request.getParameter("importPerform") != null && icform.getUploadedFile()!=null && icform.getUploadedFile().getFileSize()>0) {
 			InputStream inp = icform.getUploadedFile().getInputStream();
+            POIFSFileSystem poifs=null;
+            Sheet sheet=null;
+			try {
+                poifs = new POIFSFileSystem(inp);
+                HSSFWorkbook wb = new HSSFWorkbook(poifs);
+                sheet = wb.getSheetAt(0);
+            }
+           catch (Exception ex) {
+               logger.error("invalid file", ex);
+               ActionErrors errors = new ActionErrors();
+               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.dataExchange.invalidFile"));
+               saveErrors(request, errors);
+               icform.setImportPerform(false);
+               return mapping.findForward("forward");
+            }
 			
-			POIFSFileSystem poifs = new POIFSFileSystem(inp);
-			HSSFWorkbook wb = new HSSFWorkbook(poifs);
-			Sheet sheet = wb.getSheetAt(0);
 			boolean header = true;
 			int chaptersInserted = 0;
 			int chaptersUpdated = 0;

@@ -289,7 +289,7 @@ saveReportEngine	= null;
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
 		
-		var msgP4='\n<digi:trn key="rep:filter:SetFormat">Please select format</digi:trn>';
+		var msgP4='\n<digi:trn>Please select report settings</digi:trn>';
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);

@@ -454,20 +454,21 @@ function RowSelector(rowEl, propertyObj, callback ) {
 }
 
 function getRowSelectorInstance(rowEl, propertyObj, callback, unique ){
-	var objectMap		= RowSelector.prototype.objectMap;
+	var objectMap = RowSelector.prototype.objectMap;
 	if (unique != null && unique) {
-		objectMap		= UniqueRowSelector.prototype.objectMap;
+		objectMap = UniqueRowSelector.prototype.objectMap;
 	}
 	if ( rowEl.id == null || rowEl.id.length==0) {
-		rowEl.id	= propertyObj.baseId + (RowSelector.prototype.uniqueId++);
+		rowEl.id = propertyObj.baseId + (RowSelector.prototype.uniqueId++);
 	}
 	var rowObj	= objectMap[rowEl.id];
 	if (rowObj == null) { 
 		if (unique != null && unique) {
 			rowObj	= new UniqueRowSelector(rowEl, propertyObj, callback );
 		}
-		else
+		else{
 			rowObj	= new RowSelector(rowEl, propertyObj, callback );
+		}
 		objectMap[rowEl.id]	= rowObj;
 	}
 	return rowObj;
@@ -477,8 +478,10 @@ RowSelector.prototype.colorRow	= function (color) {
 	if (children!=null && children.length!=null) {
 		for (var i=0; i<children.length; i++) {
 			var child		= children[i];
-			var childYuiEl	= new YAHOO.util.Element(child);
-			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(this.skippedClass) ) ) {
+			//var childYuiEl	= new YAHOO.util.Element(child);
+			//alert("childYuiEl: " + childYuiEl);
+			//if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(this.skippedClass) ) ) {
+			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null ) ) {
 				child.style.backgroundColor	= color;
 			}
 		}
@@ -549,7 +552,7 @@ UniqueRowSelector.prototype.toggleRow	= function () {
 			this.propertyObj.lastSelectedRow.isMarked	= false;
 			this.propertyObj.lastSelectedRow.unmarkRow(true);
 		}
-		this.propertyObj.lastSelectedRow		= this;
+		this.propertyObj.lastSelectedRow = this;
 		if (this.callback != null && this.callback.onSelect != null) {
 			this.callback.onSelect();
 		}

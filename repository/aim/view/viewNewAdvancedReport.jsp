@@ -234,7 +234,7 @@ session.setAttribute("progressValue", counter);
               </logic:notEqual>
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                <digi:trn key="rep:pop:ChangeFormat">Report Settings</digi:trn>
                 </a>
            
             </span>

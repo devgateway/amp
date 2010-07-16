@@ -27,11 +27,11 @@
 					<tr>
 						<td align="right"><strong><digi:trn>Title</digi:trn></strong></td>
 						<td align="left">
-                            <c:set var="translation">
-                            	<digi:trn>Please select from below</digi:trn>
-                            </c:set>
-                            <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddContactForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
-                       </td>
+              <c:set var="translation">
+              	<digi:trn>Please select from below</digi:trn>
+              </c:set>
+              <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddContactForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+						</td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
@@ -127,7 +127,15 @@
 							<logic:notEmpty name="aimAddContactForm" property="phones">
 								<logic:iterate name="aimAddContactForm" property="phones" id="foo" indexId="ctr">
 									<div>
+										
+										<c:set var="translationNone">
+              				<digi:trn>None</digi:trn>
+              			</c:set>
+										
+              			<category:showoptions multiselect="false" firstLine="${translationNone}" name="aimAddContactForm" property="phones[${ctr}].phoneTypeId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="selectStyle" outerid="phoneType_${ctr}"/>
+										<%--
 										<html:text name="aimAddContactForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+										--%>
 									   	<html:text name="aimAddContactForm" property="phones[${ctr}].value" size="16" styleId="phoneNum_${ctr}"/>
 									  	<a href="javascript:removeData('phone',${ctr})"> 
 									 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>

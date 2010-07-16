@@ -221,30 +221,36 @@ YAHOO.namespace("YAHOO.amp");
     	}
     	//phone shouldn't be empty and should contain valid characters
     	//also if phone type is filled, number should be filled too and vice versa
-    	var phoneTypes=$("input[id^='phoneType_']");
+    	//var phoneTypes=$("input[id^='phoneType_']");
+    	
+    	var phoneTypes=$("select[id^='phoneType_']");
+			
+			console.log(phoneTypes);
+			    	
     	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
-        		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
+        		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
             		alert('Please enter phone');
             		return false;
-        		}else if(phoneTypes[i].value=='' && phoneNumbers[i].value!=''){
-        			alert('Please enter phone type');
+        		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
+        			alert('Please select phone type');
         			return false;
-        		}else if(phoneTypes[i].value!='' && phoneNumbers[i].value==''){
+        		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
         			alert('Please enter phone number');
         			return false;
         		}
     		}
     	}
     	
+    	/*
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
             	if(checkNumber(phoneNumbers[i].value)==false || checkPhoneNumberType(phoneTypes[i].value)==false){            		
             		return false;
             	}
         	}
-    	}
+    	}*/
     	//check fax
     	var faxes=$("input[id^='faxes_']");
     	if(faxes!=null){
@@ -395,10 +401,11 @@ YAHOO.namespace("YAHOO.amp");
             	}
         	}
         	//get phone types
-        	var phoneTypes=$("input[id^='phoneType_']");
+        	var phoneTypes=$("select[id^='phoneType_']");
+        	
         	if(phoneTypes!=null){
             	for(var i=0;i < phoneTypes.length; i++){
-            		params+= "&contPhoneType="+phoneTypes[i].value;
+            		params+= "&contPhoneTypeIds="+phoneTypes[i].value;
             	}
         	}
         	//get phone numbers

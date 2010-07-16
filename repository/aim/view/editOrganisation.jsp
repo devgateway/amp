@@ -1674,7 +1674,7 @@
 								                                            <td class="tdClass">
 								                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
 																					<c:if test="${phone.name=='contact phone'}">
-																						<div>${phone.value}</div>
+																						<div>${phone.valueAsFormatedPhoneNum}</div>
 																					</c:if>
 																				</c:forEach>
 								                                            </td>

@@ -355,17 +355,17 @@ html>body #mainEmpty {
     	}
     	//phone shouldn't be empty and should contain valid characters
     	//also if phone type is filled, number should be filled too and vice versa
-    	var phoneTypes=$("input[id^='phoneType_']");
+    	var phoneTypes=$("select[id^='phoneType_']");
     	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
-        		if(phoneTypes[i].value=='' && phoneNumbers[i].value==''){
+        		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
             		alert('Please enter phone');
             		return false;
-        		}else if(phoneTypes[i].value=='' && phoneNumbers[i].value!=''){
-        			alert('Please enter phone type');
+        		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
+        			alert('Please select phone type');
         			return false;
-        		}else if(phoneTypes[i].value!='' && phoneNumbers[i].value==''){
+        		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
         			alert('Please enter phone number');
         			return false;
         		}
@@ -374,7 +374,12 @@ html>body #mainEmpty {
     	
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
+        		/*
             	if(checkNumber(phoneNumbers[i].value)==false || checkPhoneNumberType(phoneTypes[i].value)==false){            		
+            		return false;
+            	}
+            	*/
+            	if(checkNumber(phoneNumbers[i].value)==false){
             		return false;
             	}
         	}
@@ -548,11 +553,11 @@ html>body #mainEmpty {
 																													<tr>
 																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
 																														<td align="left">
-                                                                                                                        	<c:set var="translation">
-                                                                                                                            	<digi:trn>Please select from below</digi:trn>
-                                                                                                                            </c:set>
-                                                                                                                            <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
-                                                                                                                        </td>
+                                                            	<c:set var="translation">
+                                                              	<digi:trn>Please select from below</digi:trn>
+                                                              </c:set>
+                                                              <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+                                                            </td>
 																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
@@ -632,7 +637,14 @@ html>body #mainEmpty {
 																															<logic:notEmpty name="addressbookForm" property="phones">
 																																 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 																																 	<div>
-																																 		<html:text name="addressbookForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+																																 		
+																																 		<c:set var="translationNone">
+																								              				<digi:trn>None</digi:trn>
+																								              			</c:set>
+																																 		<category:showoptions multiselect="false" firstLine="${translationNone}" name="addressbookForm" property="phones[${ctr}].phoneTypeId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="selectStyle" outerid="phoneType_${ctr}"/>
+																																 		<%--
+																																 			<html:text name="addressbookForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
+																																 		--%>	
 																												                    	<html:text name="addressbookForm" property="phones[${ctr}].value" size="26" styleId="phoneNum_${ctr}"/>
 																												                    	 <a href="javascript:removeData('phone',${ctr})"> 
 																																	 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>

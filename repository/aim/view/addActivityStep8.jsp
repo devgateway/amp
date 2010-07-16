@@ -539,7 +539,7 @@ function resetAll()
 																				<td>
 																					<c:forEach var="phone" items="${donorContact.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
-																							<div>${phone.value}</div>
+																							<div>${phone.valueAsFormatedPhoneNum}</div>
 																						</c:if>
 																					</c:forEach>
 																				</td>
@@ -629,7 +629,7 @@ function resetAll()
 																				<td>
 																					<c:forEach var="phone" items="${mofedContact.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
-																							<div>${phone.value}</div>
+																							<div>${phone.valueAsFormatedPhoneNum}</div>
 																						</c:if>
 																					</c:forEach>
 																				</td>
@@ -719,7 +719,7 @@ function resetAll()
 																				<td>
 																					<c:forEach var="phone" items="${projCoordinator.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
-																							<div>${phone.value}</div>
+																							<div>${phone.valueAsFormatedPhoneNum}</div>
 																						</c:if>
 																					</c:forEach>
 																				</td>
@@ -809,7 +809,7 @@ function resetAll()
 																				<td>
 																					<c:forEach var="phone" items="${sectorMinistry.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
-																							<div>${phone.value}</div>
+																							<div>${phone.valueAsFormatedPhoneNum}</div>
 																						</c:if>
 																					</c:forEach>
 																				</td>
@@ -900,7 +900,7 @@ function resetAll()
 																				<td>
 																					<c:forEach var="phone" items="${implExecAgency.contact.properties}">
 																						<c:if test="${phone.name=='contact phone'}">
-																							<div>${phone.value}</div>
+																							<div>${phone.valueAsFormatedPhoneNum}</div>
 																						</c:if>
 																					</c:forEach>
 																				</td>

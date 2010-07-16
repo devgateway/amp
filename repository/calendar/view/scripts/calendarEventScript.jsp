@@ -59,14 +59,15 @@
         }
         if(recSelEndTime != null && recSelEndTime.value==''){
             var endDateTime=document.getElementById("selectedEndTime");
-            recSelEndTime.value=endDateTime.value;
-
-            var recEndTimeHour = document.getElementById("recSelectedEndHour");
-            recEndTimeHour.selectedIndex=parseInt(endDateTime.value.substring(0,2));
-
-            var recStartMinute = document.getElementById("recSelectedEndMinute");
-            recStartMinute.selectedIndex=parseInt(endDateTime.value.substring(3,5));
+            recSelEndTime.value=endDateTime.value;           
         }
+
+        var recEndTimeHour = document.getElementById("recSelectedEndHour");
+        recEndTimeHour.selectedIndex=parseInt(recSelEndTime.value.substring(0,2));
+
+        var recStartMinute = document.getElementById("recSelectedEndMinute");
+        recStartMinute.selectedIndex=parseInt(recSelEndTime.value.substring(3,5));
+       
 
 		if (!myPanel1Init){
 	        myPanel1.setBody(element);

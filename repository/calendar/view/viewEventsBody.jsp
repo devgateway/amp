@@ -318,16 +318,13 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
 }	
 -->
 </script>	
-<style> 
-
-</style>
 <body>
 <script type="text/javascript">
 window.onload=init;
 </script>
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>
-	<div id="scheduler_here" class="dhx_cal_container"  style='padding:1% 0% 1% 0%; width:100%; height:100%; max-height:570; position:relative'>
+	<div id="scheduler_here" class="dhx_cal_container"  style='padding:1% 0% 1% 0%; width:100%; height:93%;max-height:570;  position:relative'>
 		<div class="dhx_cal_navline">
 			<div class="dhx_cal_prev_button">&nbsp;</div>
 			<div class="dhx_cal_next_button">&nbsp;</div>

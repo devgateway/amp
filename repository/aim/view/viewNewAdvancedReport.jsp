@@ -228,13 +228,10 @@ session.setAttribute("progressValue", counter);
                 </a>
                 <%} %>  	
                       	
-           	|<a class="settingsLink" onClick="showRange(); " >
-               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
-                 </a>
-              </logic:notEqual>
+           	</logic:notEqual>
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn key="rep:pop:ChangeFormat">Report Settings</digi:trn>
+                <digi:trn>Report Settings</digi:trn>
                 </a>
            
             </span>
@@ -308,13 +305,10 @@ session.setAttribute("progressValue", counter);
 					</script>
                 </a>
            	  
-            	|<a class="settingsLink" onClick="showRange(); " >
-               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
-                 </a>
               </logic:notEqual>
                 
                 |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                <digi:trn>Tab Settings</digi:trn>
                 </a>
            
             </span>

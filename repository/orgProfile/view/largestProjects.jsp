@@ -55,7 +55,7 @@
 
     <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  varStatus="status">
         <tr>
-            <td nowrap>
+            <td width="40%">
                 <c:choose>
                     <c:when test="${empty project.fullTitle}">
                         <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link>
@@ -71,7 +71,7 @@
                     </TABLE>
                 </div>
             </td>
-            <td align="center">${project.amount}</td>
+            <td align="right">${project.amount}</td>
             <c:if test="${sessionScope.orgProfileFilter.transactionType==2}">
                 <td align="center">${project.disbAmount}</td>
             </c:if>

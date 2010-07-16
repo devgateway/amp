@@ -221,7 +221,7 @@ public class OrgProfileFilterForm extends ActionForm {
             setLargestProjectNumb(10);
             setSelRegionId(null);
             setSelZoneIds(null);
-            setYearsInRange(5);
+            setYearsInRange(3);
            
         }
         if(reset!=null&&reset.equals("true")){

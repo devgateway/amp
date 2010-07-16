@@ -374,7 +374,7 @@
 <div class="tab_organization_profile_unselected contentbox_border chartPlaceCss" style="display:none">
     <div style="float:left">
         <a href="javascript:printLargestProjects()">
-            <img alt="print preview" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0" >
+            <digi:trn>Printer Friendly Format</digi:trn>
         </a>
     </div>
     <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>

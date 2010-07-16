@@ -114,17 +114,30 @@
         function closeSettingsPopin(){
             exportSettingsPanel.hide();
         }
-         function exportPage(){
-			<digi:context name="url" property="context/module/moduleinstance/showExportOptions.do?actionType=export" />
-            document.orgProfileExportOptionsForm.action="${url}";
-			document.orgProfileExportOptionsForm.target="_blank";
-			document.orgProfileExportOptionsForm.submit();
-            exportSettingsPanel.hide();
+        function exportPage(){
+            var empty=true;
+            var radios= $("input[name$='selectedTypeOfExport']:radio:checked");
+            for(var i=0;i<radios.length;i++){
+                if(radios[i].value!='3'){
+                    empty=false;
+                    break;
+                }
+            }
+            if(empty){
+                alert('<digi:trn jsFriendly="true">This action will generate an empty file! please select some options to export</digi:trn>');
+            }
+            else{
+                <digi:context name="url" property="context/module/moduleinstance/showExportOptions.do?actionType=export" />
+                document.orgProfileExportOptionsForm.action="${url}";
+                document.orgProfileExportOptionsForm.target="_blank";
+                document.orgProfileExportOptionsForm.submit();
+                exportSettingsPanel.hide();
+            }
+           	
         }
-
         function resetToDefault(){
-             <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=true" />
-             document.location.href="${url}";
+    <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do?reset=true" />
+            document.location.href="${url}";
         }
 
         function checkAllSeleceted(){
@@ -147,14 +160,14 @@
                 valid=false;
             }
             if(valid){
-            <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do" />
-             document.orgProfOrgProfileFilterForm.action="${url}";
-             document.orgProfOrgProfileFilterForm.target="_self";
-             document.orgProfOrgProfileFilterForm.submit();
-             }
-             else{
-                 alert('<digi:trn jsFriendly="true">Select either all option or concrete options</digi:trn>')
-             }
+    <digi:context name="url" property="context/module/moduleinstance/showOrgProfile.do" />
+                document.orgProfOrgProfileFilterForm.action="${url}";
+                document.orgProfOrgProfileFilterForm.target="_self";
+                document.orgProfOrgProfileFilterForm.submit();
+            }
+            else{
+                alert('<digi:trn jsFriendly="true">Select either all option or concrete options</digi:trn>')
+            }
     
             return valid;
         }
@@ -202,7 +215,7 @@
                                                 <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter'/>
                                                 <digi:trn>Filter</digi:trn>
                                             </a>
-                                            
+
                                         </div>
                                         <div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
                                             <a>
@@ -310,18 +323,18 @@
                     </td>
                 </tr>
                 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
-                  <tr>
-                    <td nowrap align="left" colspan="2">
-                        <html:checkbox  property="pledgeVisible"><b><digi:trn>Include pledges in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
-                    </td>
-                </tr>
+                    <tr>
+                        <td nowrap align="left" colspan="2">
+                            <html:checkbox  property="pledgeVisible"><b><digi:trn>Include pledges in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
+                        </td>
+                    </tr>
                 </module:display>
                 <feature:display module="Funding" name="Expenditures">
-                  <tr>
-                    <td nowrap align="left" colspan="2">
-                        <html:checkbox  property="expendituresVisible"><b><digi:trn>Include expenditures in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
-                    </td>
-                </tr>
+                    <tr>
+                        <td nowrap align="left" colspan="2">
+                            <html:checkbox  property="expendituresVisible"><b><digi:trn>Include expenditures in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
+                        </td>
+                    </tr>
                 </feature:display>
 
 
@@ -376,7 +389,7 @@
                         </html:select>
                     </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td><b><digi:trn>Number of years in time series</digi:trn>:</b></td>
                     <td align="left">
                         <html:select property="yearsInRange" styleClass="selectDropDown">
@@ -401,15 +414,15 @@
                         </html:select>
                     </td>
                 </tr>
-                    <tr>
-                        <td colspan="2">
-                            &nbsp;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" colspan="2">
-                            <input type="button" class="button" onclick="checkAllSeleceted();" value="<digi:trn key="orgProfile:filer:Apply">Apply</digi:trn>">
-                             <input type="button" class="button" onclick="resetToDefault();" value="<digi:trn>Reset to Default Settings</digi:trn>">
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="button" class="button" onclick="checkAllSeleceted();" value="<digi:trn key="orgProfile:filer:Apply">Apply</digi:trn>">
+                        <input type="button" class="button" onclick="resetToDefault();" value="<digi:trn>Reset to Default Settings</digi:trn>">
                     </td>
                 </tr>
             </table>

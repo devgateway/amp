@@ -173,9 +173,15 @@
                         <td align="left"><html:textarea property="officeaddress" cols="36" rows="3" styleId="officeaddress"/></td>
 					</tr>	
 					<tr height="5px"><td colspan="2"/></tr>
-					<tr>
-						<td colspan="6" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button> </td>			
-					</tr>
+                    <tr>
+                        <td colspan="2" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button>
+                            <c:if test="${aimAddContactForm.action=='edit'}">
+                                <html:button styleClass="dr-menu" property="submitButton" onclick="myPanelContact.hide()">
+                                    <digi:trn>Close</digi:trn>
+                                </html:button>
+                            </c:if>
+                        </td>
+                    </tr>
 				</table>
 			</td>
 			<!-- create new contact td end -->
@@ -299,6 +305,7 @@
 			</c:if>			
 			<!-- filter end -->
 		</tr>
+        <c:if test="${aimAddContactForm.action!='edit'}">
 		<tr>
 			<td colspan="2" align="center">
 				<html:button styleClass="dr-menu" property="submitButton" onclick="myPanelContact.hide()">
@@ -306,6 +313,7 @@
 				</html:button>
 			</td>
 		</tr>
+        </c:if>
 		<!-- page logic row end -->		
 	</table>
 </digi:form>

@@ -72,11 +72,9 @@
 	}
 
 	var myPanelContact = new YAHOO.widget.Panel("newpopins2", { 
-        x:250,
-        y:100,
-        minWidth:"400px",
-        fixedcenter: false,
-        constraintoviewport: false,
+        width:"800px",
+        fixedcenter: true,
+        constraintoviewport: true,
         underlay:"none",
         close:true,
         visible:false,

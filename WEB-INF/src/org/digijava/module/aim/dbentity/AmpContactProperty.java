@@ -1,11 +1,17 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.ContactInfoUtil;
+
 public class AmpContactProperty {
 	private Long id;
 	private AmpContact contact;
 	private String name;
 	private String value;
-	
+
+    public String getValueAsFormatedPhoneNum () {
+        return ContactInfoUtil.getFormatedPhoneNum(value);
+    }
+
 	public Long getId() {
 		return id;
 	}

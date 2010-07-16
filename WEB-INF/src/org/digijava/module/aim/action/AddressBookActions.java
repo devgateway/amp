@@ -146,11 +146,11 @@ public class AddressBookActions extends DispatchAction {
 								emails+="<ul>";
 							}
 							emails+="<li>"+property.getValue() +" </li>";
-						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValue().length()>0){
+						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
 							if(phones.length()==0){
 								phones+="<ul>";
 							}
-							phones+="<li>"+property.getValue() +" </li>";
+							phones+="<li>"+property.getValueAsFormatedPhoneNum() +" </li>";
 						}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
 							if(faxes.length()==0){
 								faxes+="<ul>";

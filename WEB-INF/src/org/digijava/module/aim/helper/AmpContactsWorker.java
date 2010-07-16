@@ -21,7 +21,11 @@ public class AmpContactsWorker {
 		newProperty.setName(propertyName);
 		newProperty.setValue(value);
 		if(propertyName.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-			newProperty.setPhoneType(phoneType);
+            try {
+			    newProperty.setPhoneTypeId(Long.parseLong(phoneType));
+            } catch (NumberFormatException nfEx) {
+                newProperty.setPhoneTypeId(new Long(0));
+            }
 		}
 		return newProperty;
 	}
@@ -42,7 +46,7 @@ public class AmpContactsWorker {
 				AmpContactProperty property=new AmpContactProperty();
 				property.setName(helperProperty.getName());
 				if(helperProperty.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-					property.setValue(helperProperty.getPhoneType()+ " " + helperProperty.getValue());
+					property.setValue(helperProperty.getPhoneTypeId()+ " " + helperProperty.getValue());
 				}else{
 					property.setValue(helperProperty.getValue());
 				}
@@ -68,7 +72,11 @@ public class AmpContactsWorker {
 				contactProperty.setName(property.getName());
 				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
 					if(property.getValue().indexOf(" ")!= -1){
-						contactProperty.setPhoneType(property.getValue().substring(0, property.getValue().indexOf(" ")));
+                        try {
+						    contactProperty.setPhoneTypeId(new Long(property.getValue().substring(0, property.getValue().indexOf(" "))));
+                        } catch (NumberFormatException nfEx) {
+                           contactProperty.setPhoneTypeId(new Long(0)); 
+                        }
 					}					
 					contactProperty.setValue(property.getValue().substring(property.getValue().indexOf(" ")+1));
 				}else{

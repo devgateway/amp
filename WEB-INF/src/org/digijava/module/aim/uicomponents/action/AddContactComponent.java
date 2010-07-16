@@ -323,7 +323,7 @@ public class AddContactComponent extends DispatchAction{
         
         Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
         createForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,createForm.getContEmail(),null));
-        createForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,createForm.getContPhoneNumber(),createForm.getContPhoneType()));
+        createForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,createForm.getContPhoneNumber(),createForm.getContPhoneTypeIds()));
         createForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,createForm.getContFaxes(),null));
         if(createForm.getEmails()!=null){
         	contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(createForm.getEmails()));
@@ -415,13 +415,13 @@ public class AddContactComponent extends DispatchAction{
 				ContactPropertyHelper [] contactEmails=myForm.getEmails();
 				myForm.setEmails(buildContactPropertiesForAddNewData(contactEmails,Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
 				myForm.setEmailsSize(myForm.getEmails().length);
-				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneTypeIds()));
 				myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
 			}
 			//user clicked Add new Phone
 			if(dataName.equalsIgnoreCase("phone")){
 				ContactPropertyHelper [] contactPhones=myForm.getPhones();
-				myForm.setPhones(buildContactPropertiesForAddNewData(contactPhones,Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+				myForm.setPhones(buildContactPropertiesForAddNewData(contactPhones,Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneTypeIds()));
 				myForm.setPhonesSize(myForm.getPhones().length);
 				myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
 				myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
@@ -512,7 +512,7 @@ public class AddContactComponent extends DispatchAction{
  			for(int i=0; i<oldProperties.length;i++){
  				oldProperties[i].setValue(submittedValues[i]);
  				if(propertyName.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
- 					oldProperties[i].setPhoneType(phoneTypes[i]);
+ 					oldProperties[i].setPhoneTypeId(new Long(phoneTypes[i]));
  				}
  			}
  			System.arraycopy(oldProperties, 0, retVal, 0, oldProperties.length);

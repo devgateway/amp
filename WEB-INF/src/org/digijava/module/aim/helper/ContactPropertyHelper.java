@@ -2,7 +2,20 @@ package org.digijava.module.aim.helper;
 
 public class ContactPropertyHelper {
 	private String phoneType; //home, work, cell phone
+
+    private Long phoneTypeId; //home, work, cell phone
+
 	private String name;
+
+    public Long getPhoneTypeId() {
+        return phoneTypeId == null ? new Long(0) : this.phoneTypeId;
+    }
+
+    public void setPhoneTypeId(Long phoneTypeId) {
+        this.phoneTypeId = phoneTypeId;
+    }
+
+
 	public String getName() {
 		return name;
 	}

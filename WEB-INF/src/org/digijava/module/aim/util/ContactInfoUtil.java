@@ -11,6 +11,8 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -499,5 +501,31 @@ public class ContactInfoUtil {
 		}
 		return retVal;
 	}
+
+    public static String getFormatedPhoneNum (String phoneNum) {
+        StringBuffer retVal = new StringBuffer();
+        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
+            int typeIdSeparatorPos = phoneNum.indexOf(" ");
+            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
+            String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
+            Long phoneTypeId = null;
+
+            try {
+                phoneTypeId = Long.parseLong(phoneTypeIdStr);
+                AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
+                retVal.append(catVal.getValue());
+            } catch (NumberFormatException ex){
+                //Old style record processing
+                retVal.append(phoneTypeIdStr);
+            }
+            retVal.append(" ");
+            retVal.append(phoneNumberStr);
+
+        } else {
+            retVal.append("Incorrect phone number");
+        }
+
+        return retVal.toString();
+    }
 		
 }

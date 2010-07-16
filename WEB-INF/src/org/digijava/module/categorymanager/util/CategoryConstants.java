@@ -140,7 +140,11 @@ public class CategoryConstants {
 	
 	public static final String CONTACT_TITLE_NAME = "Contact Title";
 	public static final String CONTACT_TITLE_KEY = "contact_title";
-	
+
+    public static final String CONTACT_PHONE_TYPE_NAME = "Phone Type";
+    public static final String CONTACT_PHONE_TYPE_KEY = "contact_phone_type";
+
+
 	public static final String RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY = "Country Analytic Report (Paris Indicator)";
 
 	

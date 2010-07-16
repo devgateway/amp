@@ -36,6 +36,9 @@ public class AddContactComponentForm extends ActionForm {
 	
 	private String[] contEmail;
 	private String[] contPhoneType;
+
+    private String[] contPhoneTypeIds;
+
 	private String[] contPhoneNumber;
 	private String[] contFaxes;
 	
@@ -44,7 +47,16 @@ public class AddContactComponentForm extends ActionForm {
 	private String actOrOrgTempId;
 	private String addOrgButtonState; // hidden/visible
 	private List<AmpOrganisation> orgsToShowOnPage; //org that will appear in popin
-	
+
+
+    public String[] getContPhoneTypeIds() {
+        return contPhoneTypeIds;
+    }
+
+    public void setContPhoneTypeIds(String[] contPhoneTypeIds) {
+        this.contPhoneTypeIds = contPhoneTypeIds;
+    }    
+
 
     public Long[] getSelContactOrgs() {
         return selContactOrgs;

@@ -978,49 +978,134 @@ function commentWin(val, commentId) {
 																			</TR>
 																		</field:display>
 																		
-											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
-											<field:display name="Project Impact" feature="Identification">																		
-												<c:if test="${not empty activity.projectImpact}">			
-												<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-												<bean:define id="largeTextKey" toScope="request" name="activity" property="projectImpact"/>
-												<jsp:include page="largeTextPropertyPopup.jsp"/>
-												</c:if>
-											</field:display>
-											<c:if test="${not empty activity.activitySummary}">			
-											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="activitySummary"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+                                                                        <bean:define id="largeTextFeature" value="Identification" toScope="request"/>
+                                                                        <field:display name="Project Impact" feature="Identification">																		
+                                                                            <c:if test="${not empty activity.projectImpact}">			
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Project Impact</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+                                                                                        <bean:define id="largeTextKey" toScope="request" name="activity" property="projectImpact"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+                                                                            </c:if>
+                                                                        </field:display>
+																		<c:if test="${not empty activity.activitySummary}">			
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Project Impact</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+                                                                                        <bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
+                                                                                        <bean:define id="largeTextKey" toScope="request" name="activity" property="activitySummary"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 
-											<c:if test="${not empty activity.contractingArrangements}">						
-											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="contractingArrangements"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+                                                                        <c:if test="${not empty activity.contractingArrangements}">						
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Contracting Arrangements</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+				                                                                        <bean:define id="largeTextKey" toScope="request" name="activity" property="contractingArrangements"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 
-											<c:if test="${not empty activity.condSeq}">									
-											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="condSeq"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+																		<c:if test="${not empty activity.condSeq}">									
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Conditionality and Sequencing</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																						<bean:define id="largeTextKey" toScope="request" name="activity" property="condSeq"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 			
-											<c:if test="${not empty activity.linkedActivities}">												
-											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="linkedActivities"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+																		<c:if test="${not empty activity.linkedActivities}">												
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Linked Activities</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+                                                                                        <bean:define id="largeTextKey" toScope="request" name="activity" property="linkedActivities"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 			
-											<c:if test="${not empty activity.conditionality}">									
-											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="conditionality"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+																		<c:if test="${not empty activity.conditionality}">									
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Conditionalities</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																						<bean:define id="largeTextKey" toScope="request" name="activity" property="conditionality"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 			
-											<c:if test="${not empty activity.projectManagement}">												
-											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="projectManagement"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
+																		<c:if test="${not empty activity.projectManagement}">												
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp;
+                                                                                    <IMG
+                                                                                            height=10
+                                                                                            src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                            width=15 />
+                                                                                            <b><digi:trn>Project Management</digi:trn></b>
+                                                                                </TD>
+                                                                            </TR>
+																			<TR>
+																				<TD bgcolor="#ffffff">
+																						<bean:define id="largeTextKey" toScope="request" name="activity" property="projectManagement"/>
+                                                                                        <digi:edit key="${largeTextKey}"/>
+																				</TD>
+																			</TR>
+																		</c:if>
 
 																		<field:display feature="Identification"
 																			name="Purpose">
@@ -1057,6 +1142,15 @@ function commentWin(val, commentId) {
 																								${comment.comment}</li>
 																							</c:forEach>
 																						</c:if>
+                                                                                        <c:if test='${comments.key=="Purpose Objectively Verifiable Indicators"}'>
+                                                                                            <c:forEach var="comment" items="${comments.value}">
+                                                                                                <li><i><digi:trn>
+                                                                                                Purpose Objectively Verifiable Indicators
+                                                                                                </digi:trn>:
+                                                                                                </i>
+                                                                                                ${comment.comment}</li>
+                                                                                            </c:forEach>
+                                                                                        </c:if>
 																					</c:forEach>
 																				</ul>
 																				</TD>
@@ -1099,6 +1193,15 @@ function commentWin(val, commentId) {
 																								${comment.comment}</li>
 																							</c:forEach>
 																						</c:if>
+                                                                                        <c:if test='${comments.key=="Results Objectively Verifiable Indicators"}'>
+                                                                                            <c:forEach var="comment" items="${comments.value}">
+                                                                                                <li><i><digi:trn>
+                                                                                                Results Objectively Verifiable Indicators
+                                                                                                </digi:trn>:
+                                                                                                </i>
+                                                                                                ${comment.comment}</li>
+                                                                                            </c:forEach>
+                                                                                        </c:if>
 																					</c:forEach>
 																				</ul>
 																				</TD>

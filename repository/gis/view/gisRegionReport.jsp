@@ -88,9 +88,15 @@
 		
 		<logic:present name="gisRegReportForm" property="activityLocationFundingList">
 			<logic:notEmpty name="gisRegReportForm" property="activityLocationFundingList">
-		
-		
 
+			
+			<script language="javascript">
+				if (navigator.appName=="Microsoft Internet Explorer") {
+					document.write("<div style='width:100%; height:280px; border: 0px; overflow-y:scroll;'>");
+				}
+			</script>
+			
+			
 					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
 						<thead>
 			
@@ -114,63 +120,45 @@
 						
 						<tr>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Activity
 										</div>
-			
-								</td>
+											</td>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Region(s)
 										</div>
-			
 								</td>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Sector(s)
 										</div>
-			
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Donor(s)
 										</div>
-			
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Commitments
 										</div>
-			
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Disbursements
 										</div>
-			
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
-			
 										<div class="gisReportTableBevelCell">
 											Expenditures
 										</div>
-			
 								</td>
-								<!--
-								<td style="border-left:1px solid black;">&nbsp;&nbsp;&nbsp;</td>
-								-->
 						</tr>
 						</thead>
 						
-						<tbody style="overflow-y:scroll; overflow-x: hidden;" height="250">
-						
-						<bean:define name="gisRegReportForm" property="primarySectorSchemeId" id="primarySectorScheme"/>
+						<tbody style="display:block; display:table-row-group; overflow-y:scroll; overflow-x: hidden; height:250px;" height="250">
+							<bean:define name="gisRegReportForm" property="primarySectorSchemeId" id="primarySectorScheme"/>
 						
 						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
 							<tr>
@@ -227,11 +215,11 @@
 											<logic:present name="activityLocationFunding" property="activity.orgrole">
 												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
 													<ul style="margin:0 0 0 20px; padding:0;">
-													<logic:iterate name="activityLocationFunding" property="topSectors" id="iterTopSectors">
-														<li>
-														<bean:write name="iterTopSectors"/>
-														</li>
-													</logic:iterate>
+														<logic:iterate name="activityLocationFunding" property="topSectors" id="iterTopSectors">
+															<li>
+																<bean:write name="iterTopSectors"/>
+															</li>
+														</logic:iterate>
 													</ul>
 												</logic:notEmpty>
 											</logic:present>
@@ -240,15 +228,14 @@
 								</td>
 								<td width="20%" align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
-										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
-											<logic:present name="activityLocationFunding" property="activity.orgrole">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal"><logic:present name="activityLocationFunding" property="activity.orgrole">
 												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
 													<ul style="margin:0 0 0 20px; padding:0;">
-													<logic:iterate name="activityLocationFunding" property="donorOrgs" id="iterOrgrole">
-														<li>
-														<bean:write name="iterOrgrole"/>
-														</li>
-													</logic:iterate>
+														<logic:iterate name="activityLocationFunding" property="donorOrgs" id="iterOrgrole">
+															<li>
+																<bean:write name="iterOrgrole"/>
+															</li>
+														</logic:iterate>
 													</ul>
 												</logic:notEmpty>
 											</logic:present>
@@ -266,9 +253,7 @@
 									</logic:notPresent>
 									">
 										<bean:write name="activityLocationFunding" property="fmtCommitment"/>
-									</div>
-		
-									</div>
+									</div></div>
 								</td>
 								<td width="10%" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
@@ -311,6 +296,14 @@
 						</tr>
 						</tbody>
 					</table>
+					
+					<script language="javascript">
+						if (navigator.appName=="Microsoft Internet Explorer") {
+							document.write("</div>");
+						}
+					</script>
+					
+				
 
 		
 			</logic:notEmpty>

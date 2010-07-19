@@ -122,6 +122,7 @@
       </logic:iterate>
       
     </logic:iterate>
+    <td width="16">&nbsp</td>
   </tr>
 
   <%}

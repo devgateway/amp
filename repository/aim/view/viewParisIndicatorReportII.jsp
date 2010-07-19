@@ -551,7 +551,7 @@ function toggleSettings(){
 														<span>
 															<digi:link href="/parisIndicatorReport.do" name="urlParams" title="${translation}" target="_self">
 															<div style="max-width: 90px">
-																<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>
+																<digi:trn key="aim:parisIndicator:${report.indicatorCode}">Paris<br><c:out value="Indicator ${report.indicatorCode}"/></digi:trn>
 									                        </div>
 															</digi:link>
 								                    	</span>

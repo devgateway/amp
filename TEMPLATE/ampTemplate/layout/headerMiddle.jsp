@@ -321,7 +321,7 @@ function adminHelp(){
 
 	function addActivity() {
 		selectedLevelId=0; 
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~resetMessages=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 
 <jsp:include page="gisMenu.jsp" />

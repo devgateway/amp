@@ -409,7 +409,7 @@
 					</td>
 				</tr>
                 <tr bgcolor="#EEEEEE">
-					<td colspan="5"><digi:trn key="rep:filer:nationalPlanningObjectives">National Planning Objectives</digi:trn></td>
+					<td colspan="5"><digi:trn key="national Plan Objective">National Plan Objective</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">

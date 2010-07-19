@@ -63,9 +63,7 @@
                                             <tr>
                                               <td align="left">
                                                 <b>
-                                                  <digi:trn key="aim:nationalplanningobjectives">
-                                                  National Planning Objectives
-                                                  </digi:trn>
+                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
                                                 </b>
                                               </td>
                                             </tr>

@@ -259,7 +259,7 @@ public class ReportWizardAction extends MultiAction {
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
 		
-		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId() ) ) {
+		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId(), myForm.getDesktopTab()) ) {
 			myForm.setDuplicateName(true);
 			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
 		}
@@ -405,7 +405,7 @@ public class ReportWizardAction extends MultiAction {
 			AmpFilterData.deleteOldFilterData( reportId );
 		}
 		
-		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId ) ) {
+		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
 			myForm.setDuplicateName(true);
 			throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
 		}

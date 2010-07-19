@@ -143,7 +143,7 @@ public class ShowRegionReport extends Action {
                     }
                 }
 
-                Float percentsForSectorSelected = (Float) actData[1];
+                Float percentsForSectorSelected = actData[1] != null ? (Float) actData[1] : new Float(0);
                 FundingData totalFunding = GetFoundingDetails.
                                            getActivityTotalFundingInUSD(
                         activity, start, end);

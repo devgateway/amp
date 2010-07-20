@@ -1577,6 +1577,13 @@ function removeFunding()
 	}
 }
 
+function addRowDefault(){
+	if (numFund==0){
+		addFunding();
+	}
+}
+
+addRowDefault();
 </script>
 
 </digi:form>

@@ -1088,7 +1088,6 @@ public class OrgProfileUtil {
 
                 table.addCell(cell);
                 if (cellDisb != null) {
-                    cellDisb.setBackgroundColor(TITLECOLOR);
                     table.addCell(cellDisb);
                 }
             }

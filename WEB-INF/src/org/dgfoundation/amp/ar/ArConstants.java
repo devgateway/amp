@@ -57,6 +57,8 @@ public final class ArConstants {
 	public final static String DONOR_TYPE_COL="Donor Type";
 	
 	public final static String REGION="Region";
+	public final static String DISTRICT="District";
+	public final static String ZONE="Zone";
 	public final static String COMPONENT="Component Type";
 
 	public final static String UNALLOCATED="Unallocated";

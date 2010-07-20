@@ -178,6 +178,15 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
 		return null;
 		
+		if(metaCell.getColumn().getName().equals(ArConstants.DISTRICT) &&
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DISTRICT)))
+		return null;
+		
+		if(metaCell.getColumn().getName().equals(ArConstants.ZONE) &&
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
+		return null;
 
 		if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE)) 
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))

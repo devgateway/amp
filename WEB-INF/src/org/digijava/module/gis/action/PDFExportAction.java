@@ -715,6 +715,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206, 226, 251));
 		layoutCell.addElement(imgChart);
+        layoutCell.setBorder(Rectangle.NO_BORDER);
 
 		PdfPCell textCell = new PdfPCell();
 		textCell.setPadding(2);
@@ -733,13 +734,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		textCell.addElement(new Paragraph("All amounts in 000s of USD" + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n"
 				+ selectedStartYearTranslation + ": " + selectedStartYear + "\n" + selectedEndYearTranslation + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
-		generalBox.addCell(textCell);
+		textCell.setBorder(Rectangle.NO_BORDER);
+        generalBox.addCell(textCell);
 		PdfPCell text2Cell = new PdfPCell();
 		text2Cell.setPadding(2);
 		text2Cell.setBackgroundColor(new Color(206, 226, 251));
 		// widget:SourceAmpdatabase
 
 		text2Cell.addElement(new Paragraph("Source: AMP database", new Font(Font.HELVETICA, 6)));
+        text2Cell.setBorder(Rectangle.NO_BORDER);
 
 		generalBox.addCell(layoutCell);
 		generalBox.addCell(text2Cell);
@@ -1470,7 +1473,9 @@ private int matchesId(Long ptableId) {
 
 		// generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);
+        chart.setBackgroundPaint(new Color(206, 226, 251));
 		Plot plot = chart.getPlot();
+        plot.setBackgroundPaint(new Color(206, 226, 251));
 		plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
 		java.awt.Font font = new java.awt.Font(null, 0, 15);
 		plot.setNoDataMessageFont(font);

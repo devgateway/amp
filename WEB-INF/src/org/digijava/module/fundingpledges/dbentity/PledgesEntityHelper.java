@@ -394,7 +394,7 @@ public class PledgesEntityHelper {
 		List pledgeNames=null;
 		try{
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select pl.title from " +FundingPledges.class.getName()+" pl " ;
+			queryString="select distinct(pl.title) from " +FundingPledges.class.getName()+" pl " ;
 			query=session.createQuery(queryString);
 			pledgeNames=query.list();
 		}catch (Exception e) {

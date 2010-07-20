@@ -23,32 +23,6 @@ PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/yahoo-dom-event.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/animation-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/datasource-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/yui/autocomplete-min.js"/>"></script> 
-
-<style>
-<!--
-
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
-.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
-.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
-.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
-.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
-.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
-.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
-.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
-
-#my_container .yui-ac-content { 
-    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
-    _height:16em; /* ie6 */ 
-} 
-
--->
-</style>
 
 <script language="JavaScript" type="text/javascript"><!--
 
@@ -287,10 +261,41 @@ function validateData(){
 	</c:set>
 	i = 0;
 
-	//if (tempFund==0){
-	//	alert ("${addFunding}")
-	//	return false;
-	//}
+	<c:set var="selectPledgeType">
+	  <digi:trn key="aim:selectPledgeType">
+	  	Please, select a type of pledge.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_2")[0]!=null){
+			var temp = 0;
+			temp = document.getElementsByName("fund_"+i+"_2")[0].value;
+			if (temp==-1){
+				alert ("${selectPledgeType}")
+				return false;
+			}
+		}
+		i++;
+	}
+	
+	<c:set var="selectAssitanceType">
+	  <digi:trn key="aim:selectAssitanceType">
+	  	Please, select a type of assistance.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_3")[0]!=null){
+			var temp = 0;
+			temp = document.getElementsByName("fund_"+i+"_3")[0].value;
+			if (temp==-1){
+				alert ("${selectAssitanceType}")
+				return false;
+			}
+		}
+		i++;
+	}
 	
 	<c:set var="insertAmount">
 	  <digi:trn key="aim:insertAmount">
@@ -310,6 +315,24 @@ function validateData(){
 		i++;
 	}
 	
+	<c:set var="selectCurrency">
+	  <digi:trn key="aim:selectCurrency">
+	  	Please, select a currency.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_5")[0]!=null){
+			var temp = 0;
+			temp = document.getElementsByName("fund_"+i+"_5")[0].value;
+			if (temp==-1){
+				alert ("${selectCurrency}")
+				return false;
+			}
+		}
+		i++;
+	}
+	
 	<c:set var="selectFunding_date">
 	  <digi:trn key="aim:selectFunding_date">
 	 	 Please, select a date for each funding.
@@ -320,6 +343,24 @@ function validateData(){
 		if (document.getElementsByName("fund_"+i+"_6")[0]!=null && document.getElementsByName("fund_"+i+"_6")[0].value.length ==0){
 			alert ("${selectFunding_date}")
 			return false;
+		}
+		i++;
+	}
+
+	<c:set var="selectAidModality">
+	  <digi:trn key="aim:selectAidModality">
+	  	Please, select aid modality.
+	  </digi:trn>
+	</c:set>
+	i = 0;
+	while (i<=numFund){
+		if (document.getElementsByName("fund_"+i+"_7")[0]!=null){
+			var temp = 0;
+			temp = document.getElementsByName("fund_"+i+"_7")[0].value;
+			if (temp==-1){
+				alert ("${selectAidModality}")
+				return false;
+			}
 		}
 		i++;
 	}
@@ -351,6 +392,23 @@ function validateData(){
 	}
 	
 	return true;
+}
+
+function changeTitle(){
+	var title = document.getElementById("pledgeTitleDropDown").value;
+	if (title=="-2"){
+		document.getElementById("newTitle").style.display = "block";
+		document.getElementById("myTitle").value = "";
+	} else {
+		if (title!="-1"){
+			document.getElementById("newTitle").style.display = "none";
+			document.getElementById("myTitle").value = title;
+		} else {
+			document.getElementById("newTitle").style.display = "none";
+			document.getElementById("myTitle").value = "";
+		}
+	}
+	
 }
 
 function setSameContact(){
@@ -463,7 +521,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 <html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="1024" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="900" vAlign="top" align="center" border=0>
 	
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
@@ -540,12 +598,32 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												
 												</td>
 												<td align="left" width="70%">
-													<div id="my_autoComplete"> 
-													    <html:text property="pledgeTitle" styleId="my_input" style="width:320px;font-size:100%"></html:text>	
-													    <div id="my_container" style="width:320px;z-index: 100"></div>	
-														<html:hidden property="pledgeTitle" styleId="myHidden"/>																	    	
-													</div> 
-												</td>											
+													<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
+														<option selected="true" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
+														<option value="-2"><digi:trn key="addNewTitle">---Add new title---</digi:trn></option>
+														<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
+															<c:if test="${pledgeForm.pledgeTitle == titles}">
+																<option selected="true" value="<c:out value="${titles}"/>">	
+															</c:if>
+															<c:if test="${pledgeForm.pledgeTitle != titles}">
+																<option value="<c:out value="${titles}"/>">
+															</c:if>
+															<c:out value="${titles}" />
+															</option>
+														</c:forEach>
+													</select>
+												</td>
+											</tr>
+											<tr bgcolor="#ffffff">
+												<td valign="middle" align="left" width="30%">
+													
+												</td>
+												<td align="left" width="70%">
+													 <div id="newTitle" style="display: none">											
+													    <html:text property="pledgeTitle" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
+													   
+													</div>																	    	
+												</td>	
 											</tr>
 										</table>
 									</td></tr>
@@ -578,7 +656,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															<c:set var="valueId"> contrDonorId </c:set>
 							                              <c:set var="nameId"> nameContrDonorId </c:set>
 							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="selectedOrgName" type='text' id="${nameId}" style="text-align:left" value='${pledgeForm.selectedOrgName}' size="83" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
+							                              <input name="selectedOrgName" type='text' id="${nameId}" value='${pledgeForm.selectedOrgName}' style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
                             						</a>
 													
@@ -1145,22 +1223,22 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							                    <div id="fundTitle" style="display:block;">
 												<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
 							                    	<tr>
-														<td align="center" valign="bottom" width="30" />
-														<td align="center" width="170">
+														<td align="center" valign="bottom" width="20" />
+														<td align="center" width="160">
 						                                	<b><digi:trn key="aim:typeOfPledge">Type Of Pledge</digi:trn></b>
 						                            	</td>
 														<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
-															<td align="center" width="200">
+															<td align="center" width="190">
 								                                <b><digi:trn key="aim:typeOfAssistance">Type Of Assistance</digi:trn></b>
 								                            </td>
 														</field:display>
-														<td align="center" width="150">
+														<td align="center" width="170">
 							                                <b><digi:trn key="aim:amount">Amount</digi:trn></b>
 							                            </td>
-														<td align="center" width="100">
+														<td align="center" width="110">
 							                                <b><digi:trn key="aim:typeOfCurrency">Currency</digi:trn></b>
 							                            </td>
-														<td align="center" width="150">
+														<td align="center" width="140">
 							                                <b><digi:trn key="aim:date">Date</digi:trn></b>
 							                            </td>
 														<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
@@ -1201,6 +1279,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	</td>
 																	<td align="center" valign="bottom" width="170">
 																		<select name="<%=field2%>" class="inp-text">
+																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
 																				<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
 																					<option selected="true" value="<c:out value="${type.id}"/>">	
@@ -1216,6 +1295,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                                <select name="<%=field3%>" class="inp-text">
+																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
 																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
 																						<option selected="true" value="<c:out value="${type.id}"/>">	
@@ -1230,10 +1310,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											                            </td>
 																	</field:display>
 																	<td align="center" valign="bottom" width="150">
-																		<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" size="17" class="inp-text"/>
+																		<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
 										                            </td>
 																	<td align="center" valign="bottom" width="100">
 										                                <select name="<%=field5%>" class="inp-text">
+																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
 																				<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
 																					<option selected="true" value="<c:out value="${currency.currencyCode}"/>">	
@@ -1251,7 +1332,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																			<tr>
 																				
 																				<td align="left" vAlign="bottom">
-																					<input type="text" name="<%=field6%>" id="<%=field6%>" readonly="true" value="<c:out value="${fundingPledgesDetails.fundingDate}"/>" size="10"  class="inp-text" />
+																					<input type="text" name="<%=field6%>" id="<%=field6%>" readonly="true" value="<c:out value="${fundingPledgesDetails.fundingDate}"/>" size="10" style='width:80px' class="inp-text" />
 																				</td>
 																				<td align="left" vAlign="bottom">&nbsp;
 																					<a id="date1<%=field6%>" href='javascript:pickDateById("date1<%=field6%>","<%=field6%>")'>
@@ -1264,6 +1345,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                               <select name="<%=field7%>" class="inp-text">
+																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
 																					<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
 																						<option selected="true" value="<c:out value="${type.id}"/>">	
@@ -1389,6 +1471,7 @@ function addFunding() {
 	s += "<input name='fund_"+ numFund +"_0' type='hidden' id='fund_"+ numFund +"_0' value=''/> <input type='checkbox' id='fund_"+ numFund +"_1'/></td>";
 
 	s += "<td align='center' valign='bottom' width='170'> <select name='fund_"+ numFund +"_2' class='inp-text'>";
+	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col = pledgeForm.getPledgeTypeCategory();
 	Iterator itr = col.iterator();
 	while (itr.hasNext()) {
@@ -1401,6 +1484,7 @@ function addFunding() {
 	 
 	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
 	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_3' class='inp-text'>";
+	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col2 = pledgeForm.getAssistanceTypeCategory();
 	Iterator itr2 = col2.iterator();
 	while (itr2.hasNext()) {
@@ -1412,9 +1496,10 @@ function addFunding() {
 	 s += "</select> </td>";
 	 </field:display>
 	 
-	s += "<td align='center' valign='bottom' width='150'> <input type='text' name='fund_"+ numFund +"_4' size='17' class='inp-text'/> </td>";
+	s += "<td align='center' valign='bottom' width='150'> <input type='text' name='fund_"+ numFund +"_4' size='17' style='width:90px' class='inp-text'/> </td>";
 
 	s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_5' class='inp-text'>";
+	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col3 = pledgeForm.getValidcurrencies();
 	Iterator itr3 = col3.iterator();
 	while (itr3.hasNext()) {
@@ -1430,12 +1515,13 @@ function addFunding() {
 	 s += "</select> </td>";
 
 	s += "<td align='center' valign='bottom' width='150'> <table cellPadding='0' cellSpacing='0'>";
-		s += "<tr> <td align='left' vAlign='bottom'> <input type='text' name='fund_"+ numFund +"_6' id='fund_"+ numFund +"_6' readonly='true' size='10' class='inp-text' />	</td>";
+		s += "<tr> <td align='left' vAlign='bottom'> <input type='text' name='fund_"+ numFund +"_6' id='fund_"+ numFund +"_6' readonly='true' size='10' style='width:80px' class='inp-text' />	</td>";
 		s += "<td align='left' vAlign='bottom'>&nbsp; <a id='date1fund_"+ numFund +"_6' href='javascript:pickDateById(\"date1fund_"+ numFund +"_6\",\"fund_"+ numFund +"_6\")'>";
 		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0> </a> </td> </tr> </table> </td>";
 
 	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_7' class='inp-text'>";
+	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col4 = pledgeForm.getAidModalityCategory();
 	Iterator itr4 = col4.iterator();
 	while (itr4.hasNext()) {
@@ -1490,57 +1576,6 @@ function removeFunding()
 		remBut.style.display="none";
 	}
 }
-
-var myArray = [ 
-		<c:forEach var="pledgeName" items="${pledgeForm.pledgeNames}">
-		"<bean:write name="pledgeName" filter="true"/>",
-		</c:forEach> 
-  	]; 
-
-
-YAHOO.example.ItemSelectHandler = function() {
-    // Use a LocalDataSource
-    var oDS = new YAHOO.util.LocalDataSource(myArray);
-    oDS.responseSchema = {fields : ["name"]};
-
-    // Instantiate the AutoComplete
-    var oAC = new YAHOO.widget.AutoComplete("my_input", "my_container", oDS);
-    oAC.resultTypeList = false;
-    
-    // Define an event handler to populate a hidden form field
-    // when an item gets selected
-    var myHiddenField = YAHOO.util.Dom.get("myHidden");
-    var myHandler = function(sType, aArgs) {
-        var myAC = aArgs[0]; // reference back to the AC instance
-        var elLI = aArgs[1]; // reference to the selected LI element
-        var oData = aArgs[2]; // object literal of selected item's result data
-        
-        // update hidden form field with the selected item's fullname	        
-        myHiddenField.value = oData.name;
-    };	   
-    oAC.itemSelectEvent.subscribe(myHandler);	    
-
-    return {
-        oDS: oDS,
-        oAC: oAC
-    };
-}();    
-
-//YAHOO.example.ACJSArray = new function() {
-	// Instantiate JS Array DataSource
-//    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
-    // Instantiate AutoComplete
-//    this.oAutoComp2 = new YAHOO.widget.AutoComplete('my_input','my_container', this.oACDS2);
-//    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-//    this.oAutoComp2.useShadow = true;
-//    this.oAutoComp2.forceSelection = true;
-//        this.oAutoComp2.maxResultsDisplayed = myArray.length;
-//    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-//        var sMarkup = oResultItem[0];
-//        return (sMarkup);
-//    };
-//};
-
 
 </script>
 

@@ -1131,9 +1131,10 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
-		if (arf.isPublicView())
-			return mapping.findForward("publicView");
-		return mapping.findForward(arf.isWidget() ? "mydesktop" : "reportView");
+		if (arf.isPublicView()){
+			return mapping.findForward(arf.isWidget() ? "publicView" : "reportView");
+		}
+		return mapping.findForward("mydesktop");
 	}
 
 	public void reset(ActionForm form, HttpServletRequest request, ActionMapping mapping) {

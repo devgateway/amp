@@ -635,11 +635,11 @@ public class GetFoundingDetails extends Action {
                         //.sourceName
 
                         AmpIndicatorSource srcObj = (AmpIndicatorSource)indData[2];
+                        String srcStr = (String)indData[3];
                         String src = null;
 
-                        if (srcObj != null && srcObj.getSourceName() != null &&
-                            srcObj.getSourceName().trim().length() > 0){
-                            src = srcObj.getSourceName();
+                        if (srcStr != null && srcStr.trim().length() > 0){
+                            src = srcStr;
                         }
 
 

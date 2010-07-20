@@ -445,10 +445,11 @@ public class DbUtil {
                   Object[] tmpObj = (Object[])it.next();
                   AmpIndicatorValue indValObj = (AmpIndicatorValue)tmpObj[0];
                   String locCode = (String)tmpObj[1];
-                  Object[] actualObj = new Object[3];
+                  Object[] actualObj = new Object[4];
                   actualObj[0] = indValObj.getValue();
                   actualObj[1] = locCode;
                   actualObj[2] = indValObj.getSource();
+                  actualObj[3] = indValObj.getIndicatorSource().getValue();
 
                   retVal.add(actualObj);
               }

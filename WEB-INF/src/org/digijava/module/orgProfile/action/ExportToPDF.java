@@ -1,6 +1,5 @@
 package org.digijava.module.orgProfile.action;
 
-import com.itextpdf.text.ImgTemplate;
 import com.lowagie.text.Element;
 import com.lowagie.text.HeaderFooter;
 import java.io.ByteArrayOutputStream;
@@ -19,10 +18,15 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.DefaultFontMapper;
+import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -224,7 +228,6 @@ public class ExportToPDF extends Action {
                         String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
                         String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
                         String sectorBreakdown = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
-                        ;
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";
                         }
@@ -877,99 +880,63 @@ public class ExportToPDF extends Action {
 
                         }
                         Font font = new Font(null, 0, 24);
-                        PdfPTable chartTable = null;
-                        PdfPTable chartTableDisb = null;
-                        PdfPTable chartSecondarySecTable=null;
-                        PdfPTable chartDisbSecondarySecTable=null;
-                        if (chart != null) {
-                            chartTable = new PdfPTable(1);
-                            chartTable.setWidthPercentage(100);
+                        float width=doc.getPageSize().getWidth()-50;
+                        float height=doc.getPageSize().getHeight()-80;
+                         if (chart != null) {
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
-
-                            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-                            // write image in response
-                            ChartUtilities.writeChartAsPNG(
-                                    outByteStream,
-                                    chart,
-                                    opt.getWidth().intValue(),
-                                    opt.getHeight().intValue(),
-                                    info);
-                            Image img = Image.getInstance(outByteStream.toByteArray());
-                            img.setAlignment(Image.ALIGN_MIDDLE);
-                            PdfPCell chartCell = new PdfPCell(img);
-                            chartCell.setPadding(4);
-                            chartCell.setBorder(PdfPCell.NO_BORDER);
-                           chartTable.addCell(chartCell);
-                            if (chartDisb != null) {
-                                 chartTableDisb = new PdfPTable(1);
-                                 chartTableDisb.setWidthPercentage(100);
-                                Plot plotDisb = chartDisb.getPlot();
-                                plotDisb.setNoDataMessage("No Data Available");
-                                plotDisb.setNoDataMessageFont(font);
-                                ByteArrayOutputStream outByteStreamDisb = new ByteArrayOutputStream();
-                                // write image in response
-                                ChartUtilities.writeChartAsPNG(
-                                        outByteStreamDisb,
-                                        chartDisb,
-                                        opt.getWidth().intValue(),
-                                        opt.getHeight().intValue(),
-                                        info);
-                                Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
-                                imgDisb.setAlignment(Image.ALIGN_MIDDLE);
-                                PdfPCell chartDisbCell = new PdfPCell(imgDisb);
-                                chartDisbCell.setPadding(4);
-                                chartDisbCell.setBorder(PdfPCell.NO_BORDER);
-                                chartTableDisb.addCell(chartDisbCell);
-
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height/2);
+                            chart.draw(g2, r2D, null);
+                            g2.dispose();
+                            cb.addTemplate(tp, 0,0);
+                            doc.newPage();
                         }
+                        if (chartDisb != null) {
+                            //doc.newPage();
+                            Plot plotDisb = chartDisb.getPlot();
+                            plotDisb.setNoDataMessage("No Data Available");
+                            plotDisb.setNoDataMessageFont(font);
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height/2);
+                            chartDisb.draw(g2, r2D, null);
+                            g2.dispose();
+                            cb.addTemplate(tp, 0, 0);
+                            doc.newPage();
                         }
                         if (chartDisbSecondaryScheme != null) {
-                            chartDisbSecondarySecTable = new PdfPTable(1);
-                            chartDisbSecondarySecTable.setWidthPercentage(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
-                            ByteArrayOutputStream outByteStreamDisb = new ByteArrayOutputStream();
-
-                            // write image in response
-                            ChartUtilities.writeChartAsPNG(
-                                    outByteStreamDisb,
-                                    chartDisbSecondaryScheme,
-                                    opt.getWidth().intValue(),
-                                    opt.getHeight().intValue(),
-                                    info);
-                            Image imgDisb = Image.getInstance(outByteStreamDisb.toByteArray());
-                            imgDisb.setAlignment(Image.ALIGN_MIDDLE);
-                            PdfPCell chartDisbCell = new PdfPCell(imgDisb);
-                            chartDisbCell.setPadding(4);
-                            chartDisbCell.setBorder(PdfPCell.NO_BORDER);
-                            chartDisbSecondarySecTable.addCell(chartDisbCell);
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height/2);
+                            chartDisbSecondaryScheme.draw(g2, r2D, null);
+                            g2.dispose();
+                            cb.addTemplate(tp, 0, 0);
+                            doc.newPage();
                         }
                         if (chartSecondaryScheme != null) {
-                            chartSecondarySecTable = new PdfPTable(1);
-                            chartSecondarySecTable.setWidthPercentage(100);
                             Plot plot = chart.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
-
-                            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-                            // write image in response
-                            ChartUtilities.writeChartAsPNG(
-                                    outByteStream,
-                                    chartSecondaryScheme,
-                                    opt.getWidth().intValue(),
-                                    opt.getHeight().intValue(),
-                                    info);
-                            Image img = Image.getInstance(outByteStream.toByteArray());
-                            img.setAlignment(Image.ALIGN_MIDDLE);
-                            PdfPCell chartCell = new PdfPCell(img);
-                            chartCell.setPadding(4);
-                            chartCell.setBorder(PdfPCell.NO_BORDER);
-                            chartSecondarySecTable.addCell(chartCell);
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height/2);
+                            chartSecondaryScheme.draw(g2, r2D, null);
+                            g2.dispose();
+                            cb.addTemplate(tp, 0, 0);
+                            doc.newPage();
                         }
-                        if (chartTable != null) {
+                       
+                        /*if (chartTable != null) {
                             chartTable.setSplitRows(false);
                             doc.add(chartTable);
                             doc.add(new Paragraph(" "));
@@ -988,7 +955,7 @@ public class ExportToPDF extends Action {
                             
                             doc.add(chartDisbSecondarySecTable);
                             doc.add(new Paragraph(" "));
-                        }
+                        }*/
                       
 
                         if (orgSummaryTbl != null) {
@@ -1003,40 +970,51 @@ public class ExportToPDF extends Action {
                         if (largetsProjectsTbl != null) {
                             doc.add(largetsProjectsTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
                         if (parisDecTbl != null) {
                             doc.add(parisDecTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
                         if (typeOfAidTbl != null) {
                             doc.add(typeOfAidTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
                         if (odaProfileTbl != null) {
                             doc.add(odaProfileTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
 
                         if (pledgesCommDisbTbl != null) {
                             doc.add(pledgesCommDisbTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
                         if (sectorTbl != null) {
                             doc.add(sectorTbl);
                             doc.add(new Paragraph(" "));
+
                         }
                         if (secondarySectorTbl != null) {
                             doc.add(secondarySectorTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
+
                         }
                         if (regionTbl != null) {
                             doc.add(regionTbl);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                         }
                         if (aidPredTable != null) {
                             doc.add(aidPredTable);
                             doc.add(new Paragraph(" "));
+                            doc.newPage();
                     }
+                        
                 }
             }
             }

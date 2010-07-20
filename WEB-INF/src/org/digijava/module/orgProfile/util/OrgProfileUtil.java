@@ -75,7 +75,7 @@ public class OrgProfileUtil {
     public static final Color BORDERCOLOR = new Color(255, 255, 255);
     public static final Color CELLCOLOR = new Color(219, 229, 241);
     public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
-    public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, new Color(255, 255, 255));
+    public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
 
     /**
      *
@@ -1061,14 +1061,13 @@ public class OrgProfileUtil {
             if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
                 cell.setColspan(2);
             }
-            cell.setBackgroundColor(TITLECOLOR);
             table.addCell(cell);
         }
 
         if (type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
             PdfPCell emptycell = new PdfPCell();
-            emptycell.setBackgroundColor(TITLECOLOR);
             emptycell.setBorderWidthTop(0);
+            emptycell.setBorderWidthRight(0);
             table.addCell(emptycell);
             for (int i = yearRange; i >= endRange; i--) {
                 PdfPCell cell = null;
@@ -1087,7 +1086,6 @@ public class OrgProfileUtil {
                 }
 
 
-                cell.setBackgroundColor(TITLECOLOR);
                 table.addCell(cell);
                 if (cellDisb != null) {
                     cellDisb.setBackgroundColor(TITLECOLOR);
@@ -1100,19 +1098,12 @@ public class OrgProfileUtil {
         ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
-            int index = valuesIter.nextIndex();
             PdfPCell cellCatValue = new PdfPCell(new Paragraph(TranslatorWorker.translateText(value.getName(), langCode, siteId), PLAINFONT));
-            if (index % 2 == 0) {
-                cellCatValue.setBackgroundColor(CELLCOLOR);
-            }
             table.addCell(cellCatValue);
             Collection<String> yearValues = value.getValues();
             Iterator<String> yearValuesIter = yearValues.iterator();
             while (yearValuesIter.hasNext()) {
                 PdfPCell cell = new PdfPCell(new Paragraph(yearValuesIter.next(), PLAINFONT));
-                if (index % 2 == 0) {
-                    cell.setBackgroundColor(CELLCOLOR);
-                }
                 table.addCell(cell);
             }
         }

@@ -83,7 +83,9 @@ public abstract class XLSExporter extends Exporter {
 
 	protected HSSFCell getRegularCell(HSSFRow row) {
 		HSSFCell cell = row.createCell(colId.shortValue());
-		cell.setCellStyle(this.getAmountStyle());
+		HSSFCellStyle cellstyle = wb.createCellStyle();
+		cellstyle.cloneStyleFrom(this.getAmountStyle());
+		cell.setCellStyle(cellstyle);
 		return cell;
 	}
 
@@ -97,7 +99,9 @@ public abstract class XLSExporter extends Exporter {
 
 	protected HSSFCell getCell(HSSFRow row, HSSFCellStyle style) {
 		HSSFCell cell = row.createCell(colId.intValue());
-		cell.setCellStyle(style);
+		HSSFCellStyle cellstyle = wb.createCellStyle();
+		cellstyle.cloneStyleFrom(style);
+		cell.setCellStyle(cellstyle);
 		return cell;
 	}
 

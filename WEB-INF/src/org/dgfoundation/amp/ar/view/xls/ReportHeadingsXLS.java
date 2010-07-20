@@ -175,7 +175,9 @@ public class ReportHeadingsXLS extends XLSExporter {
 							for(int k=0;k<col.getWidth();k++) {
 								HSSFCell cell = row.getCell(colId.intValue()+k);
 								if(cell==null) cell=row.createCell(colId.intValue()+k);
-								cell.setCellStyle(this.getHighlightedStyle());
+								HSSFCellStyle cellstyle = wb.createCellStyle();
+								cellstyle.cloneStyleFrom(this.getHighlightedStyle());
+								cell.setCellStyle(cellstyle);
 							}
 						}
 

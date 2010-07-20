@@ -19,14 +19,10 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfGraphics2D;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Font;
-import java.awt.Graphics2D;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,16 +62,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
-import java.awt.geom.Rectangle2D;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.io.*;
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.print.PrintTranscoder;
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMImplementation;
+
 
 public class ExportToPDF extends Action {
 

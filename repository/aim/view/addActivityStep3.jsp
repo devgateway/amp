@@ -102,7 +102,7 @@
 	}
 
 	function fnOnEditItem(index, orgId,fundId)	{
-			openNewWindow(900, 500);
+			openNewWindow(990, 500);
 			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
 			document.aimEditActivityForm.action = "<%= editItem %>?funding.orgId=" + orgId + "&funding.offset=" + index+"&edit=true";
 			document.aimEditActivityForm.prevOrg.value = orgId;

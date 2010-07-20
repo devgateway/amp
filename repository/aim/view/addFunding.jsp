@@ -379,9 +379,9 @@
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
 	<!-- funding -->
 	<tr>
-    	<td width="100%" vAlign="top">
+    	<td vAlign="top">
 
-			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
+			<table width="99%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
 			<table width="100%" cellPadding="1" cellspacing="0" bgcolor="#ffffff">
@@ -540,36 +540,37 @@
 	<feature:display module="Funding" name="MTEF Projections">
 	<field:display feature="MTEF Projections" name="MTEFProjections">
 	<tr>
-    	<td width="100%" vAlign="top">
+    	<td vAlign="top">
 
-			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
+			<table width="99%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
 			<table width="100%" cellPadding="1" cellspacing="0" bgcolor="#ffffff">
 				<tr>
-					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="4">
+					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="5">
 						<digi:trn key="aim:MTEF Projection">MTEF Projection</digi:trn>
 					</td>
 				</tr>
 				<tr bgcolor="#003366" class="textalb" align="center">
 					<field:display name="Projection Name" feature="MTEF Projections">
-						<td><b><font color="white">						
+						<td align="center"><b><font color="white">						
 							<digi:trn key="aim:Projected">Projected</digi:trn>/<br><digi:trn key="aim:Pipeline">Pipeline</digi:trn></font></b>						
 						</td>
 					</field:display>
 					<field:display name="Projection Amount" feature="MTEF Projections">
-					<td><b><font color="white"><digi:trn key="aim:amount">Amount</digi:trn></font></b>
+					<td align="center"><b><font color="white"><digi:trn key="aim:amount">Amount</digi:trn></font></b>
 					</td>
 					</field:display>
 					<field:display name="Projection Currency Code" feature="MTEF Projections">
-					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
+					<td align="center"><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
 					<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
 					</td>
 					</field:display>
 					<field:display name="Projection Date" feature	="MTEF Projections">
-					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
+					<td align="center"><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
 					</td>
 					</field:display>
+					<td><b><font color="white">&nbsp;</font></b></td>
 				</tr>
 
 
@@ -584,7 +585,7 @@
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
 						
-						<td valign="bottom">
+						<td valign="bottom" align="center">
 						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
 						<html:select indexed="true" name="mtefProjection" property="projected" disabled="${contentDisabled}">
 							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
@@ -601,7 +602,7 @@
 						<c:if test="${contentDisabled==''}">
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
-						<td valign="bottom">
+						<td valign="bottom" align="center">
 							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value);" styleClass="amt" disabled="${contentDisabled}"/>
 						</td>
 							
@@ -609,7 +610,7 @@
 						<c:if test="${contentDisabled==''}">
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
-						<td valign="bottom">
+						<td valign="bottom" align="center">
 							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 								<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
@@ -620,7 +621,7 @@
 						<c:if test="${contentDisabled==''}">
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
-						<td valign="bottom">
+						<td valign="bottom" align="center">
 							<table cellPadding="0" cellSpacing="0">
 							<tr>
 								<td>
@@ -650,7 +651,7 @@
 
 				
 				<tr bgcolor="#ffffff">
-					<td align="center" colspan="4">
+					<td align="center" colspan="5">
 						<table cellPadding="3">
 							<tr>
 								<td>
@@ -681,9 +682,9 @@
 	<!-- commitments -->
 <feature:display module="Funding" name="Commitments">
 	<tr>
-		<td width="100%" vAlign="top">
+		<td vAlign="top">
 
-			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
+			<table width="99%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
@@ -693,15 +694,15 @@
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="2" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Commitment" feature="Commitments">
-								<td align="center" valign="middle" width="75">
+								<td align="center" valign="middle">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount Commitment" feature="Commitments">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" >
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
@@ -713,22 +714,20 @@
 								</td>
 								</field:display>
 								<field:display name="Currency Commitment" feature="Commitments">
-								<td align="center" valign="middle" width="170">
+								<td align="center" valign="middle" >
 								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
-								<td align="center" valign="middle" width="200">
+								<td align="center" valign="middle" >
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn>/<digi:trn>Pipeline</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
 								<field:display name="Related Pledge" feature="Commitments">
-									<td align="center" valign="middle" width="170">
+									<td align="center" valign="middle" >
 										<b><font color="white"><digi:trn>Pledges</digi:trn></font></b>
 									</td>
 								</field:display>
-								<td align="center" valign="middle" width="*">&nbsp;
-									
-								</td>
+								<td align="center" valign="middle" width="*">&nbsp;</td>
 							</tr>
 
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
@@ -740,10 +739,10 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-												<td valign="bottom">
+												<td valign="bottom" align="center">
 													<c:set var="index" value="${index+1}"/>
 													<c:if test="${aimEditActivityForm.planning.statusId==1}">
-														<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+														<html:select name="fundingDetail" indexed="true" property="adjustmentType"  disabled="${contentDisabled}">
 															<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 														</html:select>
 	                                                </c:if>	
@@ -760,15 +759,15 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-												<td valign="bottom">
-														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
+												<td valign="bottom" align="center">
+														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="addForValidation(this)" onclick="checkCurrency(this.name);" size="17"/>
 												</td>
 									 		<c:set var="contentDisabled"><field:display name="Currency Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text"  disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
+											<td valign="bottom" align="center">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>		
@@ -778,7 +777,7 @@
 												<c:if test="${contentDisabled==''}">
 													<c:set var="contentDisabled">true</c:set>
 												</c:if>
-												<td align="left" vAlign="bottom">
+												<td align="center" vAlign="bottom">
 													<table cellPadding="0" cellSpacing="0">
 														<tr>
 															<td>
@@ -797,8 +796,8 @@
 													</table>												
 												</td>
 											<field:display name="Related Pledge" feature="Commitments">
-												<td valign="bottom">
-													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
+												<td valign="bottom" align="center">
+													<html:select name="fundingDetail" indexed="true" property="pledge">
 														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		
@@ -900,27 +899,27 @@
         <!-- disbursement orders -->
         <feature:display module="Funding" name="Disbursement Orders">
 	<tr>
-		<td width="100%" vAlign="top">
+		<td vAlign="top">
 
-			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
+			<table width="99%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
+					<td bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="DisbursementOrdes">Disbursement Orders</digi:trn></a>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="3" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
-								<td align="center" valign="middle" width="75">
+								<td align="center" valign="middle" >
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" >
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
@@ -932,28 +931,27 @@
 								</td>
 								</field:display>
 								<field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
-								<td align="center" valign="middle" width="170">
+								<td align="center" valign="middle" >
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 									<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
 								</td>
 								</field:display>
 								<field:display name="Date of Disbursement Order" feature="Disbursement Orders">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" style="width: 15%;">
 								<a title="<digi:trn key="aim:DateofDisbursementOrder">Date of actual international transfer of financial resources</digi:trn>">
 								<b><font color="white">
                                   <digi:trn key="aim:DisbursementOrderDateFIE">Planned/Actual Disbursement Order Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
-                                <td align="center" valign="middle">
-
+                                <td align="center" valign="middle" style="width: 15%;">
 								<feature:display module="Funding" name="Disbursement Orders">
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
 								</feature:display>
-								&nbsp;	
+									
 								</td>
 								<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
-                                <td align="center" valign="middle" colspan="2">&nbsp;
+                                <td align="center" valign="middle" colspan="1" style="width: 15%;">
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
 								</field:display>
@@ -962,6 +960,7 @@
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderRejected">Rejected</digi:trn></font></b>
 								</td>
 								</field:display>
+								<td align="center" valign="middle">*&nbsp;</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
@@ -973,9 +972,9 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-												<td valign="bottom">
+												<td valign="center" align="center">
 													<c:set var="index" value="${index+1}"/>
-													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+													<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}">
 														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													</html:select>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
@@ -985,16 +984,16 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<html:text name="fundingDetail" disabled="${contentDisabled}" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
+											<td valign="center" align="center">
+												<html:text name="fundingDetail" disabled="${contentDisabled}" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="addForValidation(this)" size="14" />
 											</td>
 
 											<c:set var="contentDisabled"><field:display name="Currency of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" >
+											<td valign="center" align="center">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" >
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1004,7 +1003,7 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
+											<td valign="center" align="center">
 												<table cellpadding="0" cellspacing="0">
 													<tr>
 
@@ -1031,8 +1030,8 @@
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
                                             
-                                             <td>
-												<html:text name="fundingDetail" property="disbOrderId" readonly="true" disabled="${contentDisabled}"/>
+                                             <td valign="center" align="center">
+												<html:text name="fundingDetail" property="disbOrderId" readonly="true" disabled="${contentDisabled}" size="10"/>
 											</td>
                                             
                                             <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
@@ -1040,27 +1039,25 @@
                                             
                                              <td align="center">
                                                  <c:if test="${empty fundingDetail.contract}">
-												 	<input type="text" value="" disabled="true" readonly="true"/>
+												 	<input type="text" value="" disabled="true" readonly="true" size="12"/>
                                                  </c:if>
                                                  <c:if test="${not empty fundingDetail.contract}">
-													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true" size="10"/>
                                                  </c:if>
-											 </td>
-                                             <td>
-                                            	   <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                                 <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 											</td>
 											</field:display>
 
 												
 											<field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
 											
-                                            <td>
+                                            <td valign="center" align="center">
 												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected" />
 											</td>
 											</field:display>
                                             
                                             <field:display name="Remove Disbursement Order Link" feature="Disbursement Orders">											
-												<td>
+												<td valign="center">
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
 													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 													</a>
@@ -1113,27 +1110,27 @@
 	<!-- disbursements -->
 <feature:display module="Funding" name="Disbursement">
 	<tr>
-		<td width="100%" vAlign="top">
+		<td vAlign="top">
 
-			<table width="100%" cellpadding="0" cellspacing="1" valign="top" align="left" bgcolor="#006699">
+			<table width="99%" cellpadding="0" cellspacing="1" valign="top" align="left" bgcolor="#006699">
 			<tr><td>
 			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
+					<td bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="Disbursements">Disbursements</digi:trn></a>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="3" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" width="75">
+								<td align="center" valign="middle" style="width: 9%;">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
                                 </field:display>
 								<field:display name="Amount Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" >
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
@@ -1145,38 +1142,38 @@
 								</td>
                                 </field:display>
 								<field:display name="Currency Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" width="170">
+								<td align="center" valign="middle" >
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
                                 </field:display>
 								<field:display name="Date Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" >
 								<a title="<digi:trn key="aim:DateofDisbursement">Date of actual international transfer of financial resources</digi:trn>">
 								<b><font color="white">
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
                                 </field:display>
                                   <feature:display module="Funding" name="Disbursement Orders">
-                                <td align="center" valign="middle" >
+                                <td align="center" valign="middle" style="width: 10%;">
 									<field:display name="Link to Disbursement Order ID" feature="Disbursement">
 	                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
 									</field:display>
                                 </td>
                                 </feature:display>
                                 
-								<td align="center" valign="middle" colspan="2">&nbsp;
+								<td align="center" valign="middle" colspan="1" style="width: 15%;">
 									<field:display name="Contract of Disbursement" feature="Disbursement">
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 									</field:display>
 								</td>
 								
-								<td align="center" valign="middle" colspan="2">&nbsp;
+								<td align="center" valign="middle" colspan="1" style="width: 15%;">
 									<field:display name="Related Pledge" feature="Disbursement">
 										<b><font color="white"><digi:trn>Pledges</digi:trn></font></b>
 									</field:display>
 								</td>
-								 
+								<td align="center" valign="middle">*&nbsp;</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
@@ -1187,15 +1184,15 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
+											<td valign="middle">
 												<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.planning.statusId==1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" >
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
@@ -1207,8 +1204,8 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
+											<td valign="middle">
+												<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="addForValidation(this)" size="17"/>
 											</td>
 
 
@@ -1216,8 +1213,8 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
+											<td valign="middle">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1229,15 +1226,15 @@
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-											<td valign="bottom">
-												<table cellpadding="0" cellspacing="0">
+											<td valign="center" align="center">
+												<table cellpadding="2" cellspacing="0">
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
 															styleId="<%=tempIndexStr%>" size="10" onchange="addForValidation(this)"/>
 														</td>
-														<td align="left" vAlign="center">&nbsp;
+														<td valign="center" align="center">
 															<c:if test="${contentDisabled=='false'}">
 																<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
@@ -1254,9 +1251,9 @@
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
                                            <feature:display module="Funding" name="Disbursement Orders">
-	  											<td valign="bottom" align="center">
+	  											<td valign="middle" align="center">
 	                                                <c:if test="${aimEditActivityForm.funding.disbursementOrders}">
-													 <html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text" disabled="${contentDisabled}">
+													 <html:select name="fundingDetail" indexed="true" property="disbOrderId" disabled="${contentDisabled}">
 														<html:option value="">&nbsp;</html:option>
 			   										    <c:forEach var="funding" items="${aimEditActivityForm.funding.fundingDetails}">
 															<c:if test="${funding.transactionType==4}">
@@ -1278,26 +1275,27 @@
 											 -->
 											         
 										<field:display name="Link to Disbursement Order ID" feature="Disbursement">
-										 	<td align="center">
+										 	<td align="center" valign="middle">
                                                 	<c:if test="${empty fundingDetail.contract}">
-														<input type="text" value="" disabled/>
+														<input type="text" value="" size="10"/>
                                                 
                                                     </c:if>
                                                     <c:if test="${not empty fundingDetail.contract}">
-        												<input type="text" value="${fundingDetail.contract.contractName}" disabled/>
+        												<input type="text" value="${fundingDetail.contract.contractName}" size="10"/>
                                                     </c:if>
+                                                    <field:display name="Contract of Disbursement" feature="Disbursement">
+                                            
+                                               	<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+												
+											
+											</field:display>
 											</td>
 										</field:display>
 
-											<field:display name="Contract of Disbursement" feature="Disbursement">
-                                            <td>
-                                               	<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
-												
-											</td>
-											</field:display>
+											
 											<field:display name="Related Pledge" feature="Disbursement">
-											<td valign="bottom">
-													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
+											<td valign="middle">
+													<html:select name="fundingDetail" indexed="true" property="pledge" >
 														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		
@@ -1305,7 +1303,7 @@
 											</field:display>
 											
 											<field:display name="Remove Disbursement Link" feature="Disbursement">
-												<td align="right">
+												<td align="right" valign="middle">
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 													</a>
@@ -1354,8 +1352,8 @@
 	<!-- expenditures -->
 	<feature:display module="Funding" name="Expenditures">
 	<tr>
-		<td width="100%" vAlign="top">
-			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
+		<td vAlign="top">
+			<table width="99%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -1366,15 +1364,15 @@
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="2" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Expenditure" feature="Expenditures">
-								<td align="center" valign="middle" width="75">
+								<td align="center" valign="middle" >
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
 								<field:display name="Amount Expenditure" feature="Expenditures">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" >
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
@@ -1387,7 +1385,7 @@
 								</field:display>
 								
 								<field:display name="Currency Expenditure" feature="Expenditures">
-									<td align="center" valign="middle" width="170">
+									<td align="center" valign="middle">
 										<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  
 											<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
 										</a>
@@ -1395,7 +1393,7 @@
 									</td>
 								</field:display>
 								<field:display name="Date Expenditure" feature="Expenditures">
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
@@ -1414,7 +1412,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-										<td valign="bottom">
+										<td valign="bottom" align="center">
 											<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.planning.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
@@ -1435,7 +1433,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-										<td valign="bottom">
+										<td valign="bottom" align="center">
 											<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="addForValidation(this)" size="17" styleClass="amt"/>
 										</td>
 
@@ -1444,7 +1442,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-										<td valign="bottom">
+										<td valign="bottom" align="center">
 											<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 												<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName"/>
 											</html:select>
@@ -1455,7 +1453,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-										<td valign="bottom">
+										<td valign="bottom" align="center">
 											<table cellpadding="0" cellspacing="0">
 												<tr>
 														<td>

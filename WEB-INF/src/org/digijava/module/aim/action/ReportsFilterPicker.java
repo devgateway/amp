@@ -929,11 +929,18 @@ public class ReportsFilterPicker extends MultiAction {
 					
 		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
-		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
+		AmpCurrency currency;
+		if (filterForm.getCurrency()!=null){
+			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
+		}else{
+			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getDefaultCurrency());
+		}
+			
 		arf.setCurrency(currency);
 		String name = "- " + currency.getCurrencyName();
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		Integer all = new Integer(-1);
+		
 		
 		if ( filterForm.getLineMinRanks() != null && filterForm.getLineMinRanks().length > 0 ) {
 	 	 	ArrayList<Integer> ranks        = new ArrayList<Integer>();

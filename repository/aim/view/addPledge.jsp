@@ -672,7 +672,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													</td>
 													<td valign="middle" align="left" width="70%">
 														<a>
-															<html:text property="whoAuthorizedPledge" size="90" styleClass="inp-text"/>
+															<html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/>
 	                            						</a>
 													</td>											
 												</tr>
@@ -687,7 +687,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													</td>
 													<td valign="middle" align="left" width="70%">
 														<a>
-															<html:text property="furtherApprovalNedded" size="90" styleClass="inp-text"/>
+															<html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/>
 	                            						</a>
 													</td>											
 												</tr>

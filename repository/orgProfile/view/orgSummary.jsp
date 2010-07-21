@@ -360,10 +360,10 @@
 <digi:form action="/showOrgSummary.do" method="post">
     <html:hidden property="action" styleId="orgSummaryActionId"/>
     <html:hidden name="orgSummaryForm" property="orgId" styleId="orgSummaryOrgId"/>
-    <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:600px;height: 200px">
-        <table cellSpacing=0 cellPadding=0 width="100%" border=0  align="left">
-            <tr><td><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
-            <tr><td> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
+    <div id="orgAdditionalInformation"  style="visibility:hidden;display:none;width:550px;height: 230px">
+        <table cellSpacing=0 cellPadding=5 width="100%" border=0  align="left">
+            <tr><td style="padding-left: 20px"><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
+            <tr><td style="padding-left: 20px"> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
             <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
         </table>
     </div>

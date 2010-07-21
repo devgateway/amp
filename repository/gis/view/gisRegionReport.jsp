@@ -180,7 +180,7 @@
 														<logic:iterate name="activityLocationFunding" property="activity.locations" id="iterLocation">
 															<li>
 																<bean:define id="ampLoc" name="iterLocation" property="location" type="org.digijava.module.aim.dbentity.AmpLocation"/>
-																<bean:write name="ampLoc" property="name"/>
+																<bean:write name="ampLoc" property="location.name"/>
 															</li>
 														</logic:iterate>
 													</ul>

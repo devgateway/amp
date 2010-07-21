@@ -26,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
@@ -124,11 +126,13 @@ public class RegisterUser extends Action {
 			} else {
 				DbUtil.registerUser(user);
 				//create User Registration Trigger
+                 if(FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL)){
                                 String link=RequestUtils.getFullModuleUrl(request);
                                 String id=ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
                                 String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
                                DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                }
                   
 				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
 

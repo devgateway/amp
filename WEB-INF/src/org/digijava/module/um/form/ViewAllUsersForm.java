@@ -43,6 +43,7 @@ public class ViewAllUsersForm
           //pagedUsers = null;
 		if(reset!=null && reset.equals("true")){
 			keyword = null;       
+			type = -1;       
 	        setReset("false");
 	       
 		}	

@@ -417,6 +417,14 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Project Coordinator Contact Phone" feature="Reports Contact Information"></field:display>
 <field:display name="Project Coordinator Contact Fax" feature="Reports Contact Information"></field:display>
 <field:display name="Project Coordinator Contact Title" feature="Reports Contact Information"></field:display>
+
+<field:display name="Implementing/Executing Agency Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Implementing/Executing Agency Contact Email" feature="Reports Contact Information"></field:display>
+<field:display name="Implementing/Executing Agency Contact Organization" feature="Reports Contact Information"></field:display>
+<field:display name="Implementing/Executing Agency Contact Phone" feature="Reports Contact Information"></field:display>
+<field:display name="Implementing/Executing Agency Contact Fax" feature="Reports Contact Information"></field:display>
+<field:display name="Implementing/Executing Agency Contact Title" feature="Reports Contact Information"></field:display>
+
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 

@@ -224,8 +224,6 @@ YAHOO.namespace("YAHOO.amp");
     	//var phoneTypes=$("input[id^='phoneType_']");
     	
     	var phoneTypes=$("select[id^='phoneType_']");
-			
-			console.log(phoneTypes);
 			    	
     	var phoneNumbers=$("input[id^='phoneNum_']");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null

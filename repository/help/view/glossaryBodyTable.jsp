@@ -280,9 +280,10 @@
 	
 	function deleteNode(topicId){
 		if (!confirm("Delete this glossary item?")) return;
+		var lastTimeStamp = new Date().getTime();
 		var resp=$.ajax({
 			   type: 'POST',
-			   url: deleteLink,
+			   url: deleteLink+'~timestamp='+lastTimeStamp,
 			   data: ({helpTopicId : topicId}),
 			   cache : false,
 			   success: function(data,msg){
@@ -290,7 +291,10 @@
 					$('div#nodeContentDiv').html('');
 					$('div#nodeTitle').html('&nbsp;&nbsp;&nbsp;&nbsp;');
 					$('div#nodeEditorLinkDiv').html('');
-					tree.removeNode(node,true);
+					if (!tree.removeNode(node,true)){
+						alert('problem with '+ problem);
+					}
+					tree.render();
 			   },
 		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot delete glossary topic with id '+topicId);} 
 		}).responseText;

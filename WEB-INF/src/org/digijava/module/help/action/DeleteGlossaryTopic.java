@@ -1,5 +1,7 @@
 package org.digijava.module.help.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +45,6 @@ public class DeleteGlossaryTopic extends Action {
 				DbUtil.deleteEditor(editor);
 			}
 		}
-		
 		return null;
 	}
 

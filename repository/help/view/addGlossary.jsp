@@ -53,7 +53,12 @@
 							<strong><digi:trn>Parent name:</digi:trn></strong>
 						</td>
 						<td>
-							${glossaryForm.nodeParentName}
+							<c:if test="${empty glossaryForm.nodeParentName}">
+								<digi:trn>No Parent. This will be top level item</digi:trn>
+							</c:if>
+							<c:if test="${not empty glossaryForm.nodeParentName}">
+								${glossaryForm.nodeParentName}
+							</c:if>
 						</td>
 					</tr>
 					<tr>
@@ -61,7 +66,7 @@
 							<strong><digi:trn>Title:</digi:trn></strong>
 						</td>
 						<td>
-							<html:text name="glossaryForm" property="nodeName"/>
+							<html:text styleId="txtGlossaryTitle" name="glossaryForm" property="nodeName"/>
 						</td>
 					</tr>
 					<tr>
@@ -88,4 +93,8 @@
 		form.action='/help/glossary.do';
 		form.submit();
 	}
+	
+	$(document).ready(function () {
+		$('#txtGlossaryTitle').focus();
+	});
 </script>

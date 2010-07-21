@@ -25,12 +25,13 @@ public class ShowAddNewGlossary extends Action {
 		
 		GlossaryForm gform = (GlossaryForm)form;
 		Long nodeId = gform.getNodeId();
-		gform.setNodeParentName("No Parnt. This will be root node");
 		if (nodeId!=null){
 			HelpTopic topic = HelpUtil.getHelpTopic(nodeId);
 			if (topic != null){
 				gform.setNodeParentName(topic.getTopicKey());
 			}
+		}else{
+			gform.setNodeParentName(null);		
 		}
 		gform.setParentNodeId(nodeId);
 		return mapping.findForward("forward");

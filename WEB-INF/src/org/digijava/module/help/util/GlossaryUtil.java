@@ -2,12 +2,16 @@ package org.digijava.module.help.util;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Utility method fro glossary
@@ -15,6 +19,8 @@ import org.hibernate.Session;
  *
  */
 public class GlossaryUtil {
+
+	private static Logger logger = Logger.getLogger(GlossaryUtil.class);
 
 	public static final Integer TYPE_GLOSSARY = new Integer(2);
 
@@ -98,12 +104,99 @@ public class GlossaryUtil {
 		return result;
 	}
 	
+	/**
+	 * Creates ne glossary topic.
+	 * @param topic
+	 * @throws DgException
+	 */
 	public static void createOrUpdateGlossaryTopic(HelpTopic topic) throws DgException{
 		topic.setTopicType(TYPE_GLOSSARY);
 		HelpUtil.saveOrUpdateHelpTopic(topic);
 	}
 	
-	public static void deleteGlossaryTopic(HelpTopic topic) throws DgException{
-		HelpUtil.deleteHelpTopic(topic);
+	/**
+	 * Deletes glossary topic.
+	 * Also does all necessary cleanup of editors and children.
+	 * @param glossaryTopic
+	 * @throws DgException
+	 */
+	public static void deleteGlossaryTopic(HelpTopic glossaryTopic) throws DgException{
+		Session dbSession = null;
+		Transaction tx = null;
+		try {
+			dbSession = PersistenceManager.getRequestDBSession();
+			tx = dbSession.beginTransaction();						//Start transaction
+			deleteTopic(glossaryTopic, dbSession);					//delete topic, its editor and children
+			tx.commit();											//commit changes
+		} catch (Exception e) {
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					logger.error(ex);
+					throw new DgException("Cnnot roll back glossary deletion!!!", ex);
+				}
+			}
+			logger.error(e);
+			throw new DgException("Can't remove Glossary items", e);
+		}
+	}
+
+	/**
+	 * Delete glossary, its editor, and its children recursively.
+	 * All deletes are done in one session for which client should start
+	 * transaction and later commit it or rollback.
+	 * @param glossaryTopic
+	 * @param dbSession
+	 * @throws DgException
+	 */
+	private static void deleteTopic(HelpTopic glossaryTopic, Session dbSession) throws DgException{
+		List<HelpTopic> children = getChildren(glossaryTopic, dbSession);
+		if (children!=null && children.size()>0){
+			for (HelpTopic child : children) {
+				deleteTopic(child, dbSession);
+			}
+		}
+		deleteEditor(glossaryTopic, dbSession);
+		dbSession.delete(glossaryTopic);
+	}
+	
+	/**
+	 * Removes all editor records for key stored in help topic.
+	 * @param topic
+	 * @param dbSession
+	 * @throws DgException
+	 */
+	private static void deleteEditor(HelpTopic topic, Session dbSession) throws DgException{
+		if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
+			List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+			if (editors!=null && editors.size()>0){
+				for (Editor editor : editors) {
+					dbSession.delete(editor);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Retrieves direct children topics of specified parent topic.
+	 * @param topic paremt topic, should NOT be NULL
+	 * @param dbSession db session, should NOT be NULL
+	 * @return list of one level children topics or NULL
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	private static List<HelpTopic> getChildren(HelpTopic topic,Session dbSession) throws DgException{
+		List<HelpTopic> helpTopics = null;
+		try {
+			String queryString = "from "+ HelpTopic.class.getName() + " topic where topic.parent.helpTopicId=:id";
+			Query query = dbSession.createQuery(queryString);
+        	query.setParameter("id", topic.getHelpTopicId());
+			helpTopics = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+  			throw new AimException("Unable to load glossary children", e);
+		}
+		return helpTopics;
 	}
 }

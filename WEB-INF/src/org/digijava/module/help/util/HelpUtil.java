@@ -326,6 +326,7 @@ public class HelpUtil {
 			throw new AimException("Can't remove help topic", e);
 		}
 	}
+	
 	public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance,String key)throws AimException{
 		Session session = null;
 		Query query = null;

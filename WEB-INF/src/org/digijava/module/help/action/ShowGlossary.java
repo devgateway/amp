@@ -36,11 +36,9 @@ public class ShowGlossary extends Action {
 		String moduleInstnce = RequestUtils.getModuleInstance(request).getInstanceName();
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		
-		source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, siteId);
-		
-		HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker();
-		
-		List<HelpTopicTreeNode> tree = AmpCollectionUtils.createTree(source, worker);
+		source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, siteId);				//Flat list of all glossary items.
+		HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker();					//Node worker to build tree
+		List<HelpTopicTreeNode> tree = AmpCollectionUtils.createTree(source, worker);	//Build tree
 		
 		glossForm.setTree(tree);
 		return mapping.findForward("forward");

@@ -130,6 +130,9 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
 	
+	 public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
+		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "International", true);
+	
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
 	 public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";

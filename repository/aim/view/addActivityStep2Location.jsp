@@ -185,13 +185,20 @@
                                                                       </c:if>
                                                                     </td> --%>
                                                                     <td align="right" nowrap="nowrap">
+                                                                    <c:set var="percentageDisplay" value="block" />
+																		<c:if test="${selectedLocs.percentageBlocked}">
+																			<c:set var="percentageDisplay" value="none"/>
+																		 </c:if>
+																	<div style="display: ${percentageDisplay}">
                                                                      <field:display name="Regional Percentage" feature="Location">
                                                                     		<field:display name="Validate Mandatory Regional Percentage" feature="Location">
                                                                     			<FONT color="red">*</FONT>
                                                                     		</field:display>
                                                                     		<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
-                                                                    		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this, 'region')"/>
+                                                                    		<html:text name="selectedLocs" disabled="${selectedLocs.percentageBlocked}" indexed="true" 
+                                                                    				property="percent" size="2"  maxlength="5" onkeyup="fnChk(this, 'region')"/>
                                                                     </field:display>
+                                                                   </div>
                                                                     </td>
                                                                   </tr>
                                                                 </table>

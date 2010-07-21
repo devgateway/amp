@@ -12,9 +12,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author Alex Gartner
@@ -28,6 +32,25 @@ public class DynLocationSelected extends Action {
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 		
 		EditActivityForm eaForm 	= (EditActivityForm) form;
+		
+	    AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getImplemLocationLevel() );
+		AmpCategoryValue implLevel		= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getLevelId() );
+		String cIso						= FeaturesUtil.getDefaultCountryIso();
+		AmpCategoryValueLocations defCountry	= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+		boolean defCountryInSelection   = false;
+		ArrayList<AmpCategoryValueLocations>    userSelectedLocsColl = new ArrayList<AmpCategoryValueLocations>();
+		boolean setFullPercForDefaultCountry    					= false;
+		
+		String gsAllowPercentages	=  FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES );
+		if ( !"true".equals( gsAllowPercentages ) &&
+				implLevel!=null && implLocValue!=null &&
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
+		) {
+			setFullPercForDefaultCountry            = true;
+		}
+		
+		
 		/**
 		 * TODO NEEDS REFACTORING ! CURRENTLY WORKED ONLY FOR ACTIVITY FORM.SHOULD BE RE-WRITTEN LIKE IT'S IN 2.0, WITH IT'S FORM E.T.C.
 		 */
@@ -43,21 +66,42 @@ public class DynLocationSelected extends Action {
 		if ( userSelectedLocs != null ) {
 			for (int i=0; i<userSelectedLocs.length; i++) {
 				AmpCategoryValueLocations ampCVLocation		= DynLocationManagerUtil.getLocation( userSelectedLocs[i], false);
+				userSelectedLocsColl.add(ampCVLocation);
+				if ( ampCVLocation.getId().longValue()==defCountry.getId().longValue() )
+					defCountryInSelection   = true;
+			}
+			
+			if ( !defCountryInSelection && setFullPercForDefaultCountry ) {
+				userSelectedLocsColl.add(defCountry);
+			}
+			for (AmpCategoryValueLocations ampCVLocation: userSelectedLocsColl ) {
+				
 				Location location							= new Location();
 				location.setAmpCVLocation(ampCVLocation);
 				location.setAncestorLocationNames( DynLocationManagerUtil.getParents(ampCVLocation) );
 				location.setLocationName(ampCVLocation.getName());
 				location.setLocId( ampCVLocation.getId() );
-				location.setPercent("");
+				location.setPercent("0");
+				
+				if ( setFullPercForDefaultCountry ) {
+					if ( CategoryManagerUtil.equalsCategoryValue(ampCVLocation.getParentCategoryValue(),
+							CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
+						
+						if ( ampCVLocation.getId().longValue() == defCountry.getId().longValue() ) {
+							location.setPercent("100");
+						}
+						else
+							location.setPercentageBlocked(true);
+
+					}
+				}
 				
 				if ( eaForm.getLocation().getSelectedLocs() == null ){
 					eaForm.getLocation().setSelectedLocs( new ArrayList<Location>() );
 				}
 				if ( !eaForm.getLocation().getSelectedLocs().contains(location) ){
-					if (eaForm.getLocation().getSelectedLocs().size()==0) {
+					if (eaForm.getLocation().getSelectedLocs().size()==0 && !setFullPercForDefaultCountry ) {
 						location.setPercent("100");
-					} else {
-						location.setPercent("0");
 					}
 					eaForm.getLocation().getSelectedLocs().add(location);
 				}

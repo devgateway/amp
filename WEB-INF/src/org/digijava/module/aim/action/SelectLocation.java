@@ -32,6 +32,13 @@ public class SelectLocation extends Action {
 		eaForm.getLocation().setNoMoreRecords(false);
 		Location location = eaForm.getLocation();
 		
+		ActionForward retAF	= null;
+		if(request.getParameter("forwardToPopin")!=null){
+        	retAF	= mapping.findForward("forwardToPopin");
+        }else{
+        	retAF	= mapping.findForward("forwardToPopup");
+        }
+		
 		// TODO NEEDS REFACTORING TO SUPPORT NOT ONLY ACTIVITY FORM, BUT ORG.MANAGER TOO
 		String resetSelLocs=request.getParameter("resetSelLocs"); //Org.Manager Side -quick fix
 		if(resetSelLocs!=null && resetSelLocs.equalsIgnoreCase("reset")){
@@ -85,6 +92,26 @@ public class SelectLocation extends Action {
 		Long parentLocId			= eaForm.getLocation().getParentLocId();
 		
 		Map<Integer, Collection<KeyValue>> locationByLayers		= 	eaForm.getLocation().getLocationByLayers();
+		
+		AmpCategoryValue implLevel              = CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getLevelId() );
+		if ( implLevel!=null &&
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) )  {
+			Collection<AmpCategoryValueLocations> countries =
+				DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			if ( countries != null ) {
+				Integer countryIndex    = null;
+				ArrayList<KeyValue> countriesKV                         = new ArrayList<KeyValue>();
+				for (AmpCategoryValueLocations country: countries) {
+					countryIndex    = (countryIndex==null)?country.getParentCategoryValue().getIndex():countryIndex;
+					KeyValue countryKV                                              = new KeyValue(country.getId().toString() , country.getName() );
+					countriesKV.add(countryKV);
+				}
+				locationByLayers.put(countryIndex, countriesKV);
+			}
+			return retAF;
+		}
+	
 		
         if(cIso!=null && parentLocId == null){ // Setting up the country
         	eaForm.getLocation().setDefaultCountryIsSet(true);
@@ -155,11 +182,7 @@ public class SelectLocation extends Action {
         	}
         	
         }
-        if(request.getParameter("forwardToPopin")!=null){
-        	return mapping.findForward("forwardToPopin");
-        }else{
-        	return mapping.findForward("forwardToPopup");
-        }
+        return retAF;
         
         
 		/* END - Region Manager changes */

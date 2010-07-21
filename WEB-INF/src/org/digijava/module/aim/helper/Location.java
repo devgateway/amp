@@ -35,6 +35,8 @@ public class Location implements Serializable
 	private List<String> ancestorLocationNames;
 	private AmpCategoryValueLocations ampCVLocation;
 	
+	private boolean percentageBlocked	= false;
+	
 	public Location() {
 		locId = new Long(-1);
 		countryId = new Long(-1);
@@ -286,5 +288,18 @@ public class Location implements Serializable
 			return null;
 	}
 
+	/**
+	 * @return the percentageBlocked
+	 */
+	public boolean getPercentageBlocked() {
+		return percentageBlocked;
+	}
+
+	/**
+	 * @param percentageBlocked the percentageBlocked to set
+	 */
+	public void setPercentageBlocked(boolean percentageBlocked) {
+		this.percentageBlocked = percentageBlocked;
+	}
 	
 }

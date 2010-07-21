@@ -36,9 +36,10 @@
 <html:hidden property="editAct" />
 <html:hidden property="workingTeamLeadFlag" />
 
+<div style="width:100%;height:370px;overflow-y:scroll;">
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td valign="top" width="100%" vAlign="top" align="left">
-
 <bean:define id="defaultCurrency" name="currentMember" property="appSettings.currencyId" type="java.lang.Long" scope="session" toScope="page"/> 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 	<tr>
@@ -390,3 +391,5 @@
 	</td>
 </tr>
 </table>
+
+</div>

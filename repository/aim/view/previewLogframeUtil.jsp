@@ -15,6 +15,7 @@
 		
     var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
 		width:"800px",
+		height:"400px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",

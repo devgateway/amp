@@ -891,8 +891,8 @@ function commentWin(val, commentId) {
                                                                           <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
                                                                             <c:if test="${not empty aimChannelOverviewForm.equalOpportunity && fn:trim(aimChannelOverviewForm.equalOpportunity) ne ''}" >
                                                                             <tr>
-                                                                                <td>
-	                                                                                <i><digi:trn>Equal Opportunity</digi:trn></i><br />
+                                                                                <td bgcolor="#ffffff">
+	                                                                                <i><digi:trn>Equal Opportunity</digi:trn>:</i><br />
 																					<digi:edit key="${aimChannelOverviewForm.equalOpportunity}"/>
                                                                                 </td>
                                                                             </tr>
@@ -901,8 +901,8 @@ function commentWin(val, commentId) {
                                                                           <field:display name="Environment" feature="Cross Cutting Issues">
                                                                             <c:if test="${!empty aimChannelOverviewForm.environment && fn:trim(aimChannelOverviewForm.environment) ne ''}" >
                                                                             <tr>
-                                                                                <td>
-                                                                                    <i><digi:trn>Environment:</digi:trn></i><br />
+                                                                                <td bgcolor="#ffffff">
+                                                                                    <i><digi:trn>Environment</digi:trn>:</i><br />
                                                                                     <digi:edit key="${aimChannelOverviewForm.environment}"/>
                                                                                 </td>
                                                                             </tr>
@@ -911,8 +911,8 @@ function commentWin(val, commentId) {
                                                                           <field:display name="Minorities" feature="Cross Cutting Issues">
                                                                             <c:if test="${!empty aimChannelOverviewForm.minorities && fn:trim(aimChannelOverviewForm.minorities) ne ''}" >
                                                                             <tr>
-                                                                                <td>
-                                                                                  <i><digi:trn key="aim:monitories">Minorities:</digi:trn></i><br />
+                                                                                <td bgcolor="#ffffff">
+                                                                                  <i><digi:trn key="aim:monitories">Minorities</digi:trn>:</i><br />
                                                                                    <digi:edit key="${aimChannelOverviewForm.minorities}"/>
                                                                                 </td>
                                                                             </tr>

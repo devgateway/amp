@@ -1564,7 +1564,7 @@ public class TeamUtil {
         return team;
     }
 
-    public static Collection getAllTeamAmpActivities(Long teamId) {
+    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft) {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -1574,10 +1574,16 @@ public class TeamUtil {
             Query qry = null;
             if(teamId == null) {
             	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
+                if(!includedraft){
+                  queryString+="  and   (act.draft is null or act.draft=false) ";
+                }
             	qry=session.createQuery(queryString);
             }
             else{
             	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+                if(!includedraft){
+                  queryString+="  and   (act.draft is null or act.draft=false) ";
+                }
             	qry=session.createQuery(queryString);
             	qry.setParameter("teamId", teamId, Hibernate.LONG);
             }
@@ -1687,7 +1693,7 @@ public class TeamUtil {
                     }
                     params += id;
                 }
-                queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+")";
+                queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+") and (a.draft is null or a.draft=false)";
                 qry = session.createQuery(queryString);
 
                 itr = qry.list().iterator();
@@ -1758,6 +1764,7 @@ public class TeamUtil {
 			}else{
 				queryString+="where act.team is null";
 			}
+            queryString+=" and   (act.draft is null or act.draft=false) ";
 			qry = session.createQuery(queryString);
 			
 			qry.setFetchSize(100);
@@ -2304,7 +2311,7 @@ public class TeamUtil {
 
     public static Collection getAllUnassignedActivities() {
         //return getAllTeamActivities(null);
-    	return getAllTeamAmpActivities(null);
+    	return getAllTeamAmpActivities(null,true);
     }
 
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {

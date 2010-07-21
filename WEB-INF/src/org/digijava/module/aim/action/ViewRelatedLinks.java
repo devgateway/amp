@@ -84,7 +84,7 @@ public class ViewRelatedLinks extends Action {
 		if (pagedCol == null || pagedCol.size() == 0) {
 			pagedCol = new ArrayList();
 			
-			Collection collectionActivities = TeamUtil.getAllTeamAmpActivities(teamId);
+			Collection collectionActivities = TeamUtil.getAllTeamAmpActivities(teamId,true);
 			Iterator activitiesIterator = collectionActivities.iterator();
 			while(activitiesIterator.hasNext())
 			{

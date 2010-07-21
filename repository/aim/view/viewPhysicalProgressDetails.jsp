@@ -82,19 +82,24 @@ method="post">
 					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
-								<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-                          	<TR bgcolor="#F4F4F2" height="17">
-										<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-											<digi:trn key="aim:componentDetails">Component Details</digi:trn>
-										</TD>
-	                           <TD background="module/aim/images/corner-r.gif" height=17 width=17>
-										</TD>
-   	                     </TR>
-      	               </TABLE>									
+                                 <TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
+                                    <TR bgColor=#f4f4f2>
+                                        <TD width="7" height="17">
+                                        <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                        </TD>
+                                        <TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
+                                        <strong>
+                                            <digi:trn>Component Details</digi:trn>
+                                        </strong>
+                                        </TD>
+                                        <TD width="7" height="17">
+                                        <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                        </TD>
+                                    </TR>
+                                </TABLE>
 							</TD></TR>
 							<TR><TD width="100%" bgcolor="#F4F4F2" align="center">
-								<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
-								class="box-border-nopadding">
+                                <TABLE width="100%" cellSpacing=2 cellPadding=5 vAlign="top" align="left" style="border:1px solid #ccdbff;">
 									<TR><TD width="100%" vAlign="top" align="left">
 										<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="left" 
 										bgcolor="#ffffff">
@@ -111,8 +116,8 @@ method="post">
 												</TD>
 											</TR>
 											<TR bgcolor="#ffffff">
-												<TD>
-													&nbsp;
+												<TD>&nbsp;
+													
 												</TD>
 											</TR>
 											<TR bgcolor="#f4f4f2">
@@ -228,8 +233,8 @@ method="post">
 												</TD>
 											</TR>																						
 											<TR bgcolor="#ffffff">
-												<TD>
-													&nbsp;												
+												<TD>&nbsp;
+																									
 												</TD>
 											</TR>
 											<TR bgcolor="#f4f4f2">

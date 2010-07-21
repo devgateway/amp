@@ -79,8 +79,8 @@ function projectFiche(id)
 													<digi:trn key="aim:details">Details</digi:trn>										
 												</SPAN>											
 											</TD>
-											<TD align="right">
-												&nbsp;
+											<TD align="right">&nbsp;
+												
 											</TD>
 										</TR>
 									</TABLE>										
@@ -124,19 +124,26 @@ function projectFiche(id)
 										<c:if test="${! empty rd.commitments}">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2">
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                        	<TR bgcolor="#F4F4F2"> 
-                          	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
-															<digi:trn key="aim:commitments">Commitments</digi:trn>
-														</TD>
-	                          <TD background="module/aim/images/corner-r.gif" 
-														height=17 width=17></TD>
-													</TR>
-												</TABLE>									
+                                                <TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
+                                                <TR bgColor=#f4f4f2>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                    <TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
+                                                    <strong>
+                                                        <digi:trn>Commitments</digi:trn>
+                                                    </strong>
+                                                    </TD>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                </TR>
+                                                </TABLE>
 											</TD>
 										</TR>
 										<TR>
-											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
+											<TD width="750" bgcolor="#F4F4F2" align="center" style="border:1px solid #ccdbff;">
+                                            	<br />
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" > 
 	                        	<TD><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></TD>
@@ -155,6 +162,7 @@ function projectFiche(id)
 														</TR>
 													</c:forEach>
 												</TABLE>
+                                            	<br />
 											</TD>
 										</TR>
 										<TR>
@@ -165,19 +173,26 @@ function projectFiche(id)
 										<c:if test="${! empty rd.disbursements}">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2">
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                        	<TR bgcolor="#F4F4F2"> 
-                          	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
-															<digi:trn key="aim:disbursements">Disbursements</digi:trn>
-														</TD>
-	                          <TD background="module/aim/images/corner-r.gif" 
-														height=17 width=17></TD>
-													</TR>
-												</TABLE>									
+                                                <TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
+                                                <TR bgColor=#f4f4f2>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                    <TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
+                                                    <strong>
+                                                        <digi:trn>Disbursements</digi:trn>
+                                                    </strong>
+                                                    </TD>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                </TR>
+                                                </TABLE>
 											</TD>
 										</TR>
 										<TR>
-											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
+											<TD width="750" bgcolor="#F4F4F2" align="center" style="border:1px solid #ccdbff;">
+                                            <br />
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" > 
 	                        	<TD><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></TD>
@@ -196,6 +211,7 @@ function projectFiche(id)
 														</TR>
 													</c:forEach>
 												</TABLE>
+                                            <br />
 											</TD>
 										</TR>
 										<TR>
@@ -206,19 +222,26 @@ function projectFiche(id)
 										<c:if test="${! empty rd.expenditures}">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2">
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                        	<TR bgcolor="#F4F4F2"> 
-                          	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
-															<digi:trn key="aim:expenditures">Expenditures</digi:trn>
-														</TD>
-	                          <TD background="module/aim/images/corner-r.gif" 
-														height=17 width=17></TD>
-													</TR>
-												</TABLE>									
+                                                <TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
+                                                <TR bgColor=#f4f4f2>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                    <TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
+                                                    <strong>
+                                                        <digi:trn>Expenditures</digi:trn>
+                                                    </strong>
+                                                    </TD>
+                                                    <TD width="7" height="17">
+                                                    <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                                    </TD>
+                                                </TR>
+                                                </TABLE>
 											</TD>
 										</TR>
 										<TR>
-											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
+											<TD width="750" bgcolor="#F4F4F2" align="center" style="border:1px solid #ccdbff;">
+                                            <br />
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" > 
 	                        	<TD><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></TD>
@@ -237,6 +260,7 @@ function projectFiche(id)
 														</TR>
 													</c:forEach>
 												</TABLE>
+                                            <br />
 											</TD>
 										</TR>
 										<TR>

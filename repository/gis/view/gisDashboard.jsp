@@ -324,7 +324,7 @@
     
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Select Sector</digi:trn>:
+             <digi:trn>Select Donor</digi:trn>:
         </td>
 		<td>
 		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->

@@ -2,6 +2,7 @@ package org.digijava.module.gis.action;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
@@ -38,15 +39,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
@@ -218,7 +211,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 
 		// Check for sector and indicator
-		ByteArrayOutputStream outMapByteArray;
+		ByteArrayOutputStream outMapByteArray = null;
 //		String translatedNone = TranslatorWorker.translateText("None", locale, siteId);
 		String translatedNone = "None";
 		String indicatorName = translatedNone;
@@ -266,23 +259,59 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             mapLevel = "2";
         }
 
-		if (secId != null && indId != null) {
-			AmpIndicator indicator = IndicatorUtil.getIndicator(indId);
-			indicatorName = indicator.getName();
-			sectorName = SectorUtil.getAmpSector(secId).getName();
-			if (mapCode != null && mapCode.trim().length() > 0) {
-				outMapByteArray = getMapImageSectorIndicator(mapCode, secId, indId, subGroup, indYear, mapLevel);
-			} else {
-				outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId, subGroup, indYear, mapLevel);
-			}
+        if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
+            if (secId != null && indId != null) {
+                AmpIndicator indicator = IndicatorUtil.getIndicator(indId);
+                indicatorName = indicator.getName();
+                sectorName = SectorUtil.getAmpSector(secId).getName();
+                if (mapCode != null && mapCode.trim().length() > 0) {
+                    outMapByteArray = getMapImageSectorIndicator(mapCode, secId, indId, subGroup, indYear, mapLevel);
+                } else {
+                    outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId, subGroup, indYear, mapLevel);
+                }
 
-		} else {
-			if (mapCode != null && mapCode.trim().length() > 0) {
-				outMapByteArray = getMapImage(mapCode);
-			} else {
-				outMapByteArray = getMapImage("TZA");
-			}
-		}
+            } else {
+                if (mapCode != null && mapCode.trim().length() > 0) {
+                    outMapByteArray = getMapImage(mapCode);
+                } else {
+                    outMapByteArray = getMapImage("TZA");
+                }
+            }
+        } else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
+
+
+            if (secId.longValue() == -2f) {
+                sectorName = "None";
+            } else if (secId.longValue() == -1f) {
+                sectorName = "All";
+            } else {
+                sectorName = SectorUtil.getAmpSector(secId).getName();
+            }
+
+
+            String fromYear = request.getParameter("selectedFromYear");
+            Calendar fStartDate = null;
+            if (fromYear != null) {
+                fStartDate = Calendar.getInstance();
+                fStartDate.set(Integer.parseInt(fromYear), 0, 1, 0, 0, 0);
+
+            }
+
+            String toYear = request.getParameter("selectedToYear");
+            Calendar fEndDate = null;
+            if (toYear != null) {
+                fEndDate = Calendar.getInstance();
+                fEndDate.set(Integer.parseInt(toYear), 11, 31, 23, 59, 59);
+
+            }
+
+                if (mapCode != null && mapCode.trim().length() > 0) {
+
+                    outMapByteArray = getMapImageFinancial (mapCode, secId, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                } else {
+                    outMapByteArray = getMapImageFinancial ("TZA", secId, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                }
+        }
 
 		// Get the Map Image
 		// GIS, this
@@ -298,7 +327,20 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.setWidthPercentage(100);
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName, subGroupName, timeInterval));
+        if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
+		    imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName, subGroupName, timeInterval));
+        } else {
+            Long donorId = Long.parseLong(request.getParameter("donorId"));
+            String donorName = null;
+            if (donorId.longValue() == -1l) {
+                donorName = "All Donors";                
+            } else {
+                AmpOrganisation organisation = (AmpOrganisation) org.digijava.module.aim.util.DbUtil.getObject(AmpOrganisation.class, donorId);
+                donorName = organisation.getName();
+            }
+            imagesTable.addCell(getImageMap(imgMap, sectorName, null, null, null, donorName, request.getParameter("fundingType"), request.getParameter("mapMode") ));
+            String fundingType = request.getParameter("fundingType");
+        }
 		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear, selectedTotYear));
 		// imagesTable.addCell(" ");
 
@@ -750,7 +792,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName, String subGroup, String timeInterval) throws WorkerException {
+    private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName, String subGroup, String timeInterval) throws WorkerException {
+        return getImageMap(imgMap, sectorName, indicatorName, subGroup, timeInterval, null, null, null); 
+    }
+
+	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName, String subGroup, String timeInterval, String donorName, String FundingType, String renderMode) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 
@@ -809,10 +855,17 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		String selectedIndicatorTranslation = "Selected Indicator";
 		String selectedSubGroupTranslation = "Selected subgroup";
 		String selectedTimeIntervalTranslation = "Selected Time Interval";
+
+        String selectedDonorTranslation = "Selected Donor";
+        String selectedFundingTypeTranslation = "Selected Funding Type";
+
 		if (selectedIndicatorTranslation == null || selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
 
-		String defaultMinMaxMessage="Regions with the lowest (MIN) values for the selected indicator are shaded dark green. "
+        String defaultMinMaxMessage = null;
+
+        if (renderMode == null || !renderMode.equals("FinInfo")) {
+		defaultMinMaxMessage="Regions with the lowest (MIN) values for the selected indicator are shaded dark green. "
 				+"Regions with the highest (MAX) value are shaded light green. "
 				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
 
@@ -823,6 +876,19 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 						+ selectedTimeIntervalTranslation + ": " + timeInterval + "\n\n"
 						+ "Data Source: Dev Info", new Font(
 						Font.HELVETICA, 6)));
+        } else {
+        defaultMinMaxMessage = "Regions with the lowest (MIN) values for the selected funding type are shaded dark green. Regions with the highest (MAX) value are shaded light green.";
+
+
+		textCell
+				.addElement(new Paragraph(defaultMinMaxMessage + "\n"
+						+ selectedSectorTranslation + ": " + sectorName + "\n"
+                        + selectedDonorTranslation + ": " + donorName  + "\n"
+                        + selectedFundingTypeTranslation + ": " + FundingType + "\n"
+
+						+ "Data Source: AMP", new Font(
+						Font.HELVETICA, 6)));
+        }
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
@@ -1337,6 +1403,132 @@ private int matchesId(Long ptableId) {
 		return outByteStream;
 	}
 
+    private ByteArrayOutputStream getMapImageFinancial(String mapCode, Long secId, Long donorId, String fundingType, Date fStartDate, Date fEndDate, String mapLevel) throws Exception {
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+
+		GisMap map = null;
+
+		if (mapCode != null && mapCode.trim().length() > 0) {
+			map = GisUtil.getMap(mapCode);
+		}
+
+
+
+
+
+                    //Get segments with funding for dashed paint map
+                    List secFundings = null;
+
+                    if (secId.longValue() > -2l) {
+                        secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId);
+                    } else {
+                        secFundings = new ArrayList();
+                    }
+
+                    Object[] fundingList = GetFoundingDetails.getFundingsByLocations(secFundings,
+                            Integer.parseInt(mapLevel),
+                            fStartDate,
+                            fEndDate,
+                            donorId);
+
+
+                    Map fundingLocationMap = (Map) fundingList[0];
+
+                    List segmentDataList = new ArrayList();
+
+                    Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+
+                    BigDecimal min = null;
+                    BigDecimal max = null;
+                    while (locFoundingMapIt.hasNext()) {
+                        String key = (String) locFoundingMapIt.next();
+                        FundingData fData = (FundingData) fundingLocationMap.get(key);
+                        SegmentData segmentData = new SegmentData();
+                        segmentData.setSegmentCode(key);
+
+                        BigDecimal selValue = null;
+
+                        if (fundingType.equals("commitment")) {
+                        	selValue = fData.getCommitment();
+                        } else if (fundingType.equals("disbursement")) {
+                        	selValue = fData.getDisbursement();
+                        } else if (fundingType.equals("expenditure")) {
+                        	selValue = fData.getExpenditure();
+                        }
+
+
+                        segmentData.setSegmentValue(selValue.toString());
+
+                        if (min == null) {
+                            min = selValue;
+                            max = selValue;
+                        }
+
+                        if (selValue.compareTo(min) < 0) {
+                            min = selValue;
+                        }
+
+                        if (selValue.compareTo(max) > 0) {
+                            max = selValue;
+                        }
+
+                        segmentDataList.add(segmentData);
+                    }
+
+                    if (min == null) {
+                        min = new BigDecimal(0);
+                        max = new BigDecimal(0);
+                    }
+
+                    List hilightData = prepareHilightSegments(segmentDataList,
+                            map, new Double(min.doubleValue()), new Double(max.doubleValue()));
+
+        		    int canvasWidth = 700;
+		            int canvasHeight = 700;
+
+                    BufferedImage graph = new BufferedImage(canvasWidth,
+                            canvasHeight,
+                            BufferedImage.TYPE_INT_ARGB);
+
+                    Graphics2D g2d = graph.createGraphics();
+
+                    g2d.setBackground(new Color(0, 0, 100, 255));
+
+                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+                    GisUtil gisUtil = new GisUtil();
+		            CoordinateRect rect = gisUtil.getMapRect(map);
+
+                    gisUtil.addDataToImage(g2d,
+                                           map.getSegments(),
+                                           hilightData,
+                                           null,
+                                           canvasWidth, canvasHeight,
+                                           rect.getLeft(), rect.getRight(),
+                                           rect.getTop(), rect.getBottom(), true, false);
+
+                    gisUtil.addCaptionsToImage(g2d,
+                                               map.getSegments(),
+                                               canvasWidth, canvasHeight,
+                                               rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
+
+                    g2d.dispose();
+
+                    RenderedImage ri = graph;
+
+		try {
+			ImageIO.write(ri, "png", outByteStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		graph.flush();
+
+		return outByteStream;
+	}
+
 	private ByteArrayOutputStream getMapImage(String mapCode) {
 		GisUtil gisUtil = new GisUtil();
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
@@ -1479,6 +1671,7 @@ private int matchesId(Long ptableId) {
 		plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
 		java.awt.Font font = new java.awt.Font(null, 0, 15);
 		plot.setNoDataMessageFont(font);
+
 		ChartRenderingInfo info = new ChartRenderingInfo();
 
 		// write image in response

@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <html:javascript formName="aimUserRegisterForm"/>
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
@@ -20,10 +21,21 @@
 					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
 						<b>
-						<digi:trn key="aim:newUserConfirmRegSuccessPart1"> 
-                                                Registration is Successful! <br/>
-                                                A confirmation email has been sent to the address you specified</digi:trn> ${aimUserRegisterForm.email}. <br/> <digi:trn key="aim:newUserConfirmRegSuccessPart2">
-                                                You need to read and respond to this email before you can use your account. If you don't do this, the new account will be deleted automatically after a few days.</digi:trn>
+                            <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="true" >
+                                <digi:trn key="aim:newUserConfirmRegSuccessPart1">
+                                    Registration is Successful! <br/>
+                                    A confirmation email has been sent to the address you specified</digi:trn> ${aimUserRegisterForm.email}. <br/> <digi:trn key="aim:newUserConfirmRegSuccessPart2">
+                                    You need to read and respond to this email before you can use your account. If you don't do this, the new account will be deleted automatically after a few days.</digi:trn>
+                            </gs:test>
+                             <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL%>" compareWith="false" >
+                                <digi:trn>
+                                  You have been successfully registered!
+                                </digi:trn><br/>
+                                <digi:trn>
+                                 Please contact the AMP system administrator to assign you to a relevant workspace
+                                </digi:trn>
+                            </gs:test>
+					
 						</b>
 					</td>
 				</tr>

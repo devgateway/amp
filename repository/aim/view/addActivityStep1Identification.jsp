@@ -190,10 +190,16 @@ function toggleElement ( elementId, show ) {
  		el.style.display=displayValue;
 }
 
-function toggleBudgetFields( show ) {
-	toggleElement("CodeChapitre", show);
-	toggleElement("budgetdepart", show);
-	toggleElement("budgetprog", show);
+function toggleBudgetFields(show) {
+	<field:display name="Code Chapitre" feature="Budget">	
+		toggleElement("CodeChapitre", show);
+	</field:display> 
+	<field:display name="Budget Department" feature="Budget">
+		toggleElement("budgetdepart", show);
+	</field:display>
+	<field:display name="Budget Program" feature="Budget">
+		toggleElement("budgetprog", show);
+	</field:display>
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -696,6 +702,7 @@ target.style.cursor = "default"
 												</td>
 												<td>
 													<table width="100%" bord	er="0" cellspacing="2" cellpadding="2" align="center">
+                                                  		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
 		                                                    <td>
 		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" >
@@ -704,6 +711,8 @@ target.style.cursor = "default"
 		                                                    	</html:select>
 		                                                    </td>
 		                                                 </tr>
+		                                                 </field:display>
+		                                                 <field:display name="Budget Organization" feature="Budget">
 		                                                 <tr>
 		                                                 	<td>
 		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedorg" styleId="budgetorg" onchange="getBudgetOptions(this.value,'depselect')">
@@ -712,6 +721,8 @@ target.style.cursor = "default"
     															</html:select>
 		                                                    </td>
 		                                                 </tr>
+		                                                 </field:display>
+		                                                 <field:display name="Budget Department" feature="Budget">
 		                                                <tr>
 		                                                    <td>
 		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selecteddepartment" styleId="budgetdepart">
@@ -720,6 +731,8 @@ target.style.cursor = "default"
     															</html:select>
     														</td>
     													</tr>
+    													</field:display>
+    													<field:display name="Budget Program" feature="Budget">
     													<tr>
     														<td>
 		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedprogram" styleId="budgetprog">
@@ -728,6 +741,7 @@ target.style.cursor = "default"
     															</html:select>
 		                                                    </td>
                                                   		</tr>
+                                                  		</field:display>
                                                 	</table>
 												</td>
 											</tr>

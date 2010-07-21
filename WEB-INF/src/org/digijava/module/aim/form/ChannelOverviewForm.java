@@ -64,6 +64,11 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private AmpActivityContact primaryImplExecutingAgencyContact;
 	
 	private Collection<FinancingBreakdown> financingBreakdown;
+	
+	private String equalOpportunity;
+	private String environment;
+	private String minorities;
+	
         
     public Collection<FinancingBreakdown> getFinancingBreakdown() {
 		return financingBreakdown;
@@ -849,6 +854,30 @@ public String getAccessionInstrument() {
 
 		public AmpActivityContact getPrimaryImplExecutingAgencyContact() {
 			return primaryImplExecutingAgencyContact;
+		}
+
+		public String getEqualOpportunity() {
+			return equalOpportunity;
+		}
+
+		public void setEqualOpportunity(String equalOpportunity) {
+			this.equalOpportunity = equalOpportunity;
+		}
+
+		public String getEnvironment() {
+			return environment;
+		}
+
+		public void setEnvironment(String environment) {
+			this.environment = environment;
+		}
+
+		public String getMinorities() {
+			return minorities;
+		}
+
+		public void setMinorities(String minorities) {
+			this.minorities = minorities;
 		}
 	  
 

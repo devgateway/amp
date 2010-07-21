@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ChannelOverviewForm;
+import org.digijava.module.aim.form.EditActivityForm.CrossCuttingIssues;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -333,6 +334,8 @@ public class ViewChannelOverview extends TilesAction {
                 		formBean=setUniqueModalitiesToForm(formBean, activity);
                 		setFundingStatusesToForm(formBean, activity);
                 		setModesOfPaymentToForm(formBean, activity);
+                		setCrossCuttingIssuesToForm(formBean, activity);
+                		
                 		
                                 AmpCategoryValue impLocation=CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY,activity.getCategories());
                                 if(impLocation!=null){
@@ -586,6 +589,14 @@ public class ViewChannelOverview extends TilesAction {
 		return formBean;
 	}
 
+	private ChannelOverviewForm setCrossCuttingIssuesToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
+
+		formBean.setEqualOpportunity(activity.getEqualOpportunity());
+		formBean.setMinorities(activity.getMinorities());
+		formBean.setEnvironment(activity.getEnvironment());
+		return formBean;
+	}
 
 	private ChannelOverviewForm setTypesOfAssistanceToForm(
 			ChannelOverviewForm formBean, AmpActivity activity) {

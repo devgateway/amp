@@ -877,6 +877,49 @@ function commentWin(val, commentId) {
 																	</TR>
 																</feature:display>
 															</module:display>
+                                                            <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT">
+                                                                <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues">
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+                                                                                    height=10
+                                                                                    src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                    width=15> <b><digi:trn>Cross Cutting Issues</digi:trn></b></TD>
+                                                                            </TR>
+                                                                            <TR>
+                                                                                <TD bgcolor="#ffffff" height="5"></TD>
+                                                                            </TR>
+                                                                          <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
+                                                                            <c:if test="${not empty aimChannelOverviewForm.equalOpportunity && fn:trim(aimChannelOverviewForm.equalOpportunity) ne ''}" >
+                                                                            <tr>
+                                                                                <td>
+	                                                                                <i><digi:trn>Equal Opportunity</digi:trn></i><br />
+																					<digi:edit key="${aimChannelOverviewForm.equalOpportunity}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                          <field:display name="Environment" feature="Cross Cutting Issues">
+                                                                            <c:if test="${!empty aimChannelOverviewForm.environment && fn:trim(aimChannelOverviewForm.environment) ne ''}" >
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <i><digi:trn>Environment:</digi:trn></i><br />
+                                                                                    <digi:edit key="${aimChannelOverviewForm.environment}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                          <field:display name="Minorities" feature="Cross Cutting Issues">
+                                                                            <c:if test="${!empty aimChannelOverviewForm.minorities && fn:trim(aimChannelOverviewForm.minorities) ne ''}" >
+                                                                            <tr>
+                                                                                <td>
+                                                                                  <i><digi:trn key="aim:monitories">Minorities:</digi:trn></i><br />
+                                                                                   <digi:edit key="${aimChannelOverviewForm.minorities}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                </feature:display>
+                                                            </module:display>
 															<module:display name="Project ID and Planning"
 																parentModule="PROJECT MANAGEMENT">
 																<feature:display name="Identification"

@@ -174,19 +174,29 @@ public Cell filter(Cell metaCell,Set ids) {
 		return null;
 	
 		if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
-				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
-		return null;
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){
+				String retRegionName	= ret.getMetaValueString(ArConstants.REGION);
+				retRegionName			= (retRegionName!=null)?retRegionName.trim():retRegionName;
+				if( !metaCell.getValue().toString().equals( retRegionName ) )
+					return null;
+		}
 		
 		if(metaCell.getColumn().getName().equals(ArConstants.DISTRICT) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
-				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DISTRICT)))
-		return null;
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
+			
+				String retDistrictName	= ret.getMetaValueString(ArConstants.DISTRICT);
+				retDistrictName			= (retDistrictName!=null)?retDistrictName.trim():retDistrictName;
+				if( !metaCell.getValue().toString().equals( retDistrictName ) )
+					return null;
+		}
 		
 		if(metaCell.getColumn().getName().equals(ArConstants.ZONE) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
+				String retZoneName	= ret.getMetaValueString(ArConstants.ZONE);
+				retZoneName			= (retZoneName!=null)?retZoneName.trim():retZoneName;
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
-		return null;
+					return null;
+		}
 
 		if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE)) 
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))

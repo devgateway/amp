@@ -258,6 +258,8 @@ function setHoveredTable(tableId, hasHeaders) {
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
 										<br />
+										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span><digi:trn>Shared document</digi:trn><br/>
+										<br />
 									</td>
 								</tr>
 							</table>	        
@@ -284,6 +286,8 @@ function setHoveredTable(tableId, hasHeaders) {
 												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
+										<br />
+										<span style="color:#00FF00;font-weigth:bold;font-size:9pt;">*</span><digi:trn>Shared document</digi:trn><br/>
 										<br />
 									</td>
 								</tr>

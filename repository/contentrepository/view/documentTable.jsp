@@ -65,10 +65,10 @@
 		                            </td>
 		                        </logic:equal>
 								<td>
-									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
-										<font color="red">*</font>
-									</logic:equal>
 									<bean:write name='documentData' property='title'/>									
+									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
+										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span>
+									</logic:equal>
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${documentData.contentType}" align="absmiddle"/>

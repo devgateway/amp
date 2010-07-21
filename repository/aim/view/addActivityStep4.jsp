@@ -496,7 +496,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																								<tr bgcolor="#ffffff">
 																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																									</td></field:display>
-																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="right">
+																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>
 																									<c:out value="${disbursement.transactionAmount}"/>
 																									</td></field:display>
@@ -534,9 +534,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L4 START-->
 																								<tr bgcolor="#ffffff">
-																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
+																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding">
+                                                                                                    <td><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																									</td></field:display>
-																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="right">
+																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td>
 																									<FONT color=blue>*</FONT>
 																									<c:out value="${expenditure.transactionAmount}"/>
 																									</td></field:display>
@@ -644,8 +645,8 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 								</table>
 							</td></tr>
-							<tr><td>
-								&nbsp;
+							<tr><td>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

@@ -20,6 +20,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String refreshParentDocument = "";
 	private String aditionalRequestParameters = "";
 	private String styleClass=""; //class name
+	private String donorGroupTypes="";
 	private String useAcronym = "false";
 	private String showAs="" ; //show as popin or popup
 	
@@ -36,6 +37,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String ADITIONAL_REQUEST_PARAMS = "ADITIONAL_REQUEST_PARAMS";
 	public static final String STYLE_CLASS_NAME = "class"; //buttons standard class property
 	public static final String PARAM_USE_ACRONYM = "PARAM_USE_ACRONYM";
+	public static final String PARAM_DONOR_GROUP_LIST = "PARAM_DONOR_GROUP_LIST";
 	
 	public int doStartTag() throws JspException {
 		try {
@@ -127,6 +129,12 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append(ADITIONAL_REQUEST_PARAMS);
 				html.append("=");
 				html.append(aditionalRequestParameters);
+				html.append("~");
+			}
+			if (!"".equalsIgnoreCase(donorGroupTypes)) {
+				html.append(PARAM_DONOR_GROUP_LIST);
+				html.append("=");
+				html.append(donorGroupTypes);
 				html.append("~");
 			}
 			html.append("','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
@@ -275,5 +283,11 @@ public class AddOrganizationButton extends BodyTagSupport {
 		this.useAcronym = useAcronym;
 	}
 
-	
+	public String getDonorGroupTypes() {
+		return donorGroupTypes;
+	}
+
+	public void setDonorGroupTypes(String donorGroupTypes) {
+		this.donorGroupTypes = donorGroupTypes;
+	}
 }

@@ -42,6 +42,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean refreshParent;
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
+	private boolean filterDonorGroups;
 	
 	private List<Long> allSelectedOrgsIds; //used to hold all selected organisations (when going to another page, previously selected orgs were lost)
 	
@@ -360,6 +361,14 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void setAllSelectedOrgsIds(List<Long> allSelectedOrgsIds) {
 		this.allSelectedOrgsIds = allSelectedOrgsIds;
+	}
+
+	public boolean isFilterDonorGroups() {
+		return filterDonorGroups;
+	}
+
+	public void setFilterDonorGroups(boolean filterDonorGroups) {
+		this.filterDonorGroups = filterDonorGroups;
 	}
 	
 	

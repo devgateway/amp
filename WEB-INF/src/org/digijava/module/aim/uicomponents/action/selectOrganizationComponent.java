@@ -165,8 +165,14 @@ public class selectOrganizationComponent extends Action {
 		}
 
 		Collection<AmpOrgType> types;
-		types = DbUtil.getAllOrgTypes();
-		oForm.setOrgTypes(types);
+        if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
+        		&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {
+			oForm.setOrgTypes(this.getOrgGroupList(request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
+			oForm.setFilterDonorGroups(true);
+		} else {
+			oForm.setOrgTypes(DbUtil.getAllOrgTypes());
+			oForm.setFilterDonorGroups(false);
+		}
 		oForm.setTempNumResults(10);
 		return mapping.findForward("forward");
 
@@ -336,7 +342,14 @@ public class selectOrganizationComponent extends Action {
 
 		if (eaForm.getNumResults() == 0) {
 			eaForm.setTempNumResults(10);
-			eaForm.setOrgTypes(DbUtil.getAllOrgTypes());
+            if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
+					&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {
+				eaForm.setOrgTypes(this.getOrgGroupList(request
+						.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
+				eaForm.setFilterDonorGroups(true);
+			} else {
+				eaForm.setFilterDonorGroups(false);
+			}
 			if (eaForm.getAlphaPages() != null)
 				eaForm.setAlphaPages(null);
 		} else {
@@ -430,6 +443,21 @@ public class selectOrganizationComponent extends Action {
 		constructor.setAccessible(true);
 		IPostProcessDelegate processor = (IPostProcessDelegate) constructor.newInstance(new Object[] {});
 		return processor.execute(mapping, form, request, response);
+	}
+	
+    private Collection<AmpOrgType> getOrgGroupList(String donorGroups) {
+		Collection<AmpOrgType> list = new ArrayList<AmpOrgType>();
+		Collection<AmpOrgType> auxList = new ArrayList<AmpOrgType>();
+		if (donorGroups != null && !donorGroups.equals("")) {
+			String[] paramString = donorGroups.split(",");
+			for (int i = 0; i < paramString.length; i++) {
+				AmpOrgType type = DbUtil.getAmpOrgTypeByCode(paramString[i]);
+				if (type != null) {
+					list.add(type);
+				}
+			}
+		}
+		return list;
 	}
 
 	private void fillAllSelectedOgs(selectOrganizationComponentForm oForm) {

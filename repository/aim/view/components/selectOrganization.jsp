@@ -270,7 +270,9 @@
 												<digi:trn>All</digi:trn>
 											</c:set>
 											<html:select property="ampOrgTypeId" styleClass="inp-text" styleId="ampOrgTypeId">
-												<html:option value="-1">${translation}</html:option>
+												<logic:equal value="false" name="aimSelectOrganizationForm" property="filterDonorGroups">
+													<html:option value="-1">${translation}</html:option>
+												</logic:equal>
 												<logic:notEmpty name="aimSelectOrganizationForm" property="orgTypes">
 													<html:optionsCollection name="aimSelectOrganizationForm" property="orgTypes" value="ampOrgTypeId" label="orgType" />
 												</logic:notEmpty>

@@ -143,10 +143,9 @@ function eventType(){
 			    document.getElementById("type").value = 'week';
 		        document.getElementById("hidden").value = rec;
 		        document.getElementById("hiddenMonth").value = '';
-		
 		        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
-		
-					if(document.getElementsByName("occurrWeekDays")[i].checked == true){
+					var elemId = ""+document.getElementsByName("occurrWeekDays")[i].id;
+					if(document.getElementsByName("occurrWeekDays")[i].checked == true && elemId.indexOf('checkDay') !=-1){
 						var day = document.getElementsByName("occurrWeekDays")[i].value;
 						result += day;
 					}
@@ -157,6 +156,20 @@ function eventType(){
 		if (periodValid){
 			submit();
 		}
+}
+
+function checkSelectedDays(){
+	var daysSelected = "" + document.getElementById("weekDays").value;
+	if (daysSelected.length>0) {
+		for(j=0; j<document.getElementsByName("occurrWeekDays").length; j++){
+			var value = ""+document.getElementsByName("occurrWeekDays")[j].value;
+			if (daysSelected.indexOf(value)!=-1){
+				document.getElementsByName("occurrWeekDays")[j].checked = true;
+			} else {
+				document.getElementsByName("occurrWeekDays")[j].checked = false;
+			}
+		}
+	}
 }
 
 function disableInputs(){
@@ -219,6 +232,7 @@ function disableInputs(){
 	}
 	
 }
+
 </script>
 
 
@@ -524,3 +538,9 @@ function disableInputs(){
 		</td>
 	</tr>
 </table>
+
+<script type="text/javascript">
+
+checkSelectedDays();
+
+</script>

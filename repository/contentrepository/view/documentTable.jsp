@@ -193,6 +193,7 @@
 												</logic:equal>
 											</logic:equal>										
 											<logic:equal name="documentData" property="needsApproval" value="true">
+												<logic:equal name="documentData" property="hasApproveVersionRights" value="true">
 													<span style="color: blue;"><strong>|</strong></span>
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"
 													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>">
@@ -203,6 +204,7 @@
 													onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare');" title="<digi:trn>Click here to Reject this document</digi:trn>">
 														<digi:trn>Reject</digi:trn> 
 													</a>
+												</logic:equal>
 											</logic:equal>
 											
 										</logic:equal>

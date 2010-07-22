@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -651,6 +652,15 @@ public class NodeWrapper {
 		return ret;
 	}
 	
+	public String getLastVersionUUID(HttpServletRequest request) {
+		try {
+			Node lv	=	DocumentManagerUtil.getNodeOfLastVersion(this.getUuid(), request);
+			return lv.getUUID();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	private static Collection<KeyValue> stringColToKeyValueCol(String key, Collection<String> names) {
 		Collection<KeyValue> ret	= new ArrayList<KeyValue>(names.size());
 		Iterator<String> iter	= names.iterator();
@@ -661,6 +671,7 @@ public class NodeWrapper {
 		
 		return ret;
 	}
+	
 
 	@Override
 	public int hashCode() {

@@ -833,6 +833,28 @@ public class DocumentManagerUtil {
 		return retVal;
 	}
 	
+	public static boolean isResourceVersionPendingtoBeShared (String nodeUUID, String versionUUID){
+		boolean retVal=false;
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="select count(r) from " + CrSharedDoc.class.getName() +" r " +
+					"where r.nodeUUID=:nodeUUID and r.state=:state and r.sharedNodeVersionUUID=:versionUUID" ;
+			qry=session.createQuery(queryString);
+			qry.setString("nodeUUID", nodeUUID);
+			qry.setString("versionUUID", versionUUID);
+			qry.setInteger("state", CrConstants.PENDING_STATUS);
+			int amount=(Integer)qry.uniqueResult();
+			if(amount>0){
+				retVal=true;
+			}
+		} catch (Exception e) {
+			logger.error("Couldn't Load Resources: " + e.toString());
+		}
+		return retVal;
+	}
+	
 
 	public static NodeLastApprovedVersion getlastApprovedVersionOfTeamNode(String nodeUUID){
 		NodeLastApprovedVersion retVal=null;

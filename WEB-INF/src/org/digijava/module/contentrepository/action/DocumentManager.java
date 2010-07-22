@@ -457,8 +457,14 @@ public class DocumentManager extends Action {
 					
 					//if documentNode has pending status in sharedDocs,then it should be true
 					boolean needsApproval=false;
-					if(tabName!=null && tabName.equalsIgnoreCase(CrConstants.TEAM_DOCS_TAB)){
-						needsApproval=DocumentManagerUtil.isResourcePendingtoBeShared(documentNodeBaseVersionUUID);
+					if(tabName!=null) {
+						if(tabName.equalsIgnoreCase(CrConstants.TEAM_DOCS_TAB) ) 
+							needsApproval	= DocumentManagerUtil.isResourcePendingtoBeShared(documentNodeBaseVersionUUID);
+							
+						if ( tabName.equalsIgnoreCase(CrConstants.PRIVATE_DOCS_TAB) )
+							needsApproval	= 
+								DocumentManagerUtil.isResourceVersionPendingtoBeShared(documentNodeBaseVersionUUID, nodeWrapper.getLastVersionUUID(request));
+							
 					}
 					documentData.setNeedsApproval(needsApproval);   //should show "share" or "approve" link
 					documentData.setHasShareRights(DocumentManagerRights.hasShareRights(documentNode, request, tabName));

@@ -182,7 +182,7 @@ public class ParisIndicatorReport extends Action {
                 if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
                     svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
                         svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode()));
-                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1, svForm.getIndicatorCode()));
                     if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
                     	svForm.setPrint("false");
                     	return mapping.findForward("print");
@@ -192,7 +192,7 @@ public class ParisIndicatorReport extends Action {
                 if ("10b".equalsIgnoreCase(svForm.getIndicatorCode())) {
                     svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10b(svForm.getOrgGroup(), svForm.getDonor(),
                         svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode(), request));
-                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1, svForm.getIndicatorCode()));
                     if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
                     	svForm.setPrint("false");
                     	return mapping.findForward("print");
@@ -310,9 +310,9 @@ public class ParisIndicatorReport extends Action {
                 svForm.getIndicatorCode().equalsIgnoreCase("10a") || 
                 svForm.getIndicatorCode().equalsIgnoreCase("10b")) {
 
-                flDonorCol = filterDonors(svForm.getDonorsColl(), 1);
+                flDonorCol = filterDonors(svForm.getDonorsColl(), 1, svForm.getIndicatorCode());
             } else {
-                flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                flDonorCol = filterDonors(svForm.getDonorsColl(), 0, svForm.getIndicatorCode());
             }
 
             if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
@@ -418,7 +418,7 @@ public class ParisIndicatorReport extends Action {
         return flText;
     }
 
-    private List filterDonors(Collection donorsCol, int st) {
+    private List filterDonors(Collection donorsCol, int st, String indicator) {
         if(donorsCol==null) return null;
 
         List filteredDonorsCol = new ArrayList();
@@ -469,6 +469,22 @@ public class ParisIndicatorReport extends Action {
                 }
             }
         }
+        
+        if (indicator.equalsIgnoreCase("3") || indicator.equalsIgnoreCase("4") || indicator.equalsIgnoreCase("5b")
+				|| indicator.equalsIgnoreCase("9") || indicator.equalsIgnoreCase("10a")) {
+			Iterator<ParisIndicator> iter = filteredDonorsCol.iterator();
+			while (iter.hasNext()) {
+				ParisIndicator pi = iter.next();
+				int lastColumn = ((double[]) pi.getAnswers().get(0)).length;
+				int years = pi.getAnswers().size();
+				for (int i = 0; i < years; i++) {
+					if (((double[]) pi.getAnswers().get(i))[lastColumn - 1] > -1) {
+						((double[]) pi.getAnswers().get(i))[lastColumn - 1] = ((double[]) pi.getAnswers().get(i))[lastColumn - 3]
+								/ ((double[]) pi.getAnswers().get(i))[lastColumn - 2] * 100;
+					}
+				}				
+			}
+		}
 
         return filteredDonorsCol;
     }

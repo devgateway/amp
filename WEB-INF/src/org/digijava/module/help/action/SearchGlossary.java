@@ -18,6 +18,8 @@ import org.digijava.module.help.form.GlossaryForm;
 import org.digijava.module.help.helper.HelpTopicTreeNode;
 import org.digijava.module.help.util.GlossaryUtil;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * Does search for glossary and return ajax results.
  * @author Irakli Kobiashvili ikobiashvili@dgfoundation.org
@@ -36,7 +38,14 @@ public class SearchGlossary extends Action {
 		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		
-		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(term, moduleInstance, siteId);
+		List<String> terms = null;
+		if (term != null){
+			String[] arr = term.split(" ");
+			@SuppressWarnings("unchecked")
+			List<String> list = Arrays.asList(arr);
+			terms = list;
+		}
+		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(terms, moduleInstance, siteId);
 		
 		String result = TranslatorWorker.translateText("Nothing found", request);
 		

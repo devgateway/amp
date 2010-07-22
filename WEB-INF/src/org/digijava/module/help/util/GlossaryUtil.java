@@ -14,7 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /**
- * Utility method fro glossary
+ * Utility method for glossary
  * @author Irakli Kobiashvili ikobiashvili@dgfoundation.org
  *
  */
@@ -57,8 +57,17 @@ public class GlossaryUtil {
 		return result;
 	}
 
+	/**
+	 * Search glossary.
+	 * Tries to match keywords in title and in body.
+	 * @param keyWords list of strings that will be used in LIKE operation. can be null
+	 * @param moduleInstance help module instance name, can be null
+	 * @param siteId digi site ID- value of siteId field, can be null.
+	 * @return list of found glossary items.
+	 * @throws DgException
+	 */
 	@SuppressWarnings("unchecked")
-	public static List<HelpTopic> searchGlossary(String keyWord, String moduleInstance, String siteId) throws DgException{
+	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, String siteId) throws DgException{
 		
 		List<HelpTopic> result = null;
 		String oql = "select ht from "; 
@@ -66,8 +75,17 @@ public class GlossaryUtil {
 		oql += Editor.class.getName()+" as e ";
 		oql += " where ht.topicType=:GLOSS_TYPE";
 		oql += " and ht.bodyEditKey = e.editorKey";
-		oql += " and (ht.topicKey like :KEY_WORD";
-		oql += " or e.body like :KEY_WORD)";
+		if (keyWords!=null && keyWords.size()>0){
+			oql += " and ( ";
+			int c = 0;
+			for (int i=0;i<keyWords.size();i++){
+				if (c>0) oql += " or ";
+				oql += " ht.topicKey like :KEY_WORD_"+c;
+				oql += " or   e.body like :KEY_WORD_"+c;
+				c++;
+			}
+			oql+=" )";
+		}
 		if (moduleInstance != null){
 			oql += " and ht.moduleInstance=:MOD_INST";
 		}
@@ -77,7 +95,13 @@ public class GlossaryUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session.createQuery(oql);
 		query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
-		query.setString("KEY_WORD", "%"+keyWord+"%");
+		if (keyWords!=null && keyWords.size()>0){
+			int c = 0;
+			for (String kw : keyWords) {
+				query.setString("KEY_WORD_"+c, "%"+kw+"%");
+				c++;
+			}
+		}
 		if (moduleInstance != null){
 			query.setString("MOD_INST", moduleInstance);
 		}

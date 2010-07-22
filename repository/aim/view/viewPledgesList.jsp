@@ -55,6 +55,22 @@ function editPledge(id){
 	document.viewPledgesForm.submit();
 }
 
+function removePledge(id,used){
+	var usedMsg = "<digi:trn>This pledge is used on a funding step of an activity. Do you want to continue?</digi:trn>";
+	var delMsg = "<digi:trn>This action will remove the pledge. Are you sure?</digi:trn>";
+	if (used=="true") {
+		if (!confirm(usedMsg)) {
+			return;
+		}
+	}
+	if (!confirm(delMsg)) {
+		return;
+	} else {
+		document.viewPledgesForm.action="/removePledge.do?pledgeId="+id;
+		document.viewPledgesForm.submit();
+	}
+}
+
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
 	rows = tableElement.getElementsByTagName('tr');
@@ -184,12 +200,12 @@ function setHoveredRow(rowId) {
 									<digi:trn>Contact Name</digi:trn>
 								</b>
 							</td>
-							<td width="20%" align="center">
+							<td width="19%" align="center">
 								<b> 
 									<digi:trn>Contact Email</digi:trn>
 								</b>
 							</td>
-							<td width="5%" align="center">
+							<td width="6%" align="center">
 								<b> 
 									<digi:trn>Action</digi:trn>
 								</b>
@@ -207,23 +223,34 @@ function setHoveredRow(rowId) {
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr>
 								<td width="25%" align="center">
-									<bean:write name="allFundingPledges" property="title" />
+									<bean:write name="allFundingPledges" property="key.title" />
 								</td>
 								<td width="25%" align="center">
-									<bean:write name="allFundingPledges" property="organization.name" />
+									<bean:write name="allFundingPledges" property="key.organization.name" />
 								</td>
 								<td width="25%" align="center">
-									<bean:write name="allFundingPledges" property="contactName" />
+									<bean:write name="allFundingPledges" property="key.contactName" />
 								</td>
-								<td width="20%" align="center">
-									<bean:write name="allFundingPledges" property="contactEmail" />
+								<td width="19%" align="center">
+									<bean:write name="allFundingPledges" property="key.contactEmail" />
 								</td>
-								<td width="5%" align="center">
+								<td width="3%" align="center">
 									<c:set var="pledgeId">
-										<bean:write name="allFundingPledges" property="id" />
+										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
-									<a class="itr" href="javascript:editPledge('${pledgeId}');">
+									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge&nbsp;</digi:trn>">
 	                                   	<img src= "../ampTemplate/images/application_edit.png" border=0>
+									</a>
+								</td>
+								<td width="3%" align="center">
+									<c:set var="pledgeId">
+										<bean:write name="allFundingPledges" property="key.id" />
+									</c:set>
+									<c:set var="pledgeUsed">
+										<bean:write name="allFundingPledges" property="value" />
+									</c:set>
+									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge&nbsp;</digi:trn>">
+	                                   	<img src= "../ampTemplate/images/trash_12.gif" border=0>
 									</a>
 								</td>
 							</tr>

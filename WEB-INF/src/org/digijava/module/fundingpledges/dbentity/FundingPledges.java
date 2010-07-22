@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -15,7 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Diego Dimunzio
  * 
  */
-public class FundingPledges {
+public class FundingPledges implements Comparable<FundingPledges>{
 	private Long id;
 	private String title;
 	private String additionalInformation;
@@ -302,5 +303,13 @@ public class FundingPledges {
 	 */
 	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
 		this.furtherApprovalNedded = furtherApprovalNedded;
+	}
+	@Override
+	public int compareTo(FundingPledges o) {
+		if (this.getId()>o.getId()) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -52,6 +53,28 @@ public class PledgesEntityHelper {
 	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
 	        }
 	        return AllPledges;
+	}
+	
+	public static ArrayList<AmpFundingDetail> getFundingRelatedToPledges(FundingPledges pledge){
+		 Session session = null;
+	        Query q = null;
+	        ArrayList<AmpFundingDetail> AllFunds = new ArrayList<AmpFundingDetail>();
+	        try {
+	            session = PersistenceManager.getRequestDBSession();
+	            String queryString = new String();
+	            queryString = "select p from " + AmpFundingDetail.class.getName()
+				+ " p where (p.pledgeid=:id)";
+	            q = session.createQuery(queryString);
+	            q.setParameter("id", pledge.getId(),Hibernate.LONG);
+	            Iterator iter = q.list().iterator();
+	            while (iter.hasNext()) {
+	            	AllFunds.add((AmpFundingDetail)iter.next());
+	            }
+
+	        } catch (Exception ex) {
+	        	logger.debug("Projects : Unable to get related fundings from database" + ex.getMessage());
+	        }
+	        return AllFunds;
 	}
 	
 	public static ArrayList<FundingPledges> getPledgesByDonor(Long donorid){
@@ -243,6 +266,47 @@ public class PledgesEntityHelper {
 					throw new DgException("Cannot rallback save pledge action",ex);
 				}
 				throw new DgException("Cannot save Pledge!",e);
+			}
+		}
+	}
+	
+	public static void removePledge(FundingPledges pledge) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
+			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
+			Collection<AmpFundingDetail> fprl = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
+			for (Iterator iterator = fpsl.iterator(); iterator.hasNext();) {
+				FundingPledgesSector fundingPledgesSector = (FundingPledgesSector) iterator.next();
+				session.delete(fundingPledgesSector);
+			}
+			for (Iterator iterator = fpdl.iterator(); iterator.hasNext();) {
+				FundingPledgesDetails fundingPledgesDetails = (FundingPledgesDetails) iterator.next();
+				session.delete(fundingPledgesDetails);
+			}
+			for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
+				FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
+				session.delete(fundingPledgesloc);
+			}
+			for (Iterator iterator = fprl.iterator(); iterator.hasNext();) {
+				AmpFundingDetail fundingRelated = (AmpFundingDetail) iterator.next();
+				fundingRelated.setPledgeid(null);
+				session.update(fundingRelated);
+			}
+			session.delete(pledge);
+			
+		} catch (HibernateException e) {
+			logger.error("Error deleting pledge",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save pledge action",ex);
+				}
+				throw new DgException("Cannot delete Pledge!",e);
 			}
 		}
 	}

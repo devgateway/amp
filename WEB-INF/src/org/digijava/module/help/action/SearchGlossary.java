@@ -2,6 +2,7 @@ package org.digijava.module.help.action;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,6 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.GlossaryForm;
 import org.digijava.module.help.helper.HelpTopicTreeNode;
 import org.digijava.module.help.util.GlossaryUtil;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Does search for glossary and return ajax results.
@@ -41,7 +40,6 @@ public class SearchGlossary extends Action {
 		List<String> terms = null;
 		if (term != null){
 			String[] arr = term.split(" ");
-			@SuppressWarnings("unchecked")
 			List<String> list = Arrays.asList(arr);
 			terms = list;
 		}

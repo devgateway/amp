@@ -773,7 +773,18 @@ System.out.println("lang:"+lang);
 		
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
+//			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
+			String queryString = "from "+ HelpTopic.class.getName();
+			
+//			String oql = "select e, h from "+HelpTopic.class.getName()+" as h, ";
+//			oql+= Editor.class.getName()+" as e ";
+//			oql+= " where e.editorKey = h.bodyEditKey ";
+//				
+//			query = session.createQuery(oql);	
+//				
+//			List<?> result = 
+			
+				
             query = session.createQuery(queryString);
 
 		    Iterator itr = query.list().iterator();
@@ -793,6 +804,7 @@ System.out.println("lang:"+lang);
 				}else{
 					helpout.setParentId(new Long(0));
 				}
+				helpout.setTopicType(item.getTopicType());
 
                   List <String> allLang = TranslatorWorker.getAllUsedLanguages();
 
@@ -864,6 +876,7 @@ System.out.println("lang:"+lang);
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
 	    	    	 helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
+	    	    	 helptopic.setTopicType(help.getTopicType());
 	    	    	 HelpTopic top = storeMap.get(help.getParentId());
 	    	    	 if(top != null){
 	    	    		 
@@ -902,6 +915,7 @@ System.out.println("lang:"+lang);
 	    	    	 parent.setParent(helptopic.getParent());
 	    	    	 parent.setTitleTrnKey(helptopic.getTitleTrnKey());
 	    	    	 parent.setTopicKey(helptopic.getTopicKey());
+	    	    	 parent.setTopicType(helptopic.getTopicType());
 	    	    		 
 	    	    	 Long oldid = help.getTopicId();
 	    	    	 storeMap.put(oldid, parent);

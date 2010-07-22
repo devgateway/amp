@@ -41,6 +41,7 @@
         <xs:attribute name="keywordsTrnKey" type="xs:string"/>
         <xs:attribute name="moduleInstance" type="xs:string"/>
         <xs:attribute name="parentId" type="xs:long"/>
+        <xs:attribute name="topicType" type="xs:int"/>
     </xs:complexType>
     <xs:complexType name="helpLang">
         <xs:attribute name="title" type="xs:string"/>

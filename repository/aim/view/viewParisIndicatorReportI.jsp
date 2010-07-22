@@ -555,8 +555,7 @@ function toggleSettings(){
 													<!--<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>-->
 													<!--</div></a>-->
 													<!--</LI>-->
-													<%int newTabIndex = tabIndex.intValue() + 1;%>
-													<LI class='<%=(request.getParameter("indcId").equals(new Integer(newTabIndex).toString()))?"selected":""%>'>
+													<LI class='<%=(request.getParameter("indcId").equals(new Long(report.getAmpIndicatorId()).toString()))?"selected":""%>'>
 														<span>
 															<digi:link href="/parisIndicatorReport.do" name="urlParams" title="${translation}" target="_self">
 															<div style="max-width: 90px">

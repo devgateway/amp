@@ -9,6 +9,6 @@ CREATE OR REPLACE VIEW `v_countries` AS
 		
 		INSERT INTO amp_columns(columnName, aliasName, cellType, extractorView, relatedContentPersisterClass) 
 			VALUES ("Country", "countryCol", "org.dgfoundation.amp.ar.cell.MetaTextCell", 
-				"v_countries", "org.digijava.module.aim.dbentity.AmpCategoryValueLocations");
+				"v_countries", null);
 	
 				

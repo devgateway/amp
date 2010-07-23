@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
@@ -217,10 +218,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 				order++;
 			}
 		}
-		return finalColumns;
 		}else{
-			return columns;
+			finalColumns	= new TreeSet<AmpReportColumn>();
+			finalColumns.addAll(columns);
 		}	
+		return finalColumns;
 	}
 	
 	/**

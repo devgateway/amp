@@ -18,6 +18,7 @@
 			<forward name="search" path="/showLayout.do?layout=seachResultsLayout"/>
 			<forward name="admin" path="/showLayout.do?layout=helpAdminTopicLayout"/>
 			<forward name="helpHome" path="/help/help.do" redirect="true"/>
+			<forward name="helpAdminPage" path="/help/helpActions.do~actionType=viewAdmin" redirect="true"/>
 		</action>
 		<action forward="/showLayout.do?layout=helpLayout"  name="helpForm" path="/help/help"/>
 		<action name="helpForm" path="/help/viewHelpTopics" type="org.digijava.module.help.action.ViewHelpTopics"/>

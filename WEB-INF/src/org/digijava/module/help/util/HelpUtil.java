@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -59,6 +60,15 @@ public class HelpUtil {
 		return themeTree;
 	}
 	
+	public static Collection<HelpTopicsTreeItem> getGlossaryTopicsTree(String siteId,
+			String moduleInstance) throws DgException {
+		List<HelpTopic> helpTopics= GlossaryUtil.getAllGlosaryTopics(moduleInstance, siteId);
+		Collection<HelpTopicsTreeItem> themeTree = CollectionUtils.getHierarchy(
+				helpTopics,
+                new HelpTopicHierarchyDefinition(), 
+                new HelpTopicTreeItemFactory());
+		return themeTree;
+	}
 
 
     public static class HelpTopicTreeItemFactory implements HierarchyMemberFactory{
@@ -432,7 +442,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()
-			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id)  and (topic.topicType=NULL)";
+			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id) ";
 			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
         	query.setParameter("id", parentId);
@@ -573,7 +583,7 @@ System.out.println("lang:"+lang);
 			return retVal;
 		}
 	
-	 public static String renderTopicsTree(Collection topics,HttpServletRequest request) {
+	 public static String renderTopicsTree(Collection topics,HttpServletRequest request) throws Exception{
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		String retVal = "";
 		Iterator iter = topics.iterator();
@@ -603,7 +613,7 @@ System.out.println("lang:"+lang);
 		return retVal;
 	}
 	 
-	 public static String renderTopicTree(Collection topics,HttpServletRequest request,boolean child){
+	 public static String renderTopicTree(Collection topics,HttpServletRequest request,boolean child) throws Exception{
 		 String xml="";
 		 Iterator iter = topics.iterator();
 		 while (iter.hasNext()) {
@@ -631,11 +641,11 @@ System.out.println("lang:"+lang);
 	 }
 
 
-	public static String renderSelectTopicTree(Collection topics,String helpType,HttpServletRequest request) {
+	public static String renderSelectTopicTree(Collection topics,String helpType,HttpServletRequest request) throws Exception{
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 			String retVal = "";
 			Iterator iter = topics.iterator();
-	                String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
+			String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
 			while (iter.hasNext()) {
 				HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
 				HelpTopic topic = (HelpTopic) item.getMember();
@@ -650,7 +660,7 @@ System.out.println("lang:"+lang);
 					retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
 				}
 				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
-				if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
+				if(topic.getTopicKey()!=null){
 					//retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTopicKey(), request)+"</a>";
 					retVal += "<a>"+getTrn(topic.getTopicKey(), request)+"</a>";
 				}
@@ -675,9 +685,9 @@ System.out.println("lang:"+lang);
 				//delete link
 				retVal += "   <td width=\"12\">";
 				if(helpType != "admin"){
-					retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~helpTopicId="+topic.getHelpTopicId()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
 				}else{
-					retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~helpTopicId="+topic.getHelpTopicId()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
 				}
 				retVal += "   </td>";
 				retVal += " </tr></table>";
@@ -692,57 +702,11 @@ System.out.println("lang:"+lang);
 			return retVal;
 		}
 	
-	 public static String getTrn(String defResult, HttpServletRequest request){
-		 //CategoryManagerUtil cat = new CategoryManagerUtil();
-		 //return CategoryManagerUtil.translate(key, request, defResult);
-		String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
-        //Locale  lange    = RequestUtils.getNavigationLanguage(request);
-        Long	siteId	= RequestUtils.getSite(request).getId();
-		
-		Message m = null;
-         
-		try {
-            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
-            //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
-		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 if (m == null)
-		 {
-			 return defResult;
-		 }
-		 else
-		 {
-			 return m.getMessage();
-		 }
-		 
+	 public static String getTrn(String defResult, HttpServletRequest request) throws WorkerException{
+        return TranslatorWorker.translateText(defResult, request);
 	 }
-    public static String getTrn(String defResult,String	lange, Long	siteId){
-		 //CategoryManagerUtil cat = new CategoryManagerUtil();
-		 //return CategoryManagerUtil.translate(key, request, defResult);
-		//String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
-        //Locale  lange    = RequestUtils.getNavigationLanguage(request);
-        //Long	siteId	= RequestUtils.getSite(request).getId();
-
-		Message m = null;
-
-		try {
-            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
-            //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
-		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 if (m == null)
-		 {
-			 return defResult;
-		 }
-		 else
-		 {
-			 return m.getMessage();
-		 }
-
+    public static String getTrn(String defResult,String	lange, Long	siteId) throws Exception{
+    	return TranslatorWorker.translateText(defResult, lange, siteId.toString());
 	 }
 
      public static List<HelpTopic> getAllHelpTopics() throws Exception{
@@ -762,7 +726,7 @@ System.out.println("lang:"+lang);
 	 }
 
 	 public static Vector getAllHelpdataForExport() {
-
+		 //WTH is Vector ?!
          logger.info("Starting helpExport");
 
 		Vector vector = new Vector(); 
@@ -776,15 +740,6 @@ System.out.println("lang:"+lang);
 //			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
 			String queryString = "from "+ HelpTopic.class.getName();
 			
-//			String oql = "select e, h from "+HelpTopic.class.getName()+" as h, ";
-//			oql+= Editor.class.getName()+" as e ";
-//			oql+= " where e.editorKey = h.bodyEditKey ";
-//				
-//			query = session.createQuery(oql);	
-//				
-//			List<?> result = 
-			
-				
             query = session.createQuery(queryString);
 
 		    Iterator itr = query.list().iterator();

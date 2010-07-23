@@ -398,6 +398,29 @@ function IsEmpty(){
 			</table>
 		</td>
 	</tr>
+
+	<tr id="img_-3" onclick="expandHelp(-3);"  src="/ampTemplate/images/tree_plus.gif"/>
+		<td colspan="2" bgcolor="silver">
+			<digi:trn>Glossary</digi:trn>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table id="imgh_-3"  width="772"  style="display: none;" border="0">
+				<tr>
+					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-3)">
+							<digi:trn>Glossary</digi:trn>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+								<bean:define id="glosTree" name="helpForm" property="glossaryTree" type="java.util.Collection"/>
+								<%= HelpUtil.renderSelectTopicTree(glosTree,"default",request) %>		
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 	
 	<tr>
 		<td colspan="2" align="right">

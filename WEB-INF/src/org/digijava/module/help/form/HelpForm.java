@@ -11,6 +11,7 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
 public class HelpForm extends ActionForm {
+	private static final long serialVersionUID = 1L;
 	private List<HelpTopic> helpTopics=null;
 	private Long helpTopicId=null;
 	private String topicKey=null;
@@ -24,6 +25,7 @@ public class HelpForm extends ActionForm {
 	private String keywords;
 	private Collection topicTree;
 	private Collection adminTopicTree;
+	private Collection<HelpTopicsTreeItem> glossaryTree;
 	private List<String> helpErrors;
 	private Boolean blankPage;
 	private String title;
@@ -211,6 +213,14 @@ public class HelpForm extends ActionForm {
 
 	public void setAdminTopicTree(Collection adminTopicTree) {
 		this.adminTopicTree = adminTopicTree;
+	}
+
+	public void setGlossaryTree(Collection<HelpTopicsTreeItem> glossaryTree) {
+		this.glossaryTree = glossaryTree;
+	}
+
+	public Collection<HelpTopicsTreeItem> getGlossaryTree() {
+		return glossaryTree;
 	}
 
 

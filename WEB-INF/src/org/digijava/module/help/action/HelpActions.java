@@ -41,6 +41,7 @@ import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.jaxbi.AmpHelpRoot;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
+import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
 import org.xml.sax.InputSource;
 
@@ -103,7 +104,6 @@ public class HelpActions extends DispatchAction {
 	                   out.println(editorKey);
 	                   out.println(topicId);
 	                    helpForm.setTopicKey(help.getEditorKey());
-	                    //System.out.println("TopicKey:"+helpForm.getTopicKey());
 	                }
 				}else{
 	                   String editorKey = "_editor_key_=" +( (key.getBodyEditKey()==null)?" " : key.getBodyEditKey());
@@ -318,6 +318,7 @@ public class HelpActions extends DispatchAction {
 			}
 		}else if(request.getParameter("multi").equals("true")){
 			// delete Lucene helpSearch Directory 
+			//WTF???
 			File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
 			LuceneUtil.deleteDirectory(path);
 			//remove all topics that were selected
@@ -339,12 +340,7 @@ public class HelpActions extends DispatchAction {
             if(!page.equals("admin")){
                 return mapping.findForward("helpHome");
             }else{
-                if(helpForm.getAdminTopicTree()!=null){
-                helpForm.getAdminTopicTree().clear();
-                }
-                helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, "admin"));
-                helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, "default"));
-                return mapping.findForward("admin");
+            	return mapping.findForward("helpAdminPage");
             }
         }else {
             return mapping.findForward("helpHome");            
@@ -610,20 +606,12 @@ public class HelpActions extends DispatchAction {
 	}
 	
 	public ActionForward viewAdmin(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
-		logger.info("Vew Admin");
         HelpForm helpForm = (HelpForm) form;
-        logger.info("helpForm");
         String siteId=RequestUtils.getSite(request).getSiteId();
-        logger.info("siteId"+siteId);
         String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-
-        helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-        logger.info("Gettreee");
-
-
         helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
-	
+        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(siteId, moduleInstance));
 	  return mapping.findForward("admin");
 	}
 	

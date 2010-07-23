@@ -110,7 +110,9 @@ if (typeof DOMParser == "undefined") {
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
-            tree.enableDragAndDrop(true);
+	        <digi:secure group="Help Administrators">
+	            tree.enableDragAndDrop(true);
+			</digi:secure>
             tree.setDragBehavior("complex");
             tree.setOnClickHandler(tonclick);
             var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';

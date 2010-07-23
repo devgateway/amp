@@ -65,10 +65,8 @@
 		
 		jQuery.fn.getImageMap = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
-            
-            if (mapLevel == null) mapLevel = 2;
-            
-            
+      if (mapLevel == null) mapLevel = 2;
+
             
 			var indYear = $("#indicatorYearCombo").val();
 			var requestURL = "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&width=" + canvasWidth + "&height=" + canvasHeight;
@@ -140,15 +138,27 @@
 		
 		jQuery.fn.mapLevelChange = function(newVal) {
 			setBusy(true);
-			var sect = $("#sectorsMapCombo").val();
+			var sect = null;
+			if (showDevinfo) {
+				sect = $("#sectorsMapCombo").val();
+			} else {
+				sect = $("#sectorsMapComboFin").val();
+			}
+			
 			jQuery.fn.initIndicatorCombo();
 			jQuery.fn.initSubgroupCombo();
 			jQuery.fn.initYearCombo();
 			actionImgLoading = true;
 			imageMapLoaded = false;
-			jQuery.fn.sectorSelected(sect);
+			
+			if (showDevinfo) {
+				jQuery.fn.sectorSelected(sect);
+			} else {
+				jQuery.fn.sectorSelectedFin(sect);
+			}
 			var navCursorMapUrl = $("#navCursorMap").attr('src'); 
 			var newURL =  jQuery.fn.modifyMapLevelURL (navCursorMapUrl, newVal);
+			
 			$("#navCursorMap").attr({src: newURL});
 			
 			if (newVal==2) {
@@ -158,6 +168,8 @@
 				$("#reg_district_caption").html("District");
 				$("#reg_district_caption_for").html("For this district");
 			}
+			
+			jQuery.fn.getImageMap();
 		}
 				
 		jQuery.fn.initIndicatorCombo = function(){

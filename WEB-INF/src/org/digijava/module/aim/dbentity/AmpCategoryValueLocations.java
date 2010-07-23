@@ -3,6 +3,8 @@ package org.digijava.module.aim.dbentity;
 import java.util.Collection;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -11,7 +13,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable, HierarchyListable {
+public class AmpCategoryValueLocations implements Identifiable, HierarchyListable, ARDimensionable {
 
     private Long id;
     private String name;
@@ -160,5 +162,10 @@ public class AmpCategoryValueLocations implements Identifiable, HierarchyListabl
 	@Override
 	public String getUniqueId() {
 		return this.id + "";
+	}
+	
+	@Override
+	public Class getDimensionClass() {
+		return LocationsDimension.class;
 	}
 }

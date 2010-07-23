@@ -710,6 +710,19 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 
+	public static AmpCategoryValueLocations getLocationByIdRequestSession(Long id) {
+		Session dbSession                                                                               = null;
+		try {
+			dbSession							= PersistenceManager.getRequestDBSession();
+
+			AmpCategoryValueLocations returnLoc	= (AmpCategoryValueLocations) dbSession.get(AmpCategoryValueLocations.class, id);
+			return returnLoc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static void populateWithDescendants(Collection <AmpCategoryValueLocations> destCollection, 
 			Collection<AmpCategoryValueLocations> locations ) {
 		if (  locations != null ) {

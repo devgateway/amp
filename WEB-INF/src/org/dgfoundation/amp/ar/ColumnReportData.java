@@ -191,7 +191,7 @@ public class ColumnReportData extends ReportData {
 					/* Adding region percentages for each activity (for problem 2) */
 					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
 					if ( ArConstants.COLUMN_REGION.equals(cat.getColumn().getName()) && 
-							filterObj.getRegionSelected() == null &&  
+							filterObj.getLocationSelected() == null &&  
 							element instanceof MetaTextCell ) {
 						MetaInfo<Double> mInfo	= ((MetaTextCell)element).getMetaInfo(ArConstants.PERCENTAGE);
 						if ( mInfo != null && mInfo.getValue() > 0) {

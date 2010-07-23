@@ -56,9 +56,23 @@ public final class ArConstants {
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
 	
+	/**
+	 * @deprecated use COLUMN_COUNTRY if it's related to the column
+	 */
+	public final static String COUNTRY="Country";
+	/**
+	 * @deprecated use COLUMN_REGION if it's related to the column
+	 */
 	public final static String REGION="Region";
+	/**
+	 * @deprecated use COLUMN_DISTRICT if it's related to the column
+	 */
 	public final static String DISTRICT="District";
+	/**
+	 * @deprecated use COLUMN_ZONE if it's related to the column
+	 */
 	public final static String ZONE="Zone";
+	
 	public final static String COMPONENT="Component Type";
 
 	public final static String UNALLOCATED="Unallocated";
@@ -151,7 +165,12 @@ public final class ArConstants {
 	
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
+	
+	public final static String COLUMN_COUNTRY="Country";
 	public final static String COLUMN_REGION="Region";
+	public final static String COLUMN_ZONE="Zone";
+	public final static String COLUMN_DISTRICT="District";
+	
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	
 	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";

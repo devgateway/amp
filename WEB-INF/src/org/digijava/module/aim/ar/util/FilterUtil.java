@@ -174,6 +174,8 @@ public class FilterUtil {
 		form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
 		form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
 		
+		form.setRegionSelected( FilterUtil.getObjectsIds( filter.getLocationSelected() ) );
+		
 		form.setText( filter.getText() );
 		form.setIndexString( filter.getIndexText() );
 		
@@ -203,8 +205,8 @@ public class FilterUtil {
 	 	 	}
 	 	 	form.setPlanMinRanks(temp);
 	 	}
-		if ( filter.getRegionSelected() != null )
-			form.setRegionSelected ( FilterUtil.getObjectsIds(filter.getLocationSelected()));
+	 	if ( filter.getLocationSelected() != null )
+	 		form.setRegionSelected ( FilterUtil.getObjectsIds(filter.getLocationSelected()) );
 		
 		Collection<String> appStatuses		= filter.getApprovalStatusSelected();
 		if ( appStatuses!=null && appStatuses.size()>0  ) {

@@ -50,7 +50,13 @@ public class MetaTextColWorker extends TextColWorker {
 			if(!rs.wasNull()){
 				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));	
 			}
-		} else if((columnName.equals(ArConstants.REGION) || columnName.equals(ArConstants.DISTRICT) || columnName.equals(ArConstants.ZONE)) &&  rs.getString(4)!=null && (generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE)){
+		//TODO I think the columnName comparisons with ArConstants should be replaced by comparisons with the values from 
+		// category manager "Implementation Location"
+		} else if((columnName.equals(ArConstants.COUNTRY) || columnName.equals(ArConstants.REGION) || columnName.equals(ArConstants.DISTRICT) || 
+				columnName.equals(ArConstants.ZONE)) &&  
+				rs.getString(4)!=null && 
+				(generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE))
+		{
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}	
 		else if(columnName.equals("Componente")){

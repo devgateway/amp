@@ -13,7 +13,8 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
     
-<%@page import="org.dgfoundation.amp.ar.ArConstants"%><script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>

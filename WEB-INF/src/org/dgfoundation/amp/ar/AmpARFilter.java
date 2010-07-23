@@ -237,7 +237,7 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Collection<AmpCategoryValueLocations> relatedLocations;
 	private Boolean unallocatedLocation = null;
-	private AmpCategoryValueLocations regionSelected = null;
+	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
@@ -461,8 +461,8 @@ public class AmpARFilter extends PropertyListable {
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 				+ Util.toCSString(donnorgAgency) + ")";
 			
-			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
-				+ (regionSelected==null?null:regionSelected.getIdentifier());
+//			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
+//				+ (regionSelected==null?null:regionSelected.getIdentifier());
 			
 			String FINANCING_INSTR_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
 				+ Util.toCSString(financingInstruments) + ")";
@@ -478,9 +478,9 @@ public class AmpARFilter extends PropertyListable {
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
 					PledgequeryAppend(DONNOR_AGENCY_FILTER);
 			}
-			if (regionSelected != null){
-				PledgequeryAppend(REGION_SELECTED_FILTER);
-			}
+//			if (regionSelected != null){
+//				PledgequeryAppend(REGION_SELECTED_FILTER);
+//			}
 			if (financingInstruments != null && financingInstruments.size() > 0){
 				PledgequeryAppend(FINANCING_INSTR_FILTER);
 			}
@@ -1301,19 +1301,19 @@ public class AmpARFilter extends PropertyListable {
 		return null;
 	}
 
-	/**
-	 * @return the regionSelected
-	 */
-	public AmpCategoryValueLocations getRegionSelected() {
-		return regionSelected;
-	}
-
-	/**
-	 * @param regionSelected the regionSelected to set
-	 */
-	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
-		this.regionSelected = regionSelected;
-	}
+//	/**
+//	 * @return the regionSelected
+//	 */
+//	public AmpCategoryValueLocations getRegionSelected() {
+//		return regionSelected;
+//	}
+//
+//	/**
+//	 * @param regionSelected the regionSelected to set
+//	 */
+//	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
+//		this.regionSelected = regionSelected;
+//	}
 
 	public String getIndexText() {
 		return indexText;

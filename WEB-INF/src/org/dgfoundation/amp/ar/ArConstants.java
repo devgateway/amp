@@ -219,6 +219,8 @@ public final class ArConstants {
 	
 	//Columns order names
 	public static final String PLEDGES_COLUMNS="Pledges Columns";
+	public static final String PLEDGES_CONTACTS_1 ="Pledge Contact 1";
+	public static final String PLEDGES_CONTACTS_2 ="Pledge Contact 2";
 	
 	//reportsFilter
 	

@@ -266,16 +266,16 @@
             <div  class="noTopBorder contentbox_border chartPlaceCss tab_graph_${gisWidgetTeaserForm.type}_selected ">
                 <c:choose>
                     <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
-                        <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
+                        <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
                         <span id="chartMap${gisWidgetTeaserForm.type}_0">
                         </span>
                         <br/>
-                        <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=1" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
+                        <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=1~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
                         <span id="chartMap${gisWidgetTeaserForm.type}_1">
                         </span>
                     </c:when>
                     <c:otherwise>
-                        <img class="${imageClass}" alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                        <img class="${imageClass}" alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
                         <span id="chartMap${gisWidgetTeaserForm.type}">
 
                         </span>

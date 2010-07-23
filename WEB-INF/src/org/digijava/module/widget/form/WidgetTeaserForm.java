@@ -1,6 +1,7 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+import java.util.Date;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -104,4 +105,10 @@ public class WidgetTeaserForm extends ActionForm {
 	public WiTable getTableWidget() {
 		return tableWidget;
 	}
+    public long getTime(){
+        Date date=new Date();
+        long time=date.getTime();
+        return time;
+
+   }
 }

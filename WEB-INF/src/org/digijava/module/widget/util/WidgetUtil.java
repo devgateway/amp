@@ -539,7 +539,7 @@ public class WidgetUtil {
             
         }
 
-    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, TeamMember teamMember) throws DgException {
+    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
         Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();
         if (sectorIds != null) {
             for (Long sectId : sectorIds) {
@@ -552,7 +552,7 @@ public class WidgetUtil {
                 Long[] sectIds = new Long[ids.size()];
                 ids.toArray(sectIds);
                 // get all findings...
-                List result = getFunding(donorIDs, fromDate, toDate, sectIds, teamMember);
+                List result = getFunding(donorIDs, fromDate, toDate, sectIds);
                 //Process grouped data
                 if (result != null) {
 
@@ -596,7 +596,7 @@ public class WidgetUtil {
         return activityFundingInfos.values();
 
     }
-      public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, TeamMember tm) throws DgException {
+      public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
         String oql = "select  actSec, f.ampDonorOrgId ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -611,7 +611,7 @@ public class WidgetUtil {
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIds) + ") ";
         oql += " and config.name='Primary' ";
-        oql += ChartWidgetUtil.getTeamQuery(tm);
+        oql += "  and act.team is not null ";
         oql += " order by actSec";
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings(value = "unchecked")
@@ -621,7 +621,6 @@ public class WidgetUtil {
             if (fromDate != null && toDate != null) {
                 query.setDate("fDate", fromDate);
                 query.setDate("eDate", toDate);
-                query.setLong("teamId", tm.getTeamId());
             }
             result = query.list();
         } catch (Exception e) {

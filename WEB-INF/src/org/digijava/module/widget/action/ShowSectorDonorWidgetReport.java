@@ -37,8 +37,6 @@ public class ShowSectorDonorWidgetReport extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws DgException{
         SectorDonorWidgetReportForm cForm = (SectorDonorWidgetReportForm)form;
-        HttpSession session=request.getSession();
-        TeamMember teamMember	= (TeamMember)session.getAttribute(Constants.CURRENT_MEMBER);
         Integer fromYear =new Integer(cForm.getStartYear());
         Integer toYear = new Integer(cForm.getEndYear());
         Long[] donorIDs = null;
@@ -79,7 +77,7 @@ public class ShowSectorDonorWidgetReport extends Action {
         //we need data including the last day of toYear,this is till the first day of toYear+1
         int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
         Date toDate = new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
-        Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo=WidgetUtil.getDonorSectorFunding(donorIDs, fromDate, toDate, sectorIDs, teamMember);
+        Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo=WidgetUtil.getDonorSectorFunding(donorIDs, fromDate, toDate, sectorIDs);
         cForm.setActSectorDonorFundingInfo(actSectorDonorFundingInfo);
         double comm = 0;
         double disb = 0;

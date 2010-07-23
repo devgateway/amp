@@ -188,9 +188,9 @@ a.itr:hover {
                                   </tr>
                                   <tr>
                                     <td colspan="6" width="100%" align="center">
-                                      <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
-                                        <tr bgColor="#d7eafd">
-                                          <td width="80%">
+                                      <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;" id="dataTable" bgcolor="#dddddd" cellpadding="5" >
+                                        <tr>
+                                          <td width="80%" bgcolor="#999999" style="color: black">
                                             <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
                                             	 <a href="javascript:sortByVal('nameDesc')">
 	                                                <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/repository/aim/images/up.gif" border="0"/>
@@ -205,7 +205,7 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td width="18%" align="center">
+                                          <td width="18%" align="center" bgcolor="#999999" style="color: black">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
                                               <a href="javascript:sortByVal('sectDesc')">
                                                 <b><digi:trn>Sector</digi:trn></b><img  src="/repository/aim/images/up.gif" border="0"/>
@@ -220,14 +220,14 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td width="2%">
-                                          &nbsp;
+                                          <td width="2%" bgcolor="#999999" style="color: black">&nbsp;
+                                          
                                           </td>
                                         </tr>
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
-                                            <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
-                                              <td width="80%" nowrap="nowrap">
+                                            <tr>
+                                              <td width="80%">
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
                                                 ${indItr.name}</a>
                                                </td>
@@ -283,3 +283,62 @@ a.itr:hover {
     </tr>
   </table>
 </digi:form>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", true);
+</script>

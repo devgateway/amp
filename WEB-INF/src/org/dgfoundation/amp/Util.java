@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.kernel.cache.AbstractCache;
@@ -341,7 +342,7 @@ public final class Util {
 			baseCurrency = "USD";
 		if( baseCurrency.equals(currency)) return 1;
 		// we try the digi cache:
-		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
+		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
 
 		Double cacheRet = (Double) ratesCache.get(new String(currency
 				+ currencyDate));
@@ -390,9 +391,8 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		logger.debug("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
-				+ " is " + ret);
-		if (ret != 1)
+//		logger.debug("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
+//				+ " is " + ret);
 			ratesCache
 					.put(new String(currency + currencyDate), new Double(ret));
 

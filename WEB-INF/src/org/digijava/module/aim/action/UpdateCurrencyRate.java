@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -164,7 +165,7 @@ public class UpdateCurrencyRate extends Action {
                     	  CurrencyUtil.saveCurrencyRate(cRate);
                       else 
                     	  logger.warn("Either exchange rate or exchange rate date is null");
-                      AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
+                      AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
                       ratesCache.clear();
 
                       crForm.setAllRates(null);

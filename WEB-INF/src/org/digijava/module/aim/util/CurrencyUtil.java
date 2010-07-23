@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -616,7 +617,7 @@ public class CurrencyUtil {
 				}
 			}
 			tx.commit();
-			DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE").clear();
+			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");
 			e.printStackTrace(System.out);

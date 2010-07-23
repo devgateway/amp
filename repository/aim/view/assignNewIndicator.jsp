@@ -293,7 +293,7 @@ function closeWindow()
 					</table>
               <table width="100%" cellspacing=0 cellSpacing=0 border="0">
                 <tr>
-                  <td noWrap width=600 vAlign="top">
+                  <td noWrap  vAlign="top">
                     <table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">

@@ -411,7 +411,7 @@ public class ChartWidgetUtil {
         }
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
-		toolTipformat.setMaximumFractionDigits(3);
+		toolTipformat.setMaximumFractionDigits(1);
         toolTipformat.setMinimumIntegerDigits(1);
 		format.setMaximumFractionDigits(0);
 		String pattern = "{0} {2} ({1})";

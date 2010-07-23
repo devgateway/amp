@@ -76,6 +76,13 @@ cursor:pointer;
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
           <ul class="first-of-typeamp">
+            <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <digi:trn key="aim:homePage">
+                Home Page
+                </digi:trn>
+	            </digi:link>
+            </li>
             <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
@@ -149,6 +156,13 @@ border-right:1px solid white;
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
           <ul class="first-of-type">
+            <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <digi:trn key="aim:homePage">
+                Home Page
+                </digi:trn>
+	            </digi:link>
+            </li>
             <li class="yuiampmenuitem">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
                 <digi:trn key="aim:newUserRegistration">

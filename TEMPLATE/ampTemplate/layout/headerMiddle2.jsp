@@ -60,6 +60,13 @@ border-right:1px solid white;
       <div class="bd">
           <ul class="first-of-typeamp">
             <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <digi:trn key="aim:homePage">
+                Home Page
+                </digi:trn>
+	            </digi:link>
+            </li>
+            <li class="yuiampmenuitem">
                 <c:set var="message">
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
@@ -74,13 +81,6 @@ border-right:1px solid white;
 	            </li>
 	            </feature:display>
 -->
-            <li class="yuiampmenuitem">
-                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
-                <digi:trn key="aim:newUserRegistration">
-                New user registration
-                </digi:trn>
-	            </digi:link>
-            </li>
             <feature:display name="Language Option" module="Tools">
 		            <li>
 		                <span class="yuiampmenuitemlabel" style="float:left;position:relative;top:0px;_top:1px;border-right:0px;">
@@ -141,7 +141,14 @@ border-right:1px solid white;
 	 	 		</a>
 	 	 	</li>
  	 	--%>
- 	 	<module:display name="HELP">
+ 	 	<li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <digi:trn key="aim:homePage">
+                Home Page
+                </digi:trn>
+	            </digi:link>
+            </li>
+            <module:display name="HELP">
  	 		<li class="yuiampmenuitem">
  	 			<span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right:0px">
  	 				<digi:trn key="help:help">HELP</digi:trn>

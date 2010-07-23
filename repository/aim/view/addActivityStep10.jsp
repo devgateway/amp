@@ -101,20 +101,22 @@
 				return false;
 			}
 		}
-		if (isEmpty(currentVal.value) == true) {
-			alert(currValueNotEntered);
-			document.getElementsByName('indicator.currentVal')[0].focus();
-			return false;
-		} else if (!containsValidNumericValueZeroIncluded(currentVal)) {
-			alert(numericValueNeeded);
-			currentVal.focus();
-			return false;
-		}
-		if (isEmpty(document.getElementsByName('indicator.currentValDate')[0].value) == true) {
-			alert(currValueDateNotEntered);
-			document.getElementsByName('indicator.currentValDate')[0].focus();
-			return false;
-		}
+        if(typeof currentVal != 'undefined'){
+            if (isEmpty(currentVal.value) == true) {
+                alert(currValueNotEntered);
+                document.getElementsByName('indicator.currentVal')[0].focus();
+                return false;
+            } else if (!containsValidNumericValueZeroIncluded(currentVal)) {
+                alert(numericValueNeeded);
+                currentVal.focus();
+                return false;
+            }
+            if (isEmpty(document.getElementsByName('indicator.currentValDate')[0].value) == true) {
+                alert(currValueDateNotEntered);
+                document.getElementsByName('indicator.currentValDate')[0].focus();
+                return false;
+            }
+        }
 		return true;
 	}
 
@@ -410,7 +412,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
-										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>
+										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>xxxx
 										</a>
 									</td></tr>
 									<tr><td>

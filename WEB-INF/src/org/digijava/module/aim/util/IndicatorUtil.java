@@ -1,6 +1,8 @@
 package org.digijava.module.aim.util;
 		
 import java.text.Collator;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1004,7 +1006,9 @@ public class IndicatorUtil {
 				progress=0;
 			}
 		}
-		bean.setProgress(String.valueOf(progress*100+"%"));
+        NumberFormat format=NumberFormat.getPercentInstance();
+        format.setMaximumFractionDigits(2);
+		bean.setProgress(format.format(progress));
 		
 		AmpIndicatorRiskRatings riskObj=getRisk(connection);
 		if(riskObj!=null){

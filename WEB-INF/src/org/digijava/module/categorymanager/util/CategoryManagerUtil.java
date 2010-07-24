@@ -173,12 +173,17 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         	AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
         	 eventType.setName(item.getValue());
         	 eventType.setId(item.getId());
-        	   Iterator<AmpCategoryValue> usedValues = item.getUsedValues().iterator();
-        	    while (usedValues.hasNext()){
-        		 AmpCategoryValue categoryValueItem = (AmpCategoryValue) usedValues.next();
-        		 eventType.setColor(categoryValueItem.getValue());
+        	 Set<AmpCategoryValue> usedValues = item.getUsedValues();
+        	 if (usedValues==null || usedValues.size()==0) {
+        		 eventType.setColor("grey"); //here select grey color by default if it's not seted on category manager. Thus the event doesn't lose on calendar view.
+        	 } else {
+				Iterator<AmpCategoryValue> it = usedValues.iterator();
+			    while (it.hasNext()){
+			    	AmpCategoryValue categoryValueItem = (AmpCategoryValue) it.next();
+			    	eventType.setColor(categoryValueItem.getValue());
+			    }
         	 }
-        	  eventTypeList.add(eventType);
+        	 eventTypeList.add(eventType);
         }
 		return eventTypeList;
 		

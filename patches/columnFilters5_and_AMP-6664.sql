@@ -1,4 +1,5 @@
-TRUNCATE TABLE amp_columns_filters;
+
+TRUNCATE  TABLE amp_columns_filters;
 INSERT INTO `amp_columns_filters` VALUES 
 (1,getReportColumnId('Primary Sector'),'selectedSecondarySectors','amp_sector_id'),
 (2,getReportColumnId('National Planning Objectives'),'selectedNatPlanObj','amp_program_id'),
@@ -43,6 +44,7 @@ INSERT INTO `amp_columns_filters` VALUES
 (41,getReportColumnId('Secondary Program Level 6'),'relatedSecondaryProgs','amp_program_id'),
 (42,getReportColumnId('Secondary Program Level 7'),'relatedSecondaryProgs','amp_program_id'),
 (43,getReportColumnId('Secondary Program Level 8'),'relatedSecondaryProgs','amp_program_id'),
+
 
 (44,getReportColumnId('Zone'),'relatedLocations','location_id'),
 (45,getReportColumnId('District'),'relatedLocations','location_id');

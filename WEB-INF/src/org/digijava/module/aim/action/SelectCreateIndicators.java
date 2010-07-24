@@ -37,6 +37,8 @@ public class SelectCreateIndicators extends Action {
 		HttpSession session = request.getSession();
 		
 		IndicatorForm indForm = (IndicatorForm) form;
+		
+		if(request.getParameter("clear")!=null) indForm.setSearchkey(null);
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
 		AmpActivity activity=null;

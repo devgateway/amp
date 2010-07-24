@@ -571,7 +571,7 @@ public class ProgramUtil {
 			 	parentWithNewName.setName(parent.getName().toUpperCase());
 			 	parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
 			 	
-			 	List<AmpTheme> dbChildrenReturnSet = ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
+			 	List<AmpTheme> dbChildrenReturnSet = (List<AmpTheme>) ProgramUtil.getAllSubThemesByParentIdWihtChildren(parent.getAmpThemeId());
 			 	parent.getChildren().addAll( dbChildrenReturnSet );
 		 	
 			} catch (DgException e) {
@@ -1032,7 +1032,7 @@ public class ProgramUtil {
 		}
                 
                 
-                /**
+         /**
 		 * Returns all subchildren in the tree
 		 * Recursively iterates on all children programs till the end of the branch.
                  * The names of children programs will be decorated with dashes.
@@ -1079,7 +1079,37 @@ public class ProgramUtil {
                         
 			return subThemes;
 		}
-                
+		
+		/**
+		 * Returns all subchildren in the tree
+		 * @param parentThemeId db ID of the parent program
+		 * @return collection of AmpTheme beans
+		 * @throws AimException if anything goes wrong
+                 * @see #getAmpThemesAndSubThemes(AmpTheme parent)
+                 * @see #getAllSubThemesFor(Collection parentThemes)
+		 */
+		public static Collection getAllSubThemesByParentIdWihtChildren(Long parentThemeId) throws AimException
+		{
+			Collection progs = new ArrayList();
+			try
+			{
+				progs = getSubThemes(parentThemeId);
+				if (progs != null && progs.size()>0){
+					for (Iterator iter = progs.iterator(); iter.hasNext();) {
+						AmpTheme child = (AmpTheme) iter.next();
+						child.getChildren().addAll(getAllSubThemesByParentIdWihtChildren(child.getAmpThemeId()));
+					}
+				}
+			}
+			catch(Exception e1)
+			{
+				logger.error("Unable to get all the sub-themes");
+				logger.debug("Exception : "+e1);
+				throw new AimException("Cannot get sub themes for "+parentThemeId,e1);
+			}
+                        
+			return progs;
+		}       
                 
     /**
      * Returns List of programs and sub-programs using {@link #getAllSubThemesByParentId(Long parentThemeId, int depth) } method.
@@ -1104,11 +1134,10 @@ public class ProgramUtil {
             parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
             ret.add(parentWithNewName);
             List<AmpTheme> dbChildrenReturnSet =
-                    ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
-          //  Collections.reverse(dbChildrenReturnSet);
-            ret.addAll(dbChildrenReturnSet);
-        
-
+                ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
+      //  Collections.reverse(dbChildrenReturnSet);
+        ret.addAll(dbChildrenReturnSet);
+    
         } catch (DgException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

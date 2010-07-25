@@ -228,7 +228,7 @@
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
 						</p>
 						<p>
-							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();"  styleId="hide_empty_countries"/>
+							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();" onclick="simpleSubmit();" styleId="hide_empty_countries"/>
 						</p>
 						<p style="display: none" id="p_tree">
 							<font size="3">

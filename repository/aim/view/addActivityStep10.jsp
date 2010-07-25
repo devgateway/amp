@@ -708,7 +708,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<field:display name="Risk" feature="Activity">
 														<tr>
 															<td>&nbsp;&nbsp;&nbsp;</td>
-															<td><b>
+															<td align="right"><b>
 															<digi:trn key="aim:meRisk">Risk</digi:trn>
 															</b></td>
 															<td>

@@ -1,4 +1,0 @@
-CREATE or replace VIEW `v_cris_number` AS select `a`.`amp_activity_id` AS `amp_activity_id`,`a`.`cris_number` AS `cris_number` from `amp_activity` `a` order by `a`.`amp_activity_id`;
-CREATE or replace VIEW `v_code_chapitre` AS select `a`.`amp_activity_id` AS `amp_activity_id`,concat(`a`.`vote`,`a`.`subVote`,`a`.`subProgram`,`a`.`project_code`) AS `code_chapitre` from `amp_activity` `a` order by `a`.`amp_activity_id`;
-INSERT INTO amp_columns(columnName, cellType, extractorView) VALUES('Cris Number', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_cris_number');
-INSERT INTO amp_columns(columnName, cellType, extractorView) VALUES('Code Chapitre', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_code_chapitre');

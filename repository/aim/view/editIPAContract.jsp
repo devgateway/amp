@@ -67,14 +67,12 @@ function fnChk1(frmContrl){
 }
 
 function autosum(){
-	var v1 = document.aimIPAContractForm.totalECContribIBAmount.value;
-	var v2 = document.aimIPAContractForm.totalECContribINVAmount.value;
-	var v3 = document.aimIPAContractForm.totalNationalContribCentralAmount.value;
-	var v4 = document.aimIPAContractForm.totalNationalContribIFIAmount.value;
-	var v5 = document.aimIPAContractForm.totalNationalContribRegionalAmount.value;
-	var v6 = document.aimIPAContractForm.totalPrivateContribAmount.value;
-	
-	
+	var v1 = document.aimIPAContractForm.totalECContribIBAmount ? document.aimIPAContractForm.totalECContribIBAmount.value:0;
+	var v2 = document.aimIPAContractForm.totalECContribINVAmount ? document.aimIPAContractForm.totalECContribINVAmount.value:0;
+	var v3 = document.aimIPAContractForm.totalNationalContribCentralAmount ? document.aimIPAContractForm.totalNationalContribCentralAmount.value:0;
+	var v4 = document.aimIPAContractForm.totalNationalContribIFIAmount ? document.aimIPAContractForm.totalNationalContribIFIAmount.value:0;
+	var v5 = document.aimIPAContractForm.totalNationalContribRegionalAmount ? document.aimIPAContractForm.totalNationalContribRegionalAmount.value:0;
+	var v6 = document.aimIPAContractForm.totalPrivateContribAmount ? document.aimIPAContractForm.totalPrivateContribAmount.value:0;
 	document.aimIPAContractForm.totalAmount.value = (v1*1)+(v2*1)+(v3*1)+(v4*1)+(v5*1)+(v6*1);
 	return true; 
 }
@@ -351,7 +349,7 @@ window.onload=autosum;
 <!-- code for rendering that nice calendar -->
 
 
-<body onload="load()">
+<body onLoad="load()">
 <digi:instance property="aimIPAContractForm" />
 <digi:form action="/editIPAContract.do" method="post">
 

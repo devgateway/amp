@@ -99,10 +99,10 @@ a.itr:hover {
 
 <digi:form action="/viewIndicators.do" method="post">
   <html:hidden property="sortBy" styleId="sortBy"/>
-  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border=0>
+  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="800" border=0>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=800>
+      <td align=left class=r-dotted-lg vAlign=top width="800">
         <table cellPadding=5 cellSpacing=0 width="100%" border=0>
           <tr>
             <td height=33><span class=crumb>

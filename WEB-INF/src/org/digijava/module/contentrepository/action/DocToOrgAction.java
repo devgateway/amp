@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.jackrabbit.core.version.VersionImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -114,16 +118,25 @@ public class DocToOrgAction extends MultiAction {
 		
 		String uuid					= request.getParameter("orgsforuuid");
 		DocToOrgForm docToOrgForm	= (DocToOrgForm) form;
+		Node n						= DocumentManagerUtil.getReadNode(uuid, request);
 		
 		docToOrgForm.setHasAddParticipatingOrgRights(false);
 		if(isLoggeedIn(request)){
-			Node n		= DocumentManagerUtil.getReadNode(uuid, request);
 			if (n != null) {
 				docToOrgForm.setHasAddParticipatingOrgRights( DocumentManagerRights.hasAddParticipatingOrgRights(n, request) );
 			}
 		}
 		
-		
+		VersionHistory vh	= null;
+		try {
+			if (n.getParent() instanceof Version ) {
+				vh				= ( (Version)(n.getParent()) ).getContainingHistory() ;
+				uuid			= vh.getVersionableUUID() ;
+			}
+		}
+		catch (Exception e) {
+			logger.info("Error finding root node of version");
+		}
 		docToOrgForm.setOrgs(new ArrayList<AmpOrganisation>() );
 		if (uuid != null) {
 			List<CrDocumentsToOrganisations> docsToOrgsList	= DocToOrgDAO.getDocToOrgObjsByUuid(uuid);

@@ -91,7 +91,7 @@ es:
         planned_start_end:
           label: 'Início - Conclusão Planificado'
         date_of_signing:
-          label: Data da Assinatura
+          label: Data da Assinatura do MoU/contracto
           description: |
              Data da assinatura do memorando ou do contracto.
         implementing_agencies:

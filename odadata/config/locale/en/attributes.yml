@@ -84,7 +84,7 @@ en:
         planned_start_end:
           label: Planned Start - End
         date_of_signing:
-          label: Date of Signing
+          label: Date of Signature of MoU/Contract
           description: |
             The date of signing the memorandum or the contract.
         implementing_agencies: 

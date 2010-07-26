@@ -335,7 +335,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
         // setting width of columns
         sheet.setColumnWidth((short) 0, TITLE_WIDTH);
-        for(short i=1;i<6;i++){
+        for(short i=1;i<7;i++){
              sheet.setColumnWidth(i , COLUMN_WIDTH);
         }
         HSSFCellStyle style= wb.createCellStyle();
@@ -403,6 +403,15 @@ public class ExportOrganizationToExcel extends DispatchAction {
             cell.setCellValue(headerTitle);
             cell.setCellStyle(style);
 
+            cell = row.createCell(cellNum++);
+            headerPrefix = TranslatorWorker.translateText("PRIMARY CONTACT", locale, siteId);
+            HSSFRichTextString headerPrimaryContact = new HSSFRichTextString(headerPrefix);
+            headerPrimaryContact.applyFont(fontSubHeader);
+            cell.setCellValue(headerPrimaryContact);
+            cell.setCellStyle(style);
+            String primary= TranslatorWorker.translateText("Primary", locale, siteId);
+            String nonPrimary= TranslatorWorker.translateText("Non Primary Contact", locale, siteId);
+
             Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
             while (contactInfoIter.hasNext()) {
             	AmpOrganisationContact orgContact = contactInfoIter.next();
@@ -442,6 +451,12 @@ public class ExportOrganizationToExcel extends DispatchAction {
                 }
                 cell.setCellValue(new HSSFRichTextString(title));
                 cell.setCellStyle(style);
+                cell = row.createCell(cellNum++);
+                String isprimaryContact=nonPrimary;
+                if(orgContact.getPrimaryContact()!=null&&orgContact.getPrimaryContact()){
+                    isprimaryContact=primary;
+                }
+                cell.setCellValue(new HSSFRichTextString(isprimaryContact));
 
             }
         }

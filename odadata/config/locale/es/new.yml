@@ -1,6 +1,7 @@
 es:
   options:
     prompt: Por favor seleccione
+    national: Nacional
   pagination:
     previous_page: Anterior
     next_page: 'Próxima'

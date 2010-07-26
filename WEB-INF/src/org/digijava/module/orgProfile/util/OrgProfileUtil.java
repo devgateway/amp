@@ -473,9 +473,7 @@ public class OrgProfileUtil {
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if (maxResult != -1) {
-                query.setMaxResults(maxResult);
-            }
+            query.setMaxResults(maxResult);
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
             }

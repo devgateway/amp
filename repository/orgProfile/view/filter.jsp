@@ -410,7 +410,6 @@
                             <html:option value="10">10</html:option>
                             <html:option value="20">20</html:option>
                             <html:option value="50">50</html:option>
-                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                         </html:select>
                     </td>
                 </tr>

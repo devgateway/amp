@@ -37,14 +37,8 @@
 <table border="1"  bgcolor="#dddddd" width="100%"  class="tableElement" cellspacing="0" cellpadding="0">
     <tr>
         <th colspan="4" class="tableHeaderCls">
-            <c:choose>
-                <c:when test="${sessionScope.orgProfileFilter.largestProjectNumb==-1}">
-                    <digi:trn>All</digi:trn>
-                </c:when>
-                <c:otherwise>
-                    ${sessionScope.orgProfileFilter.largestProjectNumb}
-                </c:otherwise>
-            </c:choose><digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
+          ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})
+        </th>
     </tr>
     <tr>
         <td class="tableHeaderCls"><digi:trn>Project title</digi:trn></td>

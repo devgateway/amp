@@ -513,7 +513,9 @@ public class ContactInfoUtil {
             try {
                 phoneTypeId = Long.parseLong(phoneTypeIdStr);
                 AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-                retVal.append(catVal.getValue());
+                if(catVal!=null){
+                	retVal.append(catVal.getValue());
+                }                
             } catch (NumberFormatException ex){
                 //Old style record processing
                 retVal.append(phoneTypeIdStr);

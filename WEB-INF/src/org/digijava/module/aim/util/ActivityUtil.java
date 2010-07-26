@@ -866,7 +866,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ampContact.setFunction(contact.getFunction());
 
 
-    			/*
+    			
     			//remove old properties
     			List<AmpContactProperty> dbProperties=ContactInfoUtil.getContactProperties(ampContact);
     			if(dbProperties!=null){
@@ -883,13 +883,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					}
     			}
 
-    			ampContact.setOrganizationContacts(null);*/
+    			ampContact.setOrganizationContacts(null);
+    			
+    			    			
     			session.update(ampContact);    			    			
     		}else{
     			session.save(contact);
     		}
     		
-    		/*
+    		
     		//save properties
     		if(contact.getProperties()!=null){
 				for (AmpContactProperty formProperty : contact.getProperties()) {
@@ -911,7 +913,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					}
 					session.save(orgCont);
 				}
-    		}*/
+    		}
 
     		//link activity to activityContact
     		/*

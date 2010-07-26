@@ -127,7 +127,7 @@
 				<many-to-one name="parentsector" column="budget_sector_id" class="org.digijava.module.budget.dbentity.AmpBudgetSector" cascade="none" />
 				
 
-		<set name="organizationContacts" inverse="true" cascade="all-delete-orphan" lazy="false">
+		<set name="organizationContacts" inverse="true" cascade="delete" lazy="false">
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 		</set>

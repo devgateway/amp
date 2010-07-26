@@ -437,7 +437,7 @@ public class AddressBookActions extends DispatchAction {
         			}
         			org.getOrganizationContacts().remove(ampOrganisationContact);
         			DbUtil.update(org);
-					//ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
+					ContactInfoUtil.deleteOrgContact(ampOrganisationContact);
 					
 					cont.getOrganizationContacts().remove(ampOrganisationContact);
 				}

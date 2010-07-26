@@ -27,6 +27,8 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.tools.ant.taskdefs.Sleep;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
@@ -873,6 +875,14 @@ public class EditOrganisation extends DispatchAction {
       if (!orgsCol.isEmpty()) { // To check for duplicate org-code
           errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgCodeError"));
       }
+       String[] orgContsIds=editForm.getPrimaryOrgContIds();
+
+        if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
+    		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+    		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			errors.add("invalidOrgCont",new ActionError("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));
+
+		}
       
       if(!errors.isEmpty()){
       	saveErrors(request, errors);

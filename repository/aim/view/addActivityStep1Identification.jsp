@@ -82,29 +82,41 @@ var responseSuccessRetrive = function(o){
 	 */
 	 		
 	var text=o.responseText;
+
 	if (text=='null'){
-			removeOptionSelected('budgetorg');
-			document.getElementById("budgetorg").options[0] = new Option('Select', '0');
-		}
+		removeOptionSelected('budgetorg');
+		removeOptionSelected('budgetdepart');
+		document.getElementById("budgetdepart").disabled=false;
+		document.getElementById("budgetorg").disabled=false;
+		document.getElementById("budgetorg").options[0] = new Option("Select", "0","true","true");
+		document.getElementById("budgetdepart").options[0] = new Option("Select", "0","true","true");
+	}
+	
 	//Split the document
 	var returnelements=text.split("||")
 	//Process each of the elements
 	if (returnelements[0]=='1'){
 		removeOptionSelected('budgetorg');
+		removeOptionSelected('budgetdepart');
+
 		for ( var i=1; i<returnelements.length; i++ ){
 			valueLabelPair = returnelements[i].split("|")
 			document.getElementById("budgetorg").options[i-1] = new Option(valueLabelPair[1], valueLabelPair[0]);
 			document.getElementById("budgetorg").disabled=false;
 		}
+		document.getElementById("budgetorg").options[0].selected='selected';
+		document.getElementById("budgetdepart").options[0] = new Option('Select', '0');
+		document.getElementById("budgetdepart").options[0].selected='selected';
+		
 	}else if (returnelements[0]=='2'){
 		removeOptionSelected('budgetdepart');
 		for ( var i=1; i<returnelements.length; i++ ){
 			valueLabelPair = returnelements[i].split("|")
 			document.getElementById("budgetdepart").options[i-1] = new Option(valueLabelPair[1], valueLabelPair[0]);
-			document.getElementById("budgetdepart").disabled=false;
-			document.getElementById("budgetorg").disabled=false;
-			document.getElementById("budgetprog").disabled=false;
 		}
+		document.getElementById("budgetdepart").options[0].selected='selected';
+		document.getElementById("budgetdepart").disabled=false;
+		document.getElementById("budgetorg").disabled=false;
 	}
 }	
 
@@ -112,11 +124,9 @@ function removeOptionSelected(name)
 {
   var elSel = document.getElementById(name);
   var i;
-  for (i = elSel.length - 1; i>=0; i--) {
-    if (elSel.options[i].selected) {
-      elSel.remove(i);
-    }
-  }
+  for (i = elSel.length; i>=0; i--) {
+    	elSel.remove(i);
+  	}
 }
 
 
@@ -140,10 +150,11 @@ function getBudgetOptions(id,type)
 	var params = "id="+ id + "&optionstype=" + type
 	var url= "<%=retrivevalues%>";
 	YAHOOAmp.util.Connect.asyncRequest('POST',url,RetriveCallback,params);
-	
-	document.getElementById("budgetdepart").disabled=true;
-	document.getElementById("budgetorg").disabled=true;
-	document.getElementById("budgetprog").disabled=true;
+
+	if (type=='orgselect'){
+		document.getElementById("budgetdepart").disabled=true;
+		document.getElementById("budgetorg").disabled=true;
+	}
 }
 
 </script>

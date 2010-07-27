@@ -73,7 +73,7 @@
 					<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="612">
 								<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="610">
-                                        &nbsp;
+                                        &nbsp;<digi:errors/>
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>

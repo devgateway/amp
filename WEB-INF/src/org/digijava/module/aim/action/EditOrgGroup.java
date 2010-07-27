@@ -77,6 +77,17 @@ public class EditOrgGroup extends Action {
 			AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
 			ampGrp.setOrgType(ot);
 			ARUtil.clearOrgGroupTypeDimensions();
+			
+			AmpOrgGroup groupByName = DbUtil.getAmpOrgGroupByName(ampGrp.getOrgGrpName());
+			if(groupByName !=null && (editForm.getAmpOrgGrpId()==null || groupByName.getAmpOrgGrpId().compareTo( editForm.getAmpOrgGrpId())!=0)) {
+				ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.duplicateGroupName"));
+				saveErrors(request, errors);
+				//if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit"); 
+				//else editForm.setAction("create");
+				if (editForm.getAmpOrgId() != null) return mapping.findForward("popup");
+				else return mapping.findForward("forward");
+			}
 
 			if ((editForm.getAmpOrgGrpId().longValue() ==0)||(editForm.getAmpOrgGrpId().longValue() ==-1)) {
 				DbUtil.add(ampGrp);

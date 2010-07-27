@@ -5042,6 +5042,27 @@ public class DbUtil {
         }
         return grp;
     }
+    
+    public static AmpOrgGroup getAmpOrgGroupByName(String name) {
+        Session session = null;
+        AmpOrgGroup grp = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select l from " + AmpOrgGroup.class.getName()
+                + " l " + "where (l.orgGrpName=:name)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("name", name, Hibernate.STRING);
+            Iterator itr = qry.list().iterator();
+            if (itr.hasNext()) {
+                grp = (AmpOrgGroup) itr.next();
+            }
+
+        } catch (Exception ex) {
+            logger.error("Unable to get Org Group" + ex);
+        }
+        return grp;
+    }
 
     public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
         Session session = null;

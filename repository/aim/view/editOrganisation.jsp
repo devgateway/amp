@@ -815,7 +815,26 @@
             document.aimAddOrgForm.submit();
         }
 
+        function changePrimaryState(){
+        	var orgConts= $("input[id^='primary_']");
+        	var resetConts=resetPrimary(orgConts);
+        	if(resetConts==true){
+        		document.getElementById('primaryOrgCont').value=true;
+        	}else{
+        		document.getElementById('primaryOrgCont').value=false;
+        	}
+        }
 
+        function resetPrimary(contList){
+            var retValue=true;
+        	for(var i=0;i<contList.length;i++){
+        		if(contList[i].checked){
+        			retValue=false;
+        			break;
+        		}
+        	}
+        	return retValue;
+        }
 
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
@@ -831,7 +850,8 @@
     <html:hidden name="aimAddOrgForm"  property="ampOrgId" />
     <html:hidden name="aimAddOrgForm"  property="transIndexId" />
     <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/> 
-		<html:hidden name="aimAddOrgForm"  property="selContactId" />
+	<html:hidden name="aimAddOrgForm"  property="selContactId" />
+	<html:hidden styleId="primaryOrgCont" value="${aimAddOrgForm.resetPrimaryOrgContIds}" name="aimAddOrgForm" property="resetPrimaryOrgContIds"/>
 
     <table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
         <tr>

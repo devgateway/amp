@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import mondrian.util.Bug;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -25,7 +23,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -875,6 +872,7 @@ public class EditOrganisation extends DispatchAction {
       if (!orgsCol.isEmpty()) { // To check for duplicate org-code
           errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgCodeError"));
       }
+            
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 
         if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
@@ -887,6 +885,10 @@ public class EditOrganisation extends DispatchAction {
       if(!errors.isEmpty()){
       	saveErrors(request, errors);
           return mapping.findForward("forward");
+      }
+      
+      if(editForm.getResetPrimaryOrgContIds()!=null && editForm.getResetPrimaryOrgContIds()){
+      	editForm.setPrimaryOrgContIds(null);
       }
       
       organization.setName(editForm.getName());

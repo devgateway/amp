@@ -153,6 +153,7 @@ public class AddOrgForm extends ActionForm {
     
     private String[] selectedContactInfoIds;
     private String[] primaryOrgContIds;
+    private Boolean resetPrimaryOrgContIds;
     private String selContactId;
 	
 	public Pledge getFundingDetail(int index) {
@@ -897,6 +898,14 @@ public class AddOrgForm extends ActionForm {
 
 	public String getSelContactId() {
 		return selContactId;
+	}
+
+	public Boolean getResetPrimaryOrgContIds() {
+		return resetPrimaryOrgContIds;
+	}
+
+	public void setResetPrimaryOrgContIds(Boolean resetPrimaryOrgContIds) {
+		this.resetPrimaryOrgContIds = resetPrimaryOrgContIds;
 	}
 	
 }

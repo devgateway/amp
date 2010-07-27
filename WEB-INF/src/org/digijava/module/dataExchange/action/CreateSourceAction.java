@@ -58,7 +58,6 @@ public class CreateSourceAction extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		// TODO Auto-generated method stub
 		
 		return modeSelect(mapping, form, request, response);
 	}
@@ -69,7 +68,7 @@ public class CreateSourceAction extends MultiAction {
 	@Override
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		// TODO Auto-generated method stub
+		
 		HttpSession session=request.getSession();
 		session.setAttribute("errorLogForDE","");
 		session.setAttribute("messageLogForDe","");
@@ -80,6 +79,8 @@ public class CreateSourceAction extends MultiAction {
 		
 		if(request.getParameter("saveImport")!=null) 
 			return modeSave(mapping, iform, request, response);
+		else 
+			this.modeReset(mapping, iform, request, response);
 		
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
@@ -162,61 +163,74 @@ public class CreateSourceAction extends MultiAction {
 		
 		
 	}
-
-	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
-		// TODO Auto-generated method stub
+	private void modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+		CreateSourceForm myForm	= (CreateSourceForm) form;
+		myForm.setName( null );
+		myForm.setApprovalStatus( null );
+		myForm.setImportStrategy( null );
+		myForm.setUniqueIdentifier(null);
+		myForm.setImportStrategy(null);
+		myForm.setTeamId(null);
+		myForm.setSelectedLanguages(null);
+		myForm.setSelectedOptions(null);
 		
-		HttpSession session = request.getSession();
-		String siteId = RequestUtils.getSite(request).getId().toString();
-		String locale= RequestUtils.getNavigationLanguage(request).getCode();
-
-		CreateSourceForm deCreateSourceForm= (CreateSourceForm) form;
 		
-		FormFile myFile = deCreateSourceForm.getUploadedFile();
-        byte[] fileData    = myFile.getFileData();
-        if(fileData == null || fileData.length < 1)
-        	{
-        		logger.info("The file is empty or not choosed any file");
-        		//return error
-        	}
-        
-        InputStream inputStream= new ByteArrayInputStream(fileData);
-        InputStream inputStream1= new ByteArrayInputStream(fileData);
-        
-        OutputStream outputStream = new ByteArrayOutputStream(); 
-        FileCopyUtils.copy(inputStream1, outputStream);
-        
-        TeamMember tm = null;
-        if (session.getAttribute("currentMember") != null)
-        	tm = (TeamMember) session.getAttribute("currentMember");
-        
-        ImportBuilder importBuilder = new ImportBuilder();
-        boolean importOk = false;
-		importOk = importBuilder.splitInChunks(inputStream);
-		if(!importOk) {
-			ActionErrors errors = new ActionErrors();
-			errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
-			request.setAttribute("loadFile",null);
-			
-			if (errors.size() > 0){
-				session.setAttribute("DEimportErrors", errors);
-			}
-			else session.setAttribute("DEimportErrors", null);
-			return mapping.findForward("forwardError");
-		}
-		
-		importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
-        
-        importBuilder.createActivityTree();
-        
-        //deCreateSourceForm.setActivityTree(importBuilder.getRoot());
-        
-        session.setAttribute("DELogGenerated", importBuilder.printLogs());
-        session.setAttribute("importBuilder", importBuilder);
-        session.setAttribute("DEfileUploaded", "true");
-        
-		return mapping.findForward("afterUploadFile");
 	}
+
+//	private ActionForward modeLoadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
+//		// TODO Auto-generated method stub
+//		
+//		HttpSession session = request.getSession();
+//		String siteId = RequestUtils.getSite(request).getId().toString();
+//		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+//
+//		CreateSourceForm deCreateSourceForm= (CreateSourceForm) form;
+//		
+//		FormFile myFile = deCreateSourceForm.getUploadedFile();
+//        byte[] fileData    = myFile.getFileData();
+//        if(fileData == null || fileData.length < 1)
+//        	{
+//        		logger.info("The file is empty or not choosed any file");
+//        		//return error
+//        	}
+//        
+//        InputStream inputStream= new ByteArrayInputStream(fileData);
+//        InputStream inputStream1= new ByteArrayInputStream(fileData);
+//        
+//        OutputStream outputStream = new ByteArrayOutputStream(); 
+//        FileCopyUtils.copy(inputStream1, outputStream);
+//        
+//        TeamMember tm = null;
+//        if (session.getAttribute("currentMember") != null)
+//        	tm = (TeamMember) session.getAttribute("currentMember");
+//        
+//        ImportBuilder importBuilder = new ImportBuilder();
+//        boolean importOk = false;
+//		importOk = importBuilder.splitInChunks(inputStream);
+//		if(!importOk) {
+//			ActionErrors errors = new ActionErrors();
+//			errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
+//			request.setAttribute("loadFile",null);
+//			
+//			if (errors.size() > 0){
+//				session.setAttribute("DEimportErrors", errors);
+//			}
+//			else session.setAttribute("DEimportErrors", null);
+//			return mapping.findForward("forwardError");
+//		}
+//		
+//		importBuilder.generateLogForActivities(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd");
+//        
+//        importBuilder.createActivityTree();
+//        
+//        //deCreateSourceForm.setActivityTree(importBuilder.getRoot());
+//        
+//        session.setAttribute("DELogGenerated", importBuilder.printLogs());
+//        session.setAttribute("importBuilder", importBuilder);
+//        session.setAttribute("DEfileUploaded", "true");
+//        
+//		return mapping.findForward("afterUploadFile");
+//	}
 
 	
 }

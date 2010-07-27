@@ -203,14 +203,15 @@ public class CategoryManager extends Action {
 			
 			while (iterator.hasNext()) {
 				AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
-				//possibleValues[k++]					= ampCategoryValue.getValue();
-				PossibleValue value					= new PossibleValue();
+				if (ampCategoryValue!=null){
+					//possibleValues[k++]					= ampCategoryValue.getValue();
+					PossibleValue value					= new PossibleValue();
 				
-				value.setValue(ampCategoryValue.getValue());
-				value.setId(ampCategoryValue.getId());
-				value.setDisable(false);
-				
-				possibleVals.add(value);
+					value.setValue(ampCategoryValue.getValue());
+					value.setId(ampCategoryValue.getId());
+					value.setDisable(false);
+					possibleVals.add(value);
+				}
 			}
 			
 			//myForm.setPossibleValues( possibleValues );

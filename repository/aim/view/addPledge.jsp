@@ -147,6 +147,14 @@ function removeSector() {
 	}	
 }
 
+function cancel(){
+	<digi:context name="cancel" property="/savePledge.do" />
+	document.pledgeForm.action = "<%=cancel%>?cancel=true";
+	document.pledgeForm.target = "_self";
+
+	document.pledgeForm.submit();
+}
+
 function savePledge() {
 
 	if (validateData()){
@@ -1424,11 +1432,18 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								</feature:display>
 								<table width="95%" bgcolor="#f4f4f2" border="0">
-									<tr><td align="center">
-										<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">
-	                                         <digi:trn key="btn:savePlegde">Save Pledge</digi:trn>
-										</html:button>
-									</td></tr>
+									<tr>
+										<td align="right" width="50%">
+											<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">
+		                                         <digi:trn key="btn:savePlegde">Save Pledge</digi:trn>
+											</html:button>
+										</td>
+										<td align="left" width="50%">
+											<html:button styleClass="dr-menu" property="submitButton" onclick="return cancel()">
+		                                         <digi:trn key="btn:cancel">Cancel</digi:trn>
+											</html:button>
+										</td>
+									</tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>

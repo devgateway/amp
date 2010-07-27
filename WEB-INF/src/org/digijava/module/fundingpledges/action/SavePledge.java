@@ -32,6 +32,11 @@ public class SavePledge extends Action {
 			
     		PledgeForm plForm = (PledgeForm) form;
     		
+    		if (request.getParameter("cancel")!=null && request.getParameter("cancel").equals("true")) {
+    			request.getSession().removeAttribute("cancel");
+    			return mapping.findForward("forward");
+			}
+    		
     		FundingPledges pledge = null;
     		if (plForm.getFundingPledges()==null) {
     			pledge = new FundingPledges();

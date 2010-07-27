@@ -99,8 +99,17 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private AmpBudgetSector parentsector;
     private Set<AmpDepartments> departments;
     private Set<AmpBudgetSector> budgetsectors;
-    
-    
+    private String  lineMinRegNumber;
+
+    public String getLineMinRegNumber() {
+        return lineMinRegNumber;
+    }
+
+    public void setLineMinRegNumber(String lineMinRegNumber) {
+        this.lineMinRegNumber = lineMinRegNumber;
+    }
+
+       
     public Set<AmpBudgetSector> getBudgetsectors() {
 		return budgetsectors;
 	}

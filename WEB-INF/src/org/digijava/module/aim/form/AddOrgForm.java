@@ -117,6 +117,17 @@ public class AddOrgForm extends ActionForm {
 	private Long[] selecteddepartments;
 	private Collection<AmpBudgetSector> budgetsectors;
 	private Long[] selectedbudgetsectors;
+    private String  lineMinRegNumber;
+
+    public String getLineMinRegNumber() {
+        return lineMinRegNumber;
+    }
+
+    public void setLineMinRegNumber(String lineMinRegNumber) {
+        this.lineMinRegNumber = lineMinRegNumber;
+    }
+
+
 	public Collection<AmpBudgetSector> getBudgetsectors() {
 		return budgetsectors;
 	}

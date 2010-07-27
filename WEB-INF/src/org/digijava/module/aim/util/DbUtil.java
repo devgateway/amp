@@ -2971,6 +2971,7 @@ public class DbUtil {
                 String taxNumber = org.getTaxNumber();
                 String primaryPurpose = org.getPrimaryPurpose();
                 String minPlanRegNumb = org.getMinPlanRegNumb();
+                String lineMinRegNumber = org.getLineMinRegNumber();
                 String legalPersonNum = org.getLegalPersonNum();
                 Date legalPersonRegDate = org.getLegalPersonRegDate();
                 Date minPlanRegDate = org.getMinPlanRegDate();
@@ -3014,6 +3015,7 @@ public class DbUtil {
                 org.setLineMinRegDate(lineMinRegDate);
                 org.setReceiptLegPersonalityAct(receiptLegPersonalityAct);
                 org.setOtherInformation(otherInformation);
+                org.setLineMinRegNumber(lineMinRegNumber);
                 if(org.getLocations()==null){
                     org.setLocations(new HashSet<AmpOrgLocation>());
                 }

@@ -139,15 +139,14 @@ public class EditOrganisation extends DispatchAction {
                   editForm.setOrgInfos(new ArrayList(organization.getOrganizationBudgetInfos()));
               }
               editForm.setOrgPrimaryPurpose(organization.getPrimaryPurpose());
-              if (organization.getMinPlanRegNumb() != null) {
-                  editForm.setRegNumbMinPlan(organization.getMinPlanRegNumb().toString());
+            
+              editForm.setRegNumbMinPlan(organization.getMinPlanRegNumb());
+              
+              if (organization.getMinPlanRegDate() != null) {
+                  editForm.setMinPlanRegDate(FormatHelper.formatDate(organization.getMinPlanRegDate()));
               }
-
-              editForm.setMinPlanRegDate(FormatHelper.formatDate(organization.getMinPlanRegDate()));
-              if (organization.getLegalPersonNum() != null) {
-                  editForm.setLegalPersonNum(organization.getLegalPersonNum().toString());
-              }
-
+              
+              editForm.setLegalPersonNum(organization.getLegalPersonNum());
               if (organization.getLegalPersonRegDate() != null) {
                   editForm.setLegalPersonRegDate(FormatHelper.formatDate(organization.getLegalPersonRegDate()));
               }
@@ -157,6 +156,7 @@ public class EditOrganisation extends DispatchAction {
               if (organization.getLineMinRegDate() != null) {
                   editForm.setLineMinRegDate(FormatHelper.formatDate(organization.getLineMinRegDate()));
              }
+             editForm.setLineMinRegNumber(organization.getLineMinRegNumber());
              editForm.setReceiptLegPersonalityAct(organization.getReceiptLegPersonalityAct());
              editForm.setOtherInformation(organization.getOtherInformation());
              List<AmpOrgRecipient> recipients=new ArrayList<AmpOrgRecipient>(organization.getRecipients());
@@ -813,6 +813,7 @@ public class EditOrganisation extends DispatchAction {
           editForm.setOtherInformation(null);
           editForm.setReceiptLegPersonalityAct(null);
           editForm.setLineMinRegDate(null);
+          editForm.setLineMinRegNumber(null);
           editForm.setOperFuncApprDate(null);
       }
       return mapping.findForward("forward");
@@ -948,6 +949,12 @@ public class EditOrganisation extends DispatchAction {
       }
       else{
           organization.setLineMinRegDate(null);
+      }
+      if (editForm.getLineMinRegNumber() != null && !editForm.getLineMinRegNumber().equals("")) {
+          organization.setLineMinRegNumber(editForm.getLineMinRegNumber());
+
+      } else {
+          organization.setLineMinRegNumber(null);
       }
       organization.setReceiptLegPersonalityAct(editForm.getReceiptLegPersonalityAct());
       organization.setOtherInformation(editForm.getOtherInformation());
@@ -1365,6 +1372,7 @@ public class EditOrganisation extends DispatchAction {
           form.setOrgInfoType(null);
           form.setOrgInfoSelectedYear(null);
           form.setOrgInfoPercent(null);
+          form.setLineMinRegNumber(null);
           Collection col = DbUtil.getAllOrgTypes();
           if (col != null) {
               List sortedCol = new ArrayList(col);

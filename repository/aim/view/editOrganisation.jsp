@@ -1252,6 +1252,12 @@
                                                                         </a>
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <td nowrap style=" text-align:right" class="tdBoldClass"><digi:trn>Line Ministry Registration Number</digi:trn></td>
+                                                                    <td>
+                                                                        <html:text property="lineMinRegNumber"/>
+                                                                    </td>
+                                                                </tr>
                                                                  <tr>
                                                                     <td style=" text-align:right" class="tdBoldClass"><digi:trn>Registration date of Line Ministry</digi:trn></td>
                                                                     <td>

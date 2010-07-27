@@ -1,24 +1,18 @@
 package org.digijava.module.widget.util;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +26,12 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.IndicatorSector;
@@ -60,10 +52,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.orgProfile.helper.FilterHelper;
-import org.digijava.module.orgProfile.helper.NameValueYearHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
@@ -83,7 +73,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.ItemLabelAnchor;
@@ -95,7 +84,6 @@ import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.RingPlot;
 import org.jfree.chart.plot.XYPlot;
@@ -380,32 +368,36 @@ public class ChartWidgetUtil {
         Font subTitleFont = new Font("Arial", Font.BOLD, 10);
         CategoryDataset dataset =null;
         TextTitle subTitle=null;
-        String trnsType="";
+        String titleType="";
         if (filter.getTransactionType() == 0) {
-            trnsType = TranslatorWorker.translateText(" commitments in", opt.getLangCode(), opt.getSiteId());
+            titleType = " commitments in";
         } else {
-            trnsType = TranslatorWorker.translateText(" disbursements in", opt.getLangCode(), opt.getSiteId());
+            titleType = " disbursements in";
         }
         switch (widgetType) {
 
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
                 dataset = ChartWidgetUtil.getPledgesCommDisbExpDataset(filter, opt);
-                subTitle = new TextTitle(filter.getCurrName(), subTitleFont);
+                String currencyTranslated = TranslatorWorker.translateText(filter.getCurrName(), opt.getLangCode(), opt.getSiteId());
+                subTitle = new TextTitle(currencyTranslated, subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_ODA_PROFILE:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, false);
-                trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
-                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                titleType = "Actual" + titleType + " " + filter.getCurrName();
+                titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
+                subTitle = new TextTitle(titleType, subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                 dataset = ChartWidgetUtil.getTypeOfAidOdaProfileDataset(filter, opt, true);
-                trnsType= TranslatorWorker.translateText("Actual", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
-                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                titleType = "Actual" + titleType + " " + filter.getCurrName();
+                titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
+                subTitle = new TextTitle( titleType ,subTitleFont);
                 break;
             case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
-                trnsType= TranslatorWorker.translateText("Actual vs Planned", opt.getLangCode(), opt.getSiteId())+" "+trnsType;
+                titleType = "Actual vs Planned" +titleType + " " + filter.getCurrName();
                 dataset = ChartWidgetUtil.getAidPredictiblityDataset(filter,opt);
-                subTitle = new TextTitle( trnsType+" "+filter.getCurrName(),subTitleFont);
+                titleType = TranslatorWorker.translateText(titleType, opt.getLangCode(), opt.getSiteId());
+                subTitle = new TextTitle(titleType,subTitleFont);
                 break;
 
         }
@@ -806,11 +798,12 @@ public class ChartWidgetUtil {
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
 		DefaultPieDataset dataset = null;
+    	String otherTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
         if(WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN==widgetType){
-            dataset=getDonorSectorDataSet(filter,sectorClassConfigId);
+            dataset=getDonorSectorDataSet(filter,sectorClassConfigId,otherTitle);
         }
         else{
-             dataset=getDonorRegionalDataSet(filter);
+             dataset=getDonorRegionalDataSet(filter,otherTitle);
         }
 		String transTypeName = "";
 		switch (filter.getTransactionType()) {
@@ -821,7 +814,7 @@ public class ChartWidgetUtil {
 			transTypeName = "Disbursement in";
 			break;
 		}
-        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
+        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName+" "+filter.getCurrName(), opt.getLangCode(), opt.getSiteId());
         dataset.sortByKeys(SortOrder.ASCENDING);
         chart = ChartFactory.createRingChart(opt.getTitle(), dataset, true, true, false);
 		chart.setBackgroundPaint(new Color(255,255,255,0));
@@ -829,7 +822,7 @@ public class ChartWidgetUtil {
 		if (title != null) {
 			title.setFont(titleFont);
 		}
-        TextTitle subTitle = new TextTitle(transTypeNameTrn+" "+filter.getCurrName(),subTitleFont);
+        TextTitle subTitle = new TextTitle(transTypeNameTrn,subTitleFont);
         TextTitle subTitleDate = new TextTitle(FormatHelper.formatDate(filter.getStartDate())+"-" +FormatHelper.formatDate(filter.getEndDate()),subTitleFont);
 		subTitle.setPadding(5, 5, 5, 5);
 		chart.addSubtitle(0, subTitle);
@@ -1228,7 +1221,7 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter,String othersTitle) throws DgException {
        BigDecimal divideByMillionDenominator=new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
               divideByMillionDenominator=new BigDecimal(1000);
@@ -1281,7 +1274,7 @@ public class ChartWidgetUtil {
                 }
             }
             if (!othersValue.equals(BigDecimal.ZERO)) {
-                ds.setValue("Others", othersValue.setScale(10, RoundingMode.HALF_UP));
+                ds.setValue(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
             }
         } catch (Exception e) {
             logger.error(e);
@@ -1438,7 +1431,7 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter,Long sectorClassConfigId) throws DgException {
+    public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter,Long sectorClassConfigId,String othersTitle) throws DgException {
         Double divideByMillionDenominator=new Double(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
              divideByMillionDenominator=new Double(1000);
@@ -1487,7 +1480,7 @@ public class ChartWidgetUtil {
             }
         }
         if (others.doubleValue() > 0) {
-            ds.setValue("Others", others/divideByMillionDenominator);
+            ds.setValue(othersTitle, others/divideByMillionDenominator);
         }
 
         return ds;

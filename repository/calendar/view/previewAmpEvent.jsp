@@ -59,11 +59,27 @@ function getWeekdays(){
     return result;
  }
 
+function valid(value){
+	var err = '<digi:trn>Are You sure?</digi:trn>';
+ 	if(confirm(err)){
+ 		if (value){
+ 	 		document.getElementById('hdnValid').value = 1;
+ 	 	} else {
+ 	 	 	document.getElementById('hdnValid').value = -1;
+ 	 	}
+ 	 	document.getElementById('hdnMethod').value = "valid";
+ 	 	document.getElementById('eventForm').submit();
+ 	 	return true;
+ 	 }
+ 	 return false;
+}
+
 </script>
 
-<digi:form action="/showCalendarEvent.do">
+<digi:form styleId="eventForm" action="/showCalendarEvent.do">
 
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
+  <html:hidden styleId="hdnValid" name="calendarEventForm" property="approve"/>
   <html:hidden styleId="id" name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table width="530">
@@ -102,7 +118,12 @@ function getWeekdays(){
 			                   	<td  style="height: 5px;"/>
 			                 </tr>
 			                 <tr>
-			               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
+								<td style="background-color: #CCDBFF;height: 18px;">
+				               	 	<feature:display name="Event Approve" module="Calendar">
+	 	 	 	 			            <c:if test="${calendarEventForm.approve==0||calendarEventForm.approve==2}">Awaiting Validation</c:if>
+	 	 	 	 			            <c:if test="${calendarEventForm.approve==-1}">Event not Approved</c:if>
+	 	 	 	 				    </feature:display>
+ 	 	 	 		            </td>
 			                 </tr>
 			            </table>
                 	</td>                	
@@ -285,6 +306,19 @@ function getWeekdays(){
 										&nbsp;
 										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
 									</td>
+								</tr>
+				            </c:if>
+							<c:if test="${sessionScope.currentMember.teamHead==true && (calendarEventForm.approve==0||calendarEventForm.approve==2)}">
+ 	 	 	 					<tr>
+					              	<td>
+					              	</td>
+									<td>
+					               		<feature:display name="Event Approve" module="Calendar">
+		 	 	 	 						<input type="button" value="<digi:trn>Approved</digi:trn>" style="width: 110px;" onclick="valid(true);" />
+		 	 	 	 						&nbsp;
+											<input type="button" value="<digi:trn>Not Approved</digi:trn>" style="width: 110px;" onclick="valid(false);" />
+ 	 	 	 							</feature:display>
+ 	 	 	 						</td>
 								</tr>
 				            </c:if>
 				           	<c:if test="${calendarEventForm.actionButtonsVisible==false}">

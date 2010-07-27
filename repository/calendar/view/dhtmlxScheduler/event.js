@@ -464,7 +464,7 @@ scheduler.render_event_bar=function(ev){
 	if (cse) cs=cs+" "+cse; 
 	
 	var html='<div event_id="'+ev.id+'" class="'+cs+'" style="position:absolute; top:'+y+'px; left:'+x+'px; width:'+(x2-x-15)+'px;'+(ev._text_style||"")+'">';
-		
+	
 	if (ev._timed)
 		html+=scheduler.templates.event_bar_date(ev.start_date,ev.end_date,ev);
 	html+=scheduler.templates.event_bar_text(ev.start_date,ev.end_date,ev)+'</div>';

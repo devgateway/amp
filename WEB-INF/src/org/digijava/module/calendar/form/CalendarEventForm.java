@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
+import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
@@ -78,7 +79,7 @@ public class CalendarEventForm
 	private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
-
+    private int approve;
     private Long selOrganizations[];
 	private Collection<AmpOrganisation> organizations;
 	private String description;
@@ -110,6 +111,14 @@ public class CalendarEventForm
 		return selOrganizations;
 	}
 
+	public int getApprove() {
+		return approve;
+	}
+	
+	public void setApprove(int approve) {
+		this.approve = approve;
+	}
+		
 	public void setSelOrganizations(Long[] selOrganizations) {
 		this.selOrganizations = selOrganizations;
 	}

@@ -208,6 +208,11 @@ public class CalendarUtil {
 						 }else{
 						 	xml+="<details>"+"No Description"+"</details>";
 						 }
+						 if(calItme.getApprove() != null){
+							 xml+="<approve>"+calItme.getApprove()+"</approve>";
+						 }else{
+						 	xml+="<approve>"+"1"+"</approve>";
+						 }
 					}
 										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
 										//id.getEventType().getId();

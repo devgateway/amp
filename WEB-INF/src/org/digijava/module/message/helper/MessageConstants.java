@@ -122,6 +122,7 @@ public class MessageConstants {
 	 */
     public static final int CALENDAR_EVENT_AWAITING = 0;
     public static final int CALENDAR_EVENT_APPROVED = 1;
+    public static final int CALENDAR_EVENT_AWAITING_REAPPROVE = 2;
     public static final int CALENDAR_EVENT_NOT_APPROVED = -1;
    
 }

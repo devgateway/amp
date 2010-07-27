@@ -238,9 +238,16 @@
 		
 	if(!printView){
 		 scheduler.templates.event_bar_text=function(start_date,end_date,ev){
-		    var dotted= "..."; 
+			var app = "";
+			if (ev.approve==0) {
+				app = "*";
+			} else if (ev.approve==2){
+				app = "**";
+			}
+				
+			var dotted= "..."; 
 			var isDotted = ev.text.length >20 ? dotted : "";
-		    var text = ev.text.substr(0,20)+isDotted;
+		    var text = app+ev.text.substr(0,20)+isDotted;
 	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
 	        return "<span  title='"+"Title: "+text+" "+" StartDate: "+start_date+" EndDate: "+end_date+"'>"+img+""+text+"</span>";
 		 }

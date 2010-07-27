@@ -9,7 +9,7 @@ MAP
   SIZE 400 450
   UNITS kilometers
   
-  EXTENT -180 -90 180 90
+  EXTENT 30.4193 -27.0 40.8393 -10.3
   PROJECTION
     'proj=longlat'
     'ellps=WGS84'

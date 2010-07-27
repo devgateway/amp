@@ -24,8 +24,8 @@ insert into amp_measures
 values 
 	('Actual Commitments','Actual Commitments','P',null, null),
 	('Actual Disbursements','Actual Disbursements','P',null, null),
-	('Planed Commitments','Planed Commitments','P',null, null),
-	('Planed Disbursements','Planed Disbursements','P',null, null);
+	('Planned Commitments','Pledges Planned Commitments','P',null, null),
+	('Planned Disbursements','Pledges Planned Disbursements','P',null, null);
 
 CREATE OR REPLACE VIEW   v_pledges_funding_st  AS 
 	SELECT   `f`.`id` AS `pledge_id`,

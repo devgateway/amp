@@ -49,7 +49,7 @@ public class AddressBookActions extends DispatchAction {
     	String alpha=null;
     	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
     		alpha=myForm.getCurrentAlpha();
-    	}    	
+    	}
 //    	
 //    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword(),alpha);
 //    	//how many pages
@@ -117,7 +117,7 @@ public class AddressBookActions extends DispatchAction {
 		String results = request.getParameter("results");
 		//get contacts
 		List<AmpContact> pagedContacts=ContactInfoUtil.getPagedContacts(new Integer(startIndex).intValue(), new Integer(results).intValue(), sortBy,sortDir,myForm.getKeyword(),alpha);
-		
+
 
         JSONObject json = null;
 

@@ -248,6 +248,9 @@ html>body #main {
 	</style>
 	
 <script language="JavaScript">
+	var msgDataError = '<digi:trn>Data error</digi:trn>';
+	var msgLoading	 = '<digi:trn>Loading...</digi:trn>';
+	
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		function initDynamicTable1() {	
 				
@@ -293,7 +296,7 @@ html>body #main {
 		        }
 		
 		        var handleFailure = function(o){
-		        	if(o.responseText !== undefined){
+		        	if(o.responseText != undefined){
 		        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
 		        		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
 		        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
@@ -306,19 +309,22 @@ html>body #main {
 		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
 		        	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
 		        	rowsPerPageOptions : [10,25,50,100]
-		        });   
+		        }); 
 		        var myConfigs = {
 		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
 		            dynamicData: true, // Enables dynamic server-driven data
 		            sortedBy : {key:"name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
 		            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
-		            paginator:myPaginator
+		            paginator:myPaginator,
+		            MSG_ERROR:msgDataError,
+		            MSG_LOADING:msgLoading
 		        };
 		    	 
 		        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
 		        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
 		        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
 		        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+		        
 		 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
 						var target = YAHOO.util.Event.getTarget(ev);
 						var record = this.getRecord(target);
@@ -538,7 +544,7 @@ html>body #main {
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">
 																					<html:option value="${addressbookForm.currentAlpha}">${addressbookForm.currentAlpha}</html:option>
 																				</c:if>
-																				<html:option value="viewAll">-All-</html:option>
+																				<html:option value="viewAll"><digi:trn>-All-</digi:trn></html:option>
 																				<c:if test="${not empty addressbookForm.alphaPages}">
 																					<logic:iterate name="addressbookForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 																						<c:if test="${alphaPages != null}">

@@ -161,26 +161,32 @@ public class ReportsFilterPicker extends MultiAction {
  	 	List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
 		
  	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
- 	 	                
+ 	 	
+ 	 	
+ 	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+ 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
+ 	 	
+ 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
  	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
  	 	rootAmpSectors.setLabel("Primary Sectors");
  	 	rootAmpSectors.setUniqueId(0 + "");
  	 	rootAmpSectors.setChildren(ampSectors);
  	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
- 	 	
- 	 	HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
- 	 	rootSecondaryAmpSectors.setLabel("Secondary Sectors");
- 	 	rootSecondaryAmpSectors.setUniqueId("0");
- 	 	rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
- 	 	GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
- 	 	
- 	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.getSectorElements().add(sectorsElement);
- 	 	filterForm.getSectorElements().add(secondarySectorsElement);
- 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
+ 	 	}
  	 	
-		
- 	 	AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+ 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
+ 	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
+ 	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
+ 	 		rootSecondaryAmpSectors.setUniqueId("0");
+ 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
+ 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
+ 	 		filterForm.getSectorElements().add(secondarySectorsElement);
+ 	 	}
+ 	 		
+ 	 	
+ 	 	
+		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
 		List<AmpTheme> primaryPrograms;		
 		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {

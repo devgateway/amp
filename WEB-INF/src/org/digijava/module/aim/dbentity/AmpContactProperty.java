@@ -8,6 +8,13 @@ public class AmpContactProperty {
 	private String name;
 	private String value;
 
+    public String getActualPhoneNumber() {
+        return ContactInfoUtil.getActualPhoneNumber(value);
+    }
+
+    public String getPhoneCategory() {
+        return ContactInfoUtil.getPhoneCategory(value);
+    }
     public String getValueAsFormatedPhoneNum () {
         return ContactInfoUtil.getFormatedPhoneNum(value);
     }

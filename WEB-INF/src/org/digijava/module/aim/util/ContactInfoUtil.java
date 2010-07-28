@@ -529,5 +529,40 @@ public class ContactInfoUtil {
 
         return retVal.toString();
     }
+
+    //these methods are quick workaraound on translation problem
+    public static String getActualPhoneNumber (String phoneNum) {
+        String retVal = null;
+        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
+            int typeIdSeparatorPos = phoneNum.indexOf(" ");
+            String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
+            retVal=phoneNumberStr;
+        }
+        return retVal;
+    }
+     //these methods are  workaraound on translation problem
+    public static String getPhoneCategory (String phoneNum) {
+        StringBuffer retVal = new StringBuffer();
+        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
+            int typeIdSeparatorPos = phoneNum.indexOf(" ");
+            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
+            Long phoneTypeId = null;
+            try {
+                phoneTypeId = Long.parseLong(phoneTypeIdStr);
+                AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
+                if(catVal!=null){
+                	retVal.append(catVal.getValue());
+                }
+            } catch (NumberFormatException ex){
+                //Old style record processing
+                retVal.append(phoneTypeIdStr);
+            }
+
+        } else {
+            retVal.append("Incorrect phone number");
+        }
+
+        return retVal.toString();
+    }
 		
 }

@@ -1700,8 +1700,8 @@
 								                                            </td>
 								                                            <td class="tdClass">
 								                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
-																					<c:if test="${phone.name=='contact phone'}">
-																						<div>${phone.valueAsFormatedPhoneNum}</div>
+																					<c:if test="${phone.name=='contact phone'}">                                                                                     
+                                                                                        <div><c:if test="${not empty phone.phoneCategory}"><digi:trn>${phone.phoneCategory}</digi:trn></c:if>${phone.actualPhoneNumber}</div>
 																					</c:if>
 																				</c:forEach>
 								                                            </td>

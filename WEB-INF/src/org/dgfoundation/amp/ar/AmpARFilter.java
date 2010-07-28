@@ -217,6 +217,7 @@ public class AmpARFilter extends PropertyListable {
 
 	
 	private Set<AmpCategoryValue> typeOfAssistance = null;
+	private Set<AmpCategoryValue> modeOfPayment = null;
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
@@ -682,7 +683,10 @@ public class AmpARFilter extends PropertyListable {
 		
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
-				+ Util.toCSString(typeOfAssistance) + ")";
+			+ Util.toCSString(typeOfAssistance) + ")";
+
+		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
+			+ Util.toCSString(modeOfPayment) + ")";
 
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
@@ -900,6 +904,8 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(DRAFT_FILTER);
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
+		if (modeOfPayment != null && modeOfPayment.size() > 0)
+			queryAppend(MODE_OF_PAYMENT_FILTER);
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
 		
@@ -1430,6 +1436,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setTypeOfAssistance(Set<AmpCategoryValue> typeOfAssistance) {
 		this.typeOfAssistance = typeOfAssistance;
+	}
+
+	public Set<AmpCategoryValue> getModeOfPayment() {
+		return modeOfPayment;
+	}
+
+	public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
 	}
 
 	@IgnorePersistence

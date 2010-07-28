@@ -353,6 +353,19 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFinancingLocationElements().add(typeOfAssistElement);
 		}
 		
+		if (FeaturesUtil.isVisibleField("Mode of Payment", ampContext)) { 
+			Collection<AmpCategoryValue> modeOfPaymentValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY, true, request);	
+			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
+			rootModeOfPayment.setLabel("All Mode of Payment Values");
+			rootModeOfPayment.setUniqueId("0");
+			rootModeOfPayment.setChildren( modeOfPaymentValues );
+			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
+					new GroupingElement<HierarchyListableImplementation>("Mode of Payment", "filter_mode_of_payment_div", 
+							rootModeOfPayment, "selectedModeOfPayment");
+			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
+		}
+		
 		if (FeaturesUtil.isVisibleField("Project Category", ampContext)) { 
 			Collection<AmpCategoryValue> projCategoryValues	=
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_CATEGORY_KEY, true, request);	
@@ -1049,8 +1062,21 @@ public class ReportsFilterPicker extends MultiAction {
 				if (value != null)
 					arf.getTypeOfAssistance().add(value);
 			}
-		} else
+		} else {
 			arf.setTypeOfAssistance(null);
+		}
+			
+		if (filterForm.getSelectedModeOfPayment() != null && filterForm.getSelectedModeOfPayment().length > 0) {
+			arf.setModeOfPayment(new HashSet<AmpCategoryValue>());
+			for (int i = 0; i < filterForm.getSelectedModeOfPayment().length; i++) {
+				Long id = filterForm.getSelectedModeOfPayment()[i];
+				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+				if (value != null)
+					arf.getModeOfPayment().add(value);
+			}
+		} else {
+			arf.setModeOfPayment(null);
+		}
 
 		if (filterForm.getPageSize() != null) {
 			arf.setPageSize(filterForm.getPageSize()); // set page size in the

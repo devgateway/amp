@@ -33,6 +33,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
 	private Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements;
 	private Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements;
+	private Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment;
 	private Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements;
 	
 	
@@ -78,6 +79,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
 	private Long[] selectedTypeOfAssistance;
+	private Long[] selectedModeOfPayment;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
 	private Object[] selectedDonorGroups; //
 	private Object[] selectedExecutingAgency;
@@ -370,6 +372,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedStatuses = null;
 				this.selectedFinancingInstruments = null;
 				this.selectedTypeOfAssistance = null;
+				this.selectedModeOfPayment = null;
 				this.selectedDonorTypes = null;
 				this.regionSelected = null;
 				this.selectedDonorGroups = null;
@@ -680,6 +683,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedTypeOfAssistance = selectedTypeOfAssistance;
 	}
 
+	public Long[] getSelectedModeOfPayment() {
+		return selectedModeOfPayment;
+	}
+
+	public void setSelectedModeOfPayment(Long[] selectedModeOfPayment) {
+		this.selectedModeOfPayment = selectedModeOfPayment;
+	}
+
 	public Long getCountYear() {
 		return countYear;
 	}
@@ -934,6 +945,21 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setFinancingLocationElements(
 			Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements) {
 		this.financingLocationElements = financingLocationElements;
+	}
+
+	/**
+	 * @return the modeOfPayment
+	 */
+	public Collection<GroupingElement<HierarchyListableImplementation>> getModeOfPayment() {
+		return modeOfPayment;
+	}
+
+	/**
+	 * @param modeOfPayment the modeOfPayment to set
+	 */
+	public void setModeOfPayment(
+			Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
 	}
 
 	/**

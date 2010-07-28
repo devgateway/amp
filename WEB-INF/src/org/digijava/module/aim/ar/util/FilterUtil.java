@@ -221,6 +221,8 @@ public class FilterUtil {
 
 		form.setSelectedTypeOfAssistance( FilterUtil.getObjectsIds(filter.getTypeOfAssistance()) );
 
+		form.setSelectedModeOfPayment( FilterUtil.getObjectsIds(filter.getModeOfPayment()) );
+
 		form.setPageSize( filter.getPageSize() );
 
 		form.setSelectedRisks( FilterUtil.getObjectsIds(filter.getRisks()) ); 

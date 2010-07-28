@@ -51,7 +51,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-        Site site = RequestUtils.getSite(request);
+         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
         response.setContentType("application/vnd.ms-excel");
@@ -95,7 +95,6 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
         short rowNum = 0;
         short cellNum = 0;
-        String siteId = site.getSiteId();
         HSSFRow row = sheet.createRow(rowNum++);
 
         HSSFCell cell = row.createCell(cellNum);
@@ -162,7 +161,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-        Site site = RequestUtils.getSite(request);
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
         response.setContentType("application/vnd.ms-excel");
@@ -206,7 +205,6 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
         short rowNum = 0;
         short cellNum = 0;
-        String siteId = site.getSiteId();
         HSSFRow row = sheet.createRow(rowNum++);
 
         HSSFCell cell = row.createCell(cellNum);
@@ -302,7 +300,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
        AddOrgForm editForm = (AddOrgForm) form;
-        Site site = RequestUtils.getSite(request);
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
         response.setContentType("application/vnd.ms-excel");
@@ -343,7 +341,6 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
         short rowNum = 0;
         short cellNum = 0;
-        String siteId = site.getSiteId();
         HSSFRow row = sheet.createRow(rowNum++);
 
         HSSFCell cell = row.createCell(cellNum);
@@ -493,7 +490,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-        Site site = RequestUtils.getSite(request);
+         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
         response.setContentType("application/vnd.ms-excel");
@@ -533,7 +530,6 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
         short rowNum = 0;
         short cellNum = 0;
-        String siteId = site.getSiteId();
         HSSFRow row = sheet.createRow(rowNum++);
 
         HSSFCell cell = row.createCell(cellNum);
@@ -674,7 +670,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
             row = sheet.createRow(rowNum++);
             cellNum=0;
             cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Sectors Prefernce", locale, siteId);
+            headerPrefix = TranslatorWorker.translateText("Sector Prefernces", locale, siteId);
             headerTitle = new HSSFRichTextString(headerPrefix);
             headerTitle.applyFont(fontSubHeader);
             cell.setCellValue(headerTitle);

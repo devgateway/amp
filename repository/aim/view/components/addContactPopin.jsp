@@ -182,7 +182,7 @@
 					</tr>	
 					<tr height="5px"><td colspan="2"/></tr>
                     <tr>
-                        <td colspan="2" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button>
+                        <td colspan="2" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()"><digi:trn>Save</digi:trn></html:button>
                             <c:if test="${aimAddContactForm.action=='edit'}">
                                 <html:button styleClass="dr-menu" property="submitButton" onclick="myPanelContact.hide()">
                                     <digi:trn>Close</digi:trn>

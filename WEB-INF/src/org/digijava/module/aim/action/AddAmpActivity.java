@@ -87,6 +87,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -373,7 +374,14 @@ public class AddAmpActivity extends Action {
 
                 }
 
-
+		
+		//eaForm.getDocuments().getCrDocuments().addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
+		/*if(eaForm.getDocuments().getDocuments() == null) {
+			eaForm.getDocuments().setDocuments(new ArrayList());
+		}*/
+		//eaForm.getDocuments().getDocuments().addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
+		request.getSession().setAttribute(SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP, SelectDocumentDM.getContentRepositoryHashMap(request));
+		
 	//===============Sectors START===========================
 
 		// Add sectors

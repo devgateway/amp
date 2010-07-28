@@ -41,7 +41,7 @@
 		<c:set var="windowName" target="request">&nbsp;</c:set>
 	</logic:empty>	
 	
-	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
+	
 		<div id="selDocumentsDiv"></div>
 		<field:display name="Remove Documents Button" feature="Related Documents">
 		<logic:notEmpty name="showRemoveButton" >
@@ -66,10 +66,11 @@
 						viewAllRights		: ${viewAllRights}
 				};
 				</logic:notEmpty>
+				//alert('showselecteddocumentsdm.jsp');
 				windowController	= newWindow('${windowName}',false,'selDocumentsDiv');
 				// windowController.setTitle('${windowName}');
 				windowController.populateWithSelDocs('<%=documentsType%>', rights);
 				
 			</script>
-	</c:if>
+	
 </logic:notEmpty>

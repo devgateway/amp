@@ -28,11 +28,11 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<!-- 
+													 
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocuments()">
 																<digi:trn key="btn:addDocuments">Add Documents</digi:trn>
 														</html:button>
-													 -->
+													 
 														
 														<feature:display name="Content Repository" module="Document Management">
 																<field:display name="Add Documents From Repository Button" feature="Related Documents">											

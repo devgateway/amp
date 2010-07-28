@@ -111,8 +111,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
 //	   }
 	   
  	}catch (Exception e) {
- 		System.out.println("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature());
- 		e.printStackTrace();}
+ 		logger.error("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature());
+ 		logger.error(e);}
 	   	
  	return EVAL_BODY_BUFFERED;//super.doStartTag();
 	
@@ -188,7 +188,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
     	   
        }
        catch (Exception e) {
-    	   e.printStackTrace();
+    	   logger.error(e);
        	throw new JspTagException(e.getMessage());
        }
        return EVAL_PAGE;//SKIP_BODY 

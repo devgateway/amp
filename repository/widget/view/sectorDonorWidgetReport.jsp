@@ -59,7 +59,7 @@
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
-                            <td colspan="2" align="center"><font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in USD</digi:trn>, <br/><digi:trn>Report shows activities only from the current workspace </digi:trn>.</font></td>
+                            <td colspan="2" align="center"><font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in USD</digi:trn></font></td>
 			</tr>
 		</table>
 	

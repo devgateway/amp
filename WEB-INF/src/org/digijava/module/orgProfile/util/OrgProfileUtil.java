@@ -76,6 +76,7 @@ public class OrgProfileUtil {
     public static final Color CELLCOLOR = new Color(219, 229, 241);
     public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
     public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+    public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD,Color.WHITE);
 
     /**
      *
@@ -1041,7 +1042,7 @@ public class OrgProfileUtil {
     }
 
     public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
-        int yearRange = 1;
+        int yearRange = 0;
         int endRange = 0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
@@ -1050,9 +1051,6 @@ public class OrgProfileUtil {
             case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
                 yearRange = filter.getYearsInRange() - 1;
                 break;
-            case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
-            case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                endRange = 1;
         }
         for (int i = yearRange; i >= endRange; i--) {
             PdfPCell cell = new PdfPCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
@@ -1108,7 +1106,7 @@ public class OrgProfileUtil {
     }
 
     public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
-        int yearRange = 1;
+        int yearRange = 0;
         int endRange = 0;
         switch (type) {
             case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB:
@@ -1117,13 +1115,10 @@ public class OrgProfileUtil {
             case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY:
                 yearRange = filter.getYearsInRange() - 1;
                 break;
-            case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
-            case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                endRange = 1;
 
         }
         for (int i = yearRange; i >= endRange; i--) {
-            RtfCell cell = new RtfCell(new Paragraph("" + (filter.getYear() - i), HEADERFONT));
+            RtfCell cell = new RtfCell(new Paragraph("" + (filter.getYear() - i), HEADERFONTWHITE));
             if (filter.getTransactionType() == 2 && type != WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB) {
                 cell.setColspan(2);
             }
@@ -1141,14 +1136,14 @@ public class OrgProfileUtil {
                 RtfCell cellDisb = null;
                 switch (filter.getTransactionType()) {
                     case Constants.COMMITMENT:
-                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONTWHITE));
                         break;
                     case Constants.DISBURSEMENT:
-                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONTWHITE));
                         break;
                     case 2: //both COMMITMENT & DISBURSEMENT
-                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONT));
-                        cellDisb = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONT));
+                        cell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), HEADERFONTWHITE));
+                        cellDisb = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), HEADERFONTWHITE));
                         break;
                 }
 

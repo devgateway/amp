@@ -242,9 +242,9 @@ public class FilterHelper implements Serializable {
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
-        int previousYear = year.intValue() - 1;
-        this.startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, previousYear);
-        this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, previousYear);
+        int fiscalYear = year.intValue();
+        this.startDate = OrgProfileUtil.getStartDate(fiscalCalendarId,  fiscalYear);
+        this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId,  fiscalYear);
         this.locationIds = new ArrayList<Long>();
         if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
             this.locationIds.addAll(Arrays.asList(zoneIds));

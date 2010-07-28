@@ -652,13 +652,9 @@ public class ExportToPDF extends Action {
                                     //create largest projects table
                                     largetsProjectsTbl = new PdfPTable(new float[]{25, 20, 55});
                                     int projectNumber = filter.getLargestProjectNumb();
-                                    String titlePart = TranslatorWorker.translateText("Largest projects", langCode, siteId);
-                                    if (projectNumber == -1) {
-                                        titlePart = TranslatorWorker.translateText("All", langCode, siteId) + " " + titlePart;
-                                    } else {
-                                        titlePart = projectNumber + " " + titlePart;
-                                    }
-                                    PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph(titlePart + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));             
+                                    String titlePart = TranslatorWorker.translateText("Largest projects", langCode, siteId);                  
+                                    titlePart = projectNumber + " " + titlePart;
+                                    PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph(titlePart + " (" + (filter.getYear()) + ")", OrgProfileUtil.HEADERFONT));             
                                     int largestColspan = 3;
 
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
@@ -749,7 +745,7 @@ public class ExportToPDF extends Action {
 
                                     allDonorsTbl.addCell(allDonorsTblTitle);
                                     PdfPCell baseline = new PdfPCell(new Paragraph(2005 +" "+ TranslatorWorker.translateText(" Baseline ", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                    PdfPCell value = new PdfPCell(new Paragraph(filter.getYear() - 1 +" "+ TranslatorWorker.translateText(" Value ", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    PdfPCell value = new PdfPCell(new Paragraph(filter.getYear() +" "+ TranslatorWorker.translateText(" Value ", langCode, siteId), OrgProfileUtil.HEADERFONT));
                                     PdfPCell target = new PdfPCell(new Paragraph(2010 +" "+ TranslatorWorker.translateText(" Target ", langCode, siteId), OrgProfileUtil.HEADERFONT));
                                                        
                                     allDonorsTbl.addCell(baseline);
@@ -784,7 +780,7 @@ public class ExportToPDF extends Action {
                                         if (piIndicator.getIndicatorCode().equals("10b") || piIndicator.getIndicatorCode().equals("8")) {
                                             continue;
                                         }
-                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
+                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
                                         PdfPCell indicatorCode = new PdfPCell(new Paragraph(piIndicator.getIndicatorCode(), OrgProfileUtil.PLAINFONT));
                                         PdfPCell indicatorName = new PdfPCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(), langCode, siteId), OrgProfileUtil.PLAINFONT));
                                         String sufix = "";
@@ -821,7 +817,7 @@ public class ExportToPDF extends Action {
                                             PdfPCell indicator5aCode = new PdfPCell(new Paragraph("5aii", OrgProfileUtil.PLAINFONT));
                                             PdfPCell indicator5aName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country PFM", langCode, siteId), OrgProfileUtil.PLAINFONT));
 
-                                            ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter, true);
+                                            ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter);
                                             PdfPCell indicator5aAllBaseline = new PdfPCell(new Paragraph(piInd5aHelper.getAllDonorBaseLineValue() + " ", OrgProfileUtil.PLAINFONT));
                                             PdfPCell indicatorAll5aCurrentValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllCurrentValue() + " ", OrgProfileUtil.PLAINFONT));
                                             PdfPCell indicatorAll5aTargetValue = new PdfPCell(new Paragraph(piInd5aHelper.getAllTargetValue() + " ", OrgProfileUtil.PLAINFONT));
@@ -850,7 +846,7 @@ public class ExportToPDF extends Action {
 
                                             PdfPCell indicator5bCode = new PdfPCell(new Paragraph("5aii", OrgProfileUtil.PLAINFONT));
                                             PdfPCell indicator5bName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                            ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter, true);
+                                            ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
                                             PdfPCell indicator5bAllBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix));
                                             PdfPCell indicator5bAllCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix));
                                             PdfPCell indicator5bAllTargetValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix));

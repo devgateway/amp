@@ -43,7 +43,7 @@ public class OrgProfileParisIndicatorAction extends Action {
             if (piIndicator.getIndicatorCode().equals("10b")) {
                 continue;
             }
-            ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
+            ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
             indicatorHelpers.add(piHelper);
 
             /* we should add indicator 5aii and indicator 5bii,
@@ -54,7 +54,7 @@ public class OrgProfileParisIndicatorAction extends Action {
                 ind5aii.setIndicatorCode("5aii");
                 ind5aii.setAmpIndicatorId(piIndicator.getAmpIndicatorId());
                 ind5aii.setName("Number of donors using country PFM");
-                ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter, true);
+                ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter);
                 indicatorHelpers.add(piInd5aHelper);
             }
             if (piIndicator.getIndicatorCode().equals("5b")) {
@@ -62,7 +62,7 @@ public class OrgProfileParisIndicatorAction extends Action {
                 ind5bii.setIndicatorCode("5bii");
                 ind5bii.setAmpIndicatorId(piIndicator.getAmpIndicatorId());
                 ind5bii.setName("Number of donors using country procurement system");
-                ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter, true);
+                ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
                 indicatorHelpers.add(piInd5bHelper);
             }
 

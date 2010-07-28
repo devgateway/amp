@@ -79,14 +79,9 @@ public class ParisIndicatorHelper {
         return allDonorBaseLineValue;
     }
 
-    public ParisIndicatorHelper(AmpAhsurveyIndicator prIndicator, FilterHelper helper,boolean previousYear) {
+    public ParisIndicatorHelper(AmpAhsurveyIndicator prIndicator, FilterHelper helper) {
         this.prIndicator = prIndicator;
-        if (previousYear) {
-            // in the org profile we are interested in previous year value according to specs.
-            this.year = helper.getYear() - 1;
-        } else {
-            this.year = helper.getYear();
-        }
+        this.year = helper.getYear();
         AmpCurrency curr = CurrencyUtil.getAmpcurrency(helper.getCurrId());
         this.currency = curr.getCurrencyCode();
         this.member = helper.getTeamMember();
@@ -164,9 +159,9 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long previousYearValue = OrgProfileUtil.getValue( indicatorCode,  currency, orgIds, orgGroupId, startDate, endDate, member,locationIds);
+        long yearValue = OrgProfileUtil.getValue( indicatorCode,  currency, orgIds, orgGroupId, startDate, endDate, member,locationIds);
 
-        return previousYearValue;
+        return yearValue;
     }
 
     public String getCurrency() {

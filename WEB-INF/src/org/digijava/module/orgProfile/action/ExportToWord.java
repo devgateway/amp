@@ -262,11 +262,11 @@ public class ExportToWord extends Action {
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
                                     typeOfAidTbl = new Table(colspan);
                                     typeOfAidTbl.setWidth(100);
-                                    RtfCell typeofAidTitleCell = new RtfCell(new Paragraph(typeOfAid + "(" + transTypeName + "|" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell typeofAidTitleCell = new RtfCell(new Paragraph(typeOfAid + "(" + transTypeName + "|" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     typeofAidTitleCell.setColspan(colspan);
                                     typeOfAidTbl.addCell(typeofAidTitleCell);
                                     typeofAidTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell tpAidTitleCell = new RtfCell(new Paragraph(typeOfAid, OrgProfileUtil.HEADERFONT));
+                                    RtfCell tpAidTitleCell = new RtfCell(new Paragraph(typeOfAid, OrgProfileUtil.HEADERFONTWHITE));
                                     tpAidTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     typeOfAidTbl.addCell(tpAidTitleCell);
                                     OrgProfileUtil.getDataTable(typeOfAidTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_TYPE_OF_AID, null);
@@ -290,11 +290,11 @@ public class ExportToWord extends Action {
                                     colspan = filter.getYearsInRange() + 1;
                                     pledgesCommDisbTbl = new Table(colspan);
                                     pledgesCommDisbTbl.setWidth(100);
-                                    RtfCell pledgesCommDisbTitleCell = new RtfCell(new Paragraph(pledgesCommDisbExp + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell pledgesCommDisbTitleCell = new RtfCell(new Paragraph(pledgesCommDisbExp + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     pledgesCommDisbTitleCell.setColspan(colspan);
                                     pledgesCommDisbTbl.addCell(pledgesCommDisbTitleCell);
                                     pledgesCommDisbTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell pldsCommDisbdTitleCell = new RtfCell(new Paragraph(" ", OrgProfileUtil.HEADERFONT));
+                                    RtfCell pldsCommDisbdTitleCell = new RtfCell(new Paragraph(" ", OrgProfileUtil.HEADERFONTWHITE));
                                     pldsCommDisbdTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     pledgesCommDisbTbl.addCell(pldsCommDisbdTitleCell);
                                     OrgProfileUtil.getDataTable(pledgesCommDisbTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB, null);
@@ -309,11 +309,11 @@ public class ExportToWord extends Action {
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
                                     aidPredTable = new Table(colspan);
                                     aidPredTable.setWidth(100);
-                                    RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPred + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPred + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     aidPredTitleCell.setColspan(colspan);
                                     aidPredTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     aidPredTable.addCell(aidPredTitleCell);
-                                    RtfCell aidPredTitleCellValue = new RtfCell(new Paragraph(aidPred, OrgProfileUtil.HEADERFONT));
+                                    RtfCell aidPredTitleCellValue = new RtfCell(new Paragraph(aidPred, OrgProfileUtil.HEADERFONTWHITE));
                                     aidPredTitleCellValue.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     aidPredTable.addCell(aidPredTitleCellValue);
                                     OrgProfileUtil.getDataTable(aidPredTable, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY, null);
@@ -335,11 +335,11 @@ public class ExportToWord extends Action {
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
                                     odaProfileTbl = new Table(colspan);
                                     odaProfileTbl.setWidth(100);
-                                    RtfCell odaProfileTitleCell = new RtfCell(new Paragraph(odaProfile + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell odaProfileTitleCell = new RtfCell(new Paragraph(odaProfile + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     odaProfileTitleCell.setColspan(colspan);
                                     odaProfileTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     odaProfileTbl.addCell(odaProfileTitleCell);
-                                    RtfCell odaProfTitleCell = new RtfCell(new Paragraph(odaProfile, OrgProfileUtil.HEADERFONT));
+                                    RtfCell odaProfTitleCell = new RtfCell(new Paragraph(odaProfile, OrgProfileUtil.HEADERFONTWHITE));
                                     odaProfTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     odaProfileTbl.addCell(odaProfTitleCell);
                                     OrgProfileUtil.getDataTable(odaProfileTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_ODA_PROFILE, null);
@@ -375,22 +375,22 @@ public class ExportToWord extends Action {
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
                                     sectorTbl = new Table(oneYearColspan);
                                     sectorTbl.setWidth(100);
-                                    RtfCell sectorTitleCell = new RtfCell(new Paragraph(sectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell sectorTitleCell = new RtfCell(new Paragraph(sectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     sectorTitleCell.setColspan(oneYearColspan);
                                     sectorTbl.addCell(sectorTitleCell);
                                     sectorTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell sectorNameTitleCell = new RtfCell(new Paragraph(sectorBreakdown, OrgProfileUtil.HEADERFONT));
+                                    RtfCell sectorNameTitleCell = new RtfCell(new Paragraph(sectorBreakdown, OrgProfileUtil.HEADERFONTWHITE));
                                     sectorNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     sectorTbl.addCell(sectorNameTitleCell);
                                     OrgProfileUtil.getDataTable(sectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, primaryConfigId);
                                     if (secondaryConfigId != null) {
                                         secondarySectorTbl = new Table(oneYearColspan);
                                         secondarySectorTbl.setWidth(100);
-                                        RtfCell secondarySectorTitleCell = new RtfCell(new Paragraph(secondarySectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                        RtfCell secondarySectorTitleCell = new RtfCell(new Paragraph(secondarySectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                         secondarySectorTitleCell.setColspan(oneYearColspan);
                                         secondarySectorTbl.addCell(secondarySectorTitleCell);
                                         secondarySectorTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                        RtfCell secondarySectorNameTitleCell = new RtfCell(new Paragraph(secondarySectorBreakdown, OrgProfileUtil.HEADERFONT));
+                                        RtfCell secondarySectorNameTitleCell = new RtfCell(new Paragraph(secondarySectorBreakdown, OrgProfileUtil.HEADERFONTWHITE));
                                         secondarySectorNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                         secondarySectorTbl.addCell(secondarySectorNameTitleCell);
                                         OrgProfileUtil.getDataTable(secondarySectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
@@ -426,11 +426,11 @@ public class ExportToWord extends Action {
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_DATA_SOURCE_ONLY == typeOfExport) {
                                     regionTbl = new Table(oneYearColspan);
                                     regionTbl.setWidth(100);
-                                    RtfCell regionTitleCell = new RtfCell(new Paragraph(regionBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                    RtfCell regionTitleCell = new RtfCell(new Paragraph(regionBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     regionTitleCell.setColspan(oneYearColspan);
                                     regionTbl.addCell(regionTitleCell);
                                     regionTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell regionNameTitleCell = new RtfCell(new Paragraph(regionBreakdown, OrgProfileUtil.HEADERFONT));
+                                    RtfCell regionNameTitleCell = new RtfCell(new Paragraph(regionBreakdown, OrgProfileUtil.HEADERFONTWHITE));
                                     regionNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     regionTbl.addCell(regionNameTitleCell);
                                     OrgProfileUtil.getDataTable(regionTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN, null);
@@ -456,7 +456,7 @@ public class ExportToWord extends Action {
 
                                     orgSummaryTbl = new Table(2);
                                     orgSummaryTbl.setWidth(100);
-                                    RtfCell summaryTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Organization Profile", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell summaryTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Organization Profile", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     summaryTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     summaryTitleCell.setColspan(2);
                                     summaryTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -534,38 +534,38 @@ public class ExportToWord extends Action {
                                         if (organization != null) {
                                             orgContactsTbl = new Table(6);
                                             orgContactsTbl.setWidth(100);
-                                            RtfCell contactHeaderCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Contact Information", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactHeaderCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Contact Information", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactHeaderCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactHeaderCell.setColspan(6);
                                             contactHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactHeaderCell);
 
-                                            RtfCell contactLastNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Last Name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactLastNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Last Name", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactLastNameCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactLastNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactLastNameCell);
 
-                                            RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("First name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("First name", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactNameCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactNameCell);
 
-                                            RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactEmailCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactEmailCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactEmailCell);
 
-                                            RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactPhoneCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactPhoneCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactPhoneCell);
 
-                                            RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactFaxCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactFaxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactFaxCell);
 
-                                            RtfCell contactTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Title", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                            RtfCell contactTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Title", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                             contactTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                             contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                             orgContactsTbl.addCell(contactTitleCell);
@@ -676,12 +676,9 @@ public class ExportToWord extends Action {
                                     float widths[] = new float[]{50f, 15f, 35f};
                                     String titlePart = TranslatorWorker.translateText("Largest projects", langCode, siteId);
                                     int projectNumber = filter.getLargestProjectNumb();
-                                    if (projectNumber == -1) {
-                                        titlePart = TranslatorWorker.translateText("All", langCode, siteId) + " " + titlePart;
-                                    } else {
-                                        titlePart = projectNumber + " " + titlePart;
-                                    }
-                                    RtfCell largestProjectsTitle = new RtfCell(new Paragraph(titlePart + " (" + (filter.getYear() - 1) + ")", OrgProfileUtil.HEADERFONT));
+                                    titlePart = projectNumber + " " + titlePart;
+                                    
+                                    RtfCell largestProjectsTitle = new RtfCell(new Paragraph(titlePart + " (" + (filter.getYear()) + ")", OrgProfileUtil.HEADERFONTWHITE));
                                     largestProjectsTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
                                         largestColspan = 4;
@@ -694,24 +691,24 @@ public class ExportToWord extends Action {
                                     largestProjectsTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsTitle);
 
-                                    RtfCell largestProjectsProjecttitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Project title", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell largestProjectsProjecttitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Project title", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     largestProjectsProjecttitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     largestProjectsProjecttitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsProjecttitle);
 
-                                    RtfCell largestProjectsCommitmentTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell largestProjectsCommitmentTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     largestProjectsCommitmentTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     largestProjectsCommitmentTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsCommitmentTitle);
 
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
-                                        RtfCell largestProjectsDisbursemenTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        RtfCell largestProjectsDisbursemenTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                         largestProjectsDisbursemenTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                         largestProjectsDisbursemenTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                         largetsProjectsTbl.addCell(largestProjectsDisbursemenTitle);
                                     }
 
-                                    RtfCell largestProjectsSectorTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sector", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell largestProjectsSectorTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sector", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     largestProjectsSectorTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     largestProjectsSectorTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsSectorTitle);
@@ -766,19 +763,19 @@ public class ExportToWord extends Action {
                                     parisDecTbl.setWidth(100);
 
 
-                                    RtfCell parisDecTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("PARIS DECLARATION INDICATORS - DONORS", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell parisDecTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("PARIS DECLARATION INDICATORS - DONORS", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     parisDecTitle.setColspan(2);
                                     parisDecTitle.setRowspan(2);
                                     parisDecTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell allDonorsCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All Donors ", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell allDonorsCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All Donors ", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     allDonorsCell.setColspan(3);
                                     allDonorsCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell selectedOrgCell = new RtfCell(new Paragraph(orgName, OrgProfileUtil.HEADERFONT));
+                                    RtfCell selectedOrgCell = new RtfCell(new Paragraph(orgName, OrgProfileUtil.HEADERFONTWHITE));
                                     selectedOrgCell.setColspan(2);
                                     selectedOrgCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
-                                    RtfCell baseline = new RtfCell(new Paragraph(2005 +" "+ TranslatorWorker.translateText(" Baseline ", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                    RtfCell value = new RtfCell(new Paragraph(filter.getYear() - 1 +" "+ TranslatorWorker.translateText(" Value ", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                    RtfCell target = new RtfCell(new Paragraph(2010 + " "+TranslatorWorker.translateText(" Target ", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                    RtfCell baseline = new RtfCell(new Paragraph(2005 +" "+ TranslatorWorker.translateText(" Baseline ", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
+                                    RtfCell value = new RtfCell(new Paragraph(filter.getYear() +" "+ TranslatorWorker.translateText(" Value ", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
+                                    RtfCell target = new RtfCell(new Paragraph(2010 + " "+TranslatorWorker.translateText(" Target ", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
                                     baseline.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     value.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     target.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
@@ -810,7 +807,7 @@ public class ExportToWord extends Action {
                                         if (piIndicator.getIndicatorCode().equals("10b") || piIndicator.getIndicatorCode().equals("8")) {
                                             continue;
                                         }
-                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
+                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
                                         RtfCell indicatorCode = new RtfCell(new Paragraph(piIndicator.getIndicatorCode(), OrgProfileUtil.PLAINFONT));
                                         RtfCell indicatorName = new RtfCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(), langCode, siteId), OrgProfileUtil.PLAINFONT));
                                         String sufix = "";
@@ -857,7 +854,7 @@ public class ExportToWord extends Action {
                                             RtfCell indicator5aCode = new RtfCell(new Paragraph("5aii", OrgProfileUtil.PLAINFONT));
                                             RtfCell indicator5aName = new RtfCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country PFM", langCode, siteId), OrgProfileUtil.PLAINFONT));
 
-                                            ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter, true);
+                                            ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter);
                                             RtfCell indicator5aAllBaseline = new RtfCell(new Paragraph(piInd5aHelper.getAllDonorBaseLineValue() + " ", OrgProfileUtil.PLAINFONT));
                                             RtfCell indicatorAll5aCurrentValue = new RtfCell(new Paragraph(piInd5aHelper.getAllCurrentValue() + " ", OrgProfileUtil.PLAINFONT));
                                             RtfCell indicatorAll5aTargetValue = new RtfCell(new Paragraph(piInd5aHelper.getAllTargetValue() + " ", OrgProfileUtil.PLAINFONT));
@@ -896,7 +893,7 @@ public class ExportToWord extends Action {
                                             RtfCell indicator5bCode = new RtfCell(new Paragraph("5bii", OrgProfileUtil.PLAINFONT));
                                             RtfCell indicator5bName = new RtfCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system", langCode, siteId), OrgProfileUtil.PLAINFONT));
 
-                                            ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter, true);
+                                            ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
                                             RtfCell indicator5bAllBaseline = new RtfCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix, OrgProfileUtil.PLAINFONT));
                                             RtfCell indicator5bAllCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix, OrgProfileUtil.PLAINFONT));
                                             RtfCell indicator5bAllTargetValue = new RtfCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix, OrgProfileUtil.PLAINFONT));

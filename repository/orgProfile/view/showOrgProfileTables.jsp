@@ -82,7 +82,7 @@
                       ${sessionScope.orgProfileFilter.year-yearRange}
                   </c:when>
                   <c:otherwise>
-                      ${sessionScope.orgProfileFilter.year-yearRange-1}
+                      ${sessionScope.orgProfileFilter.year-yearRange}
                   </c:otherwise>
               </c:choose>
           </c:set>

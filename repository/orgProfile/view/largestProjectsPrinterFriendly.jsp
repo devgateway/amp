@@ -37,7 +37,7 @@
 <table border="1"  bgcolor="#dddddd" width="100%"  class="tableElement" cellspacing="0" cellpadding="0">
     <tr>
         <th colspan="4" class="tableHeaderCls">
-          ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})
+          ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year})
         </th>
     </tr>
     <tr>

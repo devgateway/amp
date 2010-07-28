@@ -28,7 +28,7 @@
     }
 </script>
 <c:set var="largestPrjTblName">
-    ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year-1})
+    ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn>(${sessionScope.orgProfileFilter.year})
 </c:set>
 <digi:instance property="orgProfLargestProjectsForm"/>
 <table border="0"  bgcolor="#dddddd" width="100%"  class="tableElement" cellspacing="0" cellpadding="0">

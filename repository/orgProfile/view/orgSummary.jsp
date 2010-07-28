@@ -82,15 +82,7 @@
 
 </script>
 <c:set var="largestPrjTblName">
-    <c:choose>
-        <c:when test="${sessionScope.orgProfileFilter.largestProjectNumb==-1}">
-            <digi:trn>All</digi:trn>
-        </c:when>
-        <c:otherwise>
-            ${sessionScope.orgProfileFilter.largestProjectNumb}
-        </c:otherwise>
-    </c:choose><digi:trn>LARGEST PROJECTS</digi:trn> (${sessionScope.orgProfileFilter.year-1})
-
+   ${sessionScope.orgProfileFilter.largestProjectNumb} <digi:trn>LARGEST PROJECTS</digi:trn> (${sessionScope.orgProfileFilter.year})
 </c:set>
 
 <DIV id="tabs">

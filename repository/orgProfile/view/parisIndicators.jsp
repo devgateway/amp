@@ -39,10 +39,10 @@
     </tr>
     <tr>
         <th class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></th>
-        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></th>
+        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear} <digi:trn>Value</digi:trn></th>
         <th class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></th>
         <th class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></th>
-        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} <digi:trn>Value</digi:trn></th>
+        <th class="tableHeaderCls">${orgProfilePIForm.fiscalYear} <digi:trn>Value</digi:trn></th>
 
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">

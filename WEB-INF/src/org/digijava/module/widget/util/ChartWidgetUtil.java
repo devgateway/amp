@@ -2042,6 +2042,6 @@ public class ChartWidgetUtil {
             years.add(lvb);
         }
         return years;
-    }
+    } 
 }
 

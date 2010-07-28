@@ -28,8 +28,9 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
@@ -103,7 +104,9 @@ div.fakefile2 input{
 
   
 	<script type="text/javascript">
+	YAHOOAmp.namespace("YAHOOAmp.amp");
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
+	YAHOOAmp.amp.dataExchangeImport				= new Object();
 	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
 		
 	YAHOOAmp.amp.dataExchangeImport.tabLabels	= new Array("tab_file_selection", "tab_log_after_import", "tab_select_activities", "tab_confirm_import");
@@ -200,7 +203,7 @@ div.fakefile2 input{
         							
         							<br /><br /> 
         							<digi:trn>Please choose the workspace that will be used</digi:trn> <br />
-        							<html:select property="teamId" style="width: 100px;">
+        							<html:select property="teamId" style="width: 260px;">
         								<html:optionsCollection property="teamValues" label="name" value="ampTeamId"/>
         							</html:select>  																		
         						</td>

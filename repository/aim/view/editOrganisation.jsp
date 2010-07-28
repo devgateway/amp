@@ -162,7 +162,7 @@
 						selected = true;
                 }
                 if (!selected){
-					alert ("Please, select one option first.");
+					alert ('<digi:trn jsFriendly="true">Please, select one option first.</digi:trn>');
 					return false;
                 } else {
                 	document.aimAddOrgForm.selectedStaffId.value=null;
@@ -224,7 +224,7 @@
  						selected = true;
                  }
                  if (!selected){
- 					alert ("Please, select one option first.");
+ 					alert ('<digi:trn jsFriendly="true">Please, select one option first.</digi:trn>');
  					return false;
                  } else {
                 	 document.aimAddOrgForm.selectedOrgInfoId.value=null;
@@ -256,7 +256,7 @@
         function addSectors() {
             var sectorSchemeId=document.aimAddOrgForm.ampSecSchemeId;
             if(sectorSchemeId.value=="-1"){
-                alert("Please select sector scheme");
+                alert('<digi:trn jsFriendly="true">Please select sector scheme</digi:trn>');
             }
             else{
                 myAddSectors("sectorScheme="+sectorSchemeId.value+"&configId=1");
@@ -265,7 +265,7 @@
         function removeSectors() {
         	var sectorsToBeRemoved=$("#selectedSectors").find("input.sectorsMultibox:checked");
         	if(sectorsToBeRemoved==null || sectorsToBeRemoved.length == 0){
-            	alert('Please choose at least one sector to remove');
+            	alert('<digi:trn jsFriendly="true">Please choose at least one sector to remove</digi:trn>');
             	return false;
         	}else{
         		<digi:context name="removeSectors" property="context/module/moduleinstance/editOrganisation.do" />
@@ -292,7 +292,7 @@
                 document.aimAddOrgForm.target = "_self"
                 document.aimAddOrgForm.submit();
     		}else{
-        		alert('Please select Organization to remove');
+        		alert('<digi:trn jsFriendly="true">Please select Organization to remove</digi:trn>');
         		return false;
     		}
     		
@@ -381,7 +381,7 @@
             document.aimAddOrgForm.submit();
         }
         function removeFundingDetail(index) {
-            var flag = confirm('<digi:trn  jsFriendly="true" key="aim:areYouSureRemoveTransaction">Are you sure you want to remove the selected transaction ?</digi:trn>');
+            var flag = confirm('<digi:trn  jsFriendly="true">Are you sure you want to remove the selected transaction ?</digi:trn>');
             if(flag != false) {
     <digi:context name="deletePledge" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${deletePledge}";
@@ -392,7 +392,7 @@
             }
         }
         function msg() {
-            if (confirm('<digi:trn  jsFriendly="true"  key="aim:organization:deleteQuestion">Are you sure about deleting this organization?</digi:trn>')) {
+            if (confirm('<digi:trn  jsFriendly="true">Are you sure about deleting this organization?</digi:trn>')) {
     <digi:context name="delete" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${delete}";
                 document.aimAddOrgForm.actionFlag.value = "delete";
@@ -511,12 +511,14 @@
             if (document.getElementById('phone') != null) {
 	            var phoneNum=document.getElementById('phone').value;
 	            if(checkNumber(phoneNum)==false){
-	                alert('enter correct phone number');
+		            var errorMesage='<digi:trn jsFriendly="true">enter correct phone number</digi:trn>';
+	                alert(errorMesage);
 	                return false;
 	            }
 	            var fax=document.getElementById('fax').value;
 	            if(checkNumber(fax)==false){
-	            	alert('enter correct fax');
+		            var errorMesage='<digi:trn jsFriendly="true">enter correct fax</digi:trn>';
+	            	alert(errorMesage);
 	                return false;
 	            }
 	          }
@@ -867,15 +869,15 @@
                                 </digi:link>&nbsp;&gt;&nbsp; 
                                 <digi:link href="/organisationManager.do?orgSelReset=true"
                                     styleClass="comment">
-                                    <digi:trn key="aim:organizationManager">
+                                    <digi:trn>
                                         Organization Manager
                                     </digi:trn>
                                 </digi:link>&nbsp;&gt;&nbsp;
                                 <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
-                                    <digi:trn key="aim:addOrganization">Add Organization</digi:trn>
+                                    <digi:trn>Add Organization</digi:trn>
                                 </c:if>
                                 <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
-                                    <digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
+                                    <digi:trn>Edit Organization</digi:trn>
                                 </c:if>
                             </span></td>
                         <!-- End navigation -->
@@ -926,9 +928,9 @@
                                 <tr>
                                     <td bgColor=#dddddb height="20" align="center"
                                         colspan="2" class="tdBoldClass" style="font-size:13px"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
-                                            <digi:trn key="aim:addOrganization">Add Organization</digi:trn>
+                                            <digi:trn>Add Organization</digi:trn>
                                         </c:if> <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
-                                            <digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
+                                            <digi:trn>Edit Organization</digi:trn>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -986,8 +988,7 @@
                                                 <td align="right" height="2" colspan="2">&nbsp;</td>
                                                 <td height="1" align="center" colspan="2"><digi:img
                                                         src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
-                                                        height="10" /> <a href="javascript:addGroup()"> <digi:trn
-                                                            key="aim:addOrganizationGroup">Add a Group</digi:trn>
+                                                        height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
                                                     </a></td>
                                             </tr>
                                         </table>
@@ -1759,41 +1760,35 @@
             </c:when>
             <c:otherwise>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn
-                            key="aim:organizationDac">DAC Code</digi:trn></td>
+                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>DAC Code</digi:trn></td>
                     <td width="500px" height="30px">
                     	<html:text property="dacOrgCode" size="15" styleId="dacOrgCode"/></td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn
-                            key="aim:organizationIsoCode">ISO Code</digi:trn></td>
+                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>ISO Code</digi:trn></td>
                     <td width="500px" height="30px" ><html:text
                             name="aimAddOrgForm" property="orgIsoCode" size="15" styleId="orgIsoCode"/>
                     </td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn
-                            key="aim:organizationCode">Organization Code</digi:trn><font
+                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
                         property="orgCode" size="15" styleId="orgCode"/></td>
                 </tr>
 
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn
-                            key="aim:budgetOrganizationCode">Budget Organization Code</digi:trn><font
+                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
                         property="budgetOrgCode" size="15" styleId="budgetOrgCode"/></td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn
-                            key="aim:fiscalCalendar">Fiscal Calendar</digi:trn></td>
+                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>Fiscal Calendar</digi:trn></td>
                     <td width="500px" height="30px"><html:select
                             property="fiscalCalId" styleClass="selectStyle" styleId="fiscalCalId">
                             <c:set var="translation">
-                                <digi:trn
-                                    key="aim:editOrganisationSelectFiscalCalendar">Fiscal Calendar</digi:trn>
+                                <digi:trn>Fiscal Calendar</digi:trn>
                             </c:set>
                             <html:option value="-1">-- ${translation} --</html:option>
                             <logic:notEmpty name="aimAddOrgForm"
@@ -1935,16 +1930,11 @@
                             <c:if test="${ aimAddOrgForm.fundingDetails != null}">
                                 <c:set var="index" value="-1" />
                                 <tr>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn
-                                            key="aim:org:program">Program</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn
-                                            key="aim:org:planned">Planned</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn
-                                            key="aim:org:amount">Amount</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn
-                                            key="aim:org:currency">Currency</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn
-                                            key="aim:org:date">Date</digi:trn></td>
+                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Program</digi:trn></td>
+                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Planned</digi:trn></td>
+                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Amount</digi:trn></td>
+                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Currency</digi:trn></td>
+                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Date</digi:trn></td>
                                 </tr>
                                 <c:forEach var="fundingDetail"
                                            items="${aimAddOrgForm.fundingDetails}">
@@ -1958,7 +1948,7 @@
                                                name="fundingDetail" indexed="true"
                                                property="adjustmentType" styleClass="inp-text">
                                                 <html:option value="0">
-                                                    <digi:trn key="aim:Planned">Planned</digi:trn>
+                                                    <digi:trn>Planned</digi:trn>
                                                 </html:option>
                                             </html:select></td>
                                         <td valign="bottom" class="tdClass"><html:text
@@ -2004,12 +1994,12 @@
                             <tr valign="baseline">
                                 <td colspan="1" width="10px"><input
                                         type="button" class="dr-menu" onclick="addPledge();"
-                                        value='<digi:trn key="btn:addPledge">Add Pledge</digi:trn>' />
+                                        value='<digi:trn>Add Pledge</digi:trn>' />
                                 </td>
                                 <td colspan="5" align="right">
                             <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
                                 <FONT color=blue>*
-                                    <digi:trn key="aim:allTheAmountsInThousands">
+                                    <digi:trn>
 																							All the amounts are in thousands (000)
                                 </digi:trn> </FONT>
                             </gs:test>
@@ -2131,7 +2121,7 @@
                 	<html:button styleClass="dr-menu" property="submitButton" onclick="return validateSaveOrg()">
                         <digi:trn>Save</digi:trn>
                 	</html:button>
-                	<input type="reset" value='<digi:trn>Reset</digi:trn>'class="dr-menu">
+                	<input type="reset" value="<digi:trn>Reset</digi:trn>" class="dr-menu">
                 	<input type="button" value="<digi:trn>Cancel</digi:trn>"  class="dr-menu" onclick="cancel()">
                 </td>
             </tr>
@@ -2169,5 +2159,5 @@
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
-    $("#otherInformation").charCounter(256,{format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",pulse: false});
+    $("#otherInformation").charCounter(256,{format: ' (%1'+ ' <digi:trn jsFriendly="true">characters remaining</digi:trn>)',pulse: false});
 </script>

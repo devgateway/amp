@@ -102,7 +102,9 @@
     }
     addLoadEvent(initScripts);
 
-    function refreshPage(){     
+    function refreshPage(){
+        <digi:context name="reload" property="context/module/moduleinstance/editOrganisation.do" />
+        document.aimAddOrgForm.action = "${reload}";
         document.aimAddOrgForm.actionFlag.value='reload'
         document.aimAddOrgForm.submit();
     }

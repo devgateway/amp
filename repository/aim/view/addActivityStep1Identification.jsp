@@ -202,8 +202,8 @@ function toggleElement ( elementId, show ) {
 }
 
 function toggleBudgetFields(show) {
-	<field:display name="Code Chapitre" feature="Budget">	
-		toggleElement("CodeChapitre", show);
+	<field:display name="Code Chapitre Dropdown" feature="Budget">	
+		toggleElement("CodeChapitreDrop", show);
 	</field:display> 
 	<field:display name="Budget Department" feature="Budget">
 		toggleElement("budgetdepart", show);
@@ -211,6 +211,30 @@ function toggleBudgetFields(show) {
 	<field:display name="Budget Program" feature="Budget">
 		toggleElement("budgetprog", show);
 	</field:display>
+	
+	toggleElement("Imputation", show);
+	toggleElement("FY", show);
+	toggleElement("Vote", show);
+	toggleElement("Sub-Vote", show);
+	toggleElement("Sub-Program", show);
+	toggleElement("ProjectCode", show);
+	toggleElement("financial", show);
+	toggleElement("CodeChapitre", show);
+	toggleElement("Imputation1", show);
+	toggleElement("CodeChapitre1", show);
+	toggleElement("FY1", show);
+	toggleElement("Vote1", show);
+	toggleElement("Sub-Vote1", show);
+	toggleElement("Sub-Program1", show);
+	toggleElement("ProjectCode1", show);
+
+	toggleElement("Imputation2", show);
+	toggleElement("CodeChapitre2", show);
+	toggleElement("FY2", show);
+	toggleElement("Vote2", show);
+	toggleElement("Sub-Vote2", show);
+	toggleElement("Sub-Program2", show);
+	toggleElement("ProjectCode2", show);
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -685,9 +709,163 @@ target.style.cursor = "default"
 												</td>
 											</tr>
 												</field:display>
-											 <tr id="CodeChapitre">
+												
+											<field:display name="Imputation" feature="Budget">
+											<td valign="top" id="Imputation" align="center"  >
+												<a title="<digi:trn>Imputation</digi:trn>">
+												<digi:trn>
+													Imputation
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
+											<field:display name="Code Chapitre" feature="Budget">
+											<td valign="top" id="CodeChapitre" align="center"  >
+												<a title="<digi:trn>Code Chapitre</digi:trn>">
+												<digi:trn>
+													Code Chapitre
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
+											<field:display name="FY" feature="Budget">
+											<td valign="top" id="FY" align="center" >
+												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
+												<digi:trn key="aim:actFY">
+												FY
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
+										<field:display name="Vote" feature="Budget" >
+											<td valign="top"  id="Vote" align="center" >
+												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
+												<digi:trn key="aim:actVote">
+												Vote
+												</digi:trn>
+												</a>
+											</td>	
+											</field:display>
+											
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top" id="Sub-Vote" align="center" >
+												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
+												<digi:trn key="aim:actSub-Vote">
+												Sub-Vote
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
+	
+											
+									<field:display name="Sub-Program" feature="Budget">
+										<td valign="top" id="Sub-Program" align="center">
+											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
+											<digi:trn key="aim:actSubProgram">
+												Sub-Program
+												</digi:trn>
+												</a>
+										</td>
+									</field:display>
+											
+								<field:display name="Project Code" feature="Budget">
+										<td valign="top" id="ProjectCode" align="center" >
+											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
+											<digi:trn key="aim:actProjectCode">
+												Project Code
+												</digi:trn>
+												</a>
+								</td>
+								</field:display>			
+											<tr>
+											<field:display name="Imputation" feature="Budget">
+												<td valign="top"  id="Imputation1" align="center"  >
+														<html:text property="identification.FY" size="22" styleId="ImputationField" onkeyup="imputationRules.check();"/>
+												</td>
+											</field:display>
+										
+											<field:display name="Code Chapitre" feature="Budget">
+												<td valign="top"  id="CodeChapitre1" align="center">
+														<html:text property="identification.projectCode" size="11" styleId="CodeChapitreField" onkeyup="codeChapitreRules.check();"/>
+												</td>
+											</field:display>
+										
+											<field:display name="FY" feature="Budget">
+												<td valign="top"  id="FY1" align="center"  >
+														<html:text property="identification.FY" size="12"/>
+												</td>
+											</field:display>
+											
+											<field:display name="Vote" feature="Budget">
+												<td valign="top"  id="Vote1" align="center">
+													<html:text property="identification.vote" size="12"/>
+												</td>	
+											</field:display>
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top"  id="Sub-Vote1" align="center" >
+												<html:text property="identification.subVote" size="12"/>
+											</td>
+											</field:display>
+											<field:display name="Sub-Program" feature="Budget">
+												<td valign="top" id="Sub-Program1" align="center" >
+													<html:text property="identification.subProgram" size="12"/>
+												</td>
+											</field:display>
+											<field:display name="Project Code" feature="Budget">
+												<td valign="top" id="ProjectCode1" align="center" >
+													<html:text property="identification.projectCode" size="12"/>
+												</td>
+											</field:display>	
+										</tr>
+										<tr>
+											<field:display name="Imputation" feature="Budget">
+												<td valign="top"  id="Imputation2" align="center" >
+														<span id="ImputationSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											
+											<field:display name="Code Chapitre" feature="Budget">
+												<td valign="top"  id="CodeChapitre2" align="center">
+													<span id="CodeChapitreSpan">&nbsp;</span>
+												</td>	
+											</field:display>
+											
+											<field:display name="FY" feature="Budget">
+												<td valign="top"  id="FY2" align="center"  >
+														<span id="FYSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											
+											<field:display name="Vote" feature="Budget">
+												<td valign="top"  id="Vote2" align="center">
+													<span id="VoteSpan">&nbsp;</span>
+												</td>	
+											</field:display>
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top"  id="Sub-Vote2" align="center">
+												<span id="SubVoteSpan">&nbsp;</span>
+											</td>
+											</field:display>
+											<field:display name="Sub-Program" feature="Budget">
+												<td valign="top" id="Sub-Program2" align="center">
+													<span id="SubProgramSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											<field:display name="Project Code" feature="Budget">
+												<td valign="top" id="ProjectCode2" align="center">
+													<span id="ProjectCodeSpan">&nbsp;</span>
+												</td>
+											</field:display>	
+										</tr>
+												
+												
+											 <tr id="CodeChapitreDrop">
 											 <td>
-											<field:display name="Code Chapitre" feature="Budget">										
+											<field:display name="Code Chapitre Dropdown" feature="Budget">										
 											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
 											 	<html:option value="0"><digi:trn>Select Code Year</digi:trn></html:option>
 											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
@@ -712,7 +890,7 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-													<table width="100%" bord	er="0" cellspacing="2" cellpadding="2" align="center">
+													<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center">
                                                   		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
 		                                                    <td>

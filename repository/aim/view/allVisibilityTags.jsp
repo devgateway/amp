@@ -785,6 +785,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Code Chapitre" feature="Budget"></field:display>
+<field:display name="Code Chapitre Dropdown" feature="Budget"></field:display>
 <field:display name="Budgeting Year" feature="Budget"></field:display>
 <field:display name="Budget Classification" feature="Budget"></field:display>
 <field:display name="Budget Department" feature="Budget"></field:display>

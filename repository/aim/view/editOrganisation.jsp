@@ -1299,7 +1299,7 @@
                                                                         <tr>
                                                                             <td colspan="2">
                                                                          <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                        <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+                                                                        <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
                                                                         </td>
                                                                         </tr>
 
@@ -1661,7 +1661,7 @@
 								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>TITLE </digi:trn>
 								                                        </td>
-								                                        <td>
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                        	<digi:trn>PRIMARY </digi:trn>
 								                                        </td>
 								                                        <td colspan="2">

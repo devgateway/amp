@@ -244,21 +244,21 @@ function setHoveredTable(tableId, hasHeaders) {
 			      		<div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
-						        	<td width="90%">
+						        	<td>
 							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 									  		<digi:trn> Add Resource ...</digi:trn>            
 								    	</button>
-								    </td>
-								    <td width="10%">
-										<jsp:include page="legendForResources.jsp"/>
-									</td>
+								    </td>								    
 								</tr>
 								<tr>
 									<td>
-										<br />									
+										<br />
+											<div align="right" style="width: 95%" >
+												<jsp:include page="legendForResources.jsp"/>
+											</div>
 											<div id="my_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-												<bean:define toScope="request" id="checkBoxToHide" value="true" />
+												<bean:define toScope="request" id="checkBoxToHide" value="true" />												
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
 									</td>
@@ -272,24 +272,24 @@ function setHoveredTable(tableId, hasHeaders) {
 						<div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
-						        	<td width="90%">
+						        	<td>
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 										<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
 			                            	<digi:trn>Add Resource ...</digi:trn>            
 										</button>
 									<%}%>
 									</td>
-									<td width="10%">
-										<jsp:include page="legendForResources.jsp"/>
-									</td>
 								</tr>							
 								<tr>
-									<td colspan="2">
+									<td>
 										<br/>
+											<div align="right" style="width: 95%" >
+												<jsp:include page="legendForResources.jsp"/>
+											</div>
 											<div id="team_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 												<jsp:include page="documentTable.jsp" flush="true" />
-										</div>										
+										</div>
 									</td>
 								</tr>
 							</table>	        

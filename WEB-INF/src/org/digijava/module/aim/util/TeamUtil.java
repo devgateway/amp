@@ -47,6 +47,9 @@ import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
+import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -393,7 +396,23 @@ public class TeamUtil {
                         session.update(childTeam);
                     }
                 }
-
+                
+                //link shared resources with team
+                List sharedDocs=null;
+                String qstr="select c.nodeUUID,c.sharedNodeVersionUUID from " +CrSharedDoc.class.getName()  +" c where " +
+                		" c.state="+CrConstants.SHARED_AMONG_WORKSPACES +  " group by c.nodeUUID";
+                qry = session.createQuery(qstr);
+                sharedDocs = qry.list();
+                if(sharedDocs!=null && sharedDocs.size()>0){
+                	for (Object rawRow : sharedDocs) {
+    					Object[] row = (Object[])rawRow; //:)
+    					String nodeUUID=(String)row[0];
+    					String versionUUID=(String)row[1];
+    					CrSharedDoc sharedDoc=new CrSharedDoc(nodeUUID, team, CrConstants.SHARED_AMONG_WORKSPACES);
+    					sharedDoc.setSharedNodeVersionUUID(versionUUID);
+    					session.save(sharedDoc);
+    				}
+                }
                 // commit the changes
                 tx.commit();
             }
@@ -839,8 +858,15 @@ public class TeamUtil {
                 AmpApplicationSettings as = (AmpApplicationSettings) itr.next();
                 session.delete(as);
             }
+            //remove references for shared docs
+            qryStr = "delete from " + CrSharedDoc.class.getName() +" c where c.team="+teamId;
+            qry = session.createQuery(qryStr);
+            qry.executeUpdate();
+            
             session.delete(team);
-
+            
+            
+            
             tx.commit();
         } catch(ObjectNotFoundException objectNotFoundEx) {
             logger.error("Execption from removeTeam() :" + objectNotFoundEx.getMessage());

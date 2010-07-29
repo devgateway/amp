@@ -414,8 +414,24 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        &nbsp;
+                    <td><b><digi:trn>Divide amounts for bar chart by 1000</digi:trn>:</b></td>
+                    <td align="left">
+                        <html:checkbox property="divideThousands"/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b><digi:trn>Amount of decimals for bar charts</digi:trn>:</b></td>
+                    <td align="left">
+                        <html:select property="divideThousandsDecimalPlaces" styleClass="selectDropDown">
+                            <html:option value="0">0</html:option>
+                            <html:option value="1">1</html:option>
+                            <html:option value="2">2</html:option>
+                        </html:select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;
+                        
                     </td>
                 </tr>
                 <tr>

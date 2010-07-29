@@ -231,10 +231,21 @@ public class ChartWidgetUtil {
 		boolean nodata = true; // for displaying no data message
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		Long year = filter.getYear();
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+		BigDecimal divideByDenominator;
+
+        if (filter.getDivideThousands())
+        	divideByDenominator=new BigDecimal(1000000000);
+        else
+        	divideByDenominator=new BigDecimal(1000000);
+        
+
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-             divideByMillionDenominator=new BigDecimal(1000);
+            if (filter.getDivideThousands())
+            	divideByDenominator=new BigDecimal(1000000);
+            else
+            	divideByDenominator=new BigDecimal(1000);
         }
+
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -266,16 +277,16 @@ public class ChartWidgetUtil {
             Double fundingPledge=0d;
             if (filter.isPledgeVisible()) {
                 fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
-                result.addValue(fundingPledge / divideByMillionDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
+                result.addValue(fundingPledge / divideByDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
             }
             DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT,Constants.ACTUAL);
-            result.addValue(fundingComm.getValue().divide(divideByMillionDenominator), actComTranslatedTitle, new Long(i));
+            result.addValue(fundingComm.getValue().divide(divideByDenominator), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT,Constants.ACTUAL);
-            result.addValue(fundingDisb.getValue().divide(divideByMillionDenominator), actDisbTranslatedTitle, new Long(i));
+            result.addValue(fundingDisb.getValue().divide(divideByDenominator), actDisbTranslatedTitle, new Long(i));
             DecimalWraper fundingExp=new DecimalWraper();
             if (filter.isExpendituresVisible()) {
                 fundingExp = getFunding(filter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL);
-                result.addValue(fundingExp.getValue().divide(divideByMillionDenominator), actExpTranslatedTitle, new Long(i));
+                result.addValue(fundingExp.getValue().divide(divideByDenominator), actExpTranslatedTitle, new Long(i));
             }
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0||fundingExp.doubleValue()!=0) {
 				nodata = false;
@@ -313,9 +324,25 @@ public class ChartWidgetUtil {
     private static CategoryDataset getTypeOfAidOdaProfileDataset(FilterHelper filter, ChartOption opt, boolean typeOfAid) throws DgException, WorkerException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
-        double divideByMillionDenominator=1000000;
+        double divideByDenominator;
+
+        if (filter.getDivideThousands()) {
+        	divideByDenominator=1000000000;
+        }
+        else
+        {
+        	divideByDenominator=1000000;
+        }
+        
+
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-              divideByMillionDenominator=1000;
+            if (filter.getDivideThousands()) {
+            	divideByDenominator=1000000;
+            }
+            else
+            {
+            	divideByDenominator=1000;
+            }
         }
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -343,7 +370,7 @@ public class ChartWidgetUtil {
                 } else {
                     funding = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, categoryValue.getId(), filter.getTransactionType(),Constants.ACTUAL);
                 }
-                result.addValue(funding.doubleValue()/divideByMillionDenominator, title, i);
+                result.addValue(funding.doubleValue()/divideByDenominator, title, i);
                 totalCategory += funding.doubleValue();
                 if (funding.doubleValue() != 0) {
                     nodata = false;
@@ -402,6 +429,8 @@ public class ChartWidgetUtil {
 
         }
 		DecimalFormat format = FormatHelper.getDecimalFormat();
+		format.setMinimumFractionDigits(filter.getDivideThousandsDecimalPlaces());
+
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
 		toolTipformat.setMaximumFractionDigits(1);
         toolTipformat.setMinimumIntegerDigits(1);
@@ -410,8 +439,14 @@ public class ChartWidgetUtil {
 		if (opt.getLabelPattern() != null) {
 			pattern = opt.getLabelPattern();
 		}
-
-		String amount = "Amounts in Millions";
+		String amount = "";
+        if (filter.getDivideThousands()) {
+        	amount = "Amounts in Thousands of Millions";
+        }
+        else
+        {
+        	amount = "Amounts in Millions";
+        }
         String amountTranslatedTitle = TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
 
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
@@ -459,6 +494,7 @@ public class ChartWidgetUtil {
 		renderer.setMinimumBarLength(0.1);
 
 		// renderer.
+
 		CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
 		for (int i = 0; i < dataset.getRowCount(); i++) {
 			renderer.setSeriesOutlinePaint(i, new Color(0,0,0));
@@ -487,10 +523,22 @@ public class ChartWidgetUtil {
 		boolean nodata = true; // for displaying no data message
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		Long year = filter.getYear();
-		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+		BigDecimal divideByDenominator;
+
+        if (filter.getDivideThousands())
+        	divideByDenominator=new BigDecimal(1000000000);
+        else
+        	divideByDenominator=new BigDecimal(1000000);
+        
+
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-             divideByMillionDenominator=new BigDecimal(1000);
+            if (filter.getDivideThousands())
+            	divideByDenominator=new BigDecimal(1000000);
+            else
+            	divideByDenominator=new BigDecimal(1000);
         }
+
+
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -511,9 +559,9 @@ public class ChartWidgetUtil {
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             DecimalWraper fundingPlanned = getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
-            result.addValue(fundingPlanned.getValue().divide(divideByMillionDenominator), plannedTitle, new Long(i));
+            result.addValue(fundingPlanned.getValue().divide(divideByDenominator), plannedTitle, new Long(i));
             DecimalWraper fundingActual = getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
-            result.addValue(fundingActual.getValue().divide(divideByMillionDenominator), actualTitle, new Long(i));
+            result.addValue(fundingActual.getValue().divide(divideByDenominator), actualTitle, new Long(i));
             if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}

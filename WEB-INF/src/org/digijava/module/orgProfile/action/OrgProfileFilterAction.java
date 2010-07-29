@@ -107,6 +107,12 @@ public class OrgProfileFilterAction extends Action {
         if (orgForm.getLargestProjectNumb() == null) {
             orgForm.setLargestProjectNumb(10);
         }
+        if (orgForm.getDivideThousands() == null) {
+            orgForm.setDivideThousands(false);
+        }
+        if (orgForm.getDivideThousandsDecimalPlaces() == null) {
+            orgForm.setDivideThousandsDecimalPlaces(0);
+        }
         if (orgForm.getRegions() == null) {
             orgForm.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry()));
         }

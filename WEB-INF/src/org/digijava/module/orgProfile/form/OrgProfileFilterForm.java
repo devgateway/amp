@@ -39,6 +39,8 @@ public class OrgProfileFilterForm extends ActionForm {
     private Long fiscalCalendarId;
     private Long[] orgIds;
     private Integer largestProjectNumb;
+    private Boolean divideThousands;
+    private Integer divideThousandsDecimalPlaces;
     private Long selRegionId;
     private Long selZoneIds[];
     private List<AmpCategoryValueLocations> regions;
@@ -211,6 +213,7 @@ public class OrgProfileFilterForm extends ActionForm {
             setSelZoneIds(null);
             setSelRegionId(null);
             setPledgeVisible(false);
+            setDivideThousands(false);
             setExpendituresVisible(false);
             setCurrencyId(null);
             setOrgGroupId(null);
@@ -288,6 +291,22 @@ public class OrgProfileFilterForm extends ActionForm {
 
     public void setOrgIds(Long[] orgIds) {
         this.orgIds = orgIds;
+    }
+    
+    public Boolean getDivideThousands() {
+        return divideThousands;
+    }
+
+    public void setDivideThousands(Boolean divideThousands) {
+        this.divideThousands = divideThousands;
+    }
+    
+    public Integer getDivideThousandsDecimalPlaces() {
+        return divideThousandsDecimalPlaces;
+    }
+
+    public void setDivideThousandsDecimalPlaces(Integer divideThousandsDecimalPlaces) {
+        this.divideThousandsDecimalPlaces = divideThousandsDecimalPlaces;
     }
 
 }

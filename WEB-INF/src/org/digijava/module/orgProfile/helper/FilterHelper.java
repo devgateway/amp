@@ -32,6 +32,8 @@ public class FilterHelper implements Serializable {
     private Long fiscalCalendarId;
     private Long[] orgIds;
     private Integer largestProjectNumb;
+    private Boolean divideThousands;
+    private Integer divideThousandsDecimalPlaces;
     private Long regionId;
     private Long[] zoneIds;
     private Collection<Long> locationIds;
@@ -154,6 +156,22 @@ public class FilterHelper implements Serializable {
         this.transactionType = transactionType;
     }
 
+    public Boolean getDivideThousands() {
+        return divideThousands;
+    }
+
+    public void setDivideThousands(Boolean divideThousands) {
+        this.divideThousands = divideThousands;
+    }
+    
+    public Integer getDivideThousandsDecimalPlaces() {
+        return divideThousandsDecimalPlaces;
+    }
+
+    public void setDivideThousandsDecimalPlaces(Integer divideThousandsDecimalPlaces) {
+        this.divideThousandsDecimalPlaces = divideThousandsDecimalPlaces;
+    }
+
     public FilterHelper(OrgProfileFilterForm form) throws DgException {
         this.currId = form.getCurrencyId();
         this.year = form.getYear();
@@ -165,6 +183,8 @@ public class FilterHelper implements Serializable {
         this.regionId=form.getSelRegionId();
         this.zoneIds=form.getSelZoneIds();
         this.yearsInRange=form.getYearsInRange();
+        this.divideThousands=form.getDivideThousands();
+        this.divideThousandsDecimalPlaces=form.getDivideThousandsDecimalPlaces();
         this.pledgeVisible=form.getPledgeVisible();
         this.expendituresVisible=form.getExpendituresVisible();
         initDerivedProperties();
@@ -181,6 +201,8 @@ public class FilterHelper implements Serializable {
         this.zoneIds=helper.getZoneIds();
         this.teamMember=helper.getTeamMember();
         this.yearsInRange=helper.getYearsInRange();
+        this.divideThousands=helper.getDivideThousands();
+        this.divideThousandsDecimalPlaces=helper.getDivideThousandsDecimalPlaces();
         this.startDate=helper.getStartDate();
         this.endDate=helper.getEndDate();
         this.locationIds=helper.getLocationIds();

@@ -68,7 +68,7 @@
 	var current2 = window.onload;
 	window.onload = function() {
         current2.apply(current2);
-		addContract();
+		//addContract();
 	};
 	
 -->    
@@ -151,6 +151,7 @@
         			</td>
         			<td style="background-color: #F0F0F0">
        					<div id="devInfo" style="display: none;"  >
+       						<div style="display: none;">
 							<fieldset>
 					          <legend>
 					       		<a href="javascript:toggleLayer('docDiv');">
@@ -163,7 +164,8 @@
 						          </p>
 							  </div>
 							</fieldset>
-
+							</div>
+							
 							<fieldset>
 					          <legend>
 					          	<a href="javascript:toggleLayer('errMsg');">

@@ -17,7 +17,8 @@
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <%@include file="addDocumentPanel.jsp" %>
-
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <digi:errors />
 
 <digi:instance property="crDocumentManagerForm" />
@@ -243,12 +244,15 @@ function setHoveredTable(tableId, hasHeaders) {
 			      		<div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
-						        	<td>
+						        	<td width="90%">
 							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 									  		<digi:trn> Add Resource ...</digi:trn>            
 								    	</button>
 								    </td>
-								</tr>							
+								    <td width="10%">
+										<jsp:include page="legendForResources.jsp"/>
+									</td>
+								</tr>
 								<tr>
 									<td>
 										<br />									
@@ -257,9 +261,6 @@ function setHoveredTable(tableId, hasHeaders) {
 												<bean:define toScope="request" id="checkBoxToHide" value="true" />
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
-										<br />
-										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span><digi:trn>Shared document</digi:trn><br/>
-										<br />
 									</td>
 								</tr>
 							</table>	        
@@ -271,24 +272,24 @@ function setHoveredTable(tableId, hasHeaders) {
 						<div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
-						        	<td>
+						        	<td width="90%">
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 										<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
 			                            	<digi:trn>Add Resource ...</digi:trn>            
 										</button>
 									<%}%>
 									</td>
+									<td width="10%">
+										<jsp:include page="legendForResources.jsp"/>
+									</td>
 								</tr>							
 								<tr>
-									<td>
+									<td colspan="2">
 										<br/>
 											<div id="team_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 												<jsp:include page="documentTable.jsp" flush="true" />
-										</div>
-										<br />
-										<span style="color:#00FF00;font-weigth:bold;font-size:9pt;">*</span><digi:trn>Shared document</digi:trn><br/>
-										<br />
+										</div>										
 									</td>
 								</tr>
 							</table>	        

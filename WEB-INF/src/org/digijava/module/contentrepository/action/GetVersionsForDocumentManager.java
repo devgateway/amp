@@ -114,7 +114,7 @@ public class GetVersionsForDocumentManager extends Action {
 		if ( uuidMapVer.containsKey(nodeUUID) ) {
 			docData.setIsPublic(true);
 		}
-		//if this version is shared or not		
+		//if this version is shared or not
 		boolean isCurrentVersionShared=DocumentManagerUtil.isGivenVersionShared(n.getUUID());
 		docData.setIsShared(isCurrentVersionShared);
 		

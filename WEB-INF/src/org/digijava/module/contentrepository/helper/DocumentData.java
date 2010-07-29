@@ -60,7 +60,8 @@ public class DocumentData implements Comparable<DocumentData>{
 	private boolean isShared =false; //whether this resource is already shared.
 	boolean lastVersionIsShared		= false;
 	
-	private boolean currentVersionNeedsApproval=false; 
+	private boolean currentVersionNeedsApproval=false;
+	private boolean hasAnyVersionPendingApproval; // if any version of the node needs to be approved by Tl to be visible for team-members
 	private String baseNodeUUID=null; //in case documentData is just a version of some node, this property holds that main node uuid
 	
 	public boolean getHasDeleteRights() {
@@ -342,6 +343,12 @@ public class DocumentData implements Comparable<DocumentData>{
 	}
 	public void setYearofPublication(String yearofPublication) {
 		this.yearofPublication = yearofPublication;
+	}
+	public boolean isHasAnyVersionPendingApproval() {
+		return hasAnyVersionPendingApproval;
+	}
+	public void setHasAnyVersionPendingApproval(boolean hasAnyVersionPendingApproval) {
+		this.hasAnyVersionPendingApproval = hasAnyVersionPendingApproval;
 	}
 	
 }

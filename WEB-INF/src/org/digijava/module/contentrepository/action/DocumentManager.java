@@ -516,7 +516,18 @@ public class DocumentManager extends Action {
 							}							
 					}else{
 						documentData.setIsPublic(false);
-					}						
+					}
+					
+					// whether this document has any version, that needs to be approved to become team doc version
+					List<TeamNodePendingVersion> pendingVersionsForBaseNode=null;
+					if(tabName!=null && tabName.equals(CrConstants.TEAM_DOCS_TAB)){
+						pendingVersionsForBaseNode=DocumentManagerUtil.getPendingVersionsForResource(documentNodeBaseVersionUUID);
+					}
+					if(pendingVersionsForBaseNode!=null && pendingVersionsForBaseNode.size()>0){
+						documentData.setHasAnyVersionPendingApproval(true);
+					}else{
+						documentData.setHasAnyVersionPendingApproval(false);
+					}
 				}
 				// This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
 				// the above rights.

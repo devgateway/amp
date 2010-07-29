@@ -65,7 +65,15 @@
 		                            </td>
 		                        </logic:equal>
 								<td>
-									<bean:write name='documentData' property='title'/>									
+									<c:if test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
+										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">
+											<bean:write name='documentData' property='title'/>
+										</span>
+									</c:if>									
+									<c:if test="${documentData.hasAnyVersionPendingApproval!=true ||  documentData.hasApproveVersionRights!=true}">
+										<bean:write name='documentData' property='title'/>
+									</c:if>
+									&nbsp;
 									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
 										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span>
 									</logic:equal>

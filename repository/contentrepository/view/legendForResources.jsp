@@ -12,10 +12,10 @@
 <div style='position:relative;display:none;' id='legendPopup'> 
 	<ul>
 		<li>
-			<font color="RED">* <digi:trn>star</digi:trn></font> - <digi:trn>indicates shared versions of the document</digi:trn>
+			<font color="RED">* <digi:trn>star</digi:trn></font> - <digi:trn>indicates public version of the document</digi:trn>
 		</li>		
 		<li>
-			<font color="#00CC00">* <digi:trn>star</digi:trn></font> - <digi:trn>indicates public version of the document</digi:trn>
+			<font color="#00CC00">* <digi:trn>star</digi:trn></font> - <digi:trn>indicates shared version of the document</digi:trn>
 		</li>
 		<li>
 			<font color="#00CC00"><digi:trn>green text</digi:trn></font> - <digi:trn>Some Version of this Document needs Approval</digi:trn>

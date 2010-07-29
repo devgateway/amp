@@ -94,12 +94,16 @@
 	
 
 
-    function initScripts() {
-        //initSectorScript();
-        //initOrganizationScript();
-    	initPopInScript();
-			initContactScript();
-    }
+function initScripts() {
+//initSectorScript();
+//initOrganizationScript();
+initPopInScript();
+initContactScript();
+clearDisplay(document.aimAddOrgForm.minPlanRegDate, "clear1");
+clearDisplay(document.aimAddOrgForm.legalPersonRegDate, "clear2");
+clearDisplay(document.aimAddOrgForm.operFuncApprDate, "clearOperFunc");
+clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
+}
     addLoadEvent(initScripts);
 
     function refreshPage(){
@@ -1032,7 +1036,8 @@
                                                 <div style="float:right">
                                                     <a href="javascript:exportGeneralInfo();" >
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
-                                                    </a>
+                                                        <digi:trn>Export to excel</digi:trn>
+                                                    </a>                        
                                                 </div>
                                                         <fieldset><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
                                                       	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
@@ -1405,7 +1410,9 @@
                         <div style="float:right">
                         <a href="javascript:exportInfo('exportStaffInfo')" >
 				<digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
+                 <digi:trn>Export to excel</digi:trn>
                         </a>
+                       
                          </div>
                         <fieldset>
                             <legend align="left" class="tdBoldClass" style="font-size:13px;color:#0000FF; "><digi:trn>Staff Information</digi:trn></legend>
@@ -1491,9 +1498,10 @@
                 <tr>
                     <td colspan="2">
                         <div style="float:right">
-                        <a href="javascript:exportInfo('exportBudgetInfo')" >
-				<digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
-                        </a>
+                            <a href="javascript:exportInfo('exportBudgetInfo')" >
+                                <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
+                                <digi:trn>Export to excel</digi:trn>
+                            </a>
                          </div>
                         <fieldset>
                             <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
@@ -1624,9 +1632,10 @@
 								<tr>
 								    <td colspan="2">
 								        <div style="float:right">
-								            <a href="javascript:exportInfo('exportContactInfo')" >
-								                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
-								            </a>
+                                            <a href="javascript:exportInfo('exportContactInfo')" >
+                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
+                                                <digi:trn>Export to excel</digi:trn>
+                                            </a>
 								        </div>
 								        <fieldset>
 								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>

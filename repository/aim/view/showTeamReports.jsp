@@ -55,27 +55,27 @@
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
 	<c:set var="translation">
-		<digi:trn key="aim:confirmDeleteReport">
+		<digi:trn>
 			Are you sure you want to delete the selected report ?
 		</digi:trn>
 	</c:set>
 	<c:set var="pageTitle">
-		<digi:trn key="aim:reportmanager">
+		<digi:trn>
 			Report Manager
 		</digi:trn>
 	</c:set>
 	<c:set var="breadCrumb">
-		<digi:trn key="aim:reportmanager">
+		<digi:trn>
 			Report Manager
 		</digi:trn>
    	</c:set>
 	<c:set var="titleColumn">
-		<digi:trn key="aim:reportTitle">
+		<digi:trn>
 			Report Title
 		</digi:trn>
 	</c:set>
 	<c:set var="generator">
-		<digi:trn key="aim:reportGenerator">Report Generator</digi:trn>
+		<digi:trn>Report Generator</digi:trn>
 	</c:set>
 </c:if>
 
@@ -112,13 +112,13 @@ function confirmFunc() {
         <tr>
         <td valign="bottom" class="crumb" >
         <c:set var="translation">
-          <digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+          <digi:trn>Click here to view MyDesktop</digi:trn>
         </c:set>
           <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-            <digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
+            <digi:trn>My Desktop</digi:trn>
           </digi:link> &gt; ${breadCrumb}</td></tr>
         <tr>
-          <td height=16 align="left" vAlign=center>
+          <td height=16 align="left" vAlign="center">
           	<digi:errors/>
           	<span class=subtitle-blue>
             	${pageTitle}
@@ -129,7 +129,7 @@ function confirmFunc() {
         	<td>
         		<c:if test="${aimTeamReportsForm.showTabs}">
 					<a style="cursor:pointer; text-decoration:underline; color: #05528b" onclick="initializeTabManager()">
-						<b><digi:trn key="aim:tabmanager:manageactivetabs">Manage Active Tabs</digi:trn></b>
+						<b><digi:trn>Manage Active Tabs</digi:trn></b>
 					</a>
 				</c:if>
         	</td>

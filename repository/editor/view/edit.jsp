@@ -111,10 +111,10 @@ function cancelText(){
 
 	<bean:write name="editorForm" property="key"/></span></b>&nbsp;
 	
-	<c:set var="trn"><digi:trn key="editor:savebutton">Save now</digi:trn> </c:set>
-	<html:submit value="${trn}" style="BACKGROUND: #f1efed url('images/editor/grad-btn.gif') repeat-x;cursor: hand"/>&nbsp;
+	<c:set var="trn"><digi:trn>Save now</digi:trn> </c:set>
+	<html:submit value="${trn}"/>&nbsp;
 	
-	<html:button property="" onclick="cancelText()">Cancel</html:button>
+	<html:button property="" onclick="cancelText()"><digi:trn>Cancel</digi:trn></html:button>
 	<!-- 
 	<html:select property="lang" onchange="ChangeLanguage(this)">
 
@@ -193,15 +193,15 @@ function cancelText(){
 
 		<tr>
 
-			<td noWrap align="left"><small><b><digi:trn key="editor:language">Language</digi:trn></b></small>
+			<td noWrap align="left"><small><b><digi:trn>Language</digi:trn></b></small>
 
 			</td>
 
-			<td noWrap align="left"><small><b><digi:trn key="editor:lastModificationDate">Last Modification Date</digi:trn></b></small>
+			<td noWrap align="left"><small><b><digi:trn>Last Modification Date</digi:trn></b></small>
 
 			</td>
 
-			<td noWrap align="left"><small><b><digi:trn key="editor:lastUser"> Last User</digi:trn></b></small>
+			<td noWrap align="left"><small><b><digi:trn> Last User</digi:trn></b></small>
 
 			</td>
 

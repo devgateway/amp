@@ -427,7 +427,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
 						emails+=property.getValue()+";\n";
 					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-						phones+=property.getValue()+";\n";
+						phones+= TranslatorWorker.translateText(property.getPhoneCategory(), locale, siteId)+property.getActualPhoneNumber()+";\n";
 					}else{
 						faxes+=property.getValue()+";\n";
 					}

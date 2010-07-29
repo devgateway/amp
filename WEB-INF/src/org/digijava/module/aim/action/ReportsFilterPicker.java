@@ -378,7 +378,7 @@ public class ReportsFilterPicker extends MultiAction {
 							rootProjCategory, "selectedProjectCategory");
 			filterForm.getFinancingLocationElements().add(projCategoryElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
+		if (FeaturesUtil.isVisibleFeature("Disbursement Orders", ampContext)) { 
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootDisbursementOrders	= new HierarchyListableImplementation();

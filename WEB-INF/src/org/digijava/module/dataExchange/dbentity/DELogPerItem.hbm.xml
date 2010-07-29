@@ -8,7 +8,7 @@
 				<param name="sequence">DE_LOG_PER_ITEM_seq</param>
 			</generator>
 		</id>
-		<property name="description" column="description" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
 		<property name="logType" column="log_type" type="java.lang.String" />
 		<property name="itemType" column="item_type" type="java.lang.String" />				
 		<property name="name" column="name" type="java.lang.String" />

@@ -8,7 +8,7 @@
 				<param name="sequence">DE_LOG_PER_EXECUTION_seq</param>
 			</generator>
 		</id>
-		<property name="description" column="description" type="java.lang.String" />		
+		<property name="description" column="description" type="text" />		
 		<property name="externalTimestamp" column="external_timestamp" type="java.lang.String" />
 		<property name="executionTime" column="execution_time" type="java.sql.Timestamp" />
 		

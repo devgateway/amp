@@ -97,7 +97,7 @@ YAHOO.namespace("YAHOO.amp");
     }
 
     var responseFailure1 = function(o){
-        alert("Connection Failure!");
+        alert('<digi:trn jsFriendly="true">Connection Failure!</digi:trn>');
     }
     var callback1 =
         {
@@ -175,7 +175,7 @@ YAHOO.namespace("YAHOO.amp");
         var root=responseXML.getElementsByTagName('CONTACTS')[0].childNodes[0];
         var contEmail=root.getAttribute('email');
         if(contEmail=='exists'){
-            alert('Contact with the given email already exists');
+            alert('<digi:trn jsFriendly="true">Contact with the given email already exists</digi:trn>');
             return false;
         }
         //if emails doesn't exist, save contact.
@@ -202,7 +202,7 @@ YAHOO.namespace("YAHOO.amp");
 			return false;
 		}
 		if(document.getElementById('lastname').value==null || document.getElementById('lastname').value==''){
-			alert('Please Enter lastname');
+			alert('<digi:trn jsFriendly="true">Please Enter lastname</digi:trn>');
 			return false;
 		}
 		//check emails. At least one email should exist
@@ -214,7 +214,7 @@ YAHOO.namespace("YAHOO.amp");
             		return false;
             	}
             	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
-            		alert('Please enter valid email');
+            		alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
             		return false;
             	}
         	}
@@ -229,13 +229,13 @@ YAHOO.namespace("YAHOO.amp");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
         		if(phoneTypes[i].value=='0' && phoneNumbers[i].value==''){
-            		alert('Please enter phone');
+            		alert('<digi:trn jsFriendly="true">Please enter phone</digi:trn>');
             		return false;
         		}else if(phoneTypes[i].value=='0' && phoneNumbers[i].value!=''){
-        			alert('Please select phone type');
+        			alert('<digi:trn jsFriendly="true">Please select phone type</digi:trn>');
         			return false;
         		}else if(phoneTypes[i].value!='0' && phoneNumbers[i].value==''){
-        			alert('Please enter phone number');
+        			alert('<digi:trn jsFriendly="true">Please enter phone number</digi:trn>');
         			return false;
         		}
     		}
@@ -254,7 +254,7 @@ YAHOO.namespace("YAHOO.amp");
     	if(faxes!=null){
     		for(var i=0;i < faxes.length; i++){
     			if(faxes[i].value==''){
-        			alert('Please enter fax');
+        			alert('<digi:trn jsFriendly="true">Please enter fax</digi:trn>');
         		}else if(checkNumber(faxes[i].value)==false){
             		return false;
             	}
@@ -266,7 +266,7 @@ YAHOO.namespace("YAHOO.amp");
     function checkPhoneNumberType(type){
 	 	var regex='^[a-zA-Z]*$';
 	  	if (!type.match(regex)){
-	  		alert('only letters are allowed for phone type');	   			
+	  		alert('<digi:trn jsFriendly="true">only letters are allowed for phone type</digi:trn>');	   			
 	   		return false;
 	  	}	 		 
 	 	return true;
@@ -277,7 +277,7 @@ YAHOO.namespace("YAHOO.amp");
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	  			alert('enter correct number');	   			
+	  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
 	   			return false;
 	  		}
 	 	}	 
@@ -367,7 +367,7 @@ YAHOO.namespace("YAHOO.amp");
             var keyword=document.getElementById('keyword');
             if(trim(keyword.value) == "")
             {
-                alert("Please Enter a Keyword....");
+                alert('<digi:trn jsFriendly="true">Please Enter a Keyword....</digi:trn>');
                 flag=false;
             }
             return flag;
@@ -448,7 +448,7 @@ YAHOO.namespace("YAHOO.amp");
                 }
             }
             else{
-                var msg="<digi:trn jsFriendly="true">Please select organization(s) to remove</digi:trn>"
+                var msg='<digi:trn jsFriendly="true">Please select organization(s) to remove</digi:trn>';
                 alert(msg);
             }
                 <digi:context name="addCont" property="context/addAmpContactInfo.do?action=removeOrganizations"/>;

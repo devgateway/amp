@@ -348,7 +348,7 @@ html>body #mainEmpty {
             		return false;
             	}
             	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
-            		alert('Please enter valid email');
+            		alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
             		return false;
             	}
         	}

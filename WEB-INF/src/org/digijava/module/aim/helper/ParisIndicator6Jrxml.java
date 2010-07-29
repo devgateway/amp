@@ -92,7 +92,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("						isPrintInFirstWholeBand='false'");
             p2.println("						isPrintWhenDetailOverflows='false'/>");
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+//            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
             p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Paris Indicator 6: Number of parallel PIUs", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
             p2.println("				</staticText>");
@@ -121,7 +121,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("						isPrintInFirstWholeBand='false'");
             p2.println("						isPrintWhenDetailOverflows='false'/>");
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+//            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
             p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
             p2.println("				</staticText>");
@@ -149,7 +149,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
                 p2.println("						isPrintInFirstWholeBand='false'");
                 p2.println("						isPrintWhenDetailOverflows='false'/>");
                 p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-                p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+//                p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
                 p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{" + ctextkey + "}]]></textFieldExpression>");
                 p2.println("				</textField>");
@@ -259,7 +259,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("						isPrintInFirstWholeBand='false'");
             p2.println("						isPrintWhenDetailOverflows='false'/>");
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+//            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
             p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
             p2.println("				</textField>");
@@ -285,7 +285,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
                 p2.println("						isPrintInFirstWholeBand='false'");
                 p2.println("						isPrintWhenDetailOverflows='false'/>");
                 p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-                p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+//                p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
                 p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{" + ctextkey + "}]]></textFieldExpression>");
                 p2.println("				</textField>");
@@ -399,7 +399,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("isPrintInFirstWholeBand='false'");
             p2.println("isPrintWhenDetailOverflows='false'/>");
             p2.println("<textElement textAlignment='Right' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
-            p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+//            p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
             p2.println("</textElement>");
             p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Page \" + $V{PAGE_NUMBER} + \" of \"]]></textFieldExpression>");
             p2.println("</textField>");
@@ -419,7 +419,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("isPrintInFirstWholeBand='false'");
             p2.println("isPrintWhenDetailOverflows='false'/>");
             p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
-            p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+//            p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
             p2.println("</textElement>");
             p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"\"+$V{PAGE_NUMBER}]]></textFieldExpression>");
             p2.println("</textField>");

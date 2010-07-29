@@ -66,10 +66,12 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		}
 		Iterator iter = null;
 		Iterator iter1 = null;
-		if (coll.size() == 0) {
-			// //System.out.println("collection is empty");
+		if (coll == null || coll.size() == 0) {
+			//Quick and dirty solution to empty values that previously gave exceptions (FFerreyra)
+			//This makes the browser to not refresh the page if there's no data for the report.
+			response.setStatus(204);
+			return null;
 		} else {
-			// //System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
 		int colCnt1 = coll.size();

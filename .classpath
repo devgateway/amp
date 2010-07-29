@@ -63,7 +63,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jai_core.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jakarta-oro.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jakarta-regexp-1.2.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/javacup.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-api.jar"/>
@@ -145,5 +144,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.6-20091214.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.6-20091214.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.6-20091214.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.7.1.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

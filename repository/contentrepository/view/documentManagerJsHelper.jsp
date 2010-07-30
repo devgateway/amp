@@ -256,9 +256,8 @@
 </c:set>
 
 <c:set var="trans_headerYearofPubl">
-	<digi:trn>Year Of Publ.</digi:trn>
+	<digi:trn>Year Of Publication</digi:trn>
 </c:set>
-
 
 <c:set var="trans_wait">
 	<digi:trn>Please wait a moment...</digi:trn>

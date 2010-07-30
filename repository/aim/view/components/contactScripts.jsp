@@ -45,9 +45,7 @@
 YAHOO.namespace("YAHOO.amp");
 
  var myPanelContact = new YAHOO.widget.Panel("newpopins3", {
- 	x:250,
-     y:100,
-     minWidth:"400px",
+     width:"800px",
      fixedcenter: true,
      constraintoviewport: false,
      underlay:"none",

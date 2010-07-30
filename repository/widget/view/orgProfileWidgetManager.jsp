@@ -44,7 +44,7 @@
 	<tr>
 		<td>
 			
-			<table border="0" width="60%" align="center" style="font-family:verdana;font-size:11px;">
+			<table border="0" width="60%"  style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
 					
 					<td nowrap="nowrap" width="80%">

@@ -18,13 +18,16 @@
 			<font color="#00CC00">* <digi:trn>star</digi:trn></font> - <digi:trn>indicates shared version of the document</digi:trn>
 		</li>
 		<li>
+			<font color="RED"><digi:trn>red text</digi:trn></font> - <digi:trn>Document Needs Aproval To Become Team Doc.</digi:trn>
+		</li>
+		<li>
 			<font color="#00CC00"><digi:trn>green text</digi:trn></font> - <digi:trn>Some Version of this Document needs Approval</digi:trn>
 		</li>		
 	</ul>
 </div>
 <div align="left" width="2" style="display: inline; cursor: default"
-	onMouseOver="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[0])" 
-	onMouseOut="htm()" onclick="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[0])">
+	onMouseOver="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[13])" 
+	onMouseOut="htm()" onclick="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[13])">
 	<c:set var="translation">
 		<digi:trn>Click here to view Legend</digi:trn>
 	</c:set>

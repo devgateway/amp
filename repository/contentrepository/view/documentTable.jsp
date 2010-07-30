@@ -65,14 +65,23 @@
 		                            </td>
 		                        </logic:equal>
 								<td>
-									<c:if test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
-										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">
+									<c:choose>
+										<c:when test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
+											<span style="color:#00CC00;font-weigth:bold;">
+												<bean:write name='documentData' property='title'/>
+											</span>
+										</c:when>
+										<c:when test="${not empty documentData.shareWith && documentData.hasShareRights==true &&  
+											documentData.needsApproval==true && documentData.hasApproveVersionRights}">
+											<span style="color:red;font-weigth:bold;">
+												<bean:write name='documentData' property='title'/>
+											</span>
+										</c:when>
+										<c:otherwise>
 											<bean:write name='documentData' property='title'/>
-										</span>
-									</c:if>									
-									<c:if test="${documentData.hasAnyVersionPendingApproval!=true ||  documentData.hasApproveVersionRights!=true}">
-										<bean:write name='documentData' property='title'/>
-									</c:if>
+										</c:otherwise>
+									</c:choose>															
+									
 									&nbsp;
 									<logic:equal name="documentData" property="lastVersionIsShared" value="true">
 										<span style="color:#00CC00;font-weigth:bold;font-size:9pt;">*</span>
@@ -105,9 +114,6 @@
 									<td>
 									<bean:write name="documentData" property="yearofPublication" />
 								</td>
-								
-																
-								
 								<td>
 									<bean:write name="documentData" property="fileSize" />
 								</td>

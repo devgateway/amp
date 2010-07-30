@@ -34,7 +34,10 @@ public class DisplayThumbnail extends Action {
                 response.setContentType("text/plain");
                 Boolean hasRelDocs = (Boolean) session.getAttribute("homeThumbnailOptfile" + placeholder);
                 try {
-                    response.getWriter().print(hasRelDocs);
+                	AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(Integer.parseInt(placeholder));
+                	String resp = hasRelDocs.toString()+"*";
+                	resp += test.getThumbnailLabel()+"*";
+                	response.getWriter().print(resp);
                 } catch (IOException e) {
                       logger.error("Trying to parse " + placeholder + " to int",e);
                 }
@@ -45,14 +48,14 @@ public class DisplayThumbnail extends Action {
                     ServletOutputStream os = response.getOutputStream();
                     AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(temp);
                     if (test != null) {
-                        os.write(test.getThumbnail());
+						os.write(test.getThumbnail());
                         boolean optFile = false;
                         if (test.getOptionalFile() != null) {
                             optFile = true;
                         }
                         session.setAttribute("homeThumbnailOptfile" + placeholder, optFile);
                         os.flush();
-                    }
+                   } 
                 } catch (NumberFormatException nfe) {
                     logger.error("Trying to parse " + placeholder + " to int");
                 }

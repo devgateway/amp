@@ -14,6 +14,7 @@
 		<property name="optionalFileName" column="OPTIONAL_FILE_NAME" type="java.lang.String" />
 		<property name="optionalFileContentType" column="OPTIONAL_FILE_CONTENT_TYPE" type="java.lang.String" />
 		<property name="thumbnailContentType" column="THUMBNAIL_CONTENT_TYPE" type="java.lang.String" />
+		<property name="thumbnailLabel" column="THUMBNAIL_LABEL" type="java.lang.String" />
 
 	</class>
 </hibernate-mapping>

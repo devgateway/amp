@@ -1,6 +1,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <digi:context name="displayThumbnail" property="/aim/displayThumbnail.do" />
 
 <script language="javascript" type="text/javascript">
@@ -9,13 +11,17 @@
             window.location='/aim/downloadFileFromHome.do?placeholder='+placeholder;
         }
     }
-  
+
+    var title1 = "";
+    var title2 = "";
+    
     function attachFuncToThumbnail(placeholder) {
         var id="displayThumbnail"+placeholder;
         var lastTimeStamp = new Date().getTime();
         var url='/aim/displayThumbnail.do?placeholder='+placeholder+'&relDocs=relDocs'+'&timestamp='+lastTimeStamp;
         $.get(url, function(data) {
-            if(data!='true'){
+        	temp = data.split('*');
+            if(temp[0]!='true'){
                 $("#"+id).click(function() {
                     var msg="<digi:trn>No related documents to download!</digi:trn>"
                     alert(msg);
@@ -27,11 +33,34 @@
                 });
 
             }
+            
+            if(temp[1]!=null && temp[1]!="null"){
+                //document.getElementById("displayThumbnail"+placeholder).title = temp[1];
+				if (placeholder==1) {
+					title1 = temp[1];
+					$("#"+id).mouseover(function() {
+	            	     stm(['<digi:trn>Description</digi:trn>',title1],Style[1]);
+	                });
+	            	$("#"+id).mouseout(function() {
+	                	 htm();
+	                });
+				} else {
+					title2 = temp[1];
+					$("#"+id).mouseover(function() {
+	            	     stm(['<digi:trn>Description</digi:trn>',title2],Style[1]);
+	                });
+	            	$("#"+id).mouseout(function() {
+	                	 htm();
+	                });
+				}
+            }
         });
     }
 
 </script>
  
+<DIV id="TipLayer"
+  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <table width="100%" >
 	<tr>
 		<td  width="5%" />
@@ -50,13 +79,7 @@
                     </td>
 				</tr>
               </c:forEach>
-				<tr height="6%">
-			        <td valign="middle" align="center" >
-						<digi:trn key="clickImageToDownload">
-					 	    Click the images to download related documents    				
-					  	</digi:trn>
-                    </td>
-				</tr>
+				
 			</table>		
 		</td>
 	</tr>

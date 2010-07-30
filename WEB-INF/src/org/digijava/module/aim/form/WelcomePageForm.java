@@ -14,6 +14,8 @@ public class WelcomePageForm extends ActionForm{
 	
 	private String optionalFileName = null;
 	
+	private String thumbnailLabel = null;
+	
 	private int placeholder;
 	
 	/**
@@ -104,4 +106,17 @@ public class WelcomePageForm extends ActionForm{
 		this.thumbnailPlace2 = thumbnailPlace2;
 	}
 	
+	/**
+	 * @return the thumbnailLabel
+	 */
+	public String getThumbnailLabel() {
+		return thumbnailLabel;
+	}
+
+	/**
+	 * @param thumbnailLabel the thumbnailLabel to set
+	 */
+	public void setThumbnailLabel(String thumbnailLabel) {
+		this.thumbnailLabel = thumbnailLabel;
+	}
 }

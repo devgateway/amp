@@ -37,6 +37,7 @@ public class UploadThumbnail extends Action {
 					homeThumbnail.setThumbnail(image);
 					homeThumbnail.setThumbnailContentType(thumbnail.getContentType());
 					homeThumbnail.setPlaceholder(wpForm.getPlaceholder());
+					homeThumbnail.setThumbnailLabel(wpForm.getThumbnailLabel());
 					if (wpForm.getOptionalFile()!=null && wpForm.getOptionalFile().getFileSize()>0){
 						homeThumbnail.setOptionalFile(wpForm.getOptionalFile().getFileData());
 						homeThumbnail.setOptionalFileName(wpForm.getOptionalFile().getFileName());
@@ -48,6 +49,7 @@ public class UploadThumbnail extends Action {
 					homeThumbnail.setThumbnail(image);
 					homeThumbnail.setThumbnailContentType(thumbnail.getContentType());
 					homeThumbnail.setPlaceholder(wpForm.getPlaceholder());
+					homeThumbnail.setThumbnailLabel(wpForm.getThumbnailLabel());
 					if (wpForm.getOptionalFile()!=null && wpForm.getOptionalFile().getFileSize()>0){
 						homeThumbnail.setOptionalFile(wpForm.getOptionalFile().getFileData());
 						homeThumbnail.setOptionalFileName(wpForm.getOptionalFile().getFileName());

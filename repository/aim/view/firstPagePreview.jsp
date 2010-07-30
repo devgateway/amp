@@ -220,12 +220,21 @@ function initFileUploads() {
 						</tr>
 						<tr>
 							<td> 
-								<digi:trn key="firstPlaceholder">First Placeholder</digi:trn>
+								<strong><digi:trn key="firstPlaceholder">First Placeholder</digi:trn></strong>
 								<input name="placeholder" type="radio" value="1" checked="checked" />
 							</td>
 							<td> 
-								<digi:trn key="secondPlaceholder">Second Placeholder</digi:trn>
+								<strong><digi:trn key="secondPlaceholder">Second Placeholder</digi:trn></strong>
 								<input name="placeholder" type="radio" value="2" />
+							</td>
+						</tr>
+						
+						<tr>
+							<td> 
+								<strong><digi:trn key="selectOptionalFile">Thumbnail Label:</digi:trn><font color="red"></font></strong>
+							</td>
+							<td> 
+								<input name="thumbnailLabel" type="text" style="width: 200"/>
 							</td>
 						</tr>
 						

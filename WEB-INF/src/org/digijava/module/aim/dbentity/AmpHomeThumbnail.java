@@ -16,6 +16,8 @@ public class AmpHomeThumbnail {
 
 	private String thumbnailContentType;
 
+	private String thumbnailLabel;
+
 	/**
 	 * @return the thumbnailId
 	 */
@@ -112,6 +114,20 @@ public class AmpHomeThumbnail {
 	 */
 	public void setThumbnailContentType(String thumbnailContentType) {
 		this.thumbnailContentType = thumbnailContentType;
+	}
+	
+	/**
+	 * @return the thumbnailLabel
+	 */
+	public String getThumbnailLabel() {
+		return thumbnailLabel;
+	}
+
+	/**
+	 * @param thumbnailLabel the thumbnailLabel to set
+	 */
+	public void setThumbnailLabel(String thumbnailLabel) {
+		this.thumbnailLabel = thumbnailLabel;
 	}
 	
 }

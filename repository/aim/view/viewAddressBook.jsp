@@ -307,9 +307,14 @@ html>body #main {
 		        	rowsPerPage:10,
 		        	containers : ["dt-pag-nav"], 
 		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
-		        	pageReportTemplate : "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
-		        	rowsPerPageOptions : [10,25,50,100]
-		        }); 
+		        	pageReportTemplate		: "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+		        	rowsPerPageOptions		: [10,25,50,100],
+		        	firstPageLinkLabel		: '<< <digi:trn jsFriendly="true">first</digi:trn>',
+		        	previousPageLinkLabel	: '< <digi:trn jsFriendly="true">prev</digi:trn>',
+		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn> >',
+		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn> >>'
+		        });
+		         
 		        var myConfigs = {
 		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
 		            dynamicData: true, // Enables dynamic server-driven data

@@ -64,7 +64,9 @@ public class GetZones extends Action {
 
         String zoneSelect = "<select name=\"selZoneIds\" class=\"selectDropDown\" id=\"zone_dropdown_id\"  multiple=\"true\" size=\"8\">";
         Iterator<AmpCategoryValueLocations> zoneIter = zones.iterator();
-        zoneSelect += "<option value=\"-1\">All</option>";
+        if (zones != null && !zones.isEmpty()) {
+            zoneSelect += "<option value=\"-1\">All</option>";
+        }
         while (zoneIter.hasNext()) {
             AmpCategoryValueLocations zone = zoneIter.next();
             zoneSelect += "<option value=\"" + zone.getId() + "\">" + DbUtil.filter(zone.getName()) + "</option>";

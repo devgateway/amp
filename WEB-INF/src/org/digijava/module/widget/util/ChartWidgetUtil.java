@@ -94,6 +94,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.Range;
+import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -846,12 +847,11 @@ public class ChartWidgetUtil {
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 		Font subTitleFont = new Font("Arial", Font.BOLD, 10);
 		DefaultPieDataset dataset = null;
-    	String otherTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
-        if(WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN==widgetType){
-            dataset=getDonorSectorDataSet(filter,sectorClassConfigId,otherTitle);
-        }
-        else{
-             dataset=getDonorRegionalDataSet(filter,otherTitle);
+        if (WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN == widgetType) {
+            String otherTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
+            dataset = getDonorSectorDataSet(filter, sectorClassConfigId, otherTitle);
+        } else {
+            dataset = getDonorRegionalDataSet(filter, opt);
         }
 		String transTypeName = "";
 		switch (filter.getTransactionType()) {
@@ -1228,10 +1228,9 @@ public class ChartWidgetUtil {
             oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
             oql += getTeamQuery(teamMember);
             if (regionId != null && regionId != -1) {
-                oql += " and loc.id in (:zones) ";
-            } else {
-                oql += " and loc.parentCategoryValue.id= " + CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_REGION).getId();
+                oql += " and loc.id in (:locations) ";
             }
+            oql+=" order by loc.parentCategoryValue";
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -1247,15 +1246,15 @@ public class ChartWidgetUtil {
                 query.setLong("teamId", teamMember.getTeamId());
 
             }
-            Collection<Long> zones = filter.getLocationIds();
+            Collection<Long> locationIds = filter.getLocationIds();
             if (regionId != null && regionId != -1) {
-                query.setParameterList("zones", zones);
+                query.setParameterList("locations", locationIds);
             }
             locations = query.list();
         }
         catch (Exception e) {
             logger.error(e);
-            throw new DgException("Cannot load sector fundings by donors from db", e);
+            throw new DgException("Cannot load locations fundings by donors from db", e);
         }
         return locations;
 
@@ -1269,14 +1268,18 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter,String othersTitle) throws DgException {
-       BigDecimal divideByMillionDenominator=new BigDecimal(1000000);
+    public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter,ChartOption opt) throws DgException, WorkerException {
+        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+        String othersTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
+        String nationalTitle = TranslatorWorker.translateText("National", opt.getLangCode(), opt.getSiteId());
+        String regionalTitle = TranslatorWorker.translateText("Regional", opt.getLangCode(), opt.getSiteId());
+        String unallocatedTitle = TranslatorWorker.translateText("Unallocated", opt.getLangCode(), opt.getSiteId());
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-              divideByMillionDenominator=new BigDecimal(1000);
+            divideByMillionDenominator = new BigDecimal(1000);
         }
         BigDecimal regionalTotal = BigDecimal.ZERO;
         Long currId = filter.getCurrId();
-        String currCode= CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        String currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         int transactionType = filter.getTransactionType();
         DefaultPieDataset ds = new DefaultPieDataset();
         /*
@@ -1285,12 +1288,12 @@ public class ChartWidgetUtil {
          *
          */
         try {
-            List<AmpCategoryValueLocations> regions = getLocations(filter);
-            Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
+            List<AmpCategoryValueLocations> locations = getLocations(filter);
+            Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
             while (regionIter.hasNext()) {
                 //calculating funding for each region
-                AmpCategoryValueLocations region=regionIter.next();
-                List<AmpFundingDetail> fundingDets = getLocationFunding(filter,region);
+                AmpCategoryValueLocations location = regionIter.next();
+                List<AmpFundingDetail> fundingDets = getLocationFunding(filter, location);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
@@ -1306,7 +1309,41 @@ public class ChartWidgetUtil {
                 } else {
                     total = cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator));
+
+                BigDecimal amount = total.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                BigDecimal oldvalue = BigDecimal.ZERO;
+                String keyName = "";
+                String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
+                if (location.getParentCategoryValue().getValue().equals(implLocation)) {
+                    keyName = nationalTitle;
+                } else {
+                    Long zoneIds[] = filter.getZoneIds();
+                    if (zoneIds != null && zoneIds.length > 0) {
+                        implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
+                        if (location.getParentCategoryValue().getValue().equals(implLocation)) {
+                            keyName = regionalTitle;
+                        } else {
+                            AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+                            keyName = parent.getName();
+                        }
+                    } else {
+                        AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+                        keyName = parent.getName();
+                    }
+
+
+                }
+                try {
+                    oldvalue = (BigDecimal) ds.getValue(keyName);
+                } catch (UnknownKeyException ex) {
+                    oldvalue = BigDecimal.ZERO;
+                }
+                if (oldvalue != null) {
+                    BigDecimal newValue = oldvalue.add(amount);
+                    ds.setValue(keyName, newValue);
+                } else {
+                    ds.setValue(keyName, amount);
+                }
                 regionalTotal = regionalTotal.add(total.getValue());
             }
             List<String> keys = ds.getKeys();
@@ -1314,6 +1351,9 @@ public class ChartWidgetUtil {
             BigDecimal othersValue = BigDecimal.ZERO;
             while (keysIter.hasNext()) {
                 String key = keysIter.next();
+                if (key.equals(nationalTitle)||key.equals(regionalTitle)) {
+                    continue;
+                }
                 BigDecimal value = (BigDecimal) ds.getValue(key);
                 Double percent = (value.divide(regionalTotal.divide(divideByMillionDenominator), 3, RoundingMode.HALF_UP)).doubleValue();
                 if (percent <= 0.05) {
@@ -1324,11 +1364,87 @@ public class ChartWidgetUtil {
             if (!othersValue.equals(BigDecimal.ZERO)) {
                 ds.setValue(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
             }
+            Collection<Long> locationIds = filter.getLocationIds();
+            boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
+            if (unallocatedCondition) {
+                List<AmpFundingDetail> unallocatedFundings = getUnallocatedFunding(filter);
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(unallocatedFundings, currCode);
+                DecimalWraper total = null;
+
+                /*Depending on what is selected in the filter
+                we should return either actual commitments
+                or actual Disbursement */
+
+                if (transactionType == Constants.COMMITMENT) {
+                    total = cal.getTotActualComm();
+                } else {
+                    total = cal.getTotActualDisb();
+                }
+                if (total != null && total.doubleValue() != 0) {
+                    ds.setValue(unallocatedTitle, total.doubleValue() / divideByMillionDenominator.doubleValue());
+                }
+            }
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);
         }
         return ds;
+
+    }
+
+     @SuppressWarnings("unchecked")
+    public static List<AmpFundingDetail> getUnallocatedFunding(FilterHelper filter)
+            throws DgException {
+        Long[] orgIds = filter.getOrgIds();
+        Long orgGroupId = filter.getOrgGroupId();
+        int transactionType = filter.getTransactionType();
+        TeamMember tm = filter.getTeamMember();
+        Date startDate = filter.getStartDate();
+        Date endDate = filter.getEndDate();
+        Session session = PersistenceManager.getRequestDBSession();
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        oql += " left join act.locations actloc  ";
+
+        oql += "  where  "
+                + "   fd.adjustmentType = 1 ";
+        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            oql += " and fd.transactionType =:transactionType  ";
+        } else {
+            oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
+        }
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
+        if (orgIds == null) {
+            if (orgGroupId != -1) {
+                oql += getOrganizationQuery(true, orgIds);
+            }
+
+        } else {
+            oql += getOrganizationQuery(false, orgIds);
+        }
+     
+        oql += getTeamQuery(tm);
+        oql += " and actloc is NULL ";
+
+        Query query = session.createQuery(oql);
+        query.setDate("startDate", startDate);
+        query.setDate("endDate", endDate);
+        if (orgIds == null && orgGroupId != -1) {
+            query.setLong("orgGroupId", orgGroupId);
+        }
+        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            query.setLong("transactionType", transactionType);
+        }
+        if (tm != null) {
+            query.setLong("teamId", tm.getTeamId());
+
+        }
+        List<AmpFundingDetail> fundingDets = query.list();
+        return fundingDets;
 
     }
 

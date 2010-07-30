@@ -70,6 +70,7 @@
                     var toolbar=document.getElementById("orgProfToolbarId");
                     toolbar.style.display="block";
                 }
+                window.onload=showOrgProfileToolbar;
         </script>
         <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
         <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
@@ -304,7 +305,6 @@
         <script language="javascript" type="text/javascript">
             setStripsTable("tableEven", "tableOdd");
             setHoveredTable();
-            showOrgProfileToolbar();
         </script>
     </BODY>
 </HTML>

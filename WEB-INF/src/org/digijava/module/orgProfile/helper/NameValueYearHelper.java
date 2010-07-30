@@ -3,14 +3,21 @@
 package org.digijava.module.orgProfile.helper;
 
 import java.util.List;
-import java.util.SortedMap;
 
 
 public class NameValueYearHelper {
     private String name;
     private Long id;
-    private SortedMap<Long,String> yearValues;
     private List<String> values;
+    private boolean needTranslation;
+
+    public boolean getNeedTranslation() {
+        return needTranslation;
+    }
+
+    public void setNeedTranslation(boolean needTranslation) {
+        this.needTranslation = needTranslation;
+    }
 
     public List<String> getValues() {
         return values;
@@ -18,14 +25,6 @@ public class NameValueYearHelper {
 
     public void setValues(List<String> values) {
         this.values = values;
-    }
-
-    public SortedMap<Long, String> getYearValues() {
-        return yearValues;
-    }
-
-    public void setYearValues(SortedMap<Long, String> yearValues) {
-        this.yearValues = yearValues;
     }
 
     public Long getId() {
@@ -45,5 +44,4 @@ public class NameValueYearHelper {
     }
 
   
-
 }

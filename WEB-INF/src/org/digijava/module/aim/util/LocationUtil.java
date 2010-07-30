@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
@@ -1017,5 +1018,36 @@ public class LocationUtil {
              throw new DgException(e);
         }
 
+    }
+     public static void  populateWithDescendants(Collection<Long> locations,Collection <Long> destCollection ) {
+		if ( locations != null ) {
+			Iterator<Long> iterLoc	= locations.iterator();
+			while (iterLoc.hasNext()) {
+				AmpCategoryValueLocations loc	 =
+					DynLocationManagerUtil.getLocation(iterLoc.next(), true);
+				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
+				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
+                    List<Long> childrenLocsId=new ArrayList<Long>();
+                    for(AmpCategoryValueLocations child:childrenLocs){
+                        childrenLocsId.add(child.getId());
+                    }
+                    destCollection.addAll(childrenLocsId);
+					populateWithDescendants(destCollection, childrenLocsId);
+				}
+			}
+		}
+	}
+    public static AmpCategoryValueLocations getTopAncestor(AmpCategoryValueLocations loc, String beforeImpLoc) {
+        AmpCategoryValueLocations parent = loc.getParentLocation();
+        if (beforeImpLoc!=null) {
+            if (parent.getParentCategoryValue().getValue().equals(beforeImpLoc)) {
+                return loc;
+            }
+        }
+        if (parent == null) {
+            return loc;
+        } else {
+            return getTopAncestor(parent, beforeImpLoc);
+        }
     }
 }

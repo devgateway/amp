@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -265,23 +266,19 @@ public class FilterHelper implements Serializable {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
         int fiscalYear = year.intValue();
-        this.startDate = OrgProfileUtil.getStartDate(fiscalCalendarId,  fiscalYear);
-        this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId,  fiscalYear);
+        this.startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, fiscalYear);
+        this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, fiscalYear);
         this.locationIds = new ArrayList<Long>();
         if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-            this.locationIds.addAll(Arrays.asList(zoneIds));
+            List<Long> zonesAsList = Arrays.asList(zoneIds);
+            LocationUtil.populateWithDescendants(zonesAsList, locationIds);
+            this.locationIds.addAll(zonesAsList);
         } else {
-            if (zoneIds != null && zoneIds[0] == -1) {
-                AmpCategoryValueLocations region = LocationUtil.getAmpCategoryValueLocationById(regionId);
-                if (region.getChildLocations() != null) {
-                    for (AmpCategoryValueLocations child : region.getChildLocations()) {
-                        this.locationIds.add(child.getId());
-                    }
-                }
-            } else {
-                if (regionId != null && regionId != -1) {
-                    this.locationIds.add(regionId);
-                }
+            if (regionId != null && regionId != -1) {
+                List<Long> regionAsList = new ArrayList<Long>();
+                regionAsList.add(regionId);
+                LocationUtil.populateWithDescendants(regionAsList, locationIds);
+                this.locationIds.add(regionId);
             }
         }
     }

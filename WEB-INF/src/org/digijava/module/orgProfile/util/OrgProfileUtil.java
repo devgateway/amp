@@ -76,7 +76,7 @@ public class OrgProfileUtil {
     public static final Color CELLCOLOR = new Color(219, 229, 241);
     public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
     public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-    public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD,Color.WHITE);
+    public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, Color.WHITE);
 
     /**
      *
@@ -533,22 +533,22 @@ public class OrgProfileUtil {
                 project.setSectorNames(new ArrayList<String>());
                 while (sectorIter.hasNext()) {
                     String sectorsName = "";
-                    AmpActivitySector actSector=sectorIter.next();
-                    AmpSector sector=actSector.getSectorId();
-                    AmpSector parentSector=sector.getParentSectorId();
-                    sectorsName +=  sector.getAmpSecSchemeId().getSecSchemeName()+" -> ";
+                    AmpActivitySector actSector = sectorIter.next();
+                    AmpSector sector = actSector.getSectorId();
+                    AmpSector parentSector = sector.getParentSectorId();
+                    sectorsName += sector.getAmpSecSchemeId().getSecSchemeName() + " -> ";
 
-                    if(parentSector!=null){
-                        if(parentSector.getParentSectorId()!=null){
-                            sectorsName+=parentSector.getParentSectorId().getName()+" -> ";
+                    if (parentSector != null) {
+                        if (parentSector.getParentSectorId() != null) {
+                            sectorsName += parentSector.getParentSectorId().getName() + " -> ";
                         }
-                        sectorsName+=parentSector.getName()+" -> ";
+                        sectorsName += parentSector.getName() + " -> ";
                     }
-                    sectorsName +=sector.getName();
+                    sectorsName += sector.getName();
                     project.getSectorNames().add(sectorsName);
 
                 }
-               
+
                 //project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
@@ -795,7 +795,7 @@ public class OrgProfileUtil {
         return total;
     }
 
-    public static List<NameValueYearHelper> getData(FilterHelper filter, int type,Long sectorClassConfigId) throws DgException {
+    public static List<NameValueYearHelper> getData(FilterHelper filter, int type, Long sectorClassConfigId) throws DgException {
         List<NameValueYearHelper> result = new ArrayList<NameValueYearHelper>();
         TreeMap<Long, BigDecimal> totalValuesComm = new TreeMap<Long, BigDecimal>();
         TreeMap<Long, BigDecimal> totalValuesDisb = new TreeMap<Long, BigDecimal>();
@@ -840,8 +840,8 @@ public class OrgProfileUtil {
                     expHelper.getValues().add(FormatHelper.formatNumber(fundingExp.doubleValue()));
                 }
             }
-            if(filter.isPledgeVisible()){
-            result.add(pledgesHelper);
+            if (filter.isPledgeVisible()) {
+                result.add(pledgesHelper);
             }
             result.add(commHelper);
             result.add(disbHelper);
@@ -882,7 +882,7 @@ public class OrgProfileUtil {
                 result.add(actualHelper);
             } else {
                 if (type == WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN) {
-                    Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter,sectorClassConfigId);
+                    Collection<DonorSectorFundingHelper> secFundCol = ChartWidgetUtil.getDonorSectorFundingHelperList(filter, sectorClassConfigId);
                     Iterator<DonorSectorFundingHelper> secFundColIter = secFundCol.iterator();
                     while (secFundColIter.hasNext()) {
                         DonorSectorFundingHelper sectorFunding = secFundColIter.next();
@@ -908,10 +908,16 @@ public class OrgProfileUtil {
                 } else {
                     if (type == WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN) {
                         List<AmpCategoryValueLocations> regions = ChartWidgetUtil.getLocations(filter);
+                        String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
                         Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
+                        NameValueYearHelper national = null;
                         while (regionIter.hasNext()) {
                             //calculating funding for each region
+                            boolean flag = false;
                             AmpCategoryValueLocations region = regionIter.next();
+                            if (region.getParentCategoryValue().getValue().equals(implLocation)) {
+                                flag = true;
+                            }
                             List<AmpFundingDetail> fundingDets = ChartWidgetUtil.getLocationFunding(filter, region);
                             /*Newly created objects and   selected currency
                             are passed doCalculations  method*/
@@ -934,11 +940,53 @@ public class OrgProfileUtil {
                                     nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
                                     break;
                             }
-                            result.add(nameValueYearHelper);
-                            /*Depending on what is selected in the filter
-                            we should return either actual commitments
-                            or actual Disbursement */
+                            if (flag) {
+                                national = nameValueYearHelper;
+                            } else {
+                                result.add(nameValueYearHelper);
+                            }
                         }
+                        if (national != null) {
+                            national.setName("National");
+                            result.add(national);
+                        }
+                        Collection<Long> locationIds = filter.getLocationIds();
+                        boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
+                        if (unallocatedCondition) {
+                            List<AmpFundingDetail> unallocatedFundings = ChartWidgetUtil.getUnallocatedFunding(filter);
+                            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                            cal.doCalculations(unallocatedFundings, currCode);
+                            NameValueYearHelper helper = new NameValueYearHelper();
+                            helper.setName("Unallocated");
+                            //helper.setNeedTranslation(true);
+                            helper.setValues(new ArrayList<String>());
+                            DecimalWraper totActualComm = cal.getTotActualComm();
+                            DecimalWraper totActualDisb = cal.getTotActualDisb();
+                            switch (transactionType) {
+                                case Constants.COMMITMENT:
+                                    if (totActualComm != null && totActualComm.doubleValue() != 0) {
+                                        helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
+                                        result.add(helper);
+                                    }
+                                    break;
+                                case Constants.DISBURSEMENT:
+                                    if (totActualDisb != null && totActualDisb.doubleValue() != 0) {
+                                        helper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
+                                        result.add(helper);
+                                    }
+                                    break;
+                                case 2: //both COMMITMENT & DISBURSEMENT
+                                    if ((totActualDisb != null && totActualDisb.doubleValue() != 0)
+                                            || (totActualComm != null && totActualComm.doubleValue() != 0)) {
+                                        helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
+                                        helper.getValues().add(FormatHelper.formatNumber(totActualDisb.doubleValue()));
+                                        result.add(helper);
+                                    }
+                                    break;
+                            }
+
+                        }
+
                     } else {
                         if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
                             categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
@@ -1041,7 +1089,7 @@ public class OrgProfileUtil {
         return result;
     }
 
-    public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
+    public static void getDataTable(PdfPTable table, FilterHelper filter, String siteId, String langCode, int type, Long sectorClassConfigId) throws Exception {
         int yearRange = 0;
         int endRange = 0;
         switch (type) {
@@ -1089,7 +1137,7 @@ public class OrgProfileUtil {
             }
         }
 
-        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type,sectorClassConfigId);
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type, sectorClassConfigId);
         ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
@@ -1105,7 +1153,7 @@ public class OrgProfileUtil {
 
     }
 
-    public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type,Long sectorClassConfigId) throws Exception {
+    public static void getDataTable(Table table, FilterHelper filter, String siteId, String langCode, int type, Long sectorClassConfigId) throws Exception {
         int yearRange = 0;
         int endRange = 0;
         switch (type) {
@@ -1156,7 +1204,7 @@ public class OrgProfileUtil {
                 }
             }
         }
-        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type,sectorClassConfigId);
+        List<NameValueYearHelper> values = OrgProfileUtil.getData(filter, type, sectorClassConfigId);
         ListIterator<NameValueYearHelper> valuesIter = values.listIterator();
         while (valuesIter.hasNext()) {
             NameValueYearHelper value = valuesIter.next();
@@ -1215,16 +1263,18 @@ public class OrgProfileUtil {
 
         return date;
     }
-    
-      public static class NameValueYearHelperComparatorByName implements Comparator<NameValueYearHelper> {
+
+    public static class NameValueYearHelperComparatorByName implements Comparator<NameValueYearHelper> {
+
         private Collator collator;
+
         public NameValueYearHelperComparatorByName(Collator collator) {
             this.collator = collator;
 
         }
+
         public int compare(NameValueYearHelper o1, NameValueYearHelper o2) {
             return collator.compare(o1.getName(), o2.getName());
         }
     }
-
 }

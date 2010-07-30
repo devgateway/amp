@@ -1163,6 +1163,10 @@ public class EditOrganisation extends DispatchAction {
       
       //Budget sectors
       Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
+      if(editForm.getResetBudgetSectors()!=null && editForm.getResetBudgetSectors()){
+    	  editForm.setSelectedbudgetsectors(null) ;
+      }     
+      
       if (editForm.getSelectedbudgetsectors() != null) {
           Iterator<AmpBudgetSector> itr = editForm.getBudgetsectors().iterator();
           while (itr.hasNext()) {
@@ -1179,6 +1183,10 @@ public class EditOrganisation extends DispatchAction {
       
       //Departments
       Set<AmpDepartments> departments = new HashSet<AmpDepartments>();
+      if(editForm.getResetDepartments()!=null && editForm.getResetDepartments()){
+    	  editForm.setSelecteddepartments(null);
+      }
+      
       if (editForm.getSelecteddepartments() != null) {
           Iterator<AmpDepartments> itr = editForm.getDepartments().iterator();
           while (itr.hasNext()) {

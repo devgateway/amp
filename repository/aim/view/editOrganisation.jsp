@@ -630,6 +630,21 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         
         function validateSaveOrg() {
             if(check()){
+                //departments reset or not
+            	var deps=document.getElementById('depsSel');
+                if(deps.value!='' && deps.value!=0){
+                	document.getElementById('departments').value=false;
+                }else{
+                	document.getElementById('departments').value=true;
+                }
+                //budget sectors reset or not
+                var budgetSectors = document.getElementById('budgSect');
+                if(budgetSectors.value!='' && budgetSectors.value!=0){
+                	document.getElementById('budgSects').value=false;
+                }else{
+                	document.getElementById('budgSects').value=true;
+                }
+               
     			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${delete}";
                 document.aimAddOrgForm.actionFlag.value = "save";
@@ -674,9 +689,6 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 if(hasHeaders){
                     rows[0].className += " tableHeader";
                     i = 1;
-                    
-                   
-
                 }
 
                 for(i, n = rows.length; i < n; ++i) {
@@ -690,11 +702,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 }
                 rows = null;
             }
-
-
-
         }
-        function expand(suffix){
+        
+    function expand(suffix){
 		var imgId='#img_'+suffix;
 		var imghId='#imgh_'+suffix;
 		var divId='#div_container_'+suffix;
@@ -712,15 +722,16 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 		$(divId).hide('fast');
 	}
         function expandAll(){
-                $("img[id^='img_']"+':visible').slideUp('fast');
-		$("img[id^='imgh_']"+':hidden').slideDown('fast');;
-		$("div[id^='div_container_']").slideDown('fast');
+            $("img[id^='img_']"+':visible').slideUp('fast');
+			$("img[id^='imgh_']"+':hidden').slideDown('fast');;
+			$("div[id^='div_container_']").slideDown('fast');
 
          }
-         function collapseAll(){
+
+        function collapseAll(){
               $("img[id^='imgh_']"+':visible').slideUp('fast');
               $("img[id^='img_']"+':hidden').slideDown('fast');
-	      $("div[id^='div_container_']"+':visible').slideUp('fast');
+	      	  $("div[id^='div_container_']"+':visible').slideUp('fast');
          }
 
          function exportGeneralInfo(){
@@ -860,10 +871,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/> 
 	<html:hidden name="aimAddOrgForm"  property="selContactId" />
 	<html:hidden styleId="primaryOrgCont" value="${aimAddOrgForm.resetPrimaryOrgContIds}" name="aimAddOrgForm" property="resetPrimaryOrgContIds"/>
+	<html:hidden styleId="departments" value="${aimAddOrgForm.resetDepartments}" name="aimAddOrgForm" property="resetDepartments"/>
+	<html:hidden styleId="budgSects" value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm" property="resetBudgetSectors"/>
 
-    <table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
+    <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
         <tr>
-            <td class=r-dotted-lg width="1%">&nbsp;</td>
+            <td class="r-dotted-lg" width="1%">&nbsp;</td>
             <td align=left class=r-dotted-lg vAlign=top width="99%">
                 <table bgcolor="#ffffff" cellPadding=5 cellSpacing=0 width="100%">
                     <tr>
@@ -1761,12 +1774,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                </div>
 								        </fieldset>
 								    </td>
-								</tr>
-                
-                
-                
-                
-                
+								</tr>                
                 
             </c:when>
             <c:otherwise>
@@ -1892,7 +1900,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                		 <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedbudgetsectors">
                 		<tr>
                         	<td>
-                        		<html:select name="aimAddOrgForm" property="selectedbudgetsectors" multiple="true" alt="${alttext}" >
+                        		<html:select name="aimAddOrgForm" property="selectedbudgetsectors" multiple="true" alt="${alttext}" styleId="budgSect">
                         			<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
                         			<html:optionsCollection name="aimAddOrgForm" property="budgetsectors" value="idsector" label="sectorname"/>
                 				</html:select>
@@ -1912,7 +1920,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                		 <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selecteddepartments">
                 		<tr>
                         	<td>
-                        		<html:select name="aimAddOrgForm" property="selecteddepartments" multiple="true" alt="${alttext}" >
+                        		<html:select name="aimAddOrgForm" property="selecteddepartments" multiple="true" alt="${alttext}" styleId="depsSel">
                         			<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
                         			<html:optionsCollection name="aimAddOrgForm" property="departments" value="id" label="name"/>
                 				</html:select>

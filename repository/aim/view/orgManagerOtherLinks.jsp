@@ -49,7 +49,7 @@
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
 												<td>
-														<digi:link href="/orgGroupManager.do" >
+														<digi:link href="/orgGroupManager.do?resetAlpha=true" >
 															<digi:trn key="aim:orgGroupManager">Organization Group Manager</digi:trn></digi:link>
 												</td>
 											</tr>

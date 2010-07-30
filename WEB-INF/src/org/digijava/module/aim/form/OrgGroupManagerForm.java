@@ -49,7 +49,7 @@ public class OrgGroupManagerForm extends ActionForm {
 		      keyword = null;
 		      setOrgType("");
 		      setAmpOrgTypeId(null);
-		      setTempNumResults(10);
+		      setTempNumResults(10);		     
 		    }
 		
 	}

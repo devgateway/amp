@@ -45,14 +45,15 @@ public class OrgGroupManager extends Action {
 					 OrgGroupManagerForm orgForm = (OrgGroupManagerForm) form;
 					 int page = 0;
 					 
-					 if (request.getParameter("orgSelReset") != null
-						        && request.getParameter("orgSelReset").equals("false")) {
-						 		orgForm.setOrgSelReset(false);
-						    }
-						    else {
-						    	orgForm.setOrgSelReset(true);
-						    	orgForm.reset(mapping, request);
-						    }
+					 if (request.getParameter("orgSelReset") != null && request.getParameter("orgSelReset").equals("false")) {
+						orgForm.setOrgSelReset(false);
+					 }else {
+						orgForm.setOrgSelReset(true);						
+						orgForm.reset(mapping, request);
+					 }
+					 if(request.getParameter("resetAlpha") != null && request.getParameter("resetAlpha").equals("true")){
+						orgForm.setAlpha(null);
+					 }
 					 
 					 if (orgForm.getTempNumResults() !=0){
 						 orgForm.setNumResults(orgForm.getTempNumResults()); 
@@ -192,14 +193,11 @@ public class OrgGroupManager extends Action {
 			            	vect.addAll(orgsForCurrentAlpha);
 			            	 numPages = orgsForCurrentAlpha.size() / NUM_RECORDS;
 							 numPages += (orgsForCurrentAlpha.size() % NUM_RECORDS != 0) ? 1 : 0;
-			            }           
-					
+			            }					
 
 					 /*
 					  * check whether the numPages is less than the page . if yes return error.
 					  */
-
-					 
 					 for (int i = (stIndex-1); i < edIndex; i++) {
 						 if(vect.get(i)!=null){
 							 org.add(vect.get(i));

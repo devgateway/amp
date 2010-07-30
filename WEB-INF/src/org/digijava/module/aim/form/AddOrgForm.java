@@ -118,6 +118,16 @@ public class AddOrgForm extends ActionForm {
 	private Collection<AmpBudgetSector> budgetsectors;
 	private Long[] selectedbudgetsectors;
     private String  lineMinRegNumber;
+    
+    private List<AmpOrganisationContact> orgContacts;
+    
+    private String[] selectedContactInfoIds;
+    private String[] primaryOrgContIds;
+    private Boolean resetPrimaryOrgContIds;    
+    private String selContactId;
+    
+    private Boolean resetDepartments;
+    private Boolean resetBudgetSectors;
 
     public String getLineMinRegNumber() {
         return lineMinRegNumber;
@@ -158,14 +168,7 @@ public class AddOrgForm extends ActionForm {
 
 	public void setSelecteddepartments(Long[] selecteddepartments) {
 		this.selecteddepartments = selecteddepartments;
-	}
-
-    private List<AmpOrganisationContact> orgContacts;
-    
-    private String[] selectedContactInfoIds;
-    private String[] primaryOrgContIds;
-    private Boolean resetPrimaryOrgContIds;
-    private String selContactId;
+	}    
 	
 	public Pledge getFundingDetail(int index) {
 		int currentSize = fundingDetails.size();
@@ -918,5 +921,20 @@ public class AddOrgForm extends ActionForm {
 	public void setResetPrimaryOrgContIds(Boolean resetPrimaryOrgContIds) {
 		this.resetPrimaryOrgContIds = resetPrimaryOrgContIds;
 	}
-	
+
+	public Boolean getResetDepartments() {
+		return resetDepartments;
+	}
+
+	public void setResetDepartments(Boolean resetDepartments) {
+		this.resetDepartments = resetDepartments;
+	}
+
+	public Boolean getResetBudgetSectors() {
+		return resetBudgetSectors;
+	}
+
+	public void setResetBudgetSectors(Boolean resetBudgetSectors) {
+		this.resetBudgetSectors = resetBudgetSectors;
+	}	
 }

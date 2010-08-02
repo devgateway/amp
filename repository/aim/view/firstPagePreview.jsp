@@ -74,14 +74,14 @@ div.fakefile2 input{
 <script type="text/javascript">
 
 function configPanel(panelNum){
-	var title ='\n<digi:trn key="uploadThumbnails">Upload Thumbnails</digi:trn>';
+	var title ='\n<digi:trn jsFriendly="true">Upload Thumbnails</digi:trn>';
 	setPanelHeader(0, title);
 	setPanelFooter(0, "");
 	}
 
 function validateAddThumbnail() {
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
-	var trnmsg ='\n<digi:trn key="plsSpecifyThumbnail">Please select a thumbnail to upload !</digi:trn>';
+	var trnmsg ='\n<digi:trn jsFriendly="true">Please select a thumbnail to upload !</digi:trn>';
 	var msg	= '';
 	if (document.forms['aimWelcomePageForm'].thumbnail.value == ''){
 		msg = msg + trnmsg ;
@@ -117,7 +117,7 @@ function addThumbnail(){
         $.get(url, function(data) {
             if(data!='true'){
                 $("#"+id).click(function() {
-                    var msg="<digi:trn>No related documents to download!</digi:trn>"
+                    var msg='<digi:trn jsFriendly="true">No related documents to download!</digi:trn>';
                     alert(msg);
                 });
             }
@@ -145,7 +145,7 @@ function initFileUploads() {
 	var button = document.createElement('input');
 	button.type = 'button';
 
-	button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+	button.value = '<digi:trn jsFriendly="true">Browse...</digi:trn>';
 	fakeFileUpload2.appendChild(button);
 
 	fakeFileUpload.appendChild(fakeFileUpload2);
@@ -170,7 +170,8 @@ function initFileUploads() {
 	<tr>
 		<td  width="5%" />
 		<td  width="60%" >
-			<digi:edit key="um:welcomeAmp" displayText="Edit Text"></digi:edit>
+			<c:set var="lblEditText"><digi:trn>Edit Text</digi:trn></c:set>
+			<digi:edit key="um:welcomeAmp" displayText="${lblEditText}"></digi:edit>
 		</td>
 		<td  width="5%" />
 		<td width="70%" bgcolor="#dbe5f1">
@@ -210,7 +211,7 @@ function initFileUploads() {
 						</td>
 						</tr>
 						<tr id="tr_path_optional">
-						<td><strong><digi:trn key="selectOptionalFile">Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
+						<td><strong><digi:trn>Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
 						<div class="fileinputs"> 
 								<input id="optionalFile" name="optionalFile" type="file" class="file">

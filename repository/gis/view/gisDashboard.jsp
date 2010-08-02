@@ -231,8 +231,11 @@
 	
 	<script language="JavaScript">
 		if (!validatedRegPercentage || !displayeRegPercentage) {
+			
+			var msgText = '<digi:trn key="gis:funding_msg">(*) Project funding is not disaggregated by region or district, and therefore reflect activity totals.</digi:trn>'
+			
 			document.write('<tr><td nowrap colspan="2"><font color="red">');
-			document.write('(*) Project funding is not disaggregated by region or district, and therefore reflect activity totals.');
+			document.write(msgText);
 			document.write('</font></td></tr>');
 		}
 	</script>

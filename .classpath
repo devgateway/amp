@@ -145,5 +145,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.6-20091214.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.6-20091214.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.7.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/hvjavacal.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

@@ -3,6 +3,7 @@ package org.dgfoundation.amp.test.calendar;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +13,8 @@ import junit.framework.TestCase;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
-import org.digijava.module.aim.helper.fiscalcalendar.NepaliCalendar;
+
+import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 public class TestNepaliCalendar extends TestCase {
 
@@ -996,42 +998,42 @@ public class TestNepaliCalendar extends TestCase {
 			
 			System.out.println( worker.getDay()+"/"+worker.getMonthNumber() +"/" + worker.getYear());
 			
-			NepaliCalendar cal=new NepaliCalendar(new Date());
-			System.out.println( cal.getDay()+"/"+cal.getMonth() +"/" + cal.getYear());
+			//NepaliCalendarHelper cal=new NepaliCalendarHelper(new Date());
+			//System.out.println( cal.getDay()+"/"+cal.getMonth() +"/" + cal.getYear());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-/*
+
 	public void testNepaliCalendar() throws Exception {
-
 		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-
-		for (Iterator<String> iterator = dateList.keySet().iterator(); iterator
-				.hasNext();) {
+		double fail = 0;
+		for (Iterator<String> iterator = dateList.keySet().iterator(); iterator.hasNext();) {
 			String key = iterator.next();
 			try {
-
 				Date date = format.parse(key);
-				NepaliCalendar cal = new NepaliCalendar(date);
+				java.util.Calendar cal = java.util.Calendar.getInstance();
+				cal.setTime(date);
+
+				fi.joensuu.joyds1.calendar.Calendar c = fi.joensuu.joyds1.calendar.Calendar.getInstance();
+				c.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+				fi.joensuu.joyds1.calendar.NepaliCalendar npc = new fi.joensuu.joyds1.calendar.NepaliCalendar(c);
+
 				DecimalFormat ff = new DecimalFormat("00");
-				String compareWith = ff.format(cal.getDay()) + "/"
-						+ ff.format(cal.getMonth()) + "/" + cal.getYear();
+				String compareWith = ff.format(npc.getDay()) + "/" + ff.format(npc.getMonth()) + "/" + npc.getYear();
 
 				if (!dateList.get(key).equalsIgnoreCase(compareWith)) {
-
-					System.out.println(key + " converted by calendar to "
-							+ compareWith + " (" + cal.getMonthName()
+					System.out.println(key + " converted by calendar to " + compareWith + " (" + npc.getMonth()
 							+ ") but expected on TXT " + dateList.get(key));
+					fail++;
 				}
-
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw e;
 			}
-
 		}
+		System.out.println("Fails " + fail + " over " + dateList.size());
+		System.out.println("%: " + (fail * 100 / dateList.size()));
 	}
-
-*/
-	}
+}

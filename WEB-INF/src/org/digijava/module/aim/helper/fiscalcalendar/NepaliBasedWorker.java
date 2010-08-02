@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper.fiscalcalendar;
 
-import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -9,35 +8,18 @@ import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
-public class NepaliBasedWorker implements ICalendarWorker {
+import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
-	private DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+public class NepaliBasedWorker implements ICalendarWorker {
 
 	protected Map<Integer, ComparableMonth> monthCache = new HashMap<Integer, ComparableMonth>();
 
-	private GregorianCalendar internalCalendar = null;
-
-	private NepaliCalendar nepaliCalendar = null;
-
-	private Date internalTime = null;
-
 	private AmpFiscalCalendar fiscalCalendar = null;
 
-	private int fiscalMonth;
+	private fi.joensuu.joyds1.calendar.NepaliCalendar nepaliCalendar;
 
 	public NepaliBasedWorker(AmpFiscalCalendar fiscalCalendar) {
 		this.fiscalCalendar = fiscalCalendar;
-
-	}
-
-	public NepaliBasedWorker(Date date) {
-		this.internalTime = date;
-		this.nepaliCalendar = new NepaliCalendar(date);
-	}
-
-	public NepaliBasedWorker() {
-		this.internalTime = new Date();
-		this.nepaliCalendar = new NepaliCalendar(internalTime);
 	}
 
 	public Date getDate() throws Exception {
@@ -45,32 +27,25 @@ public class NepaliBasedWorker implements ICalendarWorker {
 	}
 
 	public void setTime(Date time) {
-		internalTime = time;
-
-		if (this.nepaliCalendar == null) {
-			this.nepaliCalendar = new NepaliCalendar(time);
-		} else {
-			this.nepaliCalendar.setTime(time);
-		}
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		cal.setTime(time);
+		int gregYear = cal.get(Calendar.YEAR);
+		int gregMonth = cal.get(Calendar.MONTH) + 1;
+		int gregDay = cal.get(Calendar.DAY_OF_MONTH);
 
 		if (fiscalCalendar != null) {
-			int toAdd = -(fiscalCalendar.getStartDayNum() - 1); //
-			nepaliCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
-
-			toAdd = -(fiscalCalendar.getStartMonthNum() - 1); //
-			nepaliCalendar.add(GregorianCalendar.MONTH, toAdd);
-
-			nepaliCalendar.add(GregorianCalendar.YEAR, fiscalCalendar
-					.getYearOffset());
+			fi.joensuu.joyds1.calendar.Calendar c = fi.joensuu.joyds1.calendar.Calendar.getInstance();
+			c.set(gregYear, gregMonth, gregDay);
+			nepaliCalendar = new fi.joensuu.joyds1.calendar.NepaliCalendar(c);
 		}
 	}
 
-	public Comparable getMonth() throws Exception {
-		return nepaliCalendar.getMonthName();
-	}
+	/*public Comparable getMonth() throws Exception {
+		return this.getMonthName(nepaliCalendar.getMonth()) +"-"+ nepaliCalendar.getMonth();
+	}*/
 
 	public Integer getQuarter() throws Exception {
-		return nepaliCalendar.getQuarter();
+		return getQuarter(nepaliCalendar.getMonth());
 	}
 
 	public Integer getYear() throws Exception {
@@ -96,21 +71,26 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		return this.getYear().intValue() - worker.getYear().intValue();
 	}
 
-	public Comparable getFiscalMonth() throws Exception {
+	public Comparable getMonth() throws Exception {
 		if (!this.fiscalCalendar.getIsFiscal()) {
-			return getMonth();
+			return this.getMonthName(nepaliCalendar.getMonth());
 		} else {
 			checkSetTimeCalled();
 			int monthId = nepaliCalendar.getMonth();
 			ComparableMonth cm = monthCache.get(monthId);
 			if (cm == null) {
-				String monthStr = nepaliCalendar.getMonthName();
+				String monthStr = this.getMonthName(nepaliCalendar.getMonth());
 				cm = new ComparableMonth(monthId, monthStr);
 				monthCache.put(monthId, cm);
 			}
 			return cm;
-
 		}
+		//return getMonthName(nepaliCalendar.getMonth());
+	}
+	
+	@Override
+	public Comparable getFiscalMonth() throws Exception {
+		return getMonth();
 	}
 
 	public String getFiscalYear() throws Exception {
@@ -121,4 +101,72 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		return this.getYear().toString();
 	}
 
+	private String getMonthName(int month) throws Exception {
+		String ret = "";
+		switch (month) {
+		case 1:
+			ret = "Baishak";
+			break;
+		case 2:
+			ret = "Jestha";
+			break;
+		case 3:
+			ret = "Ashad";
+			break;
+		case 4:
+			ret = "Shrawn";
+			break;
+		case 5:
+			ret = "Bhadra";
+			break;
+		case 6:
+			ret = "Ashwin";
+			break;
+		case 7:
+			ret = "Kartik";
+			break;
+		case 8:
+			ret = "Mangshir";
+			break;
+		case 9:
+			ret = "Poush";
+			break;
+		case 10:
+			ret = "Magh";
+			break;
+		case 11:
+			ret = "Falgun";
+			break;
+		case 12:
+			ret = "Chaitra";
+			break;
+		default:
+			ret = null;
+			throw new Exception("Error, incorrect month");
+		}
+		return ret;
+	}
+
+	private Integer getQuarter(int month) {
+		switch (month) {
+		case 1:
+		case 2:
+		case 3:
+			return 1;
+		case 4:
+		case 5:
+		case 6:
+			return 2;
+		case 7:
+		case 8:
+		case 9:
+			return 3;
+		case 10:
+		case 11:
+		case 12:
+			return 4;
+		default:
+			return -1;
+		}
+	}
 }

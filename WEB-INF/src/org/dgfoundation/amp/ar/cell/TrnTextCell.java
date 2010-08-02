@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar.cell;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.workers.TrnTextColWorker;
 import org.digijava.kernel.entity.Locale;
@@ -12,6 +13,8 @@ import org.digijava.kernel.util.RequestUtils;
 
 
 public class TrnTextCell extends TextCell{
+	
+	protected static Logger logger = Logger.getLogger(TrnTextCell.class);
 
 	public TrnTextCell() {
 		super();
@@ -54,6 +57,7 @@ public class TrnTextCell extends TextCell{
 		{
 			parent=parent.getParent();
 		}
+		logger.warn(this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()));
 		return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
 	}
 }

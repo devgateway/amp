@@ -25,6 +25,7 @@ public final class MoConstants {
 	public static String SECTORS= "Sectors";
 	public static String SUB_SECTORS = "Sub-Sectors";
 	public static String CURRENCY = "currency";
+	public static String YEAR = "Year";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
@@ -40,6 +41,7 @@ public final class MoConstants {
 	public static String ALL_TERMS_OF_ASSISTANCE= "All Terms of Assistance";
 	public static String ALL_SUB_SECTORS = "All Sub-Sectors";
 	public static String ALL_CURRENCIES = "All Currencies";
+	
 	//Measures
 	public static String RAW_ACTUAL_COMMITMENTS = "Raw Actual Commitments";
 	public static String RAW_ACTUAL_DISBURSEMENTS = "Raw Actual Disbursements";
@@ -74,8 +76,18 @@ public final class MoConstants {
 	public static String PLEDGE_PLEDGES_DISBURSEMENTS = "Pledges Actual Disbursements";
 	public static String PLEDGE_PLEDGES_COMMITMENTS_GAP = "Commitment Gap";
 	
-	
-	
-	
-	
+	//Months
+	public static String MONTH_JANUARY = "january";
+	public static String MONTH_FEBRUARY = "february";
+	public static String MONTH_MARCH = "march";
+	public static String MONTH_APRIL = "april";
+	public static String MONTH_MAY = "may";
+	public static String MONTH_JUNE = "june";
+	public static String MONTH_JULY = "july";
+	public static String MONTH_AGOUST = "august";
+	public static String MONTH_SEPTEMBER = "september";
+	public static String MONTH_OCTOBER = "october";
+	public static String MONTH_NOVEMBER = "november";
+	public static String MONTH_DECEMBER = "december";
+
 }

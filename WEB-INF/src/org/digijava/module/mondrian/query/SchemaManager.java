@@ -125,6 +125,19 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Pledges Actual Disbursements#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Commitment Gap#", TranslatorWorker.translateText(MoConstants.PLEDGE_PLEDGES_COMMITMENTS_GAP, locale, siteId));
 			
+			shema = shema.replaceAll("#january#", TranslatorWorker.translateText(MoConstants.MONTH_JANUARY, locale, siteId));
+			shema = shema.replaceAll("#february#", TranslatorWorker.translateText(MoConstants.MONTH_FEBRUARY, locale, siteId));
+			shema = shema.replaceAll("#march#", TranslatorWorker.translateText(MoConstants.MONTH_MARCH, locale, siteId));
+			shema = shema.replaceAll("#april#", TranslatorWorker.translateText(MoConstants.MONTH_APRIL, locale, siteId));
+			shema = shema.replaceAll("#may#", TranslatorWorker.translateText(MoConstants.MONTH_MAY, locale, siteId));
+			shema = shema.replaceAll("#june#", TranslatorWorker.translateText(MoConstants.MONTH_JUNE, locale, siteId));
+			shema = shema.replaceAll("#july#", TranslatorWorker.translateText(MoConstants.MONTH_JULY, locale, siteId));
+			shema = shema.replaceAll("#august#", TranslatorWorker.translateText(MoConstants.MONTH_AGOUST, locale, siteId));
+			shema = shema.replaceAll("#september#", TranslatorWorker.translateText(MoConstants.MONTH_SEPTEMBER, locale, siteId));
+			shema = shema.replaceAll("#october#", TranslatorWorker.translateText(MoConstants.MONTH_OCTOBER, locale, siteId));
+			shema = shema.replaceAll("#november#", TranslatorWorker.translateText(MoConstants.MONTH_NOVEMBER, locale, siteId));
+			shema = shema.replaceAll("#december#", TranslatorWorker.translateText(MoConstants.MONTH_DECEMBER, locale, siteId));
+
 			shema = shema.replaceAll("@currency", QueryThread.getCurrency());
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

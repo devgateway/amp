@@ -102,7 +102,7 @@
 </div>							
 </div>
 </div>							
-							<a href="/help/showAddGlossary.do"><digi:trn>Add root topic</digi:trn> </a>
+							<a href="/help/showAddGlossary.do"><digi:trn>Add top level topic</digi:trn> </a>
 						</td>
 						<td valign="top" width="100%">
 						
@@ -125,7 +125,7 @@
 							<div id="nodeContentContainer">
 								<div id="nodeTitle1" style="font-weight: bolder; font-size: large; margin: 5px;"></div>
 								<div id="nodeContentDiv">
-									Please select node in glossary tree
+									<digi:trn>Please select node in glossary tree</digi:trn>
 								</div>
 								<div id="nodeEditorLinkDiv"></div>
 								<div id="addEditDeleteLinksDiv" style="padding: 5px"></div>
@@ -246,12 +246,17 @@
 					$('div#nodeContentDiv').html(data);
 					$('div#nodeTitle').html(glossName);
 					<digi:secure group="Help Administrators">
+						var lblEdit 		= '<digi:trn jsFriendly="true">Edit</digi:trn>';
+						var lblEditTitle 	= '<digi:trn jsFriendly="true">Edit title</digi:trn>';
+						var lblEditText 	= '<digi:trn jsFriendly="true">Edit text</digi:trn>';
+						var lblAddChild 	= '<digi:trn jsFriendly="true">Add child</digi:trn>';
+						var lblDeleteNode 	= '<digi:trn jsFriendly="true">Delete topic</digi:trn>';
 						var key = editorKey;//event.node.data.ampEditorKey;
 						var lang = '${requestScope["org.digijava.kernel.navigation_language"].code}';
 						var linkWithParams = editorLink + '?id=' + key + '&lang=' + lang + '&referrer=' + window.location;
-						var linkEdit = '<a href="'+linkWithParams+'">Edit text</a>';
-						var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+glossId+'">Add child</a>';
-						var linkDeleteNode = '<a href="javascript:deleteNode('+glossId+')">Delete node</a>';
+						var linkEdit = '<a href="'+linkWithParams+'">'+lblEditText+'</a>';
+						var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+glossId+'">'+lblAddChild+'</a>';
+						var linkDeleteNode = '<a href="javascript:deleteNode('+glossId+')">'+lblDeleteNode+'</a>';
 						$('div#nodeEditorLinkDiv').html(linkEdit+'&nbsp;&nbsp;'+linkAddChild+'&nbsp;&nbsp;'+linkDeleteNode);
 					</digi:secure>
 			   },
@@ -279,7 +284,7 @@
 	}
 	
 	function deleteNode(topicId){
-		if (!confirm("Delete this glossary item?")) return;
+		if (!confirm('<digi:trn jsFriendly="true">Delete this glossary item?</digi:trn>')) return;
 		var lastTimeStamp = new Date().getTime();
 		var resp=$.ajax({
 			   type: 'POST',

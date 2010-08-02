@@ -34,6 +34,7 @@ public class HelpForm extends ActionForm {
 	private Collection<LabelValueBean> searched; 
 	private boolean flag;
 	private String page ;
+	private Boolean glossaryMode;
 	FormFile fileUploaded;
 	
 
@@ -201,6 +202,14 @@ public class HelpForm extends ActionForm {
 
 	public String getPage() {
 		return page;
+	}
+
+	public void setGlossaryMode(Boolean glossaryMode) {
+		this.glossaryMode = glossaryMode;
+	}
+
+	public Boolean getGlossaryMode() {
+		return glossaryMode;
 	}
 
 	public void setPage(String page) {

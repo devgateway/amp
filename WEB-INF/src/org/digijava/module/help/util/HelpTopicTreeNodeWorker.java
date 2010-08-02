@@ -13,8 +13,24 @@ import org.digijava.module.help.helper.HelpTopicTreeNode;
  */
 public class HelpTopicTreeNodeWorker implements AmpCollectionUtils.NodeWorker<Long, HelpTopic, HelpTopicTreeNode>{
 
+	private String siteId=null;
+	private String locale=null;
+	
+	public HelpTopicTreeNodeWorker(){
+		
+	}
+	
+	public HelpTopicTreeNodeWorker(String siteId, String locale){
+		this.siteId = siteId;
+		this.locale = locale;
+	}
+	
 	@Override
 	public HelpTopicTreeNode createTreeNode(HelpTopic element) {
+		if (this.siteId!=null && this.locale!=null){
+			//create translatable tree nodes.
+			return new HelpTopicTreeNode(element,this.siteId,this.locale);
+		}
 		return new HelpTopicTreeNode(element);
 	}
 

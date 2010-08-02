@@ -45,6 +45,8 @@ import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
 import org.xml.sax.InputSource;
 
+import bsh.classpath.BshClassPath.MappingFeedback;
+
 
 public class HelpActions extends DispatchAction {
     private static Logger logger = Logger.getLogger("HelpActions");
@@ -410,7 +412,9 @@ public class HelpActions extends DispatchAction {
 				break;
 			}
 		}
-		
+		if (helpForm.getGlossaryMode()!=null && helpForm.getGlossaryMode().booleanValue()==true){
+			mapping.findForward("glossaryHome");
+		}
 		if(page == null){
 				return mapping.findForward("help");
 			
@@ -435,11 +439,9 @@ public class HelpActions extends DispatchAction {
 		form.setBodyEditKey(topic.getBodyEditKey());
 		form.setHelpTopicId(topic.getHelpTopicId());
 		String siteId = RequestUtils.getSite(request).getSiteId();
-		String moduleInstance = RequestUtils.getRealModuleInstance(request)
-				.getInstanceName();
+		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		List<HelpTopic> parentTopics=(List)HelpUtil.getFirstLevelTopics(siteId,
-				moduleInstance, null);
+		List<HelpTopic> parentTopics=(List)HelpUtil.getFirstLevelTopics(siteId,moduleInstance, null);
 		form.setFirstLevelTopics(new ArrayList<HelpTopic>());
 		for (HelpTopic helpTopic : parentTopics) {	
 			if(!helpTopic.getHelpTopicId().equals(topic.getHelpTopicId())){
@@ -487,6 +489,9 @@ public class HelpActions extends DispatchAction {
 		}		
 		helpForm.setTopicKey(topickey);
 		setDefaultValues(helpForm);
+		if (helpForm.getGlossaryMode()!=null && helpForm.getGlossaryMode().booleanValue()==true){
+			mapping.findForward("glossaryHome");
+		}
 		return mapping.findForward("help");
 	}
 

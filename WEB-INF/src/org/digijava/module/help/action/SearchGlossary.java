@@ -36,6 +36,8 @@ public class SearchGlossary extends Action {
 		String term = gform.getSearchTerm();
 		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
 		String siteId = RequestUtils.getSite(request).getSiteId();
+		String siteIdNo = RequestUtils.getSite(request).getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		
 		List<String> terms = null;
 		if (term != null){
@@ -43,14 +45,14 @@ public class SearchGlossary extends Action {
 			List<String> list = Arrays.asList(arr);
 			terms = list;
 		}
-		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(terms, moduleInstance, siteId);
+		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(terms, moduleInstance, siteId, locale);
 		
 		String result = TranslatorWorker.translateText("Nothing found", request);
 		
 		if (helpTopics!=null && helpTopics.size()>0){
 			StringBuffer buf = new StringBuffer();
 			for (HelpTopic helpTopic : helpTopics) {
-				HelpTopicTreeNode node = new HelpTopicTreeNode(helpTopic);
+				HelpTopicTreeNode node = new HelpTopicTreeNode(helpTopic,siteIdNo,locale);
 				buf.append(node.getSearchResultLink());
 			}
 			result = buf.toString();

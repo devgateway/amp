@@ -8,6 +8,7 @@
 
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 <digi:instance property="helpForm" />
+<html:hidden name="helpForm" property="glossaryMode"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script langauage="JavaScript">

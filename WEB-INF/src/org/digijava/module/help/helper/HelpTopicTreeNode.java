@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.help.dbentity.HelpTopic;
 
 /**
@@ -18,17 +20,38 @@ public class HelpTopicTreeNode {
 	private HelpTopic origin;
 	private List<HelpTopicTreeNode> children;
 	private HelpTopicTreeNode parentNode;
+	private String siteId;
+	private String locale;
 
+	/**
+	 * Default constructor.
+	 */
 	public HelpTopicTreeNode(){
 		children = new ArrayList<HelpTopicTreeNode>();
 	}
 
+	/**
+	 * Constructs node from db bean. 
+	 * @param dbBean
+	 */
 	public HelpTopicTreeNode(HelpTopic dbBean){
 		this();
 		this.origin = dbBean;
 		if (dbBean.getParent()!=null){
 			this.parentNodeId = this.origin.getParent().getHelpTopicId();
 		}
+	}
+	
+	/**
+	 * Constructs node from db bean with translated title.
+	 * @param dbBean
+	 * @param siteId
+	 * @param locale
+	 */
+	public HelpTopicTreeNode(HelpTopic dbBean,String siteId,String locale){
+		this(dbBean);
+		this.siteId = siteId;
+		this.locale = locale;
 	}
 	
 	public List<HelpTopicTreeNode> getNodeChildren() {
@@ -52,8 +75,7 @@ public class HelpTopicTreeNode {
 	 */
 	public String getYahooJSdefinition(){
 		
-		//TODO translate!
-		String trnTitle = this.origin.getTopicKey();
+		String trnTitle = trn(this.origin.getTopicKey());
 		
 		StringBuffer buf=new StringBuffer("{ type: 'text', label: '");
 		buf.append(trnTitle);
@@ -79,6 +101,7 @@ public class HelpTopicTreeNode {
 			buf.append("]");
 		}
 		buf.append("}");
+//		System.out.println(buf.toString());
 		return buf.toString();
 	}
 	
@@ -93,13 +116,26 @@ public class HelpTopicTreeNode {
 		buff.append("\">\n\t<a href=\"javascript:showGlossary(");
 		buff.append(this.origin.getHelpTopicId());
 		buff.append(",'");
-		buff.append(this.origin.getTopicKey());
+		buff.append(trn(this.origin.getTopicKey()));
 		buff.append("','");
 		buff.append(this.origin.getBodyEditKey());
 		buff.append("')\">");
-		buff.append(this.origin.getTopicKey());
+		buff.append(trn(this.origin.getTopicKey()));
 		buff.append("</a>\n</div>\n");
 		return buff.toString();
 	}
 
+	private String trn(String text){
+		String result = text;
+		if (this.siteId != null && this.locale != null){
+			//translate if in translatable mode
+			try {
+				result = TranslatorWorker.translateText(text, this.locale, this.siteId);
+				result = result.replaceAll("'", "\\\\'");
+			} catch (WorkerException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }

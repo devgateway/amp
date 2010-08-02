@@ -63,11 +63,12 @@ public class GlossaryUtil {
 	 * @param keyWords list of strings that will be used in LIKE operation. can be null
 	 * @param moduleInstance help module instance name, can be null
 	 * @param siteId digi site ID- value of siteId field, can be null.
+	 * @param locale language code to search in
 	 * @return list of found glossary items.
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, String siteId) throws DgException{
+	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, String siteId, String locale) throws DgException{
 		
 		List<HelpTopic> result = null;
 		String oql = "select ht from "; 
@@ -75,6 +76,9 @@ public class GlossaryUtil {
 		oql += Editor.class.getName()+" as e ";
 		oql += " where ht.topicType=:GLOSS_TYPE";
 		oql += " and ht.bodyEditKey = e.editorKey";
+		if (locale!=null && locale.length()>0){
+			oql += " and e.language = :LANG";
+		}
 		if (keyWords!=null && keyWords.size()>0){
 			oql += " and ( ";
 			int c = 0;
@@ -95,6 +99,9 @@ public class GlossaryUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session.createQuery(oql);
 		query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
+		if (locale!=null && locale.length()>0){
+			query.setString("LANG", locale);
+		}
 		if (keyWords!=null && keyWords.size()>0){
 			int c = 0;
 			for (String kw : keyWords) {

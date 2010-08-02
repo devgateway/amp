@@ -406,7 +406,7 @@ window.onload=autosum;
 	
 				&nbsp;&nbsp;&nbsp;
 			</field:display>
-			<field:display name="Contracting IPA Contract Type" feature="Contracting">
+			<field:display name="Contracting IPA Activity Type" feature="Contracting">
 				<digi:trn key="aim:IPA:newPopup:actType">Activity Type</digi:trn>
 				&nbsp;&nbsp;
 				

@@ -120,7 +120,8 @@
 	}
 	
 	function requestVersions(uuid) {
-		var request = YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/getVersionsForDocumentManager.do?uuid='+uuid, callbackForVersions);
+		var currTime	= new Date().getTime();
+		var request = YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/getVersionsForDocumentManager.do?uuid='+uuid+'&time='+currTime, callbackForVersions);
 	}
 	
 	/* Function for creating YAHOO datatable for versions */

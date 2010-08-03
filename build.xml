@@ -44,7 +44,7 @@
 	 	</not>
 	 </condition>
 
-	<property name="mysql.url" value="jdbc:mysql://localhost"/>
+	<property name="mysql.url" value="jdbc:mysql://localhost?characterEncoding=UTF-8"/>
 	<property name="clean.db" value="amp_clean"/>
 	
     <!-- Path settings -->
@@ -374,7 +374,7 @@
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>	
-			<transaction>CREATE DATABASE ${clean.db}</transaction>		
+			<transaction>CREATE DATABASE ${clean.db} character set utf8 collate utf8_general_ci</transaction>		
 		</sql>
 		
 		<echo message="Creating Hibernate table structure and keys..."/>

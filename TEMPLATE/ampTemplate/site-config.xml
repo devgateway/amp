@@ -705,6 +705,7 @@
             </module>
             <module name="dataExchange">
 				<page>de_showSourceDetails</page>
+				<page>de_showLogItemDetails</page>
             </module>
 		</page-group>
 	</site-layout>

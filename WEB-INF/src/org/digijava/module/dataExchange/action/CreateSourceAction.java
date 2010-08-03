@@ -151,9 +151,9 @@ public class CreateSourceAction extends MultiAction {
 		}
 		
 		try {
-			srcSetting.setLogs(new ArrayList<DELogPerExecution>() );
-			srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
-			srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
+			//srcSetting.setLogs(new ArrayList<DELogPerExecution>() );
+			//srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
+			//srcSetting.getLogs().add(CreateSourceUtil.createTestLogObj() );
 			new SourceSettingDAO().saveObject(srcSetting);
 		} catch (Exception e) {
 			e.printStackTrace();

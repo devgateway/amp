@@ -1,6 +1,7 @@
 package org.digijava.module.dataExchange.dbentity;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 
 import org.digijava.module.dataExchange.util.WrapperLogPerItem;
 import org.digijava.module.dataExchange.util.XmlWrappable;
@@ -124,6 +125,35 @@ public class DELogPerItem implements XmlWrappable{
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getDateAsString() {
+		StringBuffer sb	 	= new StringBuffer();
+		if ( this.getExecutionTime() != null ) {
+			Calendar cal	= Calendar.getInstance();
+			cal.setTime(this.getExecutionTime() );
+			sb.append(cal.get(Calendar.MONTH)+1);
+			sb.append( "/" + cal.get(Calendar.DAY_OF_MONTH) );
+			sb.append( "/" + cal.get(Calendar.YEAR) );
+			return sb.toString();
+		}
+		else
+			return "";
+	}
+	
+	public String getTimeAsString() {
+		StringBuffer sb		= new StringBuffer();
+		if ( this.getExecutionTime() != null ) {
+			Calendar cal	= Calendar.getInstance();
+			cal.setTime(this.getExecutionTime() );
+			sb.append( cal.get(Calendar.HOUR_OF_DAY) );
+			sb.append( ":" + cal.get(Calendar.MINUTE) );
+			sb.append( ":" + cal.get(Calendar.SECOND) );
+			sb.append( "." + cal.get(Calendar.MILLISECOND) );
+			return sb.toString();
+		}
+		else
+			return "";
 	}
 
 	@Override

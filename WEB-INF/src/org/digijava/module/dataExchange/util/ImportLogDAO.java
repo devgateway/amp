@@ -56,11 +56,24 @@ public class ImportLogDAO {
 		}
 	}
 	
-	public List<DELogPerItem> getAllAmpLogPerItemByExecution(Long ampLogPerExecutionId) {
+	public List<DELogPerItem> getAllAmpLogPerItem() {
 		try{
-			String queryString 	= "select lpi from "	+ DELogPerItem.class.getName() + " lpi where lpi.executionInstance=:executionInstanceId";
+			String queryString 	= "select lpi from "	+ DELogPerItem.class.getName() + " lpi";
 			Query query			= hbSession.createQuery(queryString);
-			query.setLong("executionInstanceId", ampLogPerExecutionId );
+			List<DELogPerItem> resultList	=  query.list();
+			return resultList;
+		}
+		finally {
+			this.releaseSession();
+		}
+	}
+	
+	public List<DELogPerItem> getAmpLogPerItemObjsByExec(Long logPerExecId) {
+		try{
+			String queryString 	= "select lpi from "	+ DELogPerItem.class.getName() + " lpi where " +
+					"lpi.deLogPerExecution=:logPerExecId";
+			Query query			= hbSession.createQuery(queryString);
+			query.setLong("logPerExecId", logPerExecId );
 			List<DELogPerItem> resultList	=  query.list();
 			return resultList;
 		}
@@ -77,6 +90,15 @@ public class ImportLogDAO {
 			e.printStackTrace();
 		}
 		finally{
+			this.releaseSession();
+		}
+	}
+	
+	public Object loadObject (Class cls, Long id) {
+		try{
+			return hbSession.load(cls, id);
+		}
+		finally {
 			this.releaseSession();
 		}
 	}

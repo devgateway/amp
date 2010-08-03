@@ -23,7 +23,7 @@
 
 <script type="text/javascript">
 	LogPerExecutionConfig = {
-			columnDefs: [	{key:"DbId", sortable:true, formatter:YAHOOAmp.widget.DataTable.formatNumber},
+			columnDefs: [	{key:"DbId", sortable:true, formatter:YAHOOAmp.widget.DataTable.formatNumber, hidden: true},
 	                   	   {key:"Name", sortable: true},
 	                   	{key:"Source", label:"Source", sortable: true},
 	                   	{key:"Workspace", label:"Workspace used", sortable:true}
@@ -49,8 +49,7 @@
 	function onRowSelect(o) {
 		var dt 		= 	dataSourceBuilder.dataTable;
 		dt.onEventSelectRow(o);
-		var trEl 	= (dt.getSelectedTrEls()[0])
-		var id		= trEl.getElementsByTagName("td")[0].getElementsByTagName("div")[0].innerHTML;
+		var id		= dataSourceBuilder.getValueOfFirstColumn();
 
 		document.getElementById("selectFileDiv").style.display = "none";
 		refreshDetails(id);

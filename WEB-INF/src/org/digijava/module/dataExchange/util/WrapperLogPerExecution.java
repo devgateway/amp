@@ -17,6 +17,7 @@ public class WrapperLogPerExecution implements XmlWrapper{
 		StringBuffer sb	= new StringBuffer();
 		sb.append("<LogPerExecution>");
 		
+		sb.append("<DbId>" + lpe.getId() + "</DbId>");
 		sb.append("<Date>");
 		if ( lpe.getExecutionTime() != null ) {
 			Calendar cal	= Calendar.getInstance();

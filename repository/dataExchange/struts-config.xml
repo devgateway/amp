@@ -36,6 +36,7 @@
 																								validate="false">
 			<forward name="forward" path="/showLayout.do?layout=de_showLogs"/>
 			<forward name="feed" path="/showLayout.do?layout=de_logFeed"/>
+			<forward name="showLogItemDetails" path="/showLayout.do?layout=de_showLogItemDetails" />
 		</action> 
 		<action path="/dataExchange/createSource" scope="session" type="org.digijava.module.dataExchange.action.CreateSourceAction" name="createSourceForm" 
 																								validate="false">

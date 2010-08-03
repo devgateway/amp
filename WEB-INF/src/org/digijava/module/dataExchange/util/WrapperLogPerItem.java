@@ -29,17 +29,17 @@ public class WrapperLogPerItem implements XmlWrapper {
 	public String toXMLString() {
 		StringBuffer sb	= new StringBuffer();
 		sb.append("<LogPerItem>");
+		sb.append("<Number>" + lpi.getId() + "</Number>");
+		sb.append("<LogLevel>" + lpi.getLogType() + "</LogLevel>");
+		sb.append("<Name>" + lpi.getName() + "</Name>");
 		
 		sb.append("<Date>");
-		if ( lpi.getExecutionTime() != null ) {
-			Calendar cal	= Calendar.getInstance();
-			cal.setTime(lpi.getExecutionTime() );
-			sb.append(cal.get(Calendar.MONTH)+1);
-			sb.append( "/" + cal.get(Calendar.DAY_OF_MONTH) );
-			sb.append( "/" + cal.get(Calendar.YEAR) );
-		}
+		sb.append( lpi.getDateAsString() );
 		sb.append("</Date>");
 		
+		sb.append("<Time>");
+		sb.append( lpi.getTimeAsString() );
+		sb.append("</Time>");
 		
 		sb.append("<Description>" + lpi.getDescription() + "</Description>");
 		

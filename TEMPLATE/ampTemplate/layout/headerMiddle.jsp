@@ -12,6 +12,7 @@
 <%@page import="org.digijava.module.aim.helper.Constants"%>
 
 		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>

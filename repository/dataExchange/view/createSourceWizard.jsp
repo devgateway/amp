@@ -98,10 +98,6 @@ div.fakefile2 input{
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
-
-	<br>
-	<br>
-
   
 	<script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amp");
@@ -144,9 +140,32 @@ div.fakefile2 input{
 		YAHOOAmp.util.Event.addListener(window, "load", tabsInit) ;
 </script>
 
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="90%" class="box-border-nopadding">
+	<tr>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top width=750>
+		
+		<div style="">
+			<c:set var="translation">
+				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+			</c:set>
+			<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
+			<digi:trn key="aim:AmpAdminHome">
+			Admin Home
+			</digi:trn>
+			</digi:link>&nbsp;&gt;&nbsp;
+			<digi:link href="/manageSource.do?htmlView=true" styleClass="comment">
+			<digi:trn>
+			Source Manager
+			</digi:trn>
+			</digi:link>&nbsp;&gt;&nbsp;
+			
+			<digi:trn>
+				Source Wizard
+			</digi:trn>
+		</div>
 
-
-
+<br />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="65%">
 	<tr>
 		<td valign="bottom">
@@ -287,6 +306,11 @@ div.fakefile2 input{
 
 		</digi:form>
 	</td>
+	</tr>
+</table>
+
+
+		</td>
 	</tr>
 </table>
 	

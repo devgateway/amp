@@ -4,6 +4,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+
 <script type="text/javascript">
 <!--
 	var lastTimeStamp;
@@ -194,6 +197,8 @@ else {
 									</tr>
 									<tr>
 										<td height="100%">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="Resources at a glance" feature="Widgets">
 											<div id="content" class="yui-skin-sam" style="width:100%;padding: 0px">
 	                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;"> 
                                                   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -205,21 +210,28 @@ else {
 													<table cellpadding="5" cellspacing="0">
 														<tr valign="top">
 															<td>
-																<digi:insert attribute="widget7">
-																	<digi:put name="widget-teaser-param">atGlanceTable_Place1</digi:put>
-																</digi:insert>
+																
+																	<field:display name="Widget7" feature="Widgets">
+																		<digi:insert attribute="widget7" flush="false">
+																			<digi:put name="widget-teaser-param">atGlanceTable_Place1</digi:put>
+																		</digi:insert>
+																	</field:display>
 															</td>
 															<td rowspan="2">
-																<digi:insert attribute="widget8">
-																	<digi:put name="widget-teaser-param">atGlanceTable_Place3</digi:put>
-																</digi:insert>
+																	<field:display name="Widget8" feature="Widgets">
+																		<digi:insert attribute="widget8" flush="false">
+																			<digi:put name="widget-teaser-param">atGlanceTable_Place3</digi:put>
+																		</digi:insert>
+																	</field:display>
 															</td>
 														</tr>
 														<tr>
 															<td>
-																<digi:insert attribute="widget9">
-																	<digi:put name="widget-teaser-param">atGalnceTable_Place2</digi:put>
-																</digi:insert>
+																	<field:display name="Widget8" feature="Widgets">
+																		<digi:insert attribute="widget9" flush="false">
+																			<digi:put name="widget-teaser-param">atGalnceTable_Place2</digi:put>
+																		</digi:insert>
+																	</field:display>
 															</td>
 														</tr>
 		                                                <tr>
@@ -230,11 +242,15 @@ else {
 													</table>	
 	                                            </div>
 	                                          </div>
-	                                        </div> 											
+	                                        </div> 
+	                        </field:display>
+												</feature:display>											
 										</td>
 									</tr>									
 									<tr>
 										<td valign="top">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="Millennium Development Goals" feature="Widgets">
                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -247,17 +263,17 @@ else {
 											<table cellpadding="5" border="0" width="100%">
 												<tr>
 													<td>
-														<digi:insert attribute="widget1">
+														<digi:insert attribute="widget1" flush="false">
 															<digi:put name="widget-teaser-param">chart_place1</digi:put>
 														</digi:insert>
 													</td>
 													<td>
-														<digi:insert attribute="widget2">
+														<digi:insert attribute="widget2" flush="false">
 															<digi:put name="widget-teaser-param">chart_place2</digi:put>
 														</digi:insert>
 													</td>
 													<td>
-														<digi:insert attribute="widget3">
+														<digi:insert attribute="widget3" flush="false">
 															<digi:put name="widget-teaser-param">chart_place3</digi:put>
 														</digi:insert>
 													
@@ -265,19 +281,19 @@ else {
 												</tr>
 												<tr>
 													<td>
-														<digi:insert attribute="widget4">
+														<digi:insert attribute="widget4" flush="false">
 															<digi:put name="widget-teaser-param">chart_place4</digi:put>
 														</digi:insert>
 													
 													</td>
 													<td>
-														<digi:insert attribute="widget5">
+														<digi:insert attribute="widget5" flush="false">
 															<digi:put name="widget-teaser-param">chart_place5</digi:put>
 														</digi:insert>
 													
 													</td>
 													<td>
-														<digi:insert attribute="widget6">
+														<digi:insert attribute="widget6" flush="false">
 															<digi:put name="widget-teaser-param">chart_place6</digi:put>
 														</digi:insert>
 													</td>
@@ -303,9 +319,13 @@ else {
 										<td valign="top">
                                         	&nbsp;
 										</td>
+										</field:display>
+												</feature:display>
 									</tr>
 									<tr>
 										<td colspan="2">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="Aid Effectiveness Process Indicators" feature="Widgets">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -319,14 +339,14 @@ else {
                                             <table>
                                                 <tr>
                                                     <td valign="top">
-                                                        <digi:insert attribute="widget10">
+                                                        <digi:insert attribute="widget10" flush="false">
                                                             <digi:put name="widget-teaser-param">table_place1</digi:put>
                                                         </digi:insert>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="top">
-                                                        <digi:insert attribute="widget11">
+                                                        <digi:insert attribute="widget11" flush="false">
                                                             <digi:put name="widget-teaser-param">table_place2</digi:put>
                                                         </digi:insert>
                                                     </td>
@@ -334,7 +354,7 @@ else {
                                                 <tr>
                                                     <td valign="top">
                                                     <br><br>
-                                                        <digi:insert attribute="widget12">
+                                                        <digi:insert attribute="widget12" flush="false">
                                                             <digi:put name="widget-teaser-param">table_place3</digi:put>
                                                         </digi:insert>
                                                     </td>
@@ -351,10 +371,15 @@ else {
                                             </div>
                                             </div>
                                             </div>
+                                            </field:display>
+																						</feature:display>
                                         </td>
+                                        
                                     </tr>
 									<tr>
 										<td colspan="2" valign="top">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="Output Indicators" feature="Widgets">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -367,7 +392,7 @@ else {
                                             <table>
                                                 <tr>
                                                     <td>
-                                                    <digi:insert attribute="widget13">
+                                                    <digi:insert attribute="widget13" flush="false">
                                                         <digi:put name="widget-teaser-param">table_place4</digi:put>
                                                     </digi:insert>
                                                     </td>
@@ -381,10 +406,14 @@ else {
                                             </div>
                                             </div>
                                             </div>
+                                            </field:display>
+												</feature:display>
     									</td>
 									</tr>
 									<tr>
 										<td colspan="2">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="Total resources" feature="Widgets">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -397,7 +426,7 @@ else {
                                             <table>
                                                 <tr>
                                                     <td valign="top">
-                                                        <digi:insert attribute="widget15">
+                                                        <digi:insert attribute="widget15" flush="false">
                                                             <digi:put name="widget-teaser-param">table_place6</digi:put>
                                                         </digi:insert>
                                                         <br>
@@ -408,10 +437,14 @@ else {
                                             </div>
                                             </div>
                                             </div>
+												</field:display>
+												</feature:display>
     									</td>
 									</tr>
 									<tr>
 										<td colspan="2">
+											<feature:display name="Widgets" module="GIS DASHBOARD">
+												<field:display name="External Aid Resources" feature="Widgets">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -424,7 +457,7 @@ else {
                                             <table>
                                                 <tr>
                                                     <td valign="top">
-                                                        <digi:insert attribute="widget14">
+                                                        <digi:insert attribute="widget14" flush="false">
                                                             <digi:put name="widget-teaser-param">table_place5</digi:put>
                                                         </digi:insert>
                                                         <br>
@@ -435,11 +468,13 @@ else {
                                             </div>
                                             </div>
                                             </div>
+												</field:display>
+												</feature:display>
     									</td>
 									</tr>
 									<tr>
 										<td colspan="2">
-											<digi:insert attribute="widget16">
+											<digi:insert attribute="widget16" flush="false">
 											    <digi:put name="widget-teaser-param">additional_table</digi:put>
 											</digi:insert>
 										</td>

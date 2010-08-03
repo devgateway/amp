@@ -99,7 +99,7 @@ public class OrganisationManager
       else if (eaForm.getKeyword() != null &&
                eaForm.getKeyword().trim().length() != 0) {
         // search based on the given keyword only.
-        col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
+        col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim().replace("'","''" ));
       }
       else {
         // get all organisations since keyword field is blank and org type field has 'ALL'.

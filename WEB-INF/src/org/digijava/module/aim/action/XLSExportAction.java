@@ -246,13 +246,14 @@ public class XLSExportAction extends Action {
 				colId.reset();
 			}
 		grdx.generate();
+		/*
 		try{
 			sheet.autoSizeColumn((short)0);
 		}
 		catch (ClassCastException e) {
 			throw e;
 		}
-		
+		*/
 		rowId.inc();
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());

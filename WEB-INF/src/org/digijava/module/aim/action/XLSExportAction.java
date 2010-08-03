@@ -246,7 +246,16 @@ public class XLSExportAction extends Action {
 				colId.reset();
 			}
 		grdx.generate();
+		
 		/*
+		 * 
+		 * Commented until Apache POI fixes the following bug: 
+		 *      https://issues.apache.org/bugzilla/show_bug.cgi?id=49188
+		 *  
+		 * Beware issue happens on large db's when generating a report with 
+		 * a lot of info and columns (8000 rows, 50 columns).
+		 * 
+		 *  
 		try{
 			sheet.autoSizeColumn((short)0);
 		}

@@ -1286,7 +1286,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											                        	<input type="checkbox" name="<%=field1%>" id="<%=field1%>" >
 																	</td>
 																	<td align="center" valign="bottom" width="170">
-																		<select name="<%=field2%>" class="inp-text">
+																		<select name="<%=field2%>" class="inp-text" style="max-width: 150px;">
 																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
 																				<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
@@ -1302,7 +1302,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										                            </td>
 																	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
-											                                <select name="<%=field3%>" class="inp-text">
+											                                <select name="<%=field3%>" class="inp-text" style="max-width: 150px;">
 																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
 																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
@@ -1321,7 +1321,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																		<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
 										                            </td>
 																	<td align="center" valign="bottom" width="100">
-										                                <select name="<%=field5%>" class="inp-text">
+										                                <select name="<%=field5%>" class="inp-text" style="max-width: 150px;">
 																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
 																				<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
@@ -1352,7 +1352,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										                            </td>
 																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
-											                               <select name="<%=field7%>" class="inp-text">
+											                               <select name="<%=field7%>" class="inp-text" style="max-width: 150px;">
 																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
 																					<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
@@ -1485,7 +1485,7 @@ function addFunding() {
 	var s = "<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1> <tr> <td align='center' valign='bottom' width='30' >";
 	s += "<input name='fund_"+ numFund +"_0' type='hidden' id='fund_"+ numFund +"_0' value=''/> <input type='checkbox' id='fund_"+ numFund +"_1'/></td>";
 
-	s += "<td align='center' valign='bottom' width='170'> <select name='fund_"+ numFund +"_2' class='inp-text'>";
+	s += "<td align='center' valign='bottom' width='170'> <select name='fund_"+ numFund +"_2' class='inp-text' style='max-width: 150px;'>";
 	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col = pledgeForm.getPledgeTypeCategory();
 	Iterator itr = col.iterator();
@@ -1498,7 +1498,7 @@ function addFunding() {
 	 s += "</select> </td>";
 	 
 	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
-	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_3' class='inp-text'>";
+	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_3' class='inp-text' style='max-width: 150px;'>";
 	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col2 = pledgeForm.getAssistanceTypeCategory();
 	Iterator itr2 = col2.iterator();
@@ -1513,7 +1513,7 @@ function addFunding() {
 	 
 	s += "<td align='center' valign='bottom' width='150'> <input type='text' name='fund_"+ numFund +"_4' size='17' style='width:90px' class='inp-text'/> </td>";
 
-	s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_5' class='inp-text'>";
+	s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_5' class='inp-text' style='max-width: 150px;'>";
 	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col3 = pledgeForm.getValidcurrencies();
 	Iterator itr3 = col3.iterator();
@@ -1535,7 +1535,7 @@ function addFunding() {
 		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0> </a> </td> </tr> </table> </td>";
 
 	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
-	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_7' class='inp-text'>";
+	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_7' class='inp-text' style='max-width: 150px;'>";
 	s += "<option selected='true' value='-1'>-<digi:trn>Select from below</digi:trn>-</option>";
 	<% Collection col4 = pledgeForm.getAidModalityCategory();
 	Iterator itr4 = col4.iterator();

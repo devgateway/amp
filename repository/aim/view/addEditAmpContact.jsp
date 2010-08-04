@@ -646,9 +646,7 @@ html>body #mainEmpty {
 																																 			<html:text name="addressbookForm" property="phones[${ctr}].phoneType" size="10" styleId="phoneType_${ctr}"/>																															 																																	 	
 																																 		--%>	
 																												                    	<html:text name="addressbookForm" property="phones[${ctr}].value" size="26" styleId="phoneNum_${ctr}"/>
-																												                    	 <a href="javascript:removeData('phone',${ctr})"> 
-																																	 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
-																																	 	</a>
+																												                    	 <a href="javascript:removeData('phone',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
 																												                    	<c:if test="${addressbookForm.phonesSize==0 ||  ctr==addressbookForm.phonesSize-1}">
 																												                			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       																																		<input id="addPhoneBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('phone')">    	
@@ -668,13 +666,12 @@ html>body #mainEmpty {
 																															<logic:notEmpty name="addressbookForm" property="faxes">
 																																 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 																												                    <html:text name="addressbookForm" property="faxes[${ctr}].value" size="40" styleId="fax_${ctr}"/>																												                    																												                    
-																												                    <a href="javascript:removeData('fax',${ctr})"> 
-																																 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
-																																 	</a>
+																												                    <a href="javascript:removeData('fax',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
 																												                    <c:if test="${ctr==addressbookForm.faxesSize-1}">
 																												                    	<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       																																	<input id="addFaxBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('fax')">
 																												                    </c:if>
+																												                  <br>
 																												                 </logic:iterate>
 																															</logic:notEmpty>
 																															<logic:empty name="addressbookForm" property="faxes">

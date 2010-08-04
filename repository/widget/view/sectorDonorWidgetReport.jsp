@@ -34,32 +34,34 @@
 
 		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;background:#FFFFFF" border="1" bordercolor="#000000">
 			<tr>
-				<td width="120" class="tableMainHeader">Sector</td>
+				<td width="120" class="tableMainHeader"><digi:trn>Sector</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="sectorName"/></td>
 			</tr>
 			
                         <tr>
-				<td class="tableMainHeader">Donor</td>
+				<td class="tableMainHeader"><digi:trn>Donor</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="donorName"/></td>
 			</tr>
 			<tr>
-				<td class="tableMainHeader">Year Range</td>
+				<td class="tableMainHeader"><digi:trn>Year Range</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="startYear"/> - <bean:write name="sectorDonorWidgetReportForm" property="endYear"/></td>
 			</tr>
 			<tr>
-				<td class="tableMainHeader">Actual Commitments</td>
+				<td class="tableMainHeader"><digi:trn>Actual Commitments</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
 			<tr>
-				<td class="tableMainHeader">Actual Disbursements</td>
+				<td class="tableMainHeader"><digi:trn>Actual Disbursements</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
 			<tr>
-				<td class="tableMainHeader tableHeadColorStyle">Actual Expenditures</td>
+				<td class="tableMainHeader tableHeadColorStyle"><digi:trn>Actual Expenditures</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
-                            <td colspan="2" align="center"><font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in USD</digi:trn></font></td>
+                            <td colspan="2" align="center">
+                            	<font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in USD</digi:trn></font>
+                            </td>
 			</tr>
 		</table>
 	
@@ -87,7 +89,7 @@
 								<td colspan="3" class="tableHeader">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-                                                                                    <digi:trn>For selected sector/donor</digi:trn>
+											<digi:trn>For selected sector/donor</digi:trn>
 										</div>
 									</div>
 								</td>
@@ -112,28 +114,28 @@
 								<td width="20%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
-											Donor(s)
+											<digi:trn>Donor(s)</digi:trn>
 										</div>
 
 								</td>
 								<td width="10%"  class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
-											Commitments
+											<digi:trn>Commitments</digi:trn>
 										</div>
 
 								</td>
 								<td width="10%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
-											Disbursements
+											<digi:trn>Disbursements</digi:trn>
 										</div>
 
 								</td>
 								<td width="10%" class="tableHeader">
 
 										<div class="gisReportTableBevelCell">
-											Expenditures
+											<digi:trn>Expenditures</digi:trn>
 										</div>
 
 								</td>
@@ -141,7 +143,7 @@
 						</tr>
 						</thead>
                                                 
-                                                <tbody>
+						<tbody>
                                               
 						<logic:iterate name="sectorDonorWidgetReportForm" property="actSectorDonorFundingInfo" id="activitySectorDonorFunding">
 							<tr>
@@ -161,12 +163,11 @@
 											<logic:present name="activitySectorDonorFunding" property="sectors">
 												<logic:notEmpty name="activitySectorDonorFunding" property="sectors">
 													<ul>
-                                                                                                            <c:forEach var="sector" items="${activitySectorDonorFunding.sectors}">
-														<li>
-                                                                                                                    <c:out value="${sector.name}"/>
-												
-														</li>
-                                                                                                                </c:forEach>
+														<c:forEach var="sector" items="${activitySectorDonorFunding.sectors}">
+															<li>
+																<c:out value="${sector.name}"/>
+															</li>
+														</c:forEach>
 													</ul>
 												</logic:notEmpty>
 											</logic:present>
@@ -179,11 +180,11 @@
 											<logic:present name="activitySectorDonorFunding" property="donorOrgs">
 												<logic:notEmpty name="activitySectorDonorFunding" property="donorOrgs">
 													<ul>
-													 <c:forEach var="donor"   items="${activitySectorDonorFunding.donorOrgs}">
-														<li>
-														 <c:out value="${donor.name}"/>
-														</li>
-                                                                                                                </c:forEach>
+													 	<c:forEach var="donor"   items="${activitySectorDonorFunding.donorOrgs}">
+															<li>
+															 	<c:out value="${donor.name}"/>
+															</li>
+														</c:forEach>
 													</ul>
 												</logic:notEmpty>
 											</logic:present>

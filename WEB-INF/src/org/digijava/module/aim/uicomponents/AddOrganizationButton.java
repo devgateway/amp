@@ -157,7 +157,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
+			pageContext.getOut().print("value=\"" + bodyContent.getString().trim() + "\"/>");
 		} catch (Exception e) {
 
 		}

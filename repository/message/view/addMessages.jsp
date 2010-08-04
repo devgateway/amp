@@ -175,6 +175,27 @@
     		}
     	}    	
     	if(list!=null){
+        	//check emails
+			for(var i = 0; i < list.length; i++) {
+				if(list[i].value.match('^'+'c:')){ //starts with c:
+					var receiver=list[i].value.substr(2);
+					var email=receiver;
+					if(receiver.indexOf("<")!=-1){
+						email=receiver.substr(receiver.indexOf("<")+1, receiver.indexOf(">")-receiver.indexOf("<")-1); //cut email from "some text <email>"
+					}
+					
+					var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+					var expression = new RegExp(pattern)
+				    if(expression.test(email)!=true){
+					    var trn='<digi:trn>Please provide correct email</digi:trn>';
+						alert(trn);
+					    return false; 
+				    }
+					
+				}
+			}
+
+        	
     		for(var i = 0; i < list.length; i++) {
         		list.options[i].selected = true;
     		}
@@ -275,16 +296,16 @@
 <c:set var="messageType">
     <c:choose>
         <c:when test="${messageForm.tabIndex==1}">
-            <digi:trn key="message:Messages">Messages</digi:trn>
+            <digi:trn>Messages</digi:trn>
         </c:when>
         <c:when test="${messageForm.tabIndex==2}">
-            <digi:trn key="message:Alerts">Alerts</digi:trn>
+            <digi:trn>Alerts</digi:trn>
         </c:when>
         <c:when test="${messageForm.tabIndex==3}">
-            <digi:trn key="message:approvals">Approvals</digi:trn>
+            <digi:trn>Approvals</digi:trn>
         </c:when>
         <c:otherwise>
-            <digi:trn key="message:ebents">Calendar Events</digi:trn>
+            <digi:trn>Calendar Events</digi:trn>
         </c:otherwise>
     </c:choose>
 </c:set>
@@ -294,26 +315,26 @@
             
             <c:choose>
                 <c:when test="${messageForm.tabIndex==1}">
-            <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
+            <digi:trn>Forward Message</digi:trn>
         </c:when>
                 <c:when test="${messageForm.tabIndex==2}">
-                    <digi:trn key="message:ForwardAlert">Forward Alert</digi:trn>
+                    <digi:trn>Forward Alert</digi:trn>
                 </c:when>
                 <c:when test="${messageForm.tabIndex==3}">
-                    <digi:trn key="message:forwardApprovals">Forward Approvals</digi:trn>
+                    <digi:trn>Forward Approvals</digi:trn>
                 </c:when>
                 <c:otherwise>
-                    <digi:trn key="message:ForwardEvents">Forward Calendar Events</digi:trn>
+                    <digi:trn>Forward Calendar Events</digi:trn>
                 </c:otherwise>
             </c:choose>
             
             
         </c:when>
         <c:when test="${messageForm.messageId==null}">
-            <digi:trn key="message:AddMessage">Add Message</digi:trn>
+            <digi:trn>Add Message</digi:trn>
         </c:when>
         <c:otherwise>
-            <digi:trn key="message:EditMessage">Edit Message</digi:trn>
+            <digi:trn>Edit Message</digi:trn>
         </c:otherwise>
     </c:choose>
 </c:set>
@@ -327,16 +348,16 @@
 		</tr>
 		<tr>
 		<td>
-			<table  cellPadding=0 cellSpacing=0 width=780 border="0">
+			<table  cellPadding="0" cellSpacing="0" width="780" border="0">
 			    <tr>
-				   <td width=14>&nbsp;</td>
-					<td align=left vAlign=top width=750>
-						<table cellPadding=5 cellSpacing=0 width="100%">
+				   <td width="14">&nbsp;</td>
+					<td align="left" vAlign="top" width="750">
+						<table cellPadding="5" cellSpacing="0" width="100%">
 							<tr>
-								<td height=33>
-									<span class=crumb>
+								<td height="33">
+									<span class="crumb">
 										<c:set var="translation">
-											<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+											<digi:trn>Click here to view MyDesktop</digi:trn>
 										</c:set>
 										<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
 											<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -354,6 +375,9 @@
 											${title}						
 									</span>
 								</td>
+							</tr>
+							<tr>
+								<td><digi:errors/></td>
 							</tr>
 							<tr>
 								<td noWrap vAlign="top">

@@ -16,7 +16,7 @@
     var title2 = "";
     
     function attachFuncToThumbnail(placeholder) {
-        var id="displayThumbnail"+placeholder;
+		var id="displayThumbnail"+placeholder;
         var lastTimeStamp = new Date().getTime();
         var url='/aim/displayThumbnail.do?placeholder='+placeholder+'&relDocs=relDocs'+'&timestamp='+lastTimeStamp;
         $.get(url, function(data) {
@@ -64,8 +64,8 @@
 <table width="100%" >
 	<tr>
 		<td  width="5%" />
-		<td  width="60%" >
-			<digi:edit key="um:welcomeAmp"></digi:edit>
+		<td  width="60%">
+			<digi:edit key="um:welcomeAmp" maxLength="1500"></digi:edit>
 		</td>
 		<td  width="5%" />
 		<td width="70%" bgcolor="#dbe5f1">

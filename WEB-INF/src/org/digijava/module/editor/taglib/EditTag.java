@@ -26,12 +26,14 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 
 public class EditTag
@@ -42,6 +44,7 @@ public class EditTag
     private String key;
     private String editorBody;
     private String displayText = "E";
+    private Integer maxLength;
     private boolean showOnlyTitle = false;
 
     /**
@@ -83,7 +86,12 @@ public class EditTag
                             SiteUtils.getDefaultLanguages(site).getCode());
                     }
                 }
-                setEditorBody(editorBody);
+                if (maxLength==null || maxLength==0 || editorBody.length()<maxLength) {
+                	setEditorBody(editorBody);
+				} else {
+					setEditorBody(formatLongText(editorBody, request));
+				}
+                
             }
             catch (EditorException ex) {
                 logger.warn("Unable to get editor object from database", ex);
@@ -169,6 +177,41 @@ public class EditTag
         return EVAL_PAGE;
     }
 
+    private String formatLongText(String text, HttpServletRequest request) {
+    	String readMore = "Read More";
+    	String back = "Back";
+    	try {
+    		readMore = TranslatorWorker.translateText(readMore, request);
+    		back = TranslatorWorker.translateText(back, request);
+		} catch (WorkerException e) {
+			e.printStackTrace();
+		}
+    	String ret = "<div id='fullTextDiv' style='display: none'> " + text + " </div>";
+    	ret += "<div id='showPartTextDiv' style='display: none'><a href='javascript:' onClick='showPartText()'> << " + back + "</a></div>";
+    	ret += "<div id='partTextDiv'>" + text.substring(0, maxLength) + "</div>";
+    	ret += "<div id='showFullTextDiv'><a href='javascript:' onClick='showFullText()'>" + readMore + " >> </a></div>";
+    	ret += "<script language='javascript' type='text/javascript'>";
+    
+    	ret += "function showFullText() {";
+        ret += "document.getElementById('fullTextDiv').style.display = 'block';";
+        ret += "document.getElementById('showPartTextDiv').style.display = 'block';";
+        ret += "document.getElementById('partTextDiv').style.display = 'none';";
+        ret += "document.getElementById('showFullTextDiv').style.display = 'none';";	
+        ret += "}";
+
+        ret += "function showPartText() {";
+
+        ret += "document.getElementById('fullTextDiv').style.display = 'none';";
+        ret += "document.getElementById('showPartTextDiv').style.display = 'none';";
+        ret += "document.getElementById('partTextDiv').style.display = 'block';";
+        ret += "document.getElementById('showFullTextDiv').style.display = 'block';";
+        ret += "}";
+
+        ret += "</script>";
+                 		
+		return ret;
+	}
+    
     public String getKey() {
         return key;
     }
@@ -200,4 +243,18 @@ public class EditTag
 	public void setDisplayText(String displayText) {
  		this.displayText = displayText;
  	}
+
+	/**
+	 * @return the maxLength
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * @param maxLength the maxLength to set
+	 */
+	public void setMaxLength(Integer maxLength) {
+		this.maxLength = maxLength;
+	}
 }

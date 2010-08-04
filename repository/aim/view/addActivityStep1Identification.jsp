@@ -386,15 +386,15 @@ target.style.cursor = "default"
 																&nbsp;
 															
 														<field:display name="Objectively Verifiable Indicators" feature="Identification">
-															<a href="javascript:commentWin('<digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn>','objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+															<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Objectively Verifiable Indicators</digi:trn>','objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
 														</field:display>
 														<field:display name="Assumptions" feature="Identification">
-															<a href="javascript:commentWin('<digi:trn>Add/Edit Assumption</digi:trn>','objAssumption')" id="CommentObjAssumption"><digi:trn>Add/Edit Assumption</digi:trn></a>
+															<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Assumption</digi:trn>','objAssumption')" id="CommentObjAssumption"><digi:trn>Add/Edit Assumption</digi:trn></a>
 															&nbsp;
 														</field:display>
 														<field:display name="Verifications" feature="Identification">
-															<a href="javascript:commentWin('<digi:trn>Add/Edit Verification</digi:trn>','objVerification')" id="CommentObjVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
+															<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Verification</digi:trn>','objVerification')" id="CommentObjVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
 														</field:display>		
 														</td>
 													</tr>
@@ -462,15 +462,15 @@ target.style.cursor = "default"
 																<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
 															<field:display name="Purpose Verifiable Indicators" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn>','purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Objectively Verifiable Indicators</digi:trn>','purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 																&nbsp;
 															</field:display>
 															<field:display name="Purpose Assumptions" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn>Add/Edit Assumption</digi:trn>','purpAssumption')" id="CommentPurpAssumption"><digi:trn>Add/Edit Assumption</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Assumption</digi:trn>','purpAssumption')" id="CommentPurpAssumption"><digi:trn>Add/Edit Assumption</digi:trn></a>
 																&nbsp;
 															</field:display>
 															<field:display name="Purpose Verifications" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn>Add/Edit Verification</digi:trn>','purpVerification')" id="CommentPurpVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Verification</digi:trn>','purpVerification')" id="CommentPurpVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
 															</field:display>
 														</td>
 													</tr>
@@ -508,15 +508,15 @@ target.style.cursor = "default"
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
 															<field:display name="Results Verifiable Indicators" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn>','resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Objectively Verifiable Indicators</digi:trn>','resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn>Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
 															</field:display>
 															<field:display name="Results Assumptions" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn>','resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn key="aim:addEditAssumption" jsFriendly="true">Add/Edit Assumption</digi:trn>','resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 																&nbsp;
 															</field:display>
 															<field:display name="Results Verifications" feature="Identification">
-																<a href="javascript:commentWin('<digi:trn>Add/Edit Verification</digi:trn>','resVerification')" id="CommentResVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
+																<a href="javascript:commentWin('<digi:trn jsFriendly="true">Add/Edit Verification</digi:trn>','resVerification')" id="CommentResVerification"><digi:trn>Add/Edit Verification</digi:trn></a>
 															</field:display>
 														</td>
 													</tr>

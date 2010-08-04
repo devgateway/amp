@@ -148,7 +148,7 @@
 	<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
 		<ul class="yui-nav">
 			<li class="selected">
-				<a title='<digi:trn key="aim:helpSearch">Search Glossary</digi:trn>'>
+				<a title='<digi:trn>Search Glossary</digi:trn>'>
 					<div>
 						<digi:trn>Search</digi:trn>
 					</div>
@@ -163,8 +163,10 @@
 									<input id="edtSearchField" type="text" name="searchGlossary">
 								</div>
 								<div>	
-									<input id="btnSearchGlossary" type="button" value="Search">
-									<input id="btnResetSearch" type="button" value="Reset">
+									<c:set var="lblSearchButton"><digi:trn>Search</digi:trn></c:set>
+									<c:set var="lblResetButton"><digi:trn>Reset</digi:trn></c:set>
+									<input id="btnSearchGlossary" type="button" value="${lblSearchButton}">
+									<input id="btnResetSearch" type="button" value="${lblResetButton}">
 								</div>
 								<div id="searchResults" class="searchResults">
 								</div>

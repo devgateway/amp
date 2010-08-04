@@ -415,7 +415,9 @@ function setHoveredTable(tableId, hasHeaders) {
 										                                <logic:iterate name="ampReports" property="hierarchies" id="hierarchy" >
 										                                  <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 										                                  <li>
-										                                  	${hierarchy.column.columnName}
+										                                  	<digi:trn key="aim:report:${hierarchy.column.columnName}">
+										                                  		${hierarchy.column.columnName}
+										                                  	</digi:trn>
 										                                  </li>
 										                                </logic:iterate>
 										                            </td>

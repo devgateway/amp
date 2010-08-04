@@ -7,7 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-
 <digi:instance property="crDocToOrgForm" />
 <bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
 
@@ -36,7 +35,6 @@
 
 <c:if test="${myForm.hasAddParticipatingOrgRights}">
 	<aim:addOrganizationButton callBackFunction="showOrgsPanel();"  refreshParentDocument="false" collection="addedOrgs" 
-				form="${crDocToOrgForm}" styleClass="dr-menu">
-				<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-	</aim:addOrganizationButton>
+				form="${crDocToOrgForm}" styleClass="buton"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 </c:if>
+

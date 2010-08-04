@@ -129,7 +129,7 @@
 										<td colspan="5">
 											<category:showoptions size="5" outerstyle="width: 300px" styleClass="inp-text" name="aimParisIndicatorReportForm"
 												property="financingInstrument" multiselect="false" 
-												keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" firstLine="All"/>
+												keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 										</td>
 									</tr>
 								</table>
@@ -196,7 +196,7 @@
 										</td>
 										<td>&nbsp;</td>									
 										<td colspan="5" styleClass="inp-text">
-											<category:showoptions firstLine="All" styleClass="dr-menu" name="aimParisIndicatorReportForm" property="status" 
+											<category:showoptions styleClass="dr-menu" name="aimParisIndicatorReportForm" property="status" 
 												keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>" multiselect="false" size="6"/>
 										</td>
 									</tr>

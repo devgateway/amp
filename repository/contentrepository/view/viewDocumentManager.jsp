@@ -232,7 +232,12 @@ function setHoveredTable(tableId, hasHeaders) {
 			        	</c:if>
 					</feature:display>
 					<feature:display name="Shared Resources" module="Resources">
-						<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+						<c:if  test="${selectedType=='shared'}">
+			        		<li id="tab3" class="selected"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+			        	</c:if>
+			        	<c:if  test="${selectedType!='shared'}">
+			        		<li id="tab3"><a href="#shared_res"><div><digi:trn>Shared Resources</digi:trn></div></a></li>
+			        	</c:if>
 					</feature:display>					
 					
 					<feature:display name="Public Resources" module="Resources">
@@ -258,7 +263,8 @@ function setHoveredTable(tableId, hasHeaders) {
 											</div>
 											<div id="my_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-												<bean:define toScope="request" id="checkBoxToHide" value="true" />												
+												<bean:define toScope="request" id="checkBoxToHide" value="true" />
+												<bean:define id="tabType" value="private" toScope="request"/>												
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
 									</td>
@@ -288,6 +294,7 @@ function setHoveredTable(tableId, hasHeaders) {
 											</div>
 											<div id="team_markup" align="left"  class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+												<bean:define id="tabType" value="team" toScope="request"/>
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
 									</td>
@@ -305,6 +312,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										<br />
 										<div id="shared_markup" align="left" class="all_markup">
 												<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+												<bean:define id="tabType" value="shared" toScope="request"/>
 												<jsp:include page="documentTable.jsp" flush="true" />
 										</div>
 										<br />

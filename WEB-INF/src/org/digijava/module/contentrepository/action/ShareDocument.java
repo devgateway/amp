@@ -20,6 +20,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
+import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -31,6 +32,7 @@ import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 public class ShareDocument extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception	{
+		DocumentManagerForm myForm = (DocumentManagerForm) form;
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		String shareWith=request.getParameter("shareWith");
@@ -136,7 +138,8 @@ public class ShareDocument extends Action {
 					}
 				}
 			}
-		}		
+		}
+		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
 	}
 }

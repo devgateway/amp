@@ -14,7 +14,15 @@
 </logic:notEmpty> 
 <logic:empty name="checkBoxToHide" scope="request">
 	<bean:define id="checkBoxToHideLocal" value="false"></bean:define>
-</logic:empty> 
+</logic:empty>
+
+<logic:notEmpty name="tabType" scope="request">
+	<bean:define id="tabTypeLocal" name="tabType"></bean:define>
+</logic:notEmpty>
+<logic:empty name="tabType" scope="request">
+	<bean:define id="tabTypeLocal" value=""></bean:define>
+</logic:empty>
+
 <table id="team_table" bgcolor="white" width="100%">
 						<thead>
 							<tr>
@@ -201,7 +209,7 @@
 												<logic:equal  name="documentData" property="lastVersionIsShared" value="false">
 													<span style="color: blue"><strong>|</strong></span>
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
-													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>">
+													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>','${tabTypeLocal}');" title="<digi:trn>Click here to Share this document</digi:trn>">
 														<digi:trn>Share</digi:trn>
 													</a>
 												</logic:equal>
@@ -210,7 +218,7 @@
 												<logic:equal name="documentData" property="hasApproveVersionRights" value="true">
 													<span style="color: blue;"><strong>|</strong></span>
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"
-													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>');" title="<digi:trn>Click here to Share this document</digi:trn>">
+													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>','${tabTypeLocal}');" title="<digi:trn>Click here to Share this document</digi:trn>">
 													<digi:trn>Approve</digi:trn> </a>
 													
 													<span style="color: blue"><strong>|</strong></span>
@@ -227,7 +235,7 @@
 									<logic:equal name="documentData" property="hasUnshareRights" value="true">
 										<logic:equal name="documentData" property="isShared" value="true">
 											<span style="color: blue;"><strong>|</strong></span>
-											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;" onClick="unshareDoc('<%=documentData.getUuid() %>');" 
+											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;" onClick="unshareDoc('<%=documentData.getUuid() %>','${tabTypeLocal}');" 
 											title="<digi:trn>Click here to UnShare this document</digi:trn>">
 												<digi:trn>UnShare</digi:trn>
 											</a>

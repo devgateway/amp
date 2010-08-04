@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
+import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -22,6 +23,7 @@ import org.digijava.module.aim.util.DbUtil;
 public class UnshareDocument extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+		DocumentManagerForm myForm = (DocumentManagerForm) form;
 		String nodeUUID=request.getParameter("uuid");		
 		if(nodeUUID!=null){
 			Node nodeThatIsUnshared=DocumentManagerUtil.getReadNode(nodeUUID, request);
@@ -50,6 +52,7 @@ public class UnshareDocument extends Action {
 				}
 			}
 		}
+		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
 	}
 	

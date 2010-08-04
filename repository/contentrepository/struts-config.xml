@@ -19,10 +19,10 @@
     <action path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=amp_deleteDocumentResponse" />
     </action>
-    <action path="/contentrepository/shareDoc" type="org.digijava.module.contentrepository.action.ShareDocument" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/shareDoc" type="org.digijava.module.contentrepository.action.ShareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
-    <action path="/contentrepository/unshareDoc" type="org.digijava.module.contentrepository.action.UnshareDocument" validate="false">
+    <action name="crDocumentManagerForm" path="/contentrepository/unshareDoc" type="org.digijava.module.contentrepository.action.UnshareDocument" validate="false">
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>    
     <action path="/contentrepository/rejectDoc" type="org.digijava.module.contentrepository.action.RejectResource" validate="false" parameter="actType">

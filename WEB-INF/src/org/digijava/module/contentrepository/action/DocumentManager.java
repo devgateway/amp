@@ -176,7 +176,20 @@ public class DocumentManager extends Action {
 			myForm.setTeamLeader( teamMember.getTeamHead() );
 			myForm.setTeamMembers( TeamMemberUtil.getAllTeamMembers(teamMember.getTeamId()) );
 			
-			
+			// AMP-8791: "resourcesTab" is set only when the document is
+			// shared/unshared.
+			// Then the attribute is deleted from session. If there is no
+			// resourceTab and no type set then select the first tab.
+			if (httpSession.getAttribute("resourcesTab") == null
+					|| httpSession.getAttribute("resourcesTab").toString().equals("")) {
+				if (myForm.getType() == null || myForm.getType().equals("")) {
+					myForm.setType("private");
+				}
+			} else {
+				myForm.setType(httpSession.getAttribute("resourcesTab").toString());
+				httpSession.removeAttribute("resourcesTab");
+			}
+						
 			if (teamMember == null) {
 				throw new Exception("No TeamMember found in HttpSession !");
 			}

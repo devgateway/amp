@@ -514,6 +514,8 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
+
+				//parameters += "&type=team2"
 				//alert(parameters);
 				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
@@ -1059,7 +1061,7 @@ function setHeightOfDiv(divId, maxLimit, value ){
 	}
 }
 
-function shareDoc(uuid,shareWith){
+function shareDoc(uuid,shareWith,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
 							window.location.replace( window.location.href );
@@ -1067,10 +1069,10 @@ function shareDoc(uuid,shareWith){
 	callback.failure	= function(o) {
 							alert('share failed');
 						};
-	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/shareDoc.do?uuid="+uuid+"&shareWith="+shareWith, callback);
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/shareDoc.do?uuid="+uuid+"&shareWith="+shareWith+"&type="+tabType, callback);
 }
 
-function unshareDoc(uuid){
+function unshareDoc(uuid,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
 							window.location.replace( window.location.href );
@@ -1078,7 +1080,7 @@ function unshareDoc(uuid){
 	callback.failure	= function(o) {
 							alert('unshare failed');
 						};
-	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/unshareDoc.do?uuid="+uuid, callback);
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/unshareDoc.do?uuid="+uuid+"&type="+tabType, callback);
 }
 
 function approveVersion(versionId, baseNodeUUID){

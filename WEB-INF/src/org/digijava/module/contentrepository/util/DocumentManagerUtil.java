@@ -28,6 +28,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.jackrabbit.api.JackrabbitRepository;
+import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
@@ -270,6 +272,27 @@ public class DocumentManagerUtil {
 		}
 		
 		return niter.nextNode();		
+	}
+	public static Node getLastVersionNotWaitingApproval(String currentUUID, HttpServletRequest request) throws CrException, RepositoryException {
+		List<Version> versions	= getVersions(currentUUID, request, true);
+		if (versions == null || versions.size() == 0) 
+			throw new NoVersionsFoundException("No versions were found for node with UUID: " + currentUUID);
+		
+		for ( int i=versions.size()-1; i>=0; i-- ) {
+			Version v			= versions.get(i);
+			NodeIterator nIter	= v.getNodes();
+			if ( nIter.hasNext() ) {
+				Node n				= nIter.nextNode();
+				if ( isGivenVersionPendingApproval(n.getUUID()) != null ) 
+					continue;
+				else
+					return n;
+			}
+		}
+		return null;
+		
+		
+		
 	}
 	
 	public static int getNextVersionNumber(String uuid, HttpServletRequest request) {
@@ -973,6 +996,16 @@ public class DocumentManagerUtil {
 				logger.error("Delete Failed: " +e.toString());
 			}		
 		}
+	}
+	
+	public synchronized static void shutdownRepository( ServletContext sContext ) {
+		logger.info("Shutting down jackrabbit repository");
+		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( "JackrabbitRepository" );
+		if ( repository == null ) {
+			logger.warn("No repository found! Only normal if AMP was not used at all !");
+		}
+		repository.shutdown();
+		logger.info("Jackrabbit repository shutdown succesfully !");
 	}
 	
 	

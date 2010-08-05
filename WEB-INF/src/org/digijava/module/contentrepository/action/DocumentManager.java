@@ -350,8 +350,24 @@ public class DocumentManager extends Action {
 				 * other users should see last approved version of this node, so get version number from sharedDoc entry and load that version
 				 */
 				if(tabName!=null && !tabName.equals(CrConstants.PUBLIC_DOCS_TAB) //in public docs case documentNode is non-versionable,but public version of some node 
-						&& DocumentManagerUtil.isGivenVersionPendingApproval(DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request).getUUID())!=null){					
-					String sharedVersionId= DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID).getVersionID();
+						&& DocumentManagerUtil.isGivenVersionPendingApproval(DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request).getUUID())!=null){
+					
+					NodeLastApprovedVersion nlpv	= DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
+					String sharedVersionId			= null;
+					if ( nlpv != null ) {
+						sharedVersionId			= nlpv.getVersionID();
+					}
+					else {
+						Node verNode				= DocumentManagerUtil.getLastVersionNotWaitingApproval(documentNodeBaseVersionUUID, request);
+						if ( verNode != null )
+							sharedVersionId			= verNode.getUUID();
+						else {
+							logger.error( "Code should never get here. There should be at least one version of a document not waiting approval." );
+							continue;
+						}
+							
+					}
+					
 					documentNode = DocumentManagerUtil.getReadNode(sharedVersionId, request);
 				}
 				
@@ -420,7 +436,7 @@ public class DocumentManager extends Action {
 				documentData.process(request);
 				documentData.computeIconPath(true);
 				
-				if ( !isPublicVersion && showActionButtons) {
+				if ( !CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
 					/**
 					 * resources that are pending approval to become team resources,shouldn't have possibility to view versions,
 					 * add new versions e.t.c. 
@@ -552,6 +568,7 @@ public class DocumentManager extends Action {
 				
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: handle exception
 		}
 		return documents;

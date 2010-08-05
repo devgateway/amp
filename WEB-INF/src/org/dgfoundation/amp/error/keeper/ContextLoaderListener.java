@@ -14,6 +14,7 @@ import org.apache.log4j.spi.LoggerRepository;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class ContextLoaderListener implements ServletContextListener {
 	private static Logger logger = Logger.getLogger(ContextLoaderListener.class);
@@ -72,6 +73,7 @@ public class ContextLoaderListener implements ServletContextListener {
 	}
 	public void contextDestroyed(ServletContextEvent contextEvent) {
 		destroy();
+		DocumentManagerUtil.shutdownRepository(contextEvent.getServletContext() );
 	}
 	
 	public static synchronized void init(Boolean ecsDisable, String serverName, String propertiesFile, String warPath){

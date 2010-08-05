@@ -33,7 +33,7 @@
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
 
-    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNodeImport.js"></script>
+    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
 <style type="text/css">
 
@@ -166,7 +166,7 @@ div.fakefile2 input{
 		</div>
 
 <br />
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="65%">
+<table cellPadding=0 cellSpacing=0 style="width: 84%; background-color: #ffffff">
 	<tr>
 		<td valign="bottom">
 				<digi:errors/>

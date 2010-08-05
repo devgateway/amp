@@ -74,6 +74,14 @@ import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Location;
+import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
+import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
 import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ComponentFundingType;
@@ -81,22 +89,13 @@ import org.digijava.module.dataExchange.jaxb.ContactType;
 import org.digijava.module.dataExchange.jaxb.FreeTextType;
 import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.jaxb.FundingType;
+import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Location;
-import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
-import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
-import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
-import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.pojo.DEActivityLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
-import org.digijava.module.dataExchange.pojo.DELog;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
 import org.digijava.module.dataExchange.pojo.DEMockTest;
 import org.digijava.module.dataExchange.pojo.DEOrgMissingLog;
@@ -107,7 +106,8 @@ import org.digijava.module.dataExchange.pojo.DESectorPercentageLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
 import org.digijava.module.dataExchange.util.ImportLogDAO;
-import org.digijava.module.dataExchange.util.SessionImportLogDAO;
+import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
+import org.digijava.module.dataExchange.util.SourceSettingDAO;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
@@ -1698,10 +1698,10 @@ public class DEImportBuilder {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
 		this.getDESourceSetting().getLogs().add(execLog);
-		ImportLogDAO iLog	 		= null;
+		SourceSettingDAO iLog	 		= null;
 		
 		try {
-				iLog		 = 	new SessionImportLogDAO();
+				iLog		 = 	new SessionSourceSettingDAO();
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1732,7 +1732,7 @@ public class DEImportBuilder {
 		return this.getDESourceSetting().getImportStrategy();
 	}
 	
-	private void processFeed(DELogPerExecution log, ImportLogDAO iLog) {
+	private void processFeed(DELogPerExecution log, SourceSettingDAO iLog) {
 		for (Iterator it = this.getAmpImportItem().getActivities().getActivity().iterator(); it.hasNext();) {
 			ActivityType actType 	= (ActivityType) it.next();
 			AmpActivity activity 	= getAmpActivity(actType);
@@ -1750,14 +1750,15 @@ public class DEImportBuilder {
 			{
 				item.setDescription(contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				item.setDeLogPerExecution(log);
 				//iLog.saveObject(item);
 				if(log.getLogItems() == null) 
-					log.setLogItems(new ArrayList());
+					log.setLogItems(new ArrayList<DELogPerItem>());
+				item.setDeLogPerExecution(log);
 				log.getLogItems().add(item);
 				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-				iLog.saveObject(item);
+				//iLog.saveObject(item);
 				//iLog.saveObject(log);
+				iLog.saveObject(log.getDeSourceSetting());
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
@@ -1791,13 +1792,14 @@ public class DEImportBuilder {
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				item.setDescription(e.getMessage());
 			}
-			item.setDeLogPerExecution(log);
 			//iLog.saveObject(item);
 			if(log.getLogItems() == null) 
-				log.setLogItems(new ArrayList());
+				log.setLogItems(new ArrayList<DELogPerItem>());
+			item.setDeLogPerExecution(log);
 			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-			iLog.saveObject(item);
+			//iLog.saveObject(item);
 			//iLog.saveObject(log);
+			iLog.saveObject(log.getDeSourceSetting());
 		}
 	}	
 	

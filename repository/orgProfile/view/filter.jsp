@@ -317,21 +317,21 @@
         <div style="width:450px;float:left">
             <table cellpadding="5" cellspacing="0">
                 <tr>
-                    <td nowrap align="left" colspan="2">
+                    <td align="left" colspan="2">
                         <html:checkbox  property="workspaceOnly"><b><digi:trn>SHOW ONLY ORGANIZATION PROFILE DATA FROM THIS WORKSPACE</digi:trn></b></html:checkbox><br/>
                         <font style="color:red;font-weight:bold"><digi:trn>Note: If left unchecked it will show data for all of the current workspaces in AMP</digi:trn></font>
                     </td>
                 </tr>
                 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
                     <tr>
-                        <td nowrap align="left" colspan="2">
+                        <td align="left" colspan="2">
                             <html:checkbox  property="pledgeVisible"><b><digi:trn>Include pledges in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
                         </td>
                     </tr>
                 </module:display>
                 <feature:display module="Funding" name="Expenditures">
                     <tr>
-                        <td nowrap align="left" colspan="2">
+                        <td align="left" colspan="2">
                             <html:checkbox  property="expendituresVisible"><b><digi:trn>Include expenditures in Pledges/Commitments/Disbursements/Expenditures</digi:trn></b></html:checkbox><br/>
                         </td>
                     </tr>

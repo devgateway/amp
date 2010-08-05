@@ -110,30 +110,29 @@
 	        var titleSize=document.messageForm.messageName.value.length;
             var descSize=document.messageForm.description.value.length;
             <c:set var="message">
-        	<digi:trn>Please enter name </digi:trn>						
+        		<digi:trn>Please enter name </digi:trn>						
             </c:set>
             <c:set var="msg">
-        	${fn:replace(message,'\\n',' ')}
+        		${fn:replace(message,'\\n',' ')}
             </c:set>
             <c:set var="quote">'</c:set>
             <c:set var="escapedQuote">\'</c:set>
             <c:set var="msgsq">
-        	${fn:replace(msg,quote,escapedQuote)}
+        		${fn:replace(msg,quote,escapedQuote)}
             </c:set>
 		if(titleSize==0){
 			alert('${msgsq}');
 			return false;
-		}
-                else{
-                    if(titleSize>50){
-                        alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
-			return false;
-                    }
-                    if(descSize>500){
-                        alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
-			return false;
-                    }
-                }
+		}else{
+        	if(titleSize>50){
+         		alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
+				return false;
+         	}
+         	if(descSize>500){
+         		alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
+				return false;
+         	}
+        }
 		return true;
 	}
 
@@ -409,7 +408,14 @@
 																	<tr>
 																	   <field:display name="Description Text Box" feature="Create Message Form">
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-                                                                        <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
+                                                                        <td align="left">                                                                       
+                                                                        	 
+                                                                        <!-- 
+                                                                        	<html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax" onkeyup="checkCharCount(this);" ></html:textarea> 
+        																	<div><span id="charCounter">500</span> <digi:trn>characters left.</digi:trn></div>
+                                                                         -->
+                                                                         <html:textarea name="messageForm" property="description"  rows="20"  styleClass="inp-text" style="width:320px;" styleId="descMax"/>
+                                                                         </td>                                                                         
 																	 </field:display>
 																	</tr>
 																	<tr>
@@ -436,10 +442,10 @@
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
                                                                         <td align="left"> 
                                                                         	<html:select property="priorityLevel" styleClass="inp-text" style="width:140px">                                         
-                                                                        		<html:option value="0"><digi:trn key="message:priorityLevel:none">none</digi:trn> </html:option>                                       
-                                                                                <html:option value="1"><digi:trn key="message:priorityLevel:low">low</digi:trn> </html:option>
-                                                                                <html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
-                                                                                <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
+                                                                        		<html:option value="0"><digi:trn>none</digi:trn> </html:option>                                       
+                                                                                <html:option value="1"><digi:trn>low</digi:trn> </html:option>
+                                                                                <html:option value="2"><digi:trn>Medium</digi:trn> </html:option>
+                                                                                <html:option value="3"><digi:trn>Critical</digi:trn> </html:option>																							
                                                                             </html:select>																												                                                																																												
                                                                          </td>
                                                                     </tr> 
@@ -636,10 +642,24 @@
         $("#titleMax").charCounter(50,{
 	format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
 	pulse: false});
-        $("#descMax").charCounter(500,{
-	format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
-	pulse: false});
-        
 
+    $("#descMax").charCounter(500,{
+		format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
+		pulse: false
+	});
+
+    $("#descMax").bind("paste", function (event) { 
+    	var browser=navigator.appName;
+    	if(browser=="Microsoft Internet Explorer"){
+    		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
+    		var desc = document.getElementById('descMax');
+    		if(textThatNeedsToBePasted.length + desc.value.length >500){
+    			var msg="<digi:trn jsFriendly='true'>You can not exceed 500 symbols</digi:trn>";
+    			alert(msg);
+    			window.clipboardData.setData("Text",'');
+    		}
+        }
+				
+	});       
 </script>
 </digi:form>

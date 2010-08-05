@@ -122,18 +122,24 @@ scheduler.attachEvent("onSchedulerResize",function(){
 });
 
 scheduler._get_year_cell=function(I){
-	var G=I.getMonth()+12*(I.getFullYear()-this._min_date.getFullYear());
-	var H=this._els.dhx_cal_data[0].childNodes[G];
-	var I=this.week_starts[G]+I.getDate()-1;
-	return H.childNodes[2].firstChild.rows[Math.floor(I/7)].cells[I%7].firstChild
+	if (this._date.getYear()==I.getYear()){
+		var G=I.getMonth()+12*(I.getFullYear()-this._min_date.getFullYear());
+		G = G % 12;
+		var H=this._els.dhx_cal_data[0].childNodes[G];
+		var I=this.week_starts[G]+I.getDate()-1;
+		return H.childNodes[2].firstChild.rows[Math.floor(I/7)].cells[I%7].firstChild
+	}
+	return null;
 };
 
 var D=[];
 scheduler._mark_year_date=function(G){
 	var H=this._get_year_cell(G);
-	H.className="dhx_month_head dhx_year_event";
-	H.setAttribute("date",F(G));
-	D.push(H)
+	if (H!=null){
+		H.className="dhx_month_head dhx_year_event";
+		H.setAttribute("date",F(G));
+		D.push(H)
+	}
 };
 
 scheduler._unmark_year_date=function(G){
@@ -144,7 +150,7 @@ scheduler._year_render_event=function(G){
 	var H=G.start_date;
 	while(H<G.end_date){
 		this._mark_year_date(H);
-		H=this.date.add(H,1,"day")
+		H=this.date.add(H,1,"day");
 	}
 };
 

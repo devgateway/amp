@@ -22,61 +22,61 @@
 <%@page import="org.digijava.module.calendar.util.CalendarUtil"%>
 
 <script type="text/javascript" charset="utf-8">
-    var trn_today_button ='<digi:trn>Today</digi:trn>';
-	var trn_day_tab ='<digi:trn>Day</digi:trn>';
-	var trn_week_tab='<digi:trn>Week</digi:trn>';
-	var trn_month_tab='<digi:trn>Month</digi:trn>';
-	var trn_year_tab='<digi:trn>Year</digi:trn>';
+    var trn_today_button 	='<digi:trn jsFriendly="true">Today</digi:trn>';
+	var trn_day_tab 		='<digi:trn jsFriendly="true">Day</digi:trn>';
+	var trn_week_tab		='<digi:trn jsFriendly="true">Week</digi:trn>';
+	var trn_month_tab		='<digi:trn jsFriendly="true">Month</digi:trn>';
+	var trn_year_tab		='<digi:trn jsFriendly="true">Year</digi:trn>';
 	
 //Translations for calendar locale_sv.js file 
 //month full names
 	
-	var trn_month_january ='<digi:trn>January</digi:trn>';
-	var trn_month_february ='<digi:trn>February</digi:trn>';
-	var trn_month_march ='<digi:trn>March</digi:trn>';
-	var trn_month_april ='<digi:trn>April</digi:trn>';
-	var trn_month_may ='<digi:trn>May</digi:trn>';
-	var trn_month_june ='<digi:trn>June</digi:trn>';
-	var trn_month_july ='<digi:trn>July</digi:trn>';
-	var trn_month_august ='<digi:trn>August</digi:trn>';
-	var trn_month_september ='<digi:trn>September</digi:trn>';
-	var trn_month_october ='<digi:trn>October</digi:trn>';
-	var trn_month_november ='<digi:trn>November</digi:trn>';
-	var trn_month_december ='<digi:trn>December</digi:trn>';
+	var trn_month_january 		='<digi:trn jsFriendly="true">January</digi:trn>';
+	var trn_month_february 		='<digi:trn jsFriendly="true">February</digi:trn>';
+	var trn_month_march 		='<digi:trn jsFriendly="true">March</digi:trn>';
+	var trn_month_april 		='<digi:trn jsFriendly="true">April</digi:trn>';
+	var trn_month_may 			='<digi:trn jsFriendly="true">May</digi:trn>';
+	var trn_month_june 			='<digi:trn jsFriendly="true">June</digi:trn>';
+	var trn_month_july 			='<digi:trn jsFriendly="true">July</digi:trn>';
+	var trn_month_august 		='<digi:trn jsFriendly="true">August</digi:trn>';
+	var trn_month_september 	='<digi:trn jsFriendly="true">September</digi:trn>';
+	var trn_month_october 		='<digi:trn jsFriendly="true">October</digi:trn>';
+	var trn_month_november 		='<digi:trn jsFriendly="true">November</digi:trn>';
+	var trn_month_december 		='<digi:trn jsFriendly="true">December</digi:trn>';
 	
 //month short names
-	var trn_month_jan='<digi:trn>Jan</digi:trn>';
-	var trn_month_feb='<digi:trn>Feb</digi:trn>';
-	var trn_month_mar='<digi:trn>Mar</digi:trn>';
-	var trn_month_apr='<digi:trn>Apr</digi:trn>';
-	var trn_month_jun='<digi:trn>Jun</digi:trn>';
-	var trn_month_jul='<digi:trn>Jul</digi:trn>';
-	var trn_month_aug='<digi:trn>Aug</digi:trn>';
-	var trn_month_sep='<digi:trn>Sep</digi:trn>';
-	var trn_month_oct='<digi:trn>Oct</digi:trn>';
-	var trn_month_nov='<digi:trn>Nov</digi:trn>';
-	var trn_month_dec='<digi:trn>Dec</digi:trn>';
+	var trn_month_jan='<digi:trn jsFriendly="true">Jan</digi:trn>';
+	var trn_month_feb='<digi:trn jsFriendly="true">Feb</digi:trn>';
+	var trn_month_mar='<digi:trn jsFriendly="true">Mar</digi:trn>';
+	var trn_month_apr='<digi:trn jsFriendly="true">Apr</digi:trn>';
+	var trn_month_jun='<digi:trn jsFriendly="true">Jun</digi:trn>';
+	var trn_month_jul='<digi:trn jsFriendly="true">Jul</digi:trn>';
+	var trn_month_aug='<digi:trn jsFriendly="true">Aug</digi:trn>';
+	var trn_month_sep='<digi:trn jsFriendly="true">Sep</digi:trn>';
+	var trn_month_oct='<digi:trn jsFriendly="true">Oct</digi:trn>';
+	var trn_month_nov='<digi:trn jsFriendly="true">Nov</digi:trn>';
+	var trn_month_dec='<digi:trn jsFriendly="true">Dec</digi:trn>';
 
 //day full names 
 	
-	var trn_day_sunday='<digi:trn>Sunday</digi:trn>';
-	var trn_day_monday='<digi:trn>Monday</digi:trn>';
-	var trn_day_tuesday='<digi:trn>Tuesday</digi:trn>';
-	var trn_day_wednesday='<digi:trn>Wednesday</digi:trn>';
-	var trn_day_thursday='<digi:trn>Thursday</digi:trn>';
-	var trn_day_friday='<digi:trn>Friday</digi:trn>';
-	var trn_day_saturday='<digi:trn>Saturday</digi:trn>';
+	var trn_day_sunday		='<digi:trn jsFriendly="true">Sunday</digi:trn>';
+	var trn_day_monday		='<digi:trn jsFriendly="true">Monday</digi:trn>';
+	var trn_day_tuesday		='<digi:trn jsFriendly="true">Tuesday</digi:trn>';
+	var trn_day_wednesday	='<digi:trn jsFriendly="true">Wednesday</digi:trn>';
+	var trn_day_thursday	='<digi:trn jsFriendly="true">Thursday</digi:trn>';
+	var trn_day_friday		='<digi:trn jsFriendly="true">Friday</digi:trn>';
+	var trn_day_saturday	='<digi:trn jsFriendly="true">Saturday</digi:trn>';
 
 //day shotr names 
 	
 
-	var trn_day_sun='<digi:trn>Sun</digi:trn>';
-	var trn_day_mon='<digi:trn>Mon</digi:trn>';
-	var trn_day_tue='<digi:trn>Tue</digi:trn>';
-	var trn_day_wed='<digi:trn>Wed</digi:trn>';
-	var trn_day_thu='<digi:trn>Thu</digi:trn>';
-	var trn_day_fri='<digi:trn>Fri</digi:trn>';
-	var trn_day_sat='<digi:trn>Sat</digi:trn>';
+	var trn_day_sun='<digi:trn jsFriendly="true">Sun</digi:trn>';
+	var trn_day_mon='<digi:trn jsFriendly="true">Mon</digi:trn>';
+	var trn_day_tue='<digi:trn jsFriendly="true">Tue</digi:trn>';
+	var trn_day_wed='<digi:trn jsFriendly="true">Wed</digi:trn>';
+	var trn_day_thu='<digi:trn jsFriendly="true">Thu</digi:trn>';
+	var trn_day_fri='<digi:trn jsFriendly="true">Fri</digi:trn>';
+	var trn_day_sat='<digi:trn jsFriendly="true">Sat</digi:trn>';
 
 </script>
 
@@ -145,18 +145,18 @@
 	function init() {
 		 
 		var sections=[
-		  			{key:1, label:"Section A"},
-		  			{key:2, label:"Section B"},
-		  			{key:3, label:"Section C"},
-		  			{key:4, label:"Section D"},
-		  			{key:5, label:"Section E"},
-		  			{key:6, label:"Section F"},
-		  			{key:7, label:"Section G"},
-		  			{key:8, label:"Section H"},
-		  			{key:9, label:"Section I"},
-		  			{key:10, label:"Section G"},
-		  			{key:11, label:"Section K"},
-		  			{key:12, label:"Section L"}
+		  			{key:1, label:'Section A'},
+		  			{key:2, label:'Section B'},
+		  			{key:3, label:'Section C'},
+		  			{key:4, label:'Section D'},
+		  			{key:5, label:'Section E'},
+		  			{key:6, label:'Section F'},
+		  			{key:7, label:'Section G'},
+		  			{key:8, label:'Section H'},
+		  			{key:9, label:'Section I'},
+		  			{key:10, label:'Section G'},
+		  			{key:11, label:'Section K'},
+		  			{key:12, label:'Section L'}
 		  			
 		  		];		
 		
@@ -191,7 +191,7 @@
 		
 		scheduler.init('scheduler_here',date,defoultView,type, ehtMonth);
 		scheduler.templates.event_text=function(start_date,end_date,ev){
-			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
+			return '<digi:trn jsFriendly="true">Text:</digi:trn><b> '+ev.text+'</b><br>'+'<digi:trn jsFriendly="true">Descr.</digi:trn>'+ev.details;
 		}
          var lastTimeStamp=new Date().getTime();
 		scheduler.load("/calendar/showEvents.do?lastTimeStamp="+lastTimeStamp);
@@ -207,10 +207,10 @@
 			   document.getElementById("printDate").value = date;
 			   //show corresponding view breadcrumb
 			   var whichView=document.getElementById("viewSpan");
-			   var monthly='<digi:trn>Monthly View</digi:trn>';
-			   var weekly='<digi:trn>Weekly View</digi:trn>';
-			   var daily='<digi:trn>Daily View</digi:trn>';
-			   var yearly='<digi:trn>Yearly View</digi:trn>';
+			   var monthly='<digi:trn jsFriendly="true">Monthly View</digi:trn>';
+			   var weekly='<digi:trn jsFriendly="true">Weekly View</digi:trn>';
+			   var daily='<digi:trn jsFriendly="true">Daily View</digi:trn>';
+			   var yearly='<digi:trn jsFriendly="true">Yearly View</digi:trn>';
 			   if(mode=='month'){
 				   whichView.innerHTML=monthly;
 			   }else if(mode=='week'){
@@ -249,7 +249,10 @@
 			var isDotted = ev.text.length >20 ? dotted : "";
 		    var text = app+ev.text.substr(0,20)+isDotted;
 	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
-	        return "<span  title='"+"Title: "+text+" "+" StartDate: "+start_date+" EndDate: "+end_date+"'>"+img+""+text+"</span>";
+	        var trnLbelTitle 		= '<digi:trn jsFriendly="true">Title:</digi:trn>';
+	        var trnLabelStartDate 	= '<digi:trn jsFriendly="true">StartDate:</digi:trn>';
+	        var trnLabelEndDate 	= '<digi:trn jsFriendly="true">EndDate:</digi:trn>';
+	        return "<span  title='"+trnLbelTitle+" "+text+"  "+trnLabelStartDate+" "+start_date+" "+trnLabelEndDate+" "+end_date+"'>"+img+""+text+"</span>";
 		 }
 	 }else{
 

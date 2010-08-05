@@ -1697,6 +1697,8 @@ public class DEImportBuilder {
 	public void run() {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
+		execLog.setLogItems(new ArrayList<DELogPerItem>());
+		execLog.setDeSourceSetting(this.getDESourceSetting());
 		this.getDESourceSetting().getLogs().add(execLog);
 		SourceSettingDAO iLog	 		= null;
 		
@@ -1738,13 +1740,8 @@ public class DEImportBuilder {
 			AmpActivity activity 	= getAmpActivity(actType);
 			DELogPerItem	item	= new DELogPerItem();
 			item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
-			//item.setLogType(DELogPerItem.LOG_TYPE_INFO);
 			DEActivityLog contentLogger = new DEActivityLog();
 			validateActivityContent(actType, contentLogger);
-			
-//			if(activity == null && DESourceSetting.IMPORT_STRATEGY_UPD_PROJ.equals(getImportStrategy()))
-//				//TODO write in log that this activity was skipped
-//				continue;
 			
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
@@ -1756,8 +1753,6 @@ public class DEImportBuilder {
 				item.setDeLogPerExecution(log);
 				log.getLogItems().add(item);
 				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-				//iLog.saveObject(item);
-				//iLog.saveObject(log);
 				iLog.saveObject(log.getDeSourceSetting());
 				continue;
 			}
@@ -1792,13 +1787,11 @@ public class DEImportBuilder {
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				item.setDescription(e.getMessage());
 			}
-			//iLog.saveObject(item);
 			if(log.getLogItems() == null) 
 				log.setLogItems(new ArrayList<DELogPerItem>());
+			log.getLogItems().add(item);
 			item.setDeLogPerExecution(log);
 			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
-			//iLog.saveObject(item);
-			//iLog.saveObject(log);
 			iLog.saveObject(log.getDeSourceSetting());
 		}
 	}	

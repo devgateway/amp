@@ -83,7 +83,7 @@ function eventType(){
 
 
 	    if(!Daily && !Weekly && !Monthly && !Yearly){
-	   		alert("please choose type of recurring event");
+	   		alert('<digi:trn jsFriendly="true">please choose type of recurring event</digi:trn>');
 			return false;
 		}
 
@@ -94,7 +94,7 @@ function eventType(){
     	//var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
         
     		if(document.getElementById("recurrYearly").value=='' || document.getElementById("recurrYearly").value=='0'){
-            	alert ("Recurring period should be higher than 0");
+            	alert ('<digi:trn jsFriendly="true">Recurring period should be higher than 0</digi:trn>');
             	periodValid = false;
    			}else{
    	    		var rec = document.getElementById("recurrYearly").value;
@@ -109,7 +109,7 @@ function eventType(){
 		if(Monthly){
 			var month = document.getElementById("selectedStartMonth").value;
 		 	if(document.getElementById("selectedStartMonth").value=='' || document.getElementById("selectedStartMonth").value=='0'){
-	        	alert ("Recurring period should be higher than 0");
+	        	alert ('<digi:trn jsFriendly="true">Recurring period should be higher than 0</digi:trn>');
 	            periodValid = false;
 	   		}else{
 		   	    document.getElementById("hidden").value = month;
@@ -122,7 +122,7 @@ function eventType(){
 		if(Daily){
 	        var rec = document.getElementById("recurrDaily").value; 
         	if(document.getElementById("recurrDaily").value=='' || document.getElementById("recurrDaily").value=='0'){
-            	alert ("Recurring period should be higher than 0");
+            	alert ('<digi:trn jsFriendly="true">Recurring period should be higher than 0</digi:trn>');
             	periodValid = false;
    			}else{
    	    		document.getElementById("hidden").value = rec;
@@ -136,7 +136,7 @@ function eventType(){
 			var rec = document.getElementById("recurrWeekly").value;
 
 			if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0'){
-	            alert ("Recurring period should be higher than 0");
+	            alert ('<digi:trn jsFriendly="true">Recurring period should be higher than 0</digi:trn>');
 	            periodValid = false;
 	   		}else{
 				var result = "";

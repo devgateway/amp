@@ -47,7 +47,7 @@
                 visible:true,
                 fixedcenter: true,
                 draggable:false} );
-            var msg='\n<digi:trn >ORG PROFILE FILTER</digi:trn>';
+            var msg='\n<digi:trn jsFriendly="true">ORG PROFILE FILTER</digi:trn>';
             filter.setHeader(msg);
             filter.render();
         });
@@ -66,7 +66,7 @@
                     visible:true,
                     fixedcenter: true,
                     draggable:false} );
-                var msg='\n<digi:trn >Export Options</digi:trn>';
+                var msg='\n<digi:trn jsFriendly="true">Export Options</digi:trn>';
                 exportSettingsPanel.setHeader(msg);
                 exportSettingsPanel.setBody("<img src='images/amploading.gif' alt=''>");
                 exportSettingsPanel.render();
@@ -77,10 +77,10 @@
                 var title=$("#displaySettingsButton").text();
                 var titleEnd=title.substr(title.length-2,2);
                 if(titleEnd=='>>'){
-                    $("#displaySettingsButton").html("<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;")
+                    $("#displaySettingsButton").html('<digi:trn jsFriendly="true">Hide Current Settings</digi:trn> &lt;&lt;')
                 }
                 else{
-                    $("#displaySettingsButton").html("<digi:trn>Show Current Settings</digi:trn> &gt;&gt;")
+                    $("#displaySettingsButton").html('<digi:trn jsFriendly="true">Show Current Settings</digi:trn> &gt;&gt;')
                 }
           
          

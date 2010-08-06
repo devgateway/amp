@@ -29,7 +29,8 @@ public class DownloadFile extends Action {
 		String nodeUUID		= request.getParameter("uuid"); 
 		
 		if (nodeUUID != null) {
-			Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);
+			//Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);
+			Node node				= DocumentManagerUtil.getLastVersionNotWaitingApproval(nodeUUID, request);
 			Property contentType	= node.getProperty("ampdoc:contentType");
 			Property name			= node.getProperty("ampdoc:name");
 			Property data			= node.getProperty("ampdoc:data");

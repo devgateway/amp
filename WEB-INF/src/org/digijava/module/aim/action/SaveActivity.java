@@ -1683,24 +1683,31 @@ public class SaveActivity extends Action {
 			sectorMinContsIds=contactInfo.getPrimarySecMinContIds();
 			implExecutingContsIds=contactInfo.getPrimaryImplExecutingContIds();
 			
-			if(donorContsIds!=null && donorContsIds.length>1){ //more then one primary contact is not allowed				
-				errors.add("invalidDonorCont",new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));				
+			if (donorContsIds == null || donorContsIds.length != 1) {
+				errors.add("invalidDonorCont", new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont",
+						TranslatorWorker.translateText("Must be one Primary Donor Contact", locale, siteId)));
 			}
-			
-			if(mofedContsIds!=null && mofedContsIds.length>1){
-				errors.add("invalidMofedCont",new ActionError("error.aim.addActivity.contactInfo.invalidMofedCont", TranslatorWorker.translateText("Must Be One Primary MOFED Contact",locale,siteId)));
+
+			if (mofedContsIds == null || mofedContsIds.length != 1) {
+				errors.add("invalidMofedCont", new ActionError("error.aim.addActivity.contactInfo.invalidMofedCont",
+						TranslatorWorker.translateText("Must be one Primary MOFED Contact", locale, siteId)));
 			}
-			
-			if(projCoordContsIds!=null && projCoordContsIds.length>1){				
-				errors.add("invalidProjCoordCont",new ActionError("error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText("Must Be One Primary Project Coordinator Contact",locale,siteId)));				
+
+			if (projCoordContsIds == null || projCoordContsIds.length != 1) {
+				errors.add("invalidProjCoordCont", new ActionError(
+						"error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText(
+								"Must be one Primary Project Coordinator Contact", locale, siteId)));
 			}
-			
-			if(sectorMinContsIds!=null && sectorMinContsIds.length>1){
-				errors.add("invalidSecMinCont",new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont", TranslatorWorker.translateText("Must Be One Primary Sector Ministry Contact",locale,siteId)));
+
+			if (sectorMinContsIds == null || sectorMinContsIds.length != 1) {
+				errors.add("invalidSecMinCont", new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont",
+						TranslatorWorker.translateText("Must be one Primary Sector Ministry Contact", locale, siteId)));
 			}
-			
-			if(implExecutingContsIds != null && implExecutingContsIds.length >1){
-				errors.add("invalidImplExecutingAgencyCont",new ActionError("error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText("Must Be One Primary Implementing/Executing Agency Contact",locale,siteId)));
+
+			if (implExecutingContsIds == null || implExecutingContsIds.length != 1) {
+				errors.add("invalidImplExecutingAgencyCont", new ActionError(
+						"error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText(
+								"Must be one Primary Implementing/Executing Agency Contact", locale, siteId)));
 			}
 			
 			end:

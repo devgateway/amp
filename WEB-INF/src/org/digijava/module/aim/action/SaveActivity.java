@@ -1683,34 +1683,41 @@ public class SaveActivity extends Action {
 			sectorMinContsIds=contactInfo.getPrimarySecMinContIds();
 			implExecutingContsIds=contactInfo.getPrimaryImplExecutingContIds();
 			
-			if (donorContsIds == null || donorContsIds.length != 1) {
+			if (contactInfo.getDonorContacts() != null && contactInfo.getDonorContacts().size() != 0
+					&& (donorContsIds == null || donorContsIds.length != 1)) {
 				errors.add("invalidDonorCont", new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont",
 						TranslatorWorker.translateText("Must be one Primary Donor Contact", locale, siteId)));
 			}
 
-			if (mofedContsIds == null || mofedContsIds.length != 1) {
+			if (contactInfo.getMofedContacts() != null && contactInfo.getMofedContacts().size() != 0
+					&& (mofedContsIds == null || mofedContsIds.length != 1)) {
 				errors.add("invalidMofedCont", new ActionError("error.aim.addActivity.contactInfo.invalidMofedCont",
 						TranslatorWorker.translateText("Must be one Primary MOFED Contact", locale, siteId)));
 			}
 
-			if (projCoordContsIds == null || projCoordContsIds.length != 1) {
+			if (contactInfo.getProjCoordinatorContacts() != null
+					&& contactInfo.getProjCoordinatorContacts().size() != 0
+					&& (projCoordContsIds == null || projCoordContsIds.length != 1)) {
 				errors.add("invalidProjCoordCont", new ActionError(
 						"error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText(
 								"Must be one Primary Project Coordinator Contact", locale, siteId)));
 			}
 
-			if (sectorMinContsIds == null || sectorMinContsIds.length != 1) {
+			if (contactInfo.getSectorMinistryContacts() != null && contactInfo.getSectorMinistryContacts().size() != 0
+					&& (sectorMinContsIds == null || sectorMinContsIds.length != 1)) {
 				errors.add("invalidSecMinCont", new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont",
 						TranslatorWorker.translateText("Must be one Primary Sector Ministry Contact", locale, siteId)));
 			}
 
-			if (implExecutingContsIds == null || implExecutingContsIds.length != 1) {
+			if (contactInfo.getImplExecutingAgencyContacts() != null
+					&& contactInfo.getImplExecutingAgencyContacts().size() != 0
+					&& (implExecutingContsIds == null || implExecutingContsIds.length != 1)) {
 				errors.add("invalidImplExecutingAgencyCont", new ActionError(
 						"error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText(
 								"Must be one Primary Implementing/Executing Agency Contact", locale, siteId)));
 			}
 			
-			end:
+			//end:
 			if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error
 				saveErrors(request, errors);

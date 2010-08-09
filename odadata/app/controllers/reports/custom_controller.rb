@@ -1,7 +1,6 @@
 class Reports::CustomController < ReportsController
   RELATIONS = {
-    :donors => lambda { |m, v| ["donors.id IN (?) and donors.donor_type = 'country' ", v] },
-    :un_agencies => lambda { |m, v| ["donors.id IN (?) and donors.donor_type = 'un_agency' ", v] },
+    :donors => lambda { |m, v| ["donors.id IN (?) ", v] },
     :targets => lambda { |m, v| ["mdg_relevances.mdg_id IN (?)", v] },
     :sectors => lambda { |m, v| ["sector_relevances.dac_sector_id IN (?)", v] },
     :provinces => lambda { |m, v| 

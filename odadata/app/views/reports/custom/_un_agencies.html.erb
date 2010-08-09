@@ -1,9 +1,7 @@
-<h3><%= t('.title') %> <%= select_deselect_link('un_agencies') %></h3>
+<h3><%= t('.title') %> <%= select_deselect_link('donors','un_agencies') %></h3>
 
-<ul class="checkbox_container">
-  <li class="all"><%= check_box_tag "un_agencies[]", "all", true %>all</a>
-    
+<ul class="checkbox_container_donors">
   <% for un_agency in Donor.un_agency.ordered.all %>
-    <li><%= check_box_tag "un_agencies[]", un_agency.id %><%= un_agency.name %></li>
+    <li><%= check_box_tag "donors[]", un_agency.id, false, {:group => "un_agencies"} %><%= un_agency.name %></li>
   <% end %>
 </ul>

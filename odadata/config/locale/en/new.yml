@@ -323,9 +323,12 @@ en:
   reports:
     custom:
       donors:
-        title: Doadores
+        check_uncheck_all: Select all countries
+        all: all donors and UN agencies
+        title: Donors
       un_agencies:
-        title: Agências ONU
+        check_uncheck_all: Select all UN agencies
+        title: UN Agencies
       new:
         funds_for: Funding information {{year}}
         funding_forecasts_for: Forecasts {{year}}

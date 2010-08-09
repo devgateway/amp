@@ -56,6 +56,10 @@ ul.checkbox_container li.all {
 	font-weight: bold;
 	margin-top: -16px;
 }
+ul.checkbox_container li.all, ul.checkbox_container_donors li.all {
+	font-weight: bold;
+	margin-top: -16px;
+}
 
 ul.checkbox_container li div {
 	display: inline;
@@ -63,13 +67,13 @@ ul.checkbox_container li div {
 	padding-top: 3px;
 }
 
-ul.checkbox_container li input {
+ul.checkbox_container li input, ul.checkbox_container_donors li input {
 	float: left;
 	margin-right: 5px;
 	margin-left: 0;
 }
 
-ul.checkbox_container {
+ul.checkbox_container, ul.checkbox_container_donors {
 	margin-top: 10px;
 	font-size:8pt;
 	list-style-image:none;
@@ -80,7 +84,7 @@ ul.checkbox_container {
         line-height: normal;
 }
 
-ul.checkbox_container li {
+ul.checkbox_container li, ul.checkbox_container_donors li {
 	display: block;
 	clear: both;
 	vertical-align: baseline;

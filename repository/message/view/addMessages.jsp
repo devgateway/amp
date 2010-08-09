@@ -408,13 +408,8 @@
 																	<tr>
 																	   <field:display name="Description Text Box" feature="Create Message Form">
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-                                                                        <td align="left">                                                                       
-                                                                        	 
-                                                                        <!-- 
-                                                                        	<html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax" onkeyup="checkCharCount(this);" ></html:textarea> 
-        																	<div><span id="charCounter">500</span> <digi:trn>characters left.</digi:trn></div>
-                                                                         -->
-                                                                         <html:textarea name="messageForm" property="description"  rows="20"  styleClass="inp-text" style="width:320px;" styleId="descMax"/>
+                                                                        <td align="left">
+                                                                         	<html:textarea name="messageForm" property="description"  rows="20"  styleClass="inp-text" style="width:320px;" styleId="descMax"/>
                                                                          </td>                                                                         
 																	 </field:display>
 																	</tr>
@@ -454,8 +449,8 @@
 																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																			<td align="left">
 	                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																					<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																					<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																					<html:option value="0"><digi:trn>No</digi:trn> </html:option>
+																					<html:option value="1"><digi:trn>Yes</digi:trn> </html:option>																																														
 																			  	</html:select>																												                                                																																												
 																			</td>
 																		</field:display>
@@ -463,7 +458,7 @@
                                                                        <tr>
                                                                        		<field:display name="Recievers" feature="Create Message Form">
 																					<td nowrap="nowrap" align="right">
-																						<digi:trn key="message:Receevers">Receivers</digi:trn>
+																						<digi:trn>Receivers</digi:trn>
 																						<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
 																					</td>
 																                    <td>
@@ -533,7 +528,7 @@
 																							 <field:display name="Save button" feature="Create Message Form">
 																									<td align="right" width="30%">
 																										<c:set var="trnSavetBtn">
-																											<digi:trn key="messages:btn:save">Save</digi:trn>
+																											<digi:trn>Save</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" class="dr-menu"/>
 																									</td>
@@ -542,7 +537,7 @@
                                                                                                      <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
-																											<digi:trn key="messages:btn:send">Send</digi:trn>
+																											<digi:trn>Send</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="dr-menu"/>
 																									</td>
@@ -551,7 +546,7 @@
                                                                                                   <c:if test="${not empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnFwdtBtn">
-																											<digi:trn key="messages:btn:fwd">Forward</digi:trn>
+																											<digi:trn>Forward</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="dr-menu" />
 																									</td>
@@ -559,7 +554,7 @@
                                                                                                    <field:display name="Cancel button" feature="Create Message Form">
 																										<td align="left" width="47%">
 																											<c:set var="trnCancelBtn">
-																												<digi:trn key="message:btn:cancel">Cancel</digi:trn>
+																												<digi:trn>Cancel</digi:trn>
 																											</c:set>
 																											<input type="button" value="${trnCancelBtn}" onclick="cancel();" class="dr-menu">																																							
 																										</td>
@@ -572,8 +567,7 @@
 																		</td>
 																	</tr>
 																</table>
-															</td>
-															
+															</td>															
 														</tr>
 													</table>
                            						</td>
@@ -658,8 +652,22 @@
     			alert(msg);
     			window.clipboardData.setData("Text",'');
     		}
+        }				
+	});
+
+    $("#titleMax").bind("paste", function (event) { 
+    	var browser=navigator.appName;
+    	if(browser=="Microsoft Internet Explorer"){
+    		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
+    		var title = document.getElementById('titleMax');
+    		if(textThatNeedsToBePasted.length + title.value.length >500){
+    			var msg="<digi:trn jsFriendly='true'>You can not exceed 50 symbols</digi:trn>";
+    			alert(msg);
+    			window.clipboardData.setData("Text",'');
+    		}
         }
-				
-	});       
+	});
+
+	
 </script>
 </digi:form>

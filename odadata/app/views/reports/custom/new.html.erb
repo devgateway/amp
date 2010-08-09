@@ -16,8 +16,7 @@
 <% form_tag(
 	{ :action => 'create', :method => :put, },
 	:id => 'custom_report_conditions', 
-	:target => "Results", 
-	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
+	:target => "Results") do 
 %>
 
 <h2><%= t('.output_fields.heading') %></h2>

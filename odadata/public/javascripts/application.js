@@ -63,6 +63,4 @@ $(document).ready(function() {
 		slicePoint: 20,
 		userCollapseText: '(show less)'
 	});
-	
-	initialize_tooltips();
 });

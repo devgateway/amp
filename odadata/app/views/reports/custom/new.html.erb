@@ -414,12 +414,20 @@
         <input type="submit" name="report[format][xls]" value="<%= t('.xls_output') %>" 
           class="bt" style="margin: 5px; width: 100px" />
         <input type="submit" name="report[format][html]" value="<%= t('.web_output') %>" 
-          class="bt" style="margin: 5px; width: 100px" />
+          class="bt" style="margin: 5px; width: 100px" id="htmlButton" />
       </ul>
     </td>
   </tr>
 </table>
 <% end %>
+<script language="javascript">
+  $("#htmlButton").click(
+    function(){
+      window.open('',$("#custom_report_conditions").attr("target"),'resizable=1,scrollbars=1,height=600,width=800');
+    }
+  );
+
+</script>
 </div>
 
 

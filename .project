@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>amp-head</name>
+	<name>amp-1.15-release</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -30,11 +30,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.m7.nitrox.webProjectNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>digi-src</name>
-			<type>2</type>
-			<location>/home/mihai/workspace/digi/WEB-INF/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

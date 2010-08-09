@@ -96,6 +96,11 @@
 									<c:if test="${documentData.currentVersionNeedsApproval==true}">
 										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 											onClick="approveVersion('<%=documentData.getUuid() %>','<%=documentData.getBaseNodeUUID() %>');"><digi:trn>Approve</digi:trn> </a>
+										<!--  
+											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+											onClick="rejectVersion('<%=documentData.getUuid() %>','<%=documentData.getBaseNodeUUID() %>');"><digi:trn>Reject</digi:trn> </a>
+										-->	
+										
 									</c:if>
 								</logic:equal>
 								</td>

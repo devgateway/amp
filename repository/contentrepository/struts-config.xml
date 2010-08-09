@@ -33,6 +33,10 @@
     	<forward name="forward" path="/contentrepository/documentManager.do" />
     </action>
     
+    <action name="crDocumentManagerForm" scope="request" path="/contentrepository/rejectVersion" type="org.digijava.module.contentrepository.action.RejectVersion" validate="false">
+    	<forward name="forward" path="/contentrepository/documentManager.do" />
+    </action>
+    
     <action path="/contentrepository/downloadFile" type="org.digijava.module.contentrepository.action.DownloadFile" validate="false" />
     <!-- <action path="/contentrepository/getDocumentList" type="org.digijava.module.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">
     	<forward name="forward" path="/showLayout.do?layout=amp_getDocumentList" />

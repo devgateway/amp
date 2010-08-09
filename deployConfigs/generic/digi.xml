@@ -10,8 +10,8 @@
 	</smtp>	
 
 	
-    <logon-site id="dglogin" host="">http://amp114.ampdev.net/login</logon-site>
-    <site-domain id="dgDomain" host="">http://amp114.ampdev.net/</site-domain>
+    <logon-site id="dglogin" host="">http://amp115.ampdev.net/login</logon-site>
+    <site-domain id="dgDomain" host="">http://amp115.ampdev.net/</site-domain>
          
       
       <server-type caseSensitiveTranslatioKeys="false"/>
@@ -31,7 +31,7 @@
     
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.generic</ecsServerName>
+	<ecsServerName>ampdev.115.generic</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
     

@@ -29,14 +29,14 @@ public class ECSJob{
 			
 			HttpClient ecs;
 			try { //try connecting to the server first
-				logger.info("Contacting ECS Server ...");
+				//logger.info("Contacting ECS Server ...");
 				ecs = ECSClientManager.getClient();
 			} catch (ECSException e) {
 				//will be resent on next trigger
 				logger.error("Couldn't contact ECS server", new ECSIgnoreException(e));
 				return;
 			}
-			logger.info("Connected to ECS Server!");
+			//logger.info("Connected to ECS Server!");
 			
 			Iterator<String> it = errors.keySet().iterator(); //weekly-consistent iterator => reading is thread safe
 			while (it.hasNext()) {//remove in a thread-safe way items from the errors list
@@ -45,11 +45,12 @@ public class ECSJob{
 				queue.add(eki);
 			}
 			
-			logger.info("Sending update on errors ...");
+			//logger.info("Sending update on errors ...");
 			try { //try connecting to the server first
 				ecs.sendErrorList(serverName, queue);
+				logger.info("Updates sent to server!");
 			} catch (ECSException e) {
-				logger.error("Couldn't send data", new ECSIgnoreException(e));
+				logger.error("Couldn't send data to server", new ECSIgnoreException(e));
 				
 				logger.info("Putting the errors back in the list");
 				try {
@@ -62,9 +63,9 @@ public class ECSJob{
 				}
 				return;
 			}
-			logger.info("Updates sent!");
 			
-			logger.info("Get custom parameters ... ");
+			
+			//logger.info("Get custom parameters ... ");
 			String[] res = ecs.getParameters(serverName, "nothing-to-report");
 			int updateDelay = -1;
 			try {
@@ -75,15 +76,15 @@ public class ECSJob{
 				updateDelay = -1;
 			}
 			if (updateDelay != -1 && updateDelay != ECSRunner.DELAY_TIME){
-				logger.info(".... updating report interval from " + ECSRunner.DELAY_TIME/1000 + "s to " + updateDelay/1000 + "s");
+				//logger.info(".... updating report interval from " + ECSRunner.DELAY_TIME/1000 + "s to " + updateDelay/1000 + "s");
 				ECSRunner.DELAY_TIME = updateDelay;
 			}
 			else{
-				logger.info(".... report interval is: " + ECSRunner.DELAY_TIME/1000 + "s");
+				//logger.info(".... report interval is: " + ECSRunner.DELAY_TIME/1000 + "s");
 			}
 			
 
-			logger.info("Synchronize with ECS Server finished...................................................");
+			//logger.info("Synchronize with ECS Server finished...................................................");
 		} catch (Exception e) {
 			logger.error(new ECSIgnoreException(e));
 			//e.printStackTrace();

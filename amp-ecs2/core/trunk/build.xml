@@ -37,6 +37,7 @@
 		</jar>
 		
 		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/lib/ecs-core.jar" />
+		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-2.0/lib/ecs-core.jar" />
 	</target>
 	
 	<!-- build for all components -->

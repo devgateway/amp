@@ -17,7 +17,7 @@ public class ErrorReporting {
 	public void handle(Throwable e){
 		
 		ErrorUser user = new ErrorUser();
-		user.setLogin("unknown@amp.org");
+		user.setLogin("unknown");
 		user.setFullName("Unknown");
 
 		ErrorScene eScene = new ErrorScene(); // error "surroundings"

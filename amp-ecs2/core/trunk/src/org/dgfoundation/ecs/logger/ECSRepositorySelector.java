@@ -80,6 +80,14 @@ public class ECSRepositorySelector implements RepositorySelector {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		ECSLoggerRepository ecsRepo = new ECSLoggerRepository(new ECSLogger("root"));
 		LoggerRepository normalRepo = new Hierarchy(new RootCategory(Level.INFO)); 
+
+		/*
+		 * This section does init current war with the jboss log4j config file
+		 * but reinits curent log files.
+		 * 
+		 * No need, log4j repo will default with the log4j config file
+		 * 
+		 */ 
 		if (propertiesFile == null)
 			propertiesFile = jbossXMLFile;
 		
@@ -89,6 +97,7 @@ public class ECSRepositorySelector implements RepositorySelector {
 				try {
 					//PropertyConfigurator pconf = new PropertyConfigurator();
 					//pconf.doConfigure(propertiesFile, normalRepo);
+					
 					DOMConfigurator conf = new DOMConfigurator();
 					conf.doConfigure(propertiesFile, normalRepo);
 				} catch (Exception e) {

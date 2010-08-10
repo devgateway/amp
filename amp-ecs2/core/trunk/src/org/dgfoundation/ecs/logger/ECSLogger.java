@@ -40,7 +40,8 @@ public class ECSLogger extends Logger {
 					ecs = ecsLogRepo.getEcs();
 				}
 			}	
-			ecs.getErrorReporting().handle(t);
+			if (ecs != null)
+				ecs.getErrorReporting().handle(t);
 		}
 	}
 	

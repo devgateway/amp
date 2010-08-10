@@ -39,6 +39,10 @@ public final class ECS {
 	}
 
 	public ErrorReporting getErrorReporting() {
+		/*
+		if (errorReporting == null)
+			errorReporting = new ErrorReporting(ekeeper);
+			*/
 		return errorReporting;
 	}
 	

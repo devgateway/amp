@@ -6,7 +6,8 @@ CREATE TABLE servers (
 
 CREATE TABLE errors (
     id				serial		 	PRIMARY KEY,
-    stackTrace		text			UNIQUE,
+    md5				text			UNIQUE,
+    stackTrace		text			,
     jiraNumber		varchar(50) 	,
     resendAlert		bool 			DEFAULT false,
     lastOccurrence	timestamp			
@@ -23,8 +24,9 @@ CREATE TABLE users (
 
 CREATE TABLE scenes (
     id				serial		 	PRIMARY KEY,
-    date			timestamp			,
-    browser			text			
+    date			timestamp		,
+    browser			text			,
+    sessionId		text
 );
 
 CREATE TABLE occurrences (
@@ -35,5 +37,5 @@ CREATE TABLE occurrences (
     sceneId			int				REFERENCES scenes(id)
 );
 
-
-
+select setval('scenes_id_seq', 1);
+select setval('occurrences_id_seq', 1);

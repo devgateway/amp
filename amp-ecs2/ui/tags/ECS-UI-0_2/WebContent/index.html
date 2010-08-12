@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>ECS UI</title>
+	
+	<!-- http://developer.yahoo.com/yui/articles/hosting/?animation&autocomplete&button&calendar&charts&connection&connectioncore&container&containercore&datasource&datatable&dom&dragdrop&event&layout&paginator&progressbar&yahoo&MIN&norollup -->
+	
+	<!-- Combo-handled YUI CSS files: -->
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/autocomplete/assets/skins/sam/autocomplete.css&2.8.0r4/build/button/assets/skins/sam/button.css&2.8.0r4/build/calendar/assets/skins/sam/calendar.css&2.8.0r4/build/container/assets/skins/sam/container.css&2.8.0r4/build/paginator/assets/skins/sam/paginator.css&2.8.0r4/build/datatable/assets/skins/sam/datatable.css&2.8.0r4/build/layout/assets/skins/sam/layout.css&2.8.0r4/build/progressbar/assets/skins/sam/progressbar.css">
+	<!-- Combo-handled YUI JS files: -->
+	<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/animation/animation-min.js&2.8.0r4/build/connection/connection-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/autocomplete/autocomplete-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/calendar/calendar-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js&2.8.0r4/build/dragdrop/dragdrop-min.js&2.8.0r4/build/container/container-min.js&2.8.0r4/build/paginator/paginator-min.js&2.8.0r4/build/datatable/datatable-min.js&2.8.0r4/build/layout/layout-min.js&2.8.0r4/build/progressbar/progressbar-min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="ecs.css" />
+	
+	<!-- <link rel="stylesheet" type="text/css" href="yuicore.css" /> -->
+	<link rel="stylesheet" type="text/css" href="yuiskin.css" />
+</head>
+<body class="yui-skin-sam">
+	<div id="header">
+	    ...::<i>Error Centralization System</i>::...
+	</div>
+	<div id="filter1">
+		Reloading data: 	<span class="hoverlink">  <b><a id="reloaderCancel" class="hoverlink" >cancel</a></b></span> 
+		 <div id="pbContainer"> </div>
+		
+		<div id="startDateDiv">
+			Start Date:
+			<div id="startDate" class="yui-ac">
+				<input id="startDateSelect" type="text" style="width: 75px"/>
+				<div id="startDateContainer">
+				</div>
+			</div>
+		</div>
+		<div id="stopDateDiv">
+			Stop Date:
+			<div id="stopDate" class="yui-ac">
+				<input id="stopDateSelect" type="text" style="width: 75px"/>
+				<div id="stopDateContainer">
+				</div>
+			</div>
+		</div>
+		<div id="filterLoginDiv">
+			Login:
+			<div id="filterLogin" class="yui-ac">
+				<input id="filterLoginInput" type="text">
+				<div id="filterLoginContainer"></div>
+			</div>
+		</div>
+		<div id="filterServerDiv">
+			Server:
+			<div id="filterServer" class="yui-ac">
+				<input id="filterServerInput" type="text">
+				<div id="filterServerContainer"></div>
+			</div>
+		</div>
+		<div id="filterCustomDiv">
+			Search String:
+			<div id="filterCustom" class="yui-ac">
+				<input id="filterCustomInput" type="text" value="disabled" disabled="disabled">
+				<div id="filterCustomContainer"></div>
+			</div>
+		</div>
+		<div id="filterResetDiv">
+			&nbsp;&nbsp;
+			<div id="filterReset" class="yui-ac">
+				<input id="filterResetInput" type="button" title="Reset filter values" value="Reset">
+			</div>
+		</div>
+	</div>
+	<div id="console">
+		<table width="100%" height="100%">
+			<tr valign="middle">
+				<td align="center">
+					Future Console
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="results">
+		Results
+	</div>
+	<div id="graph">
+		<table width="100%" height="100%">
+			<tr valign="middle">
+				<td align="center">
+					Future Chart
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="filter2">
+		<table width="100%" height="100%" cellpadding="0px" cellspacing="0px">
+			<thead>
+				<tr>
+					<td style="border-bottom: 1px solid;">
+						Show/hide fields
+					</td>
+				</tr>
+			</thead>
+			<tr valign="top"><td>
+				<input type="checkbox" id="serverToggle" value="servername" checked="checked"/>Server Name<br/>
+				<input type="checkbox" id="errorSnippetToggle" value="errsnippet" checked="checked"/>Error Snippet<br/>
+				<input type="checkbox" id="jiraIssueToggle" value="jiranumber" checked="checked"/>JIRA Issue<br/>
+				<input type="checkbox" id="dateToggle" value="date" checked="checked"/>Date<br/>
+				<input type="checkbox" id="browserToggle" value="browser" checked="checked"/>Browser Info<br/>
+				<input type="checkbox" id="loginToggle" value="login" checked="checked"/>Login<br/>
+				<input type="checkbox" id="fullNameToggle" value="fullname" checked="checked"/>Full Name<br/>
+				<input type="checkbox" id="sessionToggle" value="session" checked="checked"/>Session<br/>
+			</td></tr>
+		</table>
+	</div>
+	<div id="pagination">
+		Pagination
+	</div>
+	<div id="extra">
+		<input type="button" value="Server Advanced Parameters" disabled="disabled" />
+	</div>
+	<div id="footer">
+		<table align="right">
+			<tr valign="middle">
+				<td>
+					[ECS-UI v0.2]
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="popup">
+		<div id="popupHd" class="hd">Panel #1 from Markup</div> 
+	    <div id="popupBd" class="bd">
+	    	<table width="100%">
+	    		<tr valign="top">
+	    			<td><b>Error</b>:</td><td><span id="popupErrMd5">...</span></td>
+	    		</tr>
+	    		<tr valign="top">
+	    			<td><b>Login</b>:</td><td><span id="popupLogin">...</span></td>
+	    		</tr>
+	    		<tr valign="top">
+	    			<td><b>Password</b>:</td><td><span id="popupPassword">...</span></td>
+	    		</tr>
+	    		<tr valign="top">
+	    			<td><b>Browser</b>:</td><td><span id="popupBrowser">...</span></td>
+	    		</tr>
+	    		<tr valign="top">
+	    			<td><b>Session</b>:</td><td><span id="popupSession">...</span></td>
+	    		</tr>
+	    		<tr valign="top">
+	    			<td colspan="2">
+	    				<textarea id="popupError" rows="11" style="width: 100%">...</textarea>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    	
+	    </div> 
+	    <div id="popupFt" class="ft">
+	    	<table cellpadding="0px" cellspacing="0px">
+	    		<tr>
+	    			<td align="left" width="245px"><span id="popupDate">...</span><input id="popupId" type="hidden"/></td>
+	    			<td align="right" width="205px">
+	    				JIRA:<input id="popupIssue" type="text" style="width: 100px"/><input id="popupButton" type="button" value="Update" style="width: 60px"/>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div> 
+	</div>
+</body>
+<script type="text/javascript">
+	
+	// Defer instantiation
+	YAHOO.util.Event.addListener(window, "load", function() {
+		var reloading = true;
+		var progressBar = new YAHOO.widget.ProgressBar(); 
+		//progressBar.set("direction","btt"); 
+		progressBar.set("height","5px"); 
+		progressBar.set("width","730px");
+		progressBar.set("anim", "true"); 
+		var anim = progressBar.get('anim'); 
+		anim.duration = .99; 
+		anim.method = YAHOO.util.Easing.easeNone;
+		progressBar.render("pbContainer"); 
+		progressBar.set('value',0);
+
+		//*********************
+		// Constants
+		var refreshDelay = 10;
+		//
+		//*********************
+		//*********************
+		// Varibles
+		var parselimit = refreshDelay;
+		//
+		//*********************
+
+		function beginrefresh(){
+			if (!reloading)
+				return;
+			if (parselimit==0){
+				parselimit=refreshDelay;
+				progressBar.set('value',0);
+				filterChange();
+			}
+			else{ 
+				parselimit-=1
+				var pos=Math.floor((refreshDelay - parselimit)*100/refreshDelay);
+				
+				progressBar.set('value',pos);
+			}
+			YAHOO.lang.later(999, this , beginrefresh , null , false);
+		}
+		YAHOO.lang.later(10 , this , beginrefresh , null , false);
+
+		function switchReload(){
+			if (reloading){
+				reloading=false;
+				document.getElementById("reloaderCancel").innerHTML="start";
+			}
+			else{
+				reloading=true;
+				document.getElementById("reloaderCancel").innerHTML="cancel";
+				YAHOO.lang.later(10 , this , beginrefresh , null , false);
+			}
+		}
+
+		YAHOO.util.Event.addListener("reloaderCancel", "click", switchReload, null, true);
+		
+
+		//Start Day - Calendar
+		startCal = new YAHOO.widget.Calendar("startCal","startDateContainer", { title:"Choose a start date:", close:true } ); 
+		startCal.render();
+		startCal.selectEvent.subscribe(function(type, args, obj) {
+			var selected = args[0]; 
+			var date = selected[0]; 
+			YAHOO.util.Dom.get("startDateSelect").value=date[0] + "-" + date[1] + "-" + date[2];
+			startCal.hide();
+			filterChange();
+		}, startCal, true);
+		YAHOO.util.Event.addListener("startDateSelect", "click", startCal.show, startCal, true); 
+
+		//Stop Day - Calendar 
+		stopCal = new YAHOO.widget.Calendar("stopCal","stopDateContainer", { title:"Choose a stop date:", close:true } ); 
+		stopCal.render();
+		stopCal.selectEvent.subscribe(function(type, args, obj) {
+			var selected = args[0]; 
+			var date = selected[0]; 
+			YAHOO.util.Dom.get("stopDateSelect").value=date[0] + "-" + date[1] + "-" + date[2];
+			stopCal.hide();
+			filterChange();
+		}, stopCal, true);
+		YAHOO.util.Event.addListener("stopDateSelect", "click", stopCal.show, stopCal, true); 
+			
+		//Login Selector
+		loginSelector = function() {
+		    // Use an XHRDataSource
+		    var oDS = new YAHOO.util.XHRDataSource("autocompleteLogin.php");
+		    oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+
+		    oDS.responseSchema = {
+		        resultsList : "records",
+		        fields : ["login", "fullname", "servername"]
+		    };
+		    		
+		    // Instantiate the AutoComplete
+		    var oAC = new YAHOO.widget.AutoComplete("filterLoginInput", "filterLoginContainer", oDS);
+		    // Throttle requests sent
+		    oAC.queryDelay = .5;
+		    oAC.resultTypeList = false;
+		    oAC.typeAhead=true;
+		    oAC.formatResult = function(oRD, sQuery, sResultMatch) {  
+		    	return "<div class=\"result\"><b>" + oRD.login + "</b>, <span class=\"name\">" + oRD.fullname + "</span> (<i>"+oRD.servername+"</i>)</div>"; 
+		    };
+		    // The webservice needs additional parameters
+		    oAC.generateRequest = function(sQuery) {
+		        return "?results=50&query=" + sQuery ;
+		    };
+
+		    oAC.itemSelectEvent.subscribe(function(sType, aArgs){ 
+		    	filterChange(); 
+		    });
+		    
+		    return {
+		        oDS: oDS,
+		        oAC: oAC
+		    };
+		}();
+
+		//Server Selector
+		serverSelector = function() {
+		    // Use an XHRDataSource
+		    var oDS = new YAHOO.util.XHRDataSource("autocompleteServer.php");
+		    oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+
+		    oDS.responseSchema = {
+		        resultsList : "records",
+		        fields : ["name", "noerrors"]
+		    };
+		    		
+		    // Instantiate the AutoComplete
+		    var oAC = new YAHOO.widget.AutoComplete("filterServerInput", "filterServerContainer", oDS);
+		    // Throttle requests sent
+		    oAC.queryDelay = .5;
+		    oAC.resultTypeList = false;
+		    oAC.typeAhead=true;
+		    oAC.formatResult = function(oRD, sQuery, sResultMatch) { 
+		    	return "<div class=\"result\"><b>" + oRD.name + "</b>, <span class=\"name\">" + oRD.noerrors + " errors</span></div>"; 
+		    };
+		    // The webservice needs additional parameters
+		    oAC.generateRequest = function(sQuery) {
+		        return "?results=50&query=" + sQuery ;
+		    };
+
+		    oAC.itemSelectEvent.subscribe(function(sType, aArgs){ 
+		    	filterChange(); 
+		    });
+		    
+		    return {
+		        oDS: oDS,
+		        oAC: oAC
+		    };
+		}();
+
+		
+		//Reset Button
+		YAHOO.util.Event.addListener("filterResetInput", "click", 
+				function(){
+					document.getElementById("filterLoginInput").value = "";
+					document.getElementById("filterServerInput").value = "";
+					document.getElementById("filterCustomInput").value = "";
+					document.getElementById("startDateSelect").value = "";
+					document.getElementById("stopDateSelect").value = "";
+					filterChange();
+				}
+			, null, true); 
+
+		popup = new YAHOO.widget.Panel("popup", { width:"450px", height: "310px", visible:false, constraintoviewport:true, draggable:true } );
+		popup.render();
+
+
+		
+
+		YAHOO.util.Event.addListener("popupButton", "click", 
+				function(){
+					var handleSuccess = function(o){
+							filterChange();
+					};
+					var handleFailure = function(o){
+						alert("Couldn't update JIRA issue number!");
+					};
+		
+					var callback =
+					{
+					  success:handleSuccess,
+					  failure: handleFailure
+					};
+					var sUrl = "updateJiraNumber.php?id="+document.getElementById("popupId").value+"&value="+document.getElementById("popupIssue").value;
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback); 
+				}
+			, myDataTable, true);
+		
+		function dataTableClick(oArgs){ 
+			var row_data = myDataTable.getRecord(oArgs.target);
+			var data = row_data.getData();
+			if (data.jiranumber != null && data.jiranumber.trim() != ""){
+				document.getElementById("popupHd").innerHTML = data.servername + " | " + data.jiranumber;
+				document.getElementById("popupIssue").value = data.jiranumber;
+			}
+			else{
+				document.getElementById("popupHd").innerHTML = data.servername;
+				document.getElementById("popupIssue").value = "";
+			}
+
+			document.getElementById("popupId").value = data.id;
+			document.getElementById("popupErrMd5").innerHTML = data.md5;
+			document.getElementById("popupLogin").innerHTML = data.login + " (<i>" + data.fullname + "</i>)";
+			document.getElementById("popupPassword").innerHTML = data.password;
+			document.getElementById("popupBrowser").innerHTML = data.browserfull;
+			document.getElementById("popupSession").innerHTML = data.session;
+			document.getElementById("popupError").innerHTML = data.stacktrace;
+			document.getElementById("popupDate").innerHTML = data.date;
+			popup.moveTo(oArgs.event.clientX,oArgs.event.clientY);
+			popup.show();
+		}
+		
+		//Results table
+		var myDataSource = new YAHOO.util.XHRDataSource("results.php?");
+		myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+		myDataSource.responseSchema = {
+			resultsList: "records",
+		    fields: [
+		             {key:"id"},
+		             {key:"servername"},
+		             {key:"md5"},
+		             {key:"login"},
+		             {key:"fullname"},
+		             {key:"password"},
+		             {key:"date"},
+		             {key:"browser"},
+		             {key:"browserfull"},
+		             {key:"session"},
+		             {key:"jiranumber"},
+		             {key:"stacktrace"},
+		             {key:"errsnippet"}
+		 		    ],
+			metaFields: {
+				totalRecords: "totalRecords"
+			}
+		};
+		myDataSource.maxCacheEntries=0;
+
+
+		
+		 
+		// Enable sorting for every Column
+		var myColumnDefs = [
+			{key:"id", label:"OID", sortable:true, resizeable: true},
+		    {key:"servername", label:"Server", sortable:true, resizeable: true},
+		    {key:"login", label:"Login", sortable:true, resizeable: true},
+		    {key:"fullname", label:"Full Name", sortable:true, resizeable: true},
+		    {key:"date", label:"Date", sortable:true, resizeable: true},
+		    {key:"errsnippet", label:"Error", sortable:false, resizeable: true},
+		    {key:"browser", label:"Browser", sortable:false, resizeable: true},
+		    {key:"jiranumber", label:"JIRA No.", sortable:true, resizeable: true},
+		    {key:"session", label:"Session ID", sortable:true, resizeable: true}
+		];
+
+		var myConfigs = {
+			//generateRequest: this.requestBuilder,
+			generateRequest : function(state, dt){
+				result = "";
+				result = result + 'sort='+ state.sortedBy.key;
+				result = result + '&dir='+ ((state.sortedBy && state.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc");
+				result = result + '&startIndex=' + state.pagination.recordOffset; 
+				result = result + '&results=' + state.pagination.rowsPerPage; 
+
+				val=document.getElementById("filterLoginInput").value;
+				if (val != null && val.trim() != ""){
+					result = result + '&fLogin='+val;
+				}
+
+				val=document.getElementById("filterServerInput").value;
+				if (val != null && val.trim() != ""){
+					result = result + '&fServer='+val;
+				}
+
+				val=document.getElementById("filterCustomInput").value;
+				if (val != null && val.trim() != ""){
+					result = result + '&fCustom='+val;
+				}
+
+				val=document.getElementById("startDateSelect").value;
+				if (val != null && val.trim() != ""){
+					result = result + '&startDate='+val;
+				}
+
+				val=document.getElementById("stopDateSelect").value;
+				if (val != null && val.trim() != ""){
+					result = result + '&stopDate='+val;
+				}
+				return result;
+			},	
+				
+			paginator: new YAHOO.widget.Paginator({ 
+							rowsPerPage : 10, 
+							containers  : 'pagination' 
+						}),
+		    // Sorting and pagination will be routed to the server via generateRequest
+		    dynamicData : true,
+		    width:"100%", 
+		    height:"378px",
+		    draggableColumns:true,
+		    sortedBy : {key:"id", dir:YAHOO.widget.DataTable.CLASS_DESC},
+		    initialRequest: "sort=id&dir=desc&startIndex=0&results=10"
+		};
+
+		var myDataTable = new YAHOO.widget.ScrollingDataTable("results", myColumnDefs, myDataSource, myConfigs);
+		myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow); 
+		myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);
+
+		myDataTable.subscribe("cellClickEvent", dataTableClick );
+
+		myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) { 
+			 oPayload.totalRecords = oResponse.meta.totalRecords; 
+			 return oPayload; 
+		}
+
+		//Columnt toggling
+		function columnToggle(column){
+			columnObj=column.currentTarget;
+			if (!columnObj.checked)
+				myDataTable.hideColumn(columnObj.value);
+			else
+				myDataTable.showColumn(columnObj.value);
+		}
+		YAHOO.util.Event.addListener("serverToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("errorSnippetToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("jiraIssueToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("dateToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("browserToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("loginToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("fullNameToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("sessionToggle", "click", columnToggle, null, true);
+		//initial values
+		document.getElementById("serverToggle").checked=true;
+		document.getElementById("errorSnippetToggle").checked=false;
+		document.getElementById("jiraIssueToggle").checked=false;
+		document.getElementById("dateToggle").checked=true;
+		document.getElementById("browserToggle").checked=true;
+		document.getElementById("loginToggle").checked=true;
+		document.getElementById("fullNameToggle").checked=true;
+		document.getElementById("sessionToggle").checked=false;
+		myDataTable.hideColumn("errsnippet");
+		myDataTable.hideColumn("session");
+		myDataTable.hideColumn("jiranumber");
+
+
+		//function for filter changes
+		function filterChange(){
+			var oState = myDataTable.getState(),
+				request,
+				oCallback;
+
+			oCallback = {
+							success : myDataTable.onDataReturnSetRows,
+							failure : myDataTable.onDataReturnSetRows,
+							argument : oState,
+							scope : myDataTable
+						};
+			// Generate a query string
+			request = myDataTable.get("generateRequest")(oState, myDataTable);
+			// Fire off a request for new data.
+			myDataSource.sendRequest(request, oCallback);
+		}
+
+		YAHOO.util.Event.addListener("startDateSelect", "change", filterChange, null, true);
+		
+		return {
+			oDS: myDataSource,
+			oDT: myDataTable
+		};
+	});
+
+	function toggle(field){
+		oDT.hideColumn(field.value);
+	}
+
+</script>
+
+<script type="text/javascript">
+	
+
+</script>
+</html>

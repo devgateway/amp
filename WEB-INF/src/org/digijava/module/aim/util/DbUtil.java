@@ -2572,7 +2572,7 @@ public class DbUtil {
         return col;
     }
 
-    public static ArrayList<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
+    public static ArrayList<AmpOrganisation> getAmpOrganisations() {
        Session session = null;
         Query q = null;
         ArrayList<AmpOrganisation> organizations =new ArrayList<AmpOrganisation>();
@@ -2580,10 +2580,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
-            if(!includeWeirdOrgs){
-               queryString +=  " where org.name not like '%x_%' and org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL','Private') ";
-            }     
+            queryString = " select org from " + AmpOrganisation.class.getName() +" org ";  
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
             if(q.list()!=null &&q.list().size()>0){
@@ -4202,7 +4199,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
             queryString = "select distinct f.ampDonorOrgId from "
-                + AmpFunding.class.getName() + " f";
+                + AmpFunding.class.getName() + " f  order by f.ampDonorOrgId.name";
             q = session.createQuery(queryString);
             logger.debug("No of Donors : " + q.list().size());
             donors = q.list();

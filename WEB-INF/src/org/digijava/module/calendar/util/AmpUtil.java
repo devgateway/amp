@@ -141,7 +141,7 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
         try {
 //            Collection allDonors = org.digijava.module.aim.util.DbUtil.
 //                getDonors();
-            Collection allDonors = DbUtil.getAmpOrganisations(true);
+            Collection allDonors = DbUtil.getAmpOrganisations();
             result = getSelectedDonors(allDonors, donorIds);
         } catch(Exception ex) {
 

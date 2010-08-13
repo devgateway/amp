@@ -32,7 +32,7 @@ public class SectorsByDonorTeaser extends TilesAction {
 		tForm.setSelectedFromYear(new Integer(year-1).toString());
 		tForm.setSelectedToYear(year.toString());
 		tForm.setSelectedDonor(new Long(-1));
-		Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
+		Collection<AmpOrganisation> donors = DbUtil.getDonors();
 		tForm.setDonors(donors);
 		//fill from years' drop-down
 		tForm.setYearsFrom(ChartWidgetUtil.getYears(true));

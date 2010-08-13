@@ -103,7 +103,7 @@ public class OrganisationManager
       }
       else {
         // get all organisations since keyword field is blank and org type field has 'ALL'.
-        col = DbUtil.getAmpOrganisations(true);
+        col = DbUtil.getAmpOrganisations();
       }
       //aq unda chavamato sortBy !!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(request.getParameter("sortBy")!=null) {

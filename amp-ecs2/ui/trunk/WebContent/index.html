@@ -107,6 +107,7 @@
 				<input type="checkbox" id="loginToggle" value="login" checked="checked"/>Login<br/>
 				<input type="checkbox" id="fullNameToggle" value="fullname" checked="checked"/>Full Name<br/>
 				<input type="checkbox" id="sessionToggle" value="session" checked="checked"/>Session<br/>
+				<input type="checkbox" id="countToggle" value="count" checked="checked"/>Count<br/>
 			</td></tr>
 		</table>
 	</div>
@@ -120,7 +121,7 @@
 		<table align="right">
 			<tr valign="middle">
 				<td>
-					[ECS-UI v0.2]
+					[ECS-UI v0.3]
 				</td>
 			</tr>
 		</table>
@@ -155,8 +156,16 @@
 	    <div id="popupFt" class="ft">
 	    	<table cellpadding="0px" cellspacing="0px">
 	    		<tr>
-	    			<td align="left" width="245px"><span id="popupDate">...</span><input id="popupId" type="hidden"/></td>
-	    			<td align="right" width="205px">
+	    			<td align="left" valign="middle" width="235px">
+	    				Edit Error Group enable<input type="checkbox" id="groupEnToggle" value="groupEnToggle" />
+	    			</td>
+	    			<td align="right" width="215px">
+	    				Group:<input id="popupGroupEdt" type="text" style="width: 100px" disabled="disabled"/><input id="popupGroupBtn" type="button" disabled="disabled" value="Update" style="width: 60px"/>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td align="left" ><span id="popupDate">...</span><input id="popupId" type="hidden"/></td>
+	    			<td align="right">
 	    				JIRA:<input id="popupIssue" type="text" style="width: 100px"/><input id="popupButton" type="button" value="Update" style="width: 60px"/>
 	    			</td>
 	    		</tr>
@@ -173,10 +182,10 @@
 		//progressBar.set("direction","btt"); 
 		progressBar.set("height","5px"); 
 		progressBar.set("width","730px");
-		progressBar.set("anim", "true"); 
-		var anim = progressBar.get('anim'); 
-		anim.duration = .99; 
-		anim.method = YAHOO.util.Easing.easeNone;
+		//progressBar.set("anim", "true"); 
+		//var anim = progressBar.get('anim'); 
+		//anim.duration = .99; 
+		//anim.method = YAHOO.util.Easing.easeNone;
 		progressBar.render("pbContainer"); 
 		progressBar.set('value',0);
 
@@ -331,7 +340,7 @@
 				}
 			, null, true); 
 
-		popup = new YAHOO.widget.Panel("popup", { width:"450px", height: "310px", visible:false, constraintoviewport:true, draggable:true } );
+		popup = new YAHOO.widget.Panel("popup", { width:"450px", height: "400px", visible:false, constraintoviewport:true, draggable:true } );
 		popup.render();
 
 
@@ -376,6 +385,11 @@
 			document.getElementById("popupSession").innerHTML = data.session;
 			document.getElementById("popupError").innerHTML = data.stacktrace;
 			document.getElementById("popupDate").innerHTML = data.date;
+			document.getElementById("popupGroupEdt").value = data.id;
+
+			document.getElementById("groupEnToggle").checked=true;
+			document.getElementById("groupEnToggle").click();
+			
 			popup.moveTo(oArgs.event.clientX,oArgs.event.clientY);
 			popup.show();
 		}
@@ -398,7 +412,8 @@
 		             {key:"session"},
 		             {key:"jiranumber"},
 		             {key:"stacktrace"},
-		             {key:"errsnippet"}
+		             {key:"errsnippet"},
+		             {key:"count"}
 		 		    ],
 			metaFields: {
 				totalRecords: "totalRecords"
@@ -411,7 +426,7 @@
 		 
 		// Enable sorting for every Column
 		var myColumnDefs = [
-			{key:"id", label:"OID", sortable:true, resizeable: true},
+			{key:"id", label:"EID", sortable:true, resizeable: true},
 		    {key:"servername", label:"Server", sortable:true, resizeable: true},
 		    {key:"login", label:"Login", sortable:true, resizeable: true},
 		    {key:"fullname", label:"Full Name", sortable:true, resizeable: true},
@@ -419,7 +434,8 @@
 		    {key:"errsnippet", label:"Error", sortable:false, resizeable: true},
 		    {key:"browser", label:"Browser", sortable:false, resizeable: true},
 		    {key:"jiranumber", label:"JIRA No.", sortable:true, resizeable: true},
-		    {key:"session", label:"Session ID", sortable:true, resizeable: true}
+		    {key:"session", label:"Session ID", sortable:true, resizeable: true},
+		    {key:"count", label:"Count", sortable:false, resizeable: true}
 		];
 
 		var myConfigs = {
@@ -498,20 +514,59 @@
 		YAHOO.util.Event.addListener("loginToggle", "click", columnToggle, null, true);
 		YAHOO.util.Event.addListener("fullNameToggle", "click", columnToggle, null, true);
 		YAHOO.util.Event.addListener("sessionToggle", "click", columnToggle, null, true);
+		YAHOO.util.Event.addListener("countToggle", "click", columnToggle, null, true);
 		//initial values
 		document.getElementById("serverToggle").checked=true;
 		document.getElementById("errorSnippetToggle").checked=false;
-		document.getElementById("jiraIssueToggle").checked=false;
+		document.getElementById("jiraIssueToggle").checked=true;
 		document.getElementById("dateToggle").checked=true;
-		document.getElementById("browserToggle").checked=true;
+		document.getElementById("browserToggle").checked=false;
 		document.getElementById("loginToggle").checked=true;
 		document.getElementById("fullNameToggle").checked=true;
 		document.getElementById("sessionToggle").checked=false;
+		document.getElementById("countToggle").checked=false;
 		myDataTable.hideColumn("errsnippet");
+		myDataTable.hideColumn("browser");
 		myDataTable.hideColumn("session");
-		myDataTable.hideColumn("jiranumber");
+		//myDataTable.hideColumn("jiranumber");
 
+		
+		//Popup Group toggling
+		function popupGroupToggle(column){
+			columnObj=column.currentTarget;
+			if (!columnObj.checked){
+				document.getElementById("popupGroupBtn").disabled="disabled";
+				document.getElementById("popupGroupEdt").disabled="disabled";
+			}
+			else{
+				document.getElementById("popupGroupBtn").disabled="";
+				document.getElementById("popupGroupEdt").disabled="";
+			}
+		}
+		//for the popup
+		YAHOO.util.Event.addListener("groupEnToggle", "click", popupGroupToggle, null, true);
+		document.getElementById("groupEnToggle").checked=false;
+		YAHOO.util.Event.addListener("popupGroupBtn", "click", 
+				function(){
+					var handleSuccess = function(o){
+							filterChange();
+					};
+					var handleFailure = function(o){
+						alert("Couldn't update Error Group!");
+					};
+		
+					var callback =
+					{
+					  success:handleSuccess,
+					  failure: handleFailure
+					};
+					var sUrl = "updateErrGroup.php?id="+document.getElementById("popupId").value+"&value="+document.getElementById("popupGroupEdt").value;
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback); 
+				}
+			, myDataTable, true);
+		
 
+		
 		//function for filter changes
 		function filterChange(){
 			var oState = myDataTable.getState(),

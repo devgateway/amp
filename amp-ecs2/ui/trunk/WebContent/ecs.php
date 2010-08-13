@@ -84,38 +84,81 @@
 				
 		if ($id == -1){
 			syslog(LOG_ERR, "Inserting new error");
-			$query = "INSERT INTO errors(md5, stackTrace) VALUES (md5('".$stackTrace."') , '".$stackTrace."')";
+			$query = "SELECT nextval('errorGroup_id_seq');";
 			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
-						
+			// get the number of rows in the resultset
+			$frow = pg_fetch_row($result);
+			if ($frow != false)
+				$groupId = $frow[0];
+			
+			$query = "INSERT INTO errorGroup(id) VALUES (".$groupId.")";
+			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+			
+			$query = "INSERT INTO errors(md5, stackTrace, errorGroup) VALUES (md5('".$stackTrace."') , '".$stackTrace."', ".$groupId.")";
+			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+			
 			$query = "SELECT id FROM errors WHERE md5 LIKE md5('".$stackTrace."')";
 			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
 			// get the number of rows in the resultset
 			$frow = pg_fetch_row($result);
 			if ($frow != false)
 				$id = $frow[0];
+				
+			$query = "UPDATE errorGroup SET mainError=".$id." WHERE id=".$groupId;
+			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+				
 		}
 		if ($id == -1)
 			syslog(LOG_ERR, "Could not insert error!");
 		return $id;
 	}	
-	function getLastOccurrence($conn, $errorId){
-
-		$query = "SELECT lastOccurrence FROM errors WHERE id=".$errorId;
+	
+	function getLastOccurrenceDate($conn, $errorId, $serverId){
+		$query = "SELECT lastOccurrence FROM lastOccurrences WHERE errorGroup=(select errorGroup from errors where id=".$errorId.") and server=".$serverId.";";
+		//$query = "SELECT lastOccurrence FROM errors WHERE id=".$errorId;
 		$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
 		// get the number of rows in the resultset
 		$frow = pg_fetch_row($result);
 		$id = -1;
-		if ($frow != false)
+		$result = -1;
+		if ($frow != false){
 			$id = $frow[0];
-		
-		return $id;
+			if ($id != null){
+				$query = "SELECT sceneId FROM occurrences WHERE id=".$id;
+
+				$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+				// get the number of rows in the resultset
+				$frow = pg_fetch_row($result);
+				$id = -1;
+				if ($frow != false){
+					$id = $frow[0];
+					$query = "SELECT date FROM scenes WHERE id=".$id;
+					$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+					// get the number of rows in the resultset
+					$frow = pg_fetch_row($result);
+					$id = -1;
+					if ($frow != false){
+						$result = $frow[0];
+					}
+				}
+			}
+		}
+			
+		return $result;
 	}
 	
-	function updateLastOccurrence($conn, $errorId, $date){
-
-		$query = "UPDATE errors SET lastOccurrence='".$date."' WHERE id=".$errorId;
+	function updateLastOccurrence($conn, $errorId, $id){
+		$query = "SELECT lastOccurrence FROM lastOccurrences WHERE errorGroup=(select errorGroup from errors where id=".$errorId.") and server=(select serverId from occurrences where id=".$id.");";
 		$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
-
+		$frow = pg_fetch_row($result);
+		if ($frow == false){
+			$query = "insert into lastOccurrences values ((select errorGroup from errors where id=".$errorId."), (select serverId from occurrences where id=".$id."), ".$id.");";
+			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));	
+		}
+		else{
+			$query = "update lastOccurrences SET lastOccurrence=".$id." where errorGroup=(select errorGroup from errors where id=".$errorId.") and server=(select serverId from occurrences where id=".$id.");";
+			$result = pg_query($conn, $query) or syslog(LOG_ERR, "Error in query: $query. ". pg_last_error($conn));
+		}
 	}	
 	
 	function addScene($conn, $date, $browser, $sessionId){
@@ -215,29 +258,31 @@
 				$errorScene = $scenesList[$j];
 				
 				$sceneId = addScene($conn, $errorScene['date'], $errorScene['browser'], $errorScene['sessionId']);
-				addOccurrence($conn, $serverId, $errorId, $userId, $sceneId);
+				$noid = addOccurrence($conn, $serverId, $errorId, $userId, $sceneId);
 				
-				if ($maxDate == null)
+				if ($maxDate == null){
 					$maxDate = $errorScene['date'];
+					$maxNoid = $noid;
+				}
 				else{
-					if (strtotime($maxDate) < strtotime($errorScene['date']))
+					if (strtotime($maxDate) < strtotime($errorScene['date'])){
 						$maxDate = $errorScene['date'];
+						$maxNoid = $noid;
+					}
 				}
 			}
 		}
 		syslog(LOG_ERR, " >> updating last occurences");
-		$lastOccurrence = getLastOccurrence($conn, $errorId);
+		$lastOccurrence = getLastOccurrenceDate($conn, $errorId, $serverId);
 		if ($maxDate != null){
 			if ($lastOccurrence == -1 || strtotime($lastOccurrence) < strtotime($maxDate))
-				updateLastOccurrence($conn, $errorId, $maxDate);
+				updateLastOccurrence($conn, $errorId, $maxNoid);
 		}
 		syslog(LOG_ERR, " >>> done with errors");
 	}
 		
 	$handle = fopen('php://input','r');
 	$jsonInput = fgets($handle);
-	$jsonInput = str_replace(array("\n","\r"),"",$jsonInput);
-	$jsonInput = preg_replace('/([{,])(\s*)([^"]+?)\s*:/','$1"$3":',$jsonInput);
 	$jsonInput = utf8_encode($jsonInput); 
 	$decoded = json_decode($jsonInput,true);
 	

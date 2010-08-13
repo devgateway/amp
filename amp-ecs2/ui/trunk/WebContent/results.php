@@ -24,9 +24,25 @@
 	if ($pagResults == null)
 		$pagResults = 10;
 	
-	$mainquery = "select o.id, s.name, e.md5, u.login, u.fullname, u.password, x.date, x.browser, x.sessionid, e.jiranumber, e.stacktrace from occurrences o, servers s, errors e, users u, scenes x where o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
-	$countquery = "select count(*) from occurrences o, servers s, errors e, users u, scenes x where o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	//$mainquery = "select o.id, s.name, e.md5, u.login, u.fullname, u.password, x.date, x.browser, x.sessionid, e.jiranumber, e.stacktrace from occurrences o, servers s, errors e, users u, scenes x where o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	//$countquery = "select count(*) from occurrences o, servers s, errors e, users u, scenes x where o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	
+	//$mainquery = "select g.id, s.name, e.md5, u.login, u.fullname, u.password, x.date, x.browser, x.sessionid, e.jiranumber, e.stacktrace, getCount(g.id) as count from errorGroup g, occurrences o, servers s, errors e, users u, scenes x where g.mainError=e.id and e.lastOccurrence=o.id and o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	//$countquery = "select count(*) from errorGroup g, occurrences o, servers s, errors e, users u, scenes x where g.mainError=e.id and e.lastOccurrence=o.id and o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	//select g.id as id, s.id as sid, count(e.md5) as count from errorGroup g, occurrences o, servers s, errors e, users u, scenes x where g.mainError=e.id and e.id=o.errorid and o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id group by g.id, s.id
 
+	$mainquery1 = "select my.id, s.name, e.md5, u.login, u.fullname, u.password, x.date, x.browser, x.sessionid, e.jiranumber, e.stacktrace, my.count from 
+	(select mm.id, mm.sid, count(mm.eid) as count from (select g.id as id, s.id as sid, e.id as eid from errorGroup g, occurrences o, servers s, errors e, users u, scenes x 
+	where e.errorGroup=g.id and e.id=o.errorid and o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	
+	
+	$mainquery2 =") mm group by mm.id, mm.sid) as my, servers s, lastOccurrences lo, occurrences o, errors e, users u, scenes x where s.id = my.sid and lo.errorGroup=my.id and lo.server=my.sid and lo.lastOccurrence=o.id and o.errorId=e.id and o.userId=u.id and o.sceneId=x.id ";
+	
+	$countquery1 = "select count (*) from (select mm.id, mm.sid, count(mm.eid) as count from (select g.id as id, s.id as sid, e.id as eid from errorGroup g, occurrences o, servers s, errors e, users u, scenes x 
+	where e.errorGroup=g.id and e.id=o.errorid and o.serverid=s.id and o.errorid=e.id and o.userid=u.id and o.sceneid=x.id";
+	$countquery2 = ") mm group by mm.id, mm.sid) as my;";
+	
+	
 	$query = "";
 	
 	$filter = $_GET['fLogin']; 
@@ -54,8 +70,7 @@
 		$query = $query." and x.date <= '".$filter."'";
 	}
 	
-	$countquery = $countquery.$query;
-	$query = $mainquery.$query;
+	$countquery = $countquery1.$query.$countquery2;
 
 	// generate and execute a query
 	$result = pg_query($connection, $countquery) or die("Error in query: $countquery.
@@ -87,9 +102,13 @@
 	if ($sortField == "session"){
 		$tableSort="x.sessionid";
 	}
+
+	
+	$query = $mainquery1.$query.$mainquery2." order by ".$tableSort." ".$sortDir." OFFSET ".$pagStart." LIMIT ".$pagResults." ";
+	//$query = $query." order by ".$tableSort." ".$sortDir." OFFSET ".$pagStart." LIMIT ".$pagResults." ";
 	
 	
-	$query = $query." order by ".$tableSort." ".$sortDir." OFFSET ".$pagStart." LIMIT ".$pagResults." ";
+	
 	
 	$result = pg_query($connection, $query) or die("Error in query: $query.
 	" . pg_last_error($connection));
@@ -126,7 +145,8 @@
 	    	echo "\"session\":".json_encode($row[8]).",";
 	    	echo "\"jiranumber\":".json_encode($row[9]).",";
 	    	echo "\"stacktrace\":".json_encode(str_replace("\"", "'",$row[10])).",";
-	    	echo "\"errsnippet\":".json_encode(str_replace("\"", "'", substr($row[10], 0, 100))."...");
+	    	echo "\"errsnippet\":".json_encode(str_replace("\"", "'", substr($row[10], 0, 100))."...").",";
+	    	echo "\"count\":".json_encode($row[11]);
 	    	echo "}";
 			if ($i < $rows - 1){
 				echo ",";

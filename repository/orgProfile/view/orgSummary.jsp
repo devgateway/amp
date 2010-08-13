@@ -356,7 +356,9 @@
         <table cellSpacing=0 cellPadding=5 width="100%" border=0  align="left">
             <tr><td style="padding-left: 20px"><digi:trn>Background of donor</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgBackgroundId" property="orgBackground"  cols="40" rows="3"/></td></tr>
             <tr><td style="padding-left: 20px"> <digi:trn>Description</digi:trn>:</td><td><html:textarea name="orgSummaryForm" styleId="orgDescriptionId" property="orgDescription" cols="40" rows="3"/></td></tr>
-            <tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
+            <c:if test="${(!sessionScope.orgProfileFilter.fromPublicView)}">
+            	<tr><td colspan="2" align="center"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="saveAdditionalInfo()"/></td></tr>
+            </c:if>
         </table>
     </div>
 </digi:form>

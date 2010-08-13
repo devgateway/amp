@@ -316,12 +316,14 @@
     <div id="filter" style="visibility:hidden;display:none;width:700px;height:600px;">
         <div style="width:450px;float:left">
             <table cellpadding="5" cellspacing="0">
+            	<logic:equal value="false" name="orgProfOrgProfileFilterForm" property="fromPublicView">
                 <tr>
                     <td align="left" colspan="2">
                         <html:checkbox  property="workspaceOnly"><b><digi:trn>SHOW ONLY ORGANIZATION PROFILE DATA FROM THIS WORKSPACE</digi:trn></b></html:checkbox><br/>
                         <font style="color:red;font-weight:bold"><digi:trn>Note: If left unchecked it will show data for all of the current workspaces in AMP</digi:trn></font>
                     </td>
                 </tr>
+                </logic:equal>
                 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
                     <tr>
                         <td align="left" colspan="2">

@@ -51,6 +51,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
@@ -90,7 +91,7 @@ public class OrgProfileUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-    public static Long getValue(String indCode, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, Collection<Long> locationIds) throws DgException {
+    public static Long getValue(String indCode, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, Collection<Long> locationIds, boolean showOnlyApprovedActivities) throws DgException {
         Long total = 0l;
         try {
             // questions that must be answered with 'yes' in the survey, nominator column
@@ -117,7 +118,7 @@ public class OrgProfileUtil {
 
                         } else {
                             if (indCode.equals("6")) {
-                                total = getPIUValue(orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
+                                total = getPIUValue(orgIds, orgGroupId, startDate, endDate, teamMember, locationIds, showOnlyApprovedActivities);
                                 return total;
                             } else {
                                 if (indCode.equals("7")) {
@@ -136,12 +137,12 @@ public class OrgProfileUtil {
                                         } else {
                                             if (indCode.equals("5aii")) {
                                                 nominator = new int[]{1, 5, 6, 7};
-                                                total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
+                                                total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds, showOnlyApprovedActivities);
                                                 return total;
                                             } else {
                                                 if (indCode.equals("5bii")) {
                                                     nominator = new int[]{8, 1};
-                                                    total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds);
+                                                    total = getDonorsCount(nominator, orgIds, orgGroupId, startDate, endDate, teamMember, locationIds, showOnlyApprovedActivities);
                                                     return total;
                                                 } else {
                                                     if (indCode.equals("10b") || indCode.equals("8")) {
@@ -167,15 +168,15 @@ public class OrgProfileUtil {
             if (nominatorCondition.length() > 0) {
                 if (indCode.equals("7")) {
                     // in that case we are calculating  planned disb.
-                    nominatorValue = getValue(indCode, Constants.PLANNED, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition, locationIds);
+                    nominatorValue = getValue(indCode, Constants.PLANNED, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition, locationIds, showOnlyApprovedActivities);
                 } else {
                     //calculating  actual disb.
-                    nominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition, locationIds);
+                    nominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, nominatorCondition, locationIds, showOnlyApprovedActivities);
                 }
             }
             if (denominatorCondition.length() > 0) {
                 //calculating denominator value
-                denominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, denominatorCondition, locationIds);
+                denominatorValue = getValue(indCode, adjustmentType, currCode, orgIds, orgGroupId, startDate, endDate, teamMember, denominatorCondition, locationIds, showOnlyApprovedActivities);
             }
             if (denominatorValue != null && denominatorValue != 0 && nominatorValue != null) {
                 total = Math.round(nominatorValue / denominatorValue * 100);
@@ -201,7 +202,7 @@ public class OrgProfileUtil {
      * @param year
      * @return
      */
-    public static Long getDonorsCount(int questionNumber[], Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds) {
+    public static Long getDonorsCount(int questionNumber[], Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds, boolean showOnlyApprovedActivities) {
         long size = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -230,6 +231,11 @@ public class OrgProfileUtil {
                 } else {
                     queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ")";
                 }
+                
+                if (showOnlyApprovedActivities) {
+					queryString += ActivityUtil.getApprovedActivityQueryString("act");
+				}
+                
                 queryString += ChartWidgetUtil.getTeamQuery(member);
                 qry = session.createQuery(queryString);
                 qry.setDate("startDate", startDate);
@@ -265,7 +271,7 @@ public class OrgProfileUtil {
      * @param year
      * @return
      */
-    public static long getPIUValue(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds) {
+    public static long getPIUValue(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember member, Collection<Long> locationIds, boolean showOnlyApprovedActivities) {
         long size = 0;
         boolean locationCondition = locationIds != null && !locationIds.isEmpty();
         try {
@@ -295,6 +301,11 @@ public class OrgProfileUtil {
             } else {
                 queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ")";
             }
+            
+            if (showOnlyApprovedActivities) {
+				queryString += ActivityUtil.getApprovedActivityQueryString("act");
+			}
+            
             Query qry = session.createQuery(queryString);
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
@@ -459,6 +470,9 @@ public class OrgProfileUtil {
 
             }
 
+            if (filter.getShowOnlyApprovedActivities()) {
+				queryString += ActivityUtil.getApprovedActivityQueryString("act");
+			}
 
             if (orgIds == null) {
                 if (orgGroupId != -1) {
@@ -733,7 +747,7 @@ public class OrgProfileUtil {
      * @return
      * @throws org.digijava.kernel.exception.DgException
      */
-    public static Double getValue(String indCode, int adjustmentType, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, String condition, Collection<Long> locationIds) throws DgException {
+    public static Double getValue(String indCode, int adjustmentType, String currCode, Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, TeamMember teamMember, String condition, Collection<Long> locationIds, boolean showOnlyApprovedActivities) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
         String queryString = "";
         Double total = new Double(0);
@@ -762,6 +776,10 @@ public class OrgProfileUtil {
             queryString += " and ah.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(orgIds) + ") ";
         }
 
+        if (showOnlyApprovedActivities) {
+			queryString += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         // specified survyes
         queryString += " and ah.ampAHSurveyId in (" + condition + ")";
         if (locationCondition) {

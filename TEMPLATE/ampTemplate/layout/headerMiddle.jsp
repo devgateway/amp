@@ -121,6 +121,33 @@ cursor:pointer;
             		</div>
             	</div>
            	</li>
+           	
+           	<module:display name="Org Profile" >
+	           	<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
+	                <li class="yuiampmenuitem" style="float:left;">
+	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
+	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
+	                    </span>
+	                    <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                    </a>
+	                    <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
+	                    	<div class="bd">                    
+	                    		<ul>
+	                        		<module:display name="Org Profile" >
+	                                	<li class="yuiampmenuitem">
+	                                    	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
+	                                        	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
+	                                        </a> 
+                                        </li>    
+									</module:display>
+								</ul>
+						</div>
+						</div>                    
+					</li>
+	           	</feature:display>
+           	</module:display>
+           	
            	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">

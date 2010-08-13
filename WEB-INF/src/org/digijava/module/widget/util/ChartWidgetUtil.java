@@ -42,6 +42,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -748,12 +749,12 @@ public class ChartWidgetUtil {
      * @throws DgException
      * @throws WorkerException
      */
-    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
+    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, boolean showOnlyApprovedActivities) throws DgException, WorkerException {
         JFreeChart result = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, showOnlyApprovedActivities);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
@@ -936,7 +937,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException {
+    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, boolean showOnlyApprovedActivities) throws DgException {
         DefaultPieDataset ds = new DefaultPieDataset();
         Date fromDate = null;
         Date toDate = null;
@@ -954,7 +955,7 @@ public class ChartWidgetUtil {
             toDate = new Date(getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
         }
         Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value// to hold whole funding value
-        Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper);
+        Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper, showOnlyApprovedActivities);
         if (fundings != null) {
             Double otherFunding = new Double(0);
             List<Long> otherIds = new ArrayList<Long>();
@@ -1006,7 +1007,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding) throws DgException {
+    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, boolean showOnlyApprovedActivities) throws DgException {
         Collection<DonorSectorFundingHelper> fundings = null;
         String oql = "select actSec.sectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
@@ -1024,6 +1025,11 @@ public class ChartWidgetUtil {
         if (fromDate != null && toDate != null) {
             oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         }
+        
+        if (showOnlyApprovedActivities) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         oql += " and config.name='Primary' and act.team is not null ";
         oql += " group by actSec.sectorId ";
 
@@ -1071,7 +1077,7 @@ public class ChartWidgetUtil {
         return fundings;
     }
 
-    public static Double getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[]) throws DgException {
+    public static Double getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[], boolean showOnlyApprovedActivities) throws DgException {
         Double amount = 0d;
         Long[] sectIds = null;
         if (sectorIds != null) {
@@ -1088,7 +1094,7 @@ public class ChartWidgetUtil {
             }
         }
 
-        List result = getFunding(donorIDs, fromDate, toDate, sectIds);
+        List result = getFunding(donorIDs, fromDate, toDate, sectIds, showOnlyApprovedActivities);
         //Process grouped data
         if (result != null) {
             amount = ((Double) result.get(0));
@@ -1101,7 +1107,7 @@ public class ChartWidgetUtil {
 
     }
 
-    public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
+    public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, boolean showOnlyApprovedActivities) throws DgException {
         String oql = "select   sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -1117,6 +1123,11 @@ public class ChartWidgetUtil {
             oql += " and actSec.sectorId in (" + getInStatment(sectorIds) + ") ";
         }
         oql += " and config.name='Primary' and act.team is not null ";
+        
+        if (showOnlyApprovedActivities) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         Session session = PersistenceManager.getRequestDBSession();
         //search for grouped data
         @SuppressWarnings(value = "unchecked")
@@ -1170,6 +1181,11 @@ public class ChartWidgetUtil {
                 }
                 oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and  loc.id=  " + location.getId();
                 oql += getTeamQuery(teamMember);
+                
+                if (filter.getShowOnlyApprovedActivities()) {
+                	oql += ActivityUtil.getApprovedActivityQueryString("act");
+                }
+                
                 Session session = PersistenceManager.getRequestDBSession();
                 Query query = session.createQuery(oql);
                 query.setDate("startDate", startDate);
@@ -1230,6 +1246,11 @@ public class ChartWidgetUtil {
             if (regionId != null && regionId != -1) {
                 oql += " and loc.id in (:locations) ";
             }
+            
+            if (filter.getShowOnlyApprovedActivities()) {
+				oql += ActivityUtil.getApprovedActivityQueryString("act");
+			}
+            
             oql+=" order by loc.parentCategoryValue";
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
@@ -1430,6 +1451,10 @@ public class ChartWidgetUtil {
         oql += getTeamQuery(tm);
         oql += " and actloc is NULL ";
 
+        if (filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
@@ -1492,6 +1517,11 @@ public class ChartWidgetUtil {
             oql += getOrganizationQuery(false, orgIds);
         }
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.id=:configId ";
+        
+        if (filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         oql += getTeamQuery(tm);
         if (locationCondition) {
             oql += " and loc.id in (:locations) ";
@@ -1705,6 +1735,10 @@ public class ChartWidgetUtil {
             oql += " and loc.id in (:locations) ";
         }
         
+        if (filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
@@ -1827,6 +1861,10 @@ public class ChartWidgetUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
 
+        if (filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
         oql += getTeamQuery(tm);
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -2035,7 +2073,7 @@ public class ChartWidgetUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static DecimalWraper getFunding(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, String currCode, boolean isComm, TeamMember tm, Long regionId, Long[] zoneIds) throws DgException {
+    public static DecimalWraper getFunding(Long[] orgIds, Long orgGroupId, Date startDate, Date endDate, String currCode, boolean isComm, TeamMember tm, Long regionId, Long[] zoneIds, boolean showOnlyApprovedActivities) throws DgException {
         String oql = "";
         boolean regionCondition = regionId != null && regionId != -1;
         boolean zoneCondition = zoneIds != null && (zoneIds.length > 0 || zoneIds[0] == -1);
@@ -2086,6 +2124,9 @@ public class ChartWidgetUtil {
             }
         }
 
+        if (showOnlyApprovedActivities) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -2206,6 +2247,5 @@ public class ChartWidgetUtil {
             years.add(lvb);
         }
         return years;
-    } 
+    }
 }
-

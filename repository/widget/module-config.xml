@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module-config>
 	<name>gis</name>
-	<security login-required="true" default="READ">
+	<security login-required="false" default="READ">
 		<action login-required="true" pattern="/adminTableWidgets" /> 
-		<action login-required="true" pattern="/tableWidgetTeaser" />
+		<action login-required="false" pattern="/tableWidgetTeaser" />
 		<action login-required="true" pattern="/gisService" /> 
         <action login-required="true" pattern="/indSectRegManager" />
 	</security>

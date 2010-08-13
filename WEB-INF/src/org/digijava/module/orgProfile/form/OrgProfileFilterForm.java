@@ -48,6 +48,8 @@ public class OrgProfileFilterForm extends ActionForm {
     private int yearsInRange;
     private Boolean pledgeVisible;
     private Boolean expendituresVisible;
+    private Boolean fromPublicView;
+    private Boolean showOnlyApprovedActivities;
 
     public Boolean getExpendituresVisible() {
         return expendituresVisible;
@@ -225,7 +227,8 @@ public class OrgProfileFilterForm extends ActionForm {
             setSelRegionId(null);
             setSelZoneIds(null);
             setYearsInRange(3);
-           
+            setFromPublicView(false);
+            setShowOnlyApprovedActivities(false);
         }
         if(reset!=null&&reset.equals("true")){
             setExpendituresVisible(FeaturesUtil.isVisibleFeature("Expenditures", ampContext));
@@ -309,5 +312,19 @@ public class OrgProfileFilterForm extends ActionForm {
         this.divideThousandsDecimalPlaces = divideThousandsDecimalPlaces;
     }
 
+	public Boolean getFromPublicView() {
+		return fromPublicView;
+	}
+
+	public void setFromPublicView(Boolean fromPublicView) {
+		this.fromPublicView = fromPublicView;
+	}
+
+	public Boolean getShowOnlyApprovedActivities() {
+		return showOnlyApprovedActivities;
+	}
+
+	public void setShowOnlyApprovedActivities(Boolean showOnlyApprovedActivities) {
+		this.showOnlyApprovedActivities = showOnlyApprovedActivities;
+	}
 }
-	

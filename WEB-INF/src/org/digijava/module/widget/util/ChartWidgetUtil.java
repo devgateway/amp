@@ -749,12 +749,12 @@ public class ChartWidgetUtil {
      * @throws DgException
      * @throws WorkerException
      */
-    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, boolean showOnlyApprovedActivities) throws DgException, WorkerException {
+    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
         JFreeChart result = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, showOnlyApprovedActivities);
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, false);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;

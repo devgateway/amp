@@ -22,8 +22,7 @@ public class ECSJob{
 
 	public static void execute(String serverName, ErrorKeeper ek){
 		ConcurrentHashMap<String, ErrorKeeperItem> errors = ek.getErrors();
-
-		logger.info("Starting to synchronize with ECS Server ...");
+		String report = "ECS Sync report: ";
 		try {
 			Queue<ErrorKeeperItem> queue = new LinkedList<ErrorKeeperItem>();
 			
@@ -48,7 +47,7 @@ public class ECSJob{
 			//logger.info("Sending update on errors ...");
 			try { //try connecting to the server first
 				ecs.sendErrorList(serverName, queue);
-				logger.info("Updates sent to server!");
+				report = report + "Updates sent to server!";
 			} catch (ECSException e) {
 				logger.error("Couldn't send data to server", new ECSIgnoreException(e));
 				
@@ -65,7 +64,6 @@ public class ECSJob{
 			}
 			
 			
-			//logger.info("Get custom parameters ... ");
 			String[] res = ecs.getParameters(serverName, "nothing-to-report");
 			int updateDelay = -1;
 			try {
@@ -79,11 +77,9 @@ public class ECSJob{
 				//logger.info(".... updating report interval from " + ECSRunner.DELAY_TIME/1000 + "s to " + updateDelay/1000 + "s");
 				ECSRunner.DELAY_TIME = updateDelay;
 			}
-			else{
-				//logger.info(".... report interval is: " + ECSRunner.DELAY_TIME/1000 + "s");
-			}
-			
 
+			report = report + "Report interval is: " + ECSRunner.DELAY_TIME/1000 + "s";
+			logger.info(report);
 			//logger.info("Synchronize with ECS Server finished...................................................");
 		} catch (Exception e) {
 			logger.error(new ECSIgnoreException(e));

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.1
+Created-By: R27.6.3-40_o-112056-1.6.0_11-20090318-2103-linux-ia32 (BEA
+  Systems, Inc.)
+Built-By: alexandru
+Implementation-Version: 1.0.9
+Built-Date: 2010-08-18 16:38:49
+

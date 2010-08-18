@@ -4,6 +4,10 @@
 	<property name="classes" value="bin"/>	
 	<property name="lib" value="lib"/>
 
+	<property name="version.num" value="1.0"/>
+	<buildnumber file="build.num"/>
+
+	
 	<property environment="env"/>
 	
 	<path id="classpath">	
@@ -32,12 +36,27 @@
 			<src path="${src}" />
 			<classpath refid="classpath" />
 		</javac>
-		<jar destfile="ecs-core.jar">
+
+		<delete>
+		    <fileset dir="." includes="ecs-core-*.jar"/>
+		</delete>
+
+	
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
+		
+		<manifest file="MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Implementation-Version" value="${version.num}.${build.number}"/>   
+			<attribute name="Built-Date" value="${TODAY}"/>                 
+		</manifest>
+		<jar destfile="ecs-core-${version.num}.${build.number}.jar" manifest="MANIFEST.MF">
 			<fileset dir="${classes}/" />
 		</jar>
 		
-		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/lib/ecs-core.jar" />
-		<copy file="ecs-core.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-2.0/lib/ecs-core.jar" />
+		<copy file="ecs-core-${version.num}.${build.number}.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-1.14/lib/ecs-core.jar" />
+		<copy file="ecs-core-${version.num}.${build.number}.jar" tofile="/home/alexandru/Lucru/jboss-amp-4.2.3-2.0/lib/ecs-core.jar" />
 	</target>
 	
 	<!-- build for all components -->

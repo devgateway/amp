@@ -754,7 +754,7 @@ public class ChartWidgetUtil {
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, false);
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
@@ -937,7 +937,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, boolean showOnlyApprovedActivities) throws DgException {
+    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException {
         DefaultPieDataset ds = new DefaultPieDataset();
         Date fromDate = null;
         Date toDate = null;
@@ -955,7 +955,7 @@ public class ChartWidgetUtil {
             toDate = new Date(getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
         }
         Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value// to hold whole funding value
-        Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper, showOnlyApprovedActivities);
+        Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper);
         if (fundings != null) {
             Double otherFunding = new Double(0);
             List<Long> otherIds = new ArrayList<Long>();
@@ -1007,7 +1007,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, boolean showOnlyApprovedActivities) throws DgException {
+    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding) throws DgException {
         Collection<DonorSectorFundingHelper> fundings = null;
         String oql = "select actSec.sectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
@@ -1025,11 +1025,7 @@ public class ChartWidgetUtil {
         if (fromDate != null && toDate != null) {
             oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         }
-        
-        if (showOnlyApprovedActivities) {
-			oql += ActivityUtil.getApprovedActivityQueryString("act");
-		}
-        
+               
         oql += " and config.name='Primary' and act.team is not null ";
         oql += " group by actSec.sectorId ";
 

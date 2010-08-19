@@ -20,6 +20,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </div>
 </logic:present>
 
+<!--
 <logic:notPresent name="isUserLogged" scope="session">
 <div title='<digi:trn key="aim:aimGoToLogin">Go To Login Page</digi:trn>'>
 <digi:link styleClass="loginWidget" href="/"
@@ -27,3 +28,4 @@ ${fn:replace(message,quote,escapedQuote)}
 	<digi:trn key="aim:Login">Login</digi:trn>
 </digi:link></div>
 </logic:notPresent>
+-->

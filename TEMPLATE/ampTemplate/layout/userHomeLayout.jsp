@@ -105,7 +105,7 @@
 									<!-- digi:insert attribute="dropdownLangSwitch" /-->
                                 </TD>
                                 <TD align="right" valign="middle" nowrap="nowrap">
-<!--                                    <digi:insert attribute="loginWidget" />-->
+                                    <digi:insert attribute="loginWidget" />
                                 </TD>
 							</TR>
 						</TBODY>

@@ -4,6 +4,9 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <style>
   .inp-upastext {
@@ -169,13 +172,17 @@
           </digi:secure>
        </div>
       <digi:secure authenticated="false" >
-        		<c:set var="trn3">
-					<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
-				</c:set>
-				  <digi:link href="/showRegisterUser.do" module="aim" title="${trn3}" style="color:white; margin-top: 3px;">
-				    <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
-				  </digi:link>	
-                 &nbsp;&nbsp;<span style="color: white;">|</span>&nbsp;&nbsp;
+        		<module:display name="Login - User Management" parentModule="PUBLIC VIEW">
+        			<feature:display name="Enable New User Registration" module="Login - User Management">
+		        		<c:set var="trn3">
+							<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
+						</c:set>
+						  <digi:link href="/showRegisterUser.do" module="aim" title="${trn3}" style="color:white; margin-top: 3px;">
+						    <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
+						  </digi:link>	
+		                 &nbsp;&nbsp;<span style="color: white;">|</span>&nbsp;&nbsp;
+		        	</feature:display>    	
+	            </module:display>
         		<c:set var="title">
 					<digi:trn>Click here to change your password</digi:trn>
 				</c:set>

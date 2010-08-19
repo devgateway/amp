@@ -77,6 +77,10 @@
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
+<module:display name="PUBLIC VIEW"></module:display> 
+<module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
+
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
@@ -242,6 +246,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
 </logic:iterate>
+ 
+<feature:display name="Enable New User Registration" module="Login - User Management"></feature:display> 
  
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 

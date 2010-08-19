@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,6 +23,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
@@ -34,6 +37,19 @@ public class ShowUserRegister extends Action {
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
 		try {
+			// Evaluate if the user is not logged.
+			TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute("currentMember");
+			if (currentTeamMember == null) {
+				// Check for permission in the FM to avoid using the URL to call
+				// the action directly.
+				ServletContext context = request.getSession().getServletContext();
+				if (!FeaturesUtil.isVisibleModule("Login - User Management", context)
+						|| !FeaturesUtil.isVisibleFeature("Enable New User Registration", context)) {
+					logger.error("UNAUTHORIZED ATTEMPT TO CREATE NEW USER.");
+					return mapping.findForward(null);
+				}
+			}
+			
 			UserRegisterForm registerForm = (UserRegisterForm) form;
 			String actionFlag = request.getParameter("actionFlag");
 			logger.debug("actionFlag: " + actionFlag);

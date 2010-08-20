@@ -98,10 +98,22 @@
         </div>
         <div  class="tab_organization_profile_unselected" style="display: none">
             <LI>
-                <span style="font-size:9pt">
-                    <a href="javascript:hideLargestProjects()">
-                        <div title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
-                            <digi:trn>Organization Profile</digi:trn>
+                <span>
+               <a href="javascript:hideLargestProjects()">
+                   <div style="font-size:9pt" title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
+                       <digi:trn>Organization Profile</digi:trn>
+                   </div>
+               </a>
+               </span>
+            </LI>
+        </div>
+
+        <div class="tab_organization_profile_selected">
+            <LI>
+                <span>
+                    <a  href="javascript:loadLargestProjects()">
+                        <div style="font-size:9pt;" title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
+                            ${largestPrjTblName}
                         </div>
                     </a>
                 </span>
@@ -111,22 +123,10 @@
         <div  class="tab_organization_profile_unselected" style="display: none">
             <LI>
                 <a name="node">
-                    <div style="font-size:9pt">
+                    <div style="font-size:9pt;font-weight:bold;">
                         ${largestPrjTblName}
                     </div>
                 </a>
-            </LI>
-        </div>
-
-        <div  class="tab_organization_profile_selected">
-            <LI>
-                <span>
-                    <a  href="javascript:loadLargestProjects()">
-                        <div style="font-size:9pt" title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
-                            ${largestPrjTblName}
-                        </div>
-                    </a>
-                </span>
             </LI>
         </div>
     </UL>

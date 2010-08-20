@@ -673,6 +673,7 @@
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>
 				<page>nondhtmlAddDocument</page>
+				<page>tempFieldPreDefinedValues</page>
 			</module>
 			<module name="dataExchange">
 				<page>de_showLog</page>

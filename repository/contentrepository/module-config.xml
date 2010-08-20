@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <module-config>
 	<name>contentrepository</name>
+	<security>
+		<action login-required="true" pattern="/tempDocManager" />
+	</security>
 	<!--	
 		<security>
 		<action login-required="false" pattern="/documentManager" />
@@ -22,6 +25,15 @@
 		</hibernate-class>
 		<hibernate-class>
 			org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.TemplateDoc
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.TemplateField
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.PossibleValue
 		</hibernate-class>
 	</hibernate-classes>
 </module-config>

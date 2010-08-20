@@ -241,6 +241,20 @@
  	 	                          </digi:link>                                                                   
                               </td>
                          </tr>
+                         <!-- 
+                         	<tr>
+	                         <td class="f-names" nowrap="nowrap">
+ 	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+ 	 				              <c:set var="translation">
+ 	                                <digi:trn>Click here to view template document manager</digi:trn>
+ 		                          </c:set>  
+ 	 	                          <digi:link module="contentrepository" href="/tempDocManager.do?actType=viewTemplateDocuments">
+ 	 	                              <digi:trn>Template Documents Manager</digi:trn>
+ 	 	                          </digi:link>                                                                   
+                              </td>
+                         </tr>
+                          -->
+                         
 
 						  <!-- hidden Lucene Debug! -->
 						  <!-- 

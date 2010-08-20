@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -124,8 +125,54 @@ public class NodeWrapper {
 		catch (Exception e) {
 			e.printStackTrace();
 			errorAppeared	= true;
+		}		
+	}
+	
+	/**
+	 * create document from template
+	 */
+	public NodeWrapper(String fileName , InputStream content , String contentType ,int fileSize,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
+			
+		try {
+			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+			Node newNode 	= null;
+			long docType = 0;
+				String encTitle	= URLEncoder.encode("Simple Test", "UTF-8");
+				docType = new Long(0);
+				newNode	= parentNode.addNode( encTitle );
+				newNode.addMixin("mix:versionable");
+			
+			if (isANewVersion){
+				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
+			}
+			else{
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+			}
+			
+			newNode.setProperty(CrConstants.PROPERTY_DATA, content);
+			int uploadedFileSize	=fileSize;
+			newNode.setProperty( CrConstants.PROPERTY_NAME, new String(fileName.getBytes("iso-8859-1"), "UTF8"));
+			newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );		
+			
+			
+			if ( !errorAppeared ) {
+				Calendar yearOfPublicationDate=null;								
+				populateNode(isANewVersion, newNode, encTitle, null, null,contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+			}
+			
+			this.node		= newNode;
+
+		} catch(RepositoryException e) {
+			ActionError error	= new ActionError("error.contentrepository.addFile:badPath");
+			errors.add("title",error);
+			e.printStackTrace();
+			errorAppeared	= true;
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			errorAppeared	= true;
 		}
-		
 	}
 	
 	/**

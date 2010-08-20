@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>	
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
@@ -179,7 +180,11 @@ addLoadEvent(addpanel);
 		} else if (type == "pdf") {
 			document.forms[4].action = "/aim"+"<%=viewParamPDF%>";
 		}
-		showMyPanel(0, 'logoStatement');
+		<feature:display name="Show Options on Export" module="Report and Tab Options">
+			showMyPanel(0, 'logoStatement');
+			return false;
+		</feature:display>
+		document.forms[4].submit();
 	}
 </script>
 <div class="toolbar" align="center">

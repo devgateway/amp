@@ -204,6 +204,7 @@
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Responsible Organization" module="Organizations"></feature:display> 
 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display> 
+<feature:display name="Show Options on Export" module="Report and Tab Options"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Support Request Form" module="HELP"></feature:display> 

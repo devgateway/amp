@@ -57,7 +57,7 @@
 		<div id="filterCustomDiv">
 			Search String:
 			<div id="filterCustom" class="yui-ac">
-				<input id="filterCustomInput" type="text" value="disabled" disabled="disabled">
+				<input id="filterCustomInput" type="text" value="">
 				<div id="filterCustomContainer"></div>
 			</div>
 		</div>
@@ -67,6 +67,13 @@
 				<input id="filterResetInput" type="button" title="Reset filter values" value="Reset">
 			</div>
 		</div>
+		<div id="groupErrorsDiv">
+			&nbsp;&nbsp;
+			<div id="groupErrors" class="yui-ac">
+				<input id="groupErrorsBtn" type="button" title="Group Filtered Errors" value="Group">
+			</div>
+		</div>
+		
 	</div>
 	<div id="console">
 		<table width="100%" height="100%">
@@ -167,6 +174,38 @@
 	    			<td align="left" ><span id="popupDate">...</span><input id="popupId" type="hidden"/></td>
 	    			<td align="right">
 	    				JIRA:<input id="popupIssue" type="text" style="width: 100px"/><input id="popupButton" type="button" value="Update" style="width: 60px"/>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div> 
+	</div>
+	
+	<div id="popupGroup">
+		<div id="popupGroupHd" class="hd">Group All Filtered Errors</div> 
+	    <div id="popupGroupBd" class="bd">
+	    	<table width="100%">
+	    		<tr valign="top">
+	    			<td colspan="2"><font color="red"> <b>WARNING</b>: </font></td>
+	    		</tr>
+	    		<tr>
+	    			<td colspan="2"><font color="red">All errors that were displayed after filtering are about to be added in a group, even the errors that are on the next/previous page(s) !</font></td>
+	    		</tr>
+	    		<tr valign="middle">
+	    			<td align="left" width="80px">
+	    				Group Number:
+	    			</td>
+	    			<td align="left">
+	    				<input id="groupFilterEdt" type="text" style="width: 100px" /><input id="groupFilterBtn" type="button" disabled="disabled" value="Update" style="width: 60px"/>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    	
+	    </div> 
+	    <div id="popupGroupFt" class="ft">
+	    	<table cellpadding="0px" cellspacing="0px" width="100%">
+	    		<tr>
+	    			<td align="left" valign="middle" width="100%">
+				    	<input type="checkbox" id="groupFilterToggle" value="groupFilterToggle" />I've checked the group number
 	    			</td>
 	    		</tr>
 	    	</table>
@@ -340,11 +379,50 @@
 				}
 			, null, true); 
 
+		YAHOO.util.Event.addListener("groupErrorsBtn", "click", 
+				function(oArgs){
+					popupGroup.moveTo(300,200);
+					popupGroup.show();
+				}
+			, null, true); 
+
+		
 		popup = new YAHOO.widget.Panel("popup", { width:"450px", height: "400px", visible:false, constraintoviewport:true, draggable:true } );
 		popup.render();
 
+		popupGroup = new YAHOO.widget.Panel("popupGroup", { width:"350px", height: "150px", visible:false, constraintoviewport:true, draggable:true } );
+		popupGroup.render();
 
+		YAHOO.util.Event.addListener("groupFilterToggle", "click", 
+				function (column){
+					columnObj=column.currentTarget;
+					if (!columnObj.checked){
+						document.getElementById("groupFilterBtn").disabled="disabled";
+					}
+					else{
+						document.getElementById("groupFilterBtn").disabled="";
+					}
+				}, null, true);
+		document.getElementById("groupFilterToggle").checked=false;
+
+		YAHOO.util.Event.addListener("groupFilterBtn", "click", 
+				function(){
+					var handleSuccess = function(o){
+							filterChange();
+					};
+					var handleFailure = function(o){
+						alert("Couldn't update JIRA issue number!");
+					};
 		
+					var callback =
+					{
+					  success:handleSuccess,
+					  failure: handleFailure
+					};
+					var sUrl = "updateJiraNumber.php?id="+document.getElementById("popupId").value+"&value="+document.getElementById("popupIssue").value;
+					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback); 
+				}
+			, null, true);
 
 		YAHOO.util.Event.addListener("popupButton", "click", 
 				function(){

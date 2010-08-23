@@ -102,6 +102,17 @@
     padding-bottom:2em;
 }
 
+#groupErrorsDiv {
+	position: absolute;
+	top: 28px;
+	left: 727px;
+	font-size: 8pt;
+	width:80px;	
+}
+#groupErrors {
+    width:100%; /* set width for widget here */
+    padding-bottom:2em;
+}
 
 #popupHd{
 	font-size: 9pt;
@@ -115,4 +126,14 @@
 #popupError{
 	font: monospace;
 	font-size: 7pt;
+}
+
+#popupGroupHd{
+	font-size: 9pt;
+}
+#popupGroupBd{
+	font-size: 7pt;
+}
+#popupGroupFt{
+	font-size: 8pt;
 }

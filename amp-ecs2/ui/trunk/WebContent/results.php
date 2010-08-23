@@ -70,6 +70,12 @@
 		$query = $query." and x.date <= '".$filter."'";
 	}
 	
+	$filter = $_GET['fCustom']; 
+	if ($filter != null){
+		$query = $query." and e.stackTrace like '".$filter."%'";
+	}
+	
+	
 	$countquery = $countquery1.$query.$countquery2;
 
 	// generate and execute a query

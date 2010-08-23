@@ -21,7 +21,7 @@
 	if ($id == null || trim($id) == ""){
 		return;
 	}
-	$query = "update errors set jiranumber='".$value."' where id=(select o.errorid from occurrences o where o.id=".$id.");";
+	$query = "update errors set jiranumber='".$value."' where errorGroup=".$id.";";
 	$result = pg_query($connection, $query) or die("Error in query: $query.
 	" . pg_last_error($connection));
 	

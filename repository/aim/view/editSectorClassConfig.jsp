@@ -12,8 +12,18 @@
         var flag = confirm("Delete this Scheme?");
         return flag;
     }
-   function saveClicked(){
+
+    function saveClicked(){
+	   var id = document.getElementById("originalSectorId").value;
+	   var newId = document.getElementById("sectorClassId").value;
+	   if(id != newId) {
+			var flag = confirm("<digi:trn jsFriendly='true'>Sectors for activities will have to be changed manually. Proceed anyway?</digi:trn>");
+			if (!flag) {
+				return false;
+			}
+	   }
        document.aimSectorClassConfigForm.event.value = "save";
+       document.getElementById("originalSectorId").value = newId;
        return true;
     }
     </script>
@@ -26,6 +36,7 @@
     <jsp:include page="teamPagesHeader.jsp" flush="true" />
     <!-- End of Logo -->
     <html:hidden name="aimSectorClassConfigForm" property="id"/>
+    <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>
     
     
     <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
@@ -96,7 +107,7 @@
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:SelectSectorClassifications">Select Sector Classifications</digi:trn> :
                                                                         </td>
                                                                         <td>
-                                                                           <html:select property="sectorClassId"  styleClass="inp-text">
+                                                                           <html:select property="sectorClassId"  styleClass="inp-text" styleId="sectorClassId">
 									<html:optionsCollection name="aimSectorClassConfigForm" property="classifications" 
 									value="ampSecSchemeId" label="secSchemeName" />												
 												
@@ -119,7 +130,7 @@
                                                                             &nbsp;
                                                                         </td>
                                                                         <td >&nbsp;&nbsp;
-                                                                        <html:submit  styleClass="dr-menu" property="event" onclick="saveClicked()">
+                                                                        <html:submit  styleClass="dr-menu" property="event" onclick="return saveClicked()">
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:Save">Save</digi:trn>
                                                                         </html:submit>
                                                                         <td>

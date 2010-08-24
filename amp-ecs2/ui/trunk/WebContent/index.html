@@ -405,24 +405,7 @@
 				}, null, true);
 		document.getElementById("groupFilterToggle").checked=false;
 
-		YAHOO.util.Event.addListener("groupFilterBtn", "click", 
-				function(){
-					var handleSuccess = function(o){
-							filterChange();
-					};
-					var handleFailure = function(o){
-						alert("Couldn't update JIRA issue number!");
-					};
-		
-					var callback =
-					{
-					  success:handleSuccess,
-					  failure: handleFailure
-					};
-					var sUrl = "updateJiraNumber.php?id="+document.getElementById("popupId").value+"&value="+document.getElementById("popupIssue").value;
-					YAHOO.util.Connect.asyncRequest('GET', sUrl, callback); 
-				}
-			, null, true);
+		YAHOO.util.Event.addListener("groupFilterBtn", "click", massGroupClick, null, true);
 
 		YAHOO.util.Event.addListener("popupButton", "click", 
 				function(){
@@ -663,6 +646,29 @@
 			myDataSource.sendRequest(request, oCallback);
 		}
 
+		function massGroupClick(){
+			var oState = myDataTable.getState(),
+				request;
+
+			// Generate a query string
+			request = myDataTable.get("generateRequest")(oState, myDataTable);
+			request = "massGroupErrors.php?"+request + "&value="+document.getElementById("groupFilterEdt").value;;
+
+			var handleSuccess = function(o){
+					filterChange();
+			};
+			var handleFailure = function(o){
+				alert("Couldn't update group!");
+			};
+
+			var callback =
+			{
+			  success:handleSuccess,
+			  failure: handleFailure
+			};
+			YAHOO.util.Connect.asyncRequest('GET', request, callback); 
+		}
+		
 		YAHOO.util.Event.addListener("startDateSelect", "change", filterChange, null, true);
 		
 		return {

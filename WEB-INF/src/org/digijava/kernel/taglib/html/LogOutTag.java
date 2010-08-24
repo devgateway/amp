@@ -22,17 +22,17 @@
 
 package org.digijava.kernel.taglib.html;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.util.ResponseUtils;
-import javax.servlet.http.HttpServletRequest;
-import org.digijava.kernel.security.HttpLoginManager;
+import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.Constants;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.HttpLoginManager;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 
 /**
  * <p>Title: </p>
@@ -112,7 +112,7 @@ public class LogOutTag
         results.append(">");
 
         // Print this element to our output writer
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         // Evaluate the body of this tag
         this.text = null;

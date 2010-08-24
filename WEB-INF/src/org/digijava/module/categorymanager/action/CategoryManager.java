@@ -20,8 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -46,12 +46,12 @@ import org.hibernate.Transaction;
 public class CategoryManager extends Action {
 	
 	private static Logger logger	= Logger.getLogger(CategoryManager.class);
-	ActionErrors	errors;
+	ActionMessages	errors;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		errors						= new ActionErrors();
+		errors						= new ActionMessages();
 		CategoryManagerForm myForm	= (CategoryManagerForm) form;
 		HttpSession session 		= request.getSession();
 		
@@ -167,7 +167,7 @@ public class CategoryManager extends Action {
 		/* END- Ordering the values alphabetically if necessary */
 		String errorString		= CategoryManagerUtil.checkImplementationLocationCategory();
 		if ( errorString != null ) {
-			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.implLocProblem", errorString);
+			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.implLocProblem", errorString);
 			errors.add("title", error);
 		}
 		this.saveErrors(request, errors);
@@ -297,7 +297,7 @@ public class CategoryManager extends Action {
 			transaction.commit();
 		} 
 		catch (Exception ex) {
-			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.cannotDeleteCategory");
+			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.cannotDeleteCategory");
 			errors.add("title", error);
 			logger.error("Unable to delete Category: " + ex.getMessage());
 			
@@ -328,7 +328,7 @@ public class CategoryManager extends Action {
 
 		
 	
-	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionErrors errors) throws Exception {
+	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionMessages errors) throws Exception {
 		
 		Session dbSession					= null;	
 		Transaction tx						= null;
@@ -345,7 +345,7 @@ public class CategoryManager extends Action {
 			if ( myForm.getEditedCategoryId() == null && 
 					CategoryManagerUtil.isCategoryKeyInUse( myForm.getKeyName() )  ) 
 			{
-				ActionError duplicateKeyError	= new ActionError("error.aim.categoryManager.duplicateKey");
+				ActionMessage duplicateKeyError	= new ActionMessage("error.aim.categoryManager.duplicateKey");
 				errors.add("title",duplicateKeyError);
 				return false;
 			}
@@ -443,7 +443,7 @@ public class CategoryManager extends Action {
 			if ( dupValue != null ) {
 				if (tx != null)
 					tx.rollback();
-				ActionError error	= new ActionError("error.aim.categoryManager.duplicateValue", dupValue);
+				ActionMessage error	= new ActionMessage("error.aim.categoryManager.duplicateValue", dupValue);
 				errors.add("title",error);
 				retValue			= false;
 			}
@@ -452,7 +452,7 @@ public class CategoryManager extends Action {
 				if (undeletableCategoryValues != null) {
 					if (tx != null)
 						tx.rollback();
-					ActionError error2	= new ActionError("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
+					ActionMessage error2	= new ActionMessage("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
 					errors.add("title",error2);
 					retValue			= false;
 				}
@@ -470,7 +470,7 @@ public class CategoryManager extends Action {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
-			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
+			ActionMessage error1	= new ActionMessage("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)
 					tx.rollback();

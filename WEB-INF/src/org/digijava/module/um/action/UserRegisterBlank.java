@@ -132,9 +132,9 @@ public class UserRegisterBlank
       }
 
       // email already exists
-      /*            ActionErrors errors = new ActionErrors();
-                  errors.add(ActionErrors.GLOBAL_ERROR,
-                             new ActionError("error.registration.emailexits"));
+      /*            ActionMessages errors = new ActionMessages();
+                  errors.add(ActionMessages.GLOBAL_MESSAGE,
+                             new ActionMessage("error.registration.emailexits"));
                   saveErrors(request, errors);
                   return (new ActionForward(mapping.getInput()));*/
       return (mapping.findForward("failure"));

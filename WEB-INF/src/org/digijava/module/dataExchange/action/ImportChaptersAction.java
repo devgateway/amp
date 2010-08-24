@@ -27,8 +27,8 @@ import org.digijava.module.dataExchange.form.ImportChaptersForm;
 
 import com.ibm.wsdl.OutputImpl;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
@@ -50,8 +50,8 @@ public class ImportChaptersAction extends Action {
             }
            catch (Exception ex) {
                logger.error("invalid file", ex);
-               ActionErrors errors = new ActionErrors();
-               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.dataExchange.invalidFile"));
+               ActionMessages errors = new ActionMessages();
+               errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.dataExchange.invalidFile"));
                saveErrors(request, errors);
                icform.setImportPerform(false);
                return mapping.findForward("forward");

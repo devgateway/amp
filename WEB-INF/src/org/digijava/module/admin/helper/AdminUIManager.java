@@ -26,8 +26,8 @@ import java.security.Permission;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DigiSecurityManager;
@@ -38,8 +38,8 @@ import org.digijava.kernel.user.Group;
 
 public class AdminUIManager {
 
-    public static ActionErrors checkGroupPermissions(Site currentSite, Group group, Collection newPermissions) {
-        ActionErrors actionErrors = new ActionErrors();
+    public static ActionMessages checkGroupPermissions(Site currentSite, Group group, Collection newPermissions) {
+        ActionMessages ActionMessages = new ActionMessages();
 
         if (!group.isDefaultGroup() || !currentSite.getId().equals(group.getSite().getId())) {
             return null;
@@ -57,14 +57,14 @@ public class AdminUIManager {
         }
         if (!found) {
             Object[] params = { group.getRequiredActions() };
-            actionErrors.add(null, new ActionError("error.admin.defaultGroupMustHavePermission", params));
+            ActionMessages.add(null, new ActionMessage("error.admin.defaultGroupMustHavePermission", params));
         }
 
-        return actionErrors.isEmpty() ? null : actionErrors;
+        return ActionMessages.isEmpty() ? null : ActionMessages;
     }
 
     public static void setGroupPermissions(Group group, Collection newPermissions) throws DgException {
-        ActionErrors actionErrors = new ActionErrors();
+        ActionMessages ActionMessages = new ActionMessages();
         GroupPrincipal groupPrincipal = new GroupPrincipal(group.getId().
             longValue(), group.getSite().getName(), group.getName());
 

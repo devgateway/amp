@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -372,10 +372,10 @@ public class EditOrganisation extends DispatchAction {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
-      ActionErrors errors = new ActionErrors();
+      ActionMessages errors = new ActionMessages();
       if (DbUtil.isUsed(editForm.getAmpOrgId(), false)) {
 
-          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrg"));
+          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrg"));
           saveErrors(request, errors);
           editForm.setActionFlag("edit");
           return mapping.findForward("forward");
@@ -407,7 +407,7 @@ public class EditOrganisation extends DispatchAction {
           }
       }
       if (flag || flag2) {
-          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrgActError"));
+          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
           saveErrors(request, errors);
           editForm.setActionFlag("edit");
           return mapping.findForward("forward");
@@ -415,7 +415,7 @@ public class EditOrganisation extends DispatchAction {
 
           Collection activitiesCol = DbUtil.getAllOrgActivities(editForm.getAmpOrgId());
           if (activitiesCol.size() > 0) {
-              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrgActError"));
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
 
               saveErrors(request, errors);
               editForm.setActionFlag("edit");
@@ -423,7 +423,7 @@ public class EditOrganisation extends DispatchAction {
           }
           AmpOrganisation org = DbUtil.getOrganisation(editForm.getAmpOrgId());
           if (org.getCalendar() != null && org.getCalendar().size() > 0) {
-              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrgEventError"));
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgEventError"));
               saveErrors(request, errors);
               editForm.setActionFlag("edit");
               return mapping.findForward("forward");
@@ -432,7 +432,7 @@ public class EditOrganisation extends DispatchAction {
 
           List<AmpTeam> releatedTeams = TeamUtil.getTeamByOrg(editForm.getAmpOrgId());
           if (releatedTeams != null && !releatedTeams.isEmpty()){
-              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrgTeamError"));
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgTeamError"));
               saveErrors(request, errors);
               editForm.setActionFlag("edit");
               return mapping.findForward("forward");
@@ -864,14 +864,14 @@ public class EditOrganisation extends DispatchAction {
           }
       }
 
-      ActionErrors errors = new ActionErrors();
+      ActionMessages errors = new ActionMessages();
       if (exist) {
-          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgNameError"));
+          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgNameError"));
       }
 
       Collection orgsCol = DbUtil.getOrgByCode(action, editForm.getOrgCode(),editForm.getAmpOrgId());
       if (!orgsCol.isEmpty()) { // To check for duplicate org-code
-          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgCodeError"));
+          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgCodeError"));
       }
             
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
@@ -879,7 +879,7 @@ public class EditOrganisation extends DispatchAction {
         if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
     		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
     		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-			errors.add("invalidOrgCont",new ActionError("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));
+			errors.add("invalidOrgCont",new ActionMessage("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));
 
 		}
       
@@ -1153,7 +1153,7 @@ public class EditOrganisation extends DispatchAction {
               }
 
           } catch (Exception ex) {
-              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.saveOrgPledgeError"));
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgPledgeError"));
               saveErrors(request, errors);
               return mapping.findForward("forward");
 

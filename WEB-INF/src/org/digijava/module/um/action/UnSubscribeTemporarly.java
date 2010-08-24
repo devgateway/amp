@@ -32,8 +32,8 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.user.User;
 import org.digijava.module.um.form.UserUnSubscribeForm;
 import org.digijava.module.um.util.DbUtil;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 import java.util.GregorianCalendar;
 import org.digijava.kernel.util.RequestUtils;
 
@@ -80,9 +80,9 @@ public class UnSubscribeTemporarly
            }
            DbUtil.updateUser(user);
        } else {
-           ActionErrors errors = new ActionErrors();
-           errors.add(ActionErrors.GLOBAL_ERROR,
-                      new ActionError("error.logon.invalid"));
+           ActionMessages errors = new ActionMessages();
+           errors.add(ActionMessages.GLOBAL_MESSAGE,
+                      new ActionMessage("error.logon.invalid"));
        }
 
        return mapping.findForward("unsubscribedTmp");

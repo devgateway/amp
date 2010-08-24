@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -31,7 +31,7 @@ public class AddNewLocation extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         
-    	ActionErrors errors		= new ActionErrors();
+    	ActionMessages errors		= new ActionMessages();
     	
         NewAddLocationForm addRegForm = (NewAddLocationForm) form;
         if (addRegForm.getEvent().equals("add")) {
@@ -93,7 +93,7 @@ public class AddNewLocation extends Action {
                 }
                 catch (DuplicateLocationCodeException e) {
                 	errors.add("title" ,  
-                			new ActionError("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate", request) + " " +  TranslatorWorker.translateText(e.getCodeType(), request)) 
+                			new ActionMessage("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate", request) + " " +  TranslatorWorker.translateText(e.getCodeType(), request)) 
                 	);
 					this.saveErrors(request, errors);
 					return mapping.findForward("addEdit");

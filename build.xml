@@ -17,6 +17,7 @@
     <property name="project.version" value="1.1"/>
     <property name="lib" location="./WEB-INF/lib" />
     <property name="webinf" location="./WEB-INF" />
+	<property name="metainf" location="./META-INF" />		
     <property name="classes" location="./WEB-INF/classes" />
     <property name="src" location="./WEB-INF/src" />
     <property name="test" location="./WEB-INF/test" />
@@ -29,7 +30,10 @@
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
-
+	
+	<condition property="external-lib" value="${jboss-lib}"> 
+		<isset property="jboss-lib"/>
+	</condition>
 	
 	<!-- amp_clean specific -->
 	<condition property="mysql.password" value="">
@@ -43,6 +47,8 @@
 	 		<isset property="mysql.user"/>                              
 	 	</not>
 	 </condition>
+	
+	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
 
 	<property name="mysql.url" value="jdbc:mysql://localhost?characterEncoding=UTF-8"/>
 	<property name="clean.db" value="amp_clean"/>
@@ -59,7 +65,7 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
-        <fileset dir="${jboss-lib}">
+        <fileset dir="${external-lib}">
           <include name="**/*.jar"/>
         </fileset>
     </path>
@@ -80,7 +86,7 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
-        <fileset dir="${jboss-lib}">
+        <fileset dir="${external-lib}">
         	<include name="**/*.jar"/>
          </fileset>
     </path>
@@ -302,6 +308,7 @@
       <delete dir="${classes}"/>
       <delete dir="${doc.path}"/>
       <delete dir="${gen-src}"/>
+      <delete dir="${metainf}"/>    	
     </target>
                                  
 
@@ -503,9 +510,18 @@
 	<target name="deployForServer" description="deploys the project for use with a given database">
 		<delete file="${repository}/digi.xml"/>
 		<delete file="${webinf}/jboss-web.xml"/>
+		<delete dir="${metainf}"/>
+		<mkdir dir="${metainf}"/>
 		<delete dir="${jackrabbit}"/>
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
-		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>		
+		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>	
+		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">
+		          <param name="mysql.user" expression="${mysql.user}"/>
+				  <param name="mysql.password" expression="${mysql.password}"/>
+		      	  <param name="mysql.db" expression="${mysql.db}"/>
+		  	  	  <param name="serverName" expression="${serverName}"/>
+		</xslt>
+
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
 		<antcall target="copyForAnySQL"/>
 	</target>

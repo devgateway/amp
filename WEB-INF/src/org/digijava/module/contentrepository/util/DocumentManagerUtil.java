@@ -32,8 +32,8 @@ import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
@@ -403,7 +403,7 @@ public class DocumentManagerUtil {
 		
 	}
 	
-//	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
+//	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
 //		int maxFileSizeInBytes		= Integer.MAX_VALUE;
 //		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
 //		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
@@ -413,12 +413,12 @@ public class DocumentManagerUtil {
 //		}
 //		if ( formFile.getFileSize() > maxFileSizeInBytes) {
 //			errors.add("title", 
-//					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
+//					new ActionMessage("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
 //					);
 //			return false;
 //			}
 //		if (formFile.getFileSize()<1){
-//			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
+//			ActionMessage	error	= new ActionMessage("error.contentrepository.addFile.badPath");
 //			errors.add("title", error);
 //			return false;
 //		}
@@ -426,7 +426,7 @@ public class DocumentManagerUtil {
 //	}
 
 	
-	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
+	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
 		int maxFileSizeInBytes		= Integer.MAX_VALUE;
 		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
 		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
@@ -436,14 +436,14 @@ public class DocumentManagerUtil {
 		}
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {
 			errors.add("title",
-					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes)
+					new ActionMessage("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes)
 					);
 			
 			return false;
 			}
 		if (formFile.getFileSize()<1){
 			errors.add("title", 
-					new ActionError("error.contentrepository.addFile.badPath")
+					new ActionMessage("error.contentrepository.addFile.badPath")
 					);
 			
 			return false;
@@ -1003,7 +1003,7 @@ public class DocumentManagerUtil {
 		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( "JackrabbitRepository" );
 		if ( repository == null ) {
 			logger.warn("No repository found! Only normal if AMP was not used at all !");
-		}
+		} else
 		repository.shutdown();
 		logger.info("Jackrabbit repository shutdown succesfully !");
 	}

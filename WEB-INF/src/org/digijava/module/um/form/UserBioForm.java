@@ -28,7 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.Constants;
@@ -109,7 +109,7 @@ public class UserBioForm
         FormFile formFile = getPhotoFile();
         if (formFile != null) {
             if (formFile.getFileSize() > sizeLimit) {
-                ActionError error = new ActionError(
+                ActionMessage error = new ActionMessage(
                     "error.registration.imageSizeLimit", "32");
 
                 errors.add(null, error);

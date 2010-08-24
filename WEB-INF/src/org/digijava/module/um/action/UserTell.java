@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -81,13 +81,13 @@ public class UserTell
             recipientEmail = recipientEmail.trim();
         }
 
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         if (senderEmail == null) {
-            errors.add(null, new ActionError("error.um.userNotLoggedin"));
+            errors.add(null, new ActionMessage("error.um.userNotLoggedin"));
         }
         if ( (recipientEmail == null || recipientEmail.length() == 0) ||
             (recipientName == null || recipientName.length() == 0)) {
-            errors.add(null, new ActionError("error.um.fillUserTell"));
+            errors.add(null, new ActionMessage("error.um.fillUserTell"));
         }
 
         if( !errors.isEmpty() ) {

@@ -517,8 +517,8 @@ public class AddAmpActivity extends Action {
         ArrayList sessList = (ArrayList) ampContext.getAttribute(
             org.digijava.module.aim.helper.Constants.SESSION_LIST);
         if (sessList.contains(sessId) == false) {
-          ActionErrors errors = new ActionErrors();
-          errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+          ActionMessages errors = new ActionMessages();
+          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
               "error.aim.activityAlreadyOpenedForEdit"));
           saveErrors(request, errors);
 

@@ -99,7 +99,7 @@ public class DropdownTag
     public int doStartTag() throws JspException {
         // Look up the requested property value
         Object value =
-            org.apache.struts.util.RequestUtils.lookup(pageContext, name,
+            org.apache.struts.taglib.TagUtils.getInstance().lookup(pageContext, name,
             property, scope);
         StringBuffer results = new StringBuffer("<select");
 

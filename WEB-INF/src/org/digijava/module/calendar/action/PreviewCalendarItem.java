@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -146,7 +146,7 @@ public class PreviewCalendarItem
 
         calendForm.setPreviewItem(previewItem);
 
-        ActionErrors errors = calendForm.validate(mapping, request);
+        ActionMessages errors = calendForm.validate(mapping, request);
         if (errors != null && errors.size() != 0) {
             saveErrors(request, errors);
             calendForm.setPreview(false);

@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.ecs.storage.Hash;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class AmpReports implements Comparable, LoggerIdentifiable {
+public class AmpReports implements Comparable, LoggerIdentifiable, Serializable {
 
 	private Long ampReportId;
 

@@ -31,8 +31,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.admin.form.SearchUserForm;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -54,8 +54,8 @@ public class SearchUser
 
         if ( (searchForm.getSearchUserInfo() == null) ||
             (searchForm.getSearchUserInfo().trim().length() == 0)) {
-            ActionErrors errors = new ActionErrors();
-            errors.add(null, new ActionError("error.admin.userNameEmpty"));
+            ActionMessages errors = new ActionMessages();
+            errors.add(null, new ActionMessage("error.admin.userNameEmpty"));
             saveErrors(request, errors);
         }
         else {

@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -81,7 +81,7 @@ public class ImportAction extends MultiAction {
 		if(request.getParameter("saveImport")!=null) 
 			return modeSaveImport(mapping, iform, request, response);
 	
-		ActionErrors errors = (ActionErrors) session.getAttribute("DEimportErrors");
+		ActionMessages errors = (ActionMessages) session.getAttribute("DEimportErrors");
 		if(errors != null){
 			saveErrors(request, errors);
 			session.setAttribute("DEimportErrors", null);
@@ -135,8 +135,8 @@ public class ImportAction extends MultiAction {
         boolean importOk = false;
 		importOk = importBuilder.splitInChunks(inputStream);
 		if(!importOk) {
-			ActionErrors errors = new ActionErrors();
-			errors.add("title", new ActionError("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
+			ActionMessages errors = new ActionMessages();
+			errors.add("title", new ActionMessage("error.aim.dataExchange.corruptedFile", TranslatorWorker.translateText("The file you have uploaded is corrupted. Please verify it and try upload again",locale,siteId)));
 			request.setAttribute("loadFile",null);
 			
 			if (errors.size() > 0){

@@ -26,12 +26,14 @@ public class TrnAccesTimeSaver implements Runnable {
 	 */
 	public TrnAccesTimeSaver(){
 		this(Thread.MIN_PRIORITY);
+		this.loop = true;
 	}
 	
 	public TrnAccesTimeSaver(int priority){
 		this.priority = priority;
 	}
 	
+	@Override
 	public void run() {
 		while (this.loop) {
 			Message message = null;
@@ -65,18 +67,6 @@ public class TrnAccesTimeSaver implements Runnable {
 		}
 	}
 	
-	/**
-	 * Starts up saver.
-	 */
-	public void startup(){
-		logger.info("Starting up translation access time saver thread...");
-		Thread thread = new Thread(this);
-		thread.setPriority(this.priority);
-		thread.setName(TrnAccessUpdateQueue.ALLOWED_THREAD_NAME);
-		this.loop = true;
-		thread.start();
-		
-	}
 	
 	/**
 	 * Shuts down saver.

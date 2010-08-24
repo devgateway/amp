@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -56,7 +56,7 @@ public class UpdateTeamMembers extends Action {
         }
 
         TeamMemberForm upForm = (TeamMemberForm) form;
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         AmpTeam ampTeam = TeamUtil.getAmpTeam(upForm.getTeamId());
         if (upForm.getAction() != null
             && upForm.getAction().trim().equals("edit")) {
@@ -74,9 +74,9 @@ public class UpdateTeamMembers extends Action {
                 .getRole());
             AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();
             if (role.getRole().equals(teamLead.getRole())) {
-                ActionErrors error = new ActionErrors();
-                error.add(ActionErrors.GLOBAL_ERROR,
-                          new ActionError(
+                ActionMessages error = new ActionMessages();
+                error.add(ActionMessages.GLOBAL_MESSAGE,
+                          new ActionMessage(
                               "error.aim.addTeamMember.teamLeadRole"));
             }
             if (role.getRole().equals(teamLead.getRole())) {
@@ -90,8 +90,8 @@ public class UpdateTeamMembers extends Action {
                     String trnKey = "aim:teamLeadAlreadyExist";
                     String msg = CategoryManagerUtil.translate(trnKey, request, Constants.TEAM_LEAD_ALREADY_EXISTS);
                     errors.add(
-                        ActionErrors.GLOBAL_ERROR,
-                        new ActionError(
+                        ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage(
                             "error.aim.addTeamMember.teamLeadAlreadyExist", msg));
                     saveErrors(request, errors);
 

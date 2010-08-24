@@ -40,8 +40,8 @@ import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 
 
 
@@ -54,7 +54,7 @@ public class DeleteEditor extends Action {
                                  HttpServletResponse response) {
         EditorAdminForm editorAdminForm = (EditorAdminForm) form;
         String forward = "showAdmin";
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
 
 
         String key = editorAdminForm.getKey().trim();
@@ -73,7 +73,7 @@ public class DeleteEditor extends Action {
             } catch (EditorException ex) {
                 logger.debug("Unable to delete editor", ex);
                 errors.add("editor" ,
-                           new ActionError("error.editor.errorDeletingEditor"));
+                           new ActionMessage("error.editor.errorDeletingEditor"));
             }
         }
         return mapping.findForward(forward);

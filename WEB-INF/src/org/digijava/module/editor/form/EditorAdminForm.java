@@ -28,7 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import java.util.regex.Pattern;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 
 public class EditorAdminForm extends ActionForm {
     private List siteEditors;
@@ -55,7 +55,7 @@ public class EditorAdminForm extends ActionForm {
 
             if (!isLegal) {
                 errors.add("editor",
-                           new ActionError(
+                           new ActionMessage(
                     "error.editor.ilegalKey"));
             }
         }

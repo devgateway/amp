@@ -24,7 +24,7 @@ package org.digijava.module.admin.form;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -67,19 +67,19 @@ public class AdministrateUserForm extends ActionForm {
         if ( ( (newPassword == null) || (newPassword.trim().length() == 0)) &&
             (confirmnewPassword != null) &&
             (confirmnewPassword.trim().length() != 0)) {
-            errors.add(null, new ActionError("error.admin.password1Empty"));
+            errors.add(null, new ActionMessage("error.admin.password1Empty"));
         }
         if ( (newPassword != null) && (newPassword.trim().length() != 0) &&
             ( (confirmnewPassword == null) ||
              (confirmnewPassword.trim().length() == 0))) {
-            errors.add(null, new ActionError("error.admin.password2Empty"));
+            errors.add(null, new ActionMessage("error.admin.password2Empty"));
         }
 
         if ( (newPassword != null) && (newPassword.trim().length() != 0) &&
             (confirmnewPassword != null) &&
             (confirmnewPassword.trim().length() != 0) &&
             ( (newPassword.compareTo(confirmnewPassword)) != 0)) {
-            errors.add(null, new ActionError("error.admin.passwordsDiffer"));
+            errors.add(null, new ActionMessage("error.admin.passwordsDiffer"));
         }
 
         return errors.isEmpty() ? null : errors;

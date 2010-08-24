@@ -6,10 +6,10 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.helper.Constants;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionErrors;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -456,7 +456,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			
 //			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
 //					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
-//				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
+//				ActionMessage error = new ActionMessage("error.aim.updateWorkspace.incorrectWorkspaceType");
 //				errors.add("workspaceType", error);
 //			}
 			
@@ -465,7 +465,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 					if (typeCategoryValue!=null && CategoryManagerUtil.equalsCategoryValue(typeCategoryValue, CategoryConstants.TEAM_TYPE_BILATERAL) ) {
 						if (relatedTeamBilatColl.size() > 0 )
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
+								ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
 								errors.add("relatedTeam", error);
 								relatedTeamFlag = "set";
 							}
@@ -473,7 +473,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 					if ( typeCategoryValue!=null && CategoryManagerUtil.equalsCategoryValue(typeCategoryValue, CategoryConstants.TEAM_TYPE_MULTILATERAL) ) {
 						if (relatedTeamMutilatColl.size() > 0)
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
+								ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
 								errors.add("relatedTeam", error);
 								relatedTeamFlag = "set";
 							}
@@ -482,11 +482,11 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 				else if ("add".equalsIgnoreCase(actionEvent)) {
 					if (relatedTeamBilatColl.size() > 0 && relatedTeamMutilatColl.size() > 0) {
 						if (null == typeCategoryValue) {
-							ActionError error = new ActionError("error.aim.updateWorkspace.noTeamType");
+							ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noTeamType");
 							errors.add("type", error);
 						}
 						else if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-							ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
+							ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
 							errors.add("relatedTeam", error);
 						}
 						relatedTeamFlag = "set";

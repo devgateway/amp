@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -63,11 +63,11 @@ public class AddChildSite
         while (iterSite != null);
 
         if (!permitted) {
-            ActionErrors errors = new ActionErrors();
+            ActionMessages errors = new ActionMessages();
             Object[] params = {
                 childSite.getName(), currentSite.getName()};
             errors.add(null,
-                       new ActionError("error.admin.unacceptibleChildSite",
+                       new ActionMessage("error.admin.unacceptibleChildSite",
                                        params));
             saveErrors(request, errors);
 

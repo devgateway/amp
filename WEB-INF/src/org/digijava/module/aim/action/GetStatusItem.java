@@ -6,8 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -46,8 +46,8 @@ public class GetStatusItem extends Action
 		else
 		{
 			id = formBean.getOriginalAmpStatusId();
-			ActionErrors errors = new ActionErrors();
-			errors.add("title", new ActionError(
+			ActionMessages errors = new ActionMessages();
+			errors.add("title", new ActionMessage(
 					"error.aim.addStatus.statusAdded"));
 			saveErrors(request, errors);
 		}

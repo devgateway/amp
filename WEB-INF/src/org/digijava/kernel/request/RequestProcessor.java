@@ -47,6 +47,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.action.DynaActionFormClass;
+import org.apache.struts.action.InvalidCancelException;
 import org.apache.struts.config.ActionConfig;
 import org.apache.struts.config.ExceptionConfig;
 import org.apache.struts.config.FormBeanConfig;
@@ -829,7 +830,7 @@ public class RequestProcessor
 
         log.debug("processForwardConfig("
                   + forward.getPath() + ", "
-                  + forward.getContextRelative() + ")");
+                  + forward.getModule() + ")");
 
         String sitePath = "";
         // For redirects, add site path element
@@ -859,7 +860,7 @@ public class RequestProcessor
                     forward.getName(),
                     newPath,
                     forward.getRedirect(),
-                    forward.getContextRelative());
+                    forward.getModule());
             }
         }
 
@@ -869,7 +870,7 @@ public class RequestProcessor
                 forward.getName(),
                 sitePath + currentPath,
                 forward.getRedirect(),
-                forward.getContextRelative());
+                forward.getModule());
         }
 
         super.processForwardConfig(request, response, newForwardConfig);
@@ -895,7 +896,13 @@ public class RequestProcessor
         ActionMapping originalMapping = (ActionMapping) request.getAttribute(
             Constants.ORIGINAL_MAPPING);
 
-        return super.processValidate(request, response, form, originalMapping);
+        try {
+			return super.processValidate(request, response, form, originalMapping);
+		} catch (InvalidCancelException e) {
+			logger.error(e);
+			e.printStackTrace();
+			return false;
+		}
     }
 
     /**

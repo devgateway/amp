@@ -24,10 +24,10 @@ package org.digijava.kernel.taglib;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.struts.taglib.tiles.PutListTag;
-import org.apache.struts.taglib.tiles.PutTag;
+import org.apache.struts.tiles.taglib.PutListTag;
+import org.apache.struts.tiles.taglib.PutTag;
 import org.apache.struts.tiles.AttributeDefinition;
-import org.apache.struts.tiles.UntyppedAttribute;
+import org.apache.struts.tiles.UntypedAttribute;
 
 /**
  * @author wb231862
@@ -35,7 +35,7 @@ import org.apache.struts.tiles.UntyppedAttribute;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class DefinitionTag extends org.apache.struts.taglib.tiles.DefinitionTag
+public class DefinitionTag extends org.apache.struts.tiles.taglib.DefinitionTag
 {
 
 	private static final long serialVersionUID = 1L;
@@ -63,7 +63,7 @@ public class DefinitionTag extends org.apache.struts.taglib.tiles.DefinitionTag
 		}
 	   catch( ClassCastException ex )
 		{
-		def = new UntyppedAttribute( attributeValue );
+		def = new UntypedAttribute( attributeValue );
 		}
 	  def.setRole(nestedTag.getRole());
 	  attributeValue = def;
@@ -90,7 +90,7 @@ public class DefinitionTag extends org.apache.struts.taglib.tiles.DefinitionTag
 
 	if( nestedTag.getRole() != null )
 	  {
-	  AttributeDefinition  def = new UntyppedAttribute( attributeValue );
+	  AttributeDefinition  def = new UntypedAttribute( attributeValue );
 	  def.setRole(nestedTag.getRole());
 	  attributeValue = def;
 	  } // end if

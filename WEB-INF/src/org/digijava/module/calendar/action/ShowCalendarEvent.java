@@ -19,11 +19,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -48,7 +49,6 @@ import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.RecurrCalEvent;
-import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
@@ -205,7 +205,7 @@ public class ShowCalendarEvent extends Action {
         } else if (ceform.getMethod().equalsIgnoreCase("save")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
-        	ActionErrors errors=validateDate(stDate,endDate,ceform);
+        	ActionMessages errors=validateDate(stDate,endDate,ceform);
         	errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
@@ -277,7 +277,7 @@ public class ShowCalendarEvent extends Action {
         } else if (ceform.getMethod().equalsIgnoreCase("preview") || ceform.getMethod().equalsIgnoreCase("print")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
-        	ActionErrors errors=new ActionErrors();
+        	ActionMessages errors=new ActionMessages();
         	if(ceform.getAmpCalendarId()==null || !ceform.isResetForm()){
         		errors=validateDate(stDate,endDate,ceform);
         		errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
@@ -706,27 +706,27 @@ public class ShowCalendarEvent extends Action {
         try {
         	stDate=sdf.parse(eventStartDate);
 		} catch (Exception e) {
-			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventStartDate"));
+			errors.add("incorrectDate", new ActionMessage("error.calendar.emptyEventStartDate"));
 		}
 		
         try {
         	endDate=sdf.parse(eventEndDate);
         } catch (Exception e) {
-			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
+			errors.add("incorrectDate", new ActionMessage("error.calendar.emptyEventEndDate"));
 		}
         
         try {
         	endRecurrDate=sdf.parse(form.getRecurrEndDate() + " " + form.getRecurrSelectedEndTime());
         } catch (Exception e) {
-			//errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
+			//errors.add("incorrectDate", new ActionMessage("error.calendar.emptyEventEndDate"));
 		}
         
         if(stDate !=null && !stDate.equals(endDate) && !stDate.before(endDate)){
-        	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
+        	errors.add("incorrectDate", new ActionMessage("error.calendar.endDateLessThanStartDate"));
         }
         
         if(endRecurrDate !=null && endRecurrDate.before(endDate)){
-        	errors.add("incorrectDate", new ActionError("error.calendar.endRecurrDateLessThanEndDate"));
+        	errors.add("incorrectDate", new ActionMessage("error.calendar.endRecurrDateLessThanEndDate"));
         }
         
         
@@ -749,7 +749,7 @@ public class ShowCalendarEvent extends Action {
 			}
         }
         if ((recurrDays > 0) && (diffDays >= recurrDays)) {
-        	errors.add("incorrectDate", new ActionError("error.calendar.recurrPeriodLessThanEventDuration"));
+        	errors.add("incorrectDate", new ActionMessage("error.calendar.recurrPeriodLessThanEventDuration"));
 		}
         
     	return errors;
@@ -758,10 +758,10 @@ public class ShowCalendarEvent extends Action {
     private ActionErrors validateEventInformation(String title,String[] selectedAttendees){
     	ActionErrors errors=new ActionErrors();
     	if(title==null || title.length()==0){
-    		errors.add("emptyTitle",new ActionError("error.calendar.emptyEventTitle"));
+    		errors.add("emptyTitle",new ActionMessage("error.calendar.emptyEventTitle"));
     	}
     	if(selectedAttendees==null || selectedAttendees.length==0){
-    		errors.add("noAttendees",new ActionError("error.calendar.noAttendees"));
+    		errors.add("noAttendees",new ActionMessage("error.calendar.noAttendees"));
     	}
     	return errors;
     }

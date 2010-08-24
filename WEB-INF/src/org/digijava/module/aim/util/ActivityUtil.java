@@ -602,6 +602,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				try{
 					//String value = BeanUtils.getProperty(activity, customField.getAmpActivityPropertyName());
 					Object value = PropertyUtils.getSimpleProperty(activity, customField.getAmpActivityPropertyName());
+					if(value!=null)
 					BeanUtils.setProperty(oldActivity, customField.getAmpActivityPropertyName(), value);
 				}catch(Exception e){
 					logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);

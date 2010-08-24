@@ -20,8 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -44,7 +44,7 @@ import org.hibernate.Transaction;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
-	private ActionErrors errors					= new ActionErrors();
+	private ActionMessages errors					= new ActionMessages();
 
 	private void flushSessionObjects(HttpSession session) {
 		session.removeAttribute(ArConstants.REPORTS_FILTER);
@@ -75,7 +75,7 @@ public class GlobalSettings extends Action {
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			dailyCurrencyRatesChanges(gsForm);
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			//ActionErrors errors = new ActionErrors();
+			//ActionMessages errors = new ActionMessages();
 			auditTrialCleanerChanges(gsForm);
 			refreshGlobalSettingsCache	= true;
 		}
@@ -93,7 +93,7 @@ public class GlobalSettings extends Action {
                         }
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			//ActionErrors errors = new ActionErrors();
+			//ActionMessages errors = new ActionMessages();
 			refreshGlobalSettingsCache	= true;
 			dailyCurrencyRatesChanges(null);
 			auditTrialCleanerChanges();
@@ -380,7 +380,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not an integer
-					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}
@@ -394,7 +394,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not a year
-					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}
@@ -405,7 +405,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not an Date
-					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					ActionMessage ae	= new ActionMessage("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}

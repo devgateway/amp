@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -54,7 +54,7 @@ public class ViewEditUser extends Action {
         User user = null;
         HttpSession session = request.getSession();
         String isAmpAdmin = (String) session.getAttribute("ampAdmin");
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         Site curSite = RequestUtils.getSite(request);
         UserLangPreferences langPref = null;
         Long userId = uForm.getId();
@@ -74,7 +74,7 @@ public class ViewEditUser extends Action {
         try {
             langPref = UserUtils.getUserLangPreferences(user, curSite);
         } catch (DgException ex) {
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ex.getMessage()));
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(ex.getMessage()));
             saveErrors(request, errors);
         }
 
@@ -88,7 +88,7 @@ public class ViewEditUser extends Action {
                     Site site = RequestUtils.retreiveSiteDomain(request).getSite();        
                     boolean siteAdmin = UserUtils.isAdmin(user, site);
                     if(siteAdmin){ // should be impossible to ban admin
-                    	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.um.errorBanningAdmin"));
+                    	errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.um.errorBanningAdmin"));
                     }else{
                     	List ampTeamMembers	= TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);
                 		if ( ampTeamMembers != null && ampTeamMembers.size() == 0 ) {
@@ -109,10 +109,10 @@ public class ViewEditUser extends Action {
     	            			}
                 			}
                 			errors.add("title",
-                                    new ActionError("error.um.userIsInTeams", teamNames));
+                                    new ActionMessage("error.um.userIsInTeams", teamNames));
                 		}
                 		if ( ampTeamMembers == null ) {
-                			errors.add("title",new ActionError("error.um.errorBanning"));
+                			errors.add("title",new ActionMessage("error.um.errorBanning"));
                 		}
                     }
             	}
@@ -133,7 +133,7 @@ public class ViewEditUser extends Action {
                 }
                 DbUtil.updateUser(user);*/
             } else {
-                errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.um.banUserInvalidPermission"));
+                errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.um.banUserInvalidPermission"));
             }
             resetViewEditUserForm(uForm);
             saveErrors(request, errors);
@@ -322,13 +322,13 @@ public class ViewEditUser extends Action {
                     if (confirmNewPassword == null || newPassword == null ||
                         newPassword.trim().length() == 0 ||
                         confirmNewPassword.trim().length() == 0) {
-                        errors.add(ActionErrors.GLOBAL_ERROR,
-                                   new ActionError("error.update.blankFields"));
+                        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                                   new ActionMessage("error.update.blankFields"));
                         saveErrors(request, errors);
                     } else {
                         if (!newPassword.equals(confirmNewPassword)) {
-                            errors.add(ActionErrors.GLOBAL_ERROR,
-                                       new ActionError("error.update.noPasswordMatch"));
+                            errors.add(ActionMessages.GLOBAL_MESSAGE,
+                                       new ActionMessage("error.update.noPasswordMatch"));
                             saveErrors(request, errors);
 
                         } else {

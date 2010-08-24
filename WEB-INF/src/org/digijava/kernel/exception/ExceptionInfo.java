@@ -22,9 +22,10 @@
 
 package org.digijava.kernel.exception;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class ExceptionInfo {
+public class ExceptionInfo implements Serializable {
 	public static final String EXCEPTION_INFO = "exInfo";
     private Integer exceptionCode;
     private String stackTrace;

@@ -47,7 +47,7 @@ public class CategoryManagerAddCategoryTest extends CategoryManagerBaseTest{
 		assertTrue(setupOk);
 		actionPerform(CategoryManager.class, myForm);
 		
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyNoActionMessages();
 		verifyForward("forward");
 		

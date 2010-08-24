@@ -96,7 +96,7 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 		try {
 			beginSaveTwoColumnsReport();
 			actionPerform(ReportWizardAction.class, form);
-			verifyNoActionErrors();
+			verifyNoActionMessages();
 			verifyNoActionMessages();
 
 		} catch (Exception e) {
@@ -135,7 +135,7 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 		try {
 			prepareSaveAllColumnsReport();
 			actionPerform(ReportWizardAction.class, form);
-			verifyNoActionErrors();
+			verifyNoActionMessages();
 			verifyNoActionMessages();
 
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 		addRequestParameter("isTab", "2");
 		addRequestParameter("rid", String.valueOf(id));
 		actionPerform(DeleteAllReports.class);
-		// verifyNoActionErrors();
+		// verifyNoActionMessages();
 		verifyForward("forwardReports");
 	}
 
@@ -186,7 +186,7 @@ public class TestReportWizard extends BasicActionTestCaseAdapter {
 		addRequestParameter("isTab", "2");
 		addRequestParameter("rid", String.valueOf(id));
 		actionPerform(DeleteAllReports.class);
-		// verifyNoActionErrors();
+		// verifyNoActionMessages();
 		verifyForward("forwardReports");
 	}
 

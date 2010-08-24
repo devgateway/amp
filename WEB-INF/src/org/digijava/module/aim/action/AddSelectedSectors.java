@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -34,7 +34,7 @@ public class AddSelectedSectors
 	  
     eaForm = (SelectSectorForm) form;
     List sectors=new ArrayList();
-    ActionErrors errors = new ActionErrors();
+    ActionMessages errors = new ActionMessages();
     if(session.getAttribute("selectedSectorsForActivity")!=null){
         sectors=(List)session.getAttribute("selectedSectorsForActivity");
     }
@@ -61,7 +61,7 @@ public class AddSelectedSectors
                 selsearchedSector.length);
     eaForm.setSomeError(false);
      if(!config.isMultisector()&&selsearchedSector.length>1){
-           errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+           errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
               "error.aim.addActivity.sectorMultipleSelectionIsOff"));
           saveErrors(request, errors);
           eaForm.setSomeError(true);
@@ -134,7 +134,7 @@ public class AddSelectedSectors
     }
     else{
        
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
               "error.aim.sectorAlreadyAddedToActivity"));
           saveErrors(request, errors);
           eaForm.getCols().retainAll(sectors);

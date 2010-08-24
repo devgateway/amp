@@ -6,8 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -27,7 +27,7 @@ public class ViewUserProfile
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
 
         UserDetailForm formBean = (UserDetailForm) form;
         HttpSession httpSession = request.getSession();
@@ -56,7 +56,7 @@ public class ViewUserProfile
                 user = DbUtil.getUser(teamMember.getMemberId());
                 memberInformationn = new String[]{teamMember.getTeamName(), teamMember.getRoleName()};
             } else {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.invalidUserId"));
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
                 saveErrors(request, errors);
                 return mapping.getInputForward();
             }

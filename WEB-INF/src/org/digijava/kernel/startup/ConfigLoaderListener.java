@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -82,7 +84,8 @@ public class ConfigLoaderListener
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
     
-    private static TrnAccesTimeSaver trnTimeStampSaver = null;
+    private static ExecutorService exec ;
+    private static TrnAccesTimeSaver tats;
 
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
     		int indexOf = completeProductVersion.indexOf(versionPrefix);
@@ -154,11 +157,13 @@ public class ConfigLoaderListener
             
             // patches translations to hash code keys if this is not already done. 
             HashKeyPatch.patchTranslationsIfNecessary();
+            
+            tats=new TrnAccesTimeSaver();
+            exec = Executors.newSingleThreadExecutor();      
+            exec.execute(tats);
 
-            //TODO it will be better to get thread priority from digi.xml
-            trnTimeStampSaver = new TrnAccesTimeSaver();
-            //Starts low priority thread which saves last access times for translations.
-            trnTimeStampSaver.startup();
+            
+        
         }
         catch (Exception ex) {
             logger.debug("Unable to initialize", ex);
@@ -290,9 +295,12 @@ public class ConfigLoaderListener
      * see ServletContextListener form more details.
      */
     public void contextDestroyed(ServletContextEvent sce) {
-    	if (trnTimeStampSaver!=null){
-    		trnTimeStampSaver.shutdown();
-    	}
+    	
+    	
+    	//destroy the translator thread
+    	tats.shutdown();
+    	exec.shutdownNow();
+    	
         ServiceManager.getInstance().shutdown(1);
         try {
             Map listeners = (Map) sce.getServletContext().getAttribute(
@@ -322,7 +330,15 @@ public class ConfigLoaderListener
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
             ServiceManager.getInstance().shutdown(0);
+            
+            try {
+    			Thread.currentThread().sleep(3000);
+    		} catch (InterruptedException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
 
+     
         }
     }
 }

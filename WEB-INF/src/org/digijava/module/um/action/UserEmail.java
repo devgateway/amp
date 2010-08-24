@@ -30,8 +30,8 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -75,7 +75,7 @@ public class UserEmail
         if (StringUtils.isBlank(userEmailForm.getEmail())) {
             return new ActionForward("/", true);
         }
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
 
         // Get SMTP config
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
@@ -98,8 +98,8 @@ public class UserEmail
               sendEmail(email, code, request);
             }
             catch (Exception ex) {
-              errors.add(ActionErrors.GLOBAL_ERROR,
-                         new ActionError("error.registration.sendmail"));
+              errors.add(ActionMessages.GLOBAL_MESSAGE,
+                         new ActionMessage("error.registration.sendmail"));
               saveErrors(request, errors);
               return (new ActionForward(mapping.getInput()));
             }
@@ -112,8 +112,8 @@ public class UserEmail
             logger.debug("Email " + email + " not exists");
 
             // email not exists
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("error.registration.noemail"));
+            errors.add(ActionMessages.GLOBAL_MESSAGE,
+                       new ActionMessage("error.registration.noemail"));
             saveErrors(request, errors);
             return (new ActionForward(mapping.getInput()));
         }

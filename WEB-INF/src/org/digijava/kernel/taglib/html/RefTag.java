@@ -24,7 +24,7 @@ package org.digijava.kernel.taglib.html;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.struts.util.ResponseUtils;
+import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
 
@@ -196,7 +196,7 @@ public class RefTag
         results.append(">");
 
         // Print this element to our output writer
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
 
         return (EVAL_BODY_BUFFERED);
@@ -233,7 +233,7 @@ public class RefTag
         results.append("</link>");
 
         // Render the remainder to the output stream
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         // Evaluate the remainder of this page
         return (EVAL_PAGE);

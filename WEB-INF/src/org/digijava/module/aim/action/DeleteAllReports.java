@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -48,7 +48,7 @@ public class DeleteAllReports extends Action {
 		  	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		  	AmpReports ampReport=null;
 		  	boolean isTab			= false; 
-		  	ActionErrors errors = new ActionErrors();
+		  	ActionMessages errors = new ActionMessages();
 		  	//logger.info("In delete reports11111111");
 		  	boolean lead = false;
 				if (session.getAttribute("teamLeadFlag") == null) {
@@ -88,11 +88,11 @@ public class DeleteAllReports extends Action {
 										 if (deleted) {
 											 if (request.getParameter("isTab") != null) {
 												 if(request.getParameter("isTab").equals("1")){
-													 errors.add("title", new ActionError("error.aim.deleteTabs.tabDeleted", TranslatorWorker.translateText("Tab Deleted", locale, siteId)));
+													 errors.add("title", new ActionMessage("error.aim.deleteTabs.tabDeleted", TranslatorWorker.translateText("Tab Deleted", locale, siteId)));
 													 saveErrors(request,errors);								
 													 logger.debug("Tab deleted"); 
 												 } else {
-													 errors.add("title", new ActionError("error.aim.deleteReports.reportDeleted", TranslatorWorker.translateText("Report Deleted",locale,siteId)));
+													 errors.add("title", new ActionMessage("error.aim.deleteReports.reportDeleted", TranslatorWorker.translateText("Report Deleted",locale,siteId)));
 													 saveErrors(request,errors);								
 													 logger.debug("Report deleted");
 												 } 
@@ -102,7 +102,7 @@ public class DeleteAllReports extends Action {
 										 }												
 						 }
 				 }else {
-					 errors.add("title", new ActionError(
+					 errors.add("title", new ActionMessage(
 						"error.aim.deleteReports.reportNotDeleted", TranslatorWorker.translateText("Report Not Deleted",locale,siteId)));
 					saveErrors(request,errors);
 		

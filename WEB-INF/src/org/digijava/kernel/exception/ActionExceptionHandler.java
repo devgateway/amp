@@ -25,8 +25,8 @@ package org.digijava.kernel.exception;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -71,7 +71,7 @@ public final class ActionExceptionHandler
     /**
      * This method handles any java.lang.Exceptions that are not caught in
      * previous classes. It will loop through and get all the causes (exception
-     * chain), create ActionErrors, add them to the request and then forward to
+     * chain), create ActionMessages, add them to the request and then forward to
      * the input.
      *
      * @see org.apache.struts.action.ExceptionHandler#execute (
@@ -205,7 +205,7 @@ public final class ActionExceptionHandler
             }
 
             urlTmp.append("exception/showExceptionReport.do?module=" + currentModuleInstance);
-            ActionError error = new ActionError("errors.detail", urlTmp.toString());
+            ActionMessage error = new ActionMessage("errors.detail", urlTmp.toString());
             property = error.getKey();
 
             storeException(context, request, property, error);

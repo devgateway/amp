@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -177,8 +177,8 @@ public class ShowUserProfile
             // -------
         }
         else {
-            ActionErrors errors = new ActionErrors();
-            errors.add(null, new ActionError("error.um.selectedUserEmpty"));
+            ActionMessages errors = new ActionMessages();
+            errors.add(null, new ActionMessage("error.um.selectedUserEmpty"));
         }
 
         return mapping.findForward("forward");

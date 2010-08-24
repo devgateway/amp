@@ -26,16 +26,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.validator.ValidatorForm;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteConfigUtils;
-import java.util.List;
 
 public class SiteForm
     extends ValidatorForm {
@@ -207,7 +209,7 @@ public class SiteForm
         }
         if ( (siteDomains == null) || (siteDomains.size() == 0)) {
             errors.add(null,
-                       new ActionError("error.admin.siteDomainsEmpty"));
+                       new ActionMessage("error.admin.siteDomainsEmpty"));
         }
 
         Iterator iter = siteDomains.iterator();
@@ -220,7 +222,7 @@ public class SiteForm
             if ( (item.getDomain() == null) ||
                 (item.getDomain().trim().length() == 0)) {
                 errors.add(null,
-                           new ActionError("error.admin.domainEmpty"));
+                           new ActionMessage("error.admin.domainEmpty"));
                 break;
             }
             if ( (item.getPath() != null) &&
@@ -229,14 +231,14 @@ public class SiteForm
                     Object[] params = {
                         item.getPath()};
                     errors.add(null,
-                               new ActionError("error.admin.domainPathStart",
+                               new ActionMessage("error.admin.domainPathStart",
                                                params));
                 }
                 if (item.getPath().endsWith("/")) {
                     Object[] params = {
                         item.getPath()};
                     errors.add(null,
-                               new ActionError("error.admin.domainPathEnd",
+                               new ActionMessage("error.admin.domainPathEnd",
                                                params));
                 }
             }
@@ -248,7 +250,7 @@ public class SiteForm
                     item.getDomain(),
                     item.getPath()};
                 errors.add(null,
-                           new ActionError("error.admin.siteDomainTwise",
+                           new ActionMessage("error.admin.siteDomainTwise",
                                            params));
             }
             else {
@@ -274,7 +276,7 @@ public class SiteForm
                    (unsecure &&
                     unSecureDomainLanguages.contains(item.getLangCode()))) {
                    errors.add(null,
-                              new ActionError(
+                              new ActionMessage(
                                   "error.admin.oneDomainPerLanguage"));
                }
                else {
@@ -291,7 +293,7 @@ public class SiteForm
 
         if (!hasDefault) {
             errors.add(null,
-                       new ActionError("error.admin.defaultSiteDomainMissing"));
+                       new ActionMessage("error.admin.defaultSiteDomainMissing"));
         }
 
 

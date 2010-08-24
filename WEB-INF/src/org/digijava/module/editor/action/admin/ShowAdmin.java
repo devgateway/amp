@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -55,7 +55,7 @@ public class ShowAdmin
         String forward = "showAdmin";
         ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(
             request);
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
 
         editorAdminForm.setRefUrl(RequestUtils.getSourceURL(request));
 
@@ -68,7 +68,7 @@ public class ShowAdmin
         }
         catch (EditorException ex) {
             errors.add("editor",
-                       new ActionError("error.editor.errorGettingEditorsForSite"));
+                       new ActionMessage("error.editor.errorGettingEditorsForSite"));
         }
 
         //Check order index duplicates
@@ -140,7 +140,7 @@ public class ShowAdmin
                 }
                 catch (EditorException ex1) {
                     errors.add("editor",
-                               new ActionError(
+                               new ActionMessage(
                         "error.editor.errorUpdatingEditorList"));
                 }
             }

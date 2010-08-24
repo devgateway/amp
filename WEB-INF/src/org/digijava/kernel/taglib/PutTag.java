@@ -28,7 +28,7 @@ package org.digijava.kernel.taglib;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class PutTag extends org.apache.struts.taglib.tiles.PutTag {
+public class PutTag extends org.apache.struts.tiles.taglib.PutTag {
 
 	private static final long serialVersionUID = 1L;
 	//TODO check if we can delete this class.

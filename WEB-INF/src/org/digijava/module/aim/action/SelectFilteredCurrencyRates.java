@@ -10,8 +10,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -47,7 +47,7 @@ public class SelectFilteredCurrencyRates extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		ActionErrors errors											= new ActionErrors();
+		ActionMessages errors											= new ActionMessages();
 		String action		= request.getParameter(ACTION_PARAMETER);
 		
 		if ( action == null || ACTION_SHOW.equals(action) ) {
@@ -65,7 +65,7 @@ public class SelectFilteredCurrencyRates extends MultiAction {
 		return null;
 	}
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response, ActionErrors errors)
+			HttpServletRequest request, HttpServletResponse response, ActionMessages errors)
 			throws Exception {
 		
 		SelectFilteredCurrencyRatesForm myForm			= (SelectFilteredCurrencyRatesForm) form;
@@ -88,7 +88,7 @@ public class SelectFilteredCurrencyRates extends MultiAction {
 	}
 	
 	public ActionForward modeAdd(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response,  ActionErrors errors)
+			HttpServletRequest request, HttpServletResponse response,  ActionMessages errors)
 			throws Exception {
 		
 		SelectFilteredCurrencyRatesForm myForm						= (SelectFilteredCurrencyRatesForm) form;
@@ -100,19 +100,19 @@ public class SelectFilteredCurrencyRates extends MultiAction {
 		
 		if ( toCurrency == null ) {
 			errors.add(
-					"title", new ActionError("error.aim.addFilteredRate.cannotAddFilteredRate", myForm.getToCurrencyCode() )
+					"title", new ActionMessage("error.aim.addFilteredRate.cannotAddFilteredRate", myForm.getToCurrencyCode() )
 			);
 		}
 		else if ( fromCurrency == null ) {
 			errors.add(
-					"title", new ActionError("error.aim.addFilteredRate.cannotAddFilteredRate", myForm.getFromCurrencyCode() )
+					"title", new ActionMessage("error.aim.addFilteredRate.cannotAddFilteredRate", myForm.getFromCurrencyCode() )
 			);
 		}
 		else if ( filteredCurrencyRateUtil.checkPairExistance(myForm.getToCurrencyCode().trim(), myForm.getFromCurrencyCode().trim()) || 
 				filteredCurrencyRateUtil.checkPairExistance(myForm.getFromCurrencyCode().trim(), myForm.getToCurrencyCode().trim()) ) {
 			
 			errors.add(
-					"title", new ActionError("error.aim.addFilteredRate.selectionExists")
+					"title", new ActionMessage("error.aim.addFilteredRate.selectionExists")
 			);
 		}
 		else {
@@ -127,7 +127,7 @@ public class SelectFilteredCurrencyRates extends MultiAction {
 	}
 	
 	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response, ActionErrors errors)
+			HttpServletRequest request, HttpServletResponse response, ActionMessages errors)
 			throws Exception {
 		
 		SelectFilteredCurrencyRatesForm myForm			= (SelectFilteredCurrencyRatesForm) form;

@@ -3,15 +3,13 @@
  */
 package org.digijava.module.aim.startup;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -19,7 +17,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -28,16 +25,15 @@ import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.SchedulerMetaData;
 import org.quartz.ee.servlet.QuartzInitializerListener;
-import org.quartz.impl.StdSchedulerFactory;
 
 public class AMPStartupListener extends HttpServlet implements
 		ServletContextListener {
@@ -51,7 +47,42 @@ public class AMPStartupListener extends HttpServlet implements
 
 	private static Logger logger = Logger.getLogger(AMPStartupListener.class);
 
+	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
+		ServletContext ampContext = sce.getServletContext();
+		
+		//destroy quartz
+		SchedulerFactory factory = (SchedulerFactory) ampContext.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
+		try {
+			factory.getScheduler().shutdown();
+		} catch (SchedulerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//destroy jackrabbit
+		DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
+		
+		
+		//destroy jdbc
+		Enumeration<Driver> drivers = DriverManager.getDrivers();
+		while (drivers.hasMoreElements()) {
+			Driver driver = (Driver) drivers.nextElement();
+			try {
+				DriverManager.deregisterDriver(driver);
+			} catch (SQLException e) {
+				logger.error("Could not deregister driver "+driver);
+				e.printStackTrace();
+			}
+		}
+
+    	try {
+			Thread.currentThread().sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		logger.info("The AMP ServletContext has been terminated.");
 	}
 
@@ -109,6 +140,7 @@ public class AMPStartupListener extends HttpServlet implements
 			logger.error(e);
 		}
 	}
+	
 
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ampContext = null;

@@ -129,22 +129,22 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
             
               //verify update
             addRequestParameter("actType", "update");
-            verifyNoActionErrors();
+            verifyNoActionMessages();
             verifyForward("forward");
 
               //verify save
             addRequestParameter("actType", "save");
-            verifyNoActionErrors();
+            verifyNoActionMessages();
             verifyForward("forward");
 
              //verify view all
             addRequestParameter("actType", "viewAll");
-            verifyNoActionErrors();
+            verifyNoActionMessages();
             verifyForward("forward");
 
               //verify delete
             addRequestParameter("actType", "delete");
-            verifyNoActionErrors();
+            verifyNoActionMessages();
             verifyForward("forward");
        
     }

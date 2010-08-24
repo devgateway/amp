@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -80,8 +80,8 @@ public class EditOrgGroup extends Action {
 			
 			AmpOrgGroup groupByName = DbUtil.getAmpOrgGroupByName(ampGrp.getOrgGrpName());
 			if(groupByName !=null && (editForm.getAmpOrgGrpId()==null || groupByName.getAmpOrgGrpId().compareTo( editForm.getAmpOrgGrpId())!=0)) {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.duplicateGroupName"));
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.duplicateGroupName"));
 				saveErrors(request, errors);
 				//if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit"); 
 				//else editForm.setAction("create");
@@ -115,8 +115,8 @@ public class EditOrgGroup extends Action {
 
 			Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
 			if (DbUtil.isUsed(editForm.getAmpOrgGrpId(), true)) {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.deleteOrgGroup"));
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.deleteOrgGroup"));
 				saveErrors(request, errors);
 				editForm.setAction("edit");
 				return mapping.findForward("forward");

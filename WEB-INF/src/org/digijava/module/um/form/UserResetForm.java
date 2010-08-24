@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 //////////////
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.validator.ValidatorForm;
 
 public class UserResetForm
@@ -66,13 +66,13 @@ public class UserResetForm
 
         if ( (this.getNewpassword() == null) ||
             this.getNewpassword().trim().length() == 0) {
-            ActionError error = new ActionError(
+            ActionMessage error = new ActionMessage(
                 "error.update.blankconfirmpassword");
             errors.add(null, error);
 
         }
         else if (! (this.getConfirmpassword().equals(this.getNewpassword()))) {
-            ActionError error = new ActionError("error.update.noPasswordMatch");
+            ActionMessage error = new ActionMessage("error.update.noPasswordMatch");
             errors.add(null, error);
 
         }

@@ -48,9 +48,10 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.util.ModuleUtils;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.config.DigiConfig;
@@ -107,7 +108,7 @@ public final class HttpLoginManager {
 
         private Long userId;
         private int loginResult;
-        private ActionErrors errors;
+        private ActionMessages errors;
         private Long moduleId;
         private Long newUserId;
         private long sourceSiteId;
@@ -190,11 +191,11 @@ public final class HttpLoginManager {
             return loginResult;
         }
 
-        public void setActionErrors(ActionErrors errors) {
+        public void setActionMessages(ActionMessages errors) {
             this.errors = errors;
     }
 
-        public ActionErrors  getActionErrors() {
+        public ActionMessages  getActionMessages() {
             return this.errors;
         }
 
@@ -218,25 +219,25 @@ public final class HttpLoginManager {
         LoginInfo loginInfo = null;
             loginInfo = getLoginInfo(dgSessionId);
             if (loginInfo != null) {
-                ActionErrors errors = loginInfo.getActionErrors();
+                ActionMessages errors = loginInfo.getActionMessages();
                 if (errors != null) {
                     logger.debug("Set action errors in request, error size is " + errors.size());
                     request.setAttribute(Globals.ERROR_KEY, errors);
                     request.setAttribute(Constants.DG_UM_MODULE_ID,loginInfo.getModuleId());
-                    loginInfo.setActionErrors(null);
+                    loginInfo.setActionMessages(null);
                     saveLoginInfo(dgSessionId, loginInfo);
                 }
             }
         }
     }
 
-    public static void saveErrors(HttpServletRequest request, String sessionId, Long moduleId, ActionErrors errors) {
+    public static void saveErrors(HttpServletRequest request, String sessionId, Long moduleId, ActionMessages errors) {
         LoginInfo loginInfo = getLoginInfo(sessionId);
         if (loginInfo == null) {
             loginInfo = new LoginInfo();
         }
         loginInfo.setModuleId(moduleId);
-        loginInfo.setActionErrors(errors);
+        loginInfo.setActionMessages(errors);
         saveLoginInfo(sessionId, loginInfo);
     }
 
@@ -687,7 +688,7 @@ public final class HttpLoginManager {
         if (replace && !loginInfo.isLoggedIn() &&
             loginInfo.getLoginResult() != LOGIN_RESULT_OK) {
             loginInfo = new LoginInfo();
-            loginInfo.setActionErrors(prevLoginInfo.getActionErrors());
+            loginInfo.setActionMessages(prevLoginInfo.getActionMessages());
             saveLoginInfo(sessionId, loginInfo);
         }
         invalidate(request);
@@ -867,7 +868,7 @@ public final class HttpLoginManager {
         }
 
         ArrayList requiredPermissions = null;
-        ModuleConfig moduleConfig = org.apache.struts.util.RequestUtils.
+        ModuleConfig moduleConfig = ModuleUtils.getInstance().
             getModuleConfig(request, request.getSession().getServletContext());
 
         RequestProcessor processor = (RequestProcessor) request.getSession().

@@ -1,10 +1,7 @@
 package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -12,15 +9,14 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.contentrepository.dbentity.template.PossibleValue;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
@@ -31,10 +27,8 @@ import org.digijava.module.contentrepository.helper.template.TemplateConstants;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
 import org.digijava.module.contentrepository.util.TemplateDocsUtil;
-import org.digijava.module.message.helper.MessageConstants;
 
 import com.rc.retroweaver.runtime.Collections;
-import com.sun.media.sound.MidiUtils.TempoCache;
 
 public class TemplateDocActions extends DispatchAction {
 	
@@ -102,7 +96,7 @@ public class TemplateDocActions extends DispatchAction {
 		TemplateDoc tempDoc=TemplateDocsUtil.getTemplateDocByName(tempName);
 		if(tempDoc!=null){
 			if(! tempDoc.getId().equals(myForm.getTemplateId())){
-				errors.add("name not unique", new ActionError("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists", request)));
+				errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists", request)));
 			}			
 		}				
 		if (errors.size() > 0){

@@ -35,6 +35,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -69,7 +70,7 @@ public class DateTag
         }
         // Look up the requested property value
         Object value =
-            org.apache.struts.util.RequestUtils.lookup(pageContext, name,
+        	TagUtils.getInstance().lookup(pageContext, name,
             property, scope);
         if (value == null) {
             logger.debug("No value defined for bean name: " + name + " property: " + property + " scope: " + scope);

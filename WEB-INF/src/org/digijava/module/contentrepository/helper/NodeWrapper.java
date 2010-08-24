@@ -17,8 +17,8 @@ import javax.jcr.Workspace;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
@@ -41,7 +41,7 @@ public class NodeWrapper {
 		this.node	= node;
 	}
 	
-	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
+	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 		
 		FormFile formFile		= myForm.getFileData();
 		
@@ -116,8 +116,8 @@ public class NodeWrapper {
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError error	= 
-				new ActionError("error.contentrepository.addFile:badPath");
+			ActionMessage error	= 
+				new ActionMessage("error.contentrepository.addFile:badPath");
 			errors.add("title",error);
 			e.printStackTrace();
 			errorAppeared	= true;
@@ -131,7 +131,7 @@ public class NodeWrapper {
 	/**
 	 * create document from template
 	 */
-	public NodeWrapper(String fileName , InputStream content , String contentType ,int fileSize,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
+	public NodeWrapper(String fileName , InputStream content , String contentType ,int fileSize,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 			
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -164,7 +164,7 @@ public class NodeWrapper {
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError error	= new ActionError("error.contentrepository.addFile:badPath");
+			ActionMessage error	= new ActionMessage("error.contentrepository.addFile:badPath");
 			errors.add("title",error);
 			e.printStackTrace();
 			errorAppeared	= true;
@@ -294,7 +294,7 @@ public class NodeWrapper {
 	}	
 	
 	
-	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionErrors errors) {
+	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -372,8 +372,8 @@ public class NodeWrapper {
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError error	= 
-				new ActionError("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
+			ActionMessage error	= 
+				new ActionMessage("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
 			errors.add("title",error);
 			e.printStackTrace();
 			errorAppeared	= true;

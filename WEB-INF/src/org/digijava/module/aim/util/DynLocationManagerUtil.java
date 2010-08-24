@@ -14,8 +14,8 @@ import java.util.TreeSet;
 
 import org.apache.ecs.vxml.Catch;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -39,7 +39,7 @@ public class DynLocationManagerUtil {
 
 	public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(
 			AmpCategoryClass implLoc, DynLocationManagerForm myForm,
-			ActionErrors errors) {
+			ActionMessages errors) {
 		Collection<AmpCategoryValueLocations> locations = null;
 		Session dbSession = null;
 		Collection<AmpCategoryValueLocations> rootLocations = null;
@@ -58,7 +58,7 @@ public class DynLocationManagerUtil {
 				checkTree(rootLocations, badLayerLocations);
 				if (badLayerLocations.size() > 0) {
 					String errorListStr = collectionToString(badLayerLocations);
-					errors.add("title", new ActionError(
+					errors.add("title", new ActionMessage(
 							"error.aim.dynRegionManager.badLayerProblem",
 							errorListStr));
 				}
@@ -77,7 +77,7 @@ public class DynLocationManagerUtil {
 		return rootLocations;
 	}
 
-	public static void deleteLocation(Long id, ActionErrors errors) {
+	public static void deleteLocation(Long id, ActionMessages errors) {
 		Session dbSession = null;
 		Transaction tx = null;
 		try {
@@ -99,7 +99,7 @@ public class DynLocationManagerUtil {
 		} catch (Exception e) {
 			tx.rollback();
 			if (errors != null)
-				errors.add("title", new ActionError(
+				errors.add("title", new ActionMessage(
 						"error.aim.dynRegionManager.locationIsInUse"));
 			e.printStackTrace();
 		} finally {
@@ -113,7 +113,7 @@ public class DynLocationManagerUtil {
 
 	public static void saveStructure(String treeStructure,
 			String unorganizedLocations, AmpCategoryClass implLoc,
-			ActionErrors errors) {
+			ActionMessages errors) {
 		if (treeStructure.length() < 4)
 			return;
 		Collection<AmpCategoryValueLocations> locations = null;
@@ -176,7 +176,7 @@ public class DynLocationManagerUtil {
 			if (badLayerLocations.size() > 0) {
 				String errorListStr = collectionToString(badLayerLocations);
 				if (errors != null)
-					errors.add("title", new ActionError(
+					errors.add("title", new ActionMessage(
 							"error.aim.dynRegionManager.badLayerProblem",
 							errorListStr));
 				throw new DynLocationStructuralException(
@@ -187,7 +187,7 @@ public class DynLocationManagerUtil {
 		} catch (Exception e) {
 			tx.rollback();
 			if (errors != null)
-				errors.add("title", new ActionError(
+				errors.add("title", new ActionMessage(
 						"error.aim.dynRegionManager.treeSavingProblem"));
 			e.printStackTrace();
 		} finally {

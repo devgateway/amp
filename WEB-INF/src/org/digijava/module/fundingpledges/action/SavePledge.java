@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -164,8 +164,8 @@ public class SavePledge extends Action {
 		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
 		if (fpByNameAndOrg != null) {
 			if (fpByNameAndOrg.size()!=0) {
-				ActionErrors errors=new ActionErrors();
-				errors.add("incorrectTitle", new ActionError("error.aim.pledges.duplicatedTitle"));
+				ActionMessages errors=new ActionMessages();
+				errors.add("incorrectTitle", new ActionMessage("error.aim.pledges.duplicatedTitle"));
 				saveErrors(request, errors);
 				request.getSession().setAttribute("duplicatedTitleError", errors);
         		//return mapping.findForward("success");

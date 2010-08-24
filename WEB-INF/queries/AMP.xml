@@ -19,9 +19,27 @@
             <![CDATA[select * from v_pledges_date_hierarchy]]>
           </SQL>
         </View>
-			 <Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
+			 <Level name="Year" column="year" levelType="TimeYears" type="Numeric"/>
 			 <Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
-			 <Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric"/>
+			 <Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric">
+			 <NameExpression>
+					<SQL dialect="mysql">
+						case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN '#january#'
+						WHEN month_name='february' THEN '#february#'
+						WHEN month_name='march' THEN '#march#'
+						WHEN month_name='april' THEN '#april#'
+						WHEN month_name='may' THEN '#may#'
+						WHEN month_name='june' THEN '#june#'
+						WHEN month_name='july' THEN '#july#'
+						WHEN month_name='august' THEN '#august#'
+						WHEN month_name='september' THEN '#september#'
+						WHEN month_name='october' THEN '#october#'
+						WHEN month_name='november' THEN '#november#'
+						WHEN month_name='december' THEN '#december#'
+						END
+					</SQL>
+				</NameExpression>
+				</Level>
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
@@ -29,7 +47,26 @@
 			<Table name="cached_v_donor_date_hierarchy" />
 				<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
-				<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric"/>
+				<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric">
+				<NameExpression>
+					<SQL dialect="mysql">
+						case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN '#january#'
+						WHEN month_name='february' THEN '#february#'
+						WHEN month_name='march' THEN '#march#'
+						WHEN month_name='april' THEN '#april#'
+						WHEN month_name='may' THEN '#may#'
+						WHEN month_name='june' THEN '#june#'
+						WHEN month_name='july' THEN '#july#'
+						WHEN month_name='august' THEN '#august#'
+						WHEN month_name='september' THEN '#september#'
+						WHEN month_name='october' THEN '#october#'
+						WHEN month_name='november' THEN '#november#'
+						WHEN month_name='december' THEN '#december#'
+						END
+					</SQL>
+				</NameExpression>
+				</Level>
+				
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Status">

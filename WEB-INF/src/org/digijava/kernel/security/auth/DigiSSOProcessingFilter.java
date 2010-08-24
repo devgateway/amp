@@ -35,8 +35,8 @@ import org.acegisecurity.AuthenticationException;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
 import org.acegisecurity.ui.AbstractProcessingFilter;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForward;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -143,7 +143,7 @@ public class DigiSSOProcessingFilter
         }
 
 
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         ActionForward failureForward = null;
         try {
             failureForward = HttpLoginManager.getFailureForward(
@@ -158,11 +158,11 @@ public class DigiSSOProcessingFilter
         switch (ex.reason) {
             case HttpLoginManager.LOGIN_RESULT_INVALID:
                 errors.add(HttpLoginManager.LOGIN_ERROR_KEY,
-                           new ActionError("error.logon.invalid"));
+                           new ActionMessage("error.logon.invalid"));
                 break;
             case HttpLoginManager.LOGIN_RESULT_BANNED:
                 errors.add(HttpLoginManager.LOGIN_ERROR_KEY,
-                           new ActionError("error.logon.banned"));
+                           new ActionMessage("error.logon.banned"));
                 break;
         }
 

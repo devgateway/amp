@@ -25,7 +25,7 @@ package org.digijava.module.admin.form;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -89,7 +89,7 @@ public class GroupsForm
 
         if ( (groupName == null) || (groupName.trim().length() == 0)) {
             errors.add(null,
-                       new ActionError("error.admin.groupNameEmpty"));
+                       new ActionMessage("error.admin.groupNameEmpty"));
         }
 
         return errors.isEmpty() ? null : errors;

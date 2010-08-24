@@ -29,8 +29,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -71,7 +71,7 @@ public class SaveInstances extends Action {
             }
         }
 
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         iter = formBean.getInstances().iterator();
         while (iter.hasNext()) {
             SiteInstancesForm.InstanceInfo info = (SiteInstancesForm.
@@ -119,7 +119,7 @@ public class SaveInstances extends Action {
                         info.getModule(), info.getInstance(),
                         realInst.getSite().getName(), realInst.getInstanceName()};
                     errors.add(null,
-                               new ActionError("error.admin.unacceptableMaster"));
+                               new ActionMessage("error.admin.unacceptableMaster"));
                 }
             }
         }

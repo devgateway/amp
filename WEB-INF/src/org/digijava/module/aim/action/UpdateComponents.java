@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -85,11 +85,11 @@ public class UpdateComponents extends Action {
 				boolean flag = ComponentsUtil.checkComponentNameExists(updCompForm.getCompTitle());
 				boolean flagCode = ComponentsUtil.checkComponentCodeExists(updCompForm.getCompCode());
 				if (flag || flagCode) {
-					ActionErrors errors = new ActionErrors();
+					ActionMessages errors = new ActionMessages();
 					if (flag)
-						errors.add("title", new ActionError("error.aim.componentName.Present"));
+						errors.add("title", new ActionMessage("error.aim.componentName.Present"));
 					else
-						errors.add("code", new ActionError("error.aim.componentCode.Present"));
+						errors.add("code", new ActionMessage("error.aim.componentCode.Present"));
 					saveErrors(request, errors);
 					updCompForm.setCheck("true");
 					logger.debug("Duplicate Values::::::::::::::;;");
@@ -117,12 +117,12 @@ public class UpdateComponents extends Action {
 				return mapping.findForward("forward");
 			} else if (event.equalsIgnoreCase("delete")) {
 				Long id = Long.valueOf(compId);
-				ActionErrors errors = new ActionErrors();
+				ActionMessages errors = new ActionMessages();
 				AmpComponent cm = ComponentsUtil.getComponentById(id);
 				if (cm == null || cm.getActivities() == null || cm.getActivities().isEmpty()) {
 					ComponentsUtil.deleteComponent(id);
 				} else {
-					errors.add("Delete", new ActionError("error.aim.componentDelete"));
+					errors.add("Delete", new ActionMessage("error.aim.componentDelete"));
 					saveErrors(request, errors);
 				}
 

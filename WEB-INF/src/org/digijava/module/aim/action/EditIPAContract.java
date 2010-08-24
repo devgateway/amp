@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -415,7 +415,7 @@ public class EditIPAContract extends MultiAction {
     public ActionForward modeValidateSave(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         IPAContractForm eaf = (IPAContractForm) form;
         List<String> amountsList = new ArrayList<String>();
         amountsList.add(eaf.getTotalECContribIBAmount());
@@ -429,10 +429,10 @@ public class EditIPAContract extends MultiAction {
 
 
         if (hasInvalidAmounts(amountsList)) {
-            errors.add("title", new ActionError(
+            errors.add("title", new ActionMessage(
                     "error.aim.ipacontract.invalidAmountFormat"));
         }
-        //if(hasUnselectedItems(eaf.())) errors.add("title", new ActionError(
+        //if(hasUnselectedItems(eaf.())) errors.add("title", new ActionMessage(
         //"error.aim.euactivity.selectDonor"));
 
         saveErrors(request, errors);

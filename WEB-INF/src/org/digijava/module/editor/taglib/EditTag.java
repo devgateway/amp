@@ -86,7 +86,8 @@ public class EditTag
                             SiteUtils.getDefaultLanguages(site).getCode());
                     }
                 }
-                if (maxLength==null || maxLength==0 || editorBody.length()<maxLength) {
+                if(editorBody==null) return SKIP_BODY;
+                if (maxLength==null || maxLength==0 || (editorBody!=null && editorBody.length()<maxLength)) {
                 	setEditorBody(editorBody);
 				} else {
 					setEditorBody(formatLongText(editorBody, request));

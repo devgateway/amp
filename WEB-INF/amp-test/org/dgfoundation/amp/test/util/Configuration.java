@@ -34,7 +34,7 @@ public class Configuration {
 			// Initialize a JNDI reference to the real datasource deployed by
 			// jboss-web.xml
 			// You need to have a JBoss instance running on localhost!
-			StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
+			//StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/hibernate-test.xml";
 			
 			String repository = getProperties().getProperty("repository");

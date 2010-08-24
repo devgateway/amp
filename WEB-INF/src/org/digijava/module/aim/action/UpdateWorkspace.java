@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -63,11 +63,11 @@ public class UpdateWorkspace extends Action {
             	
             ////System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.info("event : " + event + " dest : " + dest);
-            ActionErrors errors = new ActionErrors();
+            ActionMessages errors = new ActionMessages();
             if(uwForm.getWorkspaceType()!=null &&  "Team".compareTo(uwForm.getWorkspaceType()) ==0 )
             {
             	if( (uwForm.getComputation()!=null && uwForm.getComputation()==true)  && (uwForm.getOrganizations()==null || uwForm.getOrganizations().size()==0)){
-	            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.noChildOrg"));
+	            	errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.updateWorkspace.noChildOrg"));
 	            	saveErrors(request, errors);   
 	            	return mapping.getInputForward();
 	            }
@@ -142,8 +142,8 @@ public class UpdateWorkspace extends Action {
                     {
                  	   errors
                         .add(
-                            ActionErrors.GLOBAL_ERROR,
-                            new ActionError(
+                            ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage(
                                 "error.aim.updateWorkspace.noManagementChildSelected"));
                     saveErrors(request, errors);
                     logger
@@ -157,8 +157,8 @@ public class UpdateWorkspace extends Action {
                     if(teamExist) {
                         errors
                             .add(
-                                ActionErrors.GLOBAL_ERROR,
-                                new ActionError(
+                                ActionMessages.GLOBAL_MESSAGE,
+                                new ActionMessage(
                                     "error.aim.updateWorkspace.teamNameAlreadyExist"));
                         saveErrors(request, errors);
                         logger
@@ -174,8 +174,8 @@ public class UpdateWorkspace extends Action {
                     {
                  		errors
                         .add(
-                            ActionErrors.GLOBAL_ERROR,
-                            new ActionError(
+                            ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage(
                                 "error.aim.updateWorkspace.noManagementChildSelected"));
                     saveErrors(request, errors);
                     logger
@@ -187,7 +187,7 @@ public class UpdateWorkspace extends Action {
                 	else newTeam.setAmpTeamId(new Long(Long.parseLong(tId1)));
                     if(newTeam.getAccessType().equalsIgnoreCase("Team"))// && (uwForm.getChildWorkspaces() != null && uwForm.getChildWorkspaces().size() > 0)) {
                     {	uwForm.setChildWorkspaces(new ArrayList());
-                        //errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.childTeamsExistForTeam"));
+                        //errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.updateWorkspace.childTeamsExistForTeam"));
                         //saveErrors(request, errors);
                       //  return mapping.getInputForward();
                     }
@@ -205,8 +205,8 @@ public class UpdateWorkspace extends Action {
                     if(teamExist) {
                         errors
                             .add(
-                                ActionErrors.GLOBAL_ERROR,
-                                new ActionError(
+                                ActionMessages.GLOBAL_MESSAGE,
+                                new ActionMessage(
                                     "error.aim.updateWorkspace.teamNameAlreadyExist"));
                         saveErrors(request, errors);
                         logger
@@ -234,16 +234,16 @@ public class UpdateWorkspace extends Action {
                 boolean actExist = TeamUtil.teamHasActivities(teamId);
 
                 if(memExist) {
-                	errors = new ActionErrors();
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                	errors = new ActionMessages();
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
                         "error.aim.membersExistForTeam"));
                     saveErrors(request, errors);
                 
                   return mapping.findForward("forward");
                 } 
                 if(actExist) {
-                	errors = new ActionErrors();
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                	errors = new ActionMessages();
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
                         "error.aim.activitiesExistForTeam"));
                     saveErrors(request, errors);
                 

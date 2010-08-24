@@ -24,9 +24,9 @@ package org.digijava.kernel.taglib.html;
 
 import javax.servlet.jsp.JspException;
 
+import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.BaseInputTag;
 import org.apache.struts.taglib.html.Constants;
-import org.apache.struts.util.ResponseUtils;
 
 public class HtmlEditorTag
     extends BaseInputTag {
@@ -65,7 +65,7 @@ public class HtmlEditorTag
         results.append(componentId + ".Create();\n");
         results.append("</script>\n");
 
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         return EVAL_PAGE;
     }

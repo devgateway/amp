@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -105,7 +105,7 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletResponse response) throws Exception {
 
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         IndicatorSector indSec;
         List<AmpCategoryValueLocations> regions = new ArrayList<AmpCategoryValueLocations>();
         AmpSector selectedSector = indSecForm.getSector();
@@ -169,7 +169,7 @@ public class IndicatorSectorManager extends DispatchAction {
                     IndicatorUtil.saveIndicatorConnection(indSec);
                     return viewAll(mapping, form, request, response);
                 } else {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.widget.indicatorSector.indicatorSectorExists"));
                     saveErrors(request, errors);
                     return mapping.findForward("create");
                 }
@@ -198,11 +198,11 @@ public class IndicatorSectorManager extends DispatchAction {
 
                     if (allRegionsSelected) {
                         if (errors.size() == 0) {
-                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorSkipped"));
+                            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.widget.indicatorSector.indicatorSectorSkipped"));
                             saveErrors(request, errors);
                         }
                     } else {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
+                        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.widget.indicatorSector.indicatorSectorExists"));
                         saveErrors(request, errors);
                         return mapping.findForward("create");
                     }
@@ -320,8 +320,8 @@ public class IndicatorSectorManager extends DispatchAction {
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         boolean widgetsExists = ChartWidgetUtil.isWidgetForIndicator(indSec);
         if (widgetsExists){
-        	ActionErrors aes = new ActionErrors();
-        	ActionError ae = new ActionError("error.aim.deleteIndicatorSector.widgetReferencesIt");
+        	ActionMessages aes = new ActionMessages();
+        	ActionMessage ae = new ActionMessage("error.aim.deleteIndicatorSector.widgetReferencesIt");
         	aes.add("Cannot delete indicator - widget is referenceing it",ae);
         	saveErrors(request, aes);
         }else{

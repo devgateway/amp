@@ -6,8 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -42,7 +42,7 @@ public class UpdateRoles extends Action {
 			urForm.setAction("add");
 		}
 
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
 
 		if (session.getAttribute("ampRoles") != null) {
 			session.removeAttribute("ampRoles");
@@ -53,7 +53,7 @@ public class UpdateRoles extends Action {
 				AmpTeamMemberRoles ampRoles = null;
 				ampRoles = TeamMemberUtil.getAmpRoleByName(urForm.getRole());
 				if (ampRoles != null) {
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 							"error.aim.updateRoles.roleAlreadyExist"));
 					saveErrors(request, errors);
 					return mapping.getInputForward();

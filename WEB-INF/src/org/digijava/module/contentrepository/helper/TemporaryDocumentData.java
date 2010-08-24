@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -59,7 +59,7 @@ public class TemporaryDocumentData extends DocumentData {
 		
 	}
 	
-	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionErrors errors) {
+	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionMessages errors) {
 		errorsFound		= false;
 		//HashMap errors = new HashMap();
 		if ( dmForm.getFileData() != null ) {
@@ -118,7 +118,7 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setUuid( CrConstants.TEMPORARY_UUID + (list.size()-1) );
 	}
 	
-	public NodeWrapper saveToRepository (HttpServletRequest request, ActionErrors errors) {
+	public NodeWrapper saveToRepository (HttpServletRequest request, ActionMessages errors) {
 		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);

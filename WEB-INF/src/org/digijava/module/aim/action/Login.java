@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -62,7 +62,7 @@ public class Login extends Action {
 		LoginForm lForm = (LoginForm) form; // login form instance
 		ampContext = getServlet().getServletContext();
 
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
 		HttpSession session = request.getSession();
 
 		String sessionId = null;
@@ -93,14 +93,14 @@ public class Login extends Action {
 					if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_INVALID) {
 						// invalid login
 						lForm.setLogin(false);
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"error.aim.invalidLogin"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
 					} else if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_BANNED) {
 						// user banned
 						lForm.setLogin(false);
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"error.aim.userBanned"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
@@ -120,7 +120,7 @@ public class Login extends Action {
 					} else {
 						// problem in login. login again
 						lForm.setLogin(false);
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"error.aim.loginFailed"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
@@ -128,7 +128,7 @@ public class Login extends Action {
 				} else {
 					// problem in login. login again
 					lForm.setLogin(false);
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 							"error.aim.loginFailed"));
 					saveErrors(request, errors);
 					return mapping.getInputForward();
@@ -169,8 +169,8 @@ public class Login extends Action {
 					} else {
 						// The user is a regsitered user but not a team member
 						lForm.setLogin(false);
-						errors.add(ActionErrors.GLOBAL_ERROR,
-								new ActionError(
+						errors.add(ActionMessages.GLOBAL_MESSAGE,
+								new ActionMessage(
 										"error.aim.userNotTeamMember"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();

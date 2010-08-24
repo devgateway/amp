@@ -56,7 +56,7 @@ public class ChangePasswordForm extends ValidatorForm {
 					if ( (this.getNewPassword() != null) &&
 										 this.getNewPassword().trim().length() != 0) {
 							  if (! (this.getNewPassword().equals(this.getConfirmNewPassword()))) {
-										 ActionError error = new ActionError(
+										 ActionMessage error = new ActionMessage(
 															  "error.registration.NoPasswordMatch");
 										 errors.add(null, error);
 							  }

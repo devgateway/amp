@@ -22,8 +22,8 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -97,8 +97,8 @@ public class TranslatorManager extends Action {
 			} catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
 				ex.printStackTrace(System.out);
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));				
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}	        
@@ -110,15 +110,15 @@ public class TranslatorManager extends Action {
 			session.removeAttribute("myFile");
 			if(myFile==null)
 			{
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));				
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}
 			if(myFile.getFileData()==null) 
 			{
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));				
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}
@@ -159,8 +159,8 @@ public class TranslatorManager extends Action {
 	        }catch (Exception ex) {
 					logger.error("Exception : " + ex.getMessage());
 					ex.printStackTrace(System.out);
-					ActionErrors errors = new ActionErrors();
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));					
+					ActionMessages errors = new ActionMessages();
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));					
 					saveErrors(request, errors);
 					return mapping.findForward("forward");
 			}	        
@@ -182,8 +182,8 @@ public class TranslatorManager extends Action {
 							}
 							if(searchedLang==false && request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]).compareTo("update")==0)
 							{
-								ActionErrors errors = new ActionErrors();								
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateErrorTranslation"));								
+								ActionMessages errors = new ActionMessages();								
+								errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.updateErrorTranslation"));								
 								saveErrors(request, errors);
 								return mapping.findForward("forward");
 							}	
@@ -224,8 +224,8 @@ public class TranslatorManager extends Action {
 	        } catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
 				ex.printStackTrace(System.out);
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));				
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}	        
@@ -261,8 +261,8 @@ public class TranslatorManager extends Action {
 				return null;
 			}
 			else {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.pleaseChooseALanguageForExport"));
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.pleaseChooseALanguageForExport"));
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}

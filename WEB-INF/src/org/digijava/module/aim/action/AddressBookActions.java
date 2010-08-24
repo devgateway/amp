@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -397,7 +397,7 @@ public class AddressBookActions extends DispatchAction {
 		
 		//check unique email 
 		if(validateData){
-			ActionErrors errors= new ActionErrors();
+			ActionMessages errors= new ActionMessages();
 			int contactWithSameEmail=0;
 			for (ContactPropertyHelper email : emailsToLookFor) {
 				contactWithSameEmail=ContactInfoUtil.getContactsCount(email.getValue().trim(),null);
@@ -412,7 +412,7 @@ public class AddressBookActions extends DispatchAction {
 						
 				Long siteId = site.getId();
 				String locale = navigationLanguage.getCode();
-				errors.add("email not unique", new ActionError("aim.contact.emailExists","Contact with the given email already exists"));
+				errors.add("email not unique", new ActionMessage("aim.contact.emailExists","Contact with the given email already exists"));
 				
 				if (errors.size() > 0){
 					//we have all the errors for this step saved and we must throw the amp error

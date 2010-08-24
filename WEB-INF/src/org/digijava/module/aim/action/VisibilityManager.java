@@ -276,7 +276,7 @@ public class VisibilityManager extends MultiAction {
 		Session hbsession = PersistenceManager.getRequestDBSession();
 		if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"))) {
 			((VisibilityManagerForm) form).addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
-			//errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.templateExistent"));
+			//errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.templateExistent"));
 			//saveErrors(request, errors);
 		} else {
 			FeaturesUtil.insertTemplate(request.getParameter("templateName"), hbsession);

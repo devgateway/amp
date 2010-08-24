@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -111,7 +111,7 @@ public class SearchSiteForm
 
         ActionErrors errors = new ActionErrors();
         if ( (siteKey == null) || (siteKey.trim().length() == 0)) {
-            errors.add(null, new ActionError("error.admin.siteKeyEmpty"));
+            errors.add(null, new ActionMessage("error.admin.siteKeyEmpty"));
         }
 
         return errors.isEmpty() ? null : errors;

@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -117,13 +117,13 @@ public class CommonInstancesForm
 	    if ( (item.getModule() == null) ||
 		(item.getModule().trim().length() == 0)) {
 		errors.add(null,
-			   new ActionError("error.admin.moduleNameEmpty"));
+			   new ActionMessage("error.admin.moduleNameEmpty"));
 		break;
 	    }
 	    if ( (item.getInstance() == null) ||
 		(item.getInstance().trim().length() == 0)) {
 		errors.add(null,
-			   new ActionError("error.admin.instanceNameEmpty"));
+			   new ActionMessage("error.admin.instanceNameEmpty"));
 		break;
 	    }
 
@@ -141,7 +141,7 @@ public class CommonInstancesForm
 		    Object[] param = {
 			  item.getInstance(), item.getModule()};
 		    errors.add(null,
-			       new ActionError(
+			       new ActionMessage(
 			  "error.admin.instanceAlreadyExists",
 			  param));
 		    break;

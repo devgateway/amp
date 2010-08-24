@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -234,7 +234,7 @@ public class EditEUActivity extends MultiAction {
 		AmpCurrency baseCurr		= CurrencyUtil.getAmpcurrency(baseCurrCode);
 		
                       HttpSession session=request.getSession();
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
                 Site site = RequestUtils.getSite(request);
         		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
@@ -256,7 +256,7 @@ public class EditEUActivity extends MultiAction {
                 double totalCostExRate = CurrencyUtil.getExchangeRate(
                           totalCurCode);
                 if (totalCostExRate == 1.0 && !totalCurCode.equals(baseCurrCode)) {
-                  errors.add("title", new ActionError(
+                  errors.add("title", new ActionMessage(
                       "error.aim.addActivity.noExchangeRateIsDefined", 
                       TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
                       TranslatorWorker.translateText(totalCostCurr.getCurrencyName(), request) + 
@@ -274,7 +274,7 @@ public class EditEUActivity extends MultiAction {
                          double exchangeRate = CurrencyUtil.getExchangeRate(
                              currCode);
                          if (exchangeRate == 1.0 &&!currCode.equals( baseCurrCode )) {
-                           errors.add("title", new ActionError(
+                           errors.add("title", new ActionMessage(
                                "error.aim.addActivity.noExchangeRateIsDefined", 
                                TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
                                TranslatorWorker.translateText(totalCostCurr.getCurrencyName(),request) + 
@@ -290,7 +290,7 @@ public class EditEUActivity extends MultiAction {
 		try {
 			Double.parseDouble(eaf.getTotalCost());
 		} catch (NumberFormatException e) {
-			errors.add("title", new ActionError(
+			errors.add("title", new ActionMessage(
 					"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		}
 
@@ -300,20 +300,20 @@ public class EditEUActivity extends MultiAction {
 			
 		} catch (ParseException e) {
 			//System.out.println("Exception:"+e);
-			errors.add("title", new ActionError(
+			errors.add("title", new ActionMessage(
 					"error.aim.euactivity.dueDate", TranslatorWorker.translateText("Please pick the Due Date",locale,siteId)));
 		}
-		if("".equalsIgnoreCase(eaf.getName())) errors.add("title", new ActionError(
+		if("".equalsIgnoreCase(eaf.getName())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.noactivityname", TranslatorWorker.translateText("Please enter the activity name",locale,siteId)));
-		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
+		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
-		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(
+		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.selectDonor", TranslatorWorker.translateText("Please pick the Donors from the drop down lists",locale,siteId)));
-		if(hasUnselectedItems(eaf.getContrCurrIdList())) errors.add("title", new ActionError(
+		if(hasUnselectedItems(eaf.getContrCurrIdList())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.selectCurrency", TranslatorWorker.translateText("Please pick the Currencies from the drop down lists",locale,siteId)));
-		if(hasUnselectedItems(eaf.getContrFinInstrIdList())) errors.add("title", new ActionError(
+		if(hasUnselectedItems(eaf.getContrFinInstrIdList())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.contrFinInstr", TranslatorWorker.translateText("Please pick the Financing Instruments from the drop down lists",locale,siteId)));
-		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionError(
+		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionMessage(
 		"error.aim.euactivity.contrFinType", TranslatorWorker.translateText("Please pick the Financing Types from the drop down lists",locale,siteId)));
 
 

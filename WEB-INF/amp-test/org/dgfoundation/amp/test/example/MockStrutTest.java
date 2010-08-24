@@ -49,7 +49,7 @@ public class MockStrutTest extends BasicActionTestCaseAdapter {
 		form.setPassword("atl");
 		actionPerform(SelectTeam.class, form);
 
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyNoActionMessages();
 		verifyForward("forward");
 		assertNotNull(session.getAttribute("teamLeadFlag"));

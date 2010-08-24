@@ -26,7 +26,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -939,7 +939,7 @@ public class DEImportBuilder {
 					//tdd.setFormFile(new  FormFile());
 					//tdd.setContentType("");
 					tdd.setWebLink(null);
-					ActionErrors errors=new ActionErrors();
+					ActionMessages errors=new ActionMessages();
 					NodeWrapper nodeWrapper			= tdd.saveToRepository(request, errors);
 					
 					if ( nodeWrapper != null ){
@@ -978,7 +978,7 @@ public class DEImportBuilder {
 					//tdd.setFormFile(new  FormFile());
 					tdd.setWebLink(doc.getUrl());
 					//tdd.setContentType("");
-					ActionErrors errors=new ActionErrors();
+					ActionMessages errors=new ActionMessages();
 					NodeWrapper nodeWrapper			= tdd.saveToRepository(request, errors);
 					
 					if ( nodeWrapper != null ){

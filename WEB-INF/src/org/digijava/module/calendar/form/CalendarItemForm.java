@@ -30,7 +30,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.calendar.util.CalendarPopulator;
@@ -1403,13 +1403,13 @@ public class CalendarItemForm
         ActionErrors errors = new ActionErrors();
 
         if (isEmptyString(title)) {
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("error.calendar.itemTitleEmpty"));
+            errors.add(ActionErrors.GLOBAL_MESSAGE,
+                       new ActionMessage("error.calendar.itemTitleEmpty"));
         }
 
         if (isEmptyString(location)) {
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("error.calendar.itemLocationEmpty"));
+            errors.add(ActionErrors.GLOBAL_MESSAGE,
+                       new ActionMessage("error.calendar.itemLocationEmpty"));
         }
 
         boolean sourceUrlEmpty = false;
@@ -1420,8 +1420,8 @@ public class CalendarItemForm
         else {
             int schemePos = sourceUrl.indexOf(REQUEST_SCHEME_DELIMITER);
             if (schemePos < 0) {
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error.calendar.noSourceUrlRequestScheme"));
+                errors.add(ActionErrors.GLOBAL_MESSAGE,
+                           new ActionMessage("error.calendar.noSourceUrlRequestScheme"));
             } else {
                 sourceUrlEmpty =
                     sourceUrl.substring(schemePos +
@@ -1432,18 +1432,18 @@ public class CalendarItemForm
 
         if (sourceUrlEmpty && isEmptyString(sourceName)) {
             if (isEmptyString(description)) {
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error.calendar.itemDescrAndSourceEmpty"));
+                errors.add(ActionErrors.GLOBAL_MESSAGE,
+                           new ActionMessage("error.calendar.itemDescrAndSourceEmpty"));
             }
 
         } else {
             if (sourceUrlEmpty && !isEmptyString(sourceName)) {
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error.calendar.itemSourceUrlEmpty"));
+                errors.add(ActionErrors.GLOBAL_MESSAGE,
+                           new ActionMessage("error.calendar.itemSourceUrlEmpty"));
             }
             if (!sourceUrlEmpty && isEmptyString(sourceName)) {
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error.calendar.itemSourceNameEmpty"));
+                errors.add(ActionErrors.GLOBAL_MESSAGE,
+                           new ActionMessage("error.calendar.itemSourceNameEmpty"));
             }
 
         }
@@ -1451,8 +1451,8 @@ public class CalendarItemForm
 
         if (populator.getStart().getTime().compareTo(populator.getEnd().getTime()) >=
             0) {
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("error.calendar.endDateMustGreater"));
+            errors.add(ActionErrors.GLOBAL_MESSAGE,
+                       new ActionMessage("error.calendar.endDateMustGreater"));
         }
 
         return errors.isEmpty() ? null : errors;

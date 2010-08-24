@@ -45,8 +45,8 @@ import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import java.util.Date;
 import java.text.ParseException;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 
 /**
  * Action displayes events in Year View
@@ -69,9 +69,9 @@ public class ViewYearEvents
                 jumpToDt = (new SimpleDateFormat("yyyy-MM-dd")).parse(jumpTo);
             }
             catch (ParseException ex) {
-                ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("errors.date",
+                ActionMessages errors = new ActionMessages();
+                errors.add(ActionMessages.GLOBAL_MESSAGE,
+                           new ActionMessage("errors.date",
                                            calendForm.getJumpToDate()));
                 saveErrors(request, errors);
                 return mapping.getInputForward();

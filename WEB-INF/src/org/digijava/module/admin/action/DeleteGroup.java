@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -63,14 +63,14 @@ public class DeleteGroup  extends Action {
            }
        }
 
-       ActionErrors errors = new ActionErrors();
+       ActionMessages errors = new ActionMessages();
        if (targetGroup == null) {
            errors.add(null,
-                      new ActionError("error.admin.unknownGroup"));
+                      new ActionMessage("error.admin.unknownGroup"));
        } else {
            if (targetGroup.isDefaultGroup()) {
                errors.add(null,
-                          new ActionError("error.admin.cannotDelDefGroup"));
+                          new ActionMessage("error.admin.cannotDelDefGroup"));
            } else {
                GroupPrincipal gp = new GroupPrincipal(targetGroup.getId().
                    longValue());

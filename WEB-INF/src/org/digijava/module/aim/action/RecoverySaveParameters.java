@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -29,7 +29,7 @@ public class RecoverySaveParameters {
 	private TeamMember tm;
 	private AmpActivity activity;
 	private boolean createdAsDraft;
-	private ActionErrors errors;
+	private ActionMessages errors;
 	private HttpServletRequest request;
 	private HttpSession session;
 	private Long field;
@@ -99,10 +99,10 @@ public class RecoverySaveParameters {
 	public void setCreatedAsDraft(boolean createdAsDraft) {
 		this.createdAsDraft = createdAsDraft;
 	}
-	public ActionErrors getErrors() {
+	public ActionMessages getErrors() {
 		return errors;
 	}
-	public void setErrors(ActionErrors errors) {
+	public void setErrors(ActionMessages errors) {
 		this.errors = errors;
 	}
 	public HttpServletRequest getRequest() {

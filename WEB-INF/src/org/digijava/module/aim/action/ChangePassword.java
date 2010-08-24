@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,20 +25,20 @@ public class ChangePassword extends Action {
 
 					 ChangePasswordForm cpForm = (ChangePasswordForm) form;
 					 
-					 ActionErrors errors = new ActionErrors();
+					 ActionMessages errors = new ActionMessages();
 
 					 logger.debug("In change password");
 
 					 if (cpForm.getUserId() != null && cpForm.getOldPassword() != null && cpForm.getNewPassword() != null) {
 								try {
 										  if (DbUtil.isRegisteredEmail(cpForm.getUserId()) != true) {
-													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidUserId"));
+													 errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.invalidUserId"));
 													 saveErrors(request,errors);
 													 return mapping.getInputForward();
 										  }
 
 										  if (DbUtil.isCorrectPassword(cpForm.getUserId(),cpForm.getOldPassword()) != true) {
-													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidPassword"));
+													 errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.invalidPassword"));
 													 saveErrors(request,errors);
 													 return mapping.getInputForward();
 										  }
@@ -47,8 +47,8 @@ public class ChangePassword extends Action {
 																cpForm.getOldPassword(),
 																cpForm.getNewPassword());
 								} catch (Exception e) {
-										  errors.add(ActionErrors.GLOBAL_ERROR,
-																new ActionError("error.aim.cannotChangePassword"));
+										  errors.add(ActionMessages.GLOBAL_MESSAGE,
+																new ActionMessage("error.aim.cannotChangePassword"));
 										  saveErrors(request,errors);
 										  return mapping.getInputForward();
 								}

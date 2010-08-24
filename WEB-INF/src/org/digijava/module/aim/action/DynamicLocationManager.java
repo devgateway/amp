@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,7 +32,7 @@ public class DynamicLocationManager extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		ActionErrors errors				= new ActionErrors();
+		ActionMessages errors				= new ActionMessages();
 		request.setAttribute("myErrors", errors);
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
 		
@@ -60,12 +60,12 @@ public class DynamicLocationManager extends MultiAction {
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		ActionErrors errors				= (ActionErrors) request.getAttribute("myErrors");
+		ActionMessages errors				= (ActionMessages) request.getAttribute("myErrors");
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
 		
 		String errorString		= CategoryManagerUtil.checkImplementationLocationCategory();
 		if ( errorString != null ) {
-			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.implLocProblem", errorString);
+			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.implLocProblem", errorString);
 			errors.add("title", error);
 			myForm.setImportantErrorAppeared(true);
 		}
@@ -76,7 +76,7 @@ public class DynamicLocationManager extends MultiAction {
 			
 			Collection<AmpCategoryValueLocations> rootLocations	 = null;
 			if ( implLocClass == null || implLocClass.getPossibleValues() == null || implLocClass.getPossibleValues().size() == 0 ) {
-				errors.add("title", new ActionError("error.aim.dynRegionManager.implLocationCategMissing" ) );
+				errors.add("title", new ActionMessage("error.aim.dynRegionManager.implLocationCategMissing" ) );
 			}
 			
 			rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);		
@@ -227,7 +227,7 @@ public class DynamicLocationManager extends MultiAction {
 			throws Exception {
 		
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
-		ActionErrors errors				= (ActionErrors) request.getAttribute("myErrors");
+		ActionMessages errors				= (ActionMessages) request.getAttribute("myErrors");
 		
 		if ( myForm.getTreeStructure() != null && myForm.getTreeStructure().length() > 0)
 			DynLocationManagerUtil.saveStructure(myForm.getTreeStructure(), myForm.getUnorgLocations(), myForm.getImplementationLocation(), errors);

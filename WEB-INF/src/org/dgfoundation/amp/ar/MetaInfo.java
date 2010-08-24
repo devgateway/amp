@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -18,7 +19,7 @@ import java.util.Iterator;
  * @since Jun 15, 2006
  * 
  */
-public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>>  {
+public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>> , Serializable  {
 
 	protected String category;
 

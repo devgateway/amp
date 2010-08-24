@@ -111,7 +111,7 @@ public abstract class CategoryManagerBaseTest extends BasicActionTestCaseAdapter
 		assertTrue(setupOk);
 		actionPerform(CategoryManager.class, myForm);
 		
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyNoActionMessages();
 		verifyForward("forward");
 		

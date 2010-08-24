@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.Constants;
-import org.apache.struts.util.ResponseUtils;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.taglib.util.TagUtil;
@@ -56,7 +56,23 @@ public class FormTag
     private String moduleName;
     private String instanceName;
 
-    private String context = "context/module/moduleinstance";
+    public String getName() {
+		return beanName;
+	}
+
+	public void setName(String name) {
+		this.beanName = name;
+	}
+
+	public String getType() {
+		return beanType;
+	}
+
+	public void setType(String type) {
+		this.beanType = type;
+	}
+
+	private String context = "context/module/moduleinstance";
 
     public String getContextPath() {
         if (moduleName == null) {
@@ -142,7 +158,7 @@ public class FormTag
 
         results.append(renderToken());
 
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         // Store this tag itself as a page attribute
         pageContext.setAttribute(Constants.FORM_KEY, this, PageContext.REQUEST_SCOPE);

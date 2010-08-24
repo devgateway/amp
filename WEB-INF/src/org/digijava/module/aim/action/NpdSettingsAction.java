@@ -3,7 +3,7 @@ package org.digijava.module.aim.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -51,7 +51,7 @@ public class NpdSettingsAction extends DispatchAction {
 	public ActionForward changeSettings(ActionMapping arg0, ActionForm arg1,
 			HttpServletRequest request, HttpServletResponse arg3) throws Exception {
 		NpdSettingsForm form = (NpdSettingsForm) arg1;
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
 		errors = proceedNpdsettingsValidation(form);
 		if (!errors.isEmpty()) {
 			saveErrors(request, errors);
@@ -79,8 +79,8 @@ public class NpdSettingsAction extends DispatchAction {
 		return arg0.findForward("forward");
 	}
 
-	private ActionErrors proceedNpdsettingsValidation(NpdSettingsForm form) {
-		ActionErrors errors = new ActionErrors();
+	private ActionMessages proceedNpdsettingsValidation(NpdSettingsForm form) {
+		ActionMessages errors = new ActionMessages();
 		if (form.getHeight() == null || form.getHeight().intValue() <= 0) {
 			errors.add(null, new ActionMessage(
 					"errors:aim:npdsettings:incorrectHeigh"));

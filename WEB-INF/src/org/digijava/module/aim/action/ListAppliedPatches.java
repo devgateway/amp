@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -30,7 +30,7 @@ import org.hibernate.Session;
 
 public class ListAppliedPatches extends Action {
 	private static Logger logger 				= Logger.getLogger(ListAppliedPatches.class);
-	private ActionErrors errors					= new ActionErrors();
+	private ActionMessages errors					= new ActionMessages();
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception

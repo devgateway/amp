@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
-	version="2.4"
->
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  version="2.5"> 
+
+	<display-name>AMP 1.15</display-name>
+	<description>Aid Management Platform</description>
 
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
@@ -198,6 +200,7 @@
 		<error-code>404</error-code>
 		<location>/exceptionHandle.do</location>
 	</error-page>
+	<jsp-config>
 	<taglib>
 		<taglib-uri>/taglib/struts-bean</taglib-uri>
 		<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
@@ -274,6 +277,17 @@
 		<taglib-uri>/taglib/tags-fckeditor</taglib-uri>
 		<taglib-location>/WEB-INF/FCKeditor.tld</taglib-location>
 	</taglib>
+	<taglib>
+		<taglib-uri>http://www.tonbeller.com/wcf</taglib-uri>
+		<taglib-location>/WEB-INF/wcf/wcf-tags.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>http://www.tonbeller.com/jpivot</taglib-uri>
+		<taglib-location>
+			/WEB-INF/jpivot/jpivot-tags.tld
+		</taglib-location>
+	</taglib>
+	</jsp-config>
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>
@@ -314,15 +328,10 @@
 		<init-param>
 			<param-name>errorJSP</param-name>
 			<param-value>/error.jsp</param-value>
-			<description>URI of error page</description>
 		</init-param>
 		<init-param>
 			<param-name>busyJSP</param-name>
 			<param-value>/busy.jsp</param-value>
-			<description>
-				This page is displayed if a the user clicks on a query
-				before the previous query has finished
-			</description>
 		</init-param>
 		<!--
 			<init-param>
@@ -364,20 +373,12 @@
 	<!-- jfreechart provided servlet -->
 	<servlet>
 		<servlet-name>GetChart</servlet-name>
-		<display-name>GetChart</display-name>
-		<description>
-			Default configuration created for servlet.
-		</description>
 		<servlet-class>
 			com.tonbeller.jpivot.chart.GetChart
 		</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>Print</servlet-name>
-		<display-name>Print</display-name>
-		<description>
-			Default configuration created for servlet.
-		</description>
 		<servlet-class>
 			org.digijava.module.mondrian.serverlet.Exporter
 		</servlet-class>
@@ -404,16 +405,6 @@
 		<servlet-name>MondrianXmlaServlet</servlet-name>
 		<url-pattern>/xmla</url-pattern>
 	</servlet-mapping>
-	<taglib>
-		<taglib-uri>http://www.tonbeller.com/wcf</taglib-uri>
-		<taglib-location>/WEB-INF/wcf/wcf-tags.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>http://www.tonbeller.com/jpivot</taglib-uri>
-		<taglib-location>
-			/WEB-INF/jpivot/jpivot-tags.tld
-		</taglib-location>
-	</taglib>
 	<!-- 
 	<filter>
 		<filter-name>LogDigger Servlet Filter</filter-name>

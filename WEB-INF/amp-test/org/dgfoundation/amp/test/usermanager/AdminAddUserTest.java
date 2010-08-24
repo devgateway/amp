@@ -53,7 +53,7 @@ public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 		setReset(false);
 		actionPerform(RegisterUser.class, addUserForm);
 		verifyForward("forward");
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 
 	}
 	public void testRolesAvailable() throws Exception {	

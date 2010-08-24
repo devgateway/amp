@@ -34,8 +34,8 @@ import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.kernel.entity.ModuleInstance;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Cookie;
@@ -73,14 +73,14 @@ public final class NewSession
             if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_BANNED ||
                 loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_INVALID) {
 
-                ActionErrors errors = new ActionErrors();
+                ActionMessages errors = new ActionMessages();
                 ActionForward failureForward = HttpLoginManager.getFailureForward(request, getServlet().getServletContext());
                     switch (loginInfo.getLoginResult()) {
                         case HttpLoginManager.LOGIN_RESULT_INVALID:
-                            errors.add(HttpLoginManager.LOGIN_ERROR_KEY, new ActionError("error.logon.invalid"));
+                            errors.add(HttpLoginManager.LOGIN_ERROR_KEY, new ActionMessage("error.logon.invalid"));
                             break;
                         case HttpLoginManager.LOGIN_RESULT_BANNED:
-                            errors.add(HttpLoginManager.LOGIN_ERROR_KEY, new ActionError("error.logon.banned"));
+                            errors.add(HttpLoginManager.LOGIN_ERROR_KEY, new ActionMessage("error.logon.banned"));
                             break;
                     }
 

@@ -24,11 +24,11 @@ package org.digijava.kernel.taglib.html;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.struts.util.ResponseUtils;
+import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.taglib.util.TagUtil;
-import javax.servlet.jsp.tagext.BodyContent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -72,7 +72,7 @@ public class SearchTag
 
 
         // Print this field to our output writer
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         // Continue processing this page
         return (EVAL_PAGE);
@@ -82,7 +82,7 @@ public class SearchTag
 
       // Print this field to our output writer
       BodyContent content = getBodyContent();
-      ResponseUtils.write(pageContext, content.getString() + "</form>");
+      TagUtils.getInstance().write(pageContext, content.getString() + "</form>");
       return EVAL_PAGE;
     }
 

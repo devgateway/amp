@@ -28,8 +28,8 @@ import java.util.Iterator;
 import javax.security.auth.Subject;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -62,9 +62,9 @@ public class CreateSite extends Action {
 
         Site someSite = SiteUtils.getSite(siteKey);
         if (someSite != null) {
-            ActionErrors errors = new ActionErrors();
+            ActionMessages errors = new ActionMessages();
             errors.add(null,
-                       new ActionError("error.admin.siteKeyExists"));
+                       new ActionMessage("error.admin.siteKeyExists"));
             saveErrors(request, errors);
             return mapping.findForward("error");
         }
@@ -87,9 +87,9 @@ public class CreateSite extends Action {
         }
 
         if (!permitted) {
-            ActionErrors errors = new ActionErrors();
+            ActionMessages errors = new ActionMessages();
             errors.add(null,
-                       new ActionError("error.admin.noPermissions"));
+                       new ActionMessage("error.admin.noPermissions"));
             saveErrors(request, errors);
             return mapping.findForward("error");
         }
@@ -109,7 +109,7 @@ public class CreateSite extends Action {
         site.setFolder(siteForm.getFolderName());
 
         // Assign domains to site
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         site.setSiteDomains(new HashSet());
         Iterator iter = siteForm.getSiteDomains().iterator();
         while (iter.hasNext()) {
@@ -133,7 +133,7 @@ public class CreateSite extends Action {
                     item.getDomain(),
                     item.getPath(), tmpSite.getName()};
 
-                errors.add(null, new ActionError("error.admin.siteDomainExists", params));
+                errors.add(null, new ActionMessage("error.admin.siteDomainExists", params));
             }
             // Assign language
             siteDomain.setLanguage(null);

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.util.ResponseUtils;
+import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.DgUrlProcessor;
 import org.digijava.kernel.request.Site;
@@ -173,7 +173,7 @@ public class LinkTag
             StringBuffer results = new StringBuffer("<a name=\"");
             results.append(linkName);
             results.append("\">");
-            ResponseUtils.write(pageContext, results.toString());
+            TagUtils.getInstance().write(pageContext, results.toString());
             return (EVAL_BODY_BUFFERED);
         }
 
@@ -221,7 +221,7 @@ public class LinkTag
         results.append(">");
 
         // Print this element to our output writer
-        ResponseUtils.write(pageContext, results.toString());
+        TagUtils.getInstance().write(pageContext, results.toString());
 
         // Evaluate the body of this tag
         this.text = null;

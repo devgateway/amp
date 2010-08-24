@@ -31,8 +31,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.module.admin.form.CommonInstancesForm;
 import org.digijava.kernel.util.DgUtil;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionMessage;
 
 public class DeleteCommonInstance
       extends Action {
@@ -54,7 +54,7 @@ public class DeleteCommonInstance
 	      CommonInstanceInfo) formBean.getCommonInstances().get(
 	      instanceIndex);
 
-	ActionErrors errors = new ActionErrors();
+	ActionMessages errors = new ActionMessages();
 	if ( (info.getModule().equals("admin") &&
 	      info.getInstance().equals("default")) ||
 	    (info.getModule().equals("um") && info.getInstance().equals("user"))) {
@@ -63,7 +63,7 @@ public class DeleteCommonInstance
 		  info.getModule(), info.getInstance()};
 
 	    errors.add(null,
-		       new ActionError("error.admin.blockRemove", param));
+		       new ActionMessage("error.admin.blockRemove", param));
 	}
 	if (!errors.isEmpty()) {
 	    saveErrors(request, errors);

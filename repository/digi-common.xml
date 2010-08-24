@@ -51,11 +51,12 @@
 	</hibernate-classes>
 
 	
+<!-- 
 	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
             <description>Digi's feed publishing service</description>
      </service>
 
-	
+	 -->
 
 
     <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">

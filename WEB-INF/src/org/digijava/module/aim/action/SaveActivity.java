@@ -24,8 +24,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -190,7 +190,7 @@ public class SaveActivity extends Action {
 		activity.setName(eaForm.getIdentification().getTitle());
 	}
 	
-	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -198,10 +198,10 @@ public class SaveActivity extends Action {
 			//Do the checks here
 			if (eaForm.getIdentification().getTitle() != null) {
 				if (eaForm.getIdentification().getTitle().trim().length() == 0) {
-					errors.add("title", new ActionError(
+					errors.add("title", new ActionMessage(
 					"error.aim.addActivity.titleMissing", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
 				} else if (eaForm.getIdentification().getTitle().length() > 255) {
-					errors.add("title", new ActionError(
+					errors.add("title", new ActionMessage(
 					"error.aim.addActivity.titleTooLong", TranslatorWorker.translateText("Title should be less than 255 characters",locale,siteId)));
 				}
 			}
@@ -211,7 +211,7 @@ public class SaveActivity extends Action {
 			if(isStatusEnabled()){
 				if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 					if (statId != null && statId.equals(new Long(0))) {
-						errors.add("status", new ActionError(
+						errors.add("status", new ActionMessage(
 						"error.aim.addActivity.statusMissing", TranslatorWorker.translateText("Please select the status",locale,siteId)));
 					}
 				}
@@ -552,7 +552,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -599,7 +599,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, HttpSession session) throws Exception, AMPException{
+	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request, HttpSession session) throws Exception, AMPException{
 		
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
@@ -614,7 +614,7 @@ public class SaveActivity extends Action {
 			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 				if(isSectorEnabled()){
 					if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
-						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
+						errors.add("sector", new ActionMessage("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
 					}
 					else{
 						int primaryPrc=0, secondaryPrc=0;
@@ -630,7 +630,7 @@ public class SaveActivity extends Action {
 								hasSecondarySectorsAdded=true;
 							
 							if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
-								errors.add("sectorPercentageEmpty", new ActionError("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
+								errors.add("sectorPercentageEmpty", new ActionMessage("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
 							}
 							// sector percentage is not a number
 							else {
@@ -639,7 +639,7 @@ public class SaveActivity extends Action {
 									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
-											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
+											new ActionMessage("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
 								}
 							}
 						}
@@ -647,20 +647,20 @@ public class SaveActivity extends Action {
 						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
 							if(!hasPrimarySectorsAdded){
 								errors.add("noPrimarySectorsAdded",
-										new ActionError("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
+										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
 							}
 							if(primaryPrc!=100)
-								errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
+								errors.add("primarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
 						}
 
 						
 						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
 							if(!hasSecondarySectorsAdded){
 								errors.add("noSecondarySectorsAdded",
-										new ActionError("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
+										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
 							}
 							if(hasSecondarySectorsAdded && secondaryPrc!=100)
-								errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
+								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 						}
 
 					}
@@ -681,7 +681,7 @@ public class SaveActivity extends Action {
 						//Checks if it's 100%
 						if (totalPercentage != 100)
 							errors.add("locationPercentageSumWrong",
-									new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 					}
 				}
 				
@@ -699,11 +699,11 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100) {
 						errors.add("nationalPlanProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all National Planning Objective percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all National Planning Objective percentages must be 100",locale,siteId)));
 					}
 					if(failNOP == true) {
 						errors.add("nationalPlanProgramsPercentageWrong",
-								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong", TranslatorWorker.translateText("Please enter all National Planning Objective percentages",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageWrong", TranslatorWorker.translateText("Please enter all National Planning Objective percentages",locale,siteId)));
 					}
 				}
 				
@@ -717,7 +717,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("primaryProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.primaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Primary Program percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.primaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Primary Program percentages must be 100",locale,siteId)));
 				}
 				
 				if (eaForm.getPrograms().getSecondaryPrograms()!= null
@@ -730,7 +730,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("secondaryProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.secondaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Secondary Program percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.secondaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Secondary Program percentages must be 100",locale,siteId)));
 				}
 			}
 			
@@ -920,7 +920,7 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1142,7 +1142,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1328,7 +1328,7 @@ public class SaveActivity extends Action {
 	}
 	
 
-	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1393,7 +1393,7 @@ public class SaveActivity extends Action {
 
     
 
-	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPException{
+	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1468,7 +1468,7 @@ public class SaveActivity extends Action {
 	}
 
     
-	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1648,7 +1648,7 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		ActivityContactInfo contactInfo=eaForm.getContactInformation();
@@ -1685,34 +1685,34 @@ public class SaveActivity extends Action {
 			
 			if (contactInfo.getDonorContacts() != null && contactInfo.getDonorContacts().size() != 0
 					&& (donorContsIds == null || donorContsIds.length != 1)) {
-				errors.add("invalidDonorCont", new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont",
+				errors.add("invalidDonorCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidDonorCont",
 						TranslatorWorker.translateText("Must be one Primary Donor Contact", locale, siteId)));
 			}
 
 			if (contactInfo.getMofedContacts() != null && contactInfo.getMofedContacts().size() != 0
 					&& (mofedContsIds == null || mofedContsIds.length != 1)) {
-				errors.add("invalidMofedCont", new ActionError("error.aim.addActivity.contactInfo.invalidMofedCont",
+				errors.add("invalidMofedCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidMofedCont",
 						TranslatorWorker.translateText("Must be one Primary MOFED Contact", locale, siteId)));
 			}
 
 			if (contactInfo.getProjCoordinatorContacts() != null
 					&& contactInfo.getProjCoordinatorContacts().size() != 0
 					&& (projCoordContsIds == null || projCoordContsIds.length != 1)) {
-				errors.add("invalidProjCoordCont", new ActionError(
+				errors.add("invalidProjCoordCont", new ActionMessage(
 						"error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText(
 								"Must be one Primary Project Coordinator Contact", locale, siteId)));
 			}
 
 			if (contactInfo.getSectorMinistryContacts() != null && contactInfo.getSectorMinistryContacts().size() != 0
 					&& (sectorMinContsIds == null || sectorMinContsIds.length != 1)) {
-				errors.add("invalidSecMinCont", new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont",
+				errors.add("invalidSecMinCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidSecMinCont",
 						TranslatorWorker.translateText("Must be one Primary Sector Ministry Contact", locale, siteId)));
 			}
 
 			if (contactInfo.getImplExecutingAgencyContacts() != null
 					&& contactInfo.getImplExecutingAgencyContacts().size() != 0
 					&& (implExecutingContsIds == null || implExecutingContsIds.length != 1)) {
-				errors.add("invalidImplExecutingAgencyCont", new ActionError(
+				errors.add("invalidImplExecutingAgencyCont", new ActionMessage(
 						"error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText(
 								"Must be one Primary Implementing/Executing Agency Contact", locale, siteId)));
 			}
@@ -1789,7 +1789,7 @@ public class SaveActivity extends Action {
 		}
 	}
 	
-	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1829,7 +1829,7 @@ public class SaveActivity extends Action {
 		}
 	}
 
-	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1949,7 +1949,7 @@ public class SaveActivity extends Action {
 	 * 
 	 * @author Arty
 	 */
-	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		if (check){
@@ -1974,7 +1974,7 @@ public class SaveActivity extends Action {
 	}
 	
 	private void processStepX(int stepNumber, boolean check, EditActivityForm eaForm, AmpActivity activity, 
-			ActionErrors errors, HttpServletRequest request, HttpSession session,
+			ActionMessages errors, HttpServletRequest request, HttpSession session,
 			Collection relatedLinks, String stepText[]) throws Exception, AMPException{
 		
 		
@@ -2329,7 +2329,7 @@ public class SaveActivity extends Action {
 		HttpSession session = request.getSession();
 		//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
 		ampContext = getServlet().getServletContext();
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
 		EditActivityForm eaForm = (EditActivityForm) form;
 		AmpActivity activity = new AmpActivity();
 		Collection relatedLinks = new ArrayList();
@@ -2405,7 +2405,7 @@ public class SaveActivity extends Action {
 				} catch (AMPException error) {
 				if (!error.isContinuable()){
 					if (error.getLevel() == Constants.AMP_ERROR_LEVEL_WARNING){
-						//in this case user messed up, the ActionError was set-up in the method
+						//in this case user messed up, the ActionMessage was set-up in the method
 						//we just redirect him to the page where he needs to correct the input
 						logger.debug(">>> Warning -> redirect to step:" + stepText[stepNumber]);
 						eaForm.setStep(stepText[stepNumber]);
@@ -2440,6 +2440,7 @@ public class SaveActivity extends Action {
 					continue;
 				}
 				try{
+					if(customField.getValue()!=null)
 					BeanUtils.setProperty(activity, customField.getAmpActivityPropertyName(), customField.getValue());
 				}catch(Exception e){
 					logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);

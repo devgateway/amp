@@ -19,7 +19,7 @@ public class TrnAccessUpdateQueue {
 	private HashMap<Message,Timestamp> map = new HashMap<Message,Timestamp>();
 	private Queue<Message> queue = new LinkedList<Message>();
 	private static Logger logger = Logger.getLogger(TrnAccessUpdateQueue.class);
-	public static final String ALLOWED_THREAD_NAME = "TrnTimestampSaver";
+	public static final String ALLOWED_THREAD_NAME = "pool-1-thread-1";
 	
 	/**
 	 * Private constructor. use {@link #getQueue()} to get singleton instance.
@@ -66,7 +66,7 @@ public class TrnAccessUpdateQueue {
 	 * @throws InterruptedException
 	 */
 	public synchronized Message get() throws InterruptedException {
-		if (!Thread.currentThread().getName().equals("TrnTimestampSaver")){
+		if (!Thread.currentThread().getName().equals(ALLOWED_THREAD_NAME)){
 			logger.warn("Other thread entered translation queue, it may be blocked. Name of the thread is "+Thread.currentThread().getName());
 		}
 		while (queue.isEmpty()) {

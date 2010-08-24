@@ -1324,8 +1324,7 @@ public class DgUtil {
         StringBuffer url;
 
         if (request instanceof MultipartRequestWrapper) {
-            url = ( (MultipartRequestWrapper) request).getRequest().
-                getRequestURL();
+            url = ( (MultipartRequestWrapper) request).getRequestURL();
         }
         else {
             url = request.getRequestURL();

@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -96,8 +96,8 @@ public class DeleteSector extends Action {
 			
     		 /* }
     		  else {
-    		    	ActionErrors errors = new ActionErrors();
-    				errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+    		    	ActionMessages errors = new ActionMessages();
+    				errors.add("title", new ActionMessage("error.aim.deleteScheme.schemeSelected"));
     				saveErrors(request, errors);
     		    	//forward="cantDelete";
     		    }
@@ -128,8 +128,8 @@ public class DeleteSector extends Action {
   			
     	/*	  }
     		  else {
-  		    	ActionErrors errors = new ActionErrors();
-				errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+  		    	ActionMessages errors = new ActionMessages();
+				errors.add("title", new ActionMessage("error.aim.deleteScheme.schemeSelected"));
 				saveErrors(request, errors);
 		    	//forward="cantDelete";
 		    }
@@ -159,8 +159,8 @@ public class DeleteSector extends Action {
   				deleteSectorForm.setSectorId(new Long(schemeId));
     	/*	  }
     		  else {
-    		    	ActionErrors errors = new ActionErrors();
-    				errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+    		    	ActionMessages errors = new ActionMessages();
+    				errors.add("title", new ActionMessage("error.aim.deleteScheme.schemeSelected"));
     				saveErrors(request, errors);
     		    	//forward="cantDelete";
     		    }
@@ -183,8 +183,8 @@ public class DeleteSector extends Action {
       }
 
     else {
-    	ActionErrors errors = new ActionErrors();
-		errors.add("title", new ActionError("error.aim.deleteScheme.sectorSelected"));
+    	ActionMessages errors = new ActionMessages();
+		errors.add("title", new ActionMessage("error.aim.deleteScheme.sectorSelected"));
 		saveErrors(request, errors);
     	forward="cantDelete";
     }

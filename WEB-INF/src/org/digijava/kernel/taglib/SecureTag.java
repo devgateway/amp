@@ -207,7 +207,7 @@ public class SecureTag
         else {
             Class clazz = Class.forName(permissionClass);
             Object identity =
-                org.apache.struts.util.RequestUtils.lookup(pageContext, idName,
+                org.apache.struts.taglib.TagUtils.getInstance().lookup(pageContext, idName,
                 idProperty, idScope);
             Constructor constructor = clazz.getConstructor(new Class[] {
                 identity.getClass(), String.class});

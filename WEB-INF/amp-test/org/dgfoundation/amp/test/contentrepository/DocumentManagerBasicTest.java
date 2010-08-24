@@ -25,7 +25,7 @@ public class DocumentManagerBasicTest extends DocumentManagerDefaultTest {
 		//
 		log("Forwarded to : " + forward.getName());
 		//
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyNoActionMessages();
 		//
 		verifyForward(forward.getName());

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -100,25 +100,25 @@ public class AddFiscalCalendarForm extends ActionForm {
 		ActionErrors errors = new ActionErrors();
 
 		if (startMonthNum < 1 || startMonthNum > 12) {
-			errors.add("startMonthNum", new ActionError(
+			errors.add("startMonthNum", new ActionMessage(
 					"error.aim.addFiscalCal.invalidStartMonth"));
 		}
 		
 		if (startDayNum > 31) {
-			errors.add("startDayNum", new ActionError(
+			errors.add("startDayNum", new ActionMessage(
 					"error.aim.addFiscalCal.invalidStartDay"));
 		} else if (startMonthNum % 2 == 0 && startMonthNum < 8) {
 			if (startDayNum > 30) {
-				errors.add("startDayNum", new ActionError(
+				errors.add("startDayNum", new ActionMessage(
 						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 			if (startMonthNum == 2 && startDayNum > 28) {
-				errors.add("startDayNum", new ActionError(
+				errors.add("startDayNum", new ActionMessage(
 						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 		} else if (startMonthNum % 2 != 0 && startMonthNum > 7) {
 			if (startDayNum > 30) {
-				errors.add("startDayNum", new ActionError(
+				errors.add("startDayNum", new ActionMessage(
 						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 		}

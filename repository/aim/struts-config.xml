@@ -324,19 +324,19 @@
     <action forward="/showLayout.do?layout=layoutFinancingBreakdown" path="/aim/viewFinancingBreakdown" />
     <action name="aimViewContractingForm" forward="/showLayout.do?layout=layoutViewIPAContracting" path="/aim/viewIPAContracting" />
     <action forward="/showLayout.do?layout=layoutProjectCostsBreakdown" path="/aim/viewProjectCostsBreakdown" />
-    <action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" name="aimRegionalFundingForm" path="/aim/viewRegionalFundingBreakdown" />
+    <action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" name="aimRegionalFundingForm" path="/aim/viewRegionalFundingBreakdown" validate="false" />
     <action forward="/showLayout.do?layout=layoutRegionalFundingDetails" name="aimRegionalFundingForm" path="/aim/viewRegFundDetails" />
-    <action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" path="/aim/viewFinancingBreakdownFilter" />
+    <action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" path="/aim/viewFinancingBreakdownFilter"  name="aimFinancingBreakdownForm" type="org.digijava.module.aim.form.FinancingBreakdownForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutActivityDashboard" name="aimActivityDashboardForm" path="/aim/viewActivityDashboard" />
-    <action forward="/showLayout.do?layout=layoutChannelOverview" path="/aim/viewChannelOverview" />
-    <action forward="/showLayout.do?layout=layoutReferences" path="/aim/viewReferences" />
+    <action forward="/showLayout.do?layout=layoutChannelOverview" name="aimChannelOverviewForm" type="org.digijava.module.aim.action.ViewChannelOverview" path="/aim/viewChannelOverview" />
+    <action forward="/showLayout.do?layout=layoutReferences" path="/aim/viewReferences" name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutIndicatorValues" name="aimViewIndicatorForm" path="/aim/viewIndicatorValues" />
     <action forward="/showLayout.do?layout=layoutChannelOverviewObjective" path="/aim/viewChannelOverviewObjective" />
-    <action forward="/showLayout.do?layout=layoutPhysicalProgress" path="/aim/viewPhysicalProgress" />
+    <action forward="/showLayout.do?layout=layoutPhysicalProgress" path="/aim/viewPhysicalProgress" name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm" validate="false" />
     <action forward="/showLayout.do?layout=layoutPhysicalProgressDetails" path="/aim/viewPhysicalProgressDetails" />
     <action forward="/showLayout.do?layout=layoutComponentDescription" path="/aim/viewComponentDescription" />
     <action forward="/showLayout.do?layout=layoutPhysicalProgressDescription" path="/aim/viewPhysicalProgressDescription" />
-    <action forward="/showLayout.do?layout=layoutKnowledge" path="/aim/viewKnowledge" />
+    <action forward="/showLayout.do?layout=layoutKnowledge" path="/aim/viewKnowledge" name="aimKnowledgeForm" type="org.digijava.module.aim.form.KnowledgeForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutFinancialOverview" path="/aim/viewFinancialOverview" />
     <action forward="/showLayout.do?layout=layoutYearlyInfo" path="/aim/viewYearlyInfo" />
     <action forward="/showLayout.do?layout=layoutYearlyInfoFilter" path="/aim/viewYearlyInfoFilter" />

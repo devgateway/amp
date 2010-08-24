@@ -27,8 +27,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -64,13 +64,13 @@ public class EditSite
         String templateName = viewConfig.getTemplateName();
 
         SiteForm siteForm = (SiteForm) form;
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
 
         if (!siteForm.getSiteKey().equals(realSite.getSiteId())) {
             Site someSite = SiteUtils.getSite(siteForm.getSiteKey());
             if (someSite != null) {
                 errors.add(null,
-                           new ActionError("error.admin.siteKeyExists"));
+                           new ActionMessage("error.admin.siteKeyExists"));
                 saveErrors(request, errors);
                 return mapping.findForward("error");
             }
@@ -130,7 +130,7 @@ public class EditSite
                     item.getPath(), tmpSite.getName()};
 
                 errors.add(null,
-                           new ActionError("error.admin.siteDomainExists", params));
+                           new ActionMessage("error.admin.siteDomainExists", params));
             }
 
             if (item.getLangCode() != null) {
@@ -195,7 +195,7 @@ public class EditSite
                         Object[] param = {
                             language.getName()};
                         errors.add(null,
-                                   new ActionError(
+                                   new ActionMessage(
                                        "error.admin.userLangMustBeTranslationLang",
                                        param));
                     }
@@ -208,12 +208,12 @@ public class EditSite
         }
         if (defLanguage != null && !defaultFound) {
             errors.add(null,
-                       new ActionError("error.admin.defaultLangMustBeUserLang"));
+                       new ActionMessage("error.admin.defaultLangMustBeUserLang"));
         }
 
         if ( (defLanguage == null) && (userLangs.size() > 0)) {
             errors.add(null,
-                       new ActionError("error.admin.defaultLangMustBeSet"));
+                       new ActionMessage("error.admin.defaultLangMustBeSet"));
         }
 
         // Validate domain languages against user languages
@@ -243,7 +243,7 @@ public class EditSite
                 Object[] param = {
                     lang != null ? lang.getName() : domainLang};
                 errors.add(null,
-                           new ActionError(
+                           new ActionMessage(
                                domainLangErrorKey,
                                param));
             }

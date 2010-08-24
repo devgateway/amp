@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,7 +28,7 @@ public class addWorkSpaceUser extends Action{
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 		
 		AddUserForm upMemForm = (AddUserForm) form;
-		ActionErrors errors = new ActionErrors();
+		ActionMessages errors = new ActionMessages();
 		logger.debug("In add members");
 		
 		String actionFlag = request.getParameter("actionFlag");
@@ -57,7 +57,7 @@ public class addWorkSpaceUser extends Action{
 			/* check if the user have entered an invalid user id */
 			if (user == null) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						"error.aim.addTeamMember.invalidUser"));
 				saveErrors(request, errors);
 	
@@ -67,7 +67,7 @@ public class addWorkSpaceUser extends Action{
 			/* if user havent specified the role for the new member */
 			if (upMemForm.getRole() == null) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						"error.aim.addTeamMember.roleNotSelected"));
 				saveErrors(request, errors);
 				return mapping.findForward("forward");			
@@ -78,7 +78,7 @@ public class addWorkSpaceUser extends Action{
 			if (ampTeam.getTeamLead() != null &&
 					ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
+				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
 						"error.aim.addTeamMember.teamLeadAlreadyExist"));
 				saveErrors(request, errors);
 				return mapping.findForward("forward");			
@@ -87,7 +87,7 @@ public class addWorkSpaceUser extends Action{
 			/* check if user is already part of the selected team */
 			if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
+				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
 						"error.aim.addTeamMember.teamMemberAlreadyExist"));
 				saveErrors(request, errors);
 				logger.debug("Member is already existing");
@@ -96,7 +96,7 @@ public class addWorkSpaceUser extends Action{
 			/*check if user is not admin; as admin he can't be part of a workspace*/
 			if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberIsAdmin"));
 				saveErrors(request, errors);
 				logger.debug("Member is already existing");
 				return mapping.findForward("forward");

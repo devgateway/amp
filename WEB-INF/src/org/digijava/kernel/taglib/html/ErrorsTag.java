@@ -30,8 +30,9 @@ import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
@@ -88,10 +89,10 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
         // get module name instance name
         if( context != null ) {
             moduleInstanceContext = (ModuleInstance) context.getAttribute(Constants.MODULE_INSTANCE_OBJECT);
-            ActionErrors errors = (ActionErrors) context.getAttribute(Globals.ERROR_KEY);
+            ActionMessages errors = (ActionMessages) context.getAttribute(Globals.MESSAGE_KEY);
             if( errors != null ) {
                 logger.debug("set error for teaser");
-                request.setAttribute(Globals.ERROR_KEY, errors);
+                request.setAttribute(Globals.MESSAGE_KEY, errors);
                 doErrors();
                 return super.doStartTag();
             } else {
@@ -160,15 +161,15 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();
 
-        ActionErrors errors = null;
-        ActionErrors newErrors = null;
+        ActionMessages errors = null;
+        ActionMessages newErrors = null;
 //        Message message;
         String newKey = null;
 
         try {
-            errors = org.apache.struts.util.RequestUtils.getActionErrors(pageContext, name);
+            errors = TagUtils.getInstance().getActionMessages(pageContext, name);
         } catch (JspException e) {
-            org.apache.struts.util.RequestUtils.saveException(pageContext, e);
+            TagUtils.getInstance().saveException(pageContext, e);
             throw e;
         }
 
@@ -179,13 +180,13 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 
             @SuppressWarnings("unchecked")
             Iterator iter = (property == null) ? errors.get() : errors.get(property);
-            newErrors = new ActionErrors();
+            newErrors = new ActionMessages();
             while (iter.hasNext()) {
-                ActionError item = (ActionError)iter.next();
+                ActionMessage item = (ActionMessage)iter.next();
 
                 newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
                 logger.debug("New key for error is " + newKey);
-                newErrors.add(property, new ActionError(newKey, item.getValues()));
+                newErrors.add(property, new ActionMessage(newKey, item.getValues()));
                 
                 //Add the new string id if needed.
                 try {
@@ -206,7 +207,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             }
 
             if( !newErrors.isEmpty() )
-                request.setAttribute(Globals.ERROR_KEY, newErrors);
+                request.setAttribute(Globals.MESSAGE_KEY, newErrors);
         }
     }
 

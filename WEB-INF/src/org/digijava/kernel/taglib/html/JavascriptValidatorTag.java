@@ -39,9 +39,10 @@ import org.apache.commons.validator.Field;
 import org.apache.commons.validator.Form;
 import org.apache.commons.validator.ValidatorAction;
 import org.apache.commons.validator.ValidatorResources;
-import org.apache.commons.validator.ValidatorUtil;
+import org.apache.commons.validator.util.ValidatorUtils;
 import org.apache.commons.validator.Var;
 import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.util.RequestUtils;
 import org.apache.struts.validator.Resources;
@@ -144,7 +145,7 @@ public class JavascriptValidatorTag
      * Returns true if this is an xhtml page.
      */
     private boolean isXhtml() {
-        return RequestUtils.isXhtml(this.pageContext);
+        return TagUtils.getInstance().isXhtml(this.pageContext);
     }
 
     /**
@@ -155,15 +156,15 @@ public class JavascriptValidatorTag
     public int doStartTag() throws JspException {
         StringBuffer results = new StringBuffer();
 
-        ModuleConfig config = RequestUtils.getModuleConfig(pageContext);
+        ModuleConfig config =  TagUtils.getInstance().getModuleConfig(pageContext);
         ValidatorResources resources =
             (ValidatorResources) pageContext.getAttribute(
                 ValidatorPlugIn.VALIDATOR_KEY + config.getPrefix(),
                 PageContext.APPLICATION_SCOPE);
 
-        Locale locale = RequestUtils.retrieveUserLocale(this.pageContext, null);
+        Locale locale = TagUtils.getInstance().getUserLocale(this.pageContext, null);
 
-        Form form = resources.get(locale, formName);
+        Form form = resources.getForm(locale, formName);
         if (form != null) {
             if ("true".equalsIgnoreCase(dynamicJavascript)) {
                 MessageResources messages =
@@ -178,7 +179,7 @@ public class JavascriptValidatorTag
                 for (Iterator i = form.getFields().iterator(); i.hasNext(); ) {
                     Field field = (Field) i.next();
 
-                    for (Iterator x = field.getDependencies().iterator();
+                    for (Iterator x = field.getDependencyList().iterator();
                          x.hasNext(); ) {
                         Object o = x.next();
 
@@ -240,8 +241,8 @@ public class JavascriptValidatorTag
                             return -1;
                         }
                         else {
-                            return va1.getDependencies().size() -
-                                va2.getDependencies().size();
+                            return va1.getDependencyList().size() -
+                                va2.getDependencyList().size();
                         }
                     }
                 });
@@ -322,7 +323,7 @@ public class JavascriptValidatorTag
                                     "this."
                                     + varName
                                     + "="
-                                    + ValidatorUtil.replace(
+                                    + ValidatorUtils.replace(
                                         varValue,
                                         "\\",
                                         "\\\\")
@@ -333,7 +334,7 @@ public class JavascriptValidatorTag
                                     "this."
                                     + varName
                                     + "=/"
-                                    + ValidatorUtil.replace(
+                                    + ValidatorUtils.replace(
                                         varValue,
                                         "\\",
                                         "\\\\")
@@ -344,7 +345,7 @@ public class JavascriptValidatorTag
                                     "this."
                                     + varName
                                     + "='"
-                                    + ValidatorUtil.replace(
+                                    + ValidatorUtils.replace(
                                         varValue,
                                         "\\",
                                         "\\\\")
@@ -356,7 +357,7 @@ public class JavascriptValidatorTag
                                     "this."
                                     + varName
                                     + "=/"
-                                    + ValidatorUtil.replace(
+                                    + ValidatorUtils.replace(
                                         varValue,
                                         "\\",
                                         "\\\\")
@@ -367,7 +368,7 @@ public class JavascriptValidatorTag
                                     "this."
                                     + varName
                                     + "='"
-                                    + ValidatorUtil.replace(
+                                    + ValidatorUtils.replace(
                                         varValue,
                                         "\\",
                                         "\\\\")

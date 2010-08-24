@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -138,8 +138,8 @@ public class AddNewIndicator
                  
                  if (indicator.getSectors() == null
 					|| indicator.getSectors() != null && indicator.getSectors().size() == 0) {
-                     ActionErrors errors=new ActionErrors();
-                     errors.add("noSector", new ActionError("error.aim.addIndicator.noSector"));
+                     ActionMessages errors=new ActionMessages();
+                     errors.add("noSector", new ActionMessage("error.aim.addIndicator.noSector"));
                      saveErrors(request, errors);
                      return mapping.findForward("forward");
                  } 
@@ -149,8 +149,8 @@ public class AddNewIndicator
                     newIndForm.setAction("added");
                 }
                 else{
-                    ActionErrors errors=new ActionErrors();
-                    errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
+                    ActionMessages errors=new ActionMessages();
+                    errors.add("title", new ActionMessage("error.aim.addIndicator.duplicateName"));
                     saveErrors(request, errors);
                     return mapping.findForward("forward");
                 }                

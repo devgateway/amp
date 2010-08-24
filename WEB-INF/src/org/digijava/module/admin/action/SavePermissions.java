@@ -28,7 +28,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -125,7 +125,7 @@ public class SavePermissions
             }
         }
  */
-        ActionErrors errors = AdminUIManager.checkGroupPermissions(currentSite, group, permissions);
+        ActionMessages errors = AdminUIManager.checkGroupPermissions(currentSite, group, permissions);
         if (errors != null) {
             saveErrors(request, errors);
         } else {
@@ -133,7 +133,7 @@ public class SavePermissions
         }
 
 /*
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         // Check permissions for default groups only if group belongs to
         // current site
         if (group.isDefaultGroup() &&
@@ -172,7 +172,7 @@ public class SavePermissions
                 Object[] params = {
                     permissionName};
                 errors.add(null,
-                           new ActionError(
+                           new ActionMessage(
                     "error.admin.defaultGroupMustHavePermission",
                     params));
             }

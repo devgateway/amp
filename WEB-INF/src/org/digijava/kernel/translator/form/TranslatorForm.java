@@ -24,10 +24,11 @@ package org.digijava.kernel.translator.form;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionErrors;
 
 /**
  *
@@ -165,7 +166,7 @@ public final class TranslatorForm extends ActionForm {
 			//		      System.out.println("Errors Detected");
 			errors.add(
 				"Translated text ",
-				new ActionError("error.username.required"));
+				new ActionMessage("error.username.required"));
 		}
 
 		return errors;

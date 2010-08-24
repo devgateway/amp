@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.user;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 
 public class User
-    extends Entity {
+    extends Entity implements Serializable {
 
     private Subject subject;
     private String firstNames;

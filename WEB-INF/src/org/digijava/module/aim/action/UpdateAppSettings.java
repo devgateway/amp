@@ -13,14 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axis.transport.jms.JMSConnectorManager.ShareableObjectPool;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.entity.Locale;
@@ -224,12 +223,12 @@ public class UpdateAppSettings extends Action {
 					.getContextPath());
 			if(uForm.getDefRecsPerPage() == null || uForm.getDefRecsPerPage() < 2)
 				{
-					ActionErrors errors = new ActionErrors();
+					ActionMessages errors = new ActionMessages();
 					Site site = RequestUtils.getSite(request);
 	        		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 	        		String siteId = site.getId()+"";
 	        		String locale = navigationLanguage.getCode();
-	        		errors.add("title", new ActionError("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
 	        		if (errors.size() > 0)
 	        			saveErrors(request, errors);
 	        		

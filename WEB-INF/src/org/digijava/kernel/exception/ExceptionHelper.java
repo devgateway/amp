@@ -38,9 +38,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.action.ActionForward;
 import org.digijava.kernel.util.DgUtil;
-import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 
 public class ExceptionHelper {
 
@@ -163,7 +163,7 @@ public class ExceptionHelper {
         } else {
             long exceptionId = ExceptionHelper.storeTilesExceptioinInfo(request, info);
             String url = DgUtil.getCurrRootUrl(request) + "/exception/showExceptionReport.do?reportId=" + exceptionId;
-            ActionError error = new ActionError("errors.detail", url);
+            ActionMessage error = new ActionMessage("errors.detail", url);
             String property = error.getKey();
 
             storeException(context, request, property, error);
@@ -176,11 +176,11 @@ public class ExceptionHelper {
         ComponentContext context,
         HttpServletRequest request,
         String property,
-        ActionError error) {
-        ActionErrors errors =
-            (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+        ActionMessage error) {
+        ActionMessages errors =
+            (ActionMessages) request.getAttribute(Globals.ERROR_KEY);
         if (errors == null) {
-            errors = new ActionErrors();
+            errors = new ActionMessages();
         }
         errors.add(property, error);
         context.putAttribute(Globals.ERROR_KEY, errors);

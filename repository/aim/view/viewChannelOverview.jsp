@@ -234,10 +234,10 @@ function commentWin(val, commentId) {
 								<TD vAlign="top" align="center" width="100%">
 								<font color="#FF0000">
 								<!--  FFerreyra: This was added to handle errors between different forms while keeping translation tags possible -->
-								<logic:present name="<%=org.apache.struts.action.Action.ERROR_KEY%>">
-									<bean:define id="errors" name="<%=org.apache.struts.action.Action.ERROR_KEY%>" type="org.apache.struts.action.ActionErrors"/>
+								<logic:present name="<%=org.apache.struts.Globals.ERROR_KEY%>">
+									<bean:define id="errors" name="<%=org.apache.struts.Globals.ERROR_KEY%>" type="org.apache.struts.action.ActionMessages"/>
 									<ul>
-										<logic:iterate collection="<%=errors.get()%>" id="error" type="org.apache.struts.action.ActionError">
+										<logic:iterate collection="<%=errors.get()%>" id="error" type="org.apache.struts.action.ActionMessage">
 										<li>
 											<digi:trn key="${error.key}"><bean:message key="<%=error.getKey()%>"/></digi:trn>
 										</li>

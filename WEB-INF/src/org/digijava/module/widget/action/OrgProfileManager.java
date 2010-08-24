@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -124,8 +124,8 @@ public class OrgProfileManager  extends DispatchAction {
         }
         orgProfWidget.setName(name);
         if (OrgProfileWidgetUtil.orgProfileWidgetExists(orgProfWidget.getType(), orgProfWidget.getId())) {
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
+            ActionMessages errors = new ActionMessages();
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
             saveErrors(request, errors);
             return mapping.findForward("create");
         }

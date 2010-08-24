@@ -51,7 +51,7 @@ import org.digijava.kernel.viewmanager.ViewConfigFactory;
  * @version 1.0
  */
 public class InsertTag
-    extends org.apache.struts.taglib.tiles.InsertTag {
+    extends org.apache.struts.tiles.taglib.InsertTag {
 
 	private static final long serialVersionUID = 1L;
 
@@ -289,16 +289,16 @@ public class InsertTag
             if (roleProcessResult == null ||
                 roleProcessResult.equals(Boolean.TRUE)) {
                 if (!skipPage) {
-                    super.doInclude(page);
+                    super.doInclude(page,false);
                 }
             }
             else {
-                super.doInclude("/403.jsp");
+                super.doInclude("/403.jsp",false);
             }
         }
         else {
             if (!skipPage) {
-                super.doInclude(page);
+                super.doInclude(page,false);
             }
         }
         if (RequestUtils.isDevelopmentModeActive(request)) {

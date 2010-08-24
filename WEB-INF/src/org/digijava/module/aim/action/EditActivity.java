@@ -27,8 +27,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -161,7 +161,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     //if("true".compareTo(request.getParameter("public"))!=0)
     //return mapping.findForward("forward");
 
-    ActionErrors errors = new ActionErrors();
+    ActionMessages errors = new ActionMessages();
 
     ampContext = getServlet().getServletContext();
 
@@ -216,7 +216,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if (!gatePermEditAllowed) {
 
 //			if (errorMsgKey.trim().length() > 0) {
-//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 //						errorMsgKey));
 //				saveErrors(request, errors);
 //
@@ -242,7 +242,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			}
 
 			if (errorMsgKey.trim().length() > 0 && !isPreview) {
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						errorMsgKey));
 				saveErrors(request, errors);
 				String url = "/aim/viewChannelOverview.do?ampActivityId="
@@ -404,7 +404,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       //logger.info("CanEdit = " + canEdit);
       //AMP-3461 When an activity is open by a user, an other user should be able to preview it
       if (!canEdit && !isPreview) {
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
             "error.aim.activityAlreadyOpenedForEdit"));
         saveErrors(request, errors);
 

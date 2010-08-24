@@ -25,8 +25,8 @@ package org.digijava.module.admin.action;
 import java.util.Iterator;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -60,9 +60,9 @@ public class AddGroup
         }
 
         if (equals) {
-            ActionErrors errors = new ActionErrors();
+            ActionMessages errors = new ActionMessages();
             errors.add(null,
-                       new ActionError("error.admin.groupNameMustBeUnique"));
+                       new ActionMessage("error.admin.groupNameMustBeUnique"));
             saveErrors(request, errors);
             return mapping.findForward("error");
         }

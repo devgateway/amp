@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -60,8 +60,8 @@ public class EditOrgType extends DispatchAction {
 			
 			int typesAmountWithGivenName=DbUtil.getOrgTypesAmount(editForm.getOrgType(),editForm.getAmpOrgTypeId());
 			if(typesAmountWithGivenName>0){
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else{
@@ -94,8 +94,8 @@ public class EditOrgType extends DispatchAction {
 				String siteId = site.getId()+"";
 				String locale = navigationLanguage.getCode();
 				
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else{

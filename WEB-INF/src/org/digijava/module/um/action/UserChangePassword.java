@@ -25,8 +25,8 @@ package org.digijava.module.um.action;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -69,8 +69,8 @@ public class UserChangePassword
                 }
 
                 // current password don't match
-                ActionErrors errors = new ActionErrors();
-                errors.add(null, new ActionError("error.password.invalid"));
+                ActionMessages errors = new ActionMessages();
+                errors.add(null, new ActionMessage("error.password.invalid"));
                 saveErrors(request, errors);
                 return mapping.getInputForward();
             }

@@ -65,7 +65,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 	public void testUserNotLoggedRejection() {
 		request.getSession().setAttribute("currentMember", null);
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyNoActionMessages();
 		verifyForward("index");
 	}
@@ -81,7 +81,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "1");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 		
 		//Report 4.
@@ -91,7 +91,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "2");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 		
 		//Report 5a.
@@ -101,7 +101,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "3");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 		
 		//Report 5b.
@@ -111,7 +111,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "4");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 		
 		//Report 9.
@@ -121,7 +121,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "7");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 		
 		//Report 10a.
@@ -131,7 +131,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "8");
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report1");
 	}
 	
@@ -146,7 +146,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "5");
 
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report2");
 
 		// Report 7.
@@ -156,7 +156,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("indcId", "6");
 
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("report2");
 	}
 
@@ -168,7 +168,7 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		form.setFilterFlag(false);
 		
 		actionPerform(ParisIndicatorReport.class, form);
-		verifyNoActionErrors();
+		verifyNoActionMessages();
 		verifyForward("menu");
 	}
 }

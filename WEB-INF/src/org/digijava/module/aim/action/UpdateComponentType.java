@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,7 +37,7 @@ public class UpdateComponentType extends Action {
 			}
 		}
 
-		ActionErrors errors = (ActionErrors) session.getAttribute("AddComponentTypeError");
+		ActionMessages errors = (ActionMessages) session.getAttribute("AddComponentTypeError");
 		if(errors != null){
 			saveErrors(request, errors);
 			session.setAttribute("AddComponentTypeError", null);
@@ -107,8 +107,8 @@ public class UpdateComponentType extends Action {
 		String siteId = RequestUtils.getSite(request).getId().toString();
 		String locale= RequestUtils.getNavigationLanguage(request).getCode();
 		HttpSession session = request.getSession();
-		ActionErrors errors = new ActionErrors();
-		errors.add("title", new ActionError("error.aim.componentType.componentTypeCodeNameExist", TranslatorWorker.translateText("The component type NAME or CODE you added already exist. Please add other name or code.",locale,siteId)));
+		ActionMessages errors = new ActionMessages();
+		errors.add("title", new ActionMessage("error.aim.componentType.componentTypeCodeNameExist", TranslatorWorker.translateText("The component type NAME or CODE you added already exist. Please add other name or code.",locale,siteId)));
 		session.setAttribute("AddComponentTypeError",errors);
 	}
 	

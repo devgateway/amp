@@ -23,8 +23,8 @@
 package org.digijava.module.admin.action;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -78,9 +78,9 @@ public class DeleteSite
             DbUtil.deleteSite(siteForm.getSelectedSiteId());
         }
         else {
-            ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR,
-                       new ActionError("error.admin.noPermissionToDeleteSite"));
+            ActionMessages errors = new ActionMessages();
+            errors.add(ActionMessages.GLOBAL_MESSAGE,
+                       new ActionMessage("error.admin.noPermissionToDeleteSite"));
             saveErrors(request, errors);
 
         }

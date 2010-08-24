@@ -25,8 +25,8 @@ import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -295,7 +295,7 @@ public class DeprecatedAdvancedReport extends Action {
 				year=c.get(Calendar.YEAR);
 				//for storing the value of year filter 
 				 report Title check 
-				ActionErrors errors = new ActionErrors();	
+				ActionMessages errors = new ActionMessages();	
 				AmpTeamMember found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
 				if(found!=null)
 				{ 
@@ -307,7 +307,7 @@ public class DeprecatedAdvancedReport extends Action {
 					formBean.setDuplicatedReportOwner(null);
 				}
 				
-				// report title check ends hereerrors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+				// report title check ends hereerrors.add("DuplicateReportName", new ActionMessage("error.aim.reportManager.DuplicateReportName"));
 				saveErrors(request, errors);
 				
 				if(formBean.getAmpToYear()==null)
@@ -953,12 +953,12 @@ public class DeprecatedAdvancedReport extends Action {
 			{
 				boolean flag = false;
 				//logger.info("---------Start--Report --- Save -------------");
-				ActionErrors errors = new ActionErrors();	
+				ActionMessages errors = new ActionMessages();	
 				if(formBean.getReportTitle() != null)
 				{
 					if(formBean.getReportTitle().trim().length() == 0)
 					{
-							errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
+							errors.add("title", new ActionMessage("error.aim.reportManager.ReportNameAbsent"));
 							saveErrors(request, errors);
 							flag = true;
 							return mapping.findForward("MissingReportDetails");

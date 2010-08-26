@@ -921,3 +921,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2"></field:display>
 <field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2"></field:display>
 <field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2"></field:display>
+
+<!-- Public View Modules/Features/Fields -->
+<module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
+<feature:display name="Enable New User Registration" module="Login - User Management"></feature:display>
+
+<module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
+<feature:display name="Filters" module="Public Reports and Tabs"></feature:display>

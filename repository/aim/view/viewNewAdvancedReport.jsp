@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
   <!-- Dependencies --> 
   
         <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
@@ -275,7 +276,80 @@ session.setAttribute("progressValue", counter);
 	<table width="100%"> 
 		<tr>
 		<td style="padding-left:-2px;">
-		<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+		<digi:secure authenticated="false">
+			<module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW">
+				<feature:display name="Filters" module="Public Reports and Tabs">
+				<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+			        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
+		
+		            <span style="cursor:pointer;float:left;">
+		            <logic:notEmpty name="reportMeta" property="hierarchies">
+		                <a class="settingsLink" onClick="showSorter();">
+		                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+		                </a> | 
+		            </logic:notEmpty> 
+		                <a class="settingsLink" onClick="showFilter(); " >
+		                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+		                </a>
+		                <%
+		                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+		                if (arf.isPublicView()==false){%>
+		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
+			                |
+			          	 	<a class="settingsLink" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
+			                	${saveFilters}
+			                </a>
+		           		</feature:display>
+		           		<%}%>
+		           	  <logic:notEqual name="viewFormat" value="foldable">
+		           	  |
+		           	  	<a  id="frezzlink" class="settingsLinkDisable">
+		               		<script language="	">
+						document.write((scrolling)?msg2:msg1);
+					</script>
+		                </a>
+		           	  
+		              </logic:notEqual>
+		                
+		                |<a  class="settingsLink" onClick="showFormat(); " >
+		                <digi:trn>Tab Settings</digi:trn>
+		                </a>
+		           
+		            </span>
+		             &nbsp;<br>
+		             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+		             <table cellpadding="0" cellspacing="0" border="0" width="80%">
+		             <tr>
+		             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+					<strong>
+					<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
+		                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
+		                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
+		                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+		                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+		                    <jsp:include page="${listable.jspFile}" flush="true"/>
+		                </logic:present>
+		             </td>
+		             </tr>
+		             <tr>
+		             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+						<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
+		                    <c:set var="all" scope="page">
+		                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
+		                </c:set>
+		                
+		            	<digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
+		                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
+		              </td>
+		             </tr>
+		           </table>
+		           </div>
+		    	</div>
+				</feature:display>
+			</module:display>
+		</digi:secure>
+		<digi:secure authenticated="true">
+			<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
 
             <span style="cursor:pointer;float:left;">
@@ -341,6 +415,7 @@ session.setAttribute("progressValue", counter);
            </table>
            </div>
     	</div>
+		</digi:secure>
 	</td>
 	</tr>
 	<tr>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="mpaste">
-        <wb-resource deploy-path="/" source-path="/target/mysticpaste-0.0.1-SNAPSHOT"/>
-        <property name="context-root" value="mpaste"/>
-    </wb-module>
-</project-modules>

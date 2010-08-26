@@ -517,6 +517,13 @@ function adminHelp(){
                                                     </a>
                                                 </li>
                                         </feature:display>
+                                        <feature:display name="Paris Indicators Reports" module="Portfolio">
+                                                <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                                                    <a class="yuiampmenuitemlabel" href="/parisindicator/parisindicator.do?reportId=3&reset=true&header=true"  onclick="return canExit()">
+                                                        <b><digi:trn>New Paris Indicator</digi:trn></b>
+                                                    </a>
+                                                </li>
+                                        </feature:display>
                                         <feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
                                         	<li class="yuiampmenuitem" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
                                             	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">

@@ -203,6 +203,10 @@ public class TranslatorWorker {
     public static String translateText(String text,String locale, String siteId) throws WorkerException{
     	return translateText(text, null,locale, siteId);
     }
+    
+    public static String translateText(String text,String locale, Long siteId) throws WorkerException{
+    	return translateText(text, null,locale, siteId.toString());
+    }
 
     /**
      * Translates text to specified local.

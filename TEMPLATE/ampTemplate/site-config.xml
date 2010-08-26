@@ -25,6 +25,11 @@
 		
 		<layout name="parisIndicatorLayout" extends="default" file="noLayout.jsp">
 		  <put name="title">Paris Indicator Reports</put>
+		  <put-item name="body" file="parisindicator_N.jsp"/>
+		</layout>
+		
+		<layout name="parisIndicatorLayout" extends="default" file="noLayout.jsp">
+		  <put name="title">Paris Indicator Reports</put>
 		  <put-item name="body" file="/repository/aim/view/viewParisIndicatorReportI.jsp"/>
 		</layout>
 		<layout name="parisIndicatorLayout2" extends="default" file="noLayout.jsp">

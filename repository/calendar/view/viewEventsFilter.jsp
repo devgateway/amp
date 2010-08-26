@@ -21,16 +21,15 @@ function submitFilterForm(view, timestamp) {
     	form.submit();
   	}
 }
-function changeState() {
-  var showPublicEvents = document.getElementById('showPublicEvents');
-  if (showPublicEvents!=null && showPublicEvents.checked==true) {
-    document.calendarViewForm.resetFilter.value=true;
-  }
-  else{
-    document.calendarViewForm.resetFilter.value= false;
 
-  }
+function changeState() {
+	var publicFilter = document.getElementById('publicFilter').value;
+	if (publicFilter!=null) {
+	  document.calendarViewForm.showPublicEvents.value = publicFilter;
+	}
+	document.getElementById('filterForm').submit();
 } 
+
 function changeDonorsAndEventTypesState(){
 	changeDonorsState();
 	changeEventTypesState();
@@ -92,13 +91,14 @@ function changeEventTypesState(){
 		document.calendarViewForm.resetEventTypes.value=false;
 	}	
 }
+
 </script>
 
 
 <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
 <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
 <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
-<html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
+<html:hidden name="calendarViewForm" property="showPublicEvents" value="${calendarViewForm.showPublicEvents}"/>
 <html:hidden name="calendarViewForm" property="resetDonors" value="${calendarViewForm.resetDonors}"/>
 <html:hidden name="calendarViewForm" property="resetEventTypes" value="${calendarViewForm.resetEventTypes}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
@@ -165,9 +165,35 @@ function changeEventTypesState(){
 		  </div>
 		</div>
 	</field:display>
-	<div style="padding:5px;width:190px;height:28px;">
-	  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
-	  <digi:trn>&nbsp;Public events</digi:trn>
+	<div style="padding:5px;width:210px;height:28px;">
+	 	<select id="publicFilter" class="inp-text" style="width: 200px; max-width: 200px;" onchange="changeState()" name="filter.showPublicEvents" >
+			<c:if test="${calendarViewForm.showPublicEvents == 0}">
+				<option selected="true" value="0">	
+			</c:if>
+			<c:if test="${calendarViewForm.showPublicEvents != 0}">
+				<option value="0">
+			</c:if>
+				<digi:trn>Public and private events</digi:trn>
+			</option>
+
+	  		<c:if test="${calendarViewForm.showPublicEvents == 1}">
+				<option selected="true" value="1">	
+			</c:if>
+			<c:if test="${calendarViewForm.showPublicEvents != 1}">
+				<option value="1">
+			</c:if>
+				<digi:trn>Only private events</digi:trn>
+			</option>
+	  		
+			<c:if test="${calendarViewForm.showPublicEvents == 2}">
+				<option selected="true" value="2">	
+			</c:if>
+			<c:if test="${calendarViewForm.showPublicEvents != 2}">
+				<option value="2">
+			</c:if>
+				<digi:trn>Only public events</digi:trn>
+			</option>
+		</select>
 	</div>
 	<div style="padding:5px;width:200px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">

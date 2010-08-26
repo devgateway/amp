@@ -48,7 +48,11 @@ public class ShowCalendarView extends Action {
         }
         String print =  request.getParameter("print");
         
-        Boolean showPublicEvents = calendarViewForm.getResetFilter();
+        Integer showPublicEvents = 0; 
+        
+        if (calendarViewForm.getShowPublicEvents()!=null) {
+			showPublicEvents = Integer.valueOf(calendarViewForm.getShowPublicEvents());
+		}
         
         calendarViewForm.setPrintMode(numDays);
         if(print != null){
@@ -61,7 +65,7 @@ public class ShowCalendarView extends Action {
         	calendarViewForm.setPrint(false);
         }
         if (showPublicEvents == null)
-        	showPublicEvents = new Boolean(true);
+        	showPublicEvents = 0;
         
         Object eventCreated=request.getAttribute("calendarEventCreated");
 
@@ -158,12 +162,8 @@ public class ShowCalendarView extends Action {
         calendarViewForm.setDateNavigator(navigator);
         // FILTER
         EventsFilter filter = calendarViewForm.getFilter();
-        if (showPublicEvents!=null && showPublicEvents) {
-            filter.setShowPublicEvents(true);
-            calendarViewForm.setResetFilter(true);
-        } else {
-            filter.setShowPublicEvents(false);
-        }
+        
+        filter.setShowPublicEvents(showPublicEvents);
 
         // event types
         if (CategoryManagerUtil.getAmpEventColors().size() <= 0) {
@@ -245,7 +245,7 @@ public class ShowCalendarView extends Action {
          ses.setAttribute("view",calendarViewForm.getPrintMode());
          ses.setAttribute("print",calendarViewForm.getPrint());
          ses.setAttribute("date",printDate);
-         ses.setAttribute("publicEvent", filter.isShowPublicEvents());
+         ses.setAttribute("publicEvent", filter.getShowPublicEvents());
          ses.setAttribute("donor", filter.getSelectedDonors());
          ses.setAttribute("year", calendarViewForm.getBaseDateBreakDown().getYear());
          ses.setAttribute("month", calendarViewForm.getBaseDateBreakDown().getMonth());

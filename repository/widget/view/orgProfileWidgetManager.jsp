@@ -25,12 +25,12 @@
                 <digi:trn key="admin:Navigation:orgProfileManager">Org Profile Manager</digi:trn>
 			</span>
 		</td>
+        	</tr>
                 <tr>
                     <td>
                         <digi:errors/>
                     </td>
                 </tr>
-	</tr>
 	<tr>
 		<td>
 			<span class="subtitle-blue"><digi:trn key="widget:orgProfileManager:pageHeader">Org Profile Manager</digi:trn></span>

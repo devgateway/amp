@@ -344,7 +344,7 @@
 														<td bgcolor="#ECF3FD" width="1%">
 															<logic:equal name="aimSelectOrganizationForm" property="useClient" value="false">
 																<html:button property="select" onclick="setOrganization(${organisations.ampOrgId})">
-																	<digi:trn>...</digi:trn>
+																	<digi:trn>Select</digi:trn>
 																</html:button>
 															</logic:equal>
 															<logic:equal name="aimSelectOrganizationForm" property="useClient" value="true">

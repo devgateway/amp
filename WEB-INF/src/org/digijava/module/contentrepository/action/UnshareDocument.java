@@ -24,7 +24,7 @@ public class UnshareDocument extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		DocumentManagerForm myForm = (DocumentManagerForm) form;
-		String nodeUUID=request.getParameter("uuid");		
+		String nodeUUID=request.getParameter("uuid"); //holds base node uuid or sharedversion id, depending on the tab		
 		if(nodeUUID!=null){
 			Node nodeThatIsUnshared=DocumentManagerUtil.getReadNode(nodeUUID, request);
 			List<CrSharedDoc> sharedDocs=new ArrayList<CrSharedDoc>();
@@ -34,14 +34,13 @@ public class UnshareDocument extends Action {
 			TeamMember currentMember=getCurrentTeamMember(request);
 			Long nodeCreatorTeamId=nodeThatIsUnshared.getProperty(CrConstants.PROPERTY_CREATOR_TEAM).getLong();
 			if(currentMember.getTeamId().longValue()==nodeCreatorTeamId){
-				sharedDocs=DocumentManagerUtil.getSharedDocsForGivenNode(nodeUUID);
+				sharedDocs=DocumentManagerUtil.getSharedDocsForGivenNodeUUID(nodeUUID);				
 			}else{
 				CrSharedDoc retVal=DocumentManagerUtil.loadTeamResourceSharedWithWorkspace(nodeUUID, currentMember.getTeamId());
 				if(retVal!=null){
 					sharedDocs.add(retVal);
 				}
-			}
-			//List<CrSharedDoc> sharedDocs=DocumentManagerUtil.getSharedDocsForGivenNode(nodeUUID);
+			}			
 			if(sharedDocs!=null && sharedDocs.size()>0){
 				for (CrSharedDoc sharedDoc : sharedDocs) {
 					/**

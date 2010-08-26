@@ -45,6 +45,7 @@
 </style>
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <script langauage="JavaScript">
+    var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
 	var messageHelp='<digi:trn>Message Help</digi:trn>';
 	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
 	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
@@ -100,6 +101,7 @@
   	addUserOrTeam();//fills out the list with teams and members
 
   	if(index != 0){
+        addOption(list,guestText,"guest");
 		for(var j=0; j<index; j++){
 			list.options.add(MyContacts[j]);
 		}
@@ -211,7 +213,11 @@
 
 		var guestVal=contact.value;
 			
-		if(guestVal.length>0){			
+		if(guestVal.length>0){
+            if($("#selreceivers > option[value^='c:']").length==0){
+                addOption(list,guestText,"guest");
+
+            }
 			addOption(list,guestVal,'c:'+guestVal);
 		}	
 

@@ -301,7 +301,7 @@ public class HelpUtil {
 					tx.rollback();
 				} catch (Exception ex) {
 					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", ex);
+					throw new AimException("Can't rollback topic update", ex);
 				}
 			}
 			throw new AimException("Can't update help topic", e);

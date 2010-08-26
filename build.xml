@@ -50,7 +50,7 @@
 	
 	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
 
-	<property name="mysql.url" value="jdbc:mysql://localhost?characterEncoding=UTF-8"/>
+	<property name="mysql.url" value="jdbc:mysql://localhost?useUnicode=true&amp;characterEncoding=UTF-8"/>
 	<property name="clean.db" value="amp_clean"/>
 	
     <!-- Path settings -->

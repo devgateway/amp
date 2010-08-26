@@ -577,6 +577,21 @@ public class FeaturesUtil {
 		return col;
 	}
 
+	public static void deleteThumbnail(int placeholder) {
+ 	 	Session session = null;
+ 	 	Transaction tx = null;
+ 	 	AmpHomeThumbnail thumbnail = getAmpHomeThumbnail(placeholder);
+ 	 	try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			session.delete(thumbnail);
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
+		}
+ 	}
+	
 	public static AmpHomeThumbnail getAmpHomeThumbnail(int placeholder) {
  	 	Session session = null;
  	 	Query q = null;

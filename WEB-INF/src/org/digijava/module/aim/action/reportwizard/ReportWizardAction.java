@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
@@ -50,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -158,6 +160,12 @@ public class ReportWizardAction extends MultiAction {
 
 		//Add pledges reports support, the goals is to remove all not pledges columns
 		Integer typereport=0;
+		
+		if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY)){
+			myForm.setProjecttitle("Project Title");
+		}else{
+			myForm.setProjecttitle("");
+		}
 		
 		if (request.getParameter("type")!=null){
 			typereport = new Integer(request.getParameter("type"));

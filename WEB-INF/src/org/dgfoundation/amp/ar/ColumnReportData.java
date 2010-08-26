@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -126,7 +127,15 @@ public class ColumnReportData extends ReportData {
 		
 		/*	percentagesMap will hold the added percentages (on the splitting categ) for each activity */
 		HashMap<Long,Double>	percentagesMap		= new HashMap<Long, Double>();
+		
+		/* When summing up percentages for problem 2, we need to make sure we don't sum up the percentages of the same cell twice. 
+		 * So we use this set to verify what percentages were already summed up.*/
+		HashMap<Long,List> summedCellValues					= new HashMap<Long, List>();
+		
 		Cell fakeCell								= AmpReportGenerator.generateFakeCell(this, null);
+		
+		/* This will store the last MetaTextCell created manually -- for problem 2 */
+		MetaTextCell metaFakeCell					= null;
 		
 		/* map where we hold for each new ReportData the activities that it will contain. */
 		HashMap<ColumnReportData, Set<Long>> catToIds			= new HashMap<ColumnReportData, Set<Long>> ();
@@ -188,13 +197,23 @@ public class ColumnReportData extends ReportData {
 					Long id		= element.getOwnerId();
 					ids.add( id );
 
+					
+					List summedValuesPerActivity	= summedCellValues.get(id);
+					if ( summedValuesPerActivity == null ) {
+						summedValuesPerActivity		= new ArrayList();
+						summedCellValues.put(id, summedValuesPerActivity);
+					}
 					/* Adding region percentages for each activity (for problem 2) */
 					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
-					if ( ArConstants.COLUMN_REGION.equals(cat.getColumn().getName()) && 
+					if ( ArConstants.LOCATION_COLUMNS.contains(cat.getColumn().getName().trim() ) && 
 							filterObj.getLocationSelected() == null &&  
-							element instanceof MetaTextCell ) {
+							element instanceof MetaTextCell && !summedValuesPerActivity.contains(element.getValue()) ) {
 						MetaInfo<Double> mInfo	= ((MetaTextCell)element).getMetaInfo(ArConstants.PERCENTAGE);
 						if ( mInfo != null && mInfo.getValue() > 0) {
+//							summedCellValues.add( id, element.getValue() );
+							
+							summedValuesPerActivity.add(element.getValue() );
+							
 							Double percentage 		= mInfo.getValue();
 							Double tempPerc			= percentagesMap.get(id);
 							percentagesMap.put(id, (tempPerc!=null?tempPerc:0.0) + percentage );
@@ -224,8 +243,9 @@ public class ColumnReportData extends ReportData {
 			while ( iter.hasNext() ) {
 				Entry<Long, Double> e		= iter.next();
 				if ( e.getValue() < 100.0 ) {
-					fakeCell	= AmpReportGenerator.generateFakeCell(this, e.getKey());
-					fakeCell			= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, 100.0-e.getValue() );
+					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey());
+					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, 100.0-e.getValue() );
+					metaFakeCell	= (MetaTextCell)fakeCell;
 					( (CellColumn)keyCol ).addCell(fakeCell);
 				}
 				else
@@ -259,6 +279,12 @@ public class ColumnReportData extends ReportData {
 			if ( crd.getSplitterCell().compareTo(fakeCell) == 0 ) {
 				ids.addAll( activitiesInColReport );
 				ids.addAll( percentagesMap.keySet() ) ;
+				
+				/* We need to make sure that splitter cell is a MetaTextCell otherwise percentages won't be applied */
+				if ( metaFakeCell!= null ) {
+					crd.setSplitterCell(metaFakeCell);
+					cat		= metaFakeCell;
+				}
 			}
 			
 			Iterator<Column> ii = this.getItems().iterator();

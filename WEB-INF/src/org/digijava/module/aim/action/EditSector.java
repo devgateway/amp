@@ -120,6 +120,7 @@ public class EditSector extends Action {
 										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
 										Integer schemeID = new Integer(schemeId.intValue());
 										editSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(schemeID));
+										editSectorForm.setSecSchemeId(schemeId);
 										editSectorForm.setSecSchemeCode(secSchemeCode);
 										editSectorForm.setSecSchemeName(secSchemename);
 										editSectorForm.setParentId(schemeId);

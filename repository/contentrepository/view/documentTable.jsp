@@ -23,23 +23,7 @@
 	<bean:define id="tabTypeLocal" value=""></bean:define>
 </logic:empty>
 
-<table id="team_table" bgcolor="white" width="100%">
-						<thead>
-							<tr>
-								<logic:equal name="checkBoxToHideLocal" value="false">
-									<th><digi:trn>Select</digi:trn></th>
-								</logic:equal>
-								<th><digi:trn>Title</digi:trn></th>
-								<th><digi:trn>Type</digi:trn></th>
-								<th><digi:trn>Resource Name</digi:trn></th>
-								<th><digi:trn>Date</digi:trn></th>
-								<th><digi:trn>Year Of Publication</digi:trn></th>
-								<th><digi:trn>Size (MB)</digi:trn></th>
-								<th><digi:trn>Document Type</digi:trn></th>
-								<th><digi:trn>Description</digi:trn></th>
-								<th><digi:trn>Actions</digi:trn></th>
-							</tr>
-						</thead>
+<table id="team_table" bgcolor="white" width="100%">						
 						<tbody>
 						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
 							<%--
@@ -57,12 +41,12 @@
 					--%>
 							<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="makePublicCommand">
-									<digi:trn key="contentrepository:republish">Rep</digi:trn>
+									<digi:trn>Rep</digi:trn>
 								</c:set>
 							</logic:equal>
 							<logic:equal name="documentData" property="isPublic" value="false">
 								<c:set var="makePublicCommand">
-									<digi:trn key="contentrepository:makePublic">Pub</digi:trn>
+									<digi:trn>Pub</digi:trn>
 								</c:set>
 							</logic:equal>
 							<tr>
@@ -144,7 +128,7 @@
 												<digi:trn>Click here to download document</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-											onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"title="${translation}">
+											onClick="downloadFile('<bean:write name='documentData' property='nodeVersionUUID' />');"title="${translation}">
 												<digi:trn>Download</digi:trn>
 											</a>
 										</c:when>

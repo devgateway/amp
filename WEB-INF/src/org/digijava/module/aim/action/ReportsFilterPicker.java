@@ -107,6 +107,10 @@ public class ReportsFilterPicker extends MultiAction {
 		if ( "".equals(ampReportId) )
 			ampReportId		= null;
 
+		if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
+			filterForm.setAmountinthousands(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+		}
+		
 		if (ampReportId != null && filterForm.getAmpReportId() != null) {
 			if (!filterForm.getAmpReportId().toString().equalsIgnoreCase(ampReportId)) {
 				filterForm.setIsnewreport(true);
@@ -707,6 +711,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
 		}
 
+		
 		return modeSelect(mapping, form, request, response);
 
 	}
@@ -1147,6 +1152,7 @@ public class ReportsFilterPicker extends MultiAction {
 		custom.setGroupingUsed(filterForm.getCustomUseGrouping());
 		custom.setGroupingSize(filterForm.getCustomGroupSize());
 		custom.setDecimalFormatSymbols(ds);
+		arf.setAmountinthousand(filterForm.getAmountinthousands());
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
@@ -1184,6 +1190,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setJustSearch(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
+		filterForm.setAmountinthousands(false);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
 		if (tempSettings != null) {
@@ -1230,6 +1237,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomUseGrouping(null);
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
+		filterForm.setAmountinthousands(null);
 	}
 
 	private Integer getDefaultStartYear(HttpServletRequest request) {

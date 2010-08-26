@@ -1,8 +1,9 @@
-YAHOO.namespace("YAHOO.amp.reportwizard");
 
+
+YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
-YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
+YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				 'A.C. Chapter'
 				,'Primary Sector Sub-Sector'
 				,'Primary Sector Sub-Sub-Sector'
@@ -58,12 +59,12 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Project Category'
 				,'Funding Status'
 				,'Mode of Payment'
-				,'Project Title'
 				,'Budget Department'
 				,'Budget Organization'
 				,'Budget Sector'
 				,'Budget Program'
 			);
+
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Region','Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','District','Zone'
 			);

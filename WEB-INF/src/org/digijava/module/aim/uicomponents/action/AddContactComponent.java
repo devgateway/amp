@@ -56,12 +56,9 @@ public class AddContactComponent extends DispatchAction{
          String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
          createForm.setTargetCollection(collection);
          createForm.setAction("add");
-         //It's a must that contact should have at least one email, so we can create it's empty property
-		 if(createForm.getEmails()==null){
-			 createForm.setEmails(new ContactPropertyHelper[1]);
-			 createForm.getEmails()[0]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_EMAIL);
-		 }
-		 createForm.setEmailsSize(createForm.getEmails().length);
+         if (createForm.getEmails() != null) {
+             createForm.setEmailsSize(createForm.getEmails().length);
+         }
 		 //if we are creating contact from activity's contact step
 		 String activityContactType=request.getParameter(AddContact.PARAM_CONTACT_TYPE);
 		 if(activityContactType!=null && !activityContactType.equals("")){
@@ -435,7 +432,7 @@ public class AddContactComponent extends DispatchAction{
 				myForm.setFaxes(buildContactPropertiesForAddNewData(contactFaxes,Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));				 
 				myForm.setFaxesSize(myForm.getFaxes().length);
 				myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
-				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+				myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneTypeIds()));
 			}
 			
 			 return setAction(myForm, mapping);
@@ -450,16 +447,19 @@ public class AddContactComponent extends DispatchAction{
 		if(dataName!=null){
 			if(dataName.equalsIgnoreCase("email")){
 				myArray=new String[myForm.getEmails().length-1];
-				if(myArray.length!=0){
-					int j=0;
-					for(int i=0; i< myForm.getContEmail().length; i++){
-						if(index!=i){
-							myArray[j]=myForm.getContEmail()[i];
-							j++;
-						}
-					}
-				}
-				myForm.setContEmail(myArray);
+				if (myArray.length != 0) {
+                    int j = 0;
+                    for (int i = 0; i < myForm.getContEmail().length; i++) {
+                        if (index != i) {
+                            myArray[j] = myForm.getContEmail()[i];
+                            j++;
+                        }
+                    }
+                    myForm.setContEmail(myArray);
+                } else {
+                    myForm.setContEmail(null);
+                }
+				
 			}else if(dataName.equalsIgnoreCase("phone")){
 				myArray=new String[myForm.getContPhoneNumber().length-1];
 				if(myArray.length!=0){
@@ -543,7 +543,7 @@ public class AddContactComponent extends DispatchAction{
     
     private void fillContactProperties(AddContactComponentForm myForm){
     	myForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,myForm.getContEmail(),null));
-    	myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneType()));
+    	myForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,myForm.getContPhoneNumber(),myForm.getContPhoneTypeIds()));
     	myForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,myForm.getContFaxes(),null));
 		if(myForm.getEmails()!=null){
 			myForm.setEmailsSize(myForm.getEmails().length);

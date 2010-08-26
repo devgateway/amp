@@ -113,8 +113,8 @@ public class ShareDocument extends Action {
 				/**
 				 * if other version was already shared, then just need to update version of the shared node among workspaces, 
 				 * otherwise should create new one.
-				 */							
-				Collection<AmpTeam> teams= TeamUtil.getAllTeamsExceptGiven(teamMember.getTeamId());
+				 */
+				Collection<AmpTeam> teams= TeamUtil.getAllTeams();
 				CrSharedDoc sharedDoc=null;
 				if(teams!=null && teams.size()>0){
 					for (AmpTeam ampTeam : teams) {

@@ -24,7 +24,7 @@ title="<digi:trn><bean:write name="textCell" property="fullTextVersion" filter="
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<digi:trn><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>
+		<bean:write name="textCell" property="shortTextVersion" filter="false"/>
 	<%}%>
 </div>
 </logic:notEqual>

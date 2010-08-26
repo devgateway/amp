@@ -87,6 +87,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private List classificationConfigs;
 	private Long impLocation;
 	private String projectCategory;
+	private String govAgreementNumber;
 	private String financialInstrument;
 	private String acChapter;
 	private String procurementSystem;
@@ -703,6 +704,14 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 
 				public void setProjectCategory(String projectCategory) {
 					this.projectCategory = projectCategory;
+				}
+				
+				public String getGovAgreementNumber() {
+					return govAgreementNumber;
+				}
+
+				public void setGovAgreementNumber(String govAgreementNumber) {
+					this.govAgreementNumber = govAgreementNumber;
 				}
 
 				public void setRelOrgs(Collection relOrgs) {

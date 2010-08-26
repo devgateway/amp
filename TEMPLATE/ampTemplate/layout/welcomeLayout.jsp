@@ -38,20 +38,24 @@
                 //document.getElementById("displayThumbnail"+placeholder).title = temp[1];
 				if (placeholder==1) {
 					title1 = temp[1];
-					$("#"+id).mouseover(function() {
-	            	     stm(['<digi:trn>Description</digi:trn>',title1],Style[1]);
-	                });
-	            	$("#"+id).mouseout(function() {
-	                	 htm();
-	                });
+					if (title1!=null && title1.length!=0){
+						$("#"+id).mouseover(function() {
+		            	     stm(['<digi:trn>Description</digi:trn>',title1],Style[1]);
+		                });
+		            	$("#"+id).mouseout(function() {
+		                	 htm();
+		                });
+					}
 				} else {
 					title2 = temp[1];
-					$("#"+id).mouseover(function() {
-	            	     stm(['<digi:trn>Description</digi:trn>',title2],Style[1]);
-	                });
-	            	$("#"+id).mouseout(function() {
-	                	 htm();
-	                });
+					if (title2!=null && title2.length!=0){
+						$("#"+id).mouseover(function() {
+		            	     stm(['<digi:trn>Description</digi:trn>',title2],Style[1]);
+		                });
+		            	$("#"+id).mouseout(function() {
+		                	 htm();
+		                });
+					}
 				}
             }
         });

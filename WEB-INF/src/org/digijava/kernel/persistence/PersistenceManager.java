@@ -342,6 +342,7 @@ public class PersistenceManager {
 	public static void releaseSession(Session session) throws SQLException,
 	HibernateException {
 
+		if(session.isOpen())
 		session.beginTransaction().commit();
 		
 		if (DigiConfigManager.getConfig().isTrackSessions()) {

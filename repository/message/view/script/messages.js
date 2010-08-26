@@ -161,6 +161,9 @@ function removeUserOrTeam() {
     return;
   }   
   var teamId=-1;
+  if($("#selreceivers > option[value='guest']:selected").length>0){
+       $("#selreceivers > option[value^='c:']").remove();
+  }
   for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
     if(document.getElementById('selreceivers')[i].selected){
       if(document.getElementById('selreceivers')[i].value.indexOf('t')==0){//it's a team
@@ -196,6 +199,9 @@ function removeUserOrTeam() {
       }     
     }     
   }
+  if($("#selreceivers > option[value^='c:']").length==0){
+        $("#selreceivers > option[value='guest']").remove();
+   }
 }
 
 function addActionToURL(actionName){

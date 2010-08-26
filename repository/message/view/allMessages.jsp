@@ -188,9 +188,6 @@ background-color:yellow;
 	}
 	
      function loadSelectedMessage(id){
-        if(selectedMessagePanel!=null){
-            selectedMessagePanel.destroy();
-        }
         /*
          * some messages need long time to load,
          * that is why we create blank panel here, so user will see blank panel
@@ -218,6 +215,7 @@ background-color:yellow;
             close:true,
             visible:true,
             draggable:true} );
+        selectedMessagePanel.beforeHideEvent.subscribe(closeWindow);
         selectedMessagePanel.render();
         var url;
         var ind=id.indexOf('_fId');
@@ -234,7 +232,7 @@ background-color:yellow;
         async.call(url);
 
     }
-	
+    	
 	function openObjectURL(url){
             window.open(url,'','channelmode=no,directories=no,menubar=yes,resizable=yes,status=yes,toolbar=yes,scrollbars=yes,location=yes');
             //openURLinWindow(url,600,550);
@@ -993,7 +991,7 @@ background-color:yellow;
 	function createMessage(){
 		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels";
 		messageForm.target = "_self";
-		messageForm.submit();	
+		messageForm.submit();
 	}        
  
 $(document).ready(function(){

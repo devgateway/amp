@@ -14,11 +14,22 @@
 
 <script language="JavaScript">
 
-function Save() {
+function saveDep() {
   	<digi:context name="back" property="context/module/moduleinstance/editdepartment.do" />
     document.EditDepartmentForm.action = "<%= back %>~edit=true";
     document.EditDepartmentForm.submit();
     closePopup()
+}
+function validateDep(){
+	if (document.EditDepartmentForm.depname.value==''){
+		alert('<digi:trn jsFriendly="true">Please enter name</digi:trn>');
+		return false;
+	}
+	if (document.EditDepartmentForm.depcode.value==''){
+		alert('<digi:trn jsFriendly="true">Please enter code</digi:trn>');
+		return false;
+	}
+	saveDep();
 }
 
 function closePopup() {
@@ -72,7 +83,7 @@ function closePopup() {
                               <c:set var="trnSaveBtn">
                                 <digi:trn key="aim:btnSave">Save</digi:trn>&nbsp;
                               </c:set>
-                              <input type="button" value="${trnSaveBtn}" onclick="return Save()" class="dr-menu">
+                              <input type="button" value="${trnSaveBtn}" onclick="return validateDep()" class="dr-menu">
                             </td>
                             <td align="left">
                               <c:set var="trnCloseBtn">

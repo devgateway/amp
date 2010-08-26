@@ -313,7 +313,7 @@ public class AmpDbUtil {
 
   
   public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
-		  boolean showPublicEvents, 
+		  Integer showPublicEvents, 
 		  String[] selectedDonorIds,String[] selectedeventTypeIds,
 		  String instanceId, 
 		  String siteId)
@@ -346,11 +346,11 @@ public class AmpDbUtil {
 						}
 					}
 
-				if(showPublicEvents && !ampCal.isPrivateEvent()){
+				if(!ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==2)){
 					retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
 					continue;
 				}
-				if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
+				if(ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==1)){
 					if(isCurrentMemberEventAttendee){
 						retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
 						continue;
@@ -366,7 +366,7 @@ public class AmpDbUtil {
   }
   
   public static List getAmpCalendarEvents(String[] selectedDonorIds,String[] selectedEventTypeIds,
-		  Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
+		  Long userId,Integer showPublicEvents,String instanceId, String siteId) throws CalendarException {
 	  try {
 		  Session session = PersistenceManager.getRequestDBSession();
 
@@ -377,11 +377,12 @@ public class AmpDbUtil {
 			queryString.append(" where c.id=ac.calendarPK.calendar.id ");
 
 
-			if(showPublicEvents){
+			if(showPublicEvents == 2){
 	        	  queryString.append(" and ac.privateEvent=false");
-	          }else{
+	        }
+			if(showPublicEvents == 1){
 	        	  queryString.append(" and ac.privateEvent=true");
-	          }
+	        }
 			List <Long> selectedDonors = new ArrayList<Long>();
 			if(selectedDonorIds != null && selectedDonorIds.length != 0) {
 			boolean includeNullOrganizations = false;

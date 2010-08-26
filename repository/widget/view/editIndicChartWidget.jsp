@@ -24,6 +24,21 @@
         }
 
     }
+    function validateSave(){
+        var valid=true;
+        if (document.gisIndicatorChartForm.widgetName.value==''){
+            alert('<digi:trn jsFriendly="true">Please enter name</digi:trn>');
+            valid= false;
+        }
+        else{
+            if(document.gisIndicatorChartForm.selIndicators.value=='-1'){
+                alert('<digi:trn jsFriendly="true">Please select indicator</digi:trn>');
+                valid= false;
+            }
+        }
+        return valid;
+
+    }
 //-->
 </script>
 <digi:instance property="gisIndicatorChartForm" />
@@ -106,7 +121,7 @@
 				</tr>
 				<tr>
 					<td align="right">
-						<html:submit>
+                        <html:submit onclick="return validateSave()">
 							<digi:trn key="gis:editIndicatorChartWidget:btnSave">Save</digi:trn>
 						</html:submit>
 					</td>

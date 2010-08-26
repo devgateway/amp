@@ -11,8 +11,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.aim.form.FlagUploaderForm;
 import org.digijava.module.aim.form.WelcomePageForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -23,6 +21,11 @@ public class UploadThumbnail extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
 		WelcomePageForm wpForm = (WelcomePageForm) form;
+		
+		if (request.getParameter("action")!=null && request.getParameter("action").equals("deleteThumbnail")) {
+			FeaturesUtil.deleteThumbnail(wpForm.getPlaceholder());
+			return mapping.findForward("forward");
+		}
 		
 		String errorMsg = null;
 		FormFile thumbnail = wpForm.getThumbnail();

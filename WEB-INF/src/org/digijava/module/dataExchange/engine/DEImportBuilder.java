@@ -93,7 +93,9 @@ import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
 import org.digijava.module.dataExchange.pojo.DEActivityLog;
+import org.digijava.module.dataExchange.pojo.DECurrencyMissingLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
+import org.digijava.module.dataExchange.pojo.DEImplLevelMissingLog;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
 import org.digijava.module.dataExchange.pojo.DEMTEFMissingLog;
@@ -105,7 +107,6 @@ import org.digijava.module.dataExchange.pojo.DESectorMissingLog;
 import org.digijava.module.dataExchange.pojo.DESectorPercentageLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
-import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
 import org.digijava.module.dataExchange.utils.Constants;
@@ -207,8 +208,10 @@ public class DEImportBuilder {
 	private void saveActivity(AmpActivity activity, Boolean update) throws Exception{
 		// TODO Auto-generated method stub
 		
-		if(update == false) DataExchangeUtils.saveActivityNoLogger(activity);
-		else DataExchangeUtils.updateActivityNoLogger(activity);
+		if(update == false) 
+			DataExchangeUtils.saveActivityNoLogger(activity);
+		else 
+			DataExchangeUtils.updateActivityNoLogger(activity);
 	}
 
 	private void processPreStep(AmpActivity activity, Boolean update) {
@@ -429,8 +432,9 @@ public class DEImportBuilder {
 					actInternalId.setOrganisation(org);
 				internalIds.add(actInternalId);
 			}
-			//if(activity.getInternalIds() == null || activity.getInternalIds().size() == 0)
-			activity.setInternalIds(new HashSet());
+			if(activity.getInternalIds() == null)
+				activity.setInternalIds(new HashSet());
+			else activity.getInternalIds().clear();
 			activity.getInternalIds().addAll(internalIds);
 		}
 	}
@@ -494,6 +498,11 @@ public class DEImportBuilder {
 	private void processStatus(AmpActivity activity, ActivityType actType, Boolean update) {
 		// TODO Auto-generated method stub
 		if( actType.getStatus()!=null ){
+			
+			if (activity.getCategories() == null) {
+				activity.setCategories( new HashSet() );
+			}
+			
 			if(update == true){
 				for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
 					AmpCategoryValue acv = (AmpCategoryValue) it.next();
@@ -503,9 +512,6 @@ public class DEImportBuilder {
 				}
 			}
 			AmpCategoryValue acv = getAmpCategoryValueFromCVT(actType.getStatus(), Constants.CATEG_VALUE_ACTIVITY_STATUS);
-			if (activity.getCategories() == null) {
-				activity.setCategories( new HashSet() );
-			}
 				
 			if(acv!=null)
 				activity.getCategories().add(acv);
@@ -566,10 +572,12 @@ public class DEImportBuilder {
 				ampActSector.setClassificationConfig(primConf);
                 sectors.add(ampActSector);
 			}
-			//if (activity.getSectors() == null) {
-			activity.setSectors(new HashSet());
-			//}
+			if (activity.getSectors() == null) {
+				activity.setSectors(new HashSet());
+			}
+			else activity.getSectors().clear();
 			activity.getSectors().addAll(sectors);
+			//activity.setSectors(sectors);
 		}
 
 	}
@@ -607,9 +615,9 @@ public class DEImportBuilder {
                 programs.add(ampActivityProgram);
 			}
 			
-			//if (activity.getActPrograms() == null) {
-			activity.setActPrograms(new HashSet());
-			//}
+			if (activity.getActPrograms() == null) 
+				activity.setActPrograms(new HashSet());
+			else activity.getActPrograms().clear();
 			activity.getActPrograms().addAll(programs);
 		}
 
@@ -622,11 +630,15 @@ public class DEImportBuilder {
 	//fundings
 	private void processFunding(AmpActivity activity, ActivityType actType) {
 		if(actType.getFunding() != null && actType.getFunding().size() > 0){
-			ArrayList fundings = null;
-			fundings = (ArrayList) getFundingXMLtoAMP(activity, actType);
-			//if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
+			Set fundings = new HashSet();
+			fundings = (HashSet) getFundingXMLtoAMP(activity, actType);
+			
+			if(activity.getFunding() == null) 
+				activity.setFunding(new HashSet());
+			else
+				activity.getFunding().clear();
 			activity.getFunding().addAll(fundings);
+//			activity.setFunding(fundings);
 		}
 	}
 	
@@ -686,7 +698,13 @@ public class DEImportBuilder {
 				else
 					acv1 = getAmpCategoryValueFromCVT(actType.getImplementationLevels(), Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
 				if(acv1!=null)
-					activity.getCategories().add(acv1);
+					{
+						if (activity.getCategories() == null) {
+							activity.setCategories( new HashSet() );
+						}
+						removeCategoryFromActivity(activity,Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
+						activity.getCategories().add(acv1);
+					}
 				
 			}
 			
@@ -699,21 +717,29 @@ public class DEImportBuilder {
 			}
 			AmpActivityLocation actLoc	=	new AmpActivityLocation();
 			actLoc.setActivity(activity);
-			actLoc.getActivity().setAmpActivityId(null);
+			//actLoc.getActivity().setAmpActivityId(null);
 			actLoc.setLocation(ampLoc);
 			Double percent=new Double(100);
             actLoc.setLocationPercentage(percent.floatValue());
 			locations.add(actLoc);
 
 			if(acv!=null)
-				activity.getCategories().add(acv);
+				{
+					if (activity.getCategories() == null) {
+						activity.setCategories( new HashSet() );
+					}
+					removeCategoryFromActivity(activity,Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+					activity.getCategories().add(acv);
+				}
 			
 			
 			//regional funding
 			importRegionalFunding(activity, location, ampCVLoc);
 			
 		}
-		activity.setLocations(new HashSet<AmpActivityLocation>());
+		if(activity.getLocations() == null)
+			activity.setLocations(new HashSet<AmpActivityLocation>());
+		else activity.getLocations().clear();
 		activity.getLocations().addAll(locations);
 	}
 
@@ -724,6 +750,15 @@ public class DEImportBuilder {
  * 	
  */
 	
+	private void removeCategoryFromActivity(AmpActivity activity, String categValueImplementationLevel) {
+		// TODO Auto-generated method stub
+		for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
+			AmpCategoryValue acv = (AmpCategoryValue) it.next();
+			if(categValueImplementationLevel.equals(acv.getAmpCategoryClass().getKeyName()))
+				it.remove();
+		}
+	}
+
 	private void importRegionalFunding(AmpActivity activity, Location location, AmpCategoryValueLocations ampCVLoc) {
 		// TODO Auto-generated method stub
 		Set regFundings = new HashSet();
@@ -733,11 +768,18 @@ public class DEImportBuilder {
 			addRegionalFundingDetailsToSet(funding.getDisbursements(), regFundings,  activity, org.digijava.module.aim.helper.Constants.DISBURSEMENT,ampCVLoc);
 			addRegionalFundingDetailsToSet(funding.getExpenditures(), regFundings,  activity, org.digijava.module.aim.helper.Constants.EXPENDITURE,ampCVLoc);
 		}
-		activity.setRegionalFundings(regFundings);
+		if(activity.getRegionalFundings() == null)
+			activity.setRegionalFundings(new HashSet());
+		else 
+			activity.getRegionalFundings().clear();
+		
+		activity.getRegionalFundings().addAll(regFundings);
 		//getRegionalFundingXMLToAmp(location.getLocationFunding(),regFundings);
 		
 	}
 
+
+	
 	private void addRegionalFundingDetailsToSet( List<FundingDetailType> fundings, Set regFundings, AmpActivity activity, int transactionType, AmpCategoryValueLocations ampCVLoc) {
 		// TODO Auto-generated method stub
 		for (Iterator it = fundings.iterator(); it.hasNext();) {
@@ -761,6 +803,12 @@ public class DEImportBuilder {
 		// TODO Auto-generated method stub
 		ArrayList<RelatedOrgs> relatedOrgs = (ArrayList<RelatedOrgs>)actType.getRelatedOrgs();
 		Set orgRole = new HashSet();
+		if(activity.getOrgrole() !=null )
+			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
+				AmpOrgRole aor = (AmpOrgRole) it.next();
+				if( !Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
+					it.remove();
+			}
 		if(relatedOrgs!=null)
 			for (Iterator it = relatedOrgs.iterator(); it.hasNext();) {
 				RelatedOrgs relOrg = (RelatedOrgs) it.next();
@@ -811,9 +859,16 @@ public class DEImportBuilder {
 						}
 					}
 				//if (activity.getOrgrole() == null || activity.getOrgrole().size() == 0 ){
-				activity.setOrgrole(new HashSet());
+				//activity.setOrgrole(new HashSet());
 				//}
+				//activity.getOrgrole().addAll(orgRole);
+				
+				if (activity.getOrgrole() == null){
+					activity.setOrgrole(new HashSet());
+				}
+				else activity.getOrgrole().clear();
 				activity.getOrgrole().addAll(orgRole);
+				
 			}
 	}
 	
@@ -1093,54 +1148,14 @@ public class DEImportBuilder {
 		// TODO Auto-generated method stub
 		
 		//funding
-		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
-			FundingType funding = (FundingType) it.next();
-			CodeValueType fundingOrg=funding.getFundingOrg();
-			AmpFunding ampFunding = new AmpFunding();
-			ampFunding.setActive(true);
-			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
-			if(ampOrg == null)
-				logger.getItems().add(new DEOrgMissingLog(fundingOrg));
-				
-			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
-			
-			//type of assitance
-			if(funding.getAssistanceType() != null){
-				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
-				if(acv == null)
-					//errors.add(toStringCVT(funding.getAssistanceType()));
-					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
-			}
-			//financing instrument
-			if(funding.getFinancingInstrument() != null){
-				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
-				if(acv == null)
-					//errors.add(toStringCVT(funding.getFinancingInstrument()));
-					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
-			}
-			
-			//MTEF projections
-			if(funding.getProjections()!=null)
-			{
-				Iterator mtefItr=funding.getProjections().iterator();
-				while (mtefItr.hasNext())
-				{
-					Projections mtef=(Projections)mtefItr.next();
-					if( mtef.getType()!=null ){
-						CodeValueType cvt = new CodeValueType();
-						cvt.setCode(mtef.getType());
-						cvt.setValue(mtef.getType());
-						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
-						if(acv==null)
-							logger.getItems().add(new DEMTEFMissingLog(cvt));
-							//errors.add(toStringCVT(cvt));
-					}
-				}
-			}
-		}
+		checkFunding(actType, logger);
 		
-		//TODO validate locations
+		// validate locations
+		checkLocation(actType, logger);
 	}
+
+
+
 
 	private void validateStep2(ActivityType actType, DEActivityLog logger) {
 		// TODO Auto-generated method stub
@@ -1433,9 +1448,15 @@ public class DEImportBuilder {
 		
 	}
 	
-	private Collection getFundingXMLtoAMP(AmpActivity activity, ActivityType actType){
-		ArrayList<AmpFunding> fundings= null;
+	private Set getFundingXMLtoAMP(AmpActivity activity, ActivityType actType){
+		Set<AmpFunding> fundings= null;
 		Set orgRole = new HashSet();
+		if(activity.getOrgrole() !=null && actType.getFunding() != null)
+			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
+				AmpOrgRole aor = (AmpOrgRole) it.next();
+				if( Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
+					it.remove();
+			}
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
 			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
 			FundingType funding = (FundingType) it.next();
@@ -1467,7 +1488,7 @@ public class DEImportBuilder {
 			if(activity !=null ) ampFunding.setAmpActivityId(activity);
 			if(activity.getFunding() ==  null) activity.setFunding(new HashSet<AmpFunding>());
 			
-			if(fundings == null) fundings=new ArrayList<AmpFunding>();
+			if(fundings == null) fundings=new HashSet<AmpFunding>();
 			
 			//conditions
 			//TODO: the language - lang attribute
@@ -1481,10 +1502,11 @@ public class DEImportBuilder {
 			orgRole.add(ampOrgRole);
 		}
 		
-		if (activity.getOrgrole() == null || activity.getOrgrole().size() == 0 ){
-			activity.setOrgrole(orgRole);
+		if (activity.getOrgrole() == null){
+			activity.setOrgrole(new HashSet<AmpOrgRole>());
 		}
-		else activity.getOrgrole().addAll(orgRole);
+		else ; // already cleared at the beginning of the method!
+		activity.getOrgrole().addAll(orgRole);
 		
 		return fundings;
 	}
@@ -1697,7 +1719,8 @@ public class DEImportBuilder {
 	public void run() {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
-		execLog.setLogItems(new ArrayList<DELogPerItem>());
+		if(execLog.getLogItems() == null)
+			execLog.setLogItems(new ArrayList<DELogPerItem>());
 		execLog.setDeSourceSetting(this.getDESourceSetting());
 		this.getDESourceSetting().getLogs().add(execLog);
 		SourceSettingDAO iLog	 		= null;
@@ -1742,32 +1765,29 @@ public class DEImportBuilder {
 			item.setItemType(DELogPerItem.ITEM_TYPE_ACTIVITY);
 			DEActivityLog contentLogger = new DEActivityLog();
 			validateActivityContent(actType, contentLogger);
+			if(log.getLogItems() == null) 
+				log.setLogItems(new ArrayList<DELogPerItem>());
 			
+			item.setDeLogPerExecution(log);
+			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
 				item.setDescription(contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				//iLog.saveObject(item);
-				if(log.getLogItems() == null) 
-					log.setLogItems(new ArrayList<DELogPerItem>());
-				item.setDeLogPerExecution(log);
 				log.getLogItems().add(item);
-				item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 				iLog.saveObject(log.getDeSourceSetting());
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
 			item.setDescription("OK");
-
 			try {
-				
-				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy())
-						||
+				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
 					//activity doesn't exist
 					activity = new AmpActivity();
 					insertActivity(activity, actType, false);
-					
 				}
 				else 
 					if(activity != null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
@@ -1787,13 +1807,166 @@ public class DEImportBuilder {
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				item.setDescription(e.getMessage());
 			}
-			if(log.getLogItems() == null) 
-				log.setLogItems(new ArrayList<DELogPerItem>());
+
 			log.getLogItems().add(item);
-			item.setDeLogPerExecution(log);
-			item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+			//item.setDeLogPerExecution(log);
+			//item.setExecutionTime(new Timestamp(System.currentTimeMillis()));
 			iLog.saveObject(log.getDeSourceSetting());
 		}
 	}	
+
+	private void checkLocation(ActivityType actType, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+	if(actType.getLocation() !=null && actType.getLocation().size() >0)	{
+		
+		Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
+		for (Iterator it = actType.getLocation().iterator(); it.hasNext();) {
+			Location location = (Location) it.next();
+			
+			AmpCategoryValueLocations ampCVLoc		= null;
+			AmpCategoryValue acv= null;
+			CodeValueType cvt = new CodeValueType();
+			boolean isCountry = false;
+			boolean isZone = false;
+			boolean isDistrict = false;
+			//senegal add
+			if("001".equals(location.getLocationName().getCode()) || "0000".equals(location.getLocationName().getCode()) ){
+				ampCVLoc = DynLocationManagerUtil.getLocationByCode("87274", (AmpCategoryValue)null );
+
+				cvt.setCode("001");
+				cvt.setValue("Country");
+				acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+				isCountry = true;
+			}
+			//normal use
+			else {
+					ampCVLoc = DynLocationManagerUtil.getLocationByCode(location.getLocationName().getCode(), (AmpCategoryValue)null );
+					
+					cvt.setCode(location.getLocationName().getCode());
+					if(location.getLocationName().getCode().length() <=3)
+						{
+							cvt.setValue("Zone");
+							isZone = true;
+						}
+					else {
+						cvt.setValue("District");
+						isDistrict = true;
+					}
+					acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+			}
+			if(acv!=null)
+			{
+				logger.getItems().add(new DEImplLevelMissingLog(cvt));
+			}
+			//implementation levels
+			//added here for Senegal
+			AmpCategoryValue acv1= new AmpCategoryValue();
+			if( actType.getImplementationLevels()!=null ){
+				
+				if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
+				{
+					CodeValueType cvt1 = new CodeValueType();
+					cvt1.setCode("Both");
+					cvt1.setValue("Both");
+					acv1 = getAmpCategoryValueFromCVT(cvt1, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
+				}
+				else
+					acv1 = getAmpCategoryValueFromCVT(actType.getImplementationLevels(), Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
+				if(acv1==null)
+					{
+						logger.getItems().add(new DEImplLevelMissingLog(actType.getImplementationLevels()));
+					}
+				
+			}
+			//regional funding
+			checkRegionalFundingCurrency(location, ampCVLoc,logger);
+		}
+
+	}
+
+	}
+
+	private void checkCurrencyFunding(List<FundingDetailType> funding, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		for (Iterator it = funding.iterator(); it.hasNext();) {
+			FundingDetailType fdt = (FundingDetailType) it.next();
+			
+			if(CurrencyUtil.getCurrencyByCode(fdt.getCurrency()) == null)
+				{
+					CodeValueType cvt = new CodeValueType();
+					cvt.setValue(fdt.getCurrency());
+					cvt.setCode(fdt.getCurrency());
+					logger.getItems().add(new DECurrencyMissingLog(cvt));
+				}
+			
+		}
+	}
+	
+	private void checkRegionalFundingCurrency(Location location, AmpCategoryValueLocations ampCVLoc, DEActivityLog logger) {
+		// TODO Auto-generated method stub
+		Set regFundings = new HashSet();
+		for (Iterator<LocationFundingType> it = location.getLocationFunding().iterator(); it.hasNext();) {
+			LocationFundingType funding = (LocationFundingType) it.next();
+			checkCurrencyFunding(funding.getCommitments(), logger);
+			checkCurrencyFunding(funding.getDisbursements(), logger);
+			checkCurrencyFunding(funding.getExpenditures(), logger);
+			
+		}
+		//getRegionalFundingXMLToAmp(location.getLocationFunding(),regFundings);
+		
+	}
+
+	private void checkFunding(ActivityType actType, DEActivityLog logger) {
+		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
+			FundingType funding = (FundingType) it.next();
+			CodeValueType fundingOrg=funding.getFundingOrg();
+			AmpFunding ampFunding = new AmpFunding();
+			ampFunding.setActive(true);
+			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
+			if(ampOrg == null)
+				logger.getItems().add(new DEOrgMissingLog(fundingOrg));
+			
+			checkCurrencyFunding(funding.getCommitments(),logger);
+			checkCurrencyFunding(funding.getDisbursements(),logger);
+			checkCurrencyFunding(funding.getExpenditures(),logger);
+			
+			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
+			
+			//type of assitance
+			if(funding.getAssistanceType() != null){
+				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
+				if(acv == null)
+					//errors.add(toStringCVT(funding.getAssistanceType()));
+					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
+			}
+			//financing instrument
+			if(funding.getFinancingInstrument() != null){
+				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
+				if(acv == null)
+					//errors.add(toStringCVT(funding.getFinancingInstrument()));
+					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
+			}
+			
+			//MTEF projections
+			if(funding.getProjections()!=null)
+			{
+				Iterator mtefItr=funding.getProjections().iterator();
+				while (mtefItr.hasNext())
+				{
+					Projections mtef=(Projections)mtefItr.next();
+					if( mtef.getType()!=null ){
+						CodeValueType cvt = new CodeValueType();
+						cvt.setCode(mtef.getType());
+						cvt.setValue(mtef.getType());
+						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
+						if(acv==null)
+							logger.getItems().add(new DEMTEFMissingLog(cvt));
+							//errors.add(toStringCVT(cvt));
+					}
+				}
+			}
+		}
+	}
+
 	
 }

@@ -107,7 +107,7 @@
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
 		success: function (o) {
-			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>" + o.responseText + "</div>");
+			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>"  + o.responseText + "</div>");
 			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
 			var footerText='* ${translation_public_ver_msg} \n <font color="red">*</font> The marked version is shared';
@@ -149,87 +149,87 @@
 
 </script>
 <c:set var="translation1">
-	<digi:trn key="contentrepository:documentdeleteconfirm">Are you sure you want to delete this document ?</digi:trn>
+	<digi:trn>Are you sure you want to delete this document ?</digi:trn>
 </c:set>
 
 <c:set var="translation2">
-				<digi:trn key="contentrepository:documentWaitForDelete">Deleting document ... </digi:trn>
+				<digi:trn>Deleting document ... </digi:trn>
 </c:set>
 <c:set var="translation3">
-				<digi:trn key="contentrepository:documentDeleteConnectionProblems">Your request has not been carried out due to connection problems. We are sorry. Please try again !</digi:trn>
+				<digi:trn>Your request has not been carried out due to connection problems. We are sorry. Please try again !</digi:trn>
 </c:set>
 <c:set var="translation_no_doc_selected">
 			<digi:trn>No document has been selected !</digi:trn>
 </c:set>
 <c:set var="translation_remove_failed">
-			<digi:trn key="contentrepository:removeFailedAlert">Documents cannot be removed !</digi:trn>
+			<digi:trn>Documents cannot be removed !</digi:trn>
 </c:set>
 <c:set var="translation_make_public_failed">
-			<digi:trn key="contentrepository:makePublicFailedAlert">The request for making the document public failed. Please try again.</digi:trn>
+			<digi:trn>The request for making the document public failed. Please try again.</digi:trn>
 </c:set>
 <c:set var="translation_validation_title">
-			<digi:trn key="contentrepository:plsSpecifyTitle">Please specify a title !</digi:trn>
+			<digi:trn>Please specify a title !</digi:trn>
 </c:set>
 <c:set var="translation_validation_url">
-			<digi:trn key="contentrepository:plsSpecifyUrl;">Please specify a Url !</digi:trn>
+			<digi:trn>Please specify a Url !</digi:trn>
 </c:set>
 
 <c:set var="translation_validation_title_chars">
-			<digi:trn key="contentrepository:plsTitleChars">Please only use letters, digits, '_' and space !</digi:trn>
+			<digi:trn>Please only use letters, digits, '_' and space !</digi:trn>
 </c:set>
 <c:set var="translation_validation_filedata">
-			<digi:trn key="contentrepository:plsSpecifyPath">Please select a file path !</digi:trn>
+			<digi:trn>Please select a file path !</digi:trn>
 </c:set>
 <c:set var="translation_unableToRetriveDocuments">
-			<digi:trn key="contentrepository:unableToRetriveDocs">Unable to retrieve requested documents</digi:trn>
+			<digi:trn>Unable to retrieve requested documents</digi:trn>
 </c:set>
 
 <c:set var="translation_mandatory_fields">
-			<digi:trn key="contentrepository:mandatoryFieldsMsg">The marked fields are mandatory</digi:trn>
+			<digi:trn>The marked fields are mandatory</digi:trn>
 </c:set>
 <c:set var="translation_add_new_content">
-			<digi:trn key="contentrepository:addNewContentTitle">Add new content</digi:trn>
+			<digi:trn>Add new content</digi:trn>
 </c:set>
 <c:set var="translation_add_new_version">
-			<digi:trn key="contentrepository:addNewVersionTitle">Add new version</digi:trn>
+			<digi:trn>Add new version</digi:trn>
 </c:set>
 
 <c:set var="trans_headerType">
-	 <digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn>  
+	 <digi:trn>Type</digi:trn>  
 </c:set>
 <c:set var="trans_headerFileName">
-	 <digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>  
+	 <digi:trn>Resource Name</digi:trn>  
 </c:set>
 <c:set var="trans_headerSelect">
-	 <digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn>  
+	 <digi:trn>Select</digi:trn>  
 </c:set>
 <c:set var="trans_headerResourceTitle">
-	 <digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn>  
+	 <digi:trn>Title</digi:trn>  
 </c:set>
 <c:set var="trans_headerDate">
-	 <digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn>
+	 <digi:trn>Date</digi:trn>
 </c:set>
 <c:set var="trans_fileSize">
-	 <digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn>
+	 <digi:trn>Size (MB)</digi:trn>
 </c:set>
 <c:set var="trans_headerContentType">
-	<digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn>  
+	<digi:trn>Content Type</digi:trn>  
 </c:set>
 <c:set var="trans_cmDocType">
-	<digi:trn key="contentrepository:TableHeader:CmDocType">Document Type</digi:trn>  
+	<digi:trn>Document Type</digi:trn>  
 </c:set>
 
 <c:set var="trans_headerDescription">
-	 <digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn>
+	 <digi:trn>Description</digi:trn>
 </c:set>
 
 <c:set var="trans_headerActions">
-	<digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn>
+	<digi:trn>Actions</digi:trn>
 </c:set>
 
 
 <c:set var="trans_teamMemberDocuments">
-	<digi:trn key="contentrepository:MenuItem:TeamMemberDocuments">Team Member Documents</digi:trn>
+	<digi:trn>Team Member Documents</digi:trn>
 </c:set>
 
 <c:set var="trans_teamDocuments">
@@ -245,15 +245,15 @@
 </c:set>
 
 <c:set var="trans_options">
-	<digi:trn key="contentrepository:MenuItem:Options">Options</digi:trn>
+	<digi:trn>Options</digi:trn>
 </c:set>
 
 <c:set var="trans_optionsShowOnlyDocuments">
-	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyDocs">Show only documents</digi:trn>
+	<digi:trn>Show only documents</digi:trn>
 </c:set>
 
 <c:set var="trans_optionsShowOnlyWebLinks">
-	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyWebLinks">Show only web links</digi:trn>
+	<digi:trn>Show only web links</digi:trn>
 </c:set>
 
 <c:set var="trans_headerYearofPubl">
@@ -1100,8 +1100,14 @@ function rejectVersion(versionId, baseNodeUUID){
 							window.location.replace( window.location.href );
 						};
 	callback.failure	= function(o) {
-							alert('version reject failed');
+							var failureAlert='<digi:trn>There seems to be a problem with the connection. Please try again later</digi:trn>';							
+							alert(failureAlert);
+							var myDiv=document.getElementById('loadingDiv');
+							myDiv.style.display="none";
 						};
+	var myDiv=document.getElementById('loadingDiv');
+	myDiv.style.display="block";
+	//myDiv.innerHTML='<img src=\"/repository/contentrepository/view/images/ajax-loader-darkblue.gif\" height=\"20px\" />';
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 
@@ -1113,6 +1119,8 @@ function rejectDoc (uuid,actType){
 	callback.failure	= function(o) {
 							alert('share failed');
 						};
+	var panel		= YAHOO.amp.orgPanels[uuid]; 
+	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid, callback);
 }
 
@@ -1124,8 +1132,7 @@ function setAttributeOnNode(action, uuid, doReload) {
 						};
 	callback.failure	= function(o) {
 							alert("${translation_make_public_failed}");
-						};
-	
+						};	
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/setAttributes.do?uuid="+uuid+"&action="+action, callback);
 }
 

@@ -362,34 +362,19 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+		</feature:display>
+									<field:display name="Government Agreement Number" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
+									  <digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn>		</b>								</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
+										</td>
+									</tr>
+									</field:display>
 									
 
-		</feature:display>
-                                     <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-                                     <feature:display name="Budget" module="Project ID and Planning">
-										<tr>
-											<td width="27%" align="right" valign="top" nowrap="nowrap">
-												<b>
-											  <digi:trn key="aim:actBudget">Budget</digi:trn>
-											  	</b>
-											</td>
-										  <td bgcolor="#ffffff">
-											<field:display name="On/Off Budget" feature="Budget">
-											<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
-											<digi:trn>Activity is On Budget</digi:trn>
-											</logic:equal>	
-											<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
-											<digi:trn>Activity is Off Budget</digi:trn>
-											</logic:equal>
-											<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
-											<digi:trn>Budget Unallocated</digi:trn>
-											</logic:equal>
-
-											</field:display>
-											</td>
-										</tr>
-										</feature:display>
-                                     </module:display>
+                                     
 
 										<field:display name="Humanitarian Aid" feature="Identification">
 											<tr>

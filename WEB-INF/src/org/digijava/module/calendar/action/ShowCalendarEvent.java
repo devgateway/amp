@@ -64,6 +64,7 @@ import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
@@ -212,9 +213,12 @@ public class ShowCalendarEvent extends Action {
         		ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
                 return mapping.findForward("success");        		
         	}else{
-        		saveAmpCalendar(ceform, request);
+        		AmpCalendar ampCalendar=saveAmpCalendar(ceform, request);
                 ceform.setMethod("");
                 request.setAttribute("calendarEventCreated", !ceform.isPrivateEvent());
+	 	 	 	CalendarItem calendarItem =  ampCalendar.getCalendarPK().getCalendar().getFirstCalendarItem();
+	 	 	 	AmpTeamMember tl = ampCalendar.getMember().getAmpTeam().getTeamLead();
+                new AwaitingApprovalCalendarTrigger(calendarItem, tl.getUser().getName(),tl);
                 return mapping.findForward("forward");
         	}            
 
@@ -341,7 +345,7 @@ public class ShowCalendarEvent extends Action {
     }
 
    
-	private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
+	private AmpCalendar saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
 		Object teamObj = request.getSession().getAttribute("teamHead");
 	 	boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
 	 	try {
@@ -499,8 +503,10 @@ public class ShowCalendarEvent extends Action {
             //Create new calendar event alert           
             CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
             ceform.setResetForm(true);
+            return ampCalendar;
         } catch (Exception ex) {
-            ex.printStackTrace();
+        	ex.printStackTrace();
+        	return null;
         }
 
     }

@@ -43,6 +43,7 @@ public class AdminTableWidgets extends DispatchAction {
     public static final String EDITING_WIDGET = "EditingWidget";
     public static final String EDITING_COLUMNS = "EditingColumns";
     public static final String DELETING_COLUMNS = "DeletingColumns";
+    public static final String EDITING_WIDGET_PLACES = "EditingWidgetPlaces";
 
     /**
      * Show create table widget page.
@@ -73,12 +74,12 @@ public class AdminTableWidgets extends DispatchAction {
 		setPlaces(tableForm);
 		
 		try {
-			startEditing(new AmpDaTable(), new ArrayList<AmpDaColumn>(), request);
+			startEditing(new AmpDaTable(), null,new ArrayList<AmpDaColumn>(), request);
 		} catch (Exception e) {
 			logger.error(e);
 		}finally{
 			stopEditing(request);
-			startEditing(new AmpDaTable(), new ArrayList<AmpDaColumn>(), request);
+			startEditing(new AmpDaTable(),null, new ArrayList<AmpDaColumn>(), request);
 		}
 		
 		return mapping.findForward("showAdd");
@@ -122,10 +123,10 @@ public class AdminTableWidgets extends DispatchAction {
 		wForm.setColumns(getWidgetColumnsSorted(widget));
 		setPlaces(wForm);
 		try{
-			startEditing(widget,wForm.getColumns(), request);
+			startEditing(widget,wForm.getSelPlaces(),wForm.getColumns(), request);
 		}catch (Exception e) {
 			stopEditing(request);
-			startEditing(widget,wForm.getColumns(), request);
+			startEditing(widget,wForm.getSelPlaces(),wForm.getColumns(), request);
 		}
 
 		return mapping.findForward("returnToEdit");
@@ -147,11 +148,13 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
 		setPlaces(wForm);
 		AmpDaTable widget = getWidgetFromSession(request);
+        Long[] selPlaces=getWidgetPlacesSession(request);
 		if (wForm.getId()!=null && wForm.getId().longValue()==0){
 			wForm.setId(null);
 		}
 		//widget = formToWidgetSimpleFileds(wForm,widget);
 		wForm = widgetToForm(wForm, widget);
+        wForm.setSelPlaces(selPlaces);
 		//set columns
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
 		Collections.sort(columns,new TableWidgetUtil.ColumnOrderNoComparator());
@@ -173,6 +176,7 @@ public class AdminTableWidgets extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
 		AmpDaTable widget = getWidgetFromSession(request);
+        saveToSession(wForm.getSelPlaces(), request);
 		widget = formToWidgetSimpleFileds(wForm,widget);
 		return mapping.findForward("returnToEdit");
 	}
@@ -467,6 +471,17 @@ public class AdminTableWidgets extends DispatchAction {
 		if (result==null) throw new DgException("No widget in editing state");
 		return result;
 	}
+    /**
+	 * Retrieves widget place from session.
+	 * @param request
+	 * @return
+	 * @throws DgException if there is no widget in current session. Do not call this method when not in edit mode.
+	 */
+	private Long[]  getWidgetPlacesSession(HttpServletRequest request) throws DgException{
+		HttpSession session=request.getSession();
+		Long[] selPlaces=(Long[])session.getAttribute(EDITING_WIDGET_PLACES);
+		return selPlaces;
+	}
 
 	/**
 	 * Retrieves columns list saved in session.
@@ -493,7 +508,7 @@ public class AdminTableWidgets extends DispatchAction {
 		session.setAttribute(EDITING_WIDGET, widget);
 	}
 
-	/**
+    /**
 	 * Save columns to session.
 	 * @param columns
 	 * @param request
@@ -503,6 +518,17 @@ public class AdminTableWidgets extends DispatchAction {
 		HttpSession session=request.getSession();
 		session.setAttribute(EDITING_COLUMNS, columns);
 	}
+
+	/**
+	 * Save places to session.
+	 * @param columns
+	 * @param request
+	 * @throws DgException
+	 */
+	private void saveToSession(Long[] places,HttpServletRequest request) throws DgException{
+		HttpSession session=request.getSession();
+		session.setAttribute(EDITING_WIDGET_PLACES, places);
+	}
 	
 	/**
 	 * Saves widget in session marking it as being in edit mode.
@@ -510,9 +536,10 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @param request
 	 * @throws DgException if already in editing state. first it should be ended. 
 	 */
-	private void startEditing(AmpDaTable widget, List<AmpDaColumn> columns, HttpServletRequest request) throws DgException{
+	private void startEditing(AmpDaTable widget,Long[]places, List<AmpDaColumn> columns, HttpServletRequest request) throws DgException{
 		if (isEditing(request)) throw new DgException("some widget is already in edit state");
 		saveToSession(widget, request);
+        saveToSession(places, request);
 		saveToSession(columns, request); 
 		resetDeletedColumns(request);
 	}

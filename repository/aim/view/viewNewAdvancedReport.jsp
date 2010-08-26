@@ -165,14 +165,14 @@ session.setAttribute("progressValue", counter);
 			</logic:notEmpty> 
 				<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
 					<span  style="color: red;font-family: Arial;font-size: 10px;">
-						<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-							<c:set var="AllAmount">
-								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-							</c:set>
-							<digi:trn key="rep:pop:AllAmount">
-								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+						<%
+	                	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+	                	if (af.getAmountinthousand()==true){%>
+	               			<digi:trn key="rep:pop:AllAmount">
+								Amounts are in thousands (000)
 							</digi:trn>
-						</gs:test>			
+	           			<%}%>
+						
 						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
@@ -430,14 +430,13 @@ session.setAttribute("progressValue", counter);
 			</span>
 			</logic:notEmpty>
 			<span style="color: red;font-family: Arial;padding-right: 5px">
-				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-				<c:set var="AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-				</c:set>
-				<digi:trn key="rep:pop:AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+				<%
+	            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+	            if (af.getAmountinthousand()==true){%>
+	            <digi:trn key="rep:pop:AllAmount">
+					Amounts are in thousands (000)
 				</digi:trn>
-				</gs:test>
+	           	<%}%>
 				
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />

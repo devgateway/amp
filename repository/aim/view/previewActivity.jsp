@@ -715,6 +715,17 @@ function collapseAll() {
 									</tr>
 									</field:display>
 									
+                                	<field:display name="Government Agreement Number" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn></td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
+										</td>
+									</tr>
+									</field:display>
+									
+									
+									
                               <!--END 11 12  -->        
 
 								<feature:display name="Budget" module="Project ID and Planning">
@@ -738,6 +749,10 @@ function collapseAll() {
 										</logic:equal>
 										
 										<p/>
+										<field:display name="Project Code" feature="Budget">
+											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 
+										</field:display>										
+																					
                                         <c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}">
 										<digi:trn>Code Chapitre</digi:trn>:
 										<bean:write name="aimEditActivityForm" property="identification.chapterForPreview.code"/> - 

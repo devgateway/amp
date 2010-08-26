@@ -178,7 +178,7 @@ public class CalendarUtil {
 		return CalDate;
 	}
 	
-	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
+	public static String getCalendarEventsXml(AmpTeamMember member,Integer filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
 		String xml="";
 		Collection ampCalendarEvents=null;
 		try {

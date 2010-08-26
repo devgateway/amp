@@ -420,8 +420,8 @@ public class DocumentManager extends Action {
 				}
 				DocumentData documentData		= new DocumentData();
 				documentData.setName( fileName );
-				//documentData.setUuid( nodeWrapper.getUuid() );
 				documentData.setUuid( documentNodeBaseVersionUUID );
+				documentData.setNodeVersionUUID(nodeWrapper.getUuid()); //if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid
 				documentData.setTitle( nodeWrapper.getTitle() );
 				documentData.setDescription( nodeWrapper.getDescription() );
 				documentData.setNotes( nodeWrapper.getNotes() );
@@ -513,20 +513,21 @@ public class DocumentManager extends Action {
 					}					
 					
 					
+					/**
+					 * In case of team doc, instead of lastVersion we need just firstly given documentData-s uuid
+					 *  if it's some version of the node and not original last version node !
+					 */
+					Node lastVersion=null;
+					String lastVerUUID=null;
+					if(! documentNodeBaseVersionUUID.equals(uuid)){ //this means that document data version that was passed to function,was hidden and we fund it's last not hidden version
+						lastVerUUID	=uuid;
+					}else{
+						lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+						lastVerUUID	= lastVersion.getUUID();
+					}
+					
 					if(sharedNodeVersionId!=null && sharedNodeVersionId.size()>0){
-						documentData.setIsShared(true);
-						/**
-						 * In case of team doc, instead of lastVersion we need just firstly given documentData-s uuid
-						 *  if it's some version of the node and not original last version node !
-						 */
-						Node lastVersion=null;
-						String lastVerUUID=null;
-						if(! documentNodeBaseVersionUUID.equals(uuid)){ //this means that document data version that was passed to function,was hidden and we fund it's last not hidden version
-							lastVerUUID	=uuid;
-						}else{
-							lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-							lastVerUUID	= lastVersion.getUUID();
-						}						
+						documentData.setIsShared(true);												
 						
 						if(sharedNodeVersionId.contains(lastVerUUID)){
 							documentData.setLastVersionIsShared(true);
@@ -535,14 +536,15 @@ public class DocumentManager extends Action {
 						}
 					}
 					//whether this document's any version is public and if is, then which one is public
-					if ( uuidMapOrg.containsKey(uuid) ) {
+					if ( uuidMapOrg.containsKey(documentNodeBaseVersionUUID) ) {
 							documentData.setIsPublic(true);
 							//Verify if the last (current) version is the public one.
-							Node lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-							String lastVerUUID	= lastVersion.getUUID();
+							//Node lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request);
+							//String lastVerUUID	= lastVersion.getUUID();
+														
 							if ( uuidMapVer.containsKey(lastVerUUID) ) {
 								documentData.setLastVersionIsPublic( true );
-							}							
+							}
 					}else{
 						documentData.setIsPublic(false);
 					}

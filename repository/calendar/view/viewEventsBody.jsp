@@ -244,15 +244,20 @@
 			} else if (ev.approve==2){
 				app = "**";
 			}
-				
+
+			var evName = app+ev.text;	
 			var dotted= "..."; 
-			var isDotted = ev.text.length >20 ? dotted : "";
-		    var text = app+ev.text.substr(0,20)+isDotted;
+			if (evName.length >18) {
+				var shortText = evName.substr(0,15)+dotted;
+			} else {
+				var shortText = evName;
+			}
+		    var text = evName;
 	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
 	        var trnLbelTitle 		= '<digi:trn jsFriendly="true">Title:</digi:trn>';
 	        var trnLabelStartDate 	= '<digi:trn jsFriendly="true">StartDate:</digi:trn>';
 	        var trnLabelEndDate 	= '<digi:trn jsFriendly="true">EndDate:</digi:trn>';
-	        return "<span  title='"+trnLbelTitle+" "+text+"  "+trnLabelStartDate+" "+start_date+" "+trnLabelEndDate+" "+end_date+"'>"+img+""+text+"</span>";
+	        return "<span  title='"+trnLbelTitle+" "+text+"  "+trnLabelStartDate+" "+start_date+" "+trnLabelEndDate+" "+end_date+"'>"+img+""+shortText+"</span>";
 		 }
 	 }else{
 

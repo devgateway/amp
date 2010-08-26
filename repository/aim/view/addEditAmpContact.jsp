@@ -343,14 +343,16 @@ html>body #mainEmpty {
 		var emails=$("input[id^='email_']");
     	if(emails!=null){
         	for(var i=0;i < emails.length; i++){
-            	if(emails[i].value==null || emails[i].value==''){
-            		alert('Please enter email');
-            		return false;
-            	}
-            	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
-            		alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
-            		return false;
-            	}
+                if(emails[i].value==null || emails[i].value==''){
+                    alert('Please enter email');
+                    return false;
+                }
+                else{
+                    if(emails[i].value.indexOf('@')==-1){
+                        alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
+                        return false;
+                    }
+                }
         	}
     	}
     	//phone shouldn't be empty and should contain valid characters
@@ -568,17 +570,16 @@ html>body #mainEmpty {
 																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
 																													</tr>
 																													<tr>
-																														<td align="right" valign="top"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
+																														<td align="right" valign="top"><strong><digi:trn>Email</digi:trn></strong>
 																														<td align="left">
 																															<logic:notEmpty name="addressbookForm" property="emails">
 																																 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
 																																 	<div>
-																																 		<html:text name="addressbookForm" property="emails[${ctr}].value" size="40" styleId="email_${ctr}"/>																																 		
-																																 		<c:if test="${addressbookForm.emailsSize>1}">
+																																 		<html:text name="addressbookForm" property="emails[${ctr}].value" size="40" styleId="email_${ctr}"/>																																 																										 		
 																																 			 <a href="javascript:removeData('email',${ctr})"> 
 																																		 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
-																																		 	</a>
-																																 		</c:if>
+																																		 	</a>																	
+														
 																																 		<c:if test="${ctr==addressbookForm.emailsSize-1}">
 																																 			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       																																		<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">

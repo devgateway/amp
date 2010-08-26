@@ -108,7 +108,7 @@ public class ContactInfoUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select distinct(property.contact) from " + AmpContactProperty.class.getName() + " property where property.contact.name like '%"+keyword+"%' or property.contact.lastname like '%"
+			queryString="select distinct(contact) from " + AmpContact.class.getName() + " contact left join contact.properties property where contact.name like '%"+keyword+"%' or contact.lastname like '%"
 			+keyword+"%' or (property.value like '%" + keyword + "%' and property.name='"+Constants.CONTACT_PROPERTY_NAME_EMAIL +"')";
 			query=session.createQuery(queryString);
 			contacts=query.list();

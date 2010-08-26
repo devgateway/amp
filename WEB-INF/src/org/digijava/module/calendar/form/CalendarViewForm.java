@@ -42,7 +42,7 @@ public class CalendarViewForm  extends ActionForm {
     private EventsFilter filter;
     private boolean filterInUse;
     private Collection ampCalendarGraphs;
-    private Boolean resetFilter;
+    private String showPublicEvents;
     private Boolean resetDonors;
     private Boolean resetEventTypes;
     private Boolean print = false;
@@ -136,8 +136,8 @@ public class CalendarViewForm  extends ActionForm {
         return ampCalendarGraphs;
     }
 
-  public Boolean getResetFilter() {
-    return resetFilter;
+  public String getShowPublicEvents() {
+    return showPublicEvents;
   }
 
   public void setView(String view) {
@@ -224,8 +224,8 @@ public class CalendarViewForm  extends ActionForm {
         this.ampCalendarGraphs = ampCalendarGraphs;
     }
 
-  public void setResetFilter(Boolean resetFilter) {
-    this.resetFilter = resetFilter;
+  public void setShowPublicEvents(String showPublicEvents) {
+    this.showPublicEvents = showPublicEvents;
   }
 
   public void reset(ActionMapping mapping, HttpServletRequest request) {

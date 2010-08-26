@@ -34,11 +34,8 @@ public class ShowEvents extends Action {
 		 
 		 String xml ="";		 
 		 try {
-			 if(ses.getAttribute("publicEvent").toString().equals("true")){
-			  	  filter.setShowPublicEvents(true);
-			 }else{
-				  filter.setShowPublicEvents(false);
-			 }
+			 filter.setShowPublicEvents((Integer) ses.getAttribute("publicEvent"));
+			 
 			String[] donors =  (String[]) ses.getAttribute("donor");
 			filter.setSelectedDonors(donors);
 			
@@ -46,7 +43,7 @@ public class ShowEvents extends Action {
 			filter.setSelectedEventTypes(eventTypes);			
 			
 			 
-		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.isShowPublicEvents(),siteId,filter.getSelectedDonors(),filter.getSelectedEventTypes(),moduleInstance,currentUser.getId());   
+		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.getShowPublicEvents(),siteId,filter.getSelectedDonors(),filter.getSelectedEventTypes(),moduleInstance,currentUser.getId());   
 			response.setContentType("text/xml; charset=UTF-8");               
 		    PrintWriter out = response.getWriter();
 			xml+="<data>";

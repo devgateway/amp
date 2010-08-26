@@ -827,16 +827,14 @@ public class AmpMessageActions extends DispatchAction {
         }
 
     	//cleaning form values
-    	setDefaultValues(messageForm);
-   	    if (request.getParameter("toDo") != null && request.getParameter("toDo").equals("draft")
-            || message.getForwardedMessage() != null) {
-              //  messageForm.setChildTab("draft");
-            return mapping.findForward("showAllMessages");
+    	   setDefaultValues(messageForm);
+        if (request.getParameter("toDo") != null && request.getParameter("toDo").equals("draft")) {
+            messageForm.setChildTab("draft");
+        } else {
+            messageForm.setChildTab("inbox");
         }
-            else{
-
-		return mapping.findForward("viewMyDesktop");
-	}
+           
+        return mapping.findForward("showAllMessages");
 	}
 
 
@@ -1117,6 +1115,8 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			//contacts and external people
 			if(message.getExternalReceivers()!=null){
+                LabelValueBean guestReceiver=new LabelValueBean("---guest---","guest");
+                allReceivers.add(guestReceiver);
 				String[] externalReceivers=message.getExternalReceivers().split(",");
 				for (int i = 0; i < externalReceivers.length; i++) {
 					LabelValueBean receiver=new LabelValueBean(externalReceivers[i],"c:" + externalReceivers[i]);

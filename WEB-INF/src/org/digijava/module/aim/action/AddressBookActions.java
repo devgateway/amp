@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -246,12 +247,6 @@ public class AddressBookActions extends DispatchAction {
 	public ActionForward addContact (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AddressBookForm myForm=(AddressBookForm)form;
 		clearForm(myForm);
-		//It's a must that contact should have at least one email, so we can create it's empty property
-		if(myForm.getEmails()==null){
-			myForm.setEmails(new ContactPropertyHelper[1]);
-			myForm.getEmails()[0]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_EMAIL);
-		}
-		myForm.setEmailsSize(myForm.getEmails().length);
 		return mapping.findForward("addOrEditContact");
 	}
 	
@@ -368,32 +363,35 @@ public class AddressBookActions extends DispatchAction {
 		AmpContact contact=new AmpContact();
 		Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
 		Set<ContactPropertyHelper> emailsToLookFor=new HashSet<ContactPropertyHelper>();
-		if(myForm.getContactId()!=null){
-			//get contact emails
-			List<AmpContactProperty> properties=ContactInfoUtil.getContactProperties(myForm.getContactId());
-			Set<AmpContactProperty> emails=null;
-			for (AmpContactProperty property : properties) {
-				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-					if(emails==null){
-						emails=new HashSet<AmpContactProperty>();
-					}
-					emails.add(property);
-				}
-			}
-			//if user changed any contact email, we should check that this email doesn't exist in db
-			List<ContactPropertyHelper> contactEmails=AmpContactsWorker.buildHelperContactProperties(emails);
-			for (ContactPropertyHelper property : myForm.getEmails()) {
-				if(!contactEmails.contains(property)){
-					validateData=true;
-					emailsToLookFor.add(property);					
-				}
-			}
-		}else{			
-			validateData=true;
-			for (ContactPropertyHelper currentEmail : myForm.getEmails()) {
-				emailsToLookFor.add(currentEmail);
-			}
-		}		
+       if (myForm.getEmails() != null) {
+           if (myForm.getContactId() != null) {
+               //get contact emails
+               List<AmpContactProperty> properties = ContactInfoUtil.getContactProperties(myForm.getContactId());
+               Set<AmpContactProperty> emails = null;
+               for (AmpContactProperty property : properties) {
+                   if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                       if (emails == null) {
+                           emails = new HashSet<AmpContactProperty>();
+                       }
+                       emails.add(property);
+                   }
+               }
+               //if user changed any contact email, we should check that this email doesn't exist in db
+                   List<ContactPropertyHelper> contactEmails = AmpContactsWorker.buildHelperContactProperties(emails);
+                  if (contactEmails != null) {
+                   for (ContactPropertyHelper property : myForm.getEmails()) {
+                       if (!contactEmails.contains(property)) {
+                           validateData = true;
+                           emailsToLookFor.add(property);
+                       }
+                   }
+               }
+           } else {
+               validateData = true;
+               emailsToLookFor.addAll(Arrays.asList(myForm.getEmails()));
+           }
+       }
+				
 		
 		//check unique email 
 		if(validateData){
@@ -460,7 +458,9 @@ public class AddressBookActions extends DispatchAction {
 		}		
 		
 		//filling contact properties
-		contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(myForm.getEmails()));
+       if (myForm.getEmails() != null) {
+           contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(myForm.getEmails()));
+       }
 		if(myForm.getFaxes()!=null){
 			contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(myForm.getFaxes()));
 		}
@@ -578,12 +578,15 @@ public class AddressBookActions extends DispatchAction {
 					for(int i=0; i< myForm.getEmails().length; i++){
 						if(index!=i){
 							myArray[j]=myForm.getEmails(i);
-							j++;
-						}
-					}
-				}
-				myForm.setEmails(myArray);
-				myForm.setEmailsSize(myForm.getEmails().length);
+                            j++;
+                        }
+                    }
+                    myForm.setEmails(myArray);
+                } else {
+                    myForm.setEmails(null);
+                }
+				
+				myForm.setEmailsSize(myArray.length);
 			}else if(dataName.equalsIgnoreCase("phone")){
 				myArray=new ContactPropertyHelper[myForm.getPhones().length-1];
 				if(myArray.length!=0){

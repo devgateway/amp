@@ -67,4 +67,6 @@ public class GlobalSettingsConstants {
     
     public static final String ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES = "Allow percentages for all countries";
     
+    public static final String PROJECT_TITLE_HIRARCHY = "Project Title Hierarchy";
+    
 }

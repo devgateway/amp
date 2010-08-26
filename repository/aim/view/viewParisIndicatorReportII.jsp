@@ -230,46 +230,6 @@ html>body #mainEmpty {
 
 <script language="JavaScript">
 <!--
-	function clearFilter()
-	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/parisIndicatorReport.do" />
-		var param = document.aimParisIndicatorReportForm.indicatorId.value;
-		document.aimParisIndicatorReportForm.filterFlag.value = "true";
-		document.aimParisIndicatorReportForm.action = "<%= clearVal %>?indcId=" + param;
-		document.aimParisIndicatorReportForm.target = "_self";
-		document.aimParisIndicatorReportForm.submit();
-	}
-
-	function openPrinter(){
-		var val = document.getElementsByName('indicatorId')[0].value;
-		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=false~print2=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-		document.getElementsByName('print2')[0].value = 'false';
-	}
-	
-	function popup_pdf(val) {
-		//openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=pdf" />
-		document.aimParisIndicatorReportForm.action = "<%= pdf %>&pid="+val;
-		//document.aimParisIndicatorReportForm.target = popupPointer.name;
-		document.aimParisIndicatorReportForm.submit();
-	}
-
-	function popup_csv() {
-		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=csv" />
-		document.aimParisIndicatorReportForm.action = "<%= csv %>&pid="+val;
-		document.aimParisIndicatorReportForm.target = popupPointer.name;
-		document.aimParisIndicatorReportForm.submit();
-	}
-
-	function popup_xls(val) {
-		//openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=xls" />
-		document.aimParisIndicatorReportForm.action = "<%= xls %>&pid="+val;
-		//document.aimParisIndicatorReportForm.target = popupPointer.name;
-		document.aimParisIndicatorReportForm.submit();
-	}
-
 	function popup_warn() {
 		alert("Year Range selected should NOT be Greater than 3 Years.");
 	}
@@ -744,3 +704,60 @@ function toggleSettings(){
 		</td>
 	</tr>
 </table>
+
+<script language="JavaScript">
+	function clearFilter()
+	{
+		<digi:context name="clearVal" property="context/module/moduleinstance/parisIndicatorReport.do" />
+		var param = document.aimParisIndicatorReportForm.indicatorId.value;
+		document.aimParisIndicatorReportForm.filterFlag.value = "true";
+		document.aimParisIndicatorReportForm.action = "<%= clearVal %>?indcId=" + param;
+		document.aimParisIndicatorReportForm.target = "_self";
+		document.aimParisIndicatorReportForm.submit();
+	}
+
+	function openPrinter(){
+		var val = document.getElementsByName('indicatorId')[0].value;
+		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=false~print2=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+		document.getElementsByName('print2')[0].value = 'false';
+	}
+	
+	function popup_pdf(val) {
+		<logic:empty name="aimParisIndicatorReportForm" property="donorsColl">
+			alert('<digi:trn jsFriendly="true">No survey data found.</digi:trn>');
+		</logic:empty>
+		<logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
+			//openResisableWindow(800, 600);
+			<digi:context name="pdf" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=pdf" />
+			document.aimParisIndicatorReportForm.action = "<%= pdf %>&pid="+val;
+			//document.aimParisIndicatorReportForm.target = popupPointer.name;
+			document.aimParisIndicatorReportForm.submit();
+		</logic:notEmpty>
+	}
+
+	function popup_csv() {
+		<logic:empty name="aimParisIndicatorReportForm" property="donorsColl">
+			alert('<digi:trn jsFriendly="true">No survey data found.</digi:trn>');
+		</logic:empty>
+		<logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
+			openResisableWindow(800, 600);
+			<digi:context name="csv" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=csv" />
+			document.aimParisIndicatorReportForm.action = "<%= csv %>&pid="+val;
+			document.aimParisIndicatorReportForm.target = popupPointer.name;
+			document.aimParisIndicatorReportForm.submit();
+		</logic:notEmpty>
+	}
+
+	function popup_xls(val) {
+		<logic:empty name="aimParisIndicatorReportForm" property="donorsColl">
+			alert('<digi:trn jsFriendly="true">No survey data found.</digi:trn>');
+		</logic:empty>
+		<logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
+			//openResisableWindow(800, 600);
+			<digi:context name="xls" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=xls" />
+			document.aimParisIndicatorReportForm.action = "<%= xls %>&pid="+val;
+			//document.aimParisIndicatorReportForm.target = popupPointer.name;
+			document.aimParisIndicatorReportForm.submit();
+		</logic:notEmpty>
+	}
+</script>

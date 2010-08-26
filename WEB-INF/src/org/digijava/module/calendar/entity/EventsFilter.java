@@ -7,7 +7,7 @@ public class EventsFilter {
     private String[] selectedEventTypes;
     private List donors;
     private String[] selectedDonors;
-    private boolean showPublicEvents;
+    private Integer showPublicEvents;
 
     public List getDonors() {
         return donors;
@@ -17,7 +17,7 @@ public class EventsFilter {
         return eventTypes;
     }
 
-    public boolean isShowPublicEvents() {
+    public Integer getShowPublicEvents() {
         return showPublicEvents;
     }
 
@@ -37,7 +37,7 @@ public class EventsFilter {
         this.eventTypes = eventTypes;
     }
 
-    public void setShowPublicEvents(boolean showPublicEvents) {
+    public void setShowPublicEvents(Integer showPublicEvents) {
         this.showPublicEvents = showPublicEvents;
     }
 

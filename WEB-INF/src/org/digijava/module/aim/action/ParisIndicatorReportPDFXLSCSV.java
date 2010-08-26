@@ -19,6 +19,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
+import org.digijava.module.aim.helper.ParisIndicator10bJrxml;
 import org.digijava.module.aim.helper.ParisIndicator4Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator5aJrxml;
 import org.digijava.module.aim.helper.ParisIndicator5aSubJrxml;
@@ -66,14 +67,15 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		}
 		Iterator iter = null;
 		Iterator iter1 = null;
-		if (coll == null || coll.size() == 0) {
+		/*if (coll == null || coll.size() == 0) {
 			//Quick and dirty solution to empty values that previously gave exceptions (FFerreyra)
 			//This makes the browser to not refresh the page if there's no data for the report.
 			response.setStatus(204);
 			return null;
 		} else {
 			iter = coll.iterator();
-		}
+		}*/
+		iter = coll.iterator();
 		int colCnt1 = coll.size();
 		logger.info(" this is the initail col count " + colCnt1);
 		ArrayList ans = new ArrayList();
@@ -95,12 +97,12 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					b1++;
 				}
 			}
+		
+			colCnt1 = b1 / coll.size();
+			logger.info(" this is b1 here..." + b1 + " colcount size...."
+					+ coll.size() + "COLL CNT 1 is    " + colCnt1 + " row size  "
+					+ rowCnt1);
 		}
-
-		colCnt1 = b1 / coll.size();
-		logger.info(" this is b1 here..." + b1 + " colcount size...."
-				+ coll.size() + "COLL CNT 1 is    " + colCnt1 + " row size  "
-				+ rowCnt1);
 		Object[][] data2 = new Object[rowCnt1][colCnt1];
 		if (!(pId.equals("6"))) {
 			logger.info("not the 6th one.....");
@@ -142,7 +144,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						}
 					}
 					if (pId.equals("3") || pId.equals("4") || pId.equals("7")
-							|| pId.equals("10a") || pId.equals("5b")) {
+							|| pId.equals("10a") || pId.equals("5b") || pId.equals("10b")) {
 						int c = 4;
 						for (int i = 0; i < arrSize; i++) {
 							// //System.out.println(" i am dead "+data2[row][i]+
@@ -296,6 +298,9 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 			} else if (pId.equals("10a")) {
 				jrxml = new ParisIndicator10aJrxml();
+
+			} else if (pId.equals("10b")) {
+				jrxml = new ParisIndicator10bJrxml();
 
 			} else {
 				return null;

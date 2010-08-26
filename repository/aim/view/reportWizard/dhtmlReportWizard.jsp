@@ -44,6 +44,7 @@
 	<br>
 	<br>
 	<digi:instance property="aimReportWizardForm" />
+	
 	<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
 	
 	<c:set var="failureMessage">
@@ -263,10 +264,14 @@
 			</c:forEach>	
 			<c:forEach items="${aimReportWizardForm.selectedMeasures}" var="dbId">
 				selectedMeas.push('${dbId}');
-			</c:forEach>	
+			</c:forEach>
+
+			//If ptoject title is enable in GS add it to the donor array
+			var ptitle='${myForm.projecttitle}';
+			YAHOO.amp.reportwizard.fundingGroups["donor"].push(ptitle);
 		</script>
 		
-		
+		<html:hidden name="aimReportWizardForm" property="projecttitle"/>
 		<html:hidden name="aimReportWizardForm" property="desktopTab"/>
 		<html:hidden name="aimReportWizardForm" property="originalTitle"/>
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">

@@ -42,17 +42,15 @@
 						<td align="left"><html:text property="lastname" size="30" styleId="lastname"/></td>
 					</tr>
 					<tr>
-						<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
+						<td align="right"><strong><digi:trn>Email</digi:trn></strong>
 						<td align="left" nowrap="nowrap">
 							<logic:notEmpty name="aimAddContactForm" property="emails">
 								 <logic:iterate name="aimAddContactForm" property="emails" id="foo" indexId="ctr">
 								 	<div>
 								 		<html:text name="aimAddContactForm" property="emails[${ctr}].value" size="30" styleId="email_${ctr}"/>																																 		
-								 		<c:if test="${aimAddContactForm.emailsSize>1}">
 											 <a href="javascript:removeData('email',${ctr})"> 
 										 		<img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/>
 								 		 	</a>
-								 		</c:if>
 								 		<c:if test="${ctr==aimAddContactForm.emailsSize-1}">
 								 			<c:set var="trnadd"><digi:trn>Add New</digi:trn></c:set>
       										<input id="addEmailBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData('email')">

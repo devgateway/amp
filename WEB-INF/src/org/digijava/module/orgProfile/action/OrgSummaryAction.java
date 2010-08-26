@@ -16,6 +16,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.orgProfile.form.OrganizationSummaryForm;
 import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 
 /**
@@ -54,23 +55,7 @@ public class OrgSummaryAction extends DispatchAction  {
 
         OrganizationSummaryForm orgForm = (OrganizationSummaryForm) form;
         Long orgId=orgForm.getOrgId();
-        AmpOrganisation  organization = DbUtil.getOrganisation(orgId);
-
-        //because of sessions problems to save values we need to do following :( sess.clear spoils everything :(
-       Set<AmpSector> sectors = new HashSet<AmpSector>();
-        Set<AmpSector> oldSectors=organization.getSectors();
-        if( organization.getSectors()!=null){
-            for(AmpSector sector :oldSectors ){
-                   AmpSector amps = SectorUtil.getAmpSector(sector.getAmpSectorId());
-                   sectors.add(amps);
-            }
-
-        }
-        organization.setSectors(sectors) ;
-  
-        organization.setOrgBackground(orgForm.getOrgBackground());
-        organization.setOrgDescription(orgForm.getOrgDescription());
-        DbUtil.saveOrg(organization);
+        OrgProfileUtil.saveAdditionalInfo(orgId,orgForm.getOrgBackground(),orgForm.getOrgDescription());
         return mapping.findForward("forward");
 
     }

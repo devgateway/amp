@@ -35,8 +35,8 @@ public class IndicatorSector extends IndicatorConnection {
 			buf.append(" NO SECTOR");
 		}
 		buf.append(") ");
-		if (this.location!=null && this.location.getAmpRegion()!=null){
-			buf.append(this.location.getAmpRegion().getName());
+		if (this.location!=null && this.location.getLocation().getName()!=null){
+			buf.append(this.location.getLocation().getName());
 		}else{
 			buf.append("NO LOCATION");
 		}

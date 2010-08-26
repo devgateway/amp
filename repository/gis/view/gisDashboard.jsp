@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
 <digi:instance property="gisDashboardForm"/>
 
 
@@ -67,6 +69,20 @@
         showDevinfo = true;
     </feature:display>
 </script>
+
+
+<bean:define id="isDevInfoMode">true</bean:define>
+	<c:set var="isDevInfoMode"><feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
+</c:set>
+
+<c:if test="${isDevInfoMode==''}">
+<c:set var="isDevInfoMode">false</c:set>
+</c:if>
+
+
+<bean:write name="isDevInfoMode"/>
+
+
 
 
 <div id="content" class="yui-skin-sam" style="width:600px;height:100%;max-width: 600x;">
@@ -138,8 +154,7 @@
     <div id="imageMapContainer" style="visibility:hidden;"></div>
     
     <!-- DevInfo block -->
-    
-    <feature:display name="Show DevInfo data" module="GIS DASHBOARD">
+<c:if test="${isDevInfoMode == true}">
 	<tr>
 		<td colspan="2">
 			<span>
@@ -240,10 +255,10 @@
 		}
 	</script>
 	
-    </feature:display>
+</c:if>
     
 <!-- Financial data block -->    
-<feature:display name="Show Financial data" module="GIS DASHBOARD">
+<c:if test="${isDevInfoMode == false}">
     <tr>
         <td colspan="2">
             <span>
@@ -340,7 +355,7 @@
 		</td>
 	</tr>
     
-    </feature:display>    
+</c:if>
     
 </table>
     </div>
@@ -348,7 +363,7 @@
 </div>   
 
 
-<feature:display name="Show DevInfo data" module="GIS DASHBOARD">
+<c:if test="${isDevInfoMode == true}">
     <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
  	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	    
@@ -409,10 +424,10 @@
 	    </table>
 	    </div> 
     </div>
-</feature:display>
+</c:if>
 
 
-<feature:display name="Show Financial data" module="GIS DASHBOARD">
+<c:if test="${isDevInfoMode == false}">
     <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
          <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
         
@@ -466,7 +481,7 @@
         </table>
         </div> 
     </div>
-</feature:display>
+</c:if>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" src="/repository/gis/view/js/gisMap.js"></script>

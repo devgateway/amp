@@ -14,6 +14,7 @@ import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -46,6 +47,7 @@ public class MessageConstants {
                                                                 ActivityProposedStartDateTrigger.class,
                                                                 ApprovedCalendarEventTrigger.class,
                                                                 NotApprovedCalendarEventTrigger.class,
+                                                                AwaitingApprovalCalendarTrigger.class,
                                                                 PendingResourceShareTrigger.class,
                                                                 ApprovedResourceShareTrigger.class,
                                                                 RejectResourceSharetrigger.class};
@@ -66,6 +68,7 @@ public class MessageConstants {
                                                             "Activity Proposed Start Date",
                                                             "Calendar Event Approved",
                                                             "Calendar Event Not Approved",
+                                                            "Calendar Event Awaiting Approval",
                                                             "Resource Share is Pending Approval",
                                                             "Resource Share is Approved",
                                                             "Reject Resource Share"};

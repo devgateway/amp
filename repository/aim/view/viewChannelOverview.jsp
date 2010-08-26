@@ -1041,6 +1041,7 @@ function commentWin(val, commentId) {
 																			</TR>
                                                                             </c:if>
                                                                         </field:display>
+                                                                        <field:display name="Activity Summary" feature="Identification">
 																		<c:if test="${not empty activity.activitySummary}">			
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1048,7 +1049,7 @@ function commentWin(val, commentId) {
                                                                                             height=10
                                                                                             src="../ampTemplate/images/arrow-014E86.gif"
                                                                                             width=15 />
-                                                                                            <b><digi:trn>Project Impact</digi:trn></b>
+                                                                                            <b><digi:trn>Activity Summary</digi:trn></b>
                                                                                 </TD>
                                                                             </TR>
 																			<TR>
@@ -1059,7 +1060,9 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
-
+																		</field:display>
+																		
+																		<field:display name="Contracting Arrangements" feature="Identification">
                                                                         <c:if test="${not empty activity.contractingArrangements}">						
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1077,7 +1080,8 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
-
+																		</field:display>
+																		<field:display name="Conditionality and Sequencing" feature="Identification">
 																		<c:if test="${not empty activity.condSeq}">									
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1095,7 +1099,9 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
-			
+																		</field:display>
+																		
+																		<field:display name="Linked Activities" feature="Identification">
 																		<c:if test="${not empty activity.linkedActivities}">												
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1113,7 +1119,9 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
-			
+																		</field:display>
+																		
+																		<field:display name="Conditionalities" feature="Identification">
 																		<c:if test="${not empty activity.conditionality}">									
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1131,7 +1139,9 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
-			
+																		</field:display>
+																		
+																		<field:display name="Project Management" feature="Identification">
 																		<c:if test="${not empty activity.projectManagement}">												
                                                                             <TR>
                                                                                 <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1149,6 +1159,7 @@ function commentWin(val, commentId) {
 																				</TD>
 																			</TR>
 																		</c:if>
+																		</field:display>
 
 																		<field:display feature="Identification"
 																			name="Purpose">
@@ -1672,6 +1683,29 @@ function commentWin(val, commentId) {
 													</c:if>
 													</field:display>
 													
+													<field:display name="Government Agreement Number" feature="Identification">
+                                          
+													<c:if test="${!empty aimChannelOverviewForm.govAgreementNumber}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn key="aim:step1:GovernmentAgreementNumTitle">
+																		Government Agreement Number
+																		</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${aimChannelOverviewForm.govAgreementNumber}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
 												</TABLE>
 												</TD>
 												<TD width="2%" vAlign="top" align="left">&nbsp;

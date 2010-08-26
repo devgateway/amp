@@ -63,6 +63,7 @@ public class DocumentData implements Comparable<DocumentData>{
 	private boolean currentVersionNeedsApproval=false;
 	private boolean hasAnyVersionPendingApproval; // if any version of the node needs to be approved by Tl to be visible for team-members
 	private String baseNodeUUID=null; //in case documentData is just a version of some node, this property holds that main node uuid
+	private String nodeVersionUUID=null; //in case documentData is just a version of some node, this property stores it's uuid(this case nodeVersionUUID.equals(uuid))
 	
 	public boolean getHasDeleteRights() {
 		return hasDeleteRights;
@@ -350,5 +351,10 @@ public class DocumentData implements Comparable<DocumentData>{
 	public void setHasAnyVersionPendingApproval(boolean hasAnyVersionPendingApproval) {
 		this.hasAnyVersionPendingApproval = hasAnyVersionPendingApproval;
 	}
-	
+	public String getNodeVersionUUID() {
+		return nodeVersionUUID;
+	}
+	public void setNodeVersionUUID(String nodeVersionUUID) {
+		this.nodeVersionUUID = nodeVersionUUID;
+	}	
 }

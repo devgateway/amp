@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -254,8 +255,16 @@ public class CategAmountColWorker extends ColumnWorker {
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
 		}
 
-		
-		acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
+		if (filter.getAmountinthousand()==null) {
+			filter.setAmountinthousand(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+		} else if (filter.getAmountinthousand()){
+			if (tr_amount != 0){
+				acc.setAmount(tr_amount*0.001d);
+			}
+		}
+		else{
+			acc.setAmount(tr_amount);
+		}
 		
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {

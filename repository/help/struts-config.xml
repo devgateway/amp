@@ -37,6 +37,7 @@
 		<action name="helpForm" path="/help/topicBody" scope="request" type="org.digijava.module.help.action.GetHelpBodyHtml" validate="false" />
 		<action name="helpForm" path="/help/deleteTopic" scope="request" type="org.digijava.module.help.action.DeleteGlossaryTopic" validate="false" />
 		<action name="glossaryForm" path="/help/searchGlossary" scope="request" type="org.digijava.module.help.action.SearchGlossary" validate="false" />
+		<action name="glossaryForm" path="/help/saveTopicTitle" scope="request" type="org.digijava.module.help.action.SaveTopicTitle" validate="false" />
 		
 	</action-mappings>
 </struts-config>

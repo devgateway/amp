@@ -6,6 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -170,6 +173,9 @@ public final class ArConstants {
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_ZONE="Zone";
 	public final static String COLUMN_DISTRICT="District";
+	
+	public final static List<String> LOCATION_COLUMNS	= 
+		Arrays.asList(new String[]{ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT} );
 	
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	

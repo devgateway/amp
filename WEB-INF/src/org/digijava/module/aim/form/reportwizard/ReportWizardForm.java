@@ -39,7 +39,16 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean useFilters			= false;
 	
 	private Boolean allowEmptyFundingColumns	= false;
-		
+	private String projecttitle= "Project Title";
+	
+	public String getProjecttitle() {
+		return projecttitle;
+	}
+
+	public void setProjecttitle(String projecttitle) {
+		this.projecttitle = projecttitle;
+	}
+
 	public Long getReportId() {
 		return reportId;
 	}

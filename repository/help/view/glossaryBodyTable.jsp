@@ -111,7 +111,7 @@
 	<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
 		<ul class="yui-nav">
 			<li class="selected">
-				<a title='<digi:trn key="aim:helpSearch">Select items in the tree</digi:trn>'>
+				<a title='<digi:trn>Select items in the tree</digi:trn>'>
 					<div id="nodeTitle">
 						&nbsp;&nbsp;&nbsp;&nbsp;
 					</div>
@@ -199,17 +199,24 @@
 
 <script type="text/javascript">
 
-	<digi:context name="topicBodyAction" property="context/module/moduleinstance/topicBody.do" />
-	<digi:context name="topicEditAction" property="context/editor/moduleinstance/showEditText.do" />
-	<digi:context name="topicDeleteAction" property="context/module/moduleinstance/deleteTopic.do" />
-	<digi:context name="topicSearchAction" property="context/module/moduleinstance/searchGlossary.do" />
-	<digi:context name="topicShowAddAction" property="context/module/moduleinstance/showAddGlossary.do" />
+	<digi:context name="topicBodyAction" 		property="context/module/moduleinstance/topicBody.do" />
+	<digi:context name="topicEditAction" 		property="context/editor/moduleinstance/showEditText.do" />
+	<digi:context name="topicDeleteAction" 		property="context/module/moduleinstance/deleteTopic.do" />
+	<digi:context name="topicSearchAction" 		property="context/module/moduleinstance/searchGlossary.do" />
+	<digi:context name="topicShowAddAction" 	property="context/module/moduleinstance/showAddGlossary.do" />
+	<digi:context name="topicTitleSaveAction" 	property="context/module/moduleinstance/saveTopicTitle.do" />
 	
-	var getBodyURL = '<%=topicBodyAction%>';
-	var editorLink = '<%=topicEditAction%>';
-	var deleteLink = '<%=topicDeleteAction%>';
-	var addLink = '<%=topicShowAddAction%>';
-	var searchLink = '<%=topicSearchAction%>';
+	var getBodyURL 		= '<%=topicBodyAction%>';
+	var editorLink 		= '<%=topicEditAction%>';
+	var deleteLink 		= '<%=topicDeleteAction%>';
+	var addLink 		= '<%=topicShowAddAction%>';
+	var searchLink 		= '<%=topicSearchAction%>';
+	var titleSaveLink 	= '<%=topicTitleSaveAction%>';
+	var curTitle = '';
+	var curTopicId;
+	var curEditorKey = '';
+	var curNode = '';
+	var titleEditMode = false;
 
 	$(document).ready(function () {
 
@@ -222,9 +229,14 @@
 		);
 		
 		tree.subscribe('clickEvent',function(event){
-			showGlossary(event.node.data.ampHelpTopicId, event.node.label, event.node.data.ampEditorKey);
+			curTopicId 		= event.node.data.ampHelpTopicId;
+			curTitle		= event.node.label;
+			curEditorKey	= event.node.data.ampEditorKey;
+			curNode			= event.node;
+			showGlossary(curTopicId, curTitle, curEditorKey);
+//			showGlossary(event.node.data.ampHelpTopicId, event.node.label, event.node.data.ampEditorKey);
 		});
-		
+
 		tree.render();
 
 		$('input#btnSearchGlossary').click(function(e){
@@ -256,14 +268,23 @@
 						var key = editorKey;//event.node.data.ampEditorKey;
 						var lang = '${requestScope["org.digijava.kernel.navigation_language"].code}';
 						var linkWithParams = editorLink + '?id=' + key + '&lang=' + lang + '&referrer=' + window.location;
-						var linkEdit = '<a href="'+linkWithParams+'">'+lblEditText+'</a>';
-						var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+glossId+'">'+lblAddChild+'</a>';
-						var linkDeleteNode = '<a href="javascript:deleteNode('+glossId+')">'+lblDeleteNode+'</a>';
+						var linkEdit = '<a href="'+linkWithParams+'" title="'+lblEditText+'">['+lblEditText+']</a>';
+						var linkAddChild = '<a href="/help/showAddGlossary.do?nodeId='+glossId+'" title="'+lblAddChild+'">['+lblAddChild+']</a>';
+						var linkDeleteNode = '<a href="javascript:deleteNode('+glossId+')" title="'+lblDeleteNode+'">['+lblDeleteNode+']</a>';
 						$('div#nodeEditorLinkDiv').html(linkEdit+'&nbsp;&nbsp;'+linkAddChild+'&nbsp;&nbsp;'+linkDeleteNode);
+
+						//var titleWithEditLink = '&nbsp;<a href="javascript:startTitleEdit()">'+glossName+' [Edit]</a>';
+						var titleWithEditLink = glossName+'  [Edit]';
+						$('div#nodeTitle').click(function(e){
+							var event = e || window.event;
+							doTitleEdit(event);
+						});
+						//alert(titleWithEditLink);
+						$('div#nodeTitle').html(titleWithEditLink);
 					</digi:secure>
 			   },
 		   	   error : function(XMLHttpRequest, textStatus, errorThrown){
-			   	   	alert('Error, cannot load glossary topic.');
+			   	   	alert('<digi:trn jsFriendly="true">Error, cannot load glossary topic.</digi:trn>');
 			   } 
 		}).responseText;
 	}
@@ -277,7 +298,7 @@
 			   success: function(data,msg){
 					$('div#searchResults').html(data);			   	
 			   },
-		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot search glossary ');} 
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('<digi:trn jsFriendly="true">Error, cannot search glossary </digi:trn>');} 
 		}).responseText;
 	}
 
@@ -299,12 +320,64 @@
 					$('div#nodeTitle').html('&nbsp;&nbsp;&nbsp;&nbsp;');
 					$('div#nodeEditorLinkDiv').html('');
 					if (!tree.removeNode(node,true)){
-						alert('problem with '+ problem);
+						alert('<digi:trn jsFriendly="true">problem with</digi:trn> '+ problem);
 					}
 					tree.render();
 			   },
-		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot delete glossary topic with id '+topicId);} 
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('<digi:trn jsFriendly="true">Error, cannot delete glossary topic with id </digi:trn>'+topicId);} 
+		}).responseText;
+	}
+
+	function doTitleEdit(e){
+		var source = e.target || e.srcElement;
+		var sName = source.tagName.toLowerCase();
+		if(sName=='div'){
+			showTitleEdit();
+		}else if (sName=='input'){
+			if (source.id == 'btnNewTitleSave'){
+				saveTitleEdit()
+			}else if (source.id == 'btnNewTitleCancel'){
+				cancelTitleEdit();
+			}			
+		}
+	}
+
+	function showTitleEdit(){
+		var translationWorning = '<digi:trn jsFriendly="true">You may need to re-translate new title</digi:trn>';
+		var nodeHtml = '<input id="glossaryItemNewTitle" type="text" name="itemNewTitle" value="'+curTitle+'">';
+		nodeHtml += '<input type="button" value="Save" id="btnNewTitleSave">';
+		nodeHtml += '<input type="button" value="Cancel" id="btnNewTitleCancel">';
+		nodeHtml += '<span style="color : red;">'+translationWorning+'</span>';
+		$('div#nodeTitle').html(nodeHtml);
+		$('#glossaryItemNewTitle').focus();
+	}
+	
+	function saveTitleEdit(){
+		var newTitle = $('#glossaryItemNewTitle').val();
+		if (newTitle.trim()=='') return;
+		var lastTimeStamp = new Date().getTime();
+		var actionError = '<digi:trn jsFriendly="true">Error, cannot save topic title</digi:trn>';
+		var resp=$.ajax({
+			   type: 'POST',
+			   url: titleSaveLink+'~timestamp='+lastTimeStamp,
+			   data: ({nodeName : newTitle, nodeId : curTopicId}),
+			   cache : false,
+			   success: function(data,msg){
+			   		if (msg.toLowerCase()=='success'){
+						curNode.label = newTitle;
+						//curNode.data.label = newTitle;
+						curTitle = newTitle;
+						tree.render(true);
+			   		}else{
+				   		alert(actionError);
+			   		}
+					showGlossary(curTopicId, curTitle, curEditorKey);
+			   },
+		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert(actionError);} 
 		}).responseText;
 	}
 	
+	function cancelTitleEdit(){
+		showGlossary(curTopicId, curTitle, curEditorKey);
+	}
 </script>

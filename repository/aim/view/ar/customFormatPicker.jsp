@@ -39,7 +39,7 @@
         <html:text styleClass="inp-text" disabled="true" size="2" maxlength="1" property="customDecimalSymbolTxt" onchange="initFormatPopup()" /> </label></td>
 	  </tr>
 		<tr>
-			<td width="40%" height="18" align="right" nowrap="nowrap">		  <digi:trn key="aim:formatPicket:maxFracDigits">Maximun Fraction Digits</digi:trn>
+			<td width="40%" height="18" align="right" nowrap="nowrap">		  <digi:trn key="aim:formatPicket:maxFracDigits">Maximum Fraction Digits</digi:trn>
 		    &nbsp;</td>
     <td width="20%" height="18" nowrap="nowrap"><html:select styleClass="inp-text" property="customDecimalPlaces"
 				styleId="customDecimalPlaces" onchange="initFormatPopup();">

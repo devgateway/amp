@@ -1675,48 +1675,47 @@ public class SaveActivity extends Action {
 		String[] sectorMinContsIds=null;
 		String[] implExecutingContsIds=null;
 		
-		if (check){
-			//Do the checks here
 			donorContsIds=contactInfo.getPrimaryDonorContIds();
 			mofedContsIds=contactInfo.getPrimaryMofedContIds();
 			projCoordContsIds=contactInfo.getPrimaryProjCoordContIds();
 			sectorMinContsIds=contactInfo.getPrimarySecMinContIds();
 			implExecutingContsIds=contactInfo.getPrimaryImplExecutingContIds();
 			
-			if (contactInfo.getDonorContacts() != null && contactInfo.getDonorContacts().size() != 0
-					&& (donorContsIds == null || donorContsIds.length != 1)) {
-				errors.add("invalidDonorCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidDonorCont",
-						TranslatorWorker.translateText("Must be one Primary Donor Contact", locale, siteId)));
-			}
+		if (check){
+			// If the activity has at least one contact (no matter the type)
+			// then one primary contact has to be selected.			
+			if ((contactInfo.getDonorContacts() != null && contactInfo.getDonorContacts().size() != 0)
+					|| (contactInfo.getMofedContacts() != null && contactInfo.getMofedContacts().size() != 0)
+					|| (contactInfo.getProjCoordinatorContacts() != null && contactInfo.getProjCoordinatorContacts()
+							.size() != 0)
+					|| (contactInfo.getSectorMinistryContacts() != null && contactInfo.getSectorMinistryContacts()
+							.size() != 0)
+					|| (contactInfo.getImplExecutingAgencyContacts() != null && contactInfo
+							.getImplExecutingAgencyContacts().size() != 0)) {
 
-			if (contactInfo.getMofedContacts() != null && contactInfo.getMofedContacts().size() != 0
-					&& (mofedContsIds == null || mofedContsIds.length != 1)) {
-				errors.add("invalidMofedCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidMofedCont",
-						TranslatorWorker.translateText("Must be one Primary MOFED Contact", locale, siteId)));
+				int contactsCount = 0;
+				if (donorContsIds != null) {
+					contactsCount += donorContsIds.length;
+				}
+				if (mofedContsIds != null) {
+					contactsCount += mofedContsIds.length;
+				}
+				if (projCoordContsIds != null) {
+					contactsCount += projCoordContsIds.length;
+				}
+				if (sectorMinContsIds != null) {
+					contactsCount += sectorMinContsIds.length;
+				}
+				if (implExecutingContsIds != null) {
+					contactsCount += implExecutingContsIds.length;
+				}
+				
+				if(contactsCount != 1){
+					errors.add("invalidDonorCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidPrimaryCont",
+							TranslatorWorker.translateText("Must be one Primary Contact", locale, siteId)));
+				}
 			}
-
-			if (contactInfo.getProjCoordinatorContacts() != null
-					&& contactInfo.getProjCoordinatorContacts().size() != 0
-					&& (projCoordContsIds == null || projCoordContsIds.length != 1)) {
-				errors.add("invalidProjCoordCont", new ActionMessage(
-						"error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText(
-								"Must be one Primary Project Coordinator Contact", locale, siteId)));
-			}
-
-			if (contactInfo.getSectorMinistryContacts() != null && contactInfo.getSectorMinistryContacts().size() != 0
-					&& (sectorMinContsIds == null || sectorMinContsIds.length != 1)) {
-				errors.add("invalidSecMinCont", new ActionMessage("error.aim.addActivity.contactInfo.invalidSecMinCont",
-						TranslatorWorker.translateText("Must be one Primary Sector Ministry Contact", locale, siteId)));
-			}
-
-			if (contactInfo.getImplExecutingAgencyContacts() != null
-					&& contactInfo.getImplExecutingAgencyContacts().size() != 0
-					&& (implExecutingContsIds == null || implExecutingContsIds.length != 1)) {
-				errors.add("invalidImplExecutingAgencyCont", new ActionMessage(
-						"error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText(
-								"Must be one Primary Implementing/Executing Agency Contact", locale, siteId)));
-			}
-			
+						
 			//end:
 			if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error
@@ -2025,7 +2024,8 @@ public class SaveActivity extends Action {
 			break;
 		case 8:
 			stepText[stepNumber] = "8";
-			processStep8(check, eaForm, activity, errors, request);
+			boolean draft = !eaForm.getIdentification().getDraft();
+			processStep8(draft, eaForm, activity, errors, request);
 			break;
 		case 9:
 			stepText[stepNumber] = "9";

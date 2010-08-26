@@ -273,14 +273,17 @@ public class selectOrganizationComponent extends Action {
 			if (!alpha.equals("viewAll")) {
 				eaForm.setStartAlphaFlag(false);
 				alphaResult = new ArrayList();
-				Iterator itr = organizationResult.iterator();
-				while (itr.hasNext()) {
-					AmpOrganisation org = (AmpOrganisation) itr.next();
-					if (org.getName().toUpperCase().startsWith(alpha)) {
-						alphaResult.add(org);
+				if (organizationResult != null )
+				{
+					Iterator itr = organizationResult.iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						if (org.getName().toUpperCase().startsWith(alpha)) {
+							alphaResult.add(org);
+						}
 					}
+					eaForm.setColsAlpha(alphaResult);
 				}
-				eaForm.setColsAlpha(alphaResult);
 			} else
 				eaForm.setStartAlphaFlag(true);
 		}

@@ -205,18 +205,20 @@ YAHOO.namespace("YAHOO.amp");
 		}
 		//check emails. At least one email should exist
 		var emails=$("input[id^='email_']");
-    	if(emails!=null){
-        	for(var i=0;i < emails.length; i++){
-            	if(emails[i].value==null || emails[i].value==''){
-            		alert('Please enter email');
-            		return false;
-            	}
-            	if( emails[i].value!=null && emails[i].value !='' && emails[i].value.indexOf('@')==-1){
-            		alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
-            		return false;
-            	}
-        	}
-    	}
+        if(emails!=null){
+            for(var i=0;i < emails.length; i++){
+                if(emails[i].value==null || emails[i].value==''){
+                    alert('Please enter email');
+                    return false;
+                }
+                else{
+                    if( emails[i].value.indexOf('@')==-1){
+                        alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
+                        return false;
+                    }
+                }
+            }
+        }
     	//phone shouldn't be empty and should contain valid characters
     	//also if phone type is filled, number should be filled too and vice versa
     	//var phoneTypes=$("input[id^='phoneType_']");

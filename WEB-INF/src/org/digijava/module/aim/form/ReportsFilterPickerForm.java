@@ -150,7 +150,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customDecimalPlacesTxt;
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
-	private Boolean amountinthousands=false;
+	private Boolean amountinthousands;
 	
 	private String resetFormat;
 	
@@ -353,10 +353,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		/**
 		 * Do not reset the filter when changing the range
+		 * 
+		 * [this fix seems old. if still needed check that the checkboxes in the filter still work after]
+		 * 
+		 *if ( request.getParameter("renderStartYear") != null && !request.getParameter("renderStartYear").equals("-1"))  
+		 *	return;
 		 */
-		if ( request.getParameter("renderStartYear") != null )  
-			return;
-		
 		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
 			// this.selectedDonors = null;
 			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...

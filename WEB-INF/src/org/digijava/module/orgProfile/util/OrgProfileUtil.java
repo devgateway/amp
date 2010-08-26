@@ -47,8 +47,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -63,7 +61,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.orgProfile.helper.NameValueYearHelper;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
 import org.digijava.module.widget.util.WidgetUtil;
-import org.jfree.data.general.DefaultPieDataset;
+import org.hibernate.HibernateException;
+import org.hibernate.Transaction;
+import fi.joensuu.joyds1.calendar.NepaliCalendar;
+import fi.joensuu.joyds1.calendar.EthiopicCalendar;
 
 /**
  *
@@ -600,8 +601,8 @@ public class OrgProfileUtil {
             AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
             if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
                 startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
-            } else {
-                startDate = getEthiopianDate(calendar, year, true);
+            } else {      
+                 startDate = getGregorianCalendarDate(calendar, year, true);
             }
         } else {
             Calendar cal = Calendar.getInstance();
@@ -622,7 +623,7 @@ public class OrgProfileUtil {
                 int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
                 endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
             } else {
-                endDate = getEthiopianDate(calendar, year, false);
+                endDate=getGregorianCalendarDate(calendar, year, false);
             }
 
         } else {
@@ -926,84 +927,118 @@ public class OrgProfileUtil {
                 } else {
                     if (type == WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN) {
                         List<AmpCategoryValueLocations> regions = ChartWidgetUtil.getLocations(filter);
-                        String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
                         Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
-                        NameValueYearHelper national = null;
                         while (regionIter.hasNext()) {
                             //calculating funding for each region
-                            boolean flag = false;
-                            AmpCategoryValueLocations region = regionIter.next();
-                            if (region.getParentCategoryValue().getValue().equals(implLocation)) {
-                                flag = true;
-                            }
-                            List<AmpFundingDetail> fundingDets = ChartWidgetUtil.getLocationFunding(filter, region);
+                            AmpCategoryValueLocations location = regionIter.next();
+                            List<AmpFundingDetail> fundingDets = ChartWidgetUtil.getLocationFunding(filter, location);
                             /*Newly created objects and   selected currency
                             are passed doCalculations  method*/
                             FundingCalculationsHelper cal = new FundingCalculationsHelper();
                             cal.doCalculations(fundingDets, currCode);
-                            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
-                            nameValueYearHelper.setName(region.getName());
-                            if (nameValueYearHelper.getValues() == null) {
-                                nameValueYearHelper.setValues(new ArrayList<String>());
-                            }
-                            switch (transactionType) {
-                                case Constants.COMMITMENT:
-                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
-                                    break;
-                                case Constants.DISBURSEMENT:
-                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
-                                    break;
-                                case 2: //both COMMITMENT & DISBURSEMENT
-                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualComm().doubleValue()));
-                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
-                                    break;
-                            }
-                            if (flag) {
-                                national = nameValueYearHelper;
+                            String keyName = "";
+                            Long keyId = null;
+                            String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
+                            if (location.getParentCategoryValue().getValue().equals(implLocation)) {
+                                keyName = "National";
+                                keyId = NameValueYearHelper.NATIONAL_ID;
                             } else {
-                                result.add(nameValueYearHelper);
-                            }
-                        }
-                        if (national != null) {
-                            national.setName("National");
-                            result.add(national);
-                        }
-                        Collection<Long> locationIds = filter.getLocationIds();
-                        boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
-                        if (unallocatedCondition) {
-                            List<AmpFundingDetail> unallocatedFundings = ChartWidgetUtil.getUnallocatedFunding(filter);
-                            FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                            cal.doCalculations(unallocatedFundings, currCode);
-                            NameValueYearHelper helper = new NameValueYearHelper();
-                            helper.setName("Unallocated");
-                            //helper.setNeedTranslation(true);
-                            helper.setValues(new ArrayList<String>());
-                            DecimalWraper totActualComm = cal.getTotActualComm();
-                            DecimalWraper totActualDisb = cal.getTotActualDisb();
-                            switch (transactionType) {
-                                case Constants.COMMITMENT:
-                                    if (totActualComm != null && totActualComm.doubleValue() != 0) {
-                                        helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
-                                        result.add(helper);
+                                Long zoneIds[] = filter.getZoneIds();
+                                if (zoneIds != null && zoneIds.length > 0) {
+                                    implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
+                                    if (location.getParentCategoryValue().getValue().equals(implLocation)) {
+                                        keyName = "Regional";
+                                        keyId = NameValueYearHelper.REGIONAL_ID;
+                                    } else {
+                                        AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+                                        keyName = parent.getName();
+                                        keyId = parent.getId();
                                     }
-                                    break;
-                                case Constants.DISBURSEMENT:
-                                    if (totActualDisb != null && totActualDisb.doubleValue() != 0) {
-                                        helper.getValues().add(FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()));
-                                        result.add(helper);
-                                    }
-                                    break;
-                                case 2: //both COMMITMENT & DISBURSEMENT
-                                    if ((totActualDisb != null && totActualDisb.doubleValue() != 0)
-                                            || (totActualComm != null && totActualComm.doubleValue() != 0)) {
-                                        helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
-                                        helper.getValues().add(FormatHelper.formatNumber(totActualDisb.doubleValue()));
-                                        result.add(helper);
-                                    }
-                                    break;
+                                } else {
+                                    AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+                                    keyName = parent.getName();
+                                    keyId = parent.getId();
+                                }
                             }
 
+                            NameValueYearHelper nameValueYearHelper = new NameValueYearHelper();
+                            nameValueYearHelper.setName(keyName);
+                            nameValueYearHelper.setId(keyId);
+                            int index = result.indexOf(nameValueYearHelper);
+                            if (index != -1) {
+                                nameValueYearHelper = result.get(index);
+
+                            } else {
+                                result.add(nameValueYearHelper);
+                                nameValueYearHelper.setValues(new ArrayList<String>());
+                                nameValueYearHelper.setRawValues(new ArrayList<Double>());
+                                nameValueYearHelper.getRawValues().add(NameValueYearHelper.COMMITMENT_INDEX, 0.0);
+                                nameValueYearHelper.getRawValues().add(NameValueYearHelper.DISBURSEMENT_INDEX, 0.0);
+                            }
+                            switch (transactionType) {
+                                case Constants.COMMITMENT:
+                                    Double commAmount = cal.getTotActualComm().doubleValue();
+                                    Double newAmount = nameValueYearHelper.getRawValues().get(NameValueYearHelper.COMMITMENT_INDEX) + commAmount;
+                                    nameValueYearHelper.getRawValues().set(NameValueYearHelper.COMMITMENT_INDEX, newAmount);
+                                    nameValueYearHelper.getValues().clear();
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(newAmount));
+                                    break;
+                                case Constants.DISBURSEMENT:
+                                    Double disbAmount = cal.getTotActualDisb().doubleValue();
+                                    Double newDisbAmount = nameValueYearHelper.getRawValues().get(NameValueYearHelper.DISBURSEMENT_INDEX) + disbAmount;
+                                    nameValueYearHelper.getRawValues().set(NameValueYearHelper.DISBURSEMENT_INDEX, newDisbAmount);
+                                    nameValueYearHelper.getValues().clear();
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(newDisbAmount));
+                                    break;
+                                case 2: //both COMMITMENT & DISBURSEMENT
+                                    Double comAmount = cal.getTotActualComm().doubleValue();
+                                    Double newComAmount = nameValueYearHelper.getRawValues().get(NameValueYearHelper.COMMITMENT_INDEX) + comAmount;
+                                    nameValueYearHelper.getRawValues().set(NameValueYearHelper.COMMITMENT_INDEX, newComAmount);
+                                    Double disAmount = cal.getTotActualDisb().doubleValue();
+                                    Double newDisAmount = nameValueYearHelper.getRawValues().get(NameValueYearHelper.DISBURSEMENT_INDEX) + disAmount;
+                                    nameValueYearHelper.getRawValues().set(NameValueYearHelper.DISBURSEMENT_INDEX, newDisAmount);
+                                    nameValueYearHelper.getValues().clear();
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(newComAmount));
+                                    nameValueYearHelper.getValues().add(FormatHelper.formatNumber(newDisAmount));
+                                    break;
+                            }
                         }
+                            Collection<Long> locationIds = filter.getLocationIds();
+                            boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
+                            if (unallocatedCondition) {
+                                List<AmpFundingDetail> unallocatedFundings = ChartWidgetUtil.getUnallocatedFunding(filter);
+                                FundingCalculationsHelper calUnallocated = new FundingCalculationsHelper();
+                                calUnallocated.doCalculations(unallocatedFundings, currCode);
+                                NameValueYearHelper helper = new NameValueYearHelper();
+                                helper.setName("Unallocated");
+                                //helper.setNeedTranslation(true);
+                                helper.setValues(new ArrayList<String>());
+                                DecimalWraper totActualComm = calUnallocated.getTotActualComm();
+                                DecimalWraper totActualDisb = calUnallocated.getTotActualDisb();
+                                switch (transactionType) {
+                                    case Constants.COMMITMENT:
+                                        if (totActualComm != null && totActualComm.doubleValue() != 0) {
+                                            helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
+                                            result.add(helper);
+                                        }
+                                        break;
+                                    case Constants.DISBURSEMENT:
+                                        if (totActualDisb != null && totActualDisb.doubleValue() != 0) {
+                                            helper.getValues().add(FormatHelper.formatNumber(calUnallocated.getTotActualDisb().doubleValue()));
+                                            result.add(helper);
+                                        }
+                                        break;
+                                    case 2: //both COMMITMENT & DISBURSEMENT
+                                        if ((totActualDisb != null && totActualDisb.doubleValue() != 0)
+                                                || (totActualComm != null && totActualComm.doubleValue() != 0)) {
+                                            helper.getValues().add(FormatHelper.formatNumber(totActualComm.doubleValue()));
+                                            helper.getValues().add(FormatHelper.formatNumber(totActualDisb.doubleValue()));
+                                            result.add(helper);
+                                        }
+                                        break;
+                                }
+
+                            }
 
                     } else {
                         if (type == WidgetUtil.ORG_PROFILE_ODA_PROFILE) {
@@ -1264,22 +1299,30 @@ public class OrgProfileUtil {
         return footerText;
     }
 
-    public static Date getEthiopianDate(AmpFiscalCalendar calendar, int year, boolean startDate) {
+    public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
         Date date;
-        EthiopianCalendar ethCal = new EthiopianCalendar();
-        GregorianCalendar[] dates = null;
-        if (calendar.getIsFiscal()) {
-            dates = ethCal.getGregorianDatesForEthFiscalYr(year);
+        fi.joensuu.joyds1.calendar.Calendar calendar = getCalendar(fiscalCalendar, startDate, year);
+        Calendar gregorianCal = calendar.toJavaUtilGregorianCalendar();
+        date = gregorianCal.getTime();
+        return date;
+    }
+     public static fi.joensuu.joyds1.calendar.Calendar getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+        fi.joensuu.joyds1.calendar.Calendar calendar = null;
+        String calendarType = fiscalCalendar.getBaseCal();
+        if (calendarType.equals("ETH-CAL")) {
+            calendar = new EthiopicCalendar();
         } else {
-            dates = ethCal.getGregorianDatesForEthYr(year);
+            if (calendarType.equals("NEP-CAL")) {
+                calendar = new NepaliCalendar();
+            }
         }
         if (startDate) {
-            date = dates[0].getTime();
+            calendar.set(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
         } else {
-            date = dates[1].getTime();
+            calendar.set(year + 1, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
+            calendar.addDays(-1);
         }
-
-        return date;
+        return calendar;
     }
 
     public static class NameValueYearHelperComparatorByName implements Comparator<NameValueYearHelper> {
@@ -1294,5 +1337,30 @@ public class OrgProfileUtil {
         public int compare(NameValueYearHelper o1, NameValueYearHelper o2) {
             return collator.compare(o1.getName(), o2.getName());
         }
+    }
+    public static void saveAdditionalInfo(Long orgId, String orgBackground,String orgDescription) throws DgException{
+        Session sess = null;
+        Transaction tx = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            tx = sess.beginTransaction();
+            AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
+            org.setOrgBackground(orgBackground);
+            org.setOrgDescription(orgDescription);
+            sess.update(org);
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("Unable to update", e);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }
+              throw new DgException(e);
+        }
+
     }
 }

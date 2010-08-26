@@ -349,6 +349,8 @@ public class ViewChannelOverview extends TilesAction {
 						    CategoryConstants.PROJECT_CATEGORY_NAME, activity.getCategories())
 						    ));
 						
+						formBean.setGovAgreementNumber(activity.getGovAgreementNumber());
+						
 				        Collection relOrgs = new ArrayList();
 				        if (activity.getOrgrole() != null) {
 				          Iterator orgItr = activity.getOrgrole().iterator();

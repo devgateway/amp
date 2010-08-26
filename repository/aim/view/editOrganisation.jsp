@@ -632,14 +632,14 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             if(check()){
                 //departments reset or not
             	var deps=document.getElementById('depsSel');
-                if(deps.value!='' && deps.value!=0){
+                if(deps!=null && deps.value!='' && deps.value!=0){
                 	document.getElementById('departments').value=false;
                 }else{
                 	document.getElementById('departments').value=true;
                 }
                 //budget sectors reset or not
                 var budgetSectors = document.getElementById('budgSect');
-                if(budgetSectors.value!='' && budgetSectors.value!=0){
+                if(budgetSectors!=null && budgetSectors.value!='' && budgetSectors.value!=0){
                 	document.getElementById('budgSects').value=false;
                 }else{
                 	document.getElementById('budgSects').value=true;

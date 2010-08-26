@@ -431,12 +431,13 @@ public class ChartWidgetUtil {
 
         }
 		DecimalFormat format = FormatHelper.getDecimalFormat();
-		format.setMinimumFractionDigits(filter.getDivideThousandsDecimalPlaces());
+        format.setMinimumFractionDigits(0);
+		format.setMaximumFractionDigits(filter.getDivideThousandsDecimalPlaces());
+        format.setMinimumIntegerDigits(1);
 
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
-		toolTipformat.setMaximumFractionDigits(1);
+		toolTipformat.setMaximumFractionDigits(5);
         toolTipformat.setMinimumIntegerDigits(1);
-		format.setMaximumFractionDigits(0);
 		String pattern = "{0} {2} ({1})";
 		if (opt.getLabelPattern() != null) {
 			pattern = opt.getLabelPattern();
@@ -872,7 +873,19 @@ public class ChartWidgetUtil {
 			title.setFont(titleFont);
 		}
         TextTitle subTitle = new TextTitle(transTypeNameTrn,subTitleFont);
-        TextTitle subTitleDate = new TextTitle(FormatHelper.formatDate(filter.getStartDate())+"-" +FormatHelper.formatDate(filter.getEndDate()),subTitleFont);
+        Long fiscalCalendarId=filter.getFiscalCalendarId();
+        AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+        TextTitle subTitleDate=null;
+        if(calendar.getBaseCal().equals("GREG-CAL")){
+             subTitleDate = new TextTitle(FormatHelper.formatDate(filter.getStartDate())+"-" +FormatHelper.formatDate(filter.getEndDate()),subTitleFont);
+        }
+         else{
+            int fiscalYear = filter.getYear().intValue();
+            fi.joensuu.joyds1.calendar.Calendar startDatecalendar=OrgProfileUtil.getCalendar(calendar,true, fiscalYear);
+            fi.joensuu.joyds1.calendar.Calendar endDatecalendar=OrgProfileUtil.getCalendar(calendar,false, fiscalYear);
+            subTitleDate = new TextTitle(FormatHelper.formatDate(startDatecalendar)+"-" +FormatHelper.formatDate(endDatecalendar),subTitleFont);
+         }
+        
 		subTitle.setPadding(5, 5, 5, 5);
 		chart.addSubtitle(0, subTitle);
         chart.addSubtitle(1, subTitleDate);
@@ -885,7 +898,13 @@ public class ChartWidgetUtil {
 		plot.setLabelFont(plainFont);
 		plot.setShadowXOffset(0);
 		plot.setShadowYOffset(0);
-		String pattern = "{0} {1} ({2})";
+		String amount = "";
+        if (filter.getDivideThousands()) {
+			amount = "Thousands of Millions";
+		} else {
+			amount = "Millions";
+		}		
+		String pattern = "{0} {1} " + amount + " ({2})";
 		if (opt.getLabelPattern() != null) {
 			pattern = opt.getLabelPattern();
 		}
@@ -893,7 +912,7 @@ public class ChartWidgetUtil {
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		format.setMaximumFractionDigits(3);
         format.setMinimumIntegerDigits(1);
-		PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator();
+		PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator(new DecimalFormat("0.0%"));
 		plot.setLabelGenerator(gen);
 		plot.setSimpleLabels(true);
 		plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));

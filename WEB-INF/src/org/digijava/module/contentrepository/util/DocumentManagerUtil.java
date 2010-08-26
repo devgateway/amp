@@ -707,52 +707,22 @@ public class DocumentManagerUtil {
 	
 	/**
 	 * searches if given node was shared on any level and if found returns them
+	 * uuid can ne base node uuid or shared version uuid
 	 */
-	public static List<CrSharedDoc> getSharedDocsForGivenNode(String uuid){
+	public static List<CrSharedDoc> getSharedDocsForGivenNodeUUID(String uuid){
 		List<CrSharedDoc> retVal=null;
 		org.hibernate.Session session=null;
 		Query qry=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			String queryString="select r from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+uuid+"' or (r.sharedPrivateNodeUUID='"+uuid+"' and r.state!="+CrConstants.PENDING_STATUS+" )";
+			String queryString="select r from " + CrSharedDoc.class.getName() + " r where r.nodeUUID='"+uuid+"' or (r.sharedPrivateNodeUUID='"+uuid+"' and r.state!="+CrConstants.PENDING_STATUS+" )"
+			+" or r.sharedNodeVersionUUID='"+uuid+"'";
 			qry=session.createQuery(queryString);
 			retVal=qry.list();
 		} catch (Exception e) {
 			logger.error("Couldn't Load Resourcess: " + e.toString());
 		}
 		return retVal;
-	}
-	
-	/**
-	 * 
-	 * @param uuid
-	 * @param nodeVersionUUID
-	 * @param isPrivateDoc indicates whether we want to know private document is shared or team document
-	 * @return
-	 */
-	//DELETEEEEEEEEEEEEEEEEEEEEEEEEEE
-	public static boolean isResourceSharedOrPendingToBeShared(String uuid,String nodeVersionUUID, boolean isPrivateDoc){
-		boolean retVal=false;
-		org.hibernate.Session session=null;
-		Query qry=null;
-		try {
-//			session=PersistenceManager.getRequestDBSession();
-//			String queryString="select count(r) from " + CrSharedDoc.class.getName() + " r where ";
-//			if(isPrivateDoc){
-//				queryString+=" (r.nodeUUID='"+uuid+"' and r.sharedNodeVersionUUID='"+nodeVersionUUID+"' and r.state="+CrConstants.PENDING_STATUS+") or "+
-//				" (r.sharedPrivateNodeUUID='"+uuid+"' and r.sharedNodeVersionUUID='"+nodeVersionUUID+"' and r.state="+CrConstants.SHARED_IN_WORKSPACE+")";
-//			}else{
-//				queryString+="";
-//			}
-//			qry=session.createQuery(queryString);
-//			int amount=(Integer)qry.uniqueResult();
-//			if(amount>0){
-//				retVal=true;
-//			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		} 
-		return false;
 	}
 	
 	/**
@@ -995,6 +965,19 @@ public class DocumentManagerUtil {
 			} catch (Exception e) {
 				logger.error("Delete Failed: " +e.toString());
 			}		
+		}
+	}
+	
+	public static void deleteTeamNodePendingVersion(String nodeUUID, String versionUUID){
+		org.hibernate.Session session=null;
+		Query qry=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			String queryString="delete from "+TeamNodePendingVersion.class.getName() +" r where r.nodeUUID='"+nodeUUID+"' and r.versionID='"+versionUUID+"'";			
+			qry=session.createQuery(queryString);
+			qry.executeUpdate();
+		} catch (Exception e) {
+			logger.error("Delete Failed:  " + e.toString());
 		}
 	}
 	

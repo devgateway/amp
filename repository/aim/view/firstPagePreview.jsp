@@ -103,6 +103,14 @@ function addThumbnail(){
 	return ret;
 }
 
+function deleteThumbnail(){
+	var msg='<digi:trn jsFriendly="true">This action will remove all the data related to the thumbnail. Are you sure?</digi:trn>';
+    if (confirm(msg)) {
+    	document.aimWelcomePageForm.action = document.aimWelcomePageForm.action+"?action=deleteThumbnail";
+		document.aimWelcomePageForm.target = "_self";
+    	document.aimWelcomePageForm.submit();
+	} 
+}
 
    function downloadFile(placeholder) {
         if (placeholder != '0') {
@@ -234,21 +242,32 @@ function initFileUploads() {
 							<td> 
 								<strong><digi:trn key="selectOptionalFile">Thumbnail Label:</digi:trn><font color="red"></font></strong>
 							</td>
-							<td> 
-								<input name="thumbnailLabel" type="text" style="width: 200"/>
+							<td colspan="2"> 
+								<input name="thumbnailLabel" type="text" style="width: 300"/>
 							</td>
 						</tr>
 						
-						<tr>
-							<td align="right">
-								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return addThumbnail()"><digi:trn key="submit">Submit</digi:trn></html:submit>&nbsp;
-							</td>
-							<td align="left">
-								&nbsp;
-								<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;"  
-								onClick="hidePanel(0)">
-									<digi:trn key="cancel">Cancel</digi:trn>
-								</button>
+						<tr align="center">
+							<td colspan="3">
+								<table>
+									<tr align="center">
+										<td align="center">
+											&nbsp;
+											<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return addThumbnail()"><digi:trn key="submit">Submit</digi:trn></html:submit>&nbsp;
+										</td>
+										<td align="center">
+											&nbsp;
+											<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;"  
+											onClick="hidePanel(0)">
+												<digi:trn key="cancel">Cancel</digi:trn>
+											</button>&nbsp;
+										</td>
+										<td align="center">
+											&nbsp;
+											<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;" onclick="return deleteThumbnail()"><digi:trn key="delete">Delete</digi:trn></button>&nbsp;
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 					</table>

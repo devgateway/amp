@@ -232,8 +232,6 @@ public class ManagePermissionMap extends MultiAction {
 	form.getPermissionMaps().clear();
 	TreeSet<PermissionMap> ts = new TreeSet<PermissionMap>(permissionMapsForPermissibleClass.values());
 	form.getPermissionMaps().addAll(ts);
-
-	hs.flush();
 	
 	PersistenceManager.releaseSession(hs);
 

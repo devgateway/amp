@@ -113,7 +113,12 @@ public class DEActivityLog extends DELog{
 			if(aux !=null ){
 				result += DataExchangeConstants.MISSING_MTEF + "<br/>" + aux;
 			}
-						
+			
+			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_CURRENCY));
+			if(aux !=null ){
+				result += DataExchangeConstants.MISSING_CURRENCY + "<br/>" + aux;
+			}
+			
 			return result;
 		}
 		else return null;

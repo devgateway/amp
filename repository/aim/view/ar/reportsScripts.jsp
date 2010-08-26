@@ -460,6 +460,24 @@ function resetFormat(){
 	document.aimReportsFilterPickerForm3.submit();
 }
 
+function ResetCustom() {
+	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
+	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
+	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
+	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
+	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
+	aimReportsFilterPickerForm3.customGroupSize.value = 3;
+	aimReportsFilterPickerForm3.amountinthousands.checked = "false";
+	initFormatPopup();
+	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
+	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
+	if (aimReportsFilterPickerForm3.currency)
+		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
+}
 
 function initFormatPopup(){
 		
@@ -486,7 +504,11 @@ function initFormatPopup(){
 	
 		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	
-		document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=!customUseGrouping;
+		if (!customUseGrouping){
+			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=true;
+		}else{
+			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=false;
+			}
 		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 		document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
 		document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("CUSTOM"!=customGroupCharacter));

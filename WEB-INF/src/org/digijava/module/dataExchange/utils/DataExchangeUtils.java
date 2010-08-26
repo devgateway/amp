@@ -931,8 +931,8 @@ public class DataExchangeUtils {
 	    	//session.connection().setAutoCommit(false);
 	    	tx = session.beginTransaction();
 
-			session.saveOrUpdate(activity);
-	        //session.update(activity);
+			//session.saveOrUpdate(activity);
+	        session.update(activity);
 	        tx.commit();
 	        
 //	    }catch (Exception ex) {

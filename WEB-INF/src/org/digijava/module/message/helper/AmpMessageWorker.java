@@ -46,6 +46,7 @@ import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -85,7 +86,8 @@ public class AmpMessageWorker {
                 }else if (e.getTrigger().equals(ApprovedActivityTrigger.class)) {
                     newMsg = processApprovedActivityEvent(e, newApproval, template);
                 }else if (e.getTrigger().equals(NotApprovedCalendarEventTrigger.class) || 
-                		e.getTrigger().equals(ApprovedCalendarEventTrigger.class)) {
+                		e.getTrigger().equals(ApprovedCalendarEventTrigger.class)|| 
+                		e.getTrigger().equals(AwaitingApprovalCalendarTrigger.class)) {
                     newMsg = processApprovedCalendarEvent(e, newApproval, template);
                 } else if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
                     newMsg = processNotApprovedActivityEvent(e, newApproval, template);
@@ -118,7 +120,8 @@ public class AmpMessageWorker {
                 if(e.getTrigger().equals(ApprovedActivityTrigger.class) || e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
                     defineReceiversForApprovedAndNotApprovedActivities(e.getTrigger(), newMsg,(Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM));
                 }else if(e.getTrigger().equals(NotApprovedCalendarEventTrigger.class) || 
-                		e.getTrigger().equals(ApprovedCalendarEventTrigger.class)) {
+                		e.getTrigger().equals(ApprovedCalendarEventTrigger.class)|| 
+                		e.getTrigger().equals(AwaitingApprovalCalendarTrigger.class)) {
                 	AmpTeamMember creator  = (AmpTeamMember)e.getParameters().get(AbstractCalendarEventTrigger.PARAM_AUTHOR);
                     defineReceiversForApprovedCalendarEvent(creator, newMsg);
                 }else if(e.getTrigger().equals(CalendarEventTrigger.class)) {
@@ -187,18 +190,14 @@ public class AmpMessageWorker {
     /**
      *	Calendar Event processing
      */
-    private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template,boolean saveActionWasCalled) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;        
+    private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template,boolean saveActionWasCalled) {     
         //get event creator
         AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
         
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(CalendarEventTrigger.PARAM_NAME));
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL) + "\">View Event</a>");
-            event.setObjectURL(partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" +"/" + e.getParameters().get(CalendarEventTrigger.PARAM_URL) + "\">View Event</a>");
+        event.setObjectURL("/"+e.getParameters().get(CalendarEventTrigger.PARAM_URL));
         if(saveActionWasCalled){
         	event.setSenderType(MessageConstants.SENDER_TYPE_USER);        	
         	event.setSenderId(tm.getAmpTeamMemId());
@@ -277,21 +276,13 @@ public class AmpMessageWorker {
      *	Not Approved Activity Event processing
      */
     private static Approval processNotApprovedActivityEvent(Event e, Approval approval, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
+     
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(NotApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
         myHashMap.put(MessageConstants.OBJECT_TEAM,  ((Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM)).toString());
-        //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
-            approval.setObjectURL(partialURL + e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" +"/"+ e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
+        approval.setObjectURL("/" + e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL));
         approval.setSenderId( ( (AmpTeamMember) e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createApprovalFromTemplate(template, myHashMap, approval, true,false);
@@ -301,39 +292,27 @@ public class AmpMessageWorker {
      *	Approved Activity Event processing
      */
     private static Approval processApprovedActivityEvent(Event e, Approval approval, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent();
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
+        
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
         myHashMap.put(MessageConstants.OBJECT_TEAM,  ((Long)e.getParameters().get(ApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM)).toString());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
-            approval.setObjectURL(partialURL + e.getParameters().get(ApprovedActivityTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
+        approval.setObjectURL("/" + e.getParameters().get(ApprovedActivityTrigger.PARAM_URL));
         approval.setSenderId( ( (AmpTeamMember) e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createApprovalFromTemplate(template, myHashMap, approval, false,false);
     }
     
     private static Approval processApprovedCalendarEvent(Event e, Approval approval, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent();
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(AbstractCalendarEventTrigger.PARAM_TITLE));
         //url
-        if (partialURL != null && e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL) != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL) + "\">activity URL</a>");
-            approval.setObjectURL(partialURL + e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL));
+        if (e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL) != null) {
+            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL) + "\">activity URL</a>");
+            approval.setObjectURL("/" + e.getParameters().get(AbstractCalendarEventTrigger.PARAM_URL));
         }
         AmpTeamMember creator =  (AmpTeamMember) e.getParameters().get(AbstractCalendarEventTrigger.PARAM_AUTHOR);
         approval.setSenderId( creator.getAmpTeamMemId());
@@ -348,17 +327,12 @@ public class AmpMessageWorker {
     }    
 
     private static AmpAlert processActivitySaveEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent();
-        
+
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getUser().getEmail());
-        //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
         alert.setSenderId( ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
@@ -366,139 +340,90 @@ public class AmpMessageWorker {
     }
 
     private static AmpAlert processActivityActualStartDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent();
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityCurrentCompletionDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityFinalDateForContractingEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-            partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityFinalDateForDisbursementsEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityProposedApprovalDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityProposedCompletionDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
 
     private static AmpAlert processActivityProposedStartDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
@@ -508,18 +433,11 @@ public class AmpMessageWorker {
      *	User Registration Event processing
      */
     private static AmpAlert proccessUserRegistrationEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        //url
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(UserRegistrationTrigger.PARAM_URL) + "\">User Profile URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(UserRegistrationTrigger.PARAM_URL) + "\">User Profile URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
-
         return createAlertFromTemplate(template, myHashMap, alert);
     }
 
@@ -527,18 +445,15 @@ public class AmpMessageWorker {
      * Activity's disbursement date Event processing
      */
     private static AmpAlert processActivityDisbursementDateComingEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
 
+       
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
         //creator
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL) + "\">activity URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
-        }
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
     }
@@ -833,14 +748,6 @@ public class AmpMessageWorker {
         }
         try {
             AmpMessageUtil.saveOrUpdateMessageState(newState);
-            AmpTeamMember teamMember=newState.getReceiver();
-            if(teamMember!=null){
-            	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
-                Long sendMail = messageSettings.getEmailMsgs();
-                if(sendMail.intValue() == 1){
-                	User user = teamMember.getUser();
-            }
-          }
         } catch (AimException e) {
             e.printStackTrace();
         }
@@ -871,16 +778,27 @@ public class AmpMessageWorker {
      */
     private static void createEmailsAndReceivers(AmpMessage message,List<String> receiversAddresses,boolean calendarSaveActionWasCalled) throws Exception{
     	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
+        DigiConfig config = DigiConfigManager.getConfig();
+        String partialURL = config.getSiteDomain().getContent();
+        String objUrl=message.getObjectURL();
+        String description=message.getDescription();
+        if(objUrl!=null){
+            if(partialURL.endsWith("/")){
+                partialURL=partialURL.substring(0,partialURL.length()-1);
+            }
+            String url=partialURL+objUrl;
+            description=description.replaceAll(objUrl,url);
+        }
     	if(messageSettings!=null){
     		Long sendMail = messageSettings.getEmailMsgs();
-            if(sendMail.intValue() == 1){
+            if(sendMail!=null&&sendMail.intValue() == 1){
             	AmpEmail ampEmail=null;
             	AmpTeamMember msgSender=TeamMemberUtil.getAmpTeamMember(message.getSenderId());            	
            	 	//create AmpEmail
             	if(calendarSaveActionWasCalled){ // <---means that user created new calendar event. if so, a bit different e-mail should be sent
-            		ampEmail=new AmpEmail(msgSender.getUser().getEmail(),message.getName(),message.getDescription());
+            		ampEmail=new AmpEmail(msgSender.getUser().getEmail(),message.getName(),description);
             	}else{
-            		ampEmail=new AmpEmail("system@digijava.org",message.getName(),message.getDescription());
+            		ampEmail=new AmpEmail("system@digijava.org",message.getName(),description);
             	}
             	
             	DbUtil.saveOrUpdateObject(ampEmail);

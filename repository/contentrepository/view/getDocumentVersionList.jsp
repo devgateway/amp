@@ -10,11 +10,13 @@
 
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page" type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
-	
-	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
-	
+	<div id="loadingDiv" style="text-align: center;display: none;">
+		<digi:trn>Please Wait...</digi:trn> <br>
+		<img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='15px' align="middle"/>
+	</div>
+	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">	
 	<table>
-						<thead>
+				<thead>
 							<tr>
 								<th><digi:trn>Version</digi:trn></th>
 								<th><digi:trn>Type</digi:trn></th>
@@ -25,7 +27,7 @@
 								<th><digi:trn>Notes</digi:trn></th>
 								<th><digi:trn>Actions</digi:trn></th>
 							</tr>
-						</thead>
+						</thead>											
 						<logic:iterate name="crDocumentManagerForm"	property="otherDocuments" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData">
 							<tr>
 								<td>									
@@ -96,17 +98,16 @@
 									<c:if test="${documentData.currentVersionNeedsApproval==true}">
 										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 											onClick="approveVersion('<%=documentData.getUuid() %>','<%=documentData.getBaseNodeUUID() %>');"><digi:trn>Approve</digi:trn> </a>
-										<!--  
+										
 											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 											onClick="rejectVersion('<%=documentData.getUuid() %>','<%=documentData.getBaseNodeUUID() %>');"><digi:trn>Reject</digi:trn> </a>
-										-->	
 										
 									</c:if>
 								</logic:equal>
 								</td>
 							</tr>
 						</logic:iterate>
-					</table>
+					</table>					
 					<font color="red">*</font> indicates shared versions of the document
 					* The colored row marks the public version					
 					<br />

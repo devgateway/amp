@@ -61,7 +61,8 @@ public class SetAttributes extends Action {
 				shouldSaveObject					= true;
 			} 
 			
-			Node lastVersionNode					= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+			//Node lastVersionNode					= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+			Node lastVersionNode					= DocumentManagerUtil.getLastVersionNotWaitingApproval(uuid, request);
 			
 			docAttributes.setPublicDocument(true);
 			docAttributes.setPublicVersionUUID(lastVersionNode.getUUID());

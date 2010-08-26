@@ -23,7 +23,7 @@
 			
 		</layout>
 		
-		<layout name="parisIndicatorLayout" extends="default" file="noLayout.jsp">
+		<layout name="newParisIndicatorLayout" extends="default" file="noLayout.jsp">
 		  <put name="title">Paris Indicator Reports</put>
 		  <put-item name="body" file="parisindicator_N.jsp"/>
 		</layout>

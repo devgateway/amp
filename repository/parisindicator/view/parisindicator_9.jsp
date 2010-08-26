@@ -53,6 +53,7 @@
 	                </div>
 	            </td>
 	        </tr>
+	        <html:hidden property="reportIsEmpty" value="true" styleId="reportIsEmpty"/>
 	    </logic:empty>
 	    <logic:notEmpty name="parisIndicatorForm" property="mainTableRows">
 	       <%int counter = 0; %>

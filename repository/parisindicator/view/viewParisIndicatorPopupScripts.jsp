@@ -424,13 +424,21 @@
     }
 
 	function exportPDFs() {
-        document.getElementsByName('exportPDF')[0].value = true;
-        document.getElementsByName('parisIndicatorForm')[0].submit();
+		if(document.getElementById("reportIsEmpty") != null) {
+			alert("<digi:trn jsFriendly='true'>No survey data found.</digi:trn>");
+		} else {
+	        document.getElementsByName('exportPDF')[0].value = true;
+	        document.getElementsByName('parisIndicatorForm')[0].submit();
+		}
     }
 
 	function exportXLSs() {
-        document.parisIndicatorForm.exportXLS.value = true;
-        document.parisIndicatorForm.submit();
+		if(document.getElementById("reportIsEmpty") != null) {
+			alert("<digi:trn jsFriendly='true'>No survey data found.</digi:trn>");
+		} else {
+			document.parisIndicatorForm.exportXLS.value = true;
+	        document.parisIndicatorForm.submit();
+		}
     }
 
     function resetExport() {

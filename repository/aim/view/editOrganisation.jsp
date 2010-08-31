@@ -316,6 +316,20 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         		return false;
     		}            
         }
+        function editOrgInfo(index){
+                <digi:context name="updateBudgetInfo" property="context/module/moduleinstance/editOrganisation.do" />
+                document.aimAddOrgForm.action = "${updateBudgetInfo}?orgInfoIndex="+index;
+                document.aimAddOrgForm.target = "_self"
+                document.aimAddOrgForm.actionFlag.value="editOrgInfo";
+                document.aimAddOrgForm.submit();
+            }
+            function editStaffInfo(index){
+                <digi:context name="editStaffInfo" property="context/module/moduleinstance/editOrganisation.do" />
+                    document.aimAddOrgForm.action = "${editStaffInfo}?staffInfoIndex="+index;
+                    document.aimAddOrgForm.target = "_self"
+                    document.aimAddOrgForm.actionFlag.value="editStaffInfo";
+                    document.aimAddOrgForm.submit();
+                }
 
 
         function selectLocation() {
@@ -1440,7 +1454,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                 <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
                                                 </c:if>
                                                 <table cellspacing="0" cellpadding="0" id="staffTable">
-                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}" >
+                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
                                                         <tr>
                                                             <td  style="width:40px;text-align:left;">
                                                                 <html:multibox property="selectedStaff" styleClass="staffInfo">
@@ -1450,7 +1464,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                             <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
                                                             <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
-                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
@@ -1499,8 +1514,17 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="typeOfStaff"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>" styleClass="selectStyle" />
                                 </td>
                                 <td style="text-align:center"><html:text name="aimAddOrgForm" property="numberOfStaff"  onkeyup="fnChk(this,true)" styleClass="inp-text"/></td>
-
-                                <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="<digi:trn>Add</digi:trn>" /></td>
+                                <c:set var="staffButtonTxt">
+                                    <c:choose>
+                                        <c:when test="${aimAddOrgForm.staffInfoIndex!=-1}">
+                                            <digi:trn>Update</digi:trn>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <digi:trn>Add</digi:trn>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:set>
+                                <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="${staffButtonTxt}" /></td>
                                 </tr>
                             </table>
                             </div>
@@ -1531,7 +1555,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                 <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px; min-height:100px">
                                                 </c:if>
                                                 <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
-                                                    <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" >
+                                                    <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" varStatus="orgInfoIndex" >
                                                         <tr>
                                                             <td  style="width:40px;text-align:left;">
                                                                 <html:multibox property="selectedOrgInfoIds" styleClass="selectedOrgInfoIds">
@@ -1548,7 +1572,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                             </td>
                                                             <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.amount}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
-                                                            <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editOrgInfo('${orgInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
@@ -1631,8 +1656,18 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </html:select>
 
                                     </td>
+                                      <c:set var="budgetInfoButtonTxt">
+                                    <c:choose>
+                                        <c:when test="${aimAddOrgForm.orgInfoIndex==-1}">
+                                             <digi:trn>Add</digi:trn>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <digi:trn>Update</digi:trn>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:set>
 
-                                    <td style="text-align:center"><input type="button" style="width:80px" onclick="addOrgInfo()" value="<digi:trn>Add</digi:trn>" /></td>
+                                    <td style="text-align:center"><input type="button" style="width:80px" onclick="addOrgInfo()" value="${budgetInfoButtonTxt}" /></td>
                                 </tr>
                             </table>
                             </div>

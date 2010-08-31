@@ -128,6 +128,24 @@ public class AddOrgForm extends ActionForm {
     
     private Boolean resetDepartments;
     private Boolean resetBudgetSectors;
+    private int orgInfoIndex;
+    private int staffInfoIndex;
+
+    public int getOrgInfoIndex() {
+        return orgInfoIndex;
+    }
+
+    public int getStaffInfoIndex() {
+        return staffInfoIndex;
+    }
+
+    public void setStaffInfoIndex(int staffInfoIndex) {
+        this.staffInfoIndex = staffInfoIndex;
+    }
+
+    public void setOrgInfoIndex(int orgInfoIndex) {
+        this.orgInfoIndex = orgInfoIndex;
+    }
 
     public String getLineMinRegNumber() {
         return lineMinRegNumber;

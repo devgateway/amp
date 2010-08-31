@@ -518,19 +518,25 @@ public class EditOrganisation extends DispatchAction {
       if (staff == null) {
           staff = new ArrayList<AmpOrgStaffInformation>();
       }
-      AmpOrgStaffInformation info = new AmpOrgStaffInformation();
+      AmpOrgStaffInformation info = null;
+      if (editForm.getStaffInfoIndex() != -1) {
+          info=staff.get(editForm.getStaffInfoIndex());
+      } else {
+          info = new AmpOrgStaffInformation();
+          long temp = new Date().getTime();
+          info.setId(temp);
+          info.setNewlyCreated(true);
+          staff.add(info);
+          editForm.setStaff(staff);
+      }
       info.setYear(Long.parseLong(editForm.getSelectedYear()));
       info.setStaffNumber(Long.parseLong(editForm.getNumberOfStaff()));
       AmpCategoryValue type = CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getTypeOfStaff());
       info.setType(type);
-      long temp = new Date().getTime();
-      info.setId(temp);
-      info.setNewlyCreated(true);
-      staff.add(info);
-      editForm.setStaff(staff);
       editForm.setSelectedYear(null);
       editForm.setNumberOfStaff(null);
       editForm.setTypeOfStaff(null);
+      editForm.setStaffInfoIndex(-1);
       return mapping.findForward("forward");
   }
 
@@ -564,17 +570,38 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSelectedStaffId(null);
       return mapping.findForward("forward");
   }
+  public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+      if (sessionChk(request)) {
+          return mapping.findForward("index");
+      }
+      AddOrgForm editForm = (AddOrgForm) form;
+      AmpOrgStaffInformation staff= editForm.getStaff().get(editForm.getStaffInfoIndex());
+      editForm.setSelectedYear(staff.getYear().toString());
+      editForm.setTypeOfStaff(staff.getType().getId());
+      editForm.setNumberOfStaff(staff.getStaffNumber().toString());
+      return mapping.findForward("forward");
+  }
+
   
   public ActionForward addOrgInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChk(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
+      AmpOrganizationBudgetInformation info=null;
       List<AmpOrganizationBudgetInformation> orgInfos = editForm.getOrgInfos();
-      if (orgInfos == null) {
-          orgInfos = new ArrayList<AmpOrganizationBudgetInformation>();
+      if(orgInfos==null){
+          orgInfos=new ArrayList<AmpOrganizationBudgetInformation>();
       }
-      AmpOrganizationBudgetInformation info = new AmpOrganizationBudgetInformation();
+      if(editForm.getOrgInfoIndex()!=-1){
+         info= orgInfos.get(editForm.getOrgInfoIndex());
+      }else{
+         info = new AmpOrganizationBudgetInformation();
+         orgInfos.add(info);
+         info.setNewlyCreated(true);
+         long temp = new Date().getTime();
+         info.setId(temp);
+      }
       info.setYear(Long.parseLong(editForm.getOrgInfoSelectedYear()));
       AmpCategoryValue type = CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getOrgInfoType());
       info.setType(type);
@@ -585,10 +612,6 @@ public class EditOrganisation extends DispatchAction {
       info.setOrganizations(orgs);
       info.setAmount(Double.parseDouble(editForm.getOrgInfoAmount()));
       info.setCurrency(CurrencyUtil.getAmpcurrency(editForm.getOrgInfoCurrId()));
-      long temp = new Date().getTime();
-      info.setId(temp);
-      info.setNewlyCreated(true);
-      orgInfos.add(info);
       editForm.setOrgInfos(orgInfos);
       editForm.setOrgInfoType(null);
       editForm.setOrgInfoPercent(null);
@@ -596,6 +619,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgInfoCurrId(null);
       editForm.setOrgInfoAmount(null);
       editForm.setBudgetOrgs(null);
+      editForm.setOrgInfoIndex(-1);
       editForm.setActionFlag("reload");
       return mapping.findForward("forward");
   }
@@ -629,6 +653,23 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgInfos(orgInfos);
       editForm.setSelectedOrgInfoId(null);
       editForm.setSelectedOrgInfoIds(null);
+      return mapping.findForward("forward");
+  }
+   public ActionForward editOrgInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+      if (sessionChk(request)) {
+          return mapping.findForward("index");
+      }
+      AddOrgForm editForm = (AddOrgForm) form;
+      AmpOrganizationBudgetInformation orgBudgetInfo= editForm.getOrgInfos().get(editForm.getOrgInfoIndex());
+      editForm.setOrgInfoType(orgBudgetInfo.getType().getId());
+      editForm.setOrgInfoSelectedYear(orgBudgetInfo.getYear().toString());
+      editForm.setOrgInfoCurrId(orgBudgetInfo.getCurrency().getAmpCurrencyId());
+      editForm.setOrgInfoAmount(orgBudgetInfo.getAmount().toString());
+      List<AmpOrganisation> orgs=new ArrayList<AmpOrganisation>();
+      if(orgBudgetInfo.getOrganizations()!=null){
+          orgs.addAll(orgBudgetInfo.getOrganizations());
+          editForm.setBudgetOrgs(orgs);
+      }
       return mapping.findForward("forward");
   }
 
@@ -1016,6 +1057,9 @@ public class EditOrganisation extends DispatchAction {
               AmpOrgStaffInformation info = infoIter.next();
               if (!info.isNewlyCreated()) {
                   AmpOrgStaffInformation newInfo = (AmpOrgStaffInformation) DbUtil.getObject(AmpOrgStaffInformation.class, info.getId());
+                  newInfo.setStaffNumber(info.getStaffNumber());
+                  newInfo.setType(info.getType());
+                  newInfo.setYear(info.getYear());
                   infosToRetain.add(newInfo);
                   continue;
               }
@@ -1024,8 +1068,6 @@ public class EditOrganisation extends DispatchAction {
               newInfo.setStaffNumber(info.getStaffNumber());
               newInfo.setType(info.getType());
               newInfo.setYear(info.getYear());
-
-
               infos.add(newInfo);
           }
           organization.getStaffInfos().retainAll(infosToRetain);
@@ -1044,27 +1086,43 @@ public class EditOrganisation extends DispatchAction {
           Iterator<AmpOrganizationBudgetInformation> infoIter = editForm.getOrgInfos().iterator();
           Set<AmpOrganizationBudgetInformation> infosOrg = new HashSet<AmpOrganizationBudgetInformation>();
           Set<AmpOrganizationBudgetInformation> infosOrgToRetain = new HashSet<AmpOrganizationBudgetInformation>();
+          AmpOrganizationBudgetInformation newInfo = null;
           while (infoIter.hasNext()) {
               AmpOrganizationBudgetInformation info = infoIter.next();
               if (!info.isNewlyCreated()) {
-                  AmpOrganizationBudgetInformation newInfo = (AmpOrganizationBudgetInformation) DbUtil.getObject(AmpOrganizationBudgetInformation.class, info.getId());
+                  newInfo = (AmpOrganizationBudgetInformation) DbUtil.getObject(AmpOrganizationBudgetInformation.class, info.getId());
+                  newInfo.setYear(info.getYear());
+                  newInfo.setType(info.getType());
+                  newInfo.setCurrency(info.getCurrency());
+                  newInfo.setAmount(info.getAmount());
+                  if (newInfo.getOrganizations() != null) {
+                      newInfo.getOrganizations().clear();
+                  } else {
+                      newInfo.setOrganizations(new HashSet<AmpOrganisation>());
+                  }
+                  if (info.getOrganizations() != null) {
+                      newInfo.getOrganizations().addAll(info.getOrganizations());
+                  }
                   infosOrgToRetain.add(newInfo);
                   continue;
+              } else {
+                  newInfo = new AmpOrganizationBudgetInformation();
+                  newInfo.setOrganization(organization);
+                  newInfo.setYear(info.getYear());
+                  newInfo.setType(info.getType());
+                  newInfo.setCurrency(info.getCurrency());
+                  newInfo.setAmount(info.getAmount());
+                  newInfo.setOrganizations(info.getOrganizations());
+                  infosOrg.add(newInfo);
               }
-              AmpOrganizationBudgetInformation newInfo = new AmpOrganizationBudgetInformation();
-              newInfo.setOrganization(organization);
-              newInfo.setYear(info.getYear());
-              newInfo.setType(info.getType());
-              newInfo.setCurrency(info.getCurrency());
-              newInfo.setAmount(info.getAmount());
-              newInfo.setOrganizations(info.getOrganizations());
-              infosOrg.add(newInfo);
+              
+            
+              organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
+              organization.getOrganizationBudgetInfos().addAll(infosOrg);
           }
-          organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
-          organization.getOrganizationBudgetInfos().addAll(infosOrg);
-      }
-      else{
-           organization.getOrganizationBudgetInfos().clear();
+
+      } else {
+          organization.getOrganizationBudgetInfos().clear();
       }
 
       //Sectors
@@ -1411,6 +1469,8 @@ public class EditOrganisation extends DispatchAction {
           form.setSelectedbudgetsectors(null);
           form.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
           form.setOrgContacts(null);
+          form.setOrgInfoIndex(-1);
+          form.setStaffInfoIndex(-1);
       } catch (Exception ex) {
           logger.error("error",ex);
           throw new DgException(ex);

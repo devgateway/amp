@@ -41,7 +41,6 @@
     <form-bean name="aimViewOrgForm" type="org.digijava.module.aim.form.ViewOrgForm" />
     <form-bean name="aimSurveyForm" type="org.digijava.module.aim.form.SurveyForm" />
     <form-bean name="aimEditSurveyForm" type="org.digijava.module.aim.form.EditSurveyForm" />
-    <form-bean name="aimParisIndicatorReportForm" type="org.digijava.module.aim.form.ParisIndicatorReportForm" />
     <form-bean name="aimMainProjectDetailsForm" type="org.digijava.module.aim.form.MainProjectDetailsForm" />
     <form-bean name="aimChannelOverviewForm" type="org.digijava.module.aim.form.ChannelOverviewForm" />
     <form-bean name="aimSelectActivityTabsForm" type="org.digijava.module.aim.form.SelectActivityTabsForm" />
@@ -620,21 +619,7 @@
       <forward name="survey" path="/aim/editSurveyList.do" />
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
     </action>
-    <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorReport" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport" validate="false">
-      <forward name="menu" path="/showLayout.do?layout=viewParisIndicatorReportMenu" />
-      <forward name="report1" path="/showLayout.do?layout=viewParisIndicatorReportI" />
-      <forward name="report2" path="/showLayout.do?layout=viewParisIndicatorReportII" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
-      <forward name="print" path="/showLayout.do?layout=parisIndicatorLayout" />
-      <forward name="print2" path="/showLayout.do?layout=parisIndicatorLayout2" />
-    </action>
-    
-    <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorPopupAction" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPopupAction" validate="false">
-<!--		<forward name="forward" path="/showLayout.do?layout=PI_Filter" />-->
-		<forward name="forward" path="/showLayout.do?layout=view/viewParisIndicatorPopupFilter" />
-    </action>
-    
+       
     <action name="aimSelectFilteredCurrencyRatesForm" path="/aim/selectFilteredRates" scope="request" type="org.digijava.module.aim.action.SelectFilteredCurrencyRates" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectFilteredRates" />
     </action>
@@ -1564,12 +1549,7 @@
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
       <forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />
     </action>
-    <action name="aimParisIndicatorForm" path="/aim/ParisIndicatorMenu" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport1" validate="false">
-      <forward name="pindicmenu" path="/showLayout.do?layout=ParisIndicatorReportMenu" />
-    </action>
-    <action name="aimParisIndicatorForm" path="/aim/ParisIndicatorReport1" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport1" validate="false">
-      <forward name="pindicr1" path="/showLayout.do?layout=ParisIndicatorReport1" />
-    </action>
+    
     <action name="aimParisIndicatorManagerForm" path="/aim/parisIndicatorManager" scope="session" type="org.digijava.module.aim.action.ParisIndicatorManager" validate="false">
       <forward name="parisIndiManager" path="/showLayout.do?layout=parisIndicatorManager" />
       <forward name="parisIndiDelete" path="/showLayout.do?layout=parisIndicatorDelete" />
@@ -1585,14 +1565,7 @@
     <action name="aimParisIndicatorManagerForm" path="/aim/parisIndicatorAddNew" scope="session" type="org.digijava.module.aim.action.ParisIndicatorAddNew" validate="false">
       <forward name="parisIndiManager" path="/aim/parisIndicatorManager.do" />
     </action>
-    <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorReportPDFXLSCSV" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReportPDFXLSCSV" validate="false" />
-    <action name="aimEditSurveyForm" path="/aim/ParisIndicatorPrintSurvey" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPrintSurvey" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_pIPrintSurvey" />
-    </action>
-    <action name="aimParisIndicatorReportForm" path="/aim/ParisIndicatorPrintReports" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPrintReports" validate="false">
-      <forward name="pi" path="/showLayout.do?layout=aim_pIPrintReports" />
-      <forward name="pi2" path="/showLayout.do?layout=aim_pIPrintReports2" />
-    </action>
+    
     <action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
       <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
     </action>

@@ -216,9 +216,6 @@
 	<page page="selectCreateIndicatorForStep9" name="aim_selectCreateIndicatorForStep9" title=" - ME Select/Create Indicators" />
 	<page name="editSurveyList" title=" - Aid Harmonization Indicators" />
 	<page name="editSurvey" title=" - Aid Harmonization Indicators" />
-	<page name="viewParisIndicatorReportMenu" title=" - Aid Effectiveness Indicators Reports" />
-	<page name="viewParisIndicatorReportI" title=" - Aid Effectiveness Indicators Reports" />
-	<page name="viewParisIndicatorReportII" title=" - Aid Effectiveness Indicators Reports" />
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
@@ -378,11 +375,6 @@
 
 	<page page="portPerformanceWithoutBase" name="aim_portPerfWithoutBase" title="AMP - Portfolio-Performance" />
 	<page page="activityPerformanceWithoutBase" name="aim_actPerfWithoutBase" title="AMP - Activity-Performance" />
-
-	<!--- Paris Indicator Reports. -->
-	<page name="ParisIndicatorReport1" title=" : Paris Indicator Reports" />
-	<page name="ParisIndicatorReportMenu" title=" : Paris Indicator Reports Menu" />
-	<!-- Paris Indicator Reports end-->
 
 	<!-- Paris Indiacator Manager-->
 	<page name="parisIndicatorManager" title=" : Paris Indicator Manager" />

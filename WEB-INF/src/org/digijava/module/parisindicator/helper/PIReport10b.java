@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -30,6 +31,8 @@ import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.parisindicator.helper.row.PIReport10aRow;
 import org.digijava.module.parisindicator.helper.row.PIReport10bRow;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
@@ -234,52 +237,51 @@ public class PIReport10b extends PIAbstractReport {
 	}
 	
 	@Override
-	public Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData, int startYear,
+	public Collection<PIReportAbstractRow> generateReport10b(Collection<NodeWrapper> commonData, int startYear,
 			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
 
-		/*Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>();
-		PIReport10bRow auxRow = null;
-		int yearRange = endYear - startYear + 1;
-		double fromExchangeRate;
-		double toExchangeRate;
-		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-
+		Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>();
 		try {
-			Iterator<AmpOrganisation> iterCommonData = commonData.iterator();
-			while (iterCommonData.hasNext()) {
-				AmpOrganisation auxOrganisation = iterCommonData.next();
-				Iterator<AmpCalendar> iterCal = auxOrganisation.getCalendar().iterator();
-				while (iterCal.hasNext()) {
-					auxRow = new PIReport10bRow();
-					AmpCalendar auxCalendar = iterCal.next();
-					String eventTypeName="";
-                    if(auxCalendar.getEventsType()!=null){
-                    	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(auxCalendar.getEventsType().getId());
-                    	if (ampCategoryValue != null){
-                    		eventTypeName=ampCategoryValue.getValue();
-                    	}
-                    }
-					if (PIConstants.MISSION.equalsIgnoreCase(eventTypeName)) {
-						Calendar cal = (Calendar) auxCalendar.getCalendarPK().getCalendar();
-						int year = new Integer(yearFormat.format(cal.getStartDate())).intValue();
-						// checking if the Mission is 'joint'
-						if (null != auxCalendar.getOrganisations() && auxCalendar.getOrganisations().size() > 1) {
-							auxRow.setYear(year);
-							auxRow.setColumn1(auxRow.getColumn1() + 1);
-							list.add(auxRow);
-						}
-						auxRow.setColumn2(auxRow.getColumn2() + 1);
+			Iterator<NodeWrapper> iterNodes = commonData.iterator();
+			while (iterNodes.hasNext()) {
+				NodeWrapper auxNodeWrapper = iterNodes.next();
+				// Get organizations for this document (trying to get documents
+				// from an organization didn't work).
+				Collection<AmpOrganisation> orgsFromDocument = DocToOrgDAO.getOrgsObjByUuid(auxNodeWrapper.getUuid());
+				Collection<AmpOrganisation> auxOrganizations = new ArrayList<AmpOrganisation>();
+				// Calculate number of MUL and BIL donors for this document.
+				int orgs4Doc = 0;
+				Iterator<AmpOrganisation> iterOrgs = orgsFromDocument.iterator();
+				while (iterOrgs.hasNext()) {
+					AmpOrganisation auxOrg = iterOrgs.next();
+					if (auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_BILATERAL)
+							|| auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equals(
+									PIConstants.ORG_GRP_MULTILATERAL)) {
+						orgs4Doc++;
+						auxOrganizations.add(auxOrg);
 					}
+				}
+				Iterator<AmpOrganisation> iterOrgs2 = auxOrganizations.iterator();
+				while (iterOrgs2.hasNext()) {
+					AmpOrganisation auxOrg = iterOrgs2.next();
+					PIReport10bRow auxRow = new PIReport10bRow();
+					auxRow.setYear(Integer.valueOf(
+							auxNodeWrapper.getDate().substring(auxNodeWrapper.getDate().length() - 4)).intValue());
+					auxRow.setDonorGroup(auxOrg.getOrgGrpId());
+					auxRow.setDonorGroupName(auxOrg.getOrgGrpId().getOrgGrpName());
+					auxRow.setColumn2(1);
+					if (orgs4Doc > 1) {
+						auxRow.setColumn1(1);
+					}
+					list.add(auxRow);
 				}
 			}
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
-		return list;*/
-		//TODO: Implement this method when 6012 is fixed.
-		return null;
+		return list;
 	}
 
 	@Override

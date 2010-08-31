@@ -25,17 +25,17 @@
 	        </td>
 			<td width="27%" height="33">
 			  <div align="center">
-			      <strong><digi:trn>Number of Country Analytic documents that are joint</digi:trn></strong>
+			      <strong><digi:trn>Number of country analytic reports that are joint</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="26%" height="33">
 			  <div align="center">
-			      <strong><digi:trn>Total number of Country Analytic documents</digi:trn></strong>
+			      <strong><digi:trn>Total number of country analytic reports</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="27%" height="33">
 	            <div align="center">
-	                <strong><digi:trn>Proportion of Country analytic documents that are joint</digi:trn></strong>
+	                <strong><digi:trn>Proportion of country analytic work that is joint</digi:trn></strong>
 	            </div>
 	        </td>
 		</tr>

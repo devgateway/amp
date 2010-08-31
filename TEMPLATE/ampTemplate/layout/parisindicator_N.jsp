@@ -72,6 +72,9 @@ request.getParameter("print");
                             <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
                                 <jsp:include page="/repository/parisindicator/view/parisindicator_10a.jsp"></jsp:include>
                             </logic:equal>
+                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10b">
+	                        	<jsp:include page="/repository/parisindicator/view/parisindicator_10b.jsp"></jsp:include>
+							</logic:equal>
 	                    </td>
 	                </tr>
 	                <tr>

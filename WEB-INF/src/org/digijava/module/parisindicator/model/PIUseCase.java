@@ -8,10 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
@@ -20,13 +25,21 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.ParisIndicator;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport10a;
@@ -168,7 +181,7 @@ public class PIUseCase {
 	 * Executes part of the common logic for all reports and then creates the
 	 * concrete report.
 	 */
-	public PIAbstractReport createReport(PIForm form) throws Exception {
+	public PIAbstractReport createReport(PIForm form, HttpServletRequest request) throws Exception {
 		// Create the report.
 		PIAbstractReport report = null;
 		if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_3)) {
@@ -218,7 +231,7 @@ public class PIUseCase {
 						auxFinancingInstruments);
 			}
 			if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
-				Collection<AmpOrganisation> commonData10b = getCommonSurveyDataForPI10b(auxDonors, auxDonorGroups);
+				Collection<NodeWrapper> commonData10b = getCommonSurveyDataForPI10b(auxDonors, auxDonorGroups, request);
 
 				// Execute the logic for generating each report.
 				preMainReportRows = report.generateReport10b(commonData10b, form.getSelectedStartYear(), form
@@ -252,7 +265,7 @@ public class PIUseCase {
 	 * Returns a collection of AmpAhSurvey objects filtered by donor and donor
 	 * group.
 	 */
-	public Collection<AmpAhsurvey> getCommonSurveyData(Collection<AmpOrganisation> filterDonors,
+	private Collection<AmpAhsurvey> getCommonSurveyData(Collection<AmpOrganisation> filterDonors,
 			Collection<AmpOrgGroup> filterDonorGroups) {
 
 		Collection<AmpAhsurvey> commonData = null;
@@ -291,7 +304,7 @@ public class PIUseCase {
 		return commonData;
 	}
 
-	public Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors,
+	private Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors,
 			Collection<AmpOrgGroup> filterDonorGroups) {
 
 		Collection<AmpOrganisation> commonData = new HashSet<AmpOrganisation>();
@@ -339,43 +352,74 @@ public class PIUseCase {
 		return commonData;
 	}
 
-	public Collection<AmpOrganisation> getCommonSurveyDataForPI10b(Collection<AmpOrganisation> filterDonors,
-			Collection<AmpOrgGroup> filterDonorGroups) {
+	private Collection<NodeWrapper> getCommonSurveyDataForPI10b(Collection<AmpOrganisation> filterDonors,
+			Collection<AmpOrgGroup> filterDonorGroups, HttpServletRequest request) {
 
-		/*Collection<AmpOrganisation> commonData = new ArrayList<AmpOrganisation>();
-		Session session = null;
+		Collection<NodeWrapper> commonData = new HashSet<NodeWrapper>();
 		try {
-			// TODO: change this code to use restrictions like the
-			// getCommonSurveyData() method.
-			session = PersistenceManager.getRequestDBSession();
-			List<AmpActivityDocument> documents = session.createCriteria(AmpActivityDocument.class).list();
-			Iterator<AmpActivityDocument> iterDocs = documents.iterator();
-			while (iterDocs.hasNext()) {
-				AmpActivityDocument auxDocs = iterDocs.next();
-				Set<AmpOrganisation> auxOrganisations = auxDocs.getOrganisations();
-				if (auxOrganisations != null) {
-					Iterator<AmpOrganisation> iterOrganisations = auxOrganisations.iterator();
-					while (iterOrganisations.hasNext()) {
-						AmpOrganisation auxOrganisation = iterOrganisations.next();
-						AmpOrgGroup auxOrgGrp = auxOrganisation.getOrgGrpId();
-						// Filter for Multilateral and Bilateral PoDDs.
-						if (auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_BILATERAL)
-								|| auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
-							boolean add = true;
-							// If needed, filter for organizations.
-							if (filterDonors != null) {
-								if (!PIUtils.containOrganisations(filterDonors, auxOrganisation)) {
+
+			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+			// Iterate all AmpTeamMembers.
+			Iterator<AmpTeamMember> iterTeamMembers = TeamMemberUtil.getAllTeamMembers().iterator();
+			while (iterTeamMembers.hasNext()) {
+				// Create helper TeamMember.
+				AmpTeamMember auxAmpTeamMember = iterTeamMembers.next();
+				TeamMember auxTeamMember = new TeamMember();
+				auxTeamMember.setMemberId(auxAmpTeamMember.getAmpTeamMemId());
+				auxTeamMember.setMemberName(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getName());
+				auxTeamMember.setTeamName(auxAmpTeamMember.getAmpTeam().getName());
+				auxTeamMember.setRoleName(auxAmpTeamMember.getAmpMemberRole().getRole());
+				auxTeamMember.setEmail(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getEmail());
+				auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeam().getAmpTeamId());
+
+				// Get the main team node for this team member.
+				Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember);
+
+				// Iterate documents and get organizations.
+				Iterator<Node> iter = teamNode.getNodes();
+				while (iter.hasNext()) {
+					Node nextNode = (Node) iter.next();
+					NodeWrapper nextWrapper = new NodeWrapper(nextNode);
+
+					// Check document type.
+					AmpCategoryValue docType = CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper
+							.getCmDocTypeId(), true);
+					if (docType != null) {
+						if (docType.getValue().equalsIgnoreCase(
+								TranslatorWorker.translateText(
+										CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY, request))) {
+
+							// Only add documents that have at least 1 donor.
+							Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(nextWrapper
+									.getUuid());
+							Iterator<AmpOrganisation> iterOrgs = auxOrganizations.iterator();
+							while (iterOrgs.hasNext()) {
+								AmpOrganisation auxOrganisation = iterOrgs.next();
+								boolean add = true;
+								// Filter by donor type.
+								if (!auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(
+										PIConstants.ORG_GRP_BILATERAL)
+										&& !auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(
+												PIConstants.ORG_GRP_MULTILATERAL)) {
 									add = false;
 								}
-							}
-							// If needed, filter for organization groups.
-							if (filterDonorGroups != null) {
-								if (!PIUtils.containOrgGrps(filterDonorGroups, auxOrgGrp)) {
-									add = false;
+
+								// If needed, filter for organizations.
+								if (filterDonors != null) {
+									if (!PIUtils.containOrganisations(filterDonors, auxOrganisation)) {
+										add = false;
+									}
 								}
-							}
-							if (add) {
-								commonData.add(auxOrganisation);
+								// If needed, filter for organization
+								// groups.
+								if (filterDonorGroups != null) {
+									if (!PIUtils.containOrgGrps(filterDonorGroups, auxOrganisation.getOrgGrpId())) {
+										add = false;
+									}
+								}
+								if (add) {
+									commonData.add(nextWrapper);
+								}
 							}
 						}
 					}
@@ -384,8 +428,6 @@ public class PIUseCase {
 		} catch (Exception e) {
 			logger.error(e);
 		}
-		return commonData;*/
-		//TODO: Implement this method when 6012 is fixed.
-		return null;
+		return commonData;
 	}
 }

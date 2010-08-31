@@ -8,6 +8,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public interface PIOperations {
@@ -21,7 +22,7 @@ public interface PIOperations {
 			Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
 			Collection<AmpCategoryValue> financingInstrumentFilter);
 
-	public abstract Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData,
+	public abstract Collection<PIReportAbstractRow> generateReport10b(Collection<NodeWrapper> commonData,
 			int startYear, int endYear, AmpFiscalCalendar calendar, AmpCurrency currency,
 			Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
 			Collection<AmpCategoryValue> financingInstrumentFilter);

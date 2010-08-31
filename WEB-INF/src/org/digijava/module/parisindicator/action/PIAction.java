@@ -68,7 +68,7 @@ public class PIAction extends Action {
 		piForm.setPiReport(useCase.getPIReport(piReportCode));
 
 		// Create report.
-		PIAbstractReport report = useCase.createReport(piForm);
+		PIAbstractReport report = useCase.createReport(piForm, request);
 		piForm.setMainTableRows(report.getReportRows());
 		piForm.setMiniTable(report.getMiniTable());
 

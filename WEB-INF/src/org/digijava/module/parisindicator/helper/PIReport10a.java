@@ -31,6 +31,7 @@ import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.parisindicator.helper.row.PIReport10aRow;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.model.PIUseCase;
@@ -303,7 +304,7 @@ public class PIReport10a extends PIAbstractReport {
 	}
 
 	@Override
-	public Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData, int startYear,
+	public Collection<PIReportAbstractRow> generateReport10b(Collection<NodeWrapper> commonData, int startYear,
 			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
 		// TODO Auto-generated method stub

@@ -28,6 +28,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.parisindicator.helper.row.PIReport5aRow;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.model.PIUseCase;
@@ -539,7 +540,7 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 	}
 
 	@Override
-	public Collection<PIReportAbstractRow> generateReport10b(Collection<AmpOrganisation> commonData, int startYear,
+	public Collection<PIReportAbstractRow> generateReport10b(Collection<NodeWrapper> commonData, int startYear,
 			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
 		// TODO Auto-generated method stub

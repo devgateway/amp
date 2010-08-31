@@ -48,11 +48,11 @@ public class PIReport10bExport extends PIAbstractExport {
 		parameters.put("PI_COL2", TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this
 				.getSite().getId()));
 		parameters.put("PI_COL3", TranslatorWorker.translateText(
-				"Number of Country Analytic documents that are joint", this.getLangCode(), this.getSite().getId()));
-		parameters.put("PI_COL4", TranslatorWorker.translateText("Total number of Country Analytic documents", this
+				"Number of country analytic reports that are joint", this.getLangCode(), this.getSite().getId()));
+		parameters.put("PI_COL4", TranslatorWorker.translateText("Total number of country analytic reports", this
 				.getLangCode(), this.getSite().getId()));
 		parameters.put("PI_COL5", TranslatorWorker.translateText(
-				"Proportion of Country analytic documents that are joint", this.getLangCode(), this.getSite().getId()));
+				"Proportion of country analytic work that is joint", this.getLangCode(), this.getSite().getId()));
 		parameters.put("PI_LAST_YEAR", new Integer(year).toString());
 		return parameters;
 	}

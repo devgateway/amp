@@ -435,7 +435,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		ps.println("isPrintWhenDetailOverflows='false'/>");
 		ps.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
 		ps
-				.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+				.println("<font fontName='Arial' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
 		ps.println("</textElement>");
 		ps
 				.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Page \" + $V{PAGE_NUMBER} + \" of \" + $V{PAGE_COUNT}]]></textFieldExpression>");

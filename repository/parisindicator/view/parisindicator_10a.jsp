@@ -25,17 +25,17 @@
 	        </td>
 			<td width="27%" height="33">
 			  <div align="center">
-			      <strong><digi:trn>Nombre de missions sur le terrain qui sont conjointes</digi:trn></strong>
+			      <strong><digi:trn>Number of missions to the field that are joint</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="26%" height="33">
 			  <div align="center">
-			      <strong><digi:trn>Nombre total de missions sur le terrain</digi:trn></strong>
+			      <strong><digi:trn>Total number of missions to the field</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="27%" height="33">
 	            <div align="center">
-	                <strong><digi:trn>Proportion de missions des donneurs qui sont conjointes</digi:trn></strong>
+	                <strong><digi:trn>Proportion of donor missions that are joint</digi:trn></strong>
 	            </div>
 	        </td>
 		</tr>

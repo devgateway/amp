@@ -356,10 +356,8 @@ function setHoveredTable(tableId, hasHeaders) {
 						<c:if test="${aimTeamAuditListForm.pagesSize < aimTeamAuditListForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
-							<c:set var="translation"> 
-								<digi:trn key="aim:lastpage">
-									<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
-								</digi:trn>
+							<c:set var="translation">
+                                    <digi:trn>Last Page</digi:trn>
 							</c:set>
 							<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
 								<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>

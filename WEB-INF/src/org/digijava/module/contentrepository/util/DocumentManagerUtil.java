@@ -156,6 +156,7 @@ public class DocumentManagerUtil {
 				httpSession.setAttribute(CrConstants.JCR_WRITE_SESSION, jcrSession);
 				
 				registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
+				registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

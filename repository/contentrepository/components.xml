@@ -17,6 +17,7 @@
 	<page name="templateDocsManager" page="templateDocsManager"/>
 	<page name="addEditTempDoc" page="addEditTempDoc"/>
 	<page name="tempFieldPreDefinedValues" page="tempFieldPreDefinedValues"/>
+	<page name="cr_labelManager" page="labelmanager/labelManager" title="Label Manager" />
 </secondary-pages>
 
 

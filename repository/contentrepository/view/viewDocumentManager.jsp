@@ -189,6 +189,13 @@ function setHoveredTable(tableId, hasHeaders) {
 		return ret;
 	}
 
+	var test1Obj	= {
+				click: function(e, o) {
+					alert("Label clicked")
+				}
+			}
+	var fPanel	= new FilterAsYouTypePanel("labelButtonId", test1Obj, "mainLabels");
+
 </script>
 
 <table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
@@ -253,6 +260,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 									  		<digi:trn> Add Resource ...</digi:trn>            
 								    	</button>
+								    	<%-- <button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button> --%>
 								    </td>								    
 								</tr>
 								<tr>

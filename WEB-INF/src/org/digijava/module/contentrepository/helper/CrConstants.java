@@ -29,6 +29,18 @@ public class CrConstants {
 	public static final String PROPERTY_CM_DOCUMENT_TYPE			= "ampdoc:cmDocType";
 	public static final String PROPERTY_YEAR_OF_PUBLICATION			= "ampdoc:yearOfPublication";
 	
+	public static final String LABEL_PROPERTY_NAME					= "amplabel:name";
+	public static final String LABEL_PROPERTY_COLOR					= "amplabel:color";
+	public static final String LABEL_PROPERTY_BACKGROUNDCOLOR		= "amplabel:backgroundColor";
+	public static final String LABEL_PROPERTY_CHILDREN				= "amplabel:children";
+	public static final String LABEL_PROPERTY_TYPE					= "amplabel:type";
+	
+	public static final String LABEL_NODE_NAME						= "amplabel:label";
+	public static final String LABEL_ROOT_NODE_NAME					= "amplabel:rootLabel5";
+	
+	public static final String LABEL_TYPE_FOLDER					= "FOLDER_LABEL";
+	public static final String LABEL_TYPE_LEAF						= "LEAF_LABEL";
+	
 	
 	//states
 	public static final Integer PENDING_STATUS					= 	0;

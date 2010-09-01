@@ -237,7 +237,8 @@ function submitForm() {
 	var calendarHelp="<digi:trn>Calendar</digi:trn>"
 	var separateEmails="<digi:trn>Please separate email addresses by semicolons</digi:trn>"
 	var validEmailmsg="<digi:trn>Invalid e-mail address:</digi:trn>"
-		var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
+	var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
+    var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
 		
 function makePublic(){
 
@@ -275,7 +276,7 @@ function addOrganisation(orgId, orgName){
          orphands[orpIndex]=list.options[i];
          orpIndex++;
       }
-      if(list.options[i].value.indexOf('g')==0){
+      if(list.options[i].value.indexOf('g:')==0){
          if(list.options[i].selected){
             list.options[i]=null;
          }
@@ -284,12 +285,18 @@ function addOrganisation(orgId, orgName){
       	   index++;
          }
       }
+      else{
+         if(list.options[i].value.indexOf('guest')==0&&list.options[i].selected){
+              $("#selreceivers > option[value^='g']").remove();
+         }
+      }
     }
     if(orpIndex!=0){
        registerOrphanMember(orphands);
     }
     removeUserOrTeam();
     if(index != 0){
+       addOption(list,guestText,"guest");
 	   for(var j=0; j<index; j++){
 	      list.options.add(MyGuests[j]);
 	   }
@@ -307,7 +314,7 @@ function addOrganisation(orgId, orgName){
          orpIndex++;
       }
 
-      if(list.options[i].value.indexOf('g')==0){
+      if(list.options[i].value.indexOf('g:')==0){
       	MyGuests[index]=list.options[i];
       	index++;
       }
@@ -321,6 +328,7 @@ function addOrganisation(orgId, orgName){
 
   	//add the guests to the list
   	if(index != 0){
+       addOption(list,guestText,"guest");
 	   for(var j=0; j<index; j++){
 	      list.options.add(MyGuests[j]);
 	   }
@@ -380,7 +388,6 @@ function addOrganisation(orgId, orgName){
         var guestVal=guest.value;
 		
         while(guestVal.indexOf(";")!=-1){
-
             var optionValue=guestVal.substring(0,guestVal.indexOf(";"));
             if (!checkEmail(optionValue)){
                 alert(validEmailmsg+' '+optionValue);
@@ -392,10 +399,13 @@ function addOrganisation(orgId, orgName){
             }
             guestVal=guestVal.substring(guestVal.indexOf(";")+1);
 	    }
-
+        var guestAmount=$("#selreceivers > option[value^='g:']").length;
 		var guestVal=guest.value;
-		while(guestVal.indexOf(";")!=-1){		
-			var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
+		while(guestVal.indexOf(";")!=-1){
+			var optionValue=guestVal.substring(0,guestVal.indexOf(";"));
+             if(guestAmount==0){
+                addOption(list,guestText,"guest");
+            }
 			addOption(list,optionValue,'g:'+optionValue);				
 		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
 		}
@@ -408,6 +418,9 @@ function addOrganisation(orgId, orgName){
             if (isGuestAllreadyAdded(guestVal)){
                 alert(alreadyAdded+' '+guestVal);
                 return false;
+            }
+            if(guestAmount==0){
+                addOption(list,guestText,"guest");
             }
 			addOption(list,guestVal,'g:'+guestVal);
 		}	

@@ -30,6 +30,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -81,6 +82,8 @@ public class ShowCalendarEvent extends Action {
  		CalendarThread.setSite(site);
  		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
  		CalendarThread.setLocale(navigationLanguage);
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
  		
         CalendarEventForm ceform = (CalendarEventForm) form;
         Object teamObj = request.getSession().getAttribute("teamHead");
@@ -173,6 +176,10 @@ public class ShowCalendarEvent extends Action {
                 } else if (slAtts[i].startsWith("g:")) {
                     selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(2), slAtts[i]));
                 }
+                    else if (slAtts[i].startsWith("guest")) {
+                         String guest="---"+TranslatorWorker.translateText("Guest", langCode, siteId)+"---";
+                         selectedAttsCol.add(new LabelValueBean(guest, "guest"));
+                   }
             }
             ceform.setSelectedAttsCol(selectedAttsCol);
         }
@@ -520,6 +527,8 @@ public class ShowCalendarEvent extends Action {
             ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
             String instanceId = moduleInstance.getInstanceName();
             String siteId = moduleInstance.getSite().getSiteId();
+            String site = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+            String langCode = RequestUtils.getNavigationLanguage(request).getCode();
             AmpCalendar ampCalendar = AmpDbUtil.getAmpCalendar(ampCalendarId, instanceId, siteId);
 
             if (ampCalendar != null) {
@@ -575,7 +584,11 @@ public class ShowCalendarEvent extends Action {
     					}
     				}
     			}
-                
+                if(!guests.isEmpty()){
+                    String guest="---"+TranslatorWorker.translateText("Guest", langCode, site)+"---";
+                    selectedAttsCol.add(new LabelValueBean(guest, "guest"));
+                    selAtts.add("guest");
+                }
                 for(String guest: guests){
                 	if(guest.indexOf("g:")!=-1){
                 		guest=guest.substring(guest.lastIndexOf("g:")+2);

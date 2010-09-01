@@ -89,7 +89,7 @@ cursor:pointer;
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
                 <digi:link styleClass="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
-                <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
+                <digi:trn key='aim:PublicSite'>PUBLIC SITE</digi:trn>
                 </digi:link>
             </li>
             <feature:display name="Public Documents" module="Document Management">

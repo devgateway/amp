@@ -453,7 +453,7 @@ session.setAttribute("progressValue", counter);
 		<table width="100%">
 			<tr>
 			<td>
-
+    <c:if test="${report.visibleRows/recordsPerPage>1}">
 <c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
 <c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
@@ -509,6 +509,7 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 				</logic:notEqual>
 </c:if>
+                 </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
              <logic:present name="isUserLogged" scope="session">
@@ -605,6 +606,7 @@ session.setAttribute("progressValue", counter);
 			 <table width="100%">
 			 <tr>
 			 <td>
+ <c:if test="${report.visibleRows/recordsPerPage>1}">
 <c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
 <c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
@@ -659,6 +661,7 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 				</logic:notEqual>
 </c:if>
+                </c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
              <logic:present name="isUserLogged" scope="session">

@@ -462,25 +462,32 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.setEditAct(true);
         }
         else {
-        	if(session.getAttribute("report")!=null){
-        		GroupReportData r = (GroupReportData) session.getAttribute("report");
-        		TreeSet l = (TreeSet) r.getOwnerIds();
-        		Iterator i = l.iterator();
-        		Long prev = null, next = null;
-        		while (i.hasNext()) {
-        			Long e = (Long) i.next();
-        			if (e.compareTo(activityId) == 0)
-        				break;
-        			else
-        				prev = e;
-        		}
-        		if (i.hasNext())
-        			next = (Long) i.next();
-        		session.setAttribute("previousActivity", prev);
-        		session.setAttribute("nextActivity", next);
-        		request.setAttribute(Constants.ONLY_PREVIEW, "true");
-        		logger.info("mapping does end with viewActivityPreview.do");
-        	}
+            String showOnlyAct=request.getParameter("showOnlyAct"); // to show activity preview without next, previous links
+            boolean withoutNextPrevLink=Boolean.parseBoolean(showOnlyAct);
+        	   if (session.getAttribute("report") != null && !withoutNextPrevLink) {
+                GroupReportData r = (GroupReportData) session.getAttribute("report");
+                TreeSet l = (TreeSet) r.getOwnerIds();
+                Iterator i = l.iterator();
+                Long prev = null, next = null;
+                while (i.hasNext()) {
+                    Long e = (Long) i.next();
+                    if (e.compareTo(activityId) == 0) {
+                        break;
+                    } else {
+                        prev = e;
+                    }
+                }
+                if (i.hasNext()) {
+                    next = (Long) i.next();
+                }
+                session.setAttribute("previousActivity", prev);
+                session.setAttribute("nextActivity", next);
+                request.setAttribute(Constants.ONLY_PREVIEW, "true");
+                logger.info("mapping does end with viewActivityPreview.do");
+            } else {
+                session.removeAttribute("previousActivity");
+                session.removeAttribute("nextActivity");
+            }
         }
       }
 

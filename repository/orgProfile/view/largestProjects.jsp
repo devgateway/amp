@@ -51,10 +51,24 @@
             <td width="40%">
                 <c:choose>
                     <c:when test="${empty project.fullTitle}">
-                        <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link>
+                        <c:choose>
+                            <c:when test="${sessionScope.orgProfileFilter.fromPublicView}">
+                                <digi:link module="aim" href="/viewActivityPreview.do~public=true~pageId=2~activityId=${project.activityId}~showOnlyAct=true" target="_blank">${project.title}</digi:link>
+                            </c:when>
+                            <c:otherwise>
+                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link>
+                            </c:otherwise>
+                        </c:choose>
                     </c:when>
                     <c:otherwise>
-                        <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})">${project.title}</digi:link>
+                        <c:choose>
+                            <c:when test="${sessionScope.orgProfileFilter.fromPublicView}">
+                                <digi:link module="aim" href="/viewActivityPreview.do~public=true~pageId=2~activityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})" target="_blank">${project.title}</digi:link>
+                            </c:when>
+                            <c:otherwise>
+                                <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" onmouseover="showLargestProjectsHelpTooltip(${status.count})" onmouseout="hideLargestProjectsHelpTooltip(${status.count})">${project.title}</digi:link>
+                            </c:otherwise>
+                        </c:choose>
                     </c:otherwise>
                 </c:choose>
                 <div id="largestProjectsHelpTooltip${status.count}" style="display:none; z-index:10; width:200px; position: absolute; left:70px;  background-color: #ffffff; border: 1px solid silver;">

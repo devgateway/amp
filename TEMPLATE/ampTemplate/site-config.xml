@@ -704,6 +704,9 @@
 				<page>de_showSourceDetails</page>
 				<page>de_showLogItemDetails</page>
             </module>
+            <module name="calendar">
+                <page>printPreviewPopupLayout</page>
+            </module>
 		</page-group>
 	</site-layout>
 </site-config>

@@ -44,6 +44,7 @@ function projectFiche(id)
 <digi:errors/>
 
 <digi:instance property="aimRegionalFundingForm" />
+
 <digi:form action="/viewRegionalFundingBreakdown.do" method="post">
 
 <html:hidden property="ampActivityId" />
@@ -87,19 +88,16 @@ function projectFiche(id)
 								</TD>
 							</TR>
 
-							<c:if test="${aimRegionalFundingForm.goButton == true}">
 							<TR bgColor=#f4f4f2>
       	      					<TD align=left>
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
-												<c:if test="${aimRegionalFundingForm.currFilter == true}">
 												Currency :
-												<html:select property="currFilterValue" styleClass="dr-menu">
+												<html:select property="currency" styleClass="dr-menu">
   		       		        					<html:optionsCollection name="aimRegionalFundingForm"
 													property="currencies" value="currencyCode" label="currencyName"/>
 												</html:select>&nbsp;&nbsp;&nbsp;
-												</c:if>
 												<c:if test="${aimRegionalFundingForm.calFilter == true}">
 												Calendar :
 												<html:select property="calFilterValue" styleClass="dr-menu">
@@ -113,7 +111,6 @@ function projectFiche(id)
 									</TABLE>
 								</TD>
 							</TR>
-							</c:if>
 
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">

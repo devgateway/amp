@@ -48,11 +48,18 @@ public class GetRegionalFundings extends TilesAction {
 		try {
 			RegionalFundingForm rfForm = (RegionalFundingForm) form;
 
+			rfForm.setCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
+			
 			String currCode = "";
 			long calCode = -1;
 
-			currCode = CurrencyUtil.getAmpcurrency(
-					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+			if (rfForm.getCurrency()==null) {
+				currCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+				rfForm.setCurrency(currCode);
+			} else {
+				currCode = rfForm.getCurrency();
+			}
+			
 			calCode = tm.getAppSettings().getFisCalId().longValue();
 
 			rfForm.setGoButton(false);

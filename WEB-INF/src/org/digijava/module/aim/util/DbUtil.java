@@ -144,6 +144,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.action.EntityUpdateAction;
+import org.hibernate.type.LongType;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -1482,6 +1483,7 @@ public class DbUtil {
         Session session = null;
         Query q = null;
         Collection c = null;
+        Collection ret = new ArrayList();
         Integer trsType = new Integer(transactionType);
         Integer adjType = new Integer(adjustmentType);
 
@@ -1496,39 +1498,47 @@ public class DbUtil {
         	
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select f.thousandsTransactionAmount,"
-                + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate, f.fixedRateBaseCurrency from "
+            queryString = "select f from "
                 + AmpFundingDetail.class.getName()
-                + " f left outer join f.fixedRateBaseCurrency where (f.ampFundingId=:ampFundingId) "
+                + " f where (f.ampFundingId=:fundId) "
                 + " and (f.transactionType=:trsType) "
-                + " and (f.adjustmentType=:adjType) order by f.transactionDate ";
-            q = session.createQuery(queryString);
-            q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("trsType", trsType, Hibernate.INTEGER);
-            q.setParameter("adjType", adjType, Hibernate.INTEGER);
-            c = q.list();
+                + " and (f.adjustmentType=:adjType) "
+                + "order by f.transactionDate ";
             
+            q = session.createQuery(queryString);
+            q.setParameter("fundId", ampFundingId, Hibernate.LONG);
+            q.setParameter("trsType", transactionType, Hibernate.INTEGER);
+            q.setParameter("adjType", adjustmentType, Hibernate.INTEGER);
+            
+            c = q.list();
+           
             if ( c != null ) {
-            	Iterator<Object[]> iter	= c.iterator();
+            	Object[] details = new Object[5];
+            	Iterator<AmpFundingDetail> iter	= c.iterator();
             	while ( iter.hasNext() ) {
-            		Object [] details	= iter.next();
-            			Double fixedRate						= (Double)details[3];
-            			AmpCurrency fixedCurrency		= (AmpCurrency)details[4];
-            			String fixedCurrCode					= fixedCurrency!=null ? fixedCurrency.getCurrencyCode():"USD";
-            			if ( fixedRate != null && !baseCurr.equals(fixedCurrCode) ) {
-            				details[3]	= null;
-            			}
+            		AmpFundingDetail afd	= iter.next();
+            		details[0] = afd.getThousandsTransactionAmount();
+            		details[1] = afd.getTransactionDate();
+            		details[2] = afd.getAmpCurrencyId();
+            		details[3] = afd.getFixedExchangeRate();
+            		details[4] = afd.getFixedRateBaseCurrency();
+        			Double fixedRate = (Double)details[3];
+        			AmpCurrency fixedCurrency = (AmpCurrency)details[4];
+        			String fixedCurrCode = fixedCurrency!=null ? fixedCurrency.getCurrencyCode():"USD";
+        			if ( fixedRate != null && !baseCurr.equals(fixedCurrCode) ) {
+        				details[3]	= null;
+        			}
+        			ret.add(details);
             	}
             }
             
         } catch (Exception ex) {
             logger.error("Unable to get quarterly data from database", ex);
-
         }
 
         logger.debug("getQuarterlyData() returning a list of size : "
                      + c.size());
-        return c;
+        return ret;
     }
 
 

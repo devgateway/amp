@@ -4,7 +4,7 @@ import java.util.Set;
 
 public abstract class TemplateField {
 	private Long id;
-	private String fieldName; //should be removed 
+	//private String fieldName; //should be removed 
 	
 	private String value; //for now : static text or checkbox value
 	private Set<PossibleValue> possibleValues; // select,multiple select , multibox
@@ -22,8 +22,13 @@ public abstract class TemplateField {
 	public abstract String getRendered();
 	
 	//whether this field is allowed to have multiple pre-defined values
-	public boolean getHasMultipleValues() {
+	public boolean getCanHaveMultipleValues() {
 		return true;
+	}
+	
+	//whether this field is allowd not to have pre-defined possible values
+	public boolean getHasEmptyPossibleValsRights() {
+		return false;
 	}
 	
 	public TemplateDoc getTemplateDoc() {
@@ -65,13 +70,5 @@ public abstract class TemplateField {
 
 	public void setPossibleValues(Set<PossibleValue> possibleValues) {
 		this.possibleValues = possibleValues;
-	}
-
-	public String getFieldName() {
-		return fieldName;
-	}
-
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-	}		
+	}	
 }

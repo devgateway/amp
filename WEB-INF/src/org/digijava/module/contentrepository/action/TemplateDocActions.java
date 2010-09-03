@@ -21,6 +21,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.contentrepository.dbentity.template.PossibleValue;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
 import org.digijava.module.contentrepository.dbentity.template.TemplateField;
+import org.digijava.module.contentrepository.dbentity.template.TextAreaField;
+import org.digijava.module.contentrepository.dbentity.template.TextBoxField;
 import org.digijava.module.contentrepository.form.TemplateDocManagerForm;
 import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateConstants;
@@ -60,7 +62,7 @@ public class TemplateDocActions extends DispatchAction {
 		TemplateDoc templateDocument= TemplateDocsUtil.getTemplateDoc(myForm.getTemplateId());
 		myForm.setTemplateName(templateDocument.getName());
 		//fields of template
-		List<TemplateFieldHelper> pendingFields=new ArrayList<TemplateFieldHelper>();
+		List<TemplateFieldHelper> pendingFields=new ArrayList<TemplateFieldHelper>();		
 		Set<TemplateField> fields=templateDocument.getFields(); //template should have at least one field		
 		for (TemplateField dbField : fields) {
 			TemplateFieldHelper tfHelper=new TemplateFieldHelper();
@@ -95,10 +97,26 @@ public class TemplateDocActions extends DispatchAction {
 		String tempName=myForm.getTemplateName(); //name should be unique
 		TemplateDoc tempDoc=TemplateDocsUtil.getTemplateDocByName(tempName);
 		if(tempDoc!=null){
-			if(! tempDoc.getId().equals(myForm.getTemplateId())){
+			if(! tempDoc.getId().equals(myForm.getTemplateId())){				
 				errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists", request)));
 			}			
-		}				
+		}
+		
+		//for each field check whether it's allowed not to have pre-defined values
+		List<TemplateFieldHelper> fields= myForm.getPendingFields();
+		if(fields!=null){
+			for (TemplateFieldHelper fieldHelper : fields) {
+				if (fieldHelper.getValues()==null || fieldHelper.getValues().size()==0) {
+					Class clazz = Class.forName(fieldHelper.getFieldType());
+					TemplateField templateField=(TemplateField) clazz.newInstance();
+					if(!templateField.getHasEmptyPossibleValsRights()){
+						String fieldTypeDisplayName=getFieldDisplayName(templateField.getClass());
+						errors.add("predefined values must exist", new ActionMessage("cr.templateField.predefinedValDoesnotExist",fieldTypeDisplayName+" "+TranslatorWorker.translateText("field must have pre-defined values", request)));
+					}
+				}
+			}
+		}
+		
 		if (errors.size() > 0){
 			//we have all the errors for this step saved and we must throw the amp error
 			saveErrors(request, errors);
@@ -111,7 +129,7 @@ public class TemplateDocActions extends DispatchAction {
 			fillFieldTypes(myForm); //fill ceckbox submitted values
 			TemplateDocumentHelper tempDocHelper=new TemplateDocumentHelper(myForm.getTemplateName());
 			tempDocHelper.setId(myForm.getTemplateId()); //to be removed ?
-			tempDocHelper.setFields(myForm.getPendingFields());
+			tempDocHelper.setFields(fields);
 			TemplateDocsUtil.saveTemplateDoc(tempDocHelper);
 			/**
 			 * //build it's fields
@@ -181,8 +199,16 @@ public class TemplateDocActions extends DispatchAction {
 	}
 	
 	public ActionForward editTemplateDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
-		return null;
+		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;		
+		if(myForm.getTemplateDocFieldTemporaryId()!=null){
+			TemplateFieldHelper fieldToBeChanged=getTemplateFieldHelperFromList(myForm.getPendingFields(), myForm.getTemplateDocFieldTemporaryId());
+			int fieldOrdinalNumber=fieldToBeChanged.getOrdinalNumber();
+			//need to get element from fieldType array with ordinalNumber=fieldOrdinalNumber and replace fieldToBeChanged's type with fieldType[fieldOrdinalNumber]
+			String[] submittedFieldTypes=myForm.getFieldType();
+			fieldToBeChanged.setFieldType(submittedFieldTypes[fieldOrdinalNumber]);
+			fieldToBeChanged.setValues(null);
+		}
+		return mapping.findForward("createEdit");
 	}
 	
 	public ActionForward deleteTemplateDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -196,11 +222,6 @@ public class TemplateDocActions extends DispatchAction {
 		return mapping.findForward("createEdit");
 	}
 	
-	public ActionForward saveTemplateDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
-		return null;
-	}
-	
 	public ActionForward manageDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
 		String action = request.getParameter("action");
@@ -212,6 +233,21 @@ public class TemplateDocActions extends DispatchAction {
 				field.setFieldType(myForm.getSelectedFieldType());
 				// fill form possible values with field's values
 				myForm.setPossibleValuesForField(field.getValues());
+				
+				Class clazz = Class.forName(myForm.getSelectedFieldType());
+				TemplateField templateField=(TemplateField) clazz.newInstance();
+				if(!templateField.getCanHaveMultipleValues()){
+					if (templateField.getClass().getName().equals(TextBoxField.class.getName()) || templateField.getClass().getName().equals(TextAreaField.class.getName())
+							|| (field.getValues()!=null && field.getValues().size()>0)){
+						myForm.setHasAddModeValuesRight(false);
+					}else{
+						myForm.setHasAddModeValuesRight(true);
+					}
+				}else{
+					myForm.setHasAddModeValuesRight(true);
+				}
+				
+				
 				//cast selected file type to some TemplateField object , to check then whether this field has possbility of having multiple values
 //				Class clazz = Class.forName(myForm.getSelectedFieldType());
 //				TemplateField templateField=(TemplateField) clazz.newInstance();
@@ -334,6 +370,23 @@ public class TemplateDocActions extends DispatchAction {
 		for (PossibleValueHelper val : values) {
 			if(val.getTempId().equals(valueId)){
 				retVal=val;
+				break;
+			}
+		}
+		return retVal;
+	}
+	
+	/**
+	 * returns field's fieldType display name, for example for the fieldType=org.digijava.module.contentrepository.dbentity.template.MultiboxField wil return multibox
+	 * @return
+	 */
+	private String getFieldDisplayName(Class fieldClass){
+		String retVal=null;
+		Class [] availableFieldClasses =TemplateConstants.availableFieldClasses;
+		String [] availableFieldTypes = TemplateConstants.availableFieldTypes;
+		for (int i=0;i<availableFieldClasses.length;i++) {
+			if(availableFieldClasses[i].getName().equals(fieldClass.getName())){
+				retVal= availableFieldTypes[i];
 				break;
 			}
 		}

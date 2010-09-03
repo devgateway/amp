@@ -234,6 +234,12 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     		return false;
 		}
 	}
+
+	function fieldTypeChanged(fieldTempId){
+		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=editTemplateDocumentField" />
+        document.myForm.action = "<%=addEdiNewField%>&templateDocFieldTemporaryId="+fieldTempId;
+        document.myForm.submit();
+	}
 	
 </script>
 
@@ -285,7 +291,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 								             </html:multibox>
 										</td>
 										<td>
-											<html:select property="fieldType" name="pf" styleClass="inp-text" styleId="fieldType_${pf.fieldTemporaryId}">
+											<html:select property="fieldType" name="pf" styleClass="inp-text" styleId="fieldType_${pf.fieldTemporaryId}" onchange="fieldTypeChanged('${pf.fieldTemporaryId}')">
 												<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 												<logic:iterate id="fieldType" name="tempDocManagerForm" property="availableFields">																																															
 													<html:option value="${fieldType.value}"><digi:trn>${fieldType.label}</digi:trn></html:option>																		
@@ -294,7 +300,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 										</td>
 										<td>
 											<c:set var="trnManage"><digi:trn>Manage Field</digi:trn></c:set>
-						    				<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnManage}" onclick="manageField('${pf.fieldTemporaryId}')">
+						    				<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnManage}" onclick="manageField('${pf.fieldTemporaryId}')" id="manBut_${pf.fieldTemporaryId}">
 										</td>
 									</tr>
 								</c:forEach>

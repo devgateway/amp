@@ -6,7 +6,7 @@ public class CheckboxField extends TemplateField {
 		return "chf"; //checkbox field
 	}
 	
-	public boolean getHasMultipleValues() {
+	public boolean getCanHaveMultipleValues() {
 		return false;
 	}
 	

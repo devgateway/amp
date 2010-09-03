@@ -6,7 +6,7 @@ public class StaticTextField extends TemplateField {
 		return "stf"; //static text field
 	}
 	
-	public boolean getHasMultipleValues() {
+	public boolean getCanHaveMultipleValues() {
 		return false;
 	}
 

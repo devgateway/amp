@@ -43,7 +43,16 @@
   <tr>
     <td height="25" align="center" colspan="6">
       <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewPreDefinedValue()">&nbsp;&nbsp;
+      <c:if test="${tempDocManagerForm.hasAddModeValuesRight}">
+      		<c:set var="disabledbutton"></c:set>
+      		<c:set var="buttonStyle">font-family:verdana;font-size:11px;</c:set>
+      </c:if>
+     <c:if test="${!tempDocManagerForm.hasAddModeValuesRight}">
+      		<c:set var="disabledbutton">disabled="disabled"</c:set>
+      		<c:set var="buttonStyle">font-family:verdana;font-size:11px;color: gray</c:set>
+      </c:if>
+      
+      <input style="${buttonStyle}" type="button" name="addValBtn" value="${trnadd}" onclick="addNewPreDefinedValue()" ${disabledbutton}>&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>

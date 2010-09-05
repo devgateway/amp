@@ -9,6 +9,9 @@
     <form-bean name="crDocToOrgForm" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
     <form-bean name="tempDocManagerForm" type="org.digijava.module.contentrepository.form.TemplateDocManagerForm" />
     <form-bean name="crLabelManagerForm" type="org.digijava.module.contentrepository.form.LabelManagerForm" />
+    <form-bean name="manageFieldForm" type="org.digijava.module.contentrepository.form.ManageTemplDocFieldForm" />
+    <form-bean name="docFromTemplateForm" type="org.digijava.module.contentrepository.form.CreateDocFromTemplateForm" />
+    
   </form-beans>
   <action-mappings>
   	<action path="/contentrepository/selectDocumentDM" name="crSelectDocumentForm" type="org.digijava.module.contentrepository.action.SelectDocumentDM" scope="session">
@@ -64,6 +67,16 @@
     	<forward name="list" path="/showLayout.do?layout=templateDocsManager" />
     	<forward name="createEdit" path="/showLayout.do?layout=addEditTempDoc" />
     	<forward name="manageField" path="/showLayout.do?layout=tempFieldPreDefinedValues" />
+    </action>
+    
+    <action path="/contentrepository/manageField" scope="session" type="org.digijava.module.contentrepository.action.ManageFieldAction" validate="false" name="manageFieldForm" parameter="actType">
+    	<forward name="manageField" path="/showLayout.do?layout=tempFieldPreDefinedValues" />
+    	<forward name="fill" path="/contentrepository/tempDocManager.do?actType=fillFormsPendingFieldsFromMap" />
+    </action>
+    
+    <action path="/contentrepository/docFromTemplate" scope="session" type="org.digijava.module.contentrepository.action.DocumentFromTemplateActions" validate="false" name="docFromTemplateForm" parameter="actType">
+    	<forward name="forward" path="/showLayout.do?layout=docFromTemplate" />
+    	<forward name="showResources" path="/contentrepository/documentManager.do" />
     </action>
     
     <action path="/contentrepository/labelManager" scope="session" type="org.digijava.module.contentrepository.action.LabelManagerAction" validate="false" name="crLabelManagerForm">

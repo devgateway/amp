@@ -1216,6 +1216,53 @@ function deleteDocToOrgObj(uuid, ampOrgId) {
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(panel), postString );
 }
 
+var templatesPanel;
+
+function getCallbackForTemplates (panel) {
+	var callbackObj	= {
+			success: function (o) {
+				panel.setBody( o.responseText );
+				
+			},
+			failure: function () {
+				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
+			}
+	}	
+	return callbackObj;	
+}
+
+function addFromTemplate() {
+	if ( YAHOO.amp.tempPanels == null ) {
+		YAHOO.amp.tempPanels	= new Object;
+	}
+	templatesPanel	= YAHOO.amp.tempPanels[0]; 
+	if (templatesPanel == null) {
+		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{ width:"400px",height:"400px", visible:true, draggable:true, close:true, modal:true } );
+		templatesPanel.setHeader('<digi:trn>Create Document From Template</digi:trn>');
+		templatesPanel.setBody("");
+		templatesPanel.render(document.body);
+		YAHOO.amp.tempPanels[0]	= templatesPanel;
+		templatesPanel.center();
+	}
+	templatesPanel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	templatesPanel.show();
+
+	//YAHOO.amp.orgPanels.lastUuid	= uuid;
+	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docFromTemplate.do?actType=loadTemplates', getCallbackForTemplates(templatesPanel) );
+
+}
+
+function templateNameSelected(){
+	var templateId=document.getElementById('selTempName').value;
+	if(templateId==-1){
+		alert('Please Select Template');
+		return false;
+	}
+	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
+    var url="${loadTemp}&templateId="+templateId;
+    YAHOOAmp.util.Connect.asyncRequest("POST", url, getCallbackForTemplates(templatesPanel));
+}
+
 /* Number of possible panels on this page */
 YAHOO.amp.panelCounter	= 3;
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
-import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
 
 
@@ -25,12 +24,6 @@ public class TemplateDocManagerForm extends ActionForm {
 	
 	//template document field's values
 	private String[] preDefinedValue;
-	private List<PossibleValueHelper> possibleValuesForField;
-	private Boolean hasAddModeValuesRight; //whether "add new values" button should be enabled/disabled for given field type
-	
-	//private List<TemplateFieldHelper> fields; //already added fields
-	//private TemplateFieldHelper fieldToAddOrEdit;
-		
 	
 	public String getTemplateName() {
 		return templateName;
@@ -81,30 +74,17 @@ public class TemplateDocManagerForm extends ActionForm {
 		this.selectedFieldType = selectedFieldType;
 	}
 
-	public List<PossibleValueHelper> getPossibleValuesForField() {
-		return possibleValuesForField;
+	public String[] getSelectedFieldsIds() {
+		return selectedFieldsIds;
 	}
-	public void setPossibleValuesForField(
-			List<PossibleValueHelper> possibleValuesForField) {
-		this.possibleValuesForField = possibleValuesForField;
+	public void setSelectedFieldsIds(String[] selectedFieldsIds) {
+		this.selectedFieldsIds = selectedFieldsIds;
 	}
 	public String[] getPreDefinedValue() {
 		return preDefinedValue;
 	}
 	public void setPreDefinedValue(String[] preDefinedValue) {
 		this.preDefinedValue = preDefinedValue;
-	}
-	public Boolean getHasAddModeValuesRight() {
-		return hasAddModeValuesRight;
-	}
-	public void setHasAddModeValuesRight(Boolean hasAddModeValuesRight) {
-		this.hasAddModeValuesRight = hasAddModeValuesRight;
-	}
-	public String[] getSelectedFieldsIds() {
-		return selectedFieldsIds;
-	}
-	public void setSelectedFieldsIds(String[] selectedFieldsIds) {
-		this.selectedFieldsIds = selectedFieldsIds;
 	}
 	
 }

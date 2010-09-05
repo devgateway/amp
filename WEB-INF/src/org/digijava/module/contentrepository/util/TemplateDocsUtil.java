@@ -144,4 +144,11 @@ public class TemplateDocsUtil {
             return result;
         }
     }
+	
+	public static class TempDocFieldOrdinaryNumberComparator implements Comparator<TemplateField> {
+        public int compare(TemplateField o1, TemplateField o2) {
+            int result = o1.getOrdinalNumber().compareTo(o2.getOrdinalNumber());
+            return result;
+        }
+    }
 }

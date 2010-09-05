@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -21,8 +22,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.contentrepository.dbentity.template.PossibleValue;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
 import org.digijava.module.contentrepository.dbentity.template.TemplateField;
-import org.digijava.module.contentrepository.dbentity.template.TextAreaField;
-import org.digijava.module.contentrepository.dbentity.template.TextBoxField;
 import org.digijava.module.contentrepository.form.TemplateDocManagerForm;
 import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateConstants;
@@ -38,15 +37,25 @@ public class TemplateDocActions extends DispatchAction {
 		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
 		List<TemplateDoc> tempDocs=TemplateDocsUtil.getTemplateDocs();
 		if(tempDocs!=null && tempDocs.size()>0){
-			Collections.sort(tempDocs, new TemplateDocsUtil.HelperTempDocNameComparator());
-			myForm.setTemplates(tempDocs);
-		}		
+			Collections.sort(tempDocs, new TemplateDocsUtil.HelperTempDocNameComparator());			
+		}
+		myForm.setTemplates(tempDocs);
+		//clear session if needed
+		HttpSession session = request.getSession();
+		if(session.getAttribute("fields")!=null){
+			session.removeAttribute("fields");
+		}
 		return mapping.findForward("list");
 	}
 	
 	public ActionForward addTemplateDocument (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
 		cleanForm(myForm);
+		//clear session if needed
+		HttpSession session = request.getSession();
+		if(session.getAttribute("fields")!=null){
+			session.removeAttribute("fields");
+		}
 		return mapping.findForward("createEdit");
 	}
 	
@@ -85,6 +94,10 @@ public class TemplateDocActions extends DispatchAction {
 			pendingFields.add(tfHelper);
 		}
 		myForm.setPendingFields(pendingFields);
+		//put fields in session
+		HttpSession session = request.getSession();
+		session.setAttribute("fields", pendingFields);
+		
 		//sort with ordinary number
 		Collections.sort(myForm.getPendingFields(), new TemplateDocsUtil.HelperTempDocFieldOrdinaryNumberComparator());
 		return mapping.findForward("createEdit");
@@ -122,40 +135,17 @@ public class TemplateDocActions extends DispatchAction {
 			saveErrors(request, errors);
 			return mapping.findForward("createEdit");
 		}
-		
-//		if(myForm.getTemplateId()!=null){
-//			
-//		}else{
-			fillFieldTypes(myForm); //fill ceckbox submitted values
-			TemplateDocumentHelper tempDocHelper=new TemplateDocumentHelper(myForm.getTemplateName());
-			tempDocHelper.setId(myForm.getTemplateId()); //to be removed ?
-			tempDocHelper.setFields(fields);
-			TemplateDocsUtil.saveTemplateDoc(tempDocHelper);
-			/**
-			 * //build it's fields
-			List<TemplateFieldHelper> pendingFields = myForm.getPendingFields();
-			if(pendingFields!=null && pendingFields.size()>0){
-				tempDoc.setFields(new HashSet<TemplateField>());
-				for (TemplateFieldHelper pendingField : pendingFields) {
-					Class clazz = Class.forName(pendingField.getFieldType());
-					TemplateField templateField=(TemplateField) clazz.newInstance();
-					templateField.setOrdinalNumber(pendingField.getOrdinalNumber());
-					//values of the field					
-					List<PossibleValueHelper> possibleValues=pendingField.getValues();
-					if(possibleValues!=null && possibleValues.size()>0){
-						templateField.setPossibleValues(new HashSet<PossibleValue>());
-						for (PossibleValueHelper possibleValueHelper : possibleValues) {
-							PossibleValue posVal=new PossibleValue();
-							posVal.setValue(possibleValueHelper.getPreDefinedValue());
-							templateField.getPossibleValues().add(posVal);
-						}
-					}
-					tempDoc.getFields().add(templateField);
-				}
-			}
-			 */
 
-		//}
+		fillFieldTypes(myForm); //fill ceckbox submitted values
+		TemplateDocumentHelper tempDocHelper=new TemplateDocumentHelper(myForm.getTemplateName());
+		tempDocHelper.setId(myForm.getTemplateId()); //to be removed ?
+		tempDocHelper.setFields(fields);
+		TemplateDocsUtil.saveTemplateDoc(tempDocHelper);
+		
+		//remove fields from map
+		HttpSession session = request.getSession();
+		session.removeAttribute("fields");
+		
 		return viewTemplateDocuments(mapping, myForm, request, response);
 	}
 	
@@ -164,14 +154,16 @@ public class TemplateDocActions extends DispatchAction {
 		Long templateId=myForm.getTemplateId();
 		TemplateDoc doc=TemplateDocsUtil.getTemplateDoc(templateId);
 		DbUtil.delete(doc);
+		//clear session if needed
+		HttpSession session = request.getSession();
+		if(session.getAttribute("fields")!=null){
+			session.removeAttribute("fields");
+		}
 		return viewTemplateDocuments(mapping, myForm, request, response);
 	}
 	
 	public ActionForward addTemplateDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
-//		if(myForm.getTemplateDocFieldTemporaryId()!=null){ //editing some field
-//			
-//		}else{ //adding some field
 			if(myForm.getPendingFields()==null){
 		    	 myForm.setPendingFields(new ArrayList<TemplateFieldHelper>());
 		     }else{
@@ -193,8 +185,10 @@ public class TemplateDocActions extends DispatchAction {
 			}
 		     myForm.setAvailableFields(availableFields);
 		     myForm.setPreDefinedValue(null);		     
-		     myForm.getPendingFields().add(tf);			
-		//}
+		     myForm.getPendingFields().add(tf);
+		//put fields in session
+		HttpSession session = request.getSession();
+		session.setAttribute("fields", myForm.getPendingFields());
 		return mapping.findForward("createEdit");
 	}
 	
@@ -204,10 +198,13 @@ public class TemplateDocActions extends DispatchAction {
 			TemplateFieldHelper fieldToBeChanged=getTemplateFieldHelperFromList(myForm.getPendingFields(), myForm.getTemplateDocFieldTemporaryId());
 			int fieldOrdinalNumber=fieldToBeChanged.getOrdinalNumber();
 			//need to get element from fieldType array with ordinalNumber=fieldOrdinalNumber and replace fieldToBeChanged's type with fieldType[fieldOrdinalNumber]
-			String[] submittedFieldTypes=myForm.getFieldType();
-			fieldToBeChanged.setFieldType(submittedFieldTypes[fieldOrdinalNumber]);
+			String selFieldType=request.getParameter("selFieldType");
+			fieldToBeChanged.setFieldType(selFieldType);
 			fieldToBeChanged.setValues(null);
 		}
+		//put fields in session
+		HttpSession session = request.getSession();
+		session.setAttribute("fields", myForm.getPendingFields());
 		return mapping.findForward("createEdit");
 	}
 	
@@ -216,94 +213,23 @@ public class TemplateDocActions extends DispatchAction {
 		String [] fieldsIdsToRemove=myForm.getSelectedFieldsIds();
 		if(fieldsIdsToRemove!=null && fieldsIdsToRemove.length>0){
 			for (String fieldTempId : fieldsIdsToRemove) {
-				removeFieldFromTemplate(myForm.getPendingFields(), fieldTempId);
+				List<TemplateFieldHelper> newFields= removeFieldFromTemplate(myForm.getPendingFields(), fieldTempId);
+				myForm.setPendingFields(newFields);
 			}
 		}
+		//put fields in session
+		HttpSession session = request.getSession();
+		session.setAttribute("fields", myForm.getPendingFields());
 		return mapping.findForward("createEdit");
 	}
+
 	
-	public ActionForward manageDocumentField (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+	public ActionForward fillFormsPendingFieldsFromMap (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
-		String action = request.getParameter("action");
-		if(action.equals("manage")){ //user clicked on "Manage Field" button
-			//String fieldTempId=request.getParameter("fieldTempId");
-			//String selectedFieldType=request.getParameter("fieldType");
-			if(myForm.getTemplateDocFieldTemporaryId()!=null){
-				TemplateFieldHelper field = getTemplateFieldHelperFromList(myForm.getPendingFields(),myForm.getTemplateDocFieldTemporaryId());
-				field.setFieldType(myForm.getSelectedFieldType());
-				// fill form possible values with field's values
-				myForm.setPossibleValuesForField(field.getValues());
-				
-				Class clazz = Class.forName(myForm.getSelectedFieldType());
-				TemplateField templateField=(TemplateField) clazz.newInstance();
-				if(!templateField.getCanHaveMultipleValues()){
-					if (templateField.getClass().getName().equals(TextBoxField.class.getName()) || templateField.getClass().getName().equals(TextAreaField.class.getName())
-							|| (field.getValues()!=null && field.getValues().size()>0)){
-						myForm.setHasAddModeValuesRight(false);
-					}else{
-						myForm.setHasAddModeValuesRight(true);
-					}
-				}else{
-					myForm.setHasAddModeValuesRight(true);
-				}
-				
-				
-				//cast selected file type to some TemplateField object , to check then whether this field has possbility of having multiple values
-//				Class clazz = Class.forName(myForm.getSelectedFieldType());
-//				TemplateField templateField=(TemplateField) clazz.newInstance();
-//				if(field.getValues()!=null){
-//					field.setHasAddMorePreDefinedValueRights(templateField.getHasMultipleValues());
-//				}else{
-//					field.setHasAddMorePreDefinedValueRights(true);
-//				}
-//				myForm.setFieldToAddOrEdit(field);
-			}			
-		}else if (action.equals("deleteValue")){ //user wants to remove already existing value of the field			
-			//fill possible values first
-			fillFieldPossibleValues(myForm);
-	    	//remove value
-	    	String valueTempid=request.getParameter("valueId"); 
-			PossibleValueHelper posValToRemove=getTemplateFieldHelperValue(myForm.getPossibleValuesForField(), valueTempid);
-			myForm.getPossibleValuesForField().remove(posValToRemove);			
-		}else if (action.equals("addNewValue")){
-			if(myForm.getPossibleValuesForField()==null){			
-				myForm.setPossibleValuesForField(new ArrayList<PossibleValueHelper>());
-				myForm.getPossibleValuesForField().add( new PossibleValueHelper("pv_"+new Date().getTime()));
-			}else{
-				fillFieldPossibleValues(myForm);
-		    	 
-				//create new array of possible values
-				List<PossibleValueHelper> oldValues= myForm.getPossibleValuesForField();
-				List<PossibleValueHelper> newArray= new ArrayList<PossibleValueHelper>(oldValues.size()+1);
-				newArray.addAll(oldValues);
-				newArray.add(new PossibleValueHelper("pv_"+new Date().getTime()));
-				myForm.setPossibleValuesForField(newArray);
-			}
-		}else if (action.equals("saveValues")){
-			TemplateFieldHelper field = getTemplateFieldHelperFromList(myForm.getPendingFields(),myForm.getTemplateDocFieldTemporaryId());
-			//if this field already has assigned some values etc. we should load it. Otherwise create first empty field
-			if(field.getValues()==null){
-				field.setValues(new ArrayList<PossibleValueHelper>());									
-			}
-			fillFieldPossibleValues(myForm);
-			field.setValues(myForm.getPossibleValuesForField());
-			//field.getValues().addAll(myForm.getPossibleValuesForField());
-			return mapping.findForward("createEdit");
-		}
-		
-		return mapping.findForward("manageField");
-	}
-	
-	/**
-	 * fill fields possible pre-defined values
-	 * @param myForm
-	 */
-	private void fillFieldPossibleValues(TemplateDocManagerForm myForm) {
-		String[] preDefinedValue=myForm.getPreDefinedValue();
-		 for(ListIterator iter = myForm.getPossibleValuesForField().listIterator(); iter.hasNext(); ) {
-			 PossibleValueHelper pfh = (PossibleValueHelper) iter.next();		                
-			 pfh.setPreDefinedValue(preDefinedValue[iter.nextIndex() - 1]);
-		}
+		HttpSession session = request.getSession();
+		List<TemplateFieldHelper> pendingFields=(List<TemplateFieldHelper>) session.getAttribute("fields");
+		myForm.setPendingFields(pendingFields);
+		return mapping.findForward("createEdit");
 	}
 	
 	/**
@@ -328,10 +254,9 @@ public class TemplateDocActions extends DispatchAction {
 		myForm.setTemplateName(null);
 		myForm.setTemplates(null);
 		myForm.setTemplateDocFieldTemporaryId(null);
-		myForm.setPossibleValuesForField(null);
 	}
 	
-	private void removeFieldFromTemplate(List<TemplateFieldHelper> fields , String fieldTemporaryId){
+	private List<TemplateFieldHelper> removeFieldFromTemplate(List<TemplateFieldHelper> fields , String fieldTemporaryId){
 		int fieldOrdinalNumber= -1;
 		for (TemplateFieldHelper templateFieldHelper : fields) {
 			if(templateFieldHelper.getFieldTemporaryId().equals(fieldTemporaryId)){
@@ -346,6 +271,7 @@ public class TemplateDocActions extends DispatchAction {
 				templateFieldHelper.setOrdinalNumber(templateFieldHelper.getOrdinalNumber()-1);
 			}
 		}
+		return fields;
 	}
 	
 	/**
@@ -360,21 +286,7 @@ public class TemplateDocActions extends DispatchAction {
 			}
 		}
 		return retVal;
-	}
-	
-	/**
-	 * gets PossibleValueHelper from list, whose temporary_id matches given parameter @param valueId
-	 */
-	private PossibleValueHelper getTemplateFieldHelperValue(List<PossibleValueHelper> values , String valueId){
-		PossibleValueHelper retVal=null;
-		for (PossibleValueHelper val : values) {
-			if(val.getTempId().equals(valueId)){
-				retVal=val;
-				break;
-			}
-		}
-		return retVal;
-	}
+	}	
 	
 	/**
 	 * returns field's fieldType display name, for example for the fieldType=org.digijava.module.contentrepository.dbentity.template.MultiboxField wil return multibox

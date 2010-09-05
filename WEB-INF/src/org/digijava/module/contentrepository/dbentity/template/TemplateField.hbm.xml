@@ -9,9 +9,7 @@
 		</id>
 		
 		<discriminator column="field_clazz" />
-    
-       	<!-- <property name="fieldName" type="java.lang.String" column="name" /> -->
-       	<property name="value" type="java.lang.String"/>
+		   
        	<property name="ordinalNumber" type="java.lang.Integer" column="ordinal_num"/>
        
        	<set name="possibleValues" lazy="false" inverse="false" cascade="delete">

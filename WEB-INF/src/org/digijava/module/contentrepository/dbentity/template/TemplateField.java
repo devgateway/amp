@@ -4,9 +4,6 @@ import java.util.Set;
 
 public abstract class TemplateField {
 	private Long id;
-	//private String fieldName; //should be removed 
-	
-	private String value; //for now : static text or checkbox value
 	private Set<PossibleValue> possibleValues; // select,multiple select , multibox
 	
 	private TemplateDoc templateDoc;
@@ -45,8 +42,7 @@ public abstract class TemplateField {
 
 	public void setOrdinalNumber(Integer ordinalNumber) {
 		this.ordinalNumber = ordinalNumber;
-	}
-	
+	}	
 
 	public Long getId() {
 		return id;
@@ -55,15 +51,6 @@ public abstract class TemplateField {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public Set<PossibleValue> getPossibleValues() {
 		return possibleValues;
 	}

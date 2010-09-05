@@ -260,7 +260,13 @@ function setHoveredTable(tableId, hasHeaders) {
 							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 									  		<digi:trn> Add Resource ...</digi:trn>            
 								    	</button>
-								    	<%-- <button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button> --%>
+								    	<%--
+								    		<c:set var="trnAddDocFromTemp"><digi:trn>Create From Template</digi:trn></c:set>
+						    			<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnAddDocFromTemp}" onclick="addFromTemplate()">
+										
+								    	 <button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button>
+								    	 --%>
+										 
 								    </td>								    
 								</tr>
 								<tr>
@@ -418,7 +424,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>												
 						<tr>
 							<td align="right">
-								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
 							</td>
 							<td align="left">
 								&nbsp;

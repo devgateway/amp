@@ -6,17 +6,17 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:form action="/tempDocManager.do?actType=manageDocumentField&action=saveValues" method="post">
-<digi:context name="digiContext" property="context"/>
+<digi:instance property="manageFieldForm"/>
 
+<digi:form action="/manageField.do?action=saveValues" method="post">
 <table width="420px" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">
   <tr>
     <td bgColor="#d7eafd" class="box-title" height="10" align="center" colspan="7">
     	<digi:trn>Add/Edit data</digi:trn>
     </td>
   </tr>  
-  <c:if test="${!empty tempDocManagerForm.possibleValuesForField}">
-    <c:forEach var="posVal" varStatus="index" items="${tempDocManagerForm.possibleValuesForField}">
+  <c:if test="${!empty manageFieldForm.possibleValuesForField}">
+    <c:forEach var="posVal" varStatus="index" items="${manageFieldForm.possibleValuesForField}">
         <tr>
           <td height="10" align="center" width="10%">
           	<c:if test="${posVal.dbId!=null}">
@@ -35,19 +35,19 @@
         </tr>        
     </c:forEach>   
   </c:if>
-  <c:if test="${empty tempDocManagerForm.possibleValuesForField}">
+  <c:if test="${empty manageFieldForm.possibleValuesForField}">
     <tr align="center" bgcolor="#ffffff"><td><b>
       <digi:trn>No data present</digi:trn></b></td>
     </tr>
   </c:if>
   <tr>
     <td height="25" align="center" colspan="6">
-      <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <c:if test="${tempDocManagerForm.hasAddModeValuesRight}">
+      <c:set var="trnadd"><digi:trn>Add data</digi:trn></c:set>
+      <c:if test="${manageFieldForm.hasAddModeValuesRight}">
       		<c:set var="disabledbutton"></c:set>
       		<c:set var="buttonStyle">font-family:verdana;font-size:11px;</c:set>
       </c:if>
-     <c:if test="${!tempDocManagerForm.hasAddModeValuesRight}">
+     <c:if test="${!manageFieldForm.hasAddModeValuesRight}">
       		<c:set var="disabledbutton">disabled="disabled"</c:set>
       		<c:set var="buttonStyle">font-family:verdana;font-size:11px;color: gray</c:set>
       </c:if>
@@ -56,7 +56,7 @@
     </td>
   </tr>  
   <tr>
-    <td bgColor=#dddddb height="25" align="center" colspan="6">
+    <td bgColor="#dddddb" height="25" align="center" colspan="6">
       <c:set var="trn"><digi:trn>Save</digi:trn></c:set>
       <c:set var="trncancel"><digi:trn>Cancel</digi:trn></c:set>
       <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>      

@@ -13,10 +13,12 @@ public class CheckboxField extends TemplateField {
 	@Override
 	public String getRendered() {
 		String retVal=null;
-		if(getValue()!=null){
+		if(getPossibleValues()!=null){
 			//submits in request parameter "doc_checkbox_5" if checkbox  for this template is 5th field.
 			retVal="<input type=\"checkbox\" name=\"doc_checkbox_"+getOrdinalNumber().intValue()+"\">";
-			retVal+=getValue();
+			for (PossibleValue posVal : getPossibleValues()) {
+				retVal+=posVal.getValue();
+			}
 			retVal+="</input>";
 		}		
 		return retVal;

@@ -18,6 +18,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
+<digi:instance property="tempDocManagerForm"/>
+
 <div id="popin" style="display: none">
     <div id="popinContent" class="content">
     </div>
@@ -138,14 +140,13 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 </script>
 <!--end-->
 
-<digi:instance property="tempDocManagerForm" />
-<digi:context name="digiContext" property="context" />
+
 
 <script langauage="JavaScript">
 	function addNewField() {
-		  <digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=addTemplateDocumentField" />
-          document.myForm.action = "<%=addEdiNewField%>";
-          document.myForm.submit();
+		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=addTemplateDocumentField" />
+		tempDocManagerForm.action = "<%=addEdiNewField%>";        
+		tempDocManagerForm.submit();
 	}
 
 	function manageField(fieldTempId){
@@ -155,15 +156,16 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 			alert('Select Field Type First !');
 			return false;
 		}else{
-			<digi:context name="commentUrl" property="context/module/moduleinstance/tempDocManager.do?actType=manageDocumentField" />
+			<digi:context name="commentUrl" property="context/module/moduleinstance/manageField.do?" />
 			var url = "<%=commentUrl %>";
-			var params="&action=manage&templateDocFieldTemporaryId="+fieldTempId+"&selectedFieldType="+selectedFieldType.value;
+			var temlateName=document.getElementById('tempName').value;
+			var params="&action=manage&templateDocFieldTemporaryId="+fieldTempId+"&selectedFieldType="+selectedFieldType.value+"&templateName="+temlateName;
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 		}
 	}
 
 	function addNewPreDefinedValue(){
-		<digi:context name="addVal" property="context/module/moduleinstance/tempDocManager.do?actType=manageDocumentField"/>;
+		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=addNewValue";
         var parameters=getFieldParams();
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
@@ -172,7 +174,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function deleteData(valueId){ //delete pre-defined value
 		  var flag = confirm("Delete this data?");
 		  if(flag == true){
-			  <digi:context name="addVal" property="context/module/moduleinstance/tempDocManager.do?actType=manageDocumentField"/>;
+			  <digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
 		        var url="${addVal}&action=deleteValue&valueId="+valueId;
 		        var parameters=getFieldParams();
 		        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
@@ -180,7 +182,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	}
 
 	function submitPreDefinedValues(){
-		<digi:context name="addVal" property="context/module/moduleinstance/tempDocManager.do?actType=manageDocumentField"/>;
+		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=saveValues";
         var parameters=getFieldParams();
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackAfterSave,parameters);
@@ -225,9 +227,8 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 		var checkboxes=$("#templateFieldsTbl").find("input.selectedTempFieldsIds:checked");
 		if(checkboxes!=null && checkboxes.length>0){
 			<digi:context name="remFields" property="context/module/moduleinstance/tempDocManager.do?actType=deleteTemplateDocumentField" />
-			document.myForm.action = "${remFields}";
-            document.myForm.target = "_self"
-            document.myForm.submit();
+			tempDocManagerForm.action = "${remFields}";
+			tempDocManagerForm.submit();
 		}else{
 			var msg='<digi:trn>Please select Field to remove</digi:trn>';
 			alert(msg);
@@ -236,14 +237,16 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	}
 
 	function fieldTypeChanged(fieldTempId){
+		var fieldTypeSelId="fieldType_"+fieldTempId;
+		var fieldType=document.getElementById(fieldTypeSelId).value;
 		<digi:context name="addEdiNewField" property="context/module/moduleinstance/tempDocManager.do?actType=editTemplateDocumentField" />
-        document.myForm.action = "<%=addEdiNewField%>&templateDocFieldTemporaryId="+fieldTempId;
-        document.myForm.submit();
+		tempDocManagerForm.action = "<%=addEdiNewField%>&templateDocFieldTemporaryId="+fieldTempId+"&selFieldType="+fieldType;
+		tempDocManagerForm.submit();
 	}
-	
+
 </script>
 
-<digi:form action="/tempDocManager.do?actType=saveTemplateDocument" name="myForm" type="tempDocManagerForm">
+<digi:form action="/tempDocManager.do?actType=saveTemplateDocument" method="post">
 <table border="0" cellpadding="15">
 	<tr>
 		<td colspan="2">
@@ -293,8 +296,8 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 										<td>
 											<html:select property="fieldType" name="pf" styleClass="inp-text" styleId="fieldType_${pf.fieldTemporaryId}" onchange="fieldTypeChanged('${pf.fieldTemporaryId}')">
 												<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
-												<logic:iterate id="fieldType" name="tempDocManagerForm" property="availableFields">																																															
-													<html:option value="${fieldType.value}"><digi:trn>${fieldType.label}</digi:trn></html:option>																		
+												<logic:iterate id="ft" name="tempDocManagerForm" property="availableFields">																																															
+													<html:option value="${ft.value}"><digi:trn>${ft.label}</digi:trn></html:option>																		
 												</logic:iterate>
 											</html:select>
 										</td>

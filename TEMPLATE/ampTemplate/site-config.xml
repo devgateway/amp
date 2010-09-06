@@ -51,6 +51,15 @@
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>
 
+		<layout name="gisDashboardPublicLayout" extends="default" file="gisDashboardPublicLayout.jsp">
+			<put name="title">Results Matrix</put>
+			<put-item name="body" module="gis" page="gisDashboard"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+
+		</layout>
+
 		<layout name="gisRegReportLayout" extends="default" file="gisRegReportLayout.jsp">
 			<put name="title">GIS Regional Report</put>
 			<put-item name="body" module="gis" page="gisRegionReport"/>

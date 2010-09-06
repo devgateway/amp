@@ -5,6 +5,9 @@
 		<action login-required="true" pattern="/showGisDashboard" /> 
 		<action login-required="true" pattern="/mapLoader" /> 
 		<action login-required="true" pattern="/gisService" /> 
+		<action login-required="false" pattern="/getFoundingDetails" /> 
+		<action login-required="false" pattern="/showPublicGis" /> 
+
 	</security>
 	
 	<hibernate-classes required="false">

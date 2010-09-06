@@ -122,8 +122,10 @@ cursor:pointer;
             	</div>
            	</li>
            	
+           	<%--
            	<module:display name="Org Profile" >
 	           	<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
+	           	--%>
 	                <li class="yuiampmenuitem" style="float:left;">
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
@@ -135,18 +137,32 @@ cursor:pointer;
 	                    	<div class="bd">                    
 	                    		<ul>
 	                        		<module:display name="Org Profile" >
-	                                	<li class="yuiampmenuitem">
-	                                    	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
-	                                        	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
-	                                        </a> 
-                                        </li>    
-									</module:display>
+	                        			<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
+		                            	<li class="yuiampmenuitem">
+		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
+		                                	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
+		                                </a> 
+	                                </li>    
+                                </feature:display>
+															</module:display>
+															
+															<module:display name="GIS DASHBOARD" >
+																<feature:display name="Show in public view" module="GIS DASHBOARD">
+		                            	<li class="yuiampmenuitem">
+		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do"  onclick="return canExit()">
+		                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
+		                                </a> 
+	                                </li>
+                              	</feature:display>
+															</module:display>
 								</ul>
 						</div>
 						</div>                    
 					</li>
+					<%--
 	           	</feature:display>
            	</module:display>
+          --%> 	
            	
            	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">

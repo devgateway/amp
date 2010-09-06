@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<secondary-pages>
+		<page page="showPublicGis" name="showPublicGis" title="GIS dashboard"/>
 		<page page="gisDashboard" name="gis_dashboard" title="GIS dashboard"/>
 		<page page="gisRegionReport" name="gisRegionReport" title="GIS region report"/>
 

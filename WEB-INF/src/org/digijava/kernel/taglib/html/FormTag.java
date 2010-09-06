@@ -55,13 +55,17 @@ public class FormTag
     private String referrer;
     private String moduleName;
     private String instanceName;
+    private String name;
 
     public String getName() {
-		return beanName;
+        if(name==null){
+            this.name=beanName;
+        }
+		return name;
 	}
 
 	public void setName(String name) {
-		this.beanName = name;
+		this.name = name;
 	}
 
 	public String getType() {
@@ -149,7 +153,7 @@ public class FormTag
         action = context + action;
 
         // Look up the form bean name, scope, and type if necessary
-        lookup();
+       lookup();
 
         // Create an appropriate "form" element based on our parameters
         StringBuffer results = new StringBuffer();
@@ -234,7 +238,7 @@ public class FormTag
 
         StringBuffer results = new StringBuffer("<form");
         results.append(" name=\"");
-        results.append(beanName);
+        results.append(getName());
         results.append("\"");
         results.append(" method=\"");
         results.append(method == null ? "post" : method);

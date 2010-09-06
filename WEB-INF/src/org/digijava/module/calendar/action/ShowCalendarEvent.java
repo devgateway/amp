@@ -305,18 +305,20 @@ public class ShowCalendarEvent extends Action {
             		//get current member
             		HttpSession ses = request.getSession();
                     TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
-                    ceform.setEventCreator(mem.getMemberName());
-            		String[] selattendeess=ceform.getSelectedAtts();
-            		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
-            			ceform.setActionButtonsVisible(true);
-            		}else if(ceform.isPrivateEvent()){
-            			for (String attendee : selattendeess) {
-    						if(attendee.startsWith("m:") && attendee.substring(attendee.indexOf(":")+1).equals(mem.getMemberId().toString())){
-    							ceform.setActionButtonsVisible(true);
-    							break;
-    						}
-    					}
-            		}
+                    if (mem!=null) {
+						ceform.setEventCreator(mem.getMemberName());
+	            		String[] selattendeess=ceform.getSelectedAtts();
+	            		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
+	            			ceform.setActionButtonsVisible(true);
+	            		}else if(ceform.isPrivateEvent()){
+	            			for (String attendee : selattendeess) {
+	    						if(attendee.startsWith("m:") && attendee.substring(attendee.indexOf(":")+1).equals(mem.getMemberId().toString())){
+	    							ceform.setActionButtonsVisible(true);
+	    							break;
+	    						}
+	    					}
+	            		}
+                    }
         		}        		
         		if(!ceform.getMethod().equalsIgnoreCase("print")){
         			ceform.setMethod("");

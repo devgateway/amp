@@ -33,26 +33,26 @@ public class CreatePdf extends Action {
 	com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
-    	 PdfWriter.getInstance(doc, baos);
-    	 doc.open();
-         com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
-         Paragraph pageTitle = new Paragraph(TranslatorWorker.translateText("Test PDF", request), pageTitleFont);
-         pageTitle.setAlignment(Element.ALIGN_CENTER);
-         doc.add(pageTitle);
-         doc.add(new Paragraph(" "));
-         doc.close();
-         byte[] pdfbody= baos.toByteArray();
-         InputStream stream= new ByteArrayInputStream(pdfbody);
-         String fileName="dare.pdf";
-         String contentType="application/pdf";
-         int fileSize=pdfbody.length;
-         //create jcr node
-         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
-         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
-         NodeWrapper nodeWrapper		= new NodeWrapper(fileName,stream,contentType,fileSize, request, userHomeNode, false, new ActionErrors());
-			if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
-				nodeWrapper.saveNode(jcrWriteSession);
-			}
+//    	 PdfWriter.getInstance(doc, baos);
+//    	 doc.open();
+//         com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
+//         Paragraph pageTitle = new Paragraph(TranslatorWorker.translateText("Test PDF", request), pageTitleFont);
+//         pageTitle.setAlignment(Element.ALIGN_CENTER);
+//         doc.add(pageTitle);
+//         doc.add(new Paragraph(" "));
+//         doc.close();
+//         byte[] pdfbody= baos.toByteArray();
+//         InputStream stream= new ByteArrayInputStream(pdfbody);
+//         String fileName="dare.pdf";
+//         String contentType="application/pdf";
+//         int fileSize=pdfbody.length;
+//         //create jcr node
+//         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+//         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+//         NodeWrapper nodeWrapper		= new NodeWrapper(null, request, userHomeNode, false, new ActionErrors());
+//			if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
+//				nodeWrapper.saveNode(jcrWriteSession);
+//			}
 		//aq mere last approved version unda davaupdate-o am node-is
 		//public resource unda gavaketo am node-isgan
 		

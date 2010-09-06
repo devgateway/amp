@@ -13,6 +13,7 @@ import org.digijava.module.contentrepository.dbentity.template.PossibleValue;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
 import org.digijava.module.contentrepository.dbentity.template.TemplateField;
 import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
+import org.digijava.module.contentrepository.helper.template.SubmittedValueHolder;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
 import org.hibernate.Query;
@@ -148,6 +149,13 @@ public class TemplateDocsUtil {
 	public static class TempDocFieldOrdinaryNumberComparator implements Comparator<TemplateField> {
         public int compare(TemplateField o1, TemplateField o2) {
             int result = o1.getOrdinalNumber().compareTo(o2.getOrdinalNumber());
+            return result;
+        }
+    }
+	
+	public static class SubmittedValuesOrdinaryNumberComparator implements Comparator<SubmittedValueHolder> {
+        public int compare(SubmittedValueHolder o1, SubmittedValueHolder o2) {
+            int result = o1.getFieldOrdinalValue().compareTo(o2.getFieldOrdinalValue());
             return result;
         }
     }

@@ -1254,13 +1254,22 @@ function addFromTemplate() {
 
 function templateNameSelected(){
 	var templateId=document.getElementById('selTempName').value;
+	//var docName=document.getElementById('docName').value;
 	if(templateId==-1){
 		alert('Please Select Template');
 		return false;
 	}
 	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
-    var url="${loadTemp}&templateId="+templateId;
+    var url="${loadTemp}&templateId="+templateId; //+"&documentName="+docName
     YAHOOAmp.util.Connect.asyncRequest("POST", url, getCallbackForTemplates(templatesPanel));
+}
+
+function validateDocFromTemp(){
+	var docName=document.getElementById('docName');
+	if(docName==null || docName.value==''){
+		alert('Please fill in document name');
+		return false;
+	}
 }
 
 /* Number of possible panels on this page */

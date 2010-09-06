@@ -14,7 +14,7 @@ public class DropDownField extends TemplateField {
 		retVal+="<option value=\"Select\">" + "<digi:trn>Please Select</digi:trn>" + "</option>";
 		if(getPossibleValues()!=null && getPossibleValues().size()>0){
 			for (PossibleValue pv : getPossibleValues()) {
-				retVal+="<option value=\""+pv.getId()+"\">" + "<digi:trn>"+pv.getValue()+"</digi:trn>" + "</option>";
+				retVal+="<option value=\""+pv.getValue()+"\">" + "<digi:trn>"+pv.getValue()+"</digi:trn>" + "</option>";
 			}
 		}
 		retVal+="</select>";

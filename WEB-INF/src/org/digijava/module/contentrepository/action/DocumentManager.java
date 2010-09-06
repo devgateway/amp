@@ -180,8 +180,7 @@ public class DocumentManager extends Action {
 			// shared/unshared.
 			// Then the attribute is deleted from session. If there is no
 			// resourceTab and no type set then select the first tab.
-			if (httpSession.getAttribute("resourcesTab") == null
-					|| httpSession.getAttribute("resourcesTab").toString().equals("")) {
+			if (httpSession.getAttribute("resourcesTab") == null || httpSession.getAttribute("resourcesTab").toString().equals("")) {
 				if (myForm.getType() == null || myForm.getType().equals("")) {
 					myForm.setType("private");
 				}

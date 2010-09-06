@@ -29,7 +29,11 @@ public class ShowEvents extends Action {
 		 User currentUser = RequestUtils.getUser(request);
 		 HttpSession ses = request.getSession();
 		 TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
-		 AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
+		 AmpTeamMember member = null;
+		 if (mem!=null) {
+			 member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
+		 }
+			
 		 EventsFilter filter = new EventsFilter();
 		 
 		 String xml ="";		 
@@ -43,7 +47,7 @@ public class ShowEvents extends Action {
 			filter.setSelectedEventTypes(eventTypes);			
 			
 			 
-		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.getShowPublicEvents(),siteId,filter.getSelectedDonors(),filter.getSelectedEventTypes(),moduleInstance,currentUser.getId());   
+		    String xmlEvents =  CalendarUtil.getCalendarEventsXml(member,filter.getShowPublicEvents(),siteId,filter.getSelectedDonors(),filter.getSelectedEventTypes(),moduleInstance);   
 			response.setContentType("text/xml; charset=UTF-8");               
 		    PrintWriter out = response.getWriter();
 			xml+="<data>";

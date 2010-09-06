@@ -121,7 +121,13 @@ cursor:pointer;
             		</div>
             	</div>
            	</li>
-           	
+           	<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
+                <li class="yuiampmenuitem" style="float:left;">
+                	<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                       <digi:trn key="aim:calendar">Calendar</digi:trn>
+                    </a>
+                </li>
+            </module:display>
            	<%--
            	<module:display name="Org Profile" >
 	           	<feature:display name="Enable Org. Profile in Public View" module="Org Profile">

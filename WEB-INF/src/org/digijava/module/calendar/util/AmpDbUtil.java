@@ -311,6 +311,30 @@ public class AmpDbUtil {
     }
   }
 
+  public static Collection<AmpCalendar> getAmpCalendarEventsPublic(
+		  Integer showPublicEvents, 
+		  String[] selectedDonorIds,String[] selectedeventTypeIds,
+		  String instanceId, 
+		  String siteId)
+		  throws CalendarException {
+
+	  try {
+		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
+		
+			List events = getAmpCalendarEvents(selectedDonorIds,selectedeventTypeIds, null, showPublicEvents, instanceId, siteId);
+			if (events != null) {
+				for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
+					AmpCalendar ampCal = (AmpCalendar) eventItr.next();
+					if (ampCal.getMember() != null) {
+						retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+					}
+				}
+			}
+			return retEvents.values();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+  }
   
   public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
 		  Integer showPublicEvents, 

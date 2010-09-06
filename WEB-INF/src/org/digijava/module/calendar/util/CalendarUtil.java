@@ -178,13 +178,16 @@ public class CalendarUtil {
 		return CalDate;
 	}
 	
-	public static String getCalendarEventsXml(AmpTeamMember member,Integer filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId,Long userId) throws ParseException{
+	public static String getCalendarEventsXml(AmpTeamMember member,Integer filter,String siteId,String[] selectedDonorIds,String[] selectedEventTypeIdsIds,String instanceId) throws ParseException{
 		String xml="";
 		Collection ampCalendarEvents=null;
 		try {
-			 if(selectedDonorIds!=null && selectedDonorIds.length>0 && selectedEventTypeIdsIds!=null && selectedEventTypeIdsIds.length>0){
+			if (member==null) {
+				ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsPublic(2,selectedDonorIds,selectedEventTypeIdsIds, null, null);
+			} else if(selectedDonorIds!=null && selectedDonorIds.length>0 && selectedEventTypeIdsIds!=null && selectedEventTypeIdsIds.length>0){
 				 ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds,selectedEventTypeIdsIds, null, null);
-			 }		     
+			 }		  
+			 
 			//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
 			if(ampCalendarEvents!=null && !ampCalendarEvents.isEmpty()){
 				Iterator iter = ampCalendarEvents.iterator();

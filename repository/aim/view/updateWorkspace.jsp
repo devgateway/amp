@@ -158,9 +158,10 @@ function update(action) {
 		}
 		else
 		if (action != "reset"){
-			if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
+			document.aimUpdateWorkspaceForm.workspaceType.disabled = false;
+			if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm)){
 				return false;
-	
+			}
 		    if (action != "reset"){
 			if (event == "add" || event == "edit") {
 				if (relFlag == "set") {

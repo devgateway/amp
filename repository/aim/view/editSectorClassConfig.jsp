@@ -15,7 +15,7 @@
 
     function saveClicked(){
 	   var id = document.getElementById("originalSectorId").value;
-	   var newId = document.getElementById("sectorClassId").value;
+	   var newId = document.getElementById("sctClassId").value;
 	   if(id != newId) {
 			var flag = confirm("<digi:trn jsFriendly='true'>Sectors for activities will have to be changed manually. Proceed anyway?</digi:trn>");
 			if (!flag) {
@@ -107,7 +107,7 @@
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:SelectSectorClassifications">Select Sector Classifications</digi:trn> :
                                                                         </td>
                                                                         <td>
-                                                                           <html:select property="sectorClassId"  styleClass="inp-text" styleId="sectorClassId">
+                                                                           <html:select property="sectorClassId"  styleClass="inp-text" styleId="sctClassId">
 									<html:optionsCollection name="aimSectorClassConfigForm" property="classifications" 
 									value="ampSecSchemeId" label="secSchemeName" />												
 												

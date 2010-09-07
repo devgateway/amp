@@ -21,8 +21,8 @@
     var YAHOO = YAHOOAmp;
   }
   var tree;
-  
-</script>
+
+  </script>
 
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
@@ -137,7 +137,13 @@ div.fakefile2 input{
             form.target="_self"
             form.submit();
       }
-           
+       
+       function importFromWs(){
+           var form = document.getElementById('form');
+           form.action = "/dataExchange/import.do~loadWs=true";
+           form.target="_self"
+           form.submit();
+     }
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 </script>
 
@@ -229,6 +235,13 @@ div.fakefile2 input{
                     <jsp:include page="toolbarImport.jsp" />
 					<div style="height: 255px;">
     					<table cellpadding="5px" width="80%">
+    						<feature:display name="Synergy Client" module="Activity Import Manager">
+    						<tr>
+    							<td>
+									<input type="button" onclick="javascript:importFromWs();" value='<digi:trn>Update Synergy Activities</digi:trn>' />
+								</td>
+    						</tr>
+    						</feature:display>
     						<tr>
         						<td width="47%" align="left" valign="top"><br/><br/><br/> 
         								<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import

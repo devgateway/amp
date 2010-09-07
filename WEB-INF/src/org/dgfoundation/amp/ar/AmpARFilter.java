@@ -97,8 +97,13 @@ public class AmpARFilter extends PropertyListable {
 	private Set selectedSecondarySectors = null;
 	@PropertyListableIgnore
 	private Set secondarySectorsAndAncestors = null;
-	
-	
+    @PropertyListableIgnore
+	private Set tertiarySectors = null;
+	private Set selectedTertiarySectors = null;
+    @PropertyListableIgnore
+    private Set tertiarySectorsAndAncestors = null;
+
+
 	@PropertyListableIgnore
 	private Set relatedSecondaryProgs;
 
@@ -610,6 +615,12 @@ public class AmpARFilter extends PropertyListable {
 				+ "AND c.name='Secondary' AND aas.amp_sector_id in ("
 				+ Util.toCSString(secondarySectors) + ")";
 
+       String TERTIARY_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
+				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
+				+ "AND c.name='Tertiary' AND aas.amp_sector_id in ("
+				+ Util.toCSString(tertiarySectors) + ")";
+
+
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
 				+ Util.toCSString(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
@@ -871,6 +882,9 @@ public class AmpARFilter extends PropertyListable {
 		}
 		if (secondarySectors != null && secondarySectors.size() != 0) {
 			queryAppend(SECONDARY_SECTOR_FILTER);
+		}
+        if (tertiarySectors != null && !tertiarySectors.isEmpty()) {
+			queryAppend(TERTIARY_SECTOR_FILTER);
 		}
 		if (nationalPlanningObjectives != null
 				&& nationalPlanningObjectives.size() != 0) {
@@ -1430,6 +1444,31 @@ public class AmpARFilter extends PropertyListable {
 	public void setSelectedSecondarySectors(Set selectedSecondarySectors) {
 		this.selectedSecondarySectors = selectedSecondarySectors;
 	}
+
+       public Set getSelectedTertiarySectors() {
+        return selectedTertiarySectors;
+    }
+
+    public void setSelectedTertiarySectors(Set selectedTertiarySectors) {
+        this.selectedTertiarySectors = selectedTertiarySectors;
+    }
+    
+    @PropertyListableIgnore
+    public Set getTertiarySectors() {
+        return tertiarySectors;
+    }
+
+    public void setTertiarySectors(Set tertiarySectors) {
+        this.tertiarySectors = tertiarySectors;
+    }
+    @PropertyListableIgnore
+    public Set getTertiarySectorsAndAncestors() {
+        return tertiarySectorsAndAncestors;
+    }
+
+    public void setTertiarySectorsAndAncestors(Set tertiarySectorsAndAncestors) {
+        this.tertiarySectorsAndAncestors = tertiarySectorsAndAncestors;
+    }
 
 	public Set<AmpCategoryValue> getTypeOfAssistance() {
 		return typeOfAssistance;

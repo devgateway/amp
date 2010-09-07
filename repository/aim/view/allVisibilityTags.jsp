@@ -761,7 +761,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Secondary Sector" feature="Sectors"></field:display> 
+<field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Tertiary Sector" feature="Sectors"></field:display>
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 

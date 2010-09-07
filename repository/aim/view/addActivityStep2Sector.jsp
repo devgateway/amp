@@ -85,7 +85,9 @@
 									</c:if>
 									<c:if test="${config.name== 'Tertiary' }">
 										<bean:define id="auxSectorType" value="Tertiary Sector" />
+                                        <logic:equal name="aimEditActivityForm" property="sectors.tertiarySectorVisible" value="true">
 										<bean:define id="generalSector" value="true"/>
+                                       </logic:equal>
 									</c:if>
 									<bean:define id="contentDisabled">false</bean:define>
 									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
@@ -94,7 +96,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-									
+                         	
 										<logic:equal name="generalSector" value="true">
                                         	<c:set var="sectorAdded" value="false"/>
                                          <tr>
@@ -109,7 +111,7 @@
                                             <tr>
                                                 <td>
         											<bean:define id="auxSectorType" value="empty1"/>
-                                                    <div id="config${ind.count}">  
+                                                    <div id="config${ind.count}">
                                                         <c:if test="${config.primary}">
         	                                                    <div id="primaryConfig">
                                                         </c:if>

@@ -606,8 +606,10 @@ public class SaveActivity extends Action {
 		
 		eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
 		eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+        eaForm.getSectors().setTertiarySectorVisible(FeaturesUtil.isVisibleSectors("Tertiary", ampContext)?"true":"false");
 		session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
 		session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
+        session.setAttribute("Tertiary Sector", eaForm.getSectors().getTertiarySectorVisible());
 		
 		if (check){
 			//Do the checks here
@@ -617,8 +619,8 @@ public class SaveActivity extends Action {
 						errors.add("sector", new ActionMessage("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
 					}
 					else{
-						int primaryPrc=0, secondaryPrc=0;
-						boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
+						int primaryPrc=0, secondaryPrc=0, tertiaryPrc=0;
+						boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false, hasTertiarySectorsAdded=false;
 						
 						Iterator<ActivitySector> secPerItr = eaForm.getSectors().getActivitySectors().iterator();
 						while (secPerItr.hasNext()) {
@@ -628,6 +630,8 @@ public class SaveActivity extends Action {
 								hasPrimarySectorsAdded=true;
 							if("Secondary".equals(config.getName())) 
 								hasSecondarySectorsAdded=true;
+                            if("Tertiary".equals(config.getName()))
+								hasTertiarySectorsAdded=true;
 							
 							if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
 								errors.add("sectorPercentageEmpty", new ActionMessage("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
@@ -637,6 +641,7 @@ public class SaveActivity extends Action {
 								try {
 									if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().intValue();
 									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
+                                    if("Tertiary".equals(config.getName())) tertiaryPrc+=actSect.getSectorPercentage().intValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
 											new ActionMessage("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
@@ -661,6 +666,14 @@ public class SaveActivity extends Action {
 							}
 							if(hasSecondarySectorsAdded && secondaryPrc!=100)
 								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
+						}
+                        if (Boolean.parseBoolean(eaForm.getSectors().getTertiarySectorVisible()) && isInConfig(eaForm, "Tertiary")){
+							if(!hasTertiarySectorsAdded){
+								errors.add("noTertiarySectorsAdded",
+										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors",locale,siteId)));
+							}
+							if(hasTertiarySectorsAdded && tertiaryPrc!=100)
+								errors.add("tertiarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.tertiarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all tertiary sector percentage must be 100",locale,siteId)));
 						}
 
 					}
@@ -2919,7 +2932,7 @@ public class SaveActivity extends Action {
 		private boolean isInConfig(EditActivityForm eaForm, String sectorLevel) {
 			List <AmpClassificationConfiguration> classConfig = eaForm.getSectors().getClassificationConfigs();
 			for(AmpClassificationConfiguration cls : classConfig){
-				if(cls.getName().compareToIgnoreCase(sectorLevel)==0){
+				if(cls.getName().compareToIgnoreCase(sectorLevel)==0){         
 					return true;
 				}
 			}

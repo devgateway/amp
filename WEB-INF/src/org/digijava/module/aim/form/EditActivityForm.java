@@ -1566,6 +1566,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private List classificationConfigs;
 		private String primarySectorVisible = null;
 		private String secondarySectorVisible = null;
+        private String tertiarySectorVisible=null;
 		private Collection<ActivitySector> activitySectors;
 		private Collection searchedSectors = null; // list of searched Sectors.
 		private Long selSectors[] = null; // sectors selected by user to be
@@ -1596,6 +1597,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSecondarySectorVisible(String secondarySectorVisible) {
 			this.secondarySectorVisible = secondarySectorVisible;
 		}
+        
+        public String getTertiarySectorVisible() {
+            return tertiarySectorVisible;
+        }
+
+        public void setTertiarySectorVisible(String tertiarySectorVisible) {
+            this.tertiarySectorVisible = tertiarySectorVisible;
+        }
 
 		public Collection<ActivitySector> getActivitySectors() {
 			return activitySectors;

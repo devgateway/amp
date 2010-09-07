@@ -245,8 +245,11 @@ function validateSectorPercentage(){
     Error in Primary and Secondary Sector
     </digi:trn>
     </c:set>
-    
-    
+    <c:set var="errorTertiarySector">
+   <digi:trn jsFriendly="true">Error in Tertiary Sector</digi:trn>
+    </c:set>
+
+       
     var i;
     var flag = false;
     var primConf=document.getElementById('primaryConfig');
@@ -255,15 +258,12 @@ function validateSectorPercentage(){
      }
     var sum_prim_sector=false;
     var sum_sec_sector=false;
-    var cnt = document.aimEditActivityForm.sizeSectorConfigs.value;
-    for(i=1;i<=cnt;i++) {
-        var id="config"+i;
+    var sum_tert_sector=false;
+    var empty=false;
+
+     $("div[id^='config']").each(function(index,sectorDiV){
         var sum = 0;
         var j;
-        var sectorDiV=document.getElementById(id);
-        if(sectorDiV==null){
-            continue;
-        }
         var primaryDiv=sectorDiV.getElementsByTagName("div").length;
         var inputs=sectorDiV.getElementsByTagName("input");
         if(inputs.length==0 && primaryDiv>0){
@@ -275,48 +275,63 @@ function validateSectorPercentage(){
             if (inputs[j].type == "text") {
                 var val=inputs[j].value;
                 if (val == "" || val == null) {
-                	if(i==1){
+                	if(index==0){
                     	alert("${errInPrimarySector} -  ${errMsgAddPercentage}");
                 	}
-                	else if(i==2){
+                	else if(index==1){
                 		alert("${errInSecondarySector} -  ${errMsgAddPercentage}");
                 	}
+                    else
+                      if(index==2){
+                        alert("${errorTertiarySector} -  ${errMsgAddPercentage}");
+                    }
                 	else{
                 	    alert("assert: something goes wrong with %");
                 	}    
                     inputs[j].focus();
-                    return false;                        
+                    empty=true;
+                    break;
                 }
                 if (val == 0){
-                	if(i==1){
+                	if(index==0){
                     	alert("${errInPrimarySector} -  ${errMsgZeroPercentage}");
                 	}
-                	else if(i==2){
+                	else if(index==1){
                 		alert("${errInSecondarySector} -  ${errMsgZeroPercentage}");
                 	}
+                     else if(index==2){
+                        alert("${errorTertiarySector} -   ${errMsgZeroPercentage}");
+                    }
                 	else{
                 	    alert("assert: something goes wrong with %");
-                	}    
+                	}
                     inputs[j].focus();
-                    return false;
+                    empty=true;
+                    break;
                             
                 }
                 sum+=parseFloat(val);
             }
         }
-                 
+               
         if (sum!=100&&sum>0) {
-            if(i==1){
+            if(index==0){
                sum_prim_sector=true;    
             }
-            else if (i==2){
+            else if (index==1){
                sum_sec_sector=true;
+            }
+            else if (index==2){
+               sum_tert_sector=true;
             }
             else{
                alert("assert: something goes wrong");
             }
         }
-    }
+    });
+    if(empty){
+return false;
+}
     if(sum_prim_sector && sum_sec_sector){
         alert("${errInBothSector} - ${errMsgSumPercentage}");
         return false;
@@ -328,7 +343,12 @@ function validateSectorPercentage(){
     else if(sum_sec_sector){
 		alert("${errInSecondarySector} - ${errMsgSumPercentage}");
 		return false;    
-    }    
+    }
+    else if(sum_tert_sector){
+        alert("${errorTertiarySector} - ${errMsgSumPercentage}");
+		return false;
+
+    }
     return true;
 }
             

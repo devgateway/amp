@@ -70,7 +70,16 @@ public class FilterUtil {
 			arf.setSecondarySectors(null);
 			arf.setSecondarySectorsAndAncestors(null);
 		}
+        if (arf.getSelectedTertiarySectors() != null && arf.getSelectedTertiarySectors().size() > 0) {
+			arf.setTertiarySectors(SectorUtil.getSectorDescendents( arf.getSelectedTertiarySectors() ));
 
+			arf.setTertiarySectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getTertiarySectorsAndAncestors().addAll( arf.getTertiarySectors() );
+			arf.getTertiarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedTertiarySectors()) );
+		} else {
+			arf.setTertiarySectors(null);
+			arf.setTertiarySectorsAndAncestors(null);
+		}
 
 		if ( arf.getSelectedNatPlanObj() != null && arf.getSelectedNatPlanObj().size() > 0) {
 			arf.setNationalPlanningObjectives(new ArrayList( arf.getSelectedNatPlanObj() ));
@@ -169,6 +178,7 @@ public class FilterUtil {
 		// for each sector we have also to add the subsectors
 		form.setSelectedSectors( FilterUtil.getObjectsIds(filter.getSelectedSectors()) );
 		form.setSelectedSecondarySectors( FilterUtil.getObjectsIds(filter.getSelectedSecondarySectors()) );
+        form.setSelectedTertiarySectors( FilterUtil.getObjectsIds(filter.getSelectedTertiarySectors()));
 	
 		form.setSelectedNatPlanObj( FilterUtil.getObjectsIds(filter.getSelectedNatPlanObj()) );
 		form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );

@@ -29,6 +29,7 @@ function resetFilter(){
 		
 		resetElement(aimReportsFilterPickerForm.selectedSectors);
 		resetElement(aimReportsFilterPickerForm.selectedSecondarySectors);
+        resetElement(aimReportsFilterPickerForm.selectedTertiarySectors);
 		resetElement(aimReportsFilterPickerForm.selectedNatPlanObj);
 		resetElement(aimReportsFilterPickerForm.selectedPrimaryPrograms);
         resetElement(aimReportsFilterPickerForm.selectedSecondaryPrograms);

@@ -774,6 +774,8 @@ private ActionForward removeSector(ActionMapping mapping,
       session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
       eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
       eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+      eaForm.getSectors().setTertiarySectorVisible(FeaturesUtil.isVisibleSectors("Tertiary", ampContext)?"true":"false");
+      session.setAttribute("Tertiary Sector", eaForm.getSectors().getTertiarySectorVisible());
       session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
       session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
 	}catch (Exception e) {
@@ -877,6 +879,8 @@ private ActionForward addSector(ActionMapping mapping, HttpSession session,
 	    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
 	    eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
 	    eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+        eaForm.getSectors().setTertiarySectorVisible(FeaturesUtil.isVisibleSectors("Tertiary", ampContext) ? "true" : "false");
+        session.setAttribute("Tertiary Sector", eaForm.getSectors().getTertiarySectorVisible());
 	    session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
 	    session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
 		return mapping.findForward("addActivityStep2");
@@ -966,6 +970,8 @@ private ActionForward addSector(ActionMapping mapping, HttpSession session,
 	    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
 	    eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
 	    eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+        eaForm.getSectors().setTertiarySectorVisible(FeaturesUtil.isVisibleSectors("Tertiary", ampContext)?"true":"false");
+        session.setAttribute("Tertiary Sector", eaForm.getSectors().getTertiarySectorVisible());
 	    session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
 	    session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
 		return mapping.findForward("addActivityStep2");
@@ -1371,6 +1377,8 @@ private ActionForward showStep2(ActionMapping mapping,
 	    }
 	  eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
 	  eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+      eaForm.getSectors().setTertiarySectorVisible(FeaturesUtil.isVisibleSectors("Tertiary", ampContext)?"true":"false");
+      session.setAttribute("Tertiary Sector", eaForm.getSectors().getTertiarySectorVisible());
 	  session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
 	  session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
 	return mapping.findForward("addActivityStep2");

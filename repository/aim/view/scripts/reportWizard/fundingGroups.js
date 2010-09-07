@@ -63,6 +63,9 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Budget Organization'
 				,'Budget Sector'
 				,'Budget Program'
+                ,'Tertiary Sector'
+				,'Tertiary Sector Sub-Sector'
+                ,'Tertiary Sector Sub-Sub-Sector'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -75,7 +78,9 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
 				'Secondary Program', 'Primary Sector Sub-Sector',
 				'Status', 'Primary Sector', 'A.C. Chapter',
-				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By'
+				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By' ,'Tertiary Sector'
+				,'Tertiary Sector Sub-Sector'
+                ,'Tertiary Sector Sub-Sub-Sector'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(

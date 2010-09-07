@@ -76,7 +76,7 @@ public class SelectSector extends Action {
 				//else load with specified ID 
 				config = SectorUtil.getClassificationConfigById(ssForm.getConfigId());
 			}
-			
+			ssForm.setConfigName(config.getName());
 			AmpSectorScheme defClassification=config.getClassification();
 			Collection secSchemes = new ArrayList() ;
                         secSchemes.add(defClassification);

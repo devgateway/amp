@@ -1,7 +1,9 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -106,7 +108,12 @@ public class GetWorkspace extends Action {
 			uwForm.setTypeId(typeId);
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
-			uwForm.setOrganizations(workspace.getChildOrgs());
+			TreeSet orgs=new TreeSet();
+			orgs.addAll(workspace.getChildOrgs());
+			if (uwForm.getOrganizations()==null) {
+				uwForm.setOrganizations(new ArrayList());
+			}
+			uwForm.getOrganizations().addAll(orgs);
 			uwForm.setAddActivity(workspace.getAddActivity());
 			uwForm.setComputation(workspace.getComputation());
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());

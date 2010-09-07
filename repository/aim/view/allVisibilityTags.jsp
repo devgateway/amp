@@ -81,6 +81,7 @@
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
 
+<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display> 
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>

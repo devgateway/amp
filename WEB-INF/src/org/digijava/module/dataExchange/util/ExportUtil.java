@@ -181,4 +181,20 @@ public class ExportUtil {
         }    	
     	return retValue;
     }
+    
+    public static List<AmpActivity> getWsActivities() {
+    	List<AmpActivity> retValue = null;
+        Session session = null;    	
+        	try {
+        		session = PersistenceManager.getRequestDBSession();
+				StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act ");
+		        Query qry=session.createQuery(from.toString());
+		        retValue = qry.list();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return retValue;
+           
+    }
 }

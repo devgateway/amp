@@ -262,7 +262,8 @@ public class InsertTag
 
     }
 
-    protected void doInclude(String page) throws ServletException, IOException {
+    @Override
+    protected void doInclude(String page,boolean flush) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();
         if (RequestUtils.isDevelopmentModeActive(request)) {

@@ -12,8 +12,8 @@ public class DropDownField extends TemplateField {
 	public String getRendered() {		
 		String retVal="<select name=\"doc_select_"+getOrdinalNumber().intValue()+"\" styleClass=\"inp-text\" >";
 		retVal+="<option value=\"Select\">" + "<digi:trn>Please Select</digi:trn>" + "</option>";
-		if(getPossibleValues()!=null && getPossibleValues().size()>0){
-			for (PossibleValue pv : getPossibleValues()) {
+		if(getPossibleValuesList()!=null && getPossibleValuesList().size()>0){
+			for (PossibleValue pv : getPossibleValuesList()) {
 				retVal+="<option value=\""+pv.getValue()+"\">" + "<digi:trn>"+pv.getValue()+"</digi:trn>" + "</option>";
 			}
 		}

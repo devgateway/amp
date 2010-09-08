@@ -11,12 +11,13 @@ public class MultiboxField extends TemplateField {
 	@Override
 	public String getRendered() {
 		String retVal="";
-		if(getPossibleValues()!=null && getPossibleValues().size()>0){
-			for (PossibleValue pv : getPossibleValues()) {
+		if(getPossibleValuesList()!=null && getPossibleValuesList().size()>0){
+			for (PossibleValue pv : getPossibleValuesList()) {
 				//submits in request parameter "doc_multibox_5" if multibox  for this template is 5th field.
-				retVal+="<input type=\"checkbox\" name=\"doc_multibox_"+getOrdinalNumber().intValue()+"\">";
+				retVal+="<input type=\"checkbox\" name=\"doc_multibox_"+getOrdinalNumber().intValue()+"\"" +
+						" value=\""+pv.getValue()+"\">";
 				retVal+=pv.getValue();
-				retVal+="</input>";
+				retVal+="</input><br>";
 			}
 		}		
 		return retVal;

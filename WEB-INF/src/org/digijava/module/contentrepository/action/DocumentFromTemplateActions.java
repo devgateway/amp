@@ -2,6 +2,7 @@ package org.digijava.module.contentrepository.action;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +39,6 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-import com.rc.retroweaver.runtime.Collections;
 
 public class DocumentFromTemplateActions extends DispatchAction {
 	
@@ -54,13 +54,26 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	}
 	
 	public ActionForward getTemplate(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		CreateDocFromTemplateForm myForm=(CreateDocFromTemplateForm)form;		
-		TemplateDoc tempDoc= TemplateDocsUtil.getTemplateDoc(myForm.getTemplateId());
-		myForm.setSelectedTemplate(tempDoc);
-		List<TemplateField> fields= new ArrayList<TemplateField>(tempDoc.getFields());
-		Collections.sort(fields, new TemplateDocsUtil.TempDocFieldOrdinaryNumberComparator());
-		myForm.setFields(fields);
-		tempDoc.setFields(new HashSet<TemplateField>(fields) );		
+		CreateDocFromTemplateForm myForm=(CreateDocFromTemplateForm)form;
+		if(myForm.getTemplateId()!= null && ! myForm.getTemplateId().equals(new Long(-1))){
+			TemplateDoc tempDoc= TemplateDocsUtil.getTemplateDoc(myForm.getTemplateId());
+			myForm.setSelectedTemplate(tempDoc);
+			List<TemplateField> fields= new ArrayList<TemplateField>(tempDoc.getFields());
+			Collections.sort(fields, new TemplateDocsUtil.TempDocFieldOrdinaryNumberComparator());
+			for (TemplateField templateField : fields) {
+				if(templateField.getPossibleValues()!=null){
+					List<PossibleValue> posVals= new ArrayList<PossibleValue>(templateField.getPossibleValues()) ;
+					Collections.sort(posVals, new TemplateDocsUtil.PossibleValuesValueComparator());
+					templateField.setPossibleValuesList(posVals);
+				}
+			}
+			myForm.setFields(fields);
+			tempDoc.setFields(new HashSet<TemplateField>(fields) );
+		}else{
+			myForm.setDocumentName(null);
+			myForm.setFields(null);
+			myForm.setSelectedTemplate(null);
+		}				
 		return mapping.findForward("forward");
 	}
 	
@@ -120,7 +133,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         String contentType="application/pdf";
 	         PdfFileHelper pdfHelper=new PdfFileHelper(pdfName, contentType, pdfbody);
 	         //create jcr node
-	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
 	         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
 	         NodeWrapper nodeWrapper		= new NodeWrapper(pdfHelper, request, userHomeNode, false, new ActionErrors());
 			 if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){

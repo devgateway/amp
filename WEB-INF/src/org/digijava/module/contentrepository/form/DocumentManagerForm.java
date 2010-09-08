@@ -25,7 +25,7 @@ public class DocumentManagerForm extends ActionForm {
 	private String uuid						= null;
 	private Collection<DocumentData> myPersonalDocuments	= null;
 	private Collection<DocumentData> myTeamDocuments		= null;
-	private Collection<DocumentData> sharedDocuments		= null; //shared documents from other workspaces
+	private Collection<DocumentData> sharedDocuments		= null; //shared documents
 	
 	private Collection<DocumentData> otherDocuments		= null;
 	private String otherUsername			= null;
@@ -51,6 +51,7 @@ public class DocumentManagerForm extends ActionForm {
 	private Long yearOfPublication;
 	
 	private Boolean pageCloseFlag	= false;
+	private Boolean hasCreateDocFromTemplateRights;
 	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
@@ -303,5 +304,14 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setYearOfPublication(Long yearOfPublication) {
 		this.yearOfPublication = yearOfPublication;
-	}	
+	}
+
+	public Boolean getHasCreateDocFromTemplateRights() {
+		return hasCreateDocFromTemplateRights;
+	}
+
+	public void setHasCreateDocFromTemplateRights(Boolean hasCreateDocFromTemplateRights) {
+		this.hasCreateDocFromTemplateRights = hasCreateDocFromTemplateRights;
+	}
+	
 }

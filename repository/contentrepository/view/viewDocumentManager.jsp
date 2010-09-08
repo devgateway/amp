@@ -196,8 +196,12 @@ function setHoveredTable(tableId, hasHeaders) {
 			}
 	var fPanel	= new FilterAsYouTypePanel("labelButtonId", test1Obj, "mainLabels");
 
+	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
+	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu");
+
 </script>
 
+<html:hidden property="hasCreateDocFromTemplateRights" styleId="hasCreateDocFromTemplateRights"/>
 <table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
 	<tr>
 		<td valign="bottom" class="crumb" >
@@ -257,16 +261,12 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
 						        	<td>
-							        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
-									  		<digi:trn> Add Resource ...</digi:trn>            
-								    	</button>
+						        												
+								    	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton">Add Resource...</button>
+								    	&nbsp;
 								    	<%--
-								    		<c:set var="trnAddDocFromTemp"><digi:trn>Create From Template</digi:trn></c:set>
-						    			<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnAddDocFromTemp}" onclick="addFromTemplate()">
-										
-								    	 <button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button>
-								    	 --%>
-										 
+								    		<button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button>
+								    	 --%>										 
 								    </td>								    
 								</tr>
 								<tr>
@@ -294,9 +294,13 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 						        	<td>
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
-										<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
-			                            	<digi:trn>Add Resource ...</digi:trn>            
-										</button>
+										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="dr-menu buton">Add Resource...</button>
+										<!-- 
+											<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+			                            		<digi:trn>Add Resource ...</digi:trn>            
+											</button>
+										 -->
+										
 									<%}%>
 									</td>
 								</tr>							
@@ -363,9 +367,10 @@ function setHoveredTable(tableId, hasHeaders) {
 				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
 				<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
 					<input type="hidden" name="type" id="typeId"/>
-					<input type="hidden" name="uuid" id="nodeUUID"/>
+					<input type="hidden" name="uuid" id="nodeUUID"/>					
 					<table cellpadding="3" cellspacing="3" border="0">
-						<tr>
+						<%--
+							<tr>
 							<td> 
 								<digi:trn>Document</digi:trn>
 								<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
@@ -375,6 +380,9 @@ function setHoveredTable(tableId, hasHeaders) {
 								<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
 							</td>
 						</tr>
+						 --%>
+						
+												
 						<tr>
 							<td><strong><digi:trn>Title:</digi:trn></strong><font color="red">*</font></td>
 							<td><html:text property="docTitle" size="30" /></td>

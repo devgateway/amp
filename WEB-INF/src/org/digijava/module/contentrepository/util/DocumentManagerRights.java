@@ -147,6 +147,13 @@ public class DocumentManagerRights {
 	}
 	
 	/**
+	 * whether user is allowed to create document using templates
+	 */
+	public static Boolean hasCreateDocumentFromTemplateRights (HttpServletRequest request){
+		return isTeamLeader(request);
+	}
+	
+	/**
 	 * is team member allowed to share team resources across workspaces 
 	 */
 	private static Boolean hasShareAmongWorkspacesRights(HttpServletRequest request) {

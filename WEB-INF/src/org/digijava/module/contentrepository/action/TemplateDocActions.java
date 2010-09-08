@@ -1,6 +1,7 @@
 package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -28,8 +29,6 @@ import org.digijava.module.contentrepository.helper.template.TemplateConstants;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
 import org.digijava.module.contentrepository.util.TemplateDocsUtil;
-
-import com.rc.retroweaver.runtime.Collections;
 
 public class TemplateDocActions extends DispatchAction {
 	

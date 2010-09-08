@@ -9,8 +9,8 @@ public class MultipleSelect extends TemplateField {
 	@Override
 	public String getRendered() {
 		String retVal="<select name=\"doc_multiselect_"+getOrdinalNumber().intValue()+"\" styleClass=\"inp-text\" multiple=\"multiple\">";
-		if(getPossibleValues()!=null && getPossibleValues().size()>0){
-			for (PossibleValue pv : getPossibleValues()) {
+		if(getPossibleValuesList()!=null && getPossibleValuesList().size()>0){
+			for (PossibleValue pv : getPossibleValuesList()) {
 				retVal+="<option value=\""+pv.getValue()+"\">" + "<digi:trn>"+pv.getValue()+"</digi:trn>" + "</option>";
 			}
 		}

@@ -1,4 +1,3 @@
-
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><style type="text/css">
 
@@ -57,6 +56,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -921,24 +921,9 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	if (isAUrl == null) 
 		isAUrl	= false;
 		
-	if (isAUrl) {
-		myForm.webResource[1].checked				= true;
-		myForm.webResource[1].defaultChecked		= true;
-		myForm.webResource[0].checked				= false;
-		myForm.webResource[0].defaultChecked		= false;	
-	}
-	else {
-		myForm.webResource[0].checked				= true;		
-		myForm.webResource[0].defaultChecked		= true;
-		myForm.webResource[1].checked				= false;
-		myForm.webResource[1].defaultChecked		= false;
-	}
-	
-	selectResourceType();
+	selectResourceType(isAUrl);
 	
 	if (uuid != null && uuid.length > 0) {
-		myForm.webResource[1].disabled				= true;
-		myForm.webResource[0].disabled				= true;
 		
 		myForm.docTitle.readOnly					= true;
 		myForm.docTitle.style.background			= "#eeeeee"; 
@@ -978,8 +963,8 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		myForm.yearOfPublication.disabled			= true;
 	}
 	else {
-		myForm.webResource[1].disabled				= false;
-		myForm.webResource[0].disabled				= false;
+		//myForm.webResource[1].disabled				= false;
+		//myForm.webResource[0].disabled				= false;
 		
 		myForm.docTitle.readOnly					= false;
 		myForm.docTitle.style.backgroundColor		= "";
@@ -991,6 +976,12 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		
 		myForm.docType.selectedIndex				= 0;
 		
+		myForm.docType.style.backgroundColor	= "";
+		myForm.docType.style.color			= "";
+
+		myForm.yearOfPublication.style.backgroundColor	= "";
+		myForm.yearOfPublication.style.color			= "";
+		
 		setPanelHeader(0, "${translation_add_new_content}");
 	}
 	
@@ -998,18 +989,17 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	
 }
 
-function selectResourceType() {
+function selectResourceType(isUrl) {
 	var myForm		= document.getElementById('typeId').form;
 	var elFile	= document.getElementById('tr_path');
 	var elUrl	= document.getElementById('tr_url');
-	if (myForm.webResource[1].checked) {
+	if(isUrl){
 		elFile.style.display	= "none";
 		elUrl.style.display		= "";
-	}
-	else {
+	}else{
 		alex					= '˘˘ ÈË &È"\'(-Ë_Á‡';
 		elFile.style.display	= "";
-		elUrl.style.display		= "none";	
+		elUrl.style.display		= "none";
 	}
 }
 
@@ -1027,7 +1017,7 @@ function validateAddDocument() {
 	var regexp	= new RegExp("[a-zA-Z0-9_¿¡√ƒ«»…ÀÃÕœ—“”’÷Ÿ⁄‹‡·„‰ÁËÈÎÏÌÔÒÚÛıˆ˘˙¸%& ']+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
-	var msg	= '';
+	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
 		msg = msg + "${translation_validation_title}" ;
 	else {
@@ -1038,18 +1028,24 @@ function validateAddDocument() {
 			msg = msg + "${translation_validation_title_chars}" ;
 		}
 	}
-	if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && 
-			document.forms['crDocumentManagerForm'].fileData.value == '')
+
+	var webUrlVisible=document.getElementById('tr_url');
+	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document
 		msg = msg + "${translation_validation_filedata}" ;
-	if ( document.forms['crDocumentManagerForm'].webResource[1].checked == true && 
-			document.forms['crDocumentManagerForm'].webLink.value == '')
+	}
+	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
 		msg = msg + "${translation_validation_url}" ;
+	}
+	//if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && document.forms['crDocumentManagerForm'].fileData.value == '')
+	//	msg = msg + "${translation_validation_filedata}" ;
+	//if ( document.forms['crDocumentManagerForm'].webResource[1].checked == true && 	document.forms['crDocumentManagerForm'].webLink.value == '')
+	//	msg = msg + "${translation_validation_url}" ;
 
 	//document.forms['crDocumentManagerForm'].docDescription.value = escape(document.forms['crDocumentManagerForm'].docDescription.value);
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)
 			return true;
-	return false;	
+	return false;
 }
 
 function setHeightOfDiv(divId, maxLimit, value ){
@@ -1255,10 +1251,10 @@ function addFromTemplate() {
 function templateNameSelected(){
 	var templateId=document.getElementById('selTempName').value;
 	//var docName=document.getElementById('docName').value;
-	if(templateId==-1){
-		alert('Please Select Template');
-		return false;
-	}
+	//if(templateId==-1){
+	//	alert('Please Select Template');
+	//	return false;
+	//}
 	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
     var url="${loadTemp}&templateId="+templateId; //+"&documentName="+docName
     YAHOOAmp.util.Connect.asyncRequest("POST", url, getCallbackForTemplates(templatesPanel));

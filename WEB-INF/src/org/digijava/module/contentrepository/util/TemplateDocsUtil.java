@@ -153,10 +153,24 @@ public class TemplateDocsUtil {
         }
     }
 	
+	/**
+	 * used to sort submitted values (from create document using template) with their ordinal number in the template
+	 * @author skvisha
+	 *
+	 */
 	public static class SubmittedValuesOrdinaryNumberComparator implements Comparator<SubmittedValueHolder> {
         public int compare(SubmittedValueHolder o1, SubmittedValueHolder o2) {
             int result = o1.getFieldOrdinalValue().compareTo(o2.getFieldOrdinalValue());
             return result;
         }
     }
+	
+	public static class PossibleValuesValueComparator implements Comparator<PossibleValue> {
+		@Override
+		public int compare(PossibleValue o1, PossibleValue o2) {
+			int result = o1.getValue().compareTo(o2.getValue());
+            return result;
+		}
+		
+	}
 }

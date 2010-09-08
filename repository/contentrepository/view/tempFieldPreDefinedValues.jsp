@@ -12,7 +12,7 @@
 <table width="420px" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">
   <tr>
     <td bgColor="#d7eafd" class="box-title" height="10" align="center" colspan="7">
-    	<digi:trn>Add/Edit data</digi:trn>
+    	<digi:trn>Add/Edit Values</digi:trn>
     </td>
   </tr>  
   <c:if test="${!empty manageFieldForm.possibleValuesForField}">

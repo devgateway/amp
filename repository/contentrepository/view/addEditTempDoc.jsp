@@ -182,6 +182,17 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	}
 
 	function submitPreDefinedValues(){
+		//check that all predefined values are filled and non of them is empty
+		var values=$("input[id^='val_']");
+    	if(values!=null){
+        	for(var i=0;i < values.length; i++){
+        		if(values[i].value==''){
+            		alert('Please enter value');
+            		return false;
+        		}
+        	}
+    	}
+    	
 		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=saveValues";
         var parameters=getFieldParams();
@@ -198,6 +209,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     	}
     	return params;
 	}
+	
 	function validateDoc(){
 		var tempName=document.getElementById('tempName');
 		if(tempName==null || tempName.value==''){

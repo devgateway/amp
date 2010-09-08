@@ -1,13 +1,19 @@
 package org.digijava.module.contentrepository.dbentity.template;
 
+import java.util.List;
 import java.util.Set;
-
+/**
+ * @author skvisha
+ *
+ */
 public abstract class TemplateField {
 	private Long id;
 	private Set<PossibleValue> possibleValues; // select,multiple select , multibox
 	
 	private TemplateDoc templateDoc;
 	private Integer ordinalNumber; //field has it's ordinal number in template
+	
+	private List<PossibleValue> possibleValuesList; //used only for drawing them on user-side page.
 		
 	public String getType(){
 		return "tf"; //template field
@@ -57,5 +63,14 @@ public abstract class TemplateField {
 
 	public void setPossibleValues(Set<PossibleValue> possibleValues) {
 		this.possibleValues = possibleValues;
+	}
+
+	public List<PossibleValue> getPossibleValuesList() {
+		return possibleValuesList;
+	}
+
+	public void setPossibleValuesList(List<PossibleValue> possibleValuesList) {
+		this.possibleValuesList = possibleValuesList;
 	}	
+	
 }

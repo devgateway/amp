@@ -85,6 +85,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Set documents ;
 	private Set notes;
 	private Set issues;
+	private Set<AmpRegionalObservation> regionalObservations;
 	private Set costs;
 	//private AmpModality modality ;
 	private AmpCategoryValue modality;
@@ -1774,6 +1775,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public Set <AmpActivityContact> getActivityContacts() {
 		return activityContacts;
+	}
+
+	public Set<AmpRegionalObservation> getRegionalObservations() {
+		return regionalObservations;
+	}
+
+	public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
+		this.regionalObservations = regionalObservations;
 	}
 
 }

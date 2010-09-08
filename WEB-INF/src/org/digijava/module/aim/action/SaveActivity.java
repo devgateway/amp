@@ -68,6 +68,9 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -1878,7 +1881,75 @@ public class SaveActivity extends Action {
 
 	}
 	
-	
+	private void processStep14(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors,
+			HttpServletRequest request) throws Exception, AMPException {
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
+
+		if (check) {
+			end: if (errors.size() > 0) {
+				// we have all the errors for this step saved and we must throw
+				// the amp error
+				saveErrors(request, errors);
+				throw err;
+			}
+		}
+
+		// Do the initializations and all the information transfer between beans
+		// here
+		// proccessComponents(eaForm, activity);
+		if (eaForm.getObservations() != null && eaForm.getObservations().getIssues() != null) {
+			Set<AmpRegionalObservation> observationSet = new HashSet();
+			Iterator<Issues> iIssues = eaForm.getObservations().getIssues().iterator();
+			while (iIssues.hasNext()) {
+				Issues auxIssue = iIssues.next();
+				AmpRegionalObservation auxObservation = new AmpRegionalObservation();
+				auxObservation.setActivity(activity);
+				auxObservation.setName(auxIssue.getName());
+				if (auxIssue.getId() < 100000) {
+					auxObservation.setAmpRegionalObservationId(auxIssue.getId());
+				}
+				if (auxIssue.getIssueDate() != null && auxIssue.getIssueDate().trim().length() > 0) {
+					auxObservation.setObservationDate(FormatHelper.parseDate(auxIssue.getIssueDate()).getTime());
+				}
+				Set<AmpRegionalObservationMeasure> measureSet = new HashSet();
+				if (auxIssue.getMeasures() != null) {
+					Iterator<Measures> iterMeasures = auxIssue.getMeasures().iterator();
+					while (iterMeasures.hasNext()) {
+						Measures auxHelperMeasure = iterMeasures.next();
+						AmpRegionalObservationMeasure auxMeasure = new AmpRegionalObservationMeasure();
+						auxMeasure.setRegionalObservation(auxObservation);
+						auxMeasure.setName(auxHelperMeasure.getName());
+						if (auxHelperMeasure.getId() < 100000) {
+							auxMeasure.setAmpRegionalObservationMeasureId(auxHelperMeasure.getId());
+						}
+						Set<AmpRegionalObservationActor> actorSet = new HashSet();
+						// TODO: If there is a helper called Measure then it
+						// should exist a helper called Actor too.
+						if (auxHelperMeasure.getActors() != null) {
+							Iterator<AmpActor> iActors = auxHelperMeasure.getActors().iterator();
+							while (iActors.hasNext()) {
+								AmpActor auxAmpActor = iActors.next();
+								AmpRegionalObservationActor auxRegionalObservationActor = new AmpRegionalObservationActor();
+								auxRegionalObservationActor.setMeasure(auxMeasure);
+								auxRegionalObservationActor.setName(auxAmpActor.getName());
+								if (auxAmpActor.getAmpActorId() < 100000) {
+									auxRegionalObservationActor.setAmpRegionalObservationActorId(auxAmpActor
+										.getAmpActorId());
+								}
+								actorSet.add(auxRegionalObservationActor);
+							}
+						}
+						auxMeasure.setActors(actorSet);
+						measureSet.add(auxMeasure);
+					}
+				}
+				auxObservation.setRegionalObservationMeasures(measureSet);
+				observationSet.add(auxObservation);
+			}
+			activity.setRegionalObservations(observationSet);
+		}
+	}
 	
 	private void processPostStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm){
 		
@@ -2048,7 +2119,10 @@ public class SaveActivity extends Action {
 			stepText[stepNumber] = "11";
 			processStep11(check, eaForm, activity, errors, request);
 			break;
-			
+		case 11:
+			stepText[stepNumber] = "14";
+			processStep14(check, eaForm, activity, errors, request);
+			break;
 		default:
 			break;
 		}
@@ -2396,7 +2470,7 @@ public class SaveActivity extends Action {
 		
 		
 		//The number of processStep methods we have
-		final int noOfSteps = 11;
+		final int noOfSteps = 12;
 		String stepText[] = new String[noOfSteps];
 		Boolean stepFailure[] = new Boolean[noOfSteps];
 		String stepFailureText[] = new String[noOfSteps];

@@ -802,6 +802,42 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 				</tr>
 				</field:display>
+				
+				<feature:display name="Regional Observations" module="Regional Observations">
+				<tr>
+					<c:if test="${aimEditActivityForm.step != 14}">
+					<td nowrap="nowrap">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<c:set var="trnClickToAdd8">
+							<digi:trn>Regional Observations</digi:trn>
+						</c:set>
+						<a href="javascript:gotoStep(14)" class="menu" title="${trnClickToAdd8}">
+							<digi:trn>Regional Observations</digi:trn>
+						</a>
+					</td>
+					</c:if>
+					<c:if test="${aimEditActivityForm.step == 14}">
+					<td nowrap="nowrap">
+						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+							<tr>
+								<td width="10" height="19" background="module/aim/images/left-arc.gif">
+								</td>
+								<td bgcolor="#3399ff" height="19">
+									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+									<span class="textalb">
+										<digi:trn>Regional Observations</digi:trn>
+									</span>
+								</td>
+								<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+								</td>
+							</tr>
+						</table>
+					</td>
+					</c:if>
+				</tr>
+				</feature:display>
+				
+				
 				<tr>
 					<td align="center">
 					</td>

@@ -62,6 +62,9 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -1588,6 +1591,46 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             eaForm.getIssues().setIssues(null);
           }
 
+        // Regional Observations step.
+		if (activity.getRegionalObservations() != null) {
+			ArrayList issueList = new ArrayList();
+			Iterator iItr = activity.getRegionalObservations().iterator();
+			while (iItr.hasNext()) {
+				AmpRegionalObservation ampRegionalObservation = (AmpRegionalObservation) iItr.next();
+				Issues issue = new Issues();
+				issue.setId(ampRegionalObservation.getAmpRegionalObservationId());
+				issue.setName(ampRegionalObservation.getName());
+				issue.setIssueDate(FormatHelper.formatDate(ampRegionalObservation.getObservationDate()));
+				ArrayList measureList = new ArrayList();
+				if (ampRegionalObservation.getRegionalObservationMeasures() != null) {
+					Iterator mItr = ampRegionalObservation.getRegionalObservationMeasures().iterator();
+					while (mItr.hasNext()) {
+						AmpRegionalObservationMeasure ampMeasure = (AmpRegionalObservationMeasure) mItr.next();
+						Measures measure = new Measures();
+						measure.setId(ampMeasure.getAmpRegionalObservationMeasureId());
+						measure.setName(ampMeasure.getName());
+						ArrayList actorList = new ArrayList();
+						if (ampMeasure.getActors() != null) {
+							Iterator aItr = ampMeasure.getActors().iterator();
+							while (aItr.hasNext()) {
+								AmpRegionalObservationActor actor = (AmpRegionalObservationActor) aItr.next();
+								AmpActor auxAmpActor = new AmpActor();
+								auxAmpActor.setAmpActorId(actor.getAmpRegionalObservationActorId());
+								auxAmpActor.setName(actor.getName());
+								actorList.add(auxAmpActor);
+							}
+						}
+						measure.setActors(actorList);
+						measureList.add(measure);
+					}
+				}
+				issue.setMeasures(measureList);
+				issueList.add(issue);
+			}
+			eaForm.getObservations().setIssues(issueList);
+		} else {
+			eaForm.getObservations().setIssues(null);
+		}
           
           
           // loading the contact person details and condition

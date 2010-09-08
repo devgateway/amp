@@ -604,6 +604,9 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("17")) { // show step 17 - PI page     
     	  return showStep17(mapping, eaForm);
       }
+      else if (eaForm.getStep().equals("14")) { // show step 14 - Regional Observations     
+    	  return mapping.findForward("addActivityStep14");
+      }
       else {
         return mapping.findForward("adminHome");
       }
@@ -1294,6 +1297,15 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
 	
 	          return mapping.findForward("addActivityStep10");
 }
+
+	private ActionForward showStep14(ActionMapping mapping, EditActivityForm svForm) {
+		logger.debug("In edit survey list action");
+        logger.debug("step[before] : " + svForm.getStep());
+        svForm.setStep("14");
+        logger.debug("step[after] : " + svForm.getStep());
+		
+        return mapping.findForward("addActivityStep14");
+	}
 
 	private ActionForward showStep17(ActionMapping mapping, EditActivityForm svForm) {
 		//EditSurveyList surveyListAction = new EditSurveyList();

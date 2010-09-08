@@ -177,6 +177,7 @@
 	<page name="addActivityStep12" title=" - Add Activity - Level Linker" />
     <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
     <page name="addActivityStep17" title=" - Add Activity -Paris Indicators" />
+    <page name="addActivityStep14" title=" - Add Activity - Regional Observations" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
         <page name="newLocationManager" title=" - Region Manager" />
@@ -304,6 +305,10 @@
 	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />
 	<page page="addMeasure" name="aim_addMeasure" title="AMP - Add Measure" />
 	<page page="addActor" name="aim_addActor" title="AMP - Add Actor" />
+	
+	<page page="addObservation" name="aim_addObservation" title="AMP - Add Observation" />
+	<page page="addRegionalObservationMeasure" name="aim_addRegionalObservationMeasure" title="AMP - Add Measure" />
+	<page page="addRegionalObservationActor" name="aim_addRegionalObservationActor" title="AMP - Add Actor" />
 
 	<!-- for Paris -->
 	<page page="parisEditQuestion" name="aim_editQuestions" title="ParisIndicator Question Editor"/>

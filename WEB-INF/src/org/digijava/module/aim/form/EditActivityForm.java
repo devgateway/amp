@@ -1960,6 +1960,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		
 		private String issueDate;
 		
+		private ArrayList<Long> deletedObservations;
+		private ArrayList<Long> deletedMeasures;
+		private ArrayList<Long> deletedActors;
+		
 
 		public String getActor() {
 			return actor;
@@ -2024,6 +2028,39 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setMeasureId(Long measureId) {
 			this.measureId = measureId;
+		}
+
+		public ArrayList<Long> getDeletedObservations() {
+			if (this.deletedObservations == null) {
+				this.deletedObservations = new ArrayList();
+			}
+			return deletedObservations;
+		}
+
+		public void setDeletedObservations(ArrayList<Long> deletedObservations) {
+			this.deletedObservations = deletedObservations;
+		}
+
+		public ArrayList<Long> getDeletedMeasures() {
+			if (this.deletedMeasures == null) {
+				this.deletedMeasures = new ArrayList();
+			}
+			return deletedMeasures;
+		}
+
+		public void setDeletedMeasures(ArrayList<Long> deletedMeasures) {
+			this.deletedMeasures = deletedMeasures;
+		}
+
+		public ArrayList<Long> getDeletedActors() {
+			if (this.deletedActors == null) {
+				this.deletedActors = new ArrayList();
+			}
+			return deletedActors;
+		}
+
+		public void setDeletedActors(ArrayList<Long> deletedActors) {
+			this.deletedActors = deletedActors;
 		}
 
 	}
@@ -4272,6 +4309,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Contracts contracts = null;
 	private Costing costing = null;
 	private Issues issues = null;
+	private Issues observations = null;
 	private boolean totDisbIsBiggerThanTotCom;
 	
 	public Set<Survey> getSurveys() {
@@ -4356,6 +4394,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
             this.regFundingPageCurrCode=null;
             this.funding=null;
             this.issues=null;
+            this.observations=null;
 			step = "1";
 			reset = false;
 			steps = null;
@@ -4629,6 +4668,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.issues = new Issues();
 		}
 		return issues;
+	}
+	
+	public Issues getObservations() {
+		if (this.observations == null) {
+			this.observations = new Issues();
+		}
+		return observations;
 	}
 
 	// indexed properties getter should be on the root form object

@@ -30,6 +30,7 @@ import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -72,6 +73,9 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
@@ -279,6 +283,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             session.delete(issue);
           }
         }*/
+        
+        if(oldActivity.getRegionalObservations()!=null) {
+        	oldActivity.getRegionalObservations().clear();
+        }
 
         // delete all previous Reference Docs
         oldActivity.getReferenceDocs().clear();
@@ -493,6 +501,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         
         if (activity.getIssues() != null)
         	oldActivity.getIssues().addAll(activity.getIssues());
+        
+        if (activity.getRegionalObservations() != null) {
+        	oldActivity.setRegionalObservations(new HashSet());
+        	oldActivity.getRegionalObservations().addAll(activity.getRegionalObservations());
+        }
+        
         if (activity.getCosts() != null)
         	oldActivity.getCosts().addAll(activity.getCosts());
         if (activity.getActivityPrograms() != null)
@@ -750,6 +764,46 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      	  session.save(ampPhysicalPerformance);
 	  		}
 	      }
+      }
+      
+      //Session session = PersistenceManager.getRequestDBSession();
+      Iterator<Long> iActors = rsp.getEaForm().getObservations().getDeletedActors().iterator();
+      while(iActors.hasNext()){
+    	  Long id = iActors.next();
+    	  AmpRegionalObservationActor auxActor = (AmpRegionalObservationActor) session.load(AmpRegionalObservationActor.class, id);
+    	  if(auxActor != null) {
+    		  session.delete(auxActor);
+    	  }
+    	  
+      }
+      Iterator<Long> iMeasures = rsp.getEaForm().getObservations().getDeletedMeasures().iterator();
+      while(iMeasures.hasNext()){
+    	  Long id = iMeasures.next();
+    	  AmpRegionalObservationMeasure auxMeasure = (AmpRegionalObservationMeasure) session.load(AmpRegionalObservationMeasure.class, id);
+    	  /*if(auxMeasure != null) {
+    		  Iterator<AmpRegionalObservationActor> iDBActors = auxMeasure.getActors().iterator();
+    		  while(iDBActors.hasNext()) {
+    			  AmpRegionalObservationActor auxActor = iDBActors.next();
+    			  session.delete(auxActor);
+    		  }*/
+    		  //auxMeasure.getActors().clear();
+    		  session.delete(auxMeasure);
+    	  //}
+      }
+      Iterator<Long> iObservations = rsp.getEaForm().getObservations().getDeletedObservations().iterator();
+      while(iObservations.hasNext()){
+    	  Long id = iObservations.next();
+    	  AmpRegionalObservation auxObs = (AmpRegionalObservation) session.load(AmpRegionalObservation.class, id);
+    	  if(auxObs != null) {
+    		  /*Iterator<AmpRegionalObservationMeasure> iDBMeasures = auxObs.getRegionalObservationMeasures().iterator();
+    		  while(iDBMeasures.hasNext()) {
+    			  AmpRegionalObservationMeasure auxMeasure = iDBMeasures.next();
+    			  auxMeasure.getActors().clear();
+    			  session.delete(auxMeasure);
+    		  }
+    		  auxObs.getRegionalObservationMeasures().clear();*/
+    		  session.delete(auxObs);
+    	  }
       }
 
       /*
@@ -3341,32 +3395,58 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
 
-  
-        /* delete issues,measures,actors */
-        Set issues = ampAct.getIssues();
-        if (issues != null) {
-          Iterator iItr = issues.iterator();
-          while (iItr.hasNext()) {
-            AmpIssues issue = (AmpIssues) iItr.next();
-            Set measure = issue.getMeasures();
-            if (measure != null) {
-              Iterator measureItr = measure.iterator();
-              while (measureItr.hasNext()) {
-                AmpMeasure ampMeasure = (AmpMeasure) measureItr.next();
-                Set actor = ampMeasure.getActors();
-                if (actor != null) {
-                  Iterator actorItr = actor.iterator();
-                  while (actorItr.hasNext()) {
-                    AmpActor ampActor = (AmpActor) actorItr.next();
-                    session.delete(ampActor);
-                  }
-                }
-                session.delete(ampMeasure);
-              }
-            }
-            session.delete(issue);
-          }
-        }
+				/* delete issues,measures,actors */
+				Set issues = ampAct.getIssues();
+				if (issues != null) {
+					Iterator iItr = issues.iterator();
+					while (iItr.hasNext()) {
+						AmpIssues issue = (AmpIssues) iItr.next();
+						Set measure = issue.getMeasures();
+						if (measure != null) {
+							Iterator measureItr = measure.iterator();
+							while (measureItr.hasNext()) {
+								AmpMeasure ampMeasure = (AmpMeasure) measureItr.next();
+								Set actor = ampMeasure.getActors();
+								if (actor != null) {
+									Iterator actorItr = actor.iterator();
+									while (actorItr.hasNext()) {
+										AmpRegionalObservationActor ampActor = (AmpRegionalObservationActor) actorItr
+												.next();
+										session.delete(ampActor);
+									}
+								}
+								session.delete(ampMeasure);
+							}
+						}
+						session.delete(issue);
+					}
+				}
+        
+        /* delete observations,measures,actors */
+				Set observations = ampAct.getRegionalObservations();
+				if (observations != null) {
+					Iterator iItr = observations.iterator();
+					while (iItr.hasNext()) {
+						AmpRegionalObservation auxObservation = (AmpRegionalObservation) iItr.next();
+						Set measure = auxObservation.getRegionalObservationMeasures();
+						if (measure != null) {
+							Iterator measureItr = measure.iterator();
+							while (measureItr.hasNext()) {
+								AmpRegionalObservationMeasure ampMeasure = (AmpRegionalObservationMeasure) measureItr.next();
+								Set actor = ampMeasure.getActors();
+								if (actor != null) {
+									Iterator actorItr = actor.iterator();
+									while (actorItr.hasNext()) {
+										AmpActor ampActor = (AmpActor) actorItr.next();
+										session.delete(ampActor);
+									}
+								}
+								session.delete(ampMeasure);
+							}
+						}
+						session.delete(auxObservation);
+					}
+				}
 
         // delete all previous sectors
         Set sectors = ampAct.getSectors();
@@ -3966,7 +4046,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             
             AmpModulesVisibility step11=FeaturesUtil.getModuleByName("M & E", "MONITORING AND EVALUATING", templId);
             AmpFeaturesVisibility step12=FeaturesUtil.getFeatureByName("Costing", "Activity Costing", templId);
-            AmpFeaturesVisibility step14=FeaturesUtil.getFeatureByName("Contracting", "Contracting", templId);
+            AmpFeaturesVisibility step13=FeaturesUtil.getFeatureByName("Contracting", "Contracting", templId);
+            
+            AmpFeaturesVisibility step14=FeaturesUtil.getFeatureByName("Regional Observations", "Regional Observations", templId);
             
             if(step1!=null||step1_1!=null){
                 Step newStep1=new Step();
@@ -4052,12 +4134,19 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             }
            
             
-              if(step14!=null){
-                Step newStep14=new Step();
-                newStep14.setStepActualNumber(steps.size()+1);
-                newStep14.setStepNumber("13");
-                steps.add(newStep14);
+              if(step13!=null){
+                Step newStep13=new Step();
+                newStep13.setStepActualNumber(steps.size()+1);
+                newStep13.setStepNumber("13");
+                steps.add(newStep13);
                 
+            }
+              
+            if (step14 != null) {
+				Step newStep14 = new Step();
+				newStep14.setStepActualNumber(steps.size() + 1);
+				newStep14.setStepNumber("14");
+				steps.add(newStep14);
             }
             
             return steps;

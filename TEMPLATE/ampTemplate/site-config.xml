@@ -606,6 +606,11 @@
 				<page>aim_addIssue</page>
 				<page>aim_addMeasure</page>
 				<page>aim_addActor</page>
+				
+				<page>aim_addObservation</page>
+				<page>aim_addRegionalObservationMeasure</page>
+				<page>aim_addRegionalObservationActor</page>
+				
 				<page>aim_addChildWorkspaces</page>
 				<page>aim_addOrgGrpPopupLayout</page>
 				<page>aim_viewOrgDetailPopupLayout</page>

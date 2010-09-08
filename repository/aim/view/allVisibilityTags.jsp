@@ -38,6 +38,7 @@
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
@@ -159,7 +160,8 @@
  <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
 <feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> 
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
-<feature:display name="Issues" module="Issues"></feature:display> 
+<feature:display name="Issues" module="Issues"></feature:display>
+<feature:display name="Regional Observations" module="Regional Observations"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
@@ -251,6 +253,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
  
 <feature:display name="Enable New User Registration" module="Login - User Management"></feature:display> 
  
+<field:display name="Add Observations Button" feature="Regional Observations"></field:display>
+<field:display name="Measures Taken" feature="Regional Observations"></field:display>
+<field:display name="Add Measures Link" feature="Regional Observations"></field:display>
+<field:display name="Add Actors Link" feature="Regional Observations"></field:display>
+<field:display name="Actors" feature="Regional Observations"></field:display>
+<field:display name="Observation Date" feature="Regional Observations"></field:display>
+
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 

@@ -168,14 +168,11 @@
                     var configId;
                     function loadClassification(id){
                         configId=id;
-                        $("LI[class$='_config_selected']").each(function(index) {
-                            if(this.style.display=='none'){
-                                this.style.display="block";
-                            }
-                            else{
-                                this.style.display="none";
-                            }
-                        });
+                         $("LI[class$='_config_deselected']").css('display', 'block');
+                         $("LI[class$='_config_selected']").css('display', 'none');
+                         $("LI[class='"+id+"_config_selected']").css('display', 'block');
+                         $("LI[class='"+id+"_config_deselected']").css('display',  'none');
+                           
                         var graphVisible=$(".tab_graph_${gisWidgetTeaserForm.type}_selected:first").css('display');
                         if(graphVisible=="none"){
                     <digi:context name="url" property="context/orgProfile/showOrgProfileTables.do"/>
@@ -213,13 +210,13 @@
                                 <c:forEach var="config" items="${gisWidgetTeaserForm.sectorClassificationConfigs}" varStatus="status">
                                     <c:if test="${config.name=='Primary'}">
                                         <field:display name="Primary Sector" feature="Sectors">
-                                            <LI class="primary_config_selected">
+                                            <LI class="${config.id}_config_selected">
                                                 <span>
                                                     ${config.classification.secSchemeName}
                                                 </span>
                                                 &nbsp;&nbsp;|
                                             </LI>
-                                            <LI class="secondary_config_selected" style="display: none">
+                                            <LI class="${config.id}_config_deselected" style="display: none">
                                                 <div>
                                                     <span>
                                                         <a href="javascript:loadClassification('${config.id}')" >
@@ -233,12 +230,33 @@
                                     </c:if>
                                     <c:if test="${config.name=='Secondary'}">
                                         <field:display name="Secondary Sector" feature="Sectors">
-                                            <LI class="secondary_config_selected" style="display: none">
+                                            <LI class="${config.id}_config_selected" style="display: none">
+                                                <span>
+                                                    ${config.classification.secSchemeName}
+                                                </span>
+                                                 &nbsp;&nbsp;|
+                                            </LI>
+                                            <LI class="${config.id}_config_deselected">
+                                                <div>
+                                                    <span>
+                                                        <a href="javascript:loadClassification('${config.id}')" >
+                                                            ${config.classification.secSchemeName}
+                                                        </a>
+                                                    </span>
+                                                    &nbsp;&nbsp;|
+                                                </div>
+                                            </LI>
+                                        </field:display>
+
+                                    </c:if>
+                                       <c:if test="${config.name=='Tertiary'}">
+                                        <field:display name="Tertiary Sector" feature="Sectors">
+                                            <LI class="${config.id}_config_selected" style="display: none">
                                                 <span>
                                                     ${config.classification.secSchemeName}
                                                 </span>
                                             </LI>
-                                            <LI class="primary_config_selected">
+                                            <LI class="${config.id}_config_deselected">
                                                 <div>
                                                     <span>
                                                         <a href="javascript:loadClassification('${config.id}')" >

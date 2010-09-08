@@ -1,6 +1,5 @@
 package org.digijava.module.orgProfile.action;
 
-import com.lowagie.text.Cell;
 import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -195,6 +194,8 @@ public class ExportToWord extends Action {
                         JFreeChart chartDisb = null;
                         JFreeChart chartSecondaryScheme = null;
                         JFreeChart chartDisbSecondaryScheme = null;
+                        JFreeChart chartTertiaryScheme = null;
+                        JFreeChart chartDisbTertiaryScheme = null;
                         Table orgSummaryTbl = null;
                         Table orgContactsTbl=null;
                         Table largetsProjectsTbl = null;
@@ -204,6 +205,7 @@ public class ExportToWord extends Action {
                         Table pledgesCommDisbTbl = null;
                         Table sectorTbl = null;
                         Table secondarySectorTbl = null;
+                        Table tertiarySectorTbl = null;
                         Table regionTbl = null;
                         Table aidPredTable = null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
@@ -250,6 +252,7 @@ public class ExportToWord extends Action {
                         }
                         String chartTitle = null;
                         String secondarySectorchartTitle = null;
+                        String tertiarySectorchartTitle = null;
                         int colspan = filter.getYearsInRange() + 1;
                         int oneYearColspan = 2;
                         if (filter.getTransactionType() == 2) {
@@ -360,15 +363,22 @@ public class ExportToWord extends Action {
                             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
                                 Long primaryConfigId = SectorUtil.getPrimaryConfigClassification().getId();
                                 Long secondaryConfigId = null;
+                                Long tertiaryConfigId = null;
                                 List<AmpClassificationConfiguration> congifs = SectorUtil.getAllClassificationConfigs();
                                 String secondarySectorBreakdown = null;
+                                String tertiarySectorBreakdown = null;
                                 if (congifs != null) {
                                     for (AmpClassificationConfiguration config : congifs) {
                                         if (config.getName().equals("Secondary") && FeaturesUtil.isVisibleSectors("Secondary", ampContext)) {
                                             secondaryConfigId = config.getId();
                                             secondarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
-                                            break;
 
+                                        } else {
+                                            if (config.getName().equals("Tertiary") && FeaturesUtil.isVisibleSectors("Tertiary", ampContext)) {
+                                                tertiaryConfigId = config.getId();
+                                                tertiarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+
+                                            }
                                         }
                                     }
                                 }
@@ -396,6 +406,19 @@ public class ExportToWord extends Action {
                                         OrgProfileUtil.getDataTable(secondarySectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
 
                                     }
+                                     if (tertiaryConfigId != null) {
+                                        tertiarySectorTbl = new Table(oneYearColspan);
+                                        tertiarySectorTbl.setWidth(100);
+                                        RtfCell tertiarySectorTitleCell = new RtfCell(new Paragraph(tertiarySectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONTWHITE));
+                                        tertiarySectorTitleCell.setColspan(oneYearColspan);
+                                        tertiarySectorTbl.addCell(tertiarySectorTitleCell);
+                                        tertiarySectorTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                        RtfCell tertiarySectorNameTitleCell = new RtfCell(new Paragraph(tertiarySectorBreakdown, OrgProfileUtil.HEADERFONTWHITE));
+                                        tertiarySectorNameTitleCell.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
+                                        tertiarySectorTbl.addCell(tertiarySectorNameTitleCell);
+                                        OrgProfileUtil.getDataTable(tertiarySectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
+                                    }
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
                                     chartTitle = sectorBreakdown;
@@ -405,19 +428,33 @@ public class ExportToWord extends Action {
                                         chart = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, primaryConfigId);
                                         if (secondaryConfigId != null) {
                                             chartSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
-                                            secondarySectorchartTitle=secondarySectorBreakdown;
+                                            secondarySectorchartTitle = secondarySectorBreakdown;
+                                        }
+                                        if (tertiaryConfigId != null) {
+                                            tertiarySectorchartTitle = tertiarySectorBreakdown;
+                                            chartTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
                                         }
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
                                         chartDisb = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, primaryConfigId);
                                         if (secondaryConfigId != null) {
                                             chartDisbSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
                                         }
+                                        if (tertiaryConfigId != null) {
+                                            chartDisbTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
+                                        }
 
                                     } else {
                                         chart = ChartWidgetUtil.getDonutChart(opt, filter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, primaryConfigId);
                                         if (secondaryConfigId != null) {
                                             chartSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, filter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
-                                            secondarySectorchartTitle=secondarySectorBreakdown;
+                                            secondarySectorchartTitle = secondarySectorBreakdown;
+                                        }
+                                        if (tertiaryConfigId != null) {
+                                            tertiarySectorchartTitle = tertiarySectorBreakdown;
+                                            chartTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, filter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
                                         }
                                     }
                                 }
@@ -936,6 +973,8 @@ public class ExportToWord extends Action {
                         Table chartTableDisb = null;
                         Table chartSecondarySecTable=null;
                         Table chartDisbSecondarySecTable=null;
+                        Table chartTertiarySecTable=null;
+                        Table chartDisbTertiarySecTable=null;
 
                         if (chart != null) {
                             chartTable = new Table(1);
@@ -989,6 +1028,7 @@ public class ExportToWord extends Action {
                             RtfCell cell = new RtfCell(img);
                             chartSecondarySecTable.addCell(cell);
                         }
+
                           if (chartDisbSecondaryScheme != null) {
                             chartDisbSecondarySecTable = new Table(1);
                             chartDisbSecondarySecTable.setWidth(100);
@@ -1041,6 +1081,58 @@ public class ExportToWord extends Action {
                             chartTableDisb.addCell(cell);
 
                         }
+                         if (chartTertiaryScheme != null) {
+                            chartTertiarySecTable = new Table(1);
+                            chartTertiarySecTable.setWidth(100);
+                            Plot plot = chartTertiaryScheme.getPlot();
+                            plot.setNoDataMessage("No Data Available");
+                            plot.setNoDataMessageFont(font);
+
+                            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+                            // write image in response
+                            ChartUtilities.writeChartAsPNG(
+                                    outByteStream,
+                                    chartTertiaryScheme,
+                                    opt.getWidth().intValue(),
+                                    opt.getHeight().intValue(),
+                                    info);
+                            Image img = Image.getInstance(outByteStream.toByteArray());
+                            img.setAlignment(Image.ALIGN_CENTER);
+
+                            Paragraph imgTitle = new Paragraph(chartTitle, new com.lowagie.text.Font(com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            imgTitle.setAlignment(Element.ALIGN_CENTER);
+                            RtfCell imgTitleCell = new RtfCell(imgTitle);
+                            imgTitleCell.setHeader(true);
+                            chartTertiarySecTable.addCell(imgTitleCell);
+                            RtfCell cell = new RtfCell(img);
+                            chartTertiarySecTable.addCell(cell);
+                        }
+                        if (chartDisbTertiaryScheme != null) {
+                            chartDisbTertiarySecTable= new Table(1);
+                            chartDisbTertiarySecTable.setWidth(100);
+                            Plot plot = chartDisbTertiaryScheme.getPlot();
+                            plot.setNoDataMessage("No Data Available");
+                            plot.setNoDataMessageFont(font);
+
+                            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+                            // write image in response
+                            ChartUtilities.writeChartAsPNG(
+                                    outByteStream,
+                                    chartDisbTertiaryScheme,
+                                    opt.getWidth().intValue(),
+                                    opt.getHeight().intValue(),
+                                    info);
+                            Image img = Image.getInstance(outByteStream.toByteArray());
+                            img.setAlignment(Image.ALIGN_CENTER);
+
+                            Paragraph imgTitle = new Paragraph(secondarySectorchartTitle, new com.lowagie.text.Font(com.lowagie.text.Font.TIMES_ROMAN, 12, Font.BOLD));
+                            imgTitle.setAlignment(Element.ALIGN_CENTER);
+                            RtfCell imgTitleCell = new RtfCell(imgTitle);
+                            imgTitleCell.setHeader(true);
+                            chartDisbTertiarySecTable.addCell(imgTitleCell);
+                            RtfCell cell = new RtfCell(img);
+                            chartDisbTertiarySecTable.addCell(cell);
+                        }
                         if (chartTable != null) {
                             chartTable.setBorder(Table.NO_BORDER);
                             chartTable.setTableFitsPage(true);
@@ -1060,6 +1152,16 @@ public class ExportToWord extends Action {
                             chartDisbSecondarySecTable.setBorder(Table.NO_BORDER);
                             chartDisbSecondarySecTable.setTableFitsPage(true);
                             doc.add(chartDisbSecondarySecTable);
+                        }
+                        if (chartTertiarySecTable != null) {
+                            chartTertiarySecTable.setBorder(Table.NO_BORDER);
+                            chartTertiarySecTable.setTableFitsPage(true);
+                            doc.add(chartTertiarySecTable);
+                        }
+                        if (chartDisbTertiarySecTable != null) {
+                            chartDisbTertiarySecTable.setBorder(Table.NO_BORDER);
+                            chartDisbTertiarySecTable.setTableFitsPage(true);
+                            doc.add(chartDisbTertiarySecTable);
                         }
                         if (orgSummaryTbl != null) {
                             doc.add(orgSummaryTbl);
@@ -1085,6 +1187,9 @@ public class ExportToWord extends Action {
                         }
                         if (secondarySectorTbl != null) {
                             doc.add(secondarySectorTbl);
+                        }
+                        if(tertiarySectorTbl!=null){
+                             doc.add(tertiarySectorTbl);
                         }
                         if (regionTbl != null) {
                             doc.add(regionTbl);

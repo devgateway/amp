@@ -199,6 +199,8 @@ public class ExportToPDF extends Action {
                         JFreeChart chartDisb = null;
                         JFreeChart chartSecondaryScheme = null;
                         JFreeChart chartDisbSecondaryScheme = null;
+                        JFreeChart chartTertiaryScheme = null;
+                        JFreeChart chartDisbTertiaryScheme = null;
                         PdfPTable orgSummaryTbl = null;
                         PdfPTable orgContactsTbl = null;
                         PdfPTable largetsProjectsTbl = null;
@@ -209,6 +211,7 @@ public class ExportToPDF extends Action {
                         PdfPTable pledgesCommDisbTbl = null;
                         PdfPTable sectorTbl = null;
                         PdfPTable secondarySectorTbl = null;
+                        PdfPTable tertiarySectorTbl = null;
                         PdfPTable regionTbl = null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
                         String currName = filter.getCurrName();
@@ -359,14 +362,22 @@ public class ExportToPDF extends Action {
                             case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN:
                                 Long primaryConfigId = SectorUtil.getPrimaryConfigClassification().getId();
                                 Long secondaryConfigId = null;
+                                Long tertiaryConfigId=null;
                                 List<AmpClassificationConfiguration> congifs = SectorUtil.getAllClassificationConfigs();
                                 String secondarySectorBreakdown = null;
+                                String tertiarySectorBreakdown = null;
                                 if (congifs != null) {
                                     for (AmpClassificationConfiguration config : congifs) {
                                         if (config.getName().equals("Secondary") && FeaturesUtil.isVisibleSectors("Secondary", ampContext)) {
                                             secondaryConfigId = config.getId();
                                             secondarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
-                                            break;
+
+                                        } else {
+                                            if (config.getName().equals("Tertiary") && FeaturesUtil.isVisibleSectors("Tertiary", ampContext)) {
+                                                tertiaryConfigId = config.getId();
+                                                tertiarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+
+                                            }
 
                                         }
                                     }
@@ -397,6 +408,20 @@ public class ExportToPDF extends Action {
                                         OrgProfileUtil.getDataTable(secondarySectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
 
                                     }
+                                     if (tertiaryConfigId != null) {
+                                        tertiarySectorTbl = new PdfPTable(oneYearColspan);
+                                        tertiarySectorTbl.setWidthPercentage(100);
+                                        PdfPCell tertiarySectorTitleCell = new PdfPCell(new Paragraph(tertiarySectorBreakdown + "(" + currName + amountInThousands + ")", OrgProfileUtil.HEADERFONT));
+                                        tertiarySectorTitleCell.setColspan(oneYearColspan);
+                                        tertiarySectorTbl.addCell(tertiarySectorTitleCell);
+                                        PdfPCell tertiarySectorNameTitleCell = new PdfPCell(new Paragraph(tertiarySectorBreakdown, OrgProfileUtil.HEADERFONT));
+                                        tertiarySectorNameTitleCell.setBorderWidthRight(0);
+                                        tertiarySectorNameTitleCell.setBorderWidthBottom(0);
+                                        tertiarySectorNameTitleCell.setBorderWidthTop(0);
+                                        tertiarySectorTbl.addCell(tertiarySectorNameTitleCell);
+                                        OrgProfileUtil.getDataTable(tertiarySectorTbl, filter, siteId, langCode, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
+                                    }
                                 }
                                 if (typeOfExport == Constants.EXPORT_OPTION_CHART_DATA_SOURCE || Constants.EXPORT_OPTION_CHART_ONLY == typeOfExport) {
                                     if (filter.getTransactionType() == 2) {
@@ -409,12 +434,22 @@ public class ExportToPDF extends Action {
                                             chartSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
 
                                         }
+                                        if(tertiaryConfigId!=null){
+                                            opt.setTitle(tertiarySectorBreakdown);
+                                            chartTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN,tertiaryConfigId);
+
+                                        }
                                         newFilter.setTransactionType(Constants.DISBURSEMENT);
                                         opt.setTitle( sectorBreakdown);
                                         chartDisb = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, primaryConfigId);
                                         if (secondaryConfigId != null) {
                                             opt.setTitle(secondarySectorBreakdown);
                                             chartDisbSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
+                                        }
+                                         if(tertiaryConfigId!=null){
+                                            opt.setTitle(tertiarySectorBreakdown);
+                                            chartDisbTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, newFilter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
                                         }
 
                                     } else {
@@ -423,6 +458,11 @@ public class ExportToPDF extends Action {
                                         if (secondaryConfigId != null) {
                                             opt.setTitle(secondarySectorBreakdown);
                                             chartSecondaryScheme = ChartWidgetUtil.getDonutChart(opt, filter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, secondaryConfigId);
+                                        }
+                                        if(tertiaryConfigId!=null){
+                                            opt.setTitle(tertiarySectorBreakdown);
+                                            chartDisbTertiaryScheme = ChartWidgetUtil.getDonutChart(opt, filter, WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN, tertiaryConfigId);
+
                                         }
                                     }
                                 }
@@ -945,6 +985,40 @@ public class ExportToPDF extends Action {
                             doc.add(chartTable);
                             doc.add(new Paragraph(" "));
                         }
+
+                         if (chartTertiaryScheme != null) {
+                            PdfPTable chartTable=new  PdfPTable(1);
+                            Plot plot = chart.getPlot();
+                            plot.setNoDataMessage("No Data Available");
+                            plot.setNoDataMessageFont(font);
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height);
+                            chartTertiaryScheme.draw(g2, r2D, null);
+                            g2.dispose();
+                            Image img=Image.getInstance(tp);
+                            chartTable.addCell(img);
+                            doc.add(chartTable);
+                            doc.add(new Paragraph(" "));
+                        }
+
+                        if (chartDisbTertiaryScheme != null) {
+                            PdfPTable chartTable=new  PdfPTable(1);
+                            Plot plot = chart.getPlot();
+                            plot.setNoDataMessage("No Data Available");
+                            plot.setNoDataMessageFont(font);
+                            PdfContentByte cb = pdfWriter.getDirectContent();
+                            PdfTemplate tp = cb.createTemplate(width, height);
+                            Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
+                            Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height);
+                            chartDisbTertiaryScheme.draw(g2, r2D, null);
+                            g2.dispose();
+                            Image img=Image.getInstance(tp);
+                            chartTable.addCell(img);
+                            doc.add(chartTable);
+                            doc.add(new Paragraph(" "));
+                        }
                        
                       
                         if (orgSummaryTbl != null) {
@@ -984,6 +1058,11 @@ public class ExportToPDF extends Action {
                         }
                         if (secondarySectorTbl != null) {
                             doc.add(secondarySectorTbl);
+                            doc.add(new Paragraph(" "));
+
+                        }
+                        if (tertiarySectorTbl != null) {
+                            doc.add(tertiarySectorTbl);
                             doc.add(new Paragraph(" "));
 
                         }

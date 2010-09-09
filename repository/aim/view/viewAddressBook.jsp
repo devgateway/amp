@@ -11,6 +11,8 @@
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
+<html:hidden property="totalResults" styleId="totalResults"/>
+
 <style type="text/css">
 	.jcol{												
 		padding-left:10px;												 
@@ -305,10 +307,11 @@ html>body #main {
 		        // Create the Paginator 
 		        var myPaginator = new YAHOO.widget.Paginator({ 
 		        	rowsPerPage:10,
+		        	//totalRecords:document.getElementById("totalResults").value,
 		        	containers : ["dt-pag-nav"], 
 		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
 		        	pageReportTemplate		: "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
-		        	rowsPerPageOptions		: [10,25,50,100],
+		        	rowsPerPageOptions		: [10,25,50,100,{value:document.getElementById("totalResults").value,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
 		        	firstPageLinkLabel		: '<< <digi:trn jsFriendly="true">first</digi:trn>',
 		        	previousPageLinkLabel	: '< <digi:trn jsFriendly="true">prev</digi:trn>',
 		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn> >',

@@ -11,7 +11,7 @@
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
-<html:hidden property="totalResults" styleId="totalResults"/>
+<!--<html:hidden property="totalResults" styleId="totalResults"/>-->
 
 <style type="text/css">
 	.jcol{												
@@ -311,7 +311,7 @@ html>body #main {
 		        	containers : ["dt-pag-nav"], 
 		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
 		        	pageReportTemplate		: "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
-		        	rowsPerPageOptions		: [10,25,50,100,{value:document.getElementById("totalResults").value,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
 		        	firstPageLinkLabel		: '<< <digi:trn jsFriendly="true">first</digi:trn>',
 		        	previousPageLinkLabel	: '< <digi:trn jsFriendly="true">prev</digi:trn>',
 		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn> >',

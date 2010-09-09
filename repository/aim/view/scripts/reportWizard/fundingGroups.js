@@ -66,6 +66,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Tertiary Sector'
 				,'Tertiary Sector Sub-Sector'
                 ,'Tertiary Sector Sub-Sub-Sector'
+                ,'Government Approval Procedures'
+                ,'Joint Criteria'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

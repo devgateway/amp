@@ -95,9 +95,14 @@ public class DocumentFromTemplateActions extends DispatchAction {
 				//in case it's multibox and multiple select, then submitted values can be array
 				String[] submittedParameterValues= request.getParameterValues(parameter);
 				for(int i=0;i<submittedParameterValues.length;i++){
-					Integer ordNumber=new Integer(parameter.substring(parameter.lastIndexOf("_")+1));
-					subValHolder=new SubmittedValueHolder(ordNumber, submittedParameterValues[i]);
-					submittedValsHolder.add(subValHolder);
+					if(submittedParameterValues[i].length()>0){
+						if(parameter.startsWith("doc_select_") && submittedParameterValues[i].equals("-Select-")){
+							continue;
+						}
+						Integer ordNumber=new Integer(parameter.substring(parameter.lastIndexOf("_")+1));
+						subValHolder=new SubmittedValueHolder(ordNumber, submittedParameterValues[i]);
+						submittedValsHolder.add(subValHolder);
+					}
 				}
 			}
 		}

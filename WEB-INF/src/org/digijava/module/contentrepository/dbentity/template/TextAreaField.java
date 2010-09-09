@@ -18,7 +18,7 @@ public class TextAreaField extends TemplateField {
 
 	@Override
 	public String getRendered() {
-		String retVal="<textarea name=\"doc_textArea_"+getOrdinalNumber().intValue()+"\" class=\"inp-text\" >";
+		String retVal="<textarea name=\"doc_textArea_"+getOrdinalNumber().intValue()+"\" class=\"inp-text\" rows=\"4\" cols=\"40\">";
 		retVal+="</textarea>";
 		return retVal;
 	}

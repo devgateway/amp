@@ -9,6 +9,8 @@
 <digi:instance property="docFromTemplateForm"/>
 
 <digi:form action="/docFromTemplate.do?actType=saveDocument" method="post">
+
+
 <table width="420px" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">	
   <tr>
   	<td width="100%" colspan="2">
@@ -19,7 +21,13 @@
 			</logic:iterate>
 		</html:select>
   	</td>
-  </tr> 
+  </tr>
+  <tr><td style="text-align: center;" colspan="2">
+  	<div id="tempLoadingDiv" style="text-align: center;display: none;">
+		<digi:trn>Please Wait...</digi:trn> <br>
+		<img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='20px' align="middle"/>
+	</div>
+  </td></tr>
   <c:if test="${!empty docFromTemplateForm.fields}">
   	<tr>
 		<td>
@@ -31,7 +39,8 @@
   	</tr>
     <c:forEach var="field" items="${docFromTemplateForm.fields}">
         <tr>
-          <td align="center" colspan="2">
+          <td>&nbsp;</td>
+          <td align="left" colspan="2">
           	${field.rendered}
           </td>
         </tr>

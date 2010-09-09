@@ -41,6 +41,12 @@
 #menuContainerDiv ul.first-of-type li.selected a.selected{ 
 	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
 }
+
+#panelForTemplates .bd {     
+    /* Apply scrollbars for all browsers. */ 
+    /*overflow: auto;*/
+    height: 400px; overflow: auto; width:98%; 
+}
 </style>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
@@ -1222,9 +1228,12 @@ function getCallbackForTemplates (panel) {
 			},
 			failure: function () {
 				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
+				var myDiv=document.getElementById('tempLoadingDiv');
+				myDiv.style.display="none";
 			}
 	}	
-	return callbackObj;	
+	return callbackObj;
+
 }
 
 function addFromTemplate() {
@@ -1233,7 +1242,7 @@ function addFromTemplate() {
 	}
 	templatesPanel	= YAHOO.amp.tempPanels[0]; 
 	if (templatesPanel == null) {
-		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{ width:"400px",height:"400px", visible:true, draggable:true, close:true, modal:true } );
+		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{ width:"400px",height:"400px", visible:true, draggable:true, close:true, modal:true,constraintoviewport: false } );
 		templatesPanel.setHeader('<digi:trn>Create Document From Template</digi:trn>');
 		templatesPanel.setBody("");
 		templatesPanel.render(document.body);
@@ -1255,6 +1264,8 @@ function templateNameSelected(){
 	//	alert('Please Select Template');
 	//	return false;
 	//}
+	var myDiv=document.getElementById('tempLoadingDiv');
+	myDiv.style.display="block";
 	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;
     var url="${loadTemp}&templateId="+templateId; //+"&documentName="+docName
     YAHOOAmp.util.Connect.asyncRequest("POST", url, getCallbackForTemplates(templatesPanel));

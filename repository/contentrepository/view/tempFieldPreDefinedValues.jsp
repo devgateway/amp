@@ -18,14 +18,19 @@
   <c:if test="${!empty manageFieldForm.possibleValuesForField}">
     <c:forEach var="posVal" varStatus="index" items="${manageFieldForm.possibleValuesForField}">
         <tr>
-          <td height="10" align="center" width="10%">
+          <td height="10" align="center" width="10%"> 
           	<c:if test="${posVal.dbId!=null}">
           		<c:set var="textReadonly" value="true" />
           	</c:if>
           	<c:if test="${posVal.dbId==null}">
           		<c:set var="textReadonly" value="false" />
           	</c:if>
-            <html:text name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" size="50"/>
+          	<c:if test="${manageFieldForm.selectedFieldType=='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
+          		<html:textarea name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" rows="5" cols="50" />
+          	</c:if>
+            <c:if test="${manageFieldForm.selectedFieldType!='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
+          		<html:text name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" size="50"/>
+          	</c:if>            
           </td>
           <td>
             <a href="javascript:deleteData('${posVal.tempId}')">

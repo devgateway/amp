@@ -11,8 +11,6 @@
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
-<!--<html:hidden property="totalResults" styleId="totalResults"/>-->
-
 <style type="text/css">
 	.jcol{												
 		padding-left:10px;												 

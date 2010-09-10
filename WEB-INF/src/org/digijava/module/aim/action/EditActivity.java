@@ -513,8 +513,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
     	  eaForm.getIdentification().setGbsSbs(null);
-    	  eaForm.getIdentification().setGovernmentApprovalProcedures(new Boolean(false));
-    	  eaForm.getIdentification().setJointCriteria(new Boolean(false));
+    	  eaForm.getIdentification().setGovernmentApprovalProcedures(null);
+    	  eaForm.getIdentification().setJointCriteria(null);
     	  /* END - Clearing Tanzania Adds */
 
     	  eaForm.getIdentification().setCrisNumber(null);
@@ -750,12 +750,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           if (activity.isGovernmentApprovalProcedures() != null)
             eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
           else
-            eaForm.getIdentification().setGovernmentApprovalProcedures(new Boolean(false));
+            eaForm.getIdentification().setGovernmentApprovalProcedures(null);
 
           if (activity.isJointCriteria() != null)
             eaForm.getIdentification().setJointCriteria(activity.isJointCriteria());
           else
-            activity.setJointCriteria(new Boolean(false));
+             eaForm.getIdentification().setJointCriteria(null);
           
           if (activity.isHumanitarianAid() != null)
         	  eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());

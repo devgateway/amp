@@ -44,8 +44,9 @@
 
 #panelForTemplates .bd {     
     /* Apply scrollbars for all browsers. */ 
-    /*overflow: auto;*/
-    height: 400px; overflow: auto; width:98%; 
+    height: 400px;
+    min-width:450px; overflow: auto;      
+     
 }
 </style>
 
@@ -1242,7 +1243,7 @@ function addFromTemplate() {
 	}
 	templatesPanel	= YAHOO.amp.tempPanels[0]; 
 	if (templatesPanel == null) {
-		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{ width:"400px",height:"400px", visible:true, draggable:true, close:true, modal:true,constraintoviewport: false } );
+		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true, draggable:true, close:true, modal:true,constraintoviewport: false } );
 		templatesPanel.setHeader('<digi:trn>Create Document From Template</digi:trn>');
 		templatesPanel.setBody("");
 		templatesPanel.render(document.body);

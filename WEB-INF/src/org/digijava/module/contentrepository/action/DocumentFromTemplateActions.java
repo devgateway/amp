@@ -31,6 +31,8 @@ import org.digijava.module.contentrepository.form.CreateDocFromTemplateForm;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.template.PdfFileHelper;
 import org.digijava.module.contentrepository.helper.template.SubmittedValueHolder;
+import org.digijava.module.contentrepository.helper.template.TemplateConstants;
+import org.digijava.module.contentrepository.helper.template.WordDocumentHelper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.TemplateDocsUtil;
 
@@ -39,7 +41,12 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-
+import com.lowagie.text.rtf.RtfWriter2;
+/**
+ * contians actions , that can be done while trying to create document using Templates
+ * @author Dare
+ *
+ */
 public class DocumentFromTemplateActions extends DispatchAction {
 	
 	public ActionForward loadTemplates(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
@@ -108,15 +115,38 @@ public class DocumentFromTemplateActions extends DispatchAction {
 		}
 		
 		Collections.sort(submittedValsHolder, new TemplateDocsUtil.SubmittedValuesOrdinaryNumberComparator());		
-		//create pdf from the list
-		createPdf(submittedValsHolder, myForm.getDocumentName(),request);
+		//create pdf or word from the list
+		String nodeuuid=null;
+		if(myForm.getDocType()!=null){
+			if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_PDF)){
+				nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),request);
+			}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
+				nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),request);
+			}
+			//last approved version
+			 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
+			 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
+			 DbUtil.saveOrUpdateObject(lastAppVersion);
+			 //public resource
+			 CrDocumentNodeAttributes docAttributes=new CrDocumentNodeAttributes();
+			 docAttributes.setPublicDocument(true);
+			 docAttributes.setUuid(nodeuuid);
+			 docAttributes.setPublicVersionUUID(lastApprovedNodeVersionUUID);
+			 DbUtil.saveOrUpdateObject(docAttributes);
+		} 
 		
 		clearForm(myForm);
 		return mapping.findForward("showResources");
 	}
 	
-	
-	private void createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,HttpServletRequest request){
+	/**
+	 * creates Pdf document and returns it's nodeUUID
+	 * @param pdfContent
+	 * @param pdfName
+	 * @param request
+	 * @return
+	 */
+	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,HttpServletRequest request){
 		com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    try {
@@ -144,18 +174,46 @@ public class DocumentFromTemplateActions extends DispatchAction {
 			 if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
 					nodeWrapper.saveNode(jcrWriteSession);
 			 }
-			 //last approved version
-			 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request).getUUID();
-			 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeWrapper.getUuid(), lastApprovedNodeVersionUUID);
-			 DbUtil.saveOrUpdateObject(lastAppVersion);
-			 //public resource
-			 CrDocumentNodeAttributes docAttributes=new CrDocumentNodeAttributes();
-			 docAttributes.setPublicDocument(true);
-			 docAttributes.setUuid(nodeWrapper.getUuid());
-			 docAttributes.setPublicVersionUUID(lastApprovedNodeVersionUUID);
-			 DbUtil.saveOrUpdateObject(docAttributes);
+			 return nodeWrapper.getUuid();			 
 	    }catch (Exception e) {
 	    	e.printStackTrace();
+	    	return null;
+		}
+	}
+	
+	
+	private String createWord(List<SubmittedValueHolder> docContent, String docName,HttpServletRequest request){
+        com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            RtfWriter2.getInstance(doc, baos);
+            doc.open();
+	        com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
+	        com.lowagie.text.Font plainFont = new Font(Font.TIMES_ROMAN, 10);
+	        Paragraph pageTitle = new Paragraph(docName, pageTitleFont);
+	        pageTitle.setAlignment(Element.ALIGN_CENTER);
+	        doc.add(pageTitle);
+	        doc.add(new Paragraph(" "));
+	        for (SubmittedValueHolder pdfContentElement : docContent) {
+	        	 Paragraph docContentEl = new Paragraph(pdfContentElement.getSubmittedValue(), plainFont);
+	        	 doc.add(docContentEl);
+		         doc.add(new Paragraph(" "));
+	 		}
+	        doc.close();
+	        byte[] docbody= baos.toByteArray();
+	        String contentType="application/msword";
+	        WordDocumentHelper wordDocHelper=new WordDocumentHelper(docName, contentType, docbody);
+	        //create jcr node
+	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
+	         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+	         NodeWrapper nodeWrapper		= new NodeWrapper(wordDocHelper, request, userHomeNode, false, new ActionErrors());
+			 if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
+					nodeWrapper.saveNode(jcrWriteSession);
+			 }
+			 return nodeWrapper.getUuid();
+        }catch (Exception e) {
+			e.printStackTrace();
+        	return null;
 		}
 	}
 	
@@ -171,5 +229,6 @@ public class DocumentFromTemplateActions extends DispatchAction {
 		form.setTemplates(null);
 		form.setFields(null);
 		form.setDocumentName(null);
+		form.setDocType(null);
 	}
 }

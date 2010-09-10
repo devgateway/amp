@@ -45,4 +45,7 @@ public class TemplateConstants {
 														"text box"
 														};
 	
+	public static final String DOC_TYPE_PDF ="pdf";
+	public static final String DOC_TYPE_WORD ="doc";
+	
 }

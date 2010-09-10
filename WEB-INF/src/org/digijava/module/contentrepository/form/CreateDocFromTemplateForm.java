@@ -15,6 +15,7 @@ public class CreateDocFromTemplateForm extends ActionForm {
 	private List<TemplateField> fields;
 	
 	private String documentName;
+	private String docType;
 	
 	public Long getTemplateId() {
 		return templateId;
@@ -46,5 +47,10 @@ public class CreateDocFromTemplateForm extends ActionForm {
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
 	}
-	
+	public String getDocType() {
+		return docType;
+	}
+	public void setDocType(String docType) {
+		this.docType = docType;
+	}	
 }

@@ -2,7 +2,6 @@ package org.digijava.module.contentrepository.util;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,7 +18,10 @@ import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+/**
+ * @author Dare
+ *
+ */
 public class TemplateDocsUtil {
 	
 	private static Logger logger = Logger.getLogger(TemplateDocsUtil.class);

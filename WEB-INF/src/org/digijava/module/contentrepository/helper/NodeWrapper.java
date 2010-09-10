@@ -29,6 +29,7 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.template.PdfFileHelper;
+import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class NodeWrapper {
@@ -130,13 +131,13 @@ public class NodeWrapper {
 	/**
 	 * create document from template
 	 */
-	public NodeWrapper(PdfFileHelper pdfFile,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+	public NodeWrapper(WordOrPdfFileHelper pdfOrWordFile,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 			
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
 			long docType = 0;
-				String encTitle	= pdfFile.getDocTitle(); //URLEncoder.encode("Simple Test", "UTF-8");
+				String encTitle	= pdfOrWordFile.getDocTitle(); //URLEncoder.encode("Simple Test", "UTF-8");
 				docType = new Long(0);
 				newNode	= parentNode.addNode( encTitle );
 				newNode.addMixin("mix:versionable");
@@ -149,15 +150,15 @@ public class NodeWrapper {
 				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
 			}
 			
-			newNode.setProperty(CrConstants.PROPERTY_DATA, pdfFile.getContent());
-			int uploadedFileSize	=pdfFile.getFileSize();
-			String fileName =pdfFile.getDocTitle()+".pdf";
+			newNode.setProperty(CrConstants.PROPERTY_DATA, pdfOrWordFile.getContent());
+			int uploadedFileSize	=pdfOrWordFile.getFileSize();
+			String fileName =pdfOrWordFile.getDocTitle()+"."+pdfOrWordFile.getFileType();
 			newNode.setProperty( CrConstants.PROPERTY_NAME, new String(fileName.getBytes("iso-8859-1"), "UTF8"));
 			newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
 			
 			if ( !errorAppeared ) {
 				Calendar yearOfPublicationDate=null;								
-				populateNode(isANewVersion, newNode, encTitle, null, null,pdfFile.getContentType(), docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+				populateNode(isANewVersion, newNode, encTitle, null, null,pdfOrWordFile.getContentType(), docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
 			}
 			
 			this.node		= newNode;

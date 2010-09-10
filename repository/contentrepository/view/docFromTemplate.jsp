@@ -11,7 +11,7 @@
 <digi:form action="/docFromTemplate.do?actType=saveDocument" method="post">
 
 
-<table width="420px" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">	
+<table width="98%" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">	
   <tr>
   	<td width="100%" colspan="2">
   		<html:select property="templateId" styleClass="inp-text" onchange="templateNameSelected()" styleId="selTempName" style="width:90%">
@@ -31,6 +31,17 @@
   <c:if test="${!empty docFromTemplateForm.fields}">
   	<tr>
 		<td>
+			<digi:trn>Document Format:</digi:trn>
+		</td>
+	  	<td>
+	  		<html:select property="docType" styleClass="inp-text">
+				<html:option value="pdf"><digi:trn>Pdf</digi:trn></html:option>
+				<html:option value="doc"><digi:trn>Word Document</digi:trn></html:option>
+			</html:select>
+	  	</td>
+  	</tr>
+  	<tr>
+		<td nowrap="nowrap">
 			<digi:trn>Name:</digi:trn> <font color="red">*</font>
 		</td>
 	  	<td>

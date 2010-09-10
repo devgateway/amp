@@ -209,7 +209,7 @@ public class SaveActivity extends Action {
 				}
 			}
 			
-			Long statId=eaForm.getPlanning().getStatusId();
+			Long statId=eaForm.getIdentification().getStatusId();
 			
 			if(isStatusEnabled()){
 				if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
@@ -325,11 +325,11 @@ public class SaveActivity extends Action {
 			activity.setObjective(eaForm.getIdentification().getObjectives());
 		}
 
-		if (eaForm.getPlanning().getStatusReason() == null 
-				|| eaForm.getPlanning().getStatusReason().trim().length() == 0) {
+		if (eaForm.getIdentification().getStatusReason() == null 
+				|| eaForm.getIdentification().getStatusReason().trim().length() == 0) {
 			activity.setStatusReason(" ");
 		} else {
-			activity.setStatusReason(eaForm.getPlanning().getStatusReason().trim());
+			activity.setStatusReason(eaForm.getIdentification().getStatusReason().trim());
 		}
 		
 		if (eaForm.getContracts().getContractDetails() == null
@@ -535,7 +535,7 @@ public class SaveActivity extends Action {
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getInstitutions(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAccessionInstrument(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAcChapter(), activity.getCategories() );
-		CategoryManagerUtil.addCategoryToSet(eaForm.getPlanning().getStatusId(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getStatusId(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getLevelId(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getGbsSbs(), activity.getCategories() );
         CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getImplemLocationLevel(), activity.getCategories() );
@@ -2159,7 +2159,7 @@ public class SaveActivity extends Action {
         eaForm.getIdentification().setInstitutions(new Long(0));
         eaForm.getIdentification().setAccessionInstrument(new Long(0));
         eaForm.getIdentification().setAcChapter(new Long(0));
-		eaForm.getPlanning().setStatusId(new Long(0));
+		eaForm.getIdentification().setStatusId(new Long(0));
 		eaForm.getIdentification().setGbsSbs(new Long(0));
         eaForm.getIdentification().setDraft(null);
         eaForm.getIdentification().setProjectCategory(new Long(0));

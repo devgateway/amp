@@ -656,7 +656,7 @@
 <field:display name="Sent Message" feature="Message tab"></field:display> 
 <field:display name="Set Alert Drop down" feature="Create Message Form"></field:display> 
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 
-<field:display name="Status" feature="Planning"></field:display> 
+<field:display name="Status" feature="Identification"></field:display> 
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 3" feature="NPD Dashboard"></field:display> 

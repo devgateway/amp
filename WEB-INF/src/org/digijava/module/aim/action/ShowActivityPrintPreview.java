@@ -238,7 +238,7 @@ public class ShowActivityPrintPreview
 
                 eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
                 
-                eaForm.getPlanning().setStatusReason(activity.getStatusReason());
+                eaForm.getIdentification().setStatusReason(activity.getStatusReason());
 
                 if(null != activity.getLineMinRank())
                     eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().
@@ -351,7 +351,7 @@ public class ShowActivityPrintPreview
                 AmpCategoryValue ampCategoryValueForStatus	= 
                 	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
                 if (ampCategoryValueForStatus != null)
-            		eaForm.getPlanning().setStatusId( ampCategoryValueForStatus.getId() );
+            		eaForm.getIdentification().setStatusId( ampCategoryValueForStatus.getId() );
                 
                 AmpCategoryValue ampCategoryValueForLevel	= 
                 	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
@@ -1227,7 +1227,7 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setRevisedStartDate(null);
                 eaForm.getPlanning().setCurrentCompDate(null);
                 eaForm.getDocuments().setDocumentSpace(null);
-                eaForm.getPlanning().setStatusReason(null);
+                eaForm.getIdentification().setStatusReason(null);
                 eaForm.getPlanning().setLineMinRank(null);
                 eaForm.getPlanning().setLineMinRank(null);
                 eaForm.getPlanning().setPlanMinRank(null);

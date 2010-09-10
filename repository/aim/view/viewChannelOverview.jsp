@@ -353,7 +353,7 @@ function commentWin(val, commentId) {
 																</TD>
 															</TR>
 
-															<field:display name="Status" feature="Planning">
+															<field:display name="Status" feature="Identification">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1

@@ -553,7 +553,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.getPlanning().setStatusId(new Long(ampCategoryValue.getId()));
+          eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
@@ -850,7 +850,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-          eaForm.getPlanning().setStatusReason(activity.getStatusReason());
+          eaForm.getIdentification().setStatusReason(activity.getStatusReason());
 
           if (null != activity.getLineMinRank())
             eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().

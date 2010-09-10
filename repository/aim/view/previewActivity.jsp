@@ -995,16 +995,16 @@ function collapseAll() {
                                     <!--END 15-->
                                      </feature:display>
                                     <!--16-->
-                                    <field:display name="Status" feature="Planning">
+                                    <field:display name="Status" feature="Identification">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
 	                                        <td bgcolor="#FFFFFF">
-	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.planning.statusId}"/>
+	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
 	                                        </td>
                                         </tr>
                                         <tr>
 	                                        <td valign="top" nowrap="nowrap" bgcolor="#f4f4f2"></td>
-	                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.planning.statusReason}"/></td>
+	                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
                                         </tr>
                                     </field:display>                                   
                                    

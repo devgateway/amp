@@ -103,8 +103,8 @@ public class ResetAll extends Action
 				eaForm.getPlanning().setRevisedCompDate(null);
 				eaForm.getIdentification().setCreatedDate(null);
 //				eaForm.setActivityCloseDates(null);
-				eaForm.getPlanning().setStatusId(new Long(0));
-				eaForm.getPlanning().setStatusReason(null);
+				eaForm.getIdentification().setStatusId(new Long(0));
+				eaForm.getIdentification().setStatusReason(null);
 				
 				/*
 				 * tanzania adds
@@ -213,10 +213,10 @@ public class ResetAll extends Action
 				eaForm.getPlanning().setCurrentCompDate(DateConversion.ConvertDateToString(activity.getActualCompletionDate()));
 				eaForm.getPlanning().setDisbursementsDate(DateConversion.ConvertDateToString(activity.getDisbursmentsDate()));
 				eaForm.getPlanning().setContractingDate(DateConversion.ConvertDateToString(activity.getContractingDate()));
-				eaForm.getPlanning().setStatusReason(activity.getStatusReason());
+				eaForm.getIdentification().setStatusReason(activity.getStatusReason());
 				AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
                 if (ampCategoryValue != null)
-            		eaForm.getPlanning().setStatusId( ampCategoryValue.getId() );
+            		eaForm.getIdentification().setStatusId( ampCategoryValue.getId() );
 				
 				Set orgProjIdsSet = activity.getInternalIds();
 				if (orgProjIdsSet != null)

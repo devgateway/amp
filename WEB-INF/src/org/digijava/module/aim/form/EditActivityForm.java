@@ -396,6 +396,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long selecteddepartment;
 		private Long selectedprogram;
 		
+		private Long statusId = null;
+		private String statusReason = null;
 		
 	
 		public ArrayList<AmpOrganisation> getBudgetorgs() {
@@ -1028,7 +1030,21 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.chapterForPreview = chapterForPreview;
 		}
 
+		public Long getStatusId() {
+			return statusId;
+		}
 
+		public void setStatusId(Long statusId) {
+			this.statusId = statusId;
+		}
+
+		public String getStatusReason() {
+			return statusReason;
+		}
+
+		public void setStatusReason(String statusReason) {
+			this.statusReason = statusReason;
+		}
 
 	}
 
@@ -1045,8 +1061,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String disbursementsDate;
 		private String proposedCompDate;
 		private String currentCompDate;
-		private Long statusId = null;
-		private String statusReason = null;
 		private String revisedCompDate;
 		private Collection activityCloseDates;
 		private Long creditTypeId;
@@ -1145,22 +1159,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setCurrentCompDate(String currentCompDate) {
 			this.currentCompDate = currentCompDate;
-		}
-
-		public Long getStatusId() {
-			return statusId;
-		}
-
-		public void setStatusId(Long statusId) {
-			this.statusId = statusId;
-		}
-
-		public String getStatusReason() {
-			return statusReason;
-		}
-
-		public void setStatusReason(String statusReason) {
-			this.statusReason = statusReason;
 		}
 
 		public Collection getActRankCollection() {

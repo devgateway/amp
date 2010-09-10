@@ -586,7 +586,7 @@
 									</feature:display>
                                     <feature:display name="Identification" module="Project ID and Planning">
 										
-										<field:display name="Status" feature="Planning">							
+										<field:display name="Status" feature="Identification">							
                                             <tr>
                                             	  <td align="right" valign="top" nowrap="nowrap" >
                                                   	<b>
@@ -594,8 +594,8 @@
                                                   	</b>                      	      
                                                   	</td>
 													<td bgcolor="#FFFFFF">
-												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.planning.statusId}"/><br><br>
-                                                        <c:out value="${aimEditActivityForm.planning.statusReason}"/>
+												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
+                                                        <c:out value="${aimEditActivityForm.identification.statusReason}"/>
                                                    </td>									
                                          	 </tr>
 										</field:display>									

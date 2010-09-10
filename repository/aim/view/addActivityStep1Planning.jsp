@@ -393,44 +393,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 												</tr>
 											</field:display>
 											
-											<field:display name="Status" feature="Planning"></field:display>
-											<bean:define id="contentDisabled">false</bean:define>
-											<c:set var="contentDisabled">
-											<field:display name="Status" feature="Planning">false</field:display>
-											</c:set>
-											<c:if test="${contentDisabled==''}">
-												<c:set var="contentDisabled">true</c:set>
-											</c:if>											
-											<tr>
-												<td bgcolor="#ffffff">
-												<FONT color=red>*</FONT>&nbsp;
-												<digi:trn key="aim:status">Status</digi:trn>												  
-												<a href="javascript:popupwin('activity_status')">
-												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
-												</td>
-												<td bgcolor="#ffffff">
-													<c:set var="translation">
-														<digi:trn key="aim:addActivityStatusFirstLine">Please select a status from below</digi:trn>
-													</c:set>
-													<c:if test="${contentDisabled=='true'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.statusId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
-	                                                </c:if>
-	                                                <c:if test="${contentDisabled=='false'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.statusId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
-	                                                </c:if>
-												</td>
-											</tr>
-											<tr>
-												<td bgcolor="#ffffff">
-												</td>
-												<td bgcolor="#ffffff">
-													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :
-													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
-                                                    <br/>
-													<html:textarea name="aimEditActivityForm" property="planning.statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
-													</a>												
-												</td>
-											</tr>
+											
 										</table>
 									</td></tr>
 

@@ -622,7 +622,7 @@
 					<digi:trn key="rep:filter:otherCriteria">Specify other criteria to filter with.</digi:trn>
 				</c:set>
 				<table align="center" cellpadding="1" cellspacing="1">
-				<field:display name="Status" feature="Planning">
+				<field:display name="Status" feature="Identification">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 						<b><digi:trn key="rep:filter:StatusTitle">Status</digi:trn></b>

@@ -22,6 +22,9 @@
 <logic:empty name="tabType" scope="request">
 	<bean:define id="tabTypeLocal" value=""></bean:define>
 </logic:empty>
+<logic:notEmpty name="dynamicList" scope="request">
+	<bean:define id="dynamicListLocal" name="dynamicList" toScope="page" />
+</logic:notEmpty>
 
 <table id="team_table" bgcolor="white" width="100%">						
 						<tbody>
@@ -50,12 +53,6 @@
 								</c:set>
 							</logic:equal>
 							<tr>
-								<logic:equal name="checkBoxToHideLocal" value="false">
-									<td>
-										<input class="selDocs" type=checkbox value="${documentData.uuid}" name="selectedDocs"/>										
-	                                    &nbsp;                                                          
-		                            </td>
-		                        </logic:equal>
 								<td>
 									<c:choose>
 										<c:when test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
@@ -113,15 +110,24 @@
 									${documentData.cmDocType }
 								</td>
 								<td>
-									<bean:write name='documentData' property='description'/>
+									<logic:notEmpty name="documentData" property="labels">
+										<logic:iterate id="label" name="documentData" property="labels">
+											<span style="background-color: ${label.backgroundColor}; color: ${label.color};">
+												${label.name}
+											</span>
+											<strong>|</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
+											onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
+											style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
+											&nbsp;&nbsp;
+										</logic:iterate>
+									</logic:notEmpty>
+									<%-- ><bean:write name='documentData' property='description'/>--%
 									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='description'/>"));
 									</script> --%>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td nowrap="nowrap"> 
-									<a style="display:none" id="fake1" href="http://www.yahoo.com">FOR_SILK</a>
-									
 									<c:choose>
 										<c:when test="${documentData.webLink == null}">
 											<c:set var="translation">
@@ -236,7 +242,15 @@
 									<span style="color: blue;"><strong>|</strong></span> 
 									<a style="cursor:pointer; text-decoration:none; color: blue;" onClick="showOrgsPanel('<%=documentData.getUuid() %>');" title="<digi:trn>Show Participating Organizations</digi:trn>">
 										<digi:trn>Organizations</digi:trn> 
-									</a>									
+									</a>
+									
+									<logic:equal name="documentData" property="hasVersioningRights" value="true">
+										<span style="color: blue"><strong>|</strong></span>
+										<a style="cursor:pointer; text-decoration:none; color: blue" id="addLabelLink_${documentData.uuid}"
+										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleView();fAddPanel.reposition('addLabelLink_${documentData.uuid}');" 
+										title="<digi:trn>Click here to add a new labels to this document</digi:trn>">
+											<digi:trn>Labels</digi:trn>
+									</logic:equal>									
 								</td>
 							</tr>
 						</logic:iterate>

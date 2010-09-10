@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
@@ -30,6 +33,7 @@ import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.template.PdfFileHelper;
 import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
+import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class NodeWrapper {
@@ -407,6 +411,10 @@ public class NodeWrapper {
 			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, encDescr );
 			newNode.setProperty( CrConstants.PROPERTY_NOTES, encNotes );
 			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, contentType );
+			
+			Node labelContainerNode	= newNode.addNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			labelContainerNode.addMixin("mix:versionable");
+			
 			if(cmDocType != null) newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
 			else logger.error("Doctype is null. It is ok if the file is importing using IDML");
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
@@ -665,6 +673,71 @@ public class NodeWrapper {
 			} 
 		}
 		return null;
+	}
+	public List<Label> getLabels() {
+		ArrayList<Label> labels		= new ArrayList<Label>();
+		try {
+			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			PropertyIterator pIter		= labelContainerNode.getProperties();
+			while ( pIter.hasNext() ) {
+				Property p			= pIter.nextProperty();
+				if ( p.getName().contains("ampdoc:label") ) {
+					Node labelNode		= p.getNode();
+					labels.add( new Label(labelNode) );
+				}
+			}
+		} catch (Exception e) {
+			logger.warn("Document " + this.getName() + " has no label container node");
+			//e.printStackTrace();
+		}
+		return labels;
+	}
+	public void addLabel(Node label) {
+		try {
+			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			PropertyIterator pIter		= labelContainerNode.getProperties();
+			Long maxNumber				= 0L;
+			while ( pIter.hasNext() ) {
+				Property p			= pIter.nextProperty();
+				try {
+					if ( p.getName().contains("ampdoc:label") ) {
+						Long number			= Long.parseLong( p.getName().substring("ampdoc:label".length() ) );
+						maxNumber			= (number>maxNumber)?number:maxNumber;
+					}
+				}
+				catch (NumberFormatException e) {
+					logger.error("Was trying to parse " + p.getName() );
+				}
+			}
+			maxNumber ++;
+			labelContainerNode.checkout();
+			labelContainerNode.setProperty("ampdoc:label" + maxNumber, label);
+			labelContainerNode.save();
+			labelContainerNode.checkin();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void removeLabel(String labelUUID) {
+		try {
+			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			PropertyIterator pIter		= labelContainerNode.getProperties();
+			while ( pIter.hasNext() ) {
+				Property p			= pIter.nextProperty();
+				if ( p.getName().contains("ampdoc:label") ) {
+					Node labelNode		= p.getNode();
+					if ( labelNode.getUUID().equals(labelUUID) ) {
+						labelContainerNode.checkout();
+						p.remove();
+						break;
+					}
+				}
+			}
+			labelContainerNode.save();
+			labelContainerNode.checkin();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Boolean isTeamDocument() {

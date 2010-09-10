@@ -15,7 +15,7 @@ import org.digijava.module.contentrepository.helper.CrConstants;
  * @author Alex Gartner
  *
  */
-public class RootLabel extends Label {
+public class RootLabel extends Label { 
 
 	public RootLabel(Node node) {
 		super(node);

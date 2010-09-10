@@ -30,6 +30,15 @@ public class DocumentManagerForm extends ActionForm {
 	private Collection<DocumentData> otherDocuments		= null;
 	private String otherUsername			= null;
 	private Long otherTeamId				= null;
+	
+	/* Filter related */
+	private Long filter						= null;
+	private Long[] filterDocTypeIds			= null;
+	private String[] filterFileTypes		= null;
+	private String[] filterOwners			= null;
+	private Long[] filterTeamIds			= null;
+	private String[] filterLabelsUUID		= null;
+	
 	private String docListInSession			= null;
 	private String showSharedDocs			=null;
 	
@@ -306,6 +315,55 @@ public class DocumentManagerForm extends ActionForm {
 		this.yearOfPublication = yearOfPublication;
 	}
 
+	public Long getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Long filter) {
+		this.filter = filter;
+	}
+
+
+	public Long[] getFilterDocTypeIds() {
+		return filterDocTypeIds;
+	}
+
+	public void setFilterDocTypeIds(Long[] filterDocTypeIds) {
+		this.filterDocTypeIds = filterDocTypeIds;
+	}
+
+	public String[] getFilterFileTypes() {
+		return filterFileTypes;
+	}
+
+	public void setFilterFileTypes(String[] filterFileTypes) {
+		this.filterFileTypes = filterFileTypes;
+	}
+
+	public String[] getFilterOwners() {
+		return filterOwners;
+	}
+
+	public void setFilterOwners(String[] filterOwners) {
+		this.filterOwners = filterOwners;
+	}
+
+	public Long[] getFilterTeamIds() {
+		return filterTeamIds;
+	}
+
+	public void setFilterTeamIds(Long[] filterTeamIds) {
+		this.filterTeamIds = filterTeamIds;
+	}
+
+	public String[] getFilterLabelsUUID() {
+		return filterLabelsUUID;
+	}
+
+	public void setFilterLabelsUUID(String[] filterLabelsUUID) {
+		this.filterLabelsUUID = filterLabelsUUID;
+	}
+
 	public Boolean getHasCreateDocFromTemplateRights() {
 		return hasCreateDocFromTemplateRights;
 	}
@@ -313,5 +371,6 @@ public class DocumentManagerForm extends ActionForm {
 	public void setHasCreateDocFromTemplateRights(Boolean hasCreateDocFromTemplateRights) {
 		this.hasCreateDocFromTemplateRights = hasCreateDocFromTemplateRights;
 	}
+	
 	
 }

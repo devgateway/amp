@@ -254,7 +254,20 @@
                               </td>
                          </tr>
                           -->
-                         
+                         <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION">
+                         <tr>
+	                         <td class="f-names" nowrap="nowrap">
+ 	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+ 	 				              <c:set var="translation">
+ 	                                <digi:trn>Click here to manage resource labels</digi:trn>
+ 		                          </c:set>  
+ 	 	                          <digi:link module="contentrepository" href="/labelManager.do?htmlView=true">
+ 	 	                              <digi:trn>Resource Label Manager</digi:trn>
+ 	 	                          </digi:link>                                                                   
+                              </td>
+                         </tr>
+                         	
+                         </module:display>
 
 						  <!-- hidden Lucene Debug! -->
 						  <!-- 

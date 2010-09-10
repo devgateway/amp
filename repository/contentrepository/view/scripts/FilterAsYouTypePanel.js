@@ -12,7 +12,7 @@ function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix) {
 FilterAsYouTypePanel.globalLabelArray  = null;	
 
 FilterAsYouTypePanel.prototype.createBody	= function() {
-	var mouseoverCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="orange";};
+	var mouseoverCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="#CCDBFF";};
 	var mouseoutCallbackObj		= function (e, divEl) {divEl.style.backgroundColor="white";};
 	
 	var clickCallbackObj		= function (e, label) {
@@ -21,7 +21,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 			return;
 		}
 		else
-			label.parentObj.onClickCallbackObj.click(e, label);
+			label.parentObj.onClickCallbackObj.click.call(label.parentObj.onClickCallbackObj, e, label);
 	}
 	
 	var retArray		= new Array();
@@ -83,7 +83,8 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	textboxEl.style.border	= "1px solid gray";
 	textboxEl.style.width	= "150px";
 	
-	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true); 
+	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true);
+	YAHOO.util.Event.addListener(document,"click", this.outsideClickHide, this, true );
 	
 	bigDiv.style.border	= "1px solid gray";
 	bigDiv.appendChild(textboxEl);
@@ -92,6 +93,8 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	
 	this.overlay.setBody(bigDiv);
 	this.overlay.render(document.body);
+	
+	
 	
 	if ( divArray != null && divArray.length > 0 ) {
 		for (var i=0; i < divArray.length; i++) {
@@ -112,16 +115,24 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 		this.visible	= true;
 	}
 }
+FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
+	var clickedEl	= e.target;
+	var nodeName	= clickedEl.nodeName.toLowerCase();		
+	if (nodeName != "button" && nodeName != "a") {
+		this.hide();
+	}
+}
 
 FilterAsYouTypePanel.prototype.hide	= function () {
 	this.overlay.hide();
 	this.textboxEl.value	= "";
 	this.resetFilter();
+	this.visible	= false;
 }
 
 FilterAsYouTypePanel.prototype.show	= function () {
 	if ( this.overlay == null ){
-		this.initLabelArray();
+		this.initLabelArray(true);
 	}
 	else {
 		this.overlay.show();
@@ -129,7 +140,7 @@ FilterAsYouTypePanel.prototype.show	= function () {
 	}
 }
 
-FilterAsYouTypePanel.prototype.initLabelArray	= function () {
+FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 	if ( FilterAsYouTypePanel.globalLabelArray == null ) {
 		var callbackObj	= {
 				success: function (o) {
@@ -137,8 +148,10 @@ FilterAsYouTypePanel.prototype.initLabelArray	= function () {
 						FilterAsYouTypePanel.globalLabelArray	= eval( o.responseText );
 						this.fPanel.labelArray					= FilterAsYouTypePanel.globalLabelArray;
 						this.fPanel.render();
-						this.fPanel.overlay.show();
-						this.fPanel.textboxEl.focus();
+						if (shouldShow) {
+							this.fPanel.overlay.show();
+							this.fPanel.textboxEl.focus();
+						}
 					}
 					else
 						alert("The returned label array is empty !");
@@ -197,4 +210,8 @@ FilterAsYouTypePanel.prototype.getSearchText	= function () {
 	else 
 		return null;
 
+}
+FilterAsYouTypePanel.prototype.reposition	= function (elementId) {
+	this.overlay.cfg.setProperty("context",[elementId,"tl","bl"]);
+//	this.overlay.align("tl", "tl");
 }

@@ -106,6 +106,8 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setFileSize		( nodeWrapper.getFileSizeInMegabytes() );
 		docData.setVersionNumber( nodeWrapper.getVersionNumber() );
 		docData.setUuid			( nodeWrapper.getUuid() );
+		docData.setLabels( nodeWrapper.getLabels() );
+		
 		if ( docData.getVersionNumber() == 0 )
 			docData.setVersionNumber(verNum);
 		

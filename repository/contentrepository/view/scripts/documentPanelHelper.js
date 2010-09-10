@@ -1,5 +1,4 @@
 
-<script type="text/javascript">
 
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.amp.panels	= new Array();
@@ -28,13 +27,10 @@
 
 	//YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
-</script>
 
-<script type="text/javascript">
-    var tabView = new YAHOOAmp.widget.TabView("demo"); 
-</script>    
+    var tabView = new YAHOOAmp.widget.TabView("demo");   
 
-<script type="text/javascript">
+
 	YAHOO.namespace("YAHOO.amp");
 
 	function setPanelHeader(panelNum, title) {
@@ -70,5 +66,3 @@
 		YAHOO.amp.panels[panelNum].hide();
 	}
 	
-
-</script>

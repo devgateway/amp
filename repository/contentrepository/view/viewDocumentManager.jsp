@@ -16,10 +16,10 @@
 
 <%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
-<%@include file="addDocumentPanel.jsp" %>
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <digi:errors />
+
 
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page"
@@ -32,7 +32,6 @@
 <bean:define id="selectedType" name="myForm" property="type" />
 
 <%@include file="documentManagerJsHelper.jsp" %>
-
 
 <style type="text/css">
 <!--
@@ -191,10 +190,35 @@ function setHoveredTable(tableId, hasHeaders) {
 
 	var test1Obj	= {
 				click: function(e, o) {
-					alert("Label clicked")
+					alert("Label clicked");
 				}
 			}
+	
+	var labelCallbackObj	= {
+			click: function(e, label) {
+				var postStr	= "action=add&docUUID="+this.docUUID+"&labelUUID="+label.uuid;
+				this.sendLabelRequest(postStr);
+			},
+			remove: function(dUUID, lUUID) {
+				var postStr	= "action=remove&docUUID="+dUUID+"&labelUUID="+lUUID;
+				this.sendLabelRequest(postStr);
+			},
+			sendLabelRequest: function (postStr) {
+				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/label.do?', this, postStr);
+			},
+			failure: function () {
+				alert("We are sorry but your request cannot be processed at this time");
+			},
+			success: function () {
+				this.dynamicList.sendRequest();
+			},
+			docUUID: "",
+			dynamicList: null
+	}
 	var fPanel	= new FilterAsYouTypePanel("labelButtonId", test1Obj, "mainLabels");
+	var fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
+	fPanel.initLabelArray(false);
+	fAddPanel.initLabelArray(false);
 
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu");
@@ -222,7 +246,7 @@ function setHoveredTable(tableId, hasHeaders) {
 				<digi:trn>Content Repository</digi:trn> 
 			</span> 
 			<br />
-			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px">
+			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px;">
 			<tr><td>
 			<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
@@ -261,29 +285,29 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
 						        	<td>
-						        												
-								    	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton">Add Resource...</button>
-								    	&nbsp;
-								    	<%--
-								    		<button id="labelButtonId" type="button" onclick="fPanel.toggleView();">Labels</button>
-								    	 --%>										 
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>...</button>
+								    	<button id="filterButtonId" class="buton" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
+								    		<digi:trn>Filters</digi:trn>
+								    	</button>
+								    	<button id="labelButtonId" class="buton" type="button" onclick="fPanel.toggleView();">
+								    		<digi:trn>Labels</digi:trn>
+								    	</button>
 								    </td>								    
 								</tr>
+								<tr><td><hr/></td></tr>
 								<tr>
 									<td>
 										<br />
 											<div align="right" style="width: 95%" >
 												<jsp:include page="legendForResources.jsp"/>
 											</div>
-											<div id="my_markup" align="left"  class="all_markup">
-												<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-												<bean:define toScope="request" id="checkBoxToHide" value="true" />
-												<bean:define id="tabType" value="private" toScope="request"/>												
-												<jsp:include page="documentTable.jsp" flush="true" />
-										</div>
+											<div id="my_markup" align="left">
+											</div>
 									</td>
 								</tr>
-							</table>	        
+							</table>
+							<bean:define id="filterDivId" value="privateFilterDivId" toScope="request" />
+							<jsp:include page="filters/filters.jsp"/>	        
 				        </div>
 					</feature:display>
 					
@@ -467,9 +491,11 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.table");
-
+	var privateListObj	= null;
 	function afterPageLoad(e) {
-		YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
+		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
+		privateListObj.sendRequest();
+		//YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 		YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
 		YAHOO.amp.table.sharedDoctable	= YAHOO.amp.table.enhanceMarkup("shared_markup");
 		

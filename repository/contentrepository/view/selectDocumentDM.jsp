@@ -9,7 +9,7 @@
 
 <digi:instance property="crSelectDocumentForm" />
 
-<%@include file="addDocumentPanel.jsp" %>
+
 
 <bean:define id="myForm" name="crSelectDocumentForm" toScope="request" type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
 

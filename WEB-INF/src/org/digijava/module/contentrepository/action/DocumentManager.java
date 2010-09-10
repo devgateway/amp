@@ -1,6 +1,7 @@
 package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
+import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -135,15 +137,67 @@ public class DocumentManager extends Action {
 		}
 		
 		//for selectDocumentDM
-		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) {
+		
+		myRequest.setAttribute("dynamicList", myRequest.getParameter("dynamicList") );
+		String source	= null;
+		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) 
+			source		= DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
+		else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null )
+			source		= DocumentFilter.SOURCE_TEAM_DOCUMENTS;
+		else if(myForm.getShowSharedDocs()!=null){
+			source		= DocumentFilter.SOURCE_SHARED_DOCUMENTS;
+		}
+		else 
+			source			= DocumentFilter.SOURCE_PUBLIC_DOCUMENTS;
+		
+		List<String> filterLablesUUID	= null;
+		if ( myForm.getFilterLabelsUUID() != null ){
+			filterLablesUUID		= Arrays.asList(myForm.getFilterLabelsUUID() );
+		}
+		
+		List<Long> filterDocTypes		= null;
+		if ( myForm.getFilterDocTypeIds() != null ){
+			filterDocTypes			= Arrays.asList(myForm.getFilterDocTypeIds() );
+			filterDocTypes			= new ArrayList<Long>(filterDocTypes );
+			filterDocTypes.remove(new Long(0));
+			filterDocTypes.remove(new Long(-1));
+		}
+		
+		List<String> filterFileTypes	= null;
+		if ( myForm.getFilterFileTypes() != null ){
+			filterFileTypes			= Arrays.asList(myForm.getFilterFileTypes() );
+			filterFileTypes			= new ArrayList<String>(filterFileTypes);
+			filterFileTypes.remove("-1");
+		}
+		
+		List<String> filterOwners			= null;
+		if ( myForm.getFilterOwners() != null ) {
+			filterOwners			= Arrays.asList(myForm.getFilterOwners() );
+			filterOwners			= new ArrayList<String>( filterOwners );
+			filterOwners.remove("-1");
+		}
+		
+		
+		List<Long> filterTeamIds			= null; 
+		if ( myForm.getFilterTeamIds() != null ) { 
+			filterTeamIds			= Arrays.asList(myForm.getFilterTeamIds() );
+			filterTeamIds			= new ArrayList<Long> ( filterTeamIds );
+			filterTeamIds.remove(new Long(0));
+		}
+		
+		DocumentFilter documentFilter	= new DocumentFilter(source, filterLablesUUID, filterDocTypes, 
+						filterFileTypes, filterTeamIds, filterOwners, myForm.getOtherUsername(),myForm.getOtherTeamId() );
+		
+
+		if ( DocumentFilter.SOURCE_PRIVATE_DOCUMENTS.equals(documentFilter.getSource()) ) {
 			TeamMember	otherTeamMember		= null;
-			Collection otherTeamMembers		= TeamMemberUtil.getTMTeamMembers( myForm.getOtherUsername() );
+			Collection otherTeamMembers		= TeamMemberUtil.getTMTeamMembers( documentFilter.getBaseUsername() );
 			
 			Iterator iterator				= otherTeamMembers.iterator();
 			
 			while ( iterator.hasNext() ) {
 				TeamMember someTeamMember	= (TeamMember) iterator.next(); 
-				if ( someTeamMember.getTeamId().longValue() == myForm.getOtherTeamId().longValue() ) {
+				if ( someTeamMember.getTeamId().longValue() == documentFilter.getBaseTeamId().longValue() ) {
 					otherTeamMember		= someTeamMember;
 					break;
 				}
@@ -151,17 +205,22 @@ public class DocumentManager extends Action {
 			
 			if (otherTeamMember != null) {
 				Node otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , otherTeamMember );
-				myForm.setOtherDocuments( this.getDocuments(otherHomeNode, myRequest,CrConstants.PRIVATE_DOCS_TAB,false,showActionsButtons) );
+				Collection<DocumentData> allPrivateDocs	=  
+					this.getDocuments(otherHomeNode, myRequest,CrConstants.PRIVATE_DOCS_TAB,false,showActionsButtons);
+				myForm.setOtherDocuments( documentFilter.applyFilter(allPrivateDocs) );
 			}
 		}
-		if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
+		if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
 			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
 			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
-			myForm.setOtherDocuments( this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons) );			
+			
+			Collection<DocumentData> allTeamsDocs	= this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons);
+			myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );			
 		}
 		//shared documents
-		if(myForm.getShowSharedDocs()!=null){
-			myForm.setOtherDocuments( this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,showActionsButtons));
+		if( DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource()) ){
+			Collection<DocumentData> allSharedDocs	= this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,showActionsButtons);
+			myForm.setOtherDocuments( documentFilter.applyFilter(allSharedDocs) );
 		}
 		return false;
 	}
@@ -432,6 +491,7 @@ public class DocumentManager extends Action {
 				documentData.setWebLink( nodeWrapper.getWebLink() );
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
 				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
+				documentData.setLabels( nodeWrapper.getLabels() );
 								
 				documentData.process(request);
 				documentData.computeIconPath(true);
@@ -646,6 +706,7 @@ public class DocumentManager extends Action {
 				documentData.setWebLink( nodeWrapper.getWebLink() );
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
 				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
+				documentData.setLabels( nodeWrapper.getLabels() );
 								
 				documentData.process(request);
 				documentData.computeIconPath(true);

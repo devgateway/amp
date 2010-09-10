@@ -1,3 +1,4 @@
+
 package org.digijava.module.contentrepository.helper;
 
 public class CrConstants {
@@ -74,5 +75,7 @@ public class CrConstants {
 	public static final Integer SHARE_AMONG_WRKSPACES_ALLOWED_TM 				=2;
 	
 	public static final String TEAM_PATH_ITEM						= "team";
+	
+	public static final String LABEL_CONTAINER_NODE_NAME			= "LabelContainer";
 	
 }

@@ -53,6 +53,16 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/panel/assets/container.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/tab/assets/tabview.css'/>">
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/container-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dragdrop-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/event-min.js'/>" > </script>
+<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
@@ -64,6 +74,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -776,7 +788,8 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
 					YAHOO.amp.datatables.push( datatable );
-					windowController.datatable	= datatable;
+					if ( windowController != null)
+						windowController.datatable	= datatable;
 				
 					//createToolTips(containerElement);
 				},
@@ -1278,6 +1291,13 @@ function validateDocFromTemp(){
 		alert('Please fill in document name');
 		return false;
 	}
+}
+
+
+function switchColors(element) {
+	var tempColor					= element.style.color;
+	element.style.color 			= element.style.backgroundColor;
+	element.style.backgroundColor	= tempColor;
 }
 
 /* Number of possible panels on this page */

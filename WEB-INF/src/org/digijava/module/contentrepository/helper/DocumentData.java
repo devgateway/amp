@@ -1,11 +1,13 @@
 package org.digijava.module.contentrepository.helper;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.jcrentity.Label;
 
 public class DocumentData implements Comparable<DocumentData>{
 	String name				= null;
@@ -22,7 +24,11 @@ public class DocumentData implements Comparable<DocumentData>{
 	String iconPath			= null;
 	String yearofPublication	= null;
 	
+	List<Label> labels		= null;
+	
 	Long cmDocTypeId		= null;
+	Long creatorTeamId		= null;
+	String creatorEmail		= null;
 	
 	float versionNumber;
 	
@@ -103,8 +109,12 @@ public class DocumentData implements Comparable<DocumentData>{
 		this.calendar = calendar;
 	}
 	public String getEscapedAmpDescription() {
-		String ret = description.replace("'", "\\'").replace("\r", "").replace("\n", "\\n");
-		return ret;
+		if (description != null) {
+			String ret = description.replace("'", "\\'").replace("\r", "").replace("\n", "\\n");
+			return ret; 
+		}
+		else
+			return "xxx";
 	}
 	public String getDescription() {
 		return description;
@@ -356,5 +366,24 @@ public class DocumentData implements Comparable<DocumentData>{
 	}
 	public void setNodeVersionUUID(String nodeVersionUUID) {
 		this.nodeVersionUUID = nodeVersionUUID;
-	}	
+	}
+	public List<Label> getLabels() {
+		return labels;
+	}
+	public void setLabels(List<Label> labels) {
+		this.labels = labels;
+	}
+	public Long getCreatorTeamId() {
+		return creatorTeamId;
+	}
+	public void setCreatorTeamId(Long creatorTeamId) {
+		this.creatorTeamId = creatorTeamId;
+	}
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
+	}
+	
 }

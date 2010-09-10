@@ -107,8 +107,10 @@ public class ReportsFilterPicker extends MultiAction {
 		if ( "".equals(ampReportId) )
 			ampReportId		= null;
 
-		if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
-			filterForm.setAmountinthousands(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+		if (ampReportId!=null) {
+			if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
+				filterForm.setAmountinthousands(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+			}
 		}
 		
 		if (ampReportId != null && filterForm.getAmpReportId() != null) {

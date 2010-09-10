@@ -176,15 +176,15 @@ $(document).ready(function(){
 								<td valign="top">
 									<br/>
                                     <digi:form action="/search.do">
-                                    <table cellPadding=2 cellSpacing=2 width="100%">
-                                   
+                                    <table cellPadding="0" cellSpacing="0" width="100%">
+
                                         <tr>
-                                            <td valign="top">
-                                                <digi:trn>Keyword</digi:trn>: <html:text property="keyword"></html:text><br/>
+                                            <td valign="top" width="45%" >
+                                                <digi:trn>Keyword</digi:trn>: <html:text property="keyword" style="width:75%"></html:text><br/>
                                             </td>
-                                            <td valign="top">
-                                                <digi:trn>Type</digi:trn>: 
-                                                <html:select property="queryType">
+                                            <td valign="top" width="25%">
+                                                <digi:trn>Type</digi:trn>:
+                                                <html:select property="queryType" style="width:70%">
                                                     <html:option value="-1"><digi:trn>ALL</digi:trn></html:option>
                                                     <html:option value="0"><digi:trn>Activities</digi:trn></html:option>
                                                     <html:option value="1"><digi:trn>Reports</digi:trn></html:option>
@@ -193,7 +193,7 @@ $(document).ready(function(){
                                                 </html:select>
                                             </td>
 <!--                                            <td valign="top">
-                                                Results per page: 
+                                                Results per page:
                                                 <html:select property="resultsPerPage" value="-1">
                                                     <html:option value="-1">ALL</html:option>
                                                     <html:option value="10">10</html:option>
@@ -203,9 +203,7 @@ $(document).ready(function(){
                                             </td>-->
                                             <td valign="top">
                                                 <html:submit><digi:trn>Submit</digi:trn></html:submit>
-                                            </td>
-                                            <td valign="top">
-	                                            <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
+                                                <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
                                             </td>
                                         </tr>
                                     </table>

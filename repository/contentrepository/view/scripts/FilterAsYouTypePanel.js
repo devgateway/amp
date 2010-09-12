@@ -7,6 +7,8 @@ function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix) {
 	this.overlay		= null;
 	this.visible		= false;
 	this.textboxEl		= null;
+	
+	this.bigDiv		= document.createElement("div"); //holds all label divs inside
 }
 
 FilterAsYouTypePanel.globalLabelArray  = null;	
@@ -15,13 +17,32 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 	var mouseoverCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="#CCDBFF";};
 	var mouseoutCallbackObj		= function (e, divEl) {divEl.style.backgroundColor="white";};
 	
-	var clickCallbackObj		= function (e, label) {
-		if ( (e.target != null && e.target.tagName.toLowerCase() == "input") || 
-				e.srcElement != null && e.srcElement.tagName.toLowerCase() == "input" ) {
-			return;
-		}
-		else
-			label.parentObj.onClickCallbackObj.click.call(label.parentObj.onClickCallbackObj, e, label);
+	var myBigDiv				= this.bigDiv;
+	var myOnClickCallbackObj	= this.onClickCallbackObj;
+	var clickCallbackObj		= {
+			click: function (e, label) {
+				if ( (e.target != null && e.target.tagName.toLowerCase() == "input") || 
+						e.srcElement != null && e.srcElement.tagName.toLowerCase() == "input" ) {
+					return;
+				}
+				else {
+					var inputEl		= this.getElementsByTagName("input")[0];
+					inputEl.checked	= !inputEl.checked;
+					label.parentObj.onClickCallbackObj.click.call(label.parentObj.onClickCallbackObj, e, label);
+				}
+			},
+			applyClick: function (e) {
+				var uuidArray	= new Array();
+				var allInputs	= this.bigDiv.getElementsByTagName("input");
+				for (var i=0; i<allInputs.length; i++) {
+					if (allInputs[i].name == "selectedLabel" && allInputs[i].checked ) {
+						uuidArray.push(allInputs[i].value);
+					}
+				}
+				this.onClickCallbackObj.applyClick.call(this.onClickCallbackObj, e, uuidArray);
+			},
+			bigDiv: myBigDiv,
+			onClickCallbackObj: myOnClickCallbackObj
 	}
 	
 	var retArray		= new Array();
@@ -45,6 +66,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				spanEl.style.color	= label.color;
 				spanEl.style.backgroundColor		= label.backgroundColor;
 				spanEl.style.padding	= "1px";
+				spanEl.style.cursor		= "pointer";
 				
 				divEl.appendChild(inputEl);
 				divEl.appendChild(spanEl);
@@ -56,7 +78,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				label.parentObj		= this;
 				
 				
-				YAHOO.util.Event.addListener(divEl, "click", clickCallbackObj, label, false);
+				YAHOO.util.Event.addListener(divEl, "click", clickCallbackObj.click, label, false);
 				
 				YAHOO.util.Event.addListener(divEl, "mouseover", mouseoverCallbackObj, divEl, false);
 				YAHOO.util.Event.addListener(divEl, "mouseout", mouseoutCallbackObj, divEl, false);
@@ -64,6 +86,31 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				retArray.push(divEl);
 			}
 		}
+		var hrDivEl			= document.createElement("div");
+		var hrEl			= document.createElement("hr");
+				
+		hrDivEl.appendChild(hrEl);
+		hrDivEl.style.backgroundColor	= "white";
+		hrDivEl.style.padding	= "2px";
+		
+		var applyDivEl			= document.createElement("div");
+		var applySpanEl			= document.createElement("span");
+		
+		applySpanEl.innerHTML			= "Apply Labels";
+		applySpanEl.style.padding		= "1px";
+		applySpanEl.style.cursor		= "pointer";
+		
+		applyDivEl.appendChild(applySpanEl);
+		applyDivEl.style.backgroundColor	= "white";
+		applyDivEl.style.padding			= "2px";
+		
+		YAHOO.util.Event.addListener(applyDivEl, "mouseover", mouseoverCallbackObj, applyDivEl, false);
+		YAHOO.util.Event.addListener(applyDivEl, "mouseout", mouseoutCallbackObj, applyDivEl, false);
+		YAHOO.util.Event.addListener(applyDivEl, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
+		
+		retArray.push(hrDivEl);
+		retArray.push(applyDivEl);
+		
 	}
 	return retArray;
 	
@@ -74,7 +121,6 @@ FilterAsYouTypePanel.prototype.render	= function() {
 		  visible:false,
 		  width:"150px" } );
 	var divArray	= this.createBody();
-	var bigDiv		= document.createElement("div");
 	var textboxEl	= document.createElement("input");
 	var brEl		= document.createElement("br");
 	
@@ -86,12 +132,12 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true);
 	YAHOO.util.Event.addListener(document,"click", this.outsideClickHide, this, true );
 	
-	bigDiv.style.border	= "1px solid gray";
-	bigDiv.appendChild(textboxEl);
-	bigDiv.appendChild(brEl);
+	this.bigDiv.style.border	= "1px solid gray";
+	this.bigDiv.appendChild(textboxEl);
+	this.bigDiv.appendChild(brEl);
 	
 	
-	this.overlay.setBody(bigDiv);
+	this.overlay.setBody(this.bigDiv);
 	this.overlay.render(document.body);
 	
 	
@@ -99,7 +145,7 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	if ( divArray != null && divArray.length > 0 ) {
 		for (var i=0; i < divArray.length; i++) {
 			var divEl	= divArray[i];
-			bigDiv.appendChild(divEl);
+			this.bigDiv.appendChild(divEl);
 		}
 	}
 	
@@ -118,7 +164,7 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
 	var clickedEl	= e.target;
 	var nodeName	= clickedEl.nodeName.toLowerCase();		
-	if (nodeName != "button" && nodeName != "a") {
+	if (nodeName != "button" && nodeName != "a" && nodeName != "input") {
 		this.hide();
 	}
 }
@@ -205,7 +251,7 @@ FilterAsYouTypePanel.prototype.resetFilter	= function () {
 }
 FilterAsYouTypePanel.prototype.getSearchText	= function () {
 	if (this.textboxEl != null && this.textboxEl.value.length > 0) {
-		return this.textboxEl.value;
+		return this.textboxEl.value.toLowerCase();
 	}
 	else 
 		return null;

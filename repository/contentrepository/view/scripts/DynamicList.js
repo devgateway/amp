@@ -37,9 +37,12 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 AbstractDynamicList.prototype.createFilterString	= function () {
 	this.retrieveFilterData(this.fDivId);
 	for (var field in this) {
-		if ( field.indexOf("filter") == 0 && this[field] != null && this[field].length > 0 ) {
+		if ( field.indexOf("filter") == 0 && field!="filterLabels" && this[field] != null && this[field].length > 0 ) {
 			this.reqString	+= "&"+field+"="+this[field];
 		}
+	}
+	for (var i=0; i<this.filterLabels.length; i++) {
+		this.reqString	+= "&filterLabelsUUID=" + this.filterLabels[i] ;
 	}
 }
 
@@ -88,8 +91,17 @@ DynamicList.prototype.createReqString	= function () {
 	return this.reqString;
 }
 
-DynamicList.prototype.addLabel			= function ( labelUUID ) {
+DynamicList.prototype.addRemoveLabelUUID			= function ( labelUUID ) {
+	for (var i=0; i<this.filterLabels.length; i++) {
+		if (this.filterLabels[i] == labelUUID ) {
+			this.filterLabels.splice(i, 1);
+			return;
+		}
+	}
 	this.filterLabels.push (labelUUID);
+}
+AbstractDynamicList.prototype.emptyLabelUUIDs			= function () {
+	this.filterLabels	= new Array();
 }
 
 /**

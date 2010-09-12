@@ -106,17 +106,7 @@ div.fakefile2 input{
 </style>
 
 <script language="javascript">
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
-	}
-	rows = null;
-}
+
 function setHoveredTable(tableId, hasHeaders) {
 
 	var tableElement = document.getElementById(tableId);
@@ -188,9 +178,19 @@ function setHoveredTable(tableId, hasHeaders) {
 		return ret;
 	}
 
-	var test1Obj	= {
-				click: function(e, o) {
-					alert("Label clicked");
+	var labelFileterCallbackObj	= {
+				click: function(e, label) {
+					privateListObj.addRemoveLabelUUID(label.uuid);
+					privateListObj.sendRequest();
+				},
+				applyClick: function(e, uuidArray){
+					for (var i=0; i<uuidArray.length; i++) {
+						privateListObj.addRemoveLabelUUID(uuidArray[i]);
+					}
+					if (uuidArray.length == 0) {
+						privateListObj.emptyLabelUUIDs();
+					}
+					privateListObj.sendRequest();
 				}
 			}
 	
@@ -215,7 +215,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			docUUID: "",
 			dynamicList: null
 	}
-	var fPanel	= new FilterAsYouTypePanel("labelButtonId", test1Obj, "mainLabels");
+	var fPanel	= new FilterAsYouTypePanel("labelButtonId", labelFileterCallbackObj, "mainLabels");
 	var fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
 	fPanel.initLabelArray(false);
 	fAddPanel.initLabelArray(false);

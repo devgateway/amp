@@ -89,53 +89,56 @@ public class DocumentFromTemplateActions extends DispatchAction {
 		SubmittedValueHolder subValHolder=null;
 		List<SubmittedValueHolder> submittedValsHolder=new ArrayList<SubmittedValueHolder>();
 		List<TemplateField> fields=myForm.getFields();
-		for (TemplateField field : fields) {
-			if(field instanceof StaticTextField){
-				PossibleValue posVal=(PossibleValue)field.getPossibleValues().toArray()[0];
-				subValHolder=new SubmittedValueHolder(field.getOrdinalNumber(), posVal.getValue());
-				submittedValsHolder.add(subValHolder);
+		if(fields!=null){
+			for (TemplateField field : fields) {
+				if(field instanceof StaticTextField){
+					PossibleValue posVal=(PossibleValue)field.getPossibleValues().toArray()[0];
+					subValHolder=new SubmittedValueHolder(field.getOrdinalNumber(), posVal.getValue());
+					submittedValsHolder.add(subValHolder);
+				}
 			}
-		}
-		List<String> requestParameterNames = Collections.list((Enumeration<String>)request.getParameterNames());
-		for (String parameter : requestParameterNames) {
-			if(parameter.startsWith("doc_")){
-				//in case it's multibox and multiple select, then submitted values can be array
-				String[] submittedParameterValues= request.getParameterValues(parameter);
-				for(int i=0;i<submittedParameterValues.length;i++){
-					if(submittedParameterValues[i].length()>0){
-						if(parameter.startsWith("doc_select_") && submittedParameterValues[i].equals("-Select-")){
-							continue;
+			List<String> requestParameterNames = Collections.list((Enumeration<String>)request.getParameterNames());
+			for (String parameter : requestParameterNames) {
+				if(parameter.startsWith("doc_")){
+					//in case it's multibox and multiple select, then submitted values can be array
+					String[] submittedParameterValues= request.getParameterValues(parameter);
+					for(int i=0;i<submittedParameterValues.length;i++){
+						if(submittedParameterValues[i].length()>0){
+							if(parameter.startsWith("doc_select_") && submittedParameterValues[i].equals("-Select-")){
+								continue;
+							}
+							Integer ordNumber=new Integer(parameter.substring(parameter.lastIndexOf("_")+1));
+							subValHolder=new SubmittedValueHolder(ordNumber, submittedParameterValues[i]);
+							submittedValsHolder.add(subValHolder);
 						}
-						Integer ordNumber=new Integer(parameter.substring(parameter.lastIndexOf("_")+1));
-						subValHolder=new SubmittedValueHolder(ordNumber, submittedParameterValues[i]);
-						submittedValsHolder.add(subValHolder);
 					}
 				}
 			}
+			
+			Collections.sort(submittedValsHolder, new TemplateDocsUtil.SubmittedValuesOrdinaryNumberComparator());		
+			//create pdf or word from the list
+			String nodeuuid=null;
+			if(myForm.getDocType()!=null){
+				if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_PDF)){
+					nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),request);
+				}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
+					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),request);
+				}
+				//last approved version
+				 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
+				 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
+				 DbUtil.saveOrUpdateObject(lastAppVersion);
+				 //public resource
+				 CrDocumentNodeAttributes docAttributes=new CrDocumentNodeAttributes();
+				 docAttributes.setPublicDocument(true);
+				 docAttributes.setUuid(nodeuuid);
+				 docAttributes.setPublicVersionUUID(lastApprovedNodeVersionUUID);
+				 DbUtil.saveOrUpdateObject(docAttributes);
+			} 
+			
+			clearForm(myForm);
 		}
 		
-		Collections.sort(submittedValsHolder, new TemplateDocsUtil.SubmittedValuesOrdinaryNumberComparator());		
-		//create pdf or word from the list
-		String nodeuuid=null;
-		if(myForm.getDocType()!=null){
-			if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_PDF)){
-				nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),request);
-			}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
-				nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),request);
-			}
-			//last approved version
-			 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
-			 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
-			 DbUtil.saveOrUpdateObject(lastAppVersion);
-			 //public resource
-			 CrDocumentNodeAttributes docAttributes=new CrDocumentNodeAttributes();
-			 docAttributes.setPublicDocument(true);
-			 docAttributes.setUuid(nodeuuid);
-			 docAttributes.setPublicVersionUUID(lastApprovedNodeVersionUUID);
-			 DbUtil.saveOrUpdateObject(docAttributes);
-		} 
-		
-		clearForm(myForm);
 		return mapping.findForward("showResources");
 	}
 	
@@ -143,7 +146,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	 * creates Pdf document and returns it's nodeUUID
 	 * @param pdfContent
 	 * @param pdfName
-	 * @param request
+	 * @param request 
 	 * @return
 	 */
 	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,HttpServletRequest request){

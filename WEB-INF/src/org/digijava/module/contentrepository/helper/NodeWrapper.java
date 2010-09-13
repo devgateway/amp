@@ -31,7 +31,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
-import org.digijava.module.contentrepository.helper.template.PdfFileHelper;
 import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;

@@ -39,7 +39,7 @@ ActionsMenu.prototype.render=function (){
 			addUrlLinkEl+="onclick=\"menuPanelForTeam.toggleTeamView(); \">";
 		}
 		addUrlLinkEl+="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
-		addUrlLinkEl+="</a>";	
+		addUrlLinkEl+="</a>";
 		var addURLdivEl		= createActionDiv(addUrlLinkEl);
 		divEl.appendChild(addURLdivEl);
 		
@@ -52,7 +52,7 @@ ActionsMenu.prototype.render=function (){
 				createFromTemplateLinkEl+="<digi:trn jsFriendly='true'>Create From Template</digi:trn>";
 				createFromTemplateLinkEl+="</a>";
 				var createFromTempldivEl	= createActionDiv(createFromTemplateLinkEl);
-				//divEl.appendChild(createFromTempldivEl);
+				divEl.appendChild(createFromTempldivEl);
 			}			
 		}
 	

@@ -76,7 +76,7 @@
     
     <action path="/contentrepository/docFromTemplate" scope="session" type="org.digijava.module.contentrepository.action.DocumentFromTemplateActions" validate="false" name="docFromTemplateForm" parameter="actType">
     	<forward name="forward" path="/showLayout.do?layout=docFromTemplate" />
-    	<forward name="showResources" path="/contentrepository/documentManager.do" />
+    	<forward name="showResources" path="/contentrepository/documentManager.do" redirect="true"/>
     </action>
     
     <action path="/contentrepository/labelManager" scope="session" type="org.digijava.module.contentrepository.action.LabelManagerAction" validate="false" name="crLabelManagerForm">

@@ -15,7 +15,9 @@
 							<FONT color="#FFFFFF">
 							AMP <tiles:getAsString name="version"/> build <tiles:getAsString name="build_version"/> -
 							<digi:trn key="aim:ampDevelopmentCredits">
-								Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
+								Developed and implemented by 
+								<a href='http://developmentgateway.org' style="color:#FFFFFF" target="_blank">Development Gateway (DG)</a>
+								 in partnership with OECD, UNDP, WB, and Government of Ethiopia.
 							</digi:trn>
 							</FONT>
                             </div>

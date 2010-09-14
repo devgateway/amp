@@ -12,7 +12,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 
@@ -32,6 +34,11 @@ public class SectorsByDonorTeaser extends TilesAction {
 		tForm.setSelectedFromYear(new Integer(year-1).toString());
 		tForm.setSelectedToYear(year.toString());
 		tForm.setSelectedDonor(new Long(-1));
+        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (baseCurr == null) {
+            baseCurr = "USD";
+        }
+        tForm.setSelectedCurrency(baseCurr);
 		Collection<AmpOrganisation> donors = DbUtil.getDonors();
 		tForm.setDonors(donors);
 		//fill from years' drop-down

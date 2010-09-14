@@ -60,7 +60,7 @@
 			</tr>
 			<tr>
                             <td colspan="2" align="center">
-                            	<font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in USD</digi:trn></font>
+                            	<font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in</digi:trn> ${sectorDonorWidgetReportForm.selectedCurrency}</font>
                             </td>
 			</tr>
 		</table>

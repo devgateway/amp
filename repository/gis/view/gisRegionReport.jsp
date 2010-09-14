@@ -77,7 +77,7 @@
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><font color="red">Note: all numbers are in USD</font></td>
+				<td colspan="2" align="center"><font color="red">Note: all numbers are in ${gisRegReportForm.selectedCurrency}</font></td>
 			</tr>
 		</table> 
 	</div>

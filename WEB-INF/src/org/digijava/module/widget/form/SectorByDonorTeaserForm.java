@@ -33,6 +33,15 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	//indicates whether amounts are in thousands or not.
 	private Boolean amountsInThousands;
     private Long timestamp;
+    private String selectedCurrency;
+
+    public String getSelectedCurrency() {
+        return selectedCurrency;
+    }
+
+    public void setSelectedCurrency(String selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
+    }
 
     public Long getTimestamp() {
         return timestamp;

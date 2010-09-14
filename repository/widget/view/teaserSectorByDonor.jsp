@@ -42,10 +42,10 @@
                	<digi:trn key='widget:piechart:allAmountinUSDTooltip'>The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>               
             </div>  
             	<c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==true}">
-            		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of USD</digi:trn>
+            		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
             	</c:if>
                 <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
-               		<digi:trn>All amounts in USD</digi:trn>
+               		<digi:trn>All amounts in</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
                </c:if>
             <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>

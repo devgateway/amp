@@ -886,7 +886,8 @@
 			//Set year caption
 			var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
 			var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
-			var newCapt = "(USD) " + fromYear + " - " + toYear;
+            var selectedCurrency=document.getElementById("selCurr").value;
+			var newCapt = "("+selectedCurrency+") " + fromYear + " - " + toYear;
 			document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
 			
 		}

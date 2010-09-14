@@ -20,6 +20,15 @@ public class SectorDonorWidgetReportForm extends ActionForm {
     private String actualExpendituresStr;
     private Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo;
     private Long[] sectorIds;
+    private String selectedCurrency;
+
+    public String getSelectedCurrency() {
+        return selectedCurrency;
+    }
+
+    public void setSelectedCurrency(String selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
+    }
 
     public Long[] getSectorIds() {
         return sectorIds;

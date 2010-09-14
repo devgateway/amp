@@ -57,6 +57,11 @@ public class ShowSectorDonorWidgetReport extends Action {
             }
 
         }
+         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (baseCurr == null) {
+            baseCurr = "USD";
+        }
+        cForm.setSelectedCurrency(baseCurr);
 
         // sectors
         sectorIDs=cForm.getSectorIds();

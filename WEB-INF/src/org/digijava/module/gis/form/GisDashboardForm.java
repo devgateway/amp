@@ -24,6 +24,15 @@ public class GisDashboardForm extends ActionForm {
 	private Collection<LabelValueBean> yearsTo;
 	
 	private Collection<LabelValueBean> allDonorOrgs;
+    private String selectedCurrency;
+
+    public String getSelectedCurrency() {
+        return selectedCurrency;
+    }
+
+    public void setSelectedCurrency(String selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
+    }
 
 	public Collection<LabelValueBean> getAllDonorOrgs () {
 		return this.allDonorOrgs;

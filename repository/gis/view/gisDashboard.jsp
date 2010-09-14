@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="gisDashboardForm"/>
-
+<html:hidden property="selectedCurrency" styleId="selCurr"/>
 
 <style>
 	div.navHiden{

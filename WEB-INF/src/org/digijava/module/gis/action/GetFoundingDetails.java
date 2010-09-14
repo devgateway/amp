@@ -50,6 +50,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import org.digijava.module.aim.dbentity.AmpIndicatorSource;
 import java.sql.Timestamp;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * <p>Title: </p>
@@ -1073,7 +1074,7 @@ public class GetFoundingDetails extends Action {
                 
                 if (percentsForSectorSelected != null) {
                 
-                FundingData totalFunding = getActivityTotalFundingInUSD(
+                FundingData totalFunding = getActivityTotalFundingInBaseCurrency(
                         activity, start, end, donorId);
 
                 totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForSectorSelected / 100f)))))  ;
@@ -1170,12 +1171,12 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    public static FundingData getActivityTotalFundingInUSD(AmpActivity activity,
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
             Date start, Date end) {
-    	return getActivityTotalFundingInUSD(activity, start, end, null);
+    	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
     }
     
-    public static FundingData getActivityTotalFundingInUSD(AmpActivity activity,
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
             Date start, Date end, Long donorId) {
         FundingData retVal = null;
         Set fundSet = activity.getFunding();
@@ -1215,7 +1216,11 @@ public class GetFoundingDetails extends Action {
             }
         }
 
-            fch.doCalculations(fundDetSet, "usd");
+           String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        	if ( baseCurr == null ){
+        		baseCurr	= "USD";
+            }
+            fch.doCalculations(fundDetSet, baseCurr);
 
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();

@@ -20,8 +20,10 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -671,7 +673,11 @@ public class WidgetUtil {
 
         List<AmpFundingDetail> fundingDets = query.list();
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, "USD");
+        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (baseCurr == null) {
+            baseCurr = "USD";
+        }
+        cal.doCalculations(fundingDets, baseCurr);
         activityFundngObj.setCommitment(cal.getTotActualComm());
         activityFundngObj.setDisbursement(cal.getTotActualDisb());
         activityFundngObj.setExpenditure(cal.getTotActualExp());

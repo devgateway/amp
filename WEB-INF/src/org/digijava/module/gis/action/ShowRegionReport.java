@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import java.util.HashSet;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 
 /**
@@ -51,7 +52,12 @@ public class ShowRegionReport extends Action {
                                  HttpServletResponse response) throws Exception {
 
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
-
+        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (baseCurr == null) {
+            baseCurr = "USD";
+        }
+        //currently we are using base currency but in the future we may use value, selected from currency breakdown.
+        gisRegReportForm.setSelectedCurrency(baseCurr);
         Calendar fStartDate = null;
         if (gisRegReportForm.getStartYear() != null) {
             fStartDate = Calendar.getInstance();
@@ -145,7 +151,7 @@ public class ShowRegionReport extends Action {
 
                 Float percentsForSectorSelected = actData[1] != null ? (Float) actData[1] : new Float(0);
                 FundingData totalFunding = GetFoundingDetails.
-                                           getActivityTotalFundingInUSD(
+                                           getActivityTotalFundingInBaseCurrency(
                         activity, start, end);
 
                 totalFundingForSector.setCommitment(totalFundingForSector.

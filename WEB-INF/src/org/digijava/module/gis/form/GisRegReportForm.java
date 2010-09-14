@@ -33,8 +33,15 @@ public class GisRegReportForm extends ActionForm {
     private String selSectorName;
 
     private List activityLocationFundingList;
+    private String selectedCurrency;
 
+    public String getSelectedCurrency() {
+        return selectedCurrency;
+    }
 
+    public void setSelectedCurrency(String selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
+    }
     public String getActualCommitmentsStr() {
         return actualCommitmentsStr;
     }

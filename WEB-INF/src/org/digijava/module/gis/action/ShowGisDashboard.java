@@ -20,6 +20,7 @@ import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * GIS Dashboard renderer action.
@@ -35,6 +36,12 @@ public class ShowGisDashboard extends Action {
         GisDashboardForm gisForm = (GisDashboardForm) form;
 
         Collection sectors = DbUtil.getPrimaryToplevelSectors();
+        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (baseCurr == null) {
+            baseCurr = "USD";
+        }
+        //currently we are using base currency but in the future we may use value, selected from currency breakdown.
+        gisForm.setSelectedCurrency(baseCurr);
 
         /*
                 List secData = DbUtil.getUsedSectors();

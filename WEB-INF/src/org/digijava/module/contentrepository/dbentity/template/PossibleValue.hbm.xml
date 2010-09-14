@@ -8,7 +8,7 @@
 			</generator>
 		</id>
 		
-        <property name="value" type="java.lang.String" />
+        <property name="value" type="text" />
         
         <many-to-one name="field" column="field_id" class="org.digijava.module.contentrepository.dbentity.template.TemplateField" cascade="none" />
             

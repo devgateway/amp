@@ -171,19 +171,24 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
 	}
 
-	function deleteData(valueId){ //delete pre-defined value
+	function deleteData(valueId,isTextArea){ //delete pre-defined value
 		  var flag = confirm("Delete this data?");
 		  if(flag == true){
 			  <digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
 		        var url="${addVal}&action=deleteValue&valueId="+valueId;
-		        var parameters=getFieldParams();
+		        var parameters=getFieldParams(isTextArea);
 		        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback,parameters);
 		  }
 	}
 
-	function submitPreDefinedValues(){
+	function submitPreDefinedValues(isTextArea){
 		//check that all predefined values are filled and non of them is empty
-		var values=$("input[id^='val_']");
+		if(isTextArea=='true'){
+			var values=$("textArea[id^='val_']");
+		}else{
+			var values=$("input[id^='val_']");
+		}
+		
     	if(values!=null){
         	for(var i=0;i < values.length; i++){
         		if(values[i].value==''){
@@ -195,13 +200,17 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
     	
 		<digi:context name="addVal" property="context/module/moduleinstance/manageField.do?"/>;
         var url="${addVal}&action=saveValues";
-        var parameters=getFieldParams();
+        var parameters=getFieldParams(isTextArea);
         YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackAfterSave,parameters);
 	}
 
-	function getFieldParams() {
+	function getFieldParams(isTextArea) {
 		var params='';
-		var values=$("input[id^='val_']");
+		if(isTextArea=='true'){
+			var values=$("textArea[id^='val_']");
+		}else{
+			var values=$("input[id^='val_']");
+		}
     	if(values!=null){
         	for(var i=0;i < values.length; i++){
         		params+= "&preDefinedValue="+values[i].value;

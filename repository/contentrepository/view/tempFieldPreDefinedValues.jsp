@@ -26,14 +26,16 @@
           		<c:set var="textReadonly" value="false" />
           	</c:if>
           	<c:if test="${manageFieldForm.selectedFieldType=='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
+          		<c:set var="isTextArea">true</c:set>
           		<html:textarea name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" rows="5" cols="50" />
           	</c:if>
             <c:if test="${manageFieldForm.selectedFieldType!='org.digijava.module.contentrepository.dbentity.template.StaticTextField'}">
+            	<c:set var="isTextArea">false</c:set>
           		<html:text name="posVal" property="preDefinedValue" styleId="val_${index}" readonly="${textReadonly}" size="50"/>
           	</c:if>            
           </td>
           <td>
-            <a href="javascript:deleteData('${posVal.tempId}')">
+            <a href="javascript:deleteData('${posVal.tempId}','${isTextArea}')">
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>
@@ -66,7 +68,7 @@
       <c:set var="trncancel"><digi:trn>Cancel</digi:trn></c:set>
       <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>      
       
-      <input class="dr-menu" type="reset" value="${trn}" onclick="submitPreDefinedValues();">    
+      <input class="dr-menu" type="reset" value="${trn}" onclick="submitPreDefinedValues('${isTextArea}');">    
       <input class="dr-menu" type="reset" value="${trncancel}">
       <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="myPanel.hide()">
     </td>

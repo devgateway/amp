@@ -152,7 +152,8 @@
 				/repository/mondrian/struts-config.xml,
 				/repository/dataExchange/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,
-				/repository/search/struts-config.xml
+				/repository/search/struts-config.xml,
+				/repository/content/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -287,6 +288,10 @@
 		<taglib-location>
 			/WEB-INF/jpivot/jpivot-tags.tld
 		</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>/taglib/content</taglib-uri>
+		<taglib-location>/WEB-INF/content.tld</taglib-location>
 	</taglib>
 	</jsp-config>
 	<security-constraint>

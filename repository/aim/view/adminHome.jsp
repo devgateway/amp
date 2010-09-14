@@ -234,13 +234,14 @@
 	                         <td class="f-names" nowrap="nowrap">
  	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
  	 				              <c:set var="translation">
- 	                                <digi:trn key="aim:tipUserManager">Click here to edit Welcome screen</digi:trn>
+ 	                                <digi:trn>Click here to edit public view content</digi:trn>
  		                          </c:set>  
- 	 	                          <digi:link module="aim" href="/firstPagePreview.do">
- 	 	                              <digi:trn key="um:welcomePageEdit">Edit Welcome screen</digi:trn>
+ 	 	                          <digi:link module="content" href="/contentManager.do">
+ 	 	                              <digi:trn>Public View Content</digi:trn>
  	 	                          </digi:link>                                                                   
                               </td>
                          </tr>
+                         
                          <tr>
 	                         <td class="f-names" nowrap="nowrap">
  	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

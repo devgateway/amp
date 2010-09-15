@@ -162,6 +162,50 @@ var callback =
 	failure:responseFailure 
 };
 
+function calculer1() {
+	<c:set var="errMsgAddNumericValue">
+	  <digi:trn key="aim:addNumericValueErrorMessage">
+	  Please enter numeric value only
+	  </digi:trn>
+	  </c:set> 
+	  var tmp = document.getElementsByName("donorContractFundinAmount")[0].value;
+	  if (isNaN(tmp)) {
+	    alert("${errMsgAddNumericValue}");
+	    document.getElementsByName("donorContractFundinAmount")[0].value = 0;
+	    return false;
+	  } else {
+		  if (tmp == "") tmp = 0; 
+		  var sum = parseFloat(tmp);
+		  //
+		  var divId = document.getElementById("ContractAmendmentsList");
+			if (divId != null){
+				var elems = divId.getElementsByTagName("input");
+				for (var i=0; i<elems.length; i++) {
+					//contractAmendment[0].amount
+					var str = elems[i].name;
+					var debut = str.length - 6;
+					if (str.substring(debut, str.length) == "amount") {
+						if (isNaN(elems[i].value)) {
+							alert("${errMsgAddNumericValue}");
+							elems[i].value = 0;
+							sum = sum + 0;
+						    //return false;
+						} else {
+							sum = sum + parseFloat(elems[i].value);
+						}
+					}
+				}	
+			}
+		  //
+		  //alert(sum);
+		  document.aimIPAContractForm.totAmountDonorContractFunding.value = sum;
+		  //document.getElementsByName("totAmountDonorContractFunding")[0].value += sum;
+		  //
+		  return true;
+	  }
+}
+
+
 function miseajourdevise() {
 	var curId = document.getElementsByName("donorContractFundingCurrency")[0].value;
 	//
@@ -611,7 +655,7 @@ window.onload=autosum;
 					<digi:trn>Montant</digi:trn>
 				</td>
 				<td align="left">
-					<html:text property="donorContractFundinAmount" style="text-align:right" />
+					<html:text property="donorContractFundinAmount" style="text-align:right" onkeyup="calculer1()" />
 				</td>
 				<td align="left" colspan="4">
 					<digi:trn>Devise</digi:trn>
@@ -960,7 +1004,7 @@ window.onload=autosum;
 							<html:hidden property="${contractAmendment}" value="${id}"/>
 							&nbsp;
 							<html:multibox property="selContractAmendments" value="${idx.count}"/>
-							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="calculer1();"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							&nbsp;			
 							<html:select indexed="true" name="contractAmendment" disabled="true" property="currCode" styleClass="inp-text">
 								<option value="-1"><digi:trn>Devise</digi:trn></option>

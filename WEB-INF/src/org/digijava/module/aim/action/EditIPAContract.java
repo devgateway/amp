@@ -359,21 +359,21 @@ public class EditIPAContract extends MultiAction {
             euaf.setDonorContractFundinAmount(String.valueOf(contract.getDonorContractFundinAmount()));
         } else euaf.setDonorContractFundinAmount("");
         if (contract.getDonorContractFundingCurrency() != null) {
-            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getCurrencyCode());
+            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getAmpCurrencyId().toString());
         } else  euaf.setDonorContractFundingCurrency(eaf.getCurrCode());
         //
         if (contract.getTotAmountDonorContractFunding() != null) {
             euaf.setTotAmountDonorContractFunding(String.valueOf(contract.getTotAmountDonorContractFunding()));
         } else euaf.setTotAmountDonorContractFunding("");
         if (contract.getTotalAmountCurrencyDonor() != null) {
-            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getCurrencyCode());
+            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getAmpCurrencyId().toString());
         } else  euaf.setTotalAmountCurrencyDonor(eaf.getCurrCode());
         //
         if (contract.getTotAmountCountryContractFunding() != null) {
             euaf.setTotAmountCountryContractFunding(String.valueOf(contract.getTotAmountCountryContractFunding()));
         } else euaf.setTotAmountCountryContractFunding("");
         if (contract.getTotalAmountCurrencyCountry() != null) {
-            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getCurrencyCode());
+            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getAmpCurrencyId().toString());
         } else  euaf.setTotalAmountCurrencyCountry(eaf.getCurrCode());
         	/*
         	 * 

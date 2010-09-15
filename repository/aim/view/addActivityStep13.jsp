@@ -52,7 +52,7 @@
 		*/
 		    
 	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
-			width:"730px",
+			width:"100%",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

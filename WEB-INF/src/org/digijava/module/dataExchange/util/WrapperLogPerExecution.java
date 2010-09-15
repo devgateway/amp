@@ -28,6 +28,17 @@ public class WrapperLogPerExecution implements XmlWrapper{
 		}
 		sb.append("</Date>");
 		
+		sb.append("<Time>");
+		if ( lpe.getExecutionTime() != null ) {
+			Calendar cal	= Calendar.getInstance();
+			cal.setTime(lpe.getExecutionTime() );
+			sb.append( cal.get(Calendar.HOUR_OF_DAY) );
+			sb.append( ":" + cal.get(Calendar.MINUTE) );
+			sb.append( ":" + cal.get(Calendar.SECOND) );
+			sb.append( "." + cal.get(Calendar.MILLISECOND) );
+		}
+		sb.append("</Time>");
+		
 		sb.append("<ExternalTimestamp>" + lpe.getExternalTimestamp() + "</ExternalTimestamp>");
 		
 		sb.append("<Description>" + lpe.getDescription() + "</Description>");

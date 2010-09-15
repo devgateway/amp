@@ -122,8 +122,29 @@ public class TemporaryDocumentData extends DocumentData {
 		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
 		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
 		
+		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
+		
+		if ( !nodeWrapper.isErrorAppeared() ) {
+			if ( nodeWrapper.saveNode(jcrWriteSession) ) {
+				
+				return nodeWrapper;
+			}
+		}
+		return null;
+	}
+	
+	public NodeWrapper saveToRepositoryDataExchange (HttpServletRequest request, ActionMessages errors) {
+		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+		HttpSession	httpSession		= request.getSession();
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
+		// 
+//		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
+		Node homeNode				= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
+	
 		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
 		
 		if ( !nodeWrapper.isErrorAppeared() ) {

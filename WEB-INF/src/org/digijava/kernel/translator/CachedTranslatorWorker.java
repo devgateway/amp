@@ -94,6 +94,11 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
 
     }
+    
+    //TODO may be bad idea!
+    public void refresh(Message message) throws WorkerException {
+        messageCache.put(message, message);
+    }
 
     /**
      * Overrides method in parent worker.

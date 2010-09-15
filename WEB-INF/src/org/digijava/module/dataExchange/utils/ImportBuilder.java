@@ -753,7 +753,7 @@ public class ImportBuilder {
 		//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 			//acf.setTransactionAmount(new Double(fundingDetailType.getAmount()*1000));
 		//else 
-		acf.setTransactionAmount(new Double(fundingDetailType.getAmount()));
+		acf.setTransactionAmount(new Double(fundingDetailType.getAmount().doubleValue()));
 		
 	}
 
@@ -982,14 +982,14 @@ public class ImportBuilder {
 				Projections mtef=(Projections)mtefItr.next();
 
 				//senegal add
-				if(mtef.getAmount() == 0 ) continue;
+				if(mtef.getAmount().doubleValue() == 0 ) continue;
 
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				
 				//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 					//ampmtef.setAmount(new Double(mtef.getAmount()*1000));
 				//else
-					ampmtef.setAmount(new Double(mtef.getAmount()));
+					ampmtef.setAmount(new Double(mtef.getAmount().doubleValue()));
 				
 
 				ampmtef.setAmpFunding(ampFunding);
@@ -1016,7 +1016,7 @@ public class ImportBuilder {
 			FundingDetailType fundDet = (FundingDetailType) it.next();
 			
 			//senegal
-			if(fundDet.getAmount()==0) continue;
+			if(fundDet.getAmount().doubleValue()==0) continue;
 			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
@@ -1034,7 +1034,7 @@ public class ImportBuilder {
 			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
 			//else 
-				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()));
+				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
 			fundDetails.add(ampFundDet);
 		}
 		
@@ -1697,7 +1697,7 @@ public class ImportBuilder {
 		String result = new String();
 		for (Iterator it = this.getImportLogs().iterator(); it.hasNext();) {
 			AmpDEImportLog iLog = (AmpDEImportLog) it.next();
-			result+="<br/>" + iLog.printLog("<br/>");
+			result+="<![CDATA[\"<br/>\"]]>" + iLog.printLog("<![CDATA[\"<br/>\"]]>");
 		}
 		return result;
 	}

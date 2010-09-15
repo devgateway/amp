@@ -80,7 +80,6 @@
 </c:if>
 
 
-<bean:write name="isDevInfoMode"/>
 
 
 

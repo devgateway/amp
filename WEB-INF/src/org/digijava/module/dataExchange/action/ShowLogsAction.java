@@ -75,9 +75,9 @@ public class ShowLogsAction extends MultiAction {
 		// TODO Auto-generated method stub
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
-		
+		response.setCharacterEncoding("UTF-16");
 		response.setContentType("text/xml");
-		PrintStream ps						= new PrintStream( response.getOutputStream() );
+		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
 		
 		List<DELogPerExecution> logs		= null;
 		if ( myForm.getSelectedSourceId() == null || myForm.getSelectedSourceId() <= 0 )
@@ -100,9 +100,9 @@ public class ShowLogsAction extends MultiAction {
 		// TODO Auto-generated method stub
 		
 		ShowLogsForm myForm					= (ShowLogsForm) form;
-		
+		response.setCharacterEncoding("UTF-16");
 		response.setContentType("text/xml");
-		PrintStream ps						= new PrintStream( response.getOutputStream() );
+		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
 		
 		List<DELogPerItem> logItems		= null;
 		if ( myForm.getSelectedLogPerExecId() == null || myForm.getSelectedLogPerExecId() <= 0 )

@@ -5,6 +5,15 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<script type="text/javascript">
+    function deleteWidget(id){
+        if(confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>")){
+    <digi:context name="deleteUrl" property="context/module/moduleinstance/orgProfileManager.do~actType=delete" />
+                document.widgetOrgProfileWidgetForm.action = "${deleteUrl}~id="+id;
+                document.widgetOrgProfileWidgetForm.submit();
+            }
+        }
+</script>
 
 
 <digi:instance property="widgetOrgProfileWidgetForm" />
@@ -93,7 +102,7 @@
 							</a>
                                                         
 							|&nbsp;
-							<a href="/widget/orgProfileManager.do~actType=delete~id=${orgProfile.id}">
+                            <a href="javascript:deleteWidget(${orgProfile.id})">
 								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>

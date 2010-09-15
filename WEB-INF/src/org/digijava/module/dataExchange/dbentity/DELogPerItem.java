@@ -155,6 +155,10 @@ public class DELogPerItem implements XmlWrappable{
 		else
 			return "";
 	}
+	
+	public String getFullTime(){
+		return getDateAsString()+" "+getTimeAsString();
+	}
 
 	@Override
 	public XmlWrapper getXmlWrapperInstance() {

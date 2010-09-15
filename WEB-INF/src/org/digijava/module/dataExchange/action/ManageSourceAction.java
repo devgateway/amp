@@ -79,8 +79,9 @@ public class ManageSourceAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
+		response.setCharacterEncoding("UTF-16");
 		response.setContentType("text/xml");
-		PrintStream ps						= new PrintStream( response.getOutputStream() );
+		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
 		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAllAmpSourceSettingsObjects();
 		XmlCreator xmlCreator	= new XmlCreator(sources);
 		ps.print(xmlCreator.createXml());
@@ -127,7 +128,7 @@ public class ManageSourceAction extends MultiAction {
 		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
 		DEImportItem 	deItem  = new DEImportItem(fsb);
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
-		deib.run();
+		deib.run(request);
 	}
 
 }

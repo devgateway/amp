@@ -17,7 +17,8 @@ public class XmlCreator {
 	
 	public String createXml(){
 		StringBuffer sb	= new StringBuffer();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>");
+		//sb.append("<?xml version=\"1.0\" ?>");
 		sb.append("<ResultSet>");
 		if ( this.items != null ) {
 			for (XmlWrappable item: this.items) {

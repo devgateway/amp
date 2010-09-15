@@ -1,7 +1,9 @@
 package org.digijava.module.dataExchange.util;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -9,14 +11,32 @@ import java.util.Iterator;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpNotes;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -161,7 +181,11 @@ public class ExportBuilder {
 				for (Iterator iterator = ampActivity.getSectors().iterator(); iterator.hasNext();) {
 					AmpActivitySector ampSector = (AmpActivitySector) iterator.next();
 					if (ampSector.getSectorPercentage() != null){
-						parent.getSectors().add(buildPercentageCodeValue(ampSector.getSectorId().getSectorCode(),
+//						parent.getSectors().add(buildPercentageCodeValue(ampSector.getSectorId().getSectorCode(),
+//								ampSector.getSectorId().getName(),
+//								ampSector.getSectorPercentage().floatValue()));
+						//AMP-9212
+						parent.getSectors().add(buildPercentageCodeValue(ampSector.getSectorId().getSectorCodeOfficial(),
 								ampSector.getSectorId().getName(),
 								ampSector.getSectorPercentage().floatValue()));
 					} else {
@@ -493,7 +517,7 @@ public class ExportBuilder {
 			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
 				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
 				proj.setType(ampProj.getProjected().getValue());
-				proj.setAmount(ampProj.getAmount().longValue());
+				proj.setAmount(new BigDecimal(ampProj.getAmount().longValue()));
 				proj.setCurrency(ampProj.getAmpCurrency().getCurrencyCode());
 
 				Calendar cal = Calendar.getInstance();
@@ -742,8 +766,9 @@ public class ExportBuilder {
 		if (returnString){
 			amount = amount * 1000;
 		}
-
-		retValue.setAmount(amount);
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		BigDecimal d = new BigDecimal(formatter.format(amount));
+		retValue.setAmount(d);
 		retValue.setCurrency(currency);
 		
 		return retValue;

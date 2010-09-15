@@ -1,4 +1,4 @@
-package org.digijava.module.aim.form;
+package org.digijava.module.translation.form;
 
 import java.util.List;
 
@@ -7,15 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
 /**
- * 
- * @author dan
+ * Form for translations import export action in admin menu of AMP.
+ * Replaces form in AIM module with name TranslatorManagerForm.java
+ * uses same field names to have minimal changes in JSP's.
+ * AMP-9085 
+ * @author Irakli Kobiashvili ikobiashvili@dgfoundation.org
  *
  */
-@Deprecated
-public class TranslatorManagerForm extends ActionForm {
-	
-	private static final long serialVersionUID = 2L;
+public class ImportExportForm extends ActionForm {
+
+	private static final long serialVersionUID = 1L;
 
 	private List<String> languages;
 	private List<String> importedLanguages;
@@ -25,34 +28,60 @@ public class TranslatorManagerForm extends ActionForm {
 	private FormFile fileUploaded;
 	private String[] keywords;
 	private String skipOrUpdateTrnsWithKeywords;
+
 	
-
-	public String[] getSelectedLanguages() {
-		return selectedLanguages;
-	}
-
-	public void setSelectedLanguages(String[] selectedLanguages) {
-		this.selectedLanguages = selectedLanguages;
-	}
-
 	public List<String> getLanguages() {
 		return languages;
 	}
-
 	public void setLanguages(List<String> languages) {
 		this.languages = languages;
 	}
-
+	public List<String> getImportedLanguages() {
+		return importedLanguages;
+	}
+	public void setImportedLanguages(List<String> importedLanguages) {
+		this.importedLanguages = importedLanguages;
+	}
+	public String[] getSelectedLanguages() {
+		return selectedLanguages;
+	}
+	public void setSelectedLanguages(String[] selectedLanguages) {
+		this.selectedLanguages = selectedLanguages;
+	}
+	public String[] getSelectedImportedLanguages() {
+		return selectedImportedLanguages;
+	}
+	public void setSelectedImportedLanguages(String[] selectedImportedLanguages) {
+		this.selectedImportedLanguages = selectedImportedLanguages;
+	}
+	public String[] getOverwriteTrn() {
+		return overwriteTrn;
+	}
+	public void setOverwriteTrn(String[] overwriteTrn) {
+		this.overwriteTrn = overwriteTrn;
+	}
 	public FormFile getFileUploaded() {
 		return fileUploaded;
 	}
-
 	public void setFileUploaded(FormFile fileUploaded) {
 		this.fileUploaded = fileUploaded;
 	}
-
-	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		super.reset(arg0, arg1);
+	public String[] getKeywords() {
+		return keywords;
+	}
+	public void setKeywords(String[] keywords) {
+		this.keywords = keywords;
+	}
+	public String getSkipOrUpdateTrnsWithKeywords() {
+		return skipOrUpdateTrnsWithKeywords;
+	}
+	public void setSkipOrUpdateTrnsWithKeywords(String skipOrUpdateTrnsWithKeywords) {
+		this.skipOrUpdateTrnsWithKeywords = skipOrUpdateTrnsWithKeywords;
+	}
+	
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		super.reset(mapping, request);
 		languages=null;
 		importedLanguages=null;
 		selectedLanguages=null;
@@ -63,44 +92,5 @@ public class TranslatorManagerForm extends ActionForm {
 		skipOrUpdateTrnsWithKeywords=null;
 	}
 
-	public String[] getSelectedImportedLanguages() {
-		return selectedImportedLanguages;
-	}
 
-	public void setSelectedImportedLanguages(String[] selectedImportedLanguages) {
-		this.selectedImportedLanguages = selectedImportedLanguages;
-	}
-
-	public List<String> getImportedLanguages() {
-		return importedLanguages;
-	}
-
-	public void setImportedLanguages(List<String> importedLanguages) {
-		this.importedLanguages = importedLanguages;
-	}
-
-	public String[] getOverwriteTrn() {
-		return overwriteTrn;
-	}
-
-	public void setOverwriteTrn(String[] overwriteTrn) {
-		this.overwriteTrn = overwriteTrn;
-	}
-
-	public String[] getKeywords() {
-		return keywords;
-	}
-
-	public void setKeywords(String[] keywords) {
-		this.keywords = keywords;
-	}
-
-	public String getSkipOrUpdateTrnsWithKeywords() {
-		return skipOrUpdateTrnsWithKeywords;
-	}
-
-	public void setSkipOrUpdateTrnsWithKeywords(String skipOrUpdateTrnsWithKeywords) {
-		this.skipOrUpdateTrnsWithKeywords = skipOrUpdateTrnsWithKeywords;
-	}
-	
 }

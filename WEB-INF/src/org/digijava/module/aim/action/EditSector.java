@@ -73,14 +73,16 @@ public class EditSector extends Action {
 										
 										AmpSector ampSector = SectorUtil.getAmpSector(secId);
 										editSectorForm.setSectorId(secId);
-										ampSector.setName(editSectorForm.getSectorName());
 										ampSector.setDescription(editSectorForm.getDescription());
-										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);										
+										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+										String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+										String curName = ampSector.getName();
+										ampSector.setName(editSectorForm.getSectorName());
 										ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 										String secSchemeCode = ampSector.getAmpSecSchemeId().getSecSchemeCode();
 										String secSchemename = ampSector.getAmpSecSchemeId().getSecSchemeName();
 										Collection sectors = SectorUtil.getSectorLevel1(ampSector.getAmpSecSchemeId().getAmpSecSchemeId().intValue());
-										if(checkSectorNameCodeIsNull(editSectorForm)){
+										if(checkSectorNameCodeIsNull(editSectorForm)){								
 											request.setAttribute("event", "view");
 											ActionMessages errors = new ActionMessages();
 											errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
@@ -100,6 +102,7 @@ public class EditSector extends Action {
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
+							        		ampSector.setName(curName);
 											return mapping.findForward("editedSecondLevelSector");
 										}
 										
@@ -112,7 +115,8 @@ public class EditSector extends Action {
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-											return mapping.findForward("editedSecondLevelSector");
+							        		ampSector.setSectorCodeOfficial(curSectorCodeOfficial);
+							        		return mapping.findForward("editedSecondLevelSector");
 										}
 										
 										logger.debug("Updating.............................................");
@@ -131,9 +135,11 @@ public class EditSector extends Action {
 								 {
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
 									editSectorForm.setSectorId(secId);
-									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setDescription(editSectorForm.getDescription());
-									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SUB_SECTOR);
+									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+									String curName = ampSector.getName();
+									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 									Collection sectors = SectorUtil.getAllChildSectors(ampSector.getParentSectorId().getAmpSectorId());
 									if(checkSectorNameCodeIsNull(editSectorForm)){
@@ -157,6 +163,7 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors, editSectorForm);
+						        		ampSector.setName(curName);
 										return mapping.findForward("editedThirdLevelSector");
 									}
 									
@@ -169,7 +176,8 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSector");
+						        		ampSector.setSectorCodeOfficial(curSectorCodeOfficial);
+						        		return mapping.findForward("editedThirdLevelSector");
 									}
 									
 									logger.debug("Updating.............................................");
@@ -198,9 +206,11 @@ public class EditSector extends Action {
 							 	{
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
 									editSectorForm.setSectorId(secId);
-									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setDescription(editSectorForm.getDescription());
-									ampSector.setSectorCode(editSectorForm.getSectorCode());
+									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+									String curName = ampSector.getName();
+									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 									
 									Collection sectors = SectorUtil.getAllChildSectors(ampSector.getParentSectorId().getAmpSectorId());
@@ -225,6 +235,7 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
+						        		ampSector.setName(curName);
 										return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
 									
@@ -237,7 +248,8 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSectorPlusOne");
+						        		ampSector.setSectorCodeOfficial(curSectorCodeOfficial);
+						        		return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
 									
 									logger.debug("Updating.............................................");
@@ -321,7 +333,7 @@ public class EditSector extends Action {
 					if(!Id.equals(sector.getAmpSectorId())){
 						if( sector.getName() != null && sectorsForm.getSectorName().equals(sector.getName()) ) 
 							return 1;
-						if( sector.getSectorCode() != null && sectorsForm.getSectorCodeOfficial().equals(sector.getSectorCode()) ) 
+						if( sector.getSectorCodeOfficial() != null && sectorsForm.getSectorCodeOfficial().equals(sector.getSectorCodeOfficial()) ) 
 							return 2;
 					}
 				}

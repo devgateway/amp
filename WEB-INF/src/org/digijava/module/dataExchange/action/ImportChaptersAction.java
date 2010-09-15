@@ -82,8 +82,7 @@ public class ImportChaptersAction extends Action {
 					String year =  ChapterUtil.getNumberFromCell(row.getCell(0));
 					chapter.setYear(new Integer(year));
 					ChapterUtil.saveChapter(chapter);
-					logger.info("Processed chapter with code "
-							+ chapter.getCode());
+					logger.info("Processed chapter with code " + chapter.getCode());
 					String impCode = ChapterUtil.getNumberFromCell(row.getCell(3));
 					AmpImputation imp = ChapterUtil.getImputationByCode(impCode);
 					if (imp == null) {
@@ -94,8 +93,7 @@ public class ImportChaptersAction extends Action {
 					imp.setChapter(chapter);
 					if(row.getCell(4)!=null) imp.setDescription(row.getCell(4).getStringCellValue());else imp.setDescription(null);
 					ChapterUtil.saveImputation(imp);
-					logger.info("Processed imputation with code "
-							+ imp.getCode());
+					logger.info("Processed imputation with code " + imp.getCode());
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e);

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,11 +44,12 @@ import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
+//TODO replaced with ImportExportTranslations.java in translator module. Remove this file. see AMP-9085
+@Deprecated
 public class TranslatorManager extends Action {
 	private static Logger logger = Logger.getLogger(TranslatorManager.class);
 	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-	{
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
@@ -61,12 +61,12 @@ public class TranslatorManager extends Action {
 				}
 			}
 		
-		TreeSet<String> languages= this.getPossibleLanguages();
+		// TreeSet<String> languages= this.getPossibleLanguages();
+		List<String> languages = TranslatorWorker.getAllUsedLanguages();
 		TranslatorManagerForm tMngForm=(TranslatorManagerForm) form;
 		tMngForm.setLanguages(languages);
 		
-		if(request.getParameter("import")!=null)
-		{
+		if (request.getParameter("import") != null) {
 			logger.info("I am in import step");
 			FormFile myFile = tMngForm.getFileUploaded();
 	        byte[] fileData    = myFile.getFileData();
@@ -76,8 +76,7 @@ public class TranslatorManager extends Action {
 	        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.translation.jaxb");
 	        Unmarshaller m = jc.createUnmarshaller();
 	        Translations trns_in;	        
-	        TreeSet<String> languagesImport = new TreeSet<String>();
-	        
+			List<String> languagesImport = new ArrayList<String>();
 	        
 	        try {
 				trns_in = (Translations) m.unmarshal(inputStream);
@@ -86,7 +85,8 @@ public class TranslatorManager extends Action {
 					while (it.hasNext()) {
 						Trn element = it.next();
 						List<Language> langs=element.getLang();
-						//translation must have at least one language,so this list can't be null.
+						// translation must have at least one language,so this
+						// list can't be null.
 						for (Language lang : langs) {
 							languagesImport.add(lang.getCode());
 						}						
@@ -105,18 +105,15 @@ public class TranslatorManager extends Action {
 	        
 		}
 		if(request.getParameter("importLang")!=null) {
-			long timeStart=System.currentTimeMillis();
 			FormFile myFile = (FormFile)session.getAttribute("myFile");
 			session.removeAttribute("myFile");
-			if(myFile==null)
-			{
+			if (myFile == null) {
 				ActionMessages errors = new ActionMessages();
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}
-			if(myFile.getFileData()==null) 
-			{
+			if (myFile.getFileData() == null) {
 				ActionMessages errors = new ActionMessages();
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
@@ -130,8 +127,7 @@ public class TranslatorManager extends Action {
 	        
 	        //optimized code for parsing the xml file
 	        ArrayList<TrnHashMap> trnHashMaps=new ArrayList<TrnHashMap>();
-	        for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)
-	        	{
+			for (int i = 0; i < tMngForm.getSelectedImportedLanguages().length; i++) {
 	        		TrnHashMap tHashMap=new TrnHashMap();
 	        		tHashMap.setLang(tMngForm.getSelectedImportedLanguages()[i]);
 	        		trnHashMaps.add(tHashMap);
@@ -141,14 +137,15 @@ public class TranslatorManager extends Action {
 				if (trns_in.getTrn() != null) {
 					logger.info("Processing "+trns_in.getTrn().size()+" translation groups (trn tags)...");
 					Iterator<Trn> it = trns_in.getTrn().iterator();					
-					while(it.hasNext()){
+					while (it.hasNext() && (it == null)) {
 						Trn trn = it.next();						
 						MessageGroup msgGroup=new MessageGroup(trn);
 						
 						Iterator<TrnHashMap> itForLang=trnHashMaps.iterator();
 						while(itForLang.hasNext())	{
-							TrnHashMap tanslationsHashMap=(TrnHashMap)itForLang.next();
-							//get requested languge's translation from the msgGroup
+							TrnHashMap tanslationsHashMap = itForLang.next();
+							// get requested languge's translation from the
+							// msgGroup
 							Message message=msgGroup.getMessageByLocale(tanslationsHashMap.getLang());
 							if(message!=null){
 								tanslationsHashMap.getTranslations().add(message);
@@ -166,22 +163,21 @@ public class TranslatorManager extends Action {
 			}	        
 	        
 	        try {	
-					if(tMngForm!=null && tMngForm.getSelectedImportedLanguages()!=null && tMngForm.getSelectedImportedLanguages().length>0)
-					{
+				if (tMngForm.getSelectedImportedLanguages() != null
+						&& tMngForm.getSelectedImportedLanguages().length > 0) {
 						//for every language read from file
-						TreeSet<String> languagesFromSite= this.getPossibleLanguages();
+					List<String> languagesFromSite = TranslatorWorker.getAllUsedLanguages();
 						Iterator<String> itLangFromSite;
-						for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)
-						{
+					for (int i = 0; i < tMngForm.getSelectedImportedLanguages().length; i++) {
 							itLangFromSite=languagesFromSite.iterator();
 							boolean searchedLang=false;
-							while(itLangFromSite.hasNext())
-							{
+						while (itLangFromSite.hasNext()) {
 								String langSearched=itLangFromSite.next();
-								if(tMngForm.getSelectedImportedLanguages()[i].compareTo(langSearched)==0) searchedLang=true;
+							if (tMngForm.getSelectedImportedLanguages()[i].compareTo(langSearched) == 0)
+								searchedLang = true;
 							}
-							if(searchedLang==false && request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]).compareTo("update")==0)
-							{
+						if (searchedLang == false && 
+								request.getParameter("LANG:" + tMngForm.getSelectedImportedLanguages()[i]).compareTo("update") == 0) {
 								ActionMessages errors = new ActionMessages();								
 								errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.updateErrorTranslation"));								
 								saveErrors(request, errors);
@@ -191,21 +187,28 @@ public class TranslatorManager extends Action {
 						
 						for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)	{
 							Iterator<TrnHashMap> it=trnHashMaps.iterator();
-							while(it.hasNext())
-							{									
+						while (it.hasNext()) {
 								TrnHashMap tHP=(TrnHashMap)it.next();
-								if(tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i])==0)
-								{	
-									//what was selected: overwrite,update or insert non-existing
+							if (tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i]) == 0) {
+								// what was selected: overwrite,update or insert
+								// non-existing
 									String actionName=request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]);
-									//what to do with translations,which have keywords that were typed by user on import page.
+								// what to do with translations,which have
+								// keywords that were typed by user on import
+								// page.
 									String skipOrUpdateTrnsWithKeywords=tMngForm.getSkipOrUpdateTrnsWithKeywords();
-									List<String> keywords=tMngForm.getKeywords()==null?new ArrayList<String>():Arrays.asList(tMngForm.getKeywords());
+								List<String> keywords = null;
+								if (tMngForm.getKeywords() == null) {
+									keywords = new ArrayList<String>();
+								} else {
+									keywords = Arrays.asList(tMngForm.getKeywords());
+								}
 									
 									Iterator<Message> trnsIterator=tHP.getTranslations().iterator();									
 									while(trnsIterator.hasNext()){
 										Message msg=(Message)trnsIterator.next();										
-										//now overwrite,update or insert non-existing translation
+									// now overwrite,update or insert
+									// non-existing translation
 										if(actionName.compareTo("nonexisting")==0){
 											updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
 											logger.info("updating non existing...."+msg.getKey());
@@ -236,8 +239,7 @@ public class TranslatorManager extends Action {
 		}
 		
 		if(request.getParameter("export")!=null) {
-			if(tMngForm!=null && tMngForm.getSelectedLanguages()!=null && tMngForm.getSelectedLanguages().length>0)
-			{
+			if (tMngForm != null && tMngForm.getSelectedLanguages() != null && tMngForm.getSelectedLanguages().length > 0) {
 				logger.info("I am in Export step");
 				JAXBContext jc = JAXBContext.newInstance("org.digijava.module.translation.jaxb");
 				Marshaller m = jc.createMarshaller();
@@ -259,8 +261,7 @@ public class TranslatorManager extends Action {
 				
 				session.removeAttribute("aimTranslatorManagerForm");
 				return null;
-			}
-			else {
+			} else {
 				ActionMessages errors = new ActionMessages();
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.pleaseChooseALanguageForExport"));
 				saveErrors(request, errors);
@@ -284,30 +285,6 @@ public class TranslatorManager extends Action {
 		return result;
 	}
 	
-
-	private TreeSet<String> getPossibleLanguages()	{
-		TreeSet<String> ret = new TreeSet<String>();
-		Session session = null;
-		String qryStr = null;		
-		try{
-			session	= PersistenceManager.getRequestDBSession();
-			Query qry;
-			qryStr	= "select m.locale from "+ Message.class.getName() + " m ";
-			qry=session.createQuery(qryStr);
-			Iterator<String> itr = qry.list().iterator();
-			while (itr.hasNext()){
-				String strAux=itr.next();
-				ret.add(strAux);
-			}	
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		} 
-		return ret;
-	}
-
-
 	private void fillMapWithTranslationsForALanguage(String language,Map<String,MessageGroup> map){		
 		Session session = null;
 		String qryStr = null;		
@@ -319,7 +296,8 @@ public class TranslatorManager extends Action {
 				Iterator<Message> itr = qry.list().iterator();
 				while(itr.hasNext()){
 					Message msg= (Message)itr.next();
-					//MessageGroup class key is equal to the message key, from which it was created
+				// MessageGroup class key is equal to the message key, from
+				// which it was created
 					MessageGroup msgGroup=map.get(msg.getKey());
 					if(msgGroup==null){
 						msgGroup=new MessageGroup(msg);
@@ -328,8 +306,7 @@ public class TranslatorManager extends Action {
 					}
 					map.put(msgGroup.getKey(), msgGroup);
 				}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
@@ -349,17 +326,31 @@ public class TranslatorManager extends Action {
 		}		
 	}
 	
+	private void overrideOrUpdateTrns(
+			Message msgLocal, 
+			String lang, 
+			String actionName, 
+			List<String> keyWords, 
+			String skipOrUpdateTrnsWithKeywords, 
+			HttpServletRequest request
+			) throws Exception {
 	
-	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords,String skipOrUpdateTrnsWithKeywords,HttpServletRequest request) throws Exception{
 		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
 		String siteId = RequestUtils.getSite(request).getId().toString();
 		//get message from cache,if exists.
 		Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
 		if(dbMessage!=null){
 			boolean gotoNextCheck=false;
-			if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip") && !keyWords.contains(msgLocal.getKeyWords()) && !keyWords.contains(dbMessage.getKeyWords()) ){
+			if (
+					skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip")
+					&& !keyWords.contains(msgLocal.getKeyWords())
+					&& !keyWords.contains(dbMessage.getKeyWords())
+				) {
 				gotoNextCheck=true;
-			}else if( skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && (keyWords.contains(msgLocal.getKeyWords()) || keyWords.contains(dbMessage.getKeyWords()) ) ){
+			} else if (
+					skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update")
+					&& (keyWords.contains(msgLocal.getKeyWords()) || keyWords.contains(dbMessage.getKeyWords()))
+					) {
 				gotoNextCheck=true;
 			}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
 				gotoNextCheck=true;
@@ -368,7 +359,11 @@ public class TranslatorManager extends Action {
 			if(gotoNextCheck){
 				boolean saveOrUpdate=false;
 				if(actionName.equals("update")){
-					if (msgLocal.getCreated().after(dbMessage.getCreated())&& msgLocal.getLocale().compareTo(dbMessage.getLocale()) == 0 || dbMessage.getMessage().equalsIgnoreCase("")) {
+					if (
+							msgLocal.getCreated().after(dbMessage.getCreated())
+							&& msgLocal.getLocale().compareTo(dbMessage.getLocale()) == 0 
+							|| dbMessage.getMessage().equalsIgnoreCase("")
+						) {
 						saveOrUpdate=true;								
 					}
 				}else if(actionName.equals("overwrite")){
@@ -386,7 +381,9 @@ public class TranslatorManager extends Action {
 		}else{
 			boolean insertNewMsg=true;
 			if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && !keyWords.contains(msgLocal.getKeyWords())){
-				//if we have skipOrUpdateTrnsWithKeywords=update case,this means that only messages with keywords(that match user's typed ones) should be inserted
+				// if we have skipOrUpdateTrnsWithKeywords=update case,this
+				// means that only messages with keywords(that match user's
+				// typed ones) should be inserted
 				insertNewMsg=false;
 			}
 			if(insertNewMsg){

@@ -172,18 +172,20 @@ public class GetActivityMap extends Action {
 
     private List prepareHilightSegments (List segmentData, GisMap map) {
         List retVal = new ArrayList();
-        Iterator it = map.getSegments().iterator();
+        if (map != null && map.getSegments() != null) {
+            Iterator it = map.getSegments().iterator();
 
-        while (it.hasNext()) {
-            GisMapSegment segment = (GisMapSegment) it.next();
-            for (int idx =(int) 0; idx < segmentData.size(); idx++) {
-                SegmentData sd = (SegmentData) segmentData.get(idx);
-                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
-                    HilightData hData = new HilightData();
-                    hData.setSegmentId((int) segment.getSegmentId());
-                    float redColor = Float.parseFloat(sd.getSegmentValue()) * 2.55f;
-                    hData.setColor(new ColorRGB((int)redColor, (int) (255f - redColor) , 0));
-                    retVal.add(hData);
+            while (it.hasNext()) {
+                GisMapSegment segment = (GisMapSegment) it.next();
+                for (int idx = (int) 0; idx < segmentData.size(); idx++) {
+                    SegmentData sd = (SegmentData) segmentData.get(idx);
+                    if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
+                        HilightData hData = new HilightData();
+                        hData.setSegmentId((int) segment.getSegmentId());
+                        float redColor = Float.parseFloat(sd.getSegmentValue()) * 2.55f;
+                        hData.setColor(new ColorRGB((int) redColor, (int) (255f - redColor), 0));
+                        retVal.add(hData);
+                    }
                 }
             }
         }
@@ -192,6 +194,7 @@ public class GetActivityMap extends Action {
 
     private List getSegmentsForParent (String parentCode, GisMap map) {
         List retVal = new ArrayList();
+        if (map != null && map.getSegments() != null) {
         Iterator it = map.getSegments().iterator();
 
         while (it.hasNext()) {
@@ -200,7 +203,9 @@ public class GetActivityMap extends Action {
                 retVal.add(segment);
             }
         }
+        }
         return retVal;
+       
     }
 
 }

@@ -167,7 +167,7 @@ session.setAttribute("progressValue", counter);
 					<span  style="color: red;font-family: Arial;font-size: 10px;">
 						<%
 	                	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	                	if (af.getAmountinthousand()==true){%>
+	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in thousands (000)
 							</digi:trn>
@@ -432,7 +432,7 @@ session.setAttribute("progressValue", counter);
 			<span style="color: red;font-family: Arial;padding-right: 5px">
 				<%
 	            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	            if (af.getAmountinthousand()==true){%>
+	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
 	            <digi:trn key="rep:pop:AllAmount">
 					Amounts are in thousands (000)
 				</digi:trn>

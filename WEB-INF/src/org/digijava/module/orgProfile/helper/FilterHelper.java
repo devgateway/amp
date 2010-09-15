@@ -276,15 +276,16 @@ public class FilterHelper implements Serializable {
         this.endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, fiscalYear);
         this.locationIds = new ArrayList<Long>();
         if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-            List<Long> zonesAsList = Arrays.asList(zoneIds);
-            LocationUtil.populateWithDescendants(zonesAsList, locationIds);
+            List<Long> zonesAsList =new ArrayList<Long>();
+            zonesAsList.addAll(Arrays.asList(zoneIds));
+            LocationUtil.populateWithDescendants(zonesAsList);
             this.locationIds.addAll(zonesAsList);
         } else {
             if (regionId != null && regionId != -1) {
                 List<Long> regionAsList = new ArrayList<Long>();
                 regionAsList.add(regionId);
-                LocationUtil.populateWithDescendants(regionAsList, locationIds);
-                this.locationIds.add(regionId);
+                LocationUtil.populateWithDescendants(regionAsList);
+                this.locationIds.addAll(regionAsList);
             }
         }
     }

@@ -1019,24 +1019,26 @@ public class LocationUtil {
         }
 
     }
-     public static void  populateWithDescendants(Collection<Long> locations,Collection <Long> destCollection ) {
-		if ( locations != null ) {
-			Iterator<Long> iterLoc	= locations.iterator();
-			while (iterLoc.hasNext()) {
-				AmpCategoryValueLocations loc	 =
-					DynLocationManagerUtil.getLocation(iterLoc.next(), true);
-				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
-				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
-                    List<Long> childrenLocsId=new ArrayList<Long>();
-                    for(AmpCategoryValueLocations child:childrenLocs){
-                        childrenLocsId.add(child.getId());
-                    }
-                    destCollection.addAll(childrenLocsId);
-					populateWithDescendants(destCollection, childrenLocsId);
-				}
-			}
-		}
-	}
+     public static Collection<Long> populateWithDescendants(Collection<Long> locations) {
+        Session session = null;
+        Collection<Long> destinationCollection = new ArrayList<Long>();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select loc.id from "
+                    + AmpCategoryValueLocations.class.getName()
+                    + " loc where parentLocation.id in (:locationids)";
+            Query q = session.createQuery(queryString);
+            q.setParameterList("locationids", locations);
+            destinationCollection = q.list();
+            if (destinationCollection != null && destinationCollection.size() > 0) {
+                locations.addAll(populateWithDescendants(destinationCollection));
+            }
+        } catch (Exception ex) {
+            logger.error("Exception from  populateWithDescendants: ", ex);
+        }
+        return locations;
+    }
     public static AmpCategoryValueLocations getTopAncestor(AmpCategoryValueLocations loc, String beforeImpLoc) {
         AmpCategoryValueLocations parent = loc.getParentLocation();
         if (beforeImpLoc!=null) {

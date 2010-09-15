@@ -89,6 +89,10 @@ public class UpdateAppSettings extends Action {
 			String path = mapping.getPath();
 			logger.debug("path = " + path);
 			AmpApplicationSettings ampAppSettings = null;
+			boolean loadValues = false;
+			if (uForm.getType() == null || uForm.getType().trim().equals("")) {
+				loadValues = true;
+			}
 			if (path != null
 					&& (path.trim().equals("/aim/defaultSettings") || path
 							.trim().equals("/defaultSettings"))) {
@@ -117,7 +121,7 @@ public class UpdateAppSettings extends Action {
 				filter.setCurrency(ampAppSettings.getCurrency());
 				session.setAttribute(ArConstants.REPORTS_FILTER, filter);
 			}
-			if (ampAppSettings != null) {
+			if (ampAppSettings != null && loadValues) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings
 						.getDefaultRecordsPerPage());

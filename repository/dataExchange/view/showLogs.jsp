@@ -56,6 +56,7 @@
 			columnDefs: [
 			             {key:"DbId", sortable: true, formatter:YAHOOAmp.widget.DataTable.formatNumber},
 	                   	   {key:"Date", sortable: true, formatter: YAHOOAmp.widget.DataTable.formatDate},
+	                   	   {key:"Time"},
 	                   	{key:"ExternalTimestamp", label:"External Timestamp", sortable: true},
 	                   	{key:"Description"},
 	                   	   ],
@@ -63,7 +64,7 @@
 			responseSchema: {
 						resultNode: "LogPerExecution",
 						fields: [{key:"DbId", parser:YAHOOAmp.util.DataSource.parseNumber},
-									{key:"Date", parser: YAHOOAmp.util.DataSource.parseDate}, "ExternalTimestamp", "Description"]
+									{key:"Date", parser: YAHOOAmp.util.DataSource.parseDate},"Time", "ExternalTimestamp", "Description"]
 					}
 	
 	};

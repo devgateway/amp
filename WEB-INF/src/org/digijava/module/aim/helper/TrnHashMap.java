@@ -7,10 +7,14 @@ package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 
+import org.digijava.module.translation.entity.MessageGroup;
+
 /**
  * @author dan
+ * @deprecated use {@link MessageGroup}
  *
  */
+@Deprecated
 public class TrnHashMap {
 	String lang=new String();
 	ArrayList translations= new ArrayList();

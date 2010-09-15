@@ -724,6 +724,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Projection Name" feature="MTEF Projections"></field:display> 
 <field:display name="Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Proposed Completion Date" feature="Planning"></field:display> 
+<field:display name="Closing Dates" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 
@@ -936,6 +937,17 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2"></field:display>
 <field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2"></field:display>
 <field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2"></field:display>
+
+<feature:display name="Widgets" module="GIS DASHBOARD"></feature:display>
+<field:display name="Resources at a glance" feature="Widgets"></field:display>
+<field:display name="Widget7" feature="Widgets"></field:display>
+<field:display name="Widget8" feature="Widgets"></field:display>
+<field:display name="Widget8" feature="Widgets"></field:display>
+<field:display name="Millennium Development Goals" feature="Widgets"></field:display>
+<field:display name="Aid Effectiveness Process Indicators" feature="Widgets"></field:display>
+<field:display name="Output Indicators" feature="Widgets"></field:display>
+<field:display name="Total resources" feature="Widgets"></field:display>
+<field:display name="External Aid Resources" feature="Widgets"></field:display>
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

@@ -111,9 +111,10 @@ public class AddSector extends Action {
 						}
 						ActionMessages errors = new ActionMessages();
 		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0) 
+		        		if (errors.size() > 0){ 
 		        			saveErrors(request, errors);
-
+		        			return mapping.findForward("forwardSector");
+						}
 						return mapping.findForward("levelFirstSectorAdded");
 					}
 					if(sectorStatus == 2){
@@ -130,9 +131,10 @@ public class AddSector extends Action {
 						}
 						ActionMessages errors = new ActionMessages();
 		        		errors.add("title", new ActionMessage("error.aim.addSector.wrongCode", TranslatorWorker.translateText("The code of the sector already exist for this scheme. Please enter another code",locale,siteId)));
-		        		if (errors.size() > 0) 
+		        		if (errors.size() > 0){
 		        			saveErrors(request, errors);
-		        		
+		        			return mapping.findForward("forwardSector");
+		        		}
 						return mapping.findForward("levelFirstSectorAdded");
 					}
 					addSectorForm.setParentId(new Long(schemeId));
@@ -225,7 +227,7 @@ public class AddSector extends Action {
 							addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
 						ActionMessages errors = new ActionMessages();
-		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sector already exist for this scheme. Please enter another title",locale,siteId)));
+		        		errors.add("title", new ActionMessage("error.aim.addSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sector already exist for this scheme. Please enter another code",locale,siteId)));
 		        		if (errors.size() > 0) {
 		        			saveErrors(request, errors);
 		        			return mapping.findForward("forwardSector");

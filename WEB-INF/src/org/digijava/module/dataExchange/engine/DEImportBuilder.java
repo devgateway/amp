@@ -54,6 +54,7 @@ import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
@@ -149,7 +150,7 @@ public class DEImportBuilder {
 	}
 
 	//fill a new and empty activity based on field selection
-	private void insertActivity(AmpActivity activity, ActivityType actType, Boolean update ) throws Exception{
+	private void insertActivity(AmpActivity activity, ActivityType actType, Boolean update, HttpServletRequest request ) throws Exception{
 		//update = false for new activity
 		processPreStep(activity, update);
 		processStep1(activity, actType, update);
@@ -157,7 +158,7 @@ public class DEImportBuilder {
 		processStep3(activity, actType, update);
 		processStep4(activity, actType, update);
 		processStep5(activity, actType, update);
-		processStep6(activity, actType, update);
+		processStep6(activity, actType, update, request);
 		processStep7(activity, actType, update);
 		processAdditionalFields(activity, actType, update);
 		//DataExchangeUtils.saveComponents(activity, request, tempComps);
@@ -172,7 +173,7 @@ public class DEImportBuilder {
 		return activity;
 	}
 	
-	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update )  throws Exception{
+	private void updateActivity(AmpActivity activity, ActivityType actType, Boolean update, HttpServletRequest request )  throws Exception{
 		//update = true for update activity
 		processPreStep(activity, update);
 		processStep1(activity, actType, update);
@@ -180,7 +181,7 @@ public class DEImportBuilder {
 		processStep3(activity, actType, update);
 		processStep4(activity, actType, update);
 		processStep5(activity, actType, update);
-		processStep6(activity, actType, update);
+		processStep6(activity, actType, update, request);
 		processStep7(activity, actType, update);
 		processAdditionalFields(activity, actType, update);
 		//DataExchangeUtils.saveComponents(activity, request, tempComps);
@@ -215,17 +216,26 @@ public class DEImportBuilder {
 	}
 
 	private void processPreStep(AmpActivity activity, Boolean update) {
-		// TODO Auto-generated method stub
+
 		//set the amp team
 		//if no workspace was selected the activity will be unassigned
-		//if activity exist we keep the existing settings
-		if(update == false){
-			AmpTeam team = getImportedWorkspace();
+		
+		//original request: if activity exist we keep the existing settings
+//		if(update == false){
+//			AmpTeam team = getImportedWorkspace();
+//			activity.setTeam(team);
+//			
+//			//all the activities are not saved as draft
+//			activity.setCreatedAsDraft(false);
+//		}
+
+		//AMP-9213
+		AmpTeam team = getAssignedWorkspace();
 			activity.setTeam(team);
 			
-			//all the activities are not saved as draft
-			activity.setCreatedAsDraft(false);
-		}
+		//activity creator is the team leader of the workspace
+		activity.setActivityCreator(team.getTeamLead());
+		
 		activity.setApprovalStatus(getApprovalStatus());
 	}
 
@@ -310,13 +320,13 @@ public class DEImportBuilder {
 
 	//process step 6 from activity form
 	// documents and related links
-	private void processStep6(AmpActivity activity, ActivityType actType, Boolean update) {
+	private void processStep6(AmpActivity activity, ActivityType actType, Boolean update, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		if(isFieldSelected("activity.documents"))
-			;//processDocuments(activity, actType);
+			processDocuments(activity, actType, request);
 
 		if(isFieldSelected("activity.relatedLinks"))
-			;//processRelatedLinks(activity, actType);
+			processRelatedLinks(activity, actType, request);
 	}
 
 	//process step 7 from activity form
@@ -793,7 +803,7 @@ public class DEImportBuilder {
 				ampRegFund.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.PLANNED));
 			if( Constants.IDML_ACTUAL.equals(fdt.getType()) ) 
 				ampRegFund.setAdjustmentType(new Integer(org.digijava.module.aim.helper.Constants.ACTUAL));
-			ampRegFund.setTransactionAmount(new Double(	fdt.getAmount()));
+			ampRegFund.setTransactionAmount(new Double(	fdt.getAmount().doubleValue()));
 			ampRegFund.setTransactionDate(DataExchangeUtils.XMLGregorianDateToDate(fdt.getDate()));
 			regFundings.add(ampRegFund);
 		}
@@ -972,30 +982,41 @@ public class DEImportBuilder {
  * ****************** step 6 process methods	
  */
 	//documents
-	private void processDocuments(AmpActivity activity, ActivityType actType) {
+	private void processDocuments(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		//(new MockStrutTest()).getActionMockObjectFactory().getMockRequest();
-		DEMockTest mock = new DEMockTest();
-		try {
-			mock.setUp();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MockHttpServletRequest request = mock.getRequest();
-		if(actType.getDocuments() != null || actType.getDocuments().size() > 0){
-			setTeamMember(request, "admin@amp.org", 0L);
+		if( actType.getDocuments() == null || actType.getDocuments().size() == 0 ) return;
+		
+		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
+//		DEMockTest mock = new DEMockTest();
+//		try {
+//			mock.setUp(teamLead.getUser().getId(), teamLead.getUser().getEmail());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		MockHttpServletRequest request = mock.getRequest();
+		
+		
+		
+		//if(actType.getRelatedLinks() != null || actType.getRelatedLinks().size() > 0){
+			//setTeamMember(request, "admin@amp.org", 0L);
+		HttpSession	httpSession		= request.getSession();
+		TeamMember oldTeamMember		= (TeamMember)httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+			
+		setTeamMember(request,teamLead.getUser().getEmail(),activity.getTeam().getAmpTeamId());
 			Session writeSession = DocumentManagerUtil.getWriteSession(request);
 				for (Iterator it = actType.getDocuments().iterator(); it.hasNext();) {
 					Documents doc = (Documents) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
+			tdd.setName(doc.getTitle());
 					tdd.setTitle(doc.getTitle());
 					tdd.setDescription(doc.getDescription());
 					//tdd.setFormFile(new  FormFile());
 					//tdd.setContentType("");
 					tdd.setWebLink(null);
 					ActionMessages errors=new ActionMessages();
-					NodeWrapper nodeWrapper			= tdd.saveToRepository(request, errors);
+			NodeWrapper nodeWrapper			= tdd.saveToRepositoryDataExchange(request, errors);
 					
 					if ( nodeWrapper != null ){
 						AmpActivityDocument aac		= new AmpActivityDocument();
@@ -1007,26 +1028,36 @@ public class DEImportBuilder {
 					}
 				}
 		}
-	}
 
 
 	//related links
-	private void processRelatedLinks(AmpActivity activity, ActivityType actType) {
+	private void processRelatedLinks(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		DEMockTest mock = new DEMockTest();
-		try {
-			mock.setUp();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MockHttpServletRequest request = mock.getRequest();
-		if(actType.getRelatedLinks() != null || actType.getRelatedLinks().size() > 0){
-			setTeamMember(request, "admin@amp.org", 0L);
+		if( actType.getRelatedLinks() == null || actType.getRelatedLinks().size() == 0 ) return;
+		
+		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
+//		DEMockTest mock = new DEMockTest();
+//		try {
+//			mock.setUp(teamLead.getUser().getId(), teamLead.getUser().getEmail());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		MockHttpServletRequest request = mock.getRequest();
+		
+		
+		
+		//if(actType.getRelatedLinks() != null || actType.getRelatedLinks().size() > 0){
+			//setTeamMember(request, "admin@amp.org", 0L);
+		HttpSession	httpSession		= request.getSession();
+		TeamMember oldTeamMember		= (TeamMember)httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		
+		setTeamMember(request,teamLead.getUser().getEmail(),activity.getTeam().getAmpTeamId());
 			Session writeSession = DocumentManagerUtil.getWriteSession(request);
 				for (Iterator it = actType.getRelatedLinks().iterator(); it.hasNext();) {
 					RelatedLinks doc = (RelatedLinks) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
+			tdd.setName(doc.getLabel());
 					tdd.setTitle(doc.getLabel());
 					tdd.setDescription(doc.getDescription());
 					//FormFile f;
@@ -1034,7 +1065,7 @@ public class DEImportBuilder {
 					tdd.setWebLink(doc.getUrl());
 					//tdd.setContentType("");
 					ActionMessages errors=new ActionMessages();
-					NodeWrapper nodeWrapper			= tdd.saveToRepository(request, errors);
+			NodeWrapper nodeWrapper			= tdd.saveToRepositoryDataExchange(request, errors);
 					
 					if ( nodeWrapper != null ){
 						AmpActivityDocument aac		= new AmpActivityDocument();
@@ -1045,8 +1076,11 @@ public class DEImportBuilder {
 						activity.getActivityDocuments().add(aac);
 					}
 				}
+		
+		httpSession.setAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER, oldTeamMember);
+		
+		//}
 		}
-	}
 	
 /*
  * ******************* step 7 process methods
@@ -1424,7 +1458,7 @@ public class DEImportBuilder {
 		
 	}
 	
-	private AmpTeam getImportedWorkspace (){
+	private AmpTeam getAssignedWorkspace (){
 		return getDESourceSetting().getImportWorkspace();
 	}
 	
@@ -1521,14 +1555,14 @@ public class DEImportBuilder {
 			{
 				Projections mtef=(Projections)mtefItr.next();
 				//senegal add
-				if(mtef.getAmount() == 0 ) continue;
+				if(mtef.getAmount().doubleValue() == 0 ) continue;
 
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				
 				//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 					//ampmtef.setAmount(new Double(mtef.getAmount()*1000));
 				//else
-				ampmtef.setAmount(new Double(mtef.getAmount()));
+				ampmtef.setAmount(new Double(mtef.getAmount().doubleValue()));
 
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrency()));
@@ -1554,7 +1588,7 @@ public class DEImportBuilder {
 			FundingDetailType fundDet = (FundingDetailType) it.next();
 			
 			//senegal
-			if(fundDet.getAmount()==0) continue;
+			if(fundDet.getAmount().doubleValue()==0) continue;
 			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
@@ -1572,7 +1606,7 @@ public class DEImportBuilder {
 			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
 			//else 
-			ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()));
+			ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
 			fundDetails.add(ampFundDet);
 		}
 		
@@ -1602,7 +1636,7 @@ public class DEImportBuilder {
 		//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 			//acf.setTransactionAmount(new Double(fundingDetailType.getAmount()*1000));
 		//else 
-		acf.setTransactionAmount(new Double(fundingDetailType.getAmount()));
+		acf.setTransactionAmount(new Double(fundingDetailType.getAmount().doubleValue()));
 		
 	}
 	
@@ -1716,7 +1750,7 @@ public class DEImportBuilder {
 	 ******* execution
 	 */
 
-	public void run() {
+	public void run(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
 		if(execLog.getLogItems() == null)
@@ -1744,7 +1778,7 @@ public class DEImportBuilder {
 		iLog.saveObject(this.getDESourceSetting());
 		if(!ok) return;
 		generateFieldHashMap();
-		processFeed(execLog, iLog);
+		processFeed(execLog, iLog, request);
 		
 	}
 	/**import strategy (dropdown):    
@@ -1757,7 +1791,7 @@ public class DEImportBuilder {
 		return this.getDESourceSetting().getImportStrategy();
 	}
 	
-	private void processFeed(DELogPerExecution log, SourceSettingDAO iLog) {
+	private void processFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
 		for (Iterator it = this.getAmpImportItem().getActivities().getActivity().iterator(); it.hasNext();) {
 			ActivityType actType 	= (ActivityType) it.next();
 			AmpActivity activity 	= getAmpActivity(actType);
@@ -1787,13 +1821,13 @@ public class DEImportBuilder {
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
 					//activity doesn't exist
 					activity = new AmpActivity();
-					insertActivity(activity, actType, false);
+					insertActivity(activity, actType, false, request);
 				}
 				else 
 					if(activity != null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 							activity != null && DESourceSetting.IMPORT_STRATEGY_UPD_PROJ.equals(getImportStrategy()) ){
 						//activity exists
-						updateActivity(activity, actType, true);
+						updateActivity(activity, actType, true, request);
 					}
 					else {
 						//write in log that this activity was skipped

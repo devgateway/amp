@@ -22,20 +22,20 @@ public class DEMockTest extends BasicActionTestCaseAdapter {
 	MockHttpSession session;
 	MockHttpServletRequest request;
 	
-	public void setUp() throws Exception {
-		super.setUp();
+	public void setUp(Long userId, String email) throws Exception {
+		//super.setUp();
 		//Configuration.initConfig();
-		ServletContext context = getActionMockObjectFactory().getMockServletContext();
+		//ServletContext context = getActionMockObjectFactory().getMockServletContext();
 
 		session = getActionMockObjectFactory().getMockSession();
 		request = getActionMockObjectFactory().getMockRequest();
 
-		setValidate(false);
-		setRelatedObjects();
+		//setValidate(false);
+		setRelatedObjects(userId, email);
 	}
 	
 	
-	protected void setRelatedObjects() throws Exception {
+	protected void setRelatedObjects(Long userId, String email) throws Exception {
 
 		Locale lang = new Locale();
 		lang.setCode("en");
@@ -45,8 +45,8 @@ public class DEMockTest extends BasicActionTestCaseAdapter {
 		sd.setSite(s);
 		request.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, sd);
 
-		addRequestParameter("id", "0");
-		addRequestParameter("user", "admin@amp.org");
+		addRequestParameter("id", userId.toString());
+		addRequestParameter("user", email);
 
 	}
 

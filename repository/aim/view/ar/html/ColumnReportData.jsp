@@ -40,9 +40,13 @@
 	}
 %>
 <%if (rowIdx%2==0){ %>
-	<tr bgcolor="#FFFFFF" height="16px"  onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
+	<tr bgcolor="#FFFFFF" height="16px" onclick="setPointerhtml(this,'click','#A5BCF2','#FFFFFF');"
+	 	onMouseover="setPointerhtml(this,'','#A5BCF2','#FFFFFF');"
+	 	onMouseout="setPointerhtml(this,'','#FFFFFF','#FFFFFF');">
 <%}else{%>
-	<tr bgcolor="#DBE5F1" height="16px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#DBE5F1', '#DBE5F1', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#DBE5F1'">
+	<tr bgcolor="#DBE5F1" height="16px" onclick="setPointerhtml(this,'click','#A5BCF2','#DBE5F1');" 
+		onMouseover="setPointerhtml(this,'','#A5BCF2','#DBE5F1');" 
+		onMouseout="setPointerhtml(this,'','#DBE5F1','#DBE5F1');">
 <%}%>
 	<c:if test="${addFakeColumn}">
 			<td></td>

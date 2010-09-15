@@ -41,6 +41,7 @@ public class WrapperLogPerItem implements XmlWrapper {
 		sb.append( lpi.getTimeAsString() );
 		sb.append("</Time>");
 		
+		
 		sb.append("<Description>" + lpi.getDescription() + "</Description>");
 		
 		sb.append("</LogPerItem>");

@@ -127,7 +127,7 @@
                               <c:set var="trnTranslationManager">
                                 <digi:trn key="aim:clickToViewTranslationManager">Click here to view Translation Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/translationManager.do" title="${trnTranslationManager}" >
+                              <digi:link module="translation" href="/importexport.do" title="${trnTranslationManager}" >
      				                <digi:trn key="aim:translationManager">Translation Manager</digi:trn>
                               </digi:link>
                             </td>

@@ -41,13 +41,8 @@ public class GetDesktopLinks extends TilesAction {
 			javax.jcr.Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, tm);
 
 			ArrayList<DocumentData> list = new ArrayList<DocumentData>();
-			Collection<DocumentData> tmp = this.getPrivateDocuments(tm, jcrWriteSession.getRootNode(), request);
-			if (tmp != null) {
-			list.addAll(tmp);
-			}
 			
-			
-			tmp = this.getTeamDocuments(tm, jcrWriteSession.getRootNode(), request);
+			Collection<DocumentData> tmp = this.getTeamDocuments(tm, jcrWriteSession.getRootNode(), request);
 			// just keeps last 5
 			list.addAll(tmp);
 			Collections.sort(list);

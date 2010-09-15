@@ -444,6 +444,7 @@ public class AddContactComponent extends DispatchAction{
 		String ind=request.getParameter("index");
 		int index=new Integer(ind).intValue();
 		String [] myArray=null;
+        String [] phoneTypeIds=null;
 		if(dataName!=null){
 			if(dataName.equalsIgnoreCase("email")){
 				myArray=new String[myForm.getEmails().length-1];
@@ -461,18 +462,23 @@ public class AddContactComponent extends DispatchAction{
                 }
 				
 			}else if(dataName.equalsIgnoreCase("phone")){
-				myArray=new String[myForm.getContPhoneNumber().length-1];
+                int phoneSizes = myForm.getContPhoneNumber().length;
+				myArray=new String[phoneSizes-1];
+                phoneTypeIds=new String[phoneSizes-1];
 				if(myArray.length!=0){
 					int j=0;
-					for(int i=0; i< myForm.getContPhoneNumber().length; i++){
+					for(int i=0; i< phoneSizes; i++){
 						if(index!=i){
 							myArray[j]=myForm.getContPhoneNumber()[i];
+                            phoneTypeIds[j]=myForm.getContPhoneTypeIds()[i];
 							j++;
 						}
 					}
-					myForm.setContPhoneNumber(myArray);					
+					myForm.setContPhoneNumber(myArray);
+                    myForm.setContPhoneTypeIds(phoneTypeIds);
 				}else{
-					myForm.setContPhoneNumber(null);					
+					myForm.setContPhoneNumber(null);
+                    myForm.setContPhoneTypeIds(null);
 				}
 			}else if(dataName.equalsIgnoreCase("fax")){
 				myArray=new String[myForm.getContFaxes().length-1];

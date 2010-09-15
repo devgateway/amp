@@ -55,7 +55,6 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -131,9 +130,13 @@ public class TranslatorWorker {
      * @param siteId owner site
      * @throws WorkerException if process was not completed successfully
      */
-    public void refresh(String key, String locale, String siteId) throws
-        WorkerException {
+    public void refresh(String key, String locale, String siteId) throws WorkerException {
         // DO Nothing
+    }
+    
+    //TODO may be bad idea!
+    public void refresh(Message message) throws WorkerException {
+    	// DO Nothing
     }
 
     /**
@@ -1881,4 +1884,5 @@ public class TranslatorWorker {
 		newString = new String(tempBytes);
 		return newString;
 	}
+	
 }

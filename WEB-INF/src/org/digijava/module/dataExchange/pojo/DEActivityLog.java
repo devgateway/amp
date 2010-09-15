@@ -71,52 +71,52 @@ public class DEActivityLog extends DELog{
 			 
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_SECTOR));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_SECTOR + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_SECTOR + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_PROGRAM));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_PROGRAM + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_PROGRAM + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_ORGANIZATION));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_ORGANIZATION + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_ORGANIZATION + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_STATUS));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_STATUS + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_STATUS + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_TYPE_OF_ASSISTANCE));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_TYPE_OF_ASSISTANCE + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_TYPE_OF_ASSISTANCE + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_IMPLEMENTATION_LOCATION));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_IMPLEMENTATION_LOCATION + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_IMPLEMENTATION_LOCATION + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_IMPLEMENTATION_LEVEL));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_IMPLEMENTATION_LEVEL + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_IMPLEMENTATION_LEVEL + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_FINANCING_INSTRUMENT));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_FINANCING_INSTRUMENT + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_FINANCING_INSTRUMENT + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_MTEF));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_MTEF + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_MTEF + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			aux = displayLog( (ArrayList<DELog>)hm.get(DataExchangeConstants.MISSING_CURRENCY));
 			if(aux !=null ){
-				result += DataExchangeConstants.MISSING_CURRENCY + "<br/>" + aux;
+				result += DataExchangeConstants.MISSING_CURRENCY + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
 			return result;
@@ -130,7 +130,7 @@ public class DEActivityLog extends DELog{
 		if(list!=null)
 			for (Iterator it = list.iterator(); it.hasNext();) {
 				DELog deLog = (DELog) it.next();
-				s+=deLog.display()+"<br/>";
+				s+=deLog.display()+"<![CDATA[\"<br/>\"]]>";
 			}
 		if("".equals(s)) return null;
 		return s;

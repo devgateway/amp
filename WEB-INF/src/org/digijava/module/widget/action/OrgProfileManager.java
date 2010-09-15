@@ -103,8 +103,7 @@ public class OrgProfileManager  extends DispatchAction {
         } else {
             orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(orgForm.getId());
             oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
-        }
-        orgProfWidget.setType(orgForm.getType());
+        }       
         /*
          * Name is used in  the Widget Place Manager,
          * We could force the user to enter it manually,
@@ -122,13 +121,14 @@ public class OrgProfileManager  extends DispatchAction {
                    case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
                     case WidgetUtil.ORG_PROFILE_AID_PREDICTIBLITY: name="Aid predictability"; break;
         }
-        orgProfWidget.setName(name);
-        if (OrgProfileWidgetUtil.orgProfileWidgetExists(orgProfWidget.getType(), orgProfWidget.getId())) {
+        if (OrgProfileWidgetUtil.orgProfileWidgetExists(orgForm.getType(), orgProfWidget.getId())) {
             ActionMessages errors = new ActionMessages();
             errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
             saveErrors(request, errors);
             return mapping.findForward("create");
         }
+        orgProfWidget.setType(orgForm.getType());
+        orgProfWidget.setName(name);
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);
         if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
             newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());

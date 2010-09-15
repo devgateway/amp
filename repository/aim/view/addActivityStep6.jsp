@@ -569,13 +569,13 @@ ${fn:replace(message,quote,escapedQuote)}
 							</feature:display>
 
 							
-							<!-- 
+							 
 								<tr><td>&nbsp;</td></tr>
 								<feature:display name="Web Resources" module="Document">
 									<jsp:include page="addActivityStep6WebResources.jsp"/>
 								</feature:display>
 								<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-							 -->
+							
 							
 							<!-- Managed Documents -->
 										<jsp:include page="addActivityStep6ManagedDocuments.jsp"/>

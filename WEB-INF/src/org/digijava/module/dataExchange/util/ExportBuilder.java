@@ -22,6 +22,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
+import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ComponentFundingType;
 import org.digijava.module.dataExchange.jaxb.ContactType;
@@ -300,9 +301,22 @@ public class ExportBuilder {
 			}
 		} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
+			
+			//AMP-9220 - ptip number for Senegal
+			AdditionalFieldType ptip = buildAdditionalFieldType("en", ampActivity.getCrisNumber(), "String");
+			parent.getAdditional().add(ptip);
 		}
 	}
 
+	private AdditionalFieldType buildAdditionalFieldType(String lang, String field, String type) {
+		// TODO Auto-generated method stub
+		AdditionalFieldType ptip = objectFactory.createAdditionalFieldType();
+		ptip.setLang(lang);
+		ptip.setField(field);
+		ptip.setType(type);
+		return ptip;
+	}
+	
 	private ActivityType.Id buildActivityTypeId(AmpActivityInternalId ids) throws AmpExportException{
 		ActivityType.Id retValue = objectFactory.createActivityTypeId();
 		retValue.setUniqID(ids.getInternalId());

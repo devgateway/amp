@@ -413,6 +413,12 @@ public class EditIPAContract extends MultiAction {
         if (request.getParameter("deleteEU") != null) {
             return modeDelete(mapping, form, request, response);
         }
+        if (request.getParameter("addAmendments") != null) {
+            return modeAddAmendments(mapping, form, request, response);
+        }
+        if (request.getParameter("delAmendments") != null) {
+            return modeDelAmendments(mapping, form, request, response);
+        }
         return modeFinalize(mapping, form, request, response);
     }
 
@@ -517,7 +523,6 @@ public class EditIPAContract extends MultiAction {
               icd.setCurrency(curr);
  
           }
-
         return modeFinalize(mapping, form, request, response);
     }
     
@@ -525,8 +530,8 @@ public class EditIPAContract extends MultiAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
-        IPAContractAmendment icd = new IPAContractAmendment();
-        eaf.getContractAmendments().add(icd);
+        IPAContractAmendment ica = new IPAContractAmendment();
+        eaf.getContractAmendments().add(ica);
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
           if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
@@ -535,7 +540,7 @@ public class EditIPAContract extends MultiAction {
                   getAmpcurrency(
                       tm.getAppSettings()
                       .getCurrencyId());
-              icd.setCurrency(curr);
+              ica.setCurrency(curr);
           }
 
         return modeFinalize(mapping, form, request, response);

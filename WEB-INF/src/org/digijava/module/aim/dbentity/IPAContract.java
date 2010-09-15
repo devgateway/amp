@@ -62,6 +62,24 @@ public class IPAContract implements Serializable {
     private AmpCategoryValue type;
     private AmpCategoryValue contractType;
     
+    
+    /**
+     * 
+     */
+    private Double donorContractFundinAmount;
+    private AmpCurrency donorContractFundingCurrency;
+    
+    private Double totAmountDonorContractFunding;
+    private AmpCurrency totalAmountCurrencyDonor; 
+    
+    private Double totAmountCountryContractFunding;
+    private AmpCurrency totalAmountCurrencyCountry;  
+    
+    private Set amendments;    
+    /**
+     * 
+     */
+    
     public AmpCategoryValue getType() {
         return type;
     }
@@ -409,6 +427,65 @@ public class IPAContract implements Serializable {
 
 	public void setFundingExecutionRate(Double fundingExecutionRate) {
 		this.fundingExecutionRate = fundingExecutionRate;
+	}
+
+	public Double getDonorContractFundinAmount() {
+		return donorContractFundinAmount;
+	}
+
+	public void setDonorContractFundinAmount(Double donorContractFundinAmount) {
+		this.donorContractFundinAmount = donorContractFundinAmount;
+	}
+
+	public AmpCurrency getDonorContractFundingCurrency() {
+		return donorContractFundingCurrency;
+	}
+
+	public void setDonorContractFundingCurrency(
+			AmpCurrency donorContractFundingCurrency) {
+		this.donorContractFundingCurrency = donorContractFundingCurrency;
+	}
+
+	public Double getTotAmountDonorContractFunding() {
+		return totAmountDonorContractFunding;
+	}
+
+	public void setTotAmountDonorContractFunding(
+			Double totAmountDonorContractFunding) {
+		this.totAmountDonorContractFunding = totAmountDonorContractFunding;
+	}
+
+	public AmpCurrency getTotalAmountCurrencyDonor() {
+		return totalAmountCurrencyDonor;
+	}
+
+	public void setTotalAmountCurrencyDonor(AmpCurrency totalAmountCurrencyDonor) {
+		this.totalAmountCurrencyDonor = totalAmountCurrencyDonor;
+	}
+
+	public Double getTotAmountCountryContractFunding() {
+		return totAmountCountryContractFunding;
+	}
+
+	public void setTotAmountCountryContractFunding(
+			Double totAmountCountryContractFunding) {
+		this.totAmountCountryContractFunding = totAmountCountryContractFunding;
+	}
+
+	public AmpCurrency getTotalAmountCurrencyCountry() {
+		return totalAmountCurrencyCountry;
+	}
+
+	public void setTotalAmountCurrencyCountry(AmpCurrency totalAmountCurrencyCountry) {
+		this.totalAmountCurrencyCountry = totalAmountCurrencyCountry;
+	}
+
+	public Set getAmendments() {
+		return amendments;
+	}
+
+	public void setAmendments(Set amendments) {
+		this.amendments = amendments;
 	}
 		
 }

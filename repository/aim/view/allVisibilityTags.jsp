@@ -943,3 +943,12 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
+
+<!--  -->
+
+<field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 
+<field:display name="Total Amount Donor Contract Funding" feature="Contracting"></field:display> 
+<field:display name="Total Amount Country Contract Funding" feature="Contracting"></field:display> 
+<field:display name="Contracting Amendments" feature="Contracting"></field:display> 
+<field:display name="Contracting Add Amendments" feature="Contracting"></field:display>
+<field:display name="Contracting Remove Amendments" feature="Contracting"></field:display>

@@ -180,6 +180,24 @@ function getContractDisbursments(){
 	}
 	return ret;
 }
+function getContractAmendments(){
+	var divId = document.getElementById("ContractAmendmentsList");
+	var ret = "";
+	if (divId != null){
+		var elems = divId.getElementsByTagName("input");
+		
+		for (var i=0; i<elems.length; i++) {
+			if (elems[i].type != "checkbox"){
+				ret += elems[i].name + "=" + elems[i].value + "&";
+			}
+		}
+		elems = divId.getElementsByTagName("select");
+		for (var i=0; i<elems.length; i++) {
+			ret += elems[i].name + "=" + elems[i].value + "&";
+		}	
+	}
+	return ret;
+}
 
 function generateFields(){
 	var ret = "";
@@ -252,7 +270,20 @@ function generateFields(){
 						+ "dibusrsementsGlobalCurrency="+document.getElementsByName("dibusrsementsGlobalCurrency")[0].value
 						+ "&"
 						</field:display>
-						 + getContractDisbursments();
+						<field:display name="Donor Contract Fundin" feature="Contracting">
+							+ "donorContractFundinAmount="+document.getElementsByName("donorContractFundinAmount")[0].value+"&"
+							+ "donorContractFundingCurrency="+document.getElementsByName("donorContractFundingCurrency")[0].value+"&"
+						</field:display>
+						<field:display name="Total Amount Donor Contract Funding" feature="Contracting">
+							+ "totAmountDonorContractFunding="+document.getElementsByName("totAmountDonorContractFunding")[0].value+"&"
+							+ "totalAmountCurrencyDonor="+document.getElementsByName("totalAmountCurrencyDonor")[0].value+"&"
+						</field:display>
+						<field:display name="Total Amount Country Contract Funding" feature="Contracting">
+							+ "totAmountCountryContractFunding="+document.getElementsByName("totAmountCountryContractFunding")[0].value+"&"
+							+ "totalAmountCurrencyCountry="+document.getElementsByName("totalAmountCurrencyCountry")[0].value+"&"
+						</field:display>
+						 + getContractDisbursments()
+						 + getContractAmendments();
 	
 		//alert(ret);
 		<field:display name="Contracting IPA Contract Type" feature="Contracting">
@@ -264,11 +295,18 @@ function generateFields(){
 			}
 		</field:display>
 		//alert(ret);
+		//
+		
+		//
 		return ret;
 }
 
 function addDisb() {
 	var postString		= "addFields=true&"+generateFields();
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+}
+function addAmendment() {
+	var postString		= "addAmendments=true&"+generateFields();
 	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
@@ -304,6 +342,10 @@ function getCheckedFields(name) {
 
 function delDisb() {
 	var postString		= "removeFields=true&" + getCheckedFields("selContractDisbursements")+"&"+generateFields();
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+}
+function delAmendment() {
+	var postString		= "delAmendments=true&" + getCheckedFields("selContractAmendments")+"&"+generateFields();
 	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
@@ -507,7 +549,7 @@ window.onload=autosum;
 	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
 		<b><digi:trn key="aim:IPA:newPopup:organizations">Organization(s)</digi:trn></b>
 	</td></tr>
-
+	
 	<tr>
 		<td colspan="6" align="left">
 			<field:display name="Contract Organization" feature="Contracting">
@@ -538,7 +580,38 @@ window.onload=autosum;
 				</c:forEach>
 			</table>
 		</td>
-	</tr>
+	</tr>	
+
+
+	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
+		<b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn></b>
+	</td></tr>
+
+	<tr>
+	<td colspan="2">
+	<table cellpadding="2" cellspacing="2" width="100%">	
+		<field:display name="Donor Contract Fundin" feature="Contracting">
+			<tr>
+				<td align="left">
+					<digi:trn>Montant</digi:trn>
+				</td>
+				<td align="left">
+					<html:text property="donorContractFundinAmount" style="text-align:right" />
+				</td>
+				<td align="left" colspan="4">
+					<digi:trn>Devise</digi:trn>
+					&nbsp;&nbsp;
+					<html:select property="donorContractFundingCurrency" styleClass="inp-text">
+						<option value="-1"><digi:trn>Devise</digi:trn></option>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+					</html:select>
+				</td>
+			</tr>			
+		</field:display>
+	</table>
+	</td>
+	</tr>	
+
 	
 
 	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
@@ -840,7 +913,106 @@ window.onload=autosum;
 		</tr>
 	</logic:notEmpty>						
 	</field:display>
+
+	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
+		<b><digi:trn>Amendments</digi:trn></b>
+	</td></tr>
+	<field:display name="Contracting Amendments" feature="Contracting">
+	<tr>
+		<td colspan="2" align="left">
+			<field:display name="Contracting Add Amendments" feature="Contracting">
+				<html:button styleClass="dr-menu" property="addamendments" onclick="addAmendment();">
+					<digi:trn>Add Amendments</digi:trn>
+				</html:button>
+			</field:display>
+			&nbsp;	
+			<field:display name="Contracting Remove Amendments" feature="Contracting">
+				<html:button styleClass="dr-menu" property="delamendments" onclick="delAmendment();">
+					<digi:trn>Remove Amendments</digi:trn>
+				</html:button>			
+			</field:display>				
+		</td>
+	</tr>
+	</field:display>
+	<field:display name="Contracting Amendments" feature="Contracting">
+	<logic:notEmpty name="aimIPAContractForm" property="contractAmendments">
+		<tr>
+			<td colspan="2">
+				<table id="ContractAmendmentsList">
+					<c:forEach  items="${aimIPAContractForm.contractAmendments}" var="contractAmendment"  varStatus="idx" >
+						<tr>
+						<td align="left" colspan="2">
+							<html:hidden property="${contractAmendment}" value="${id}"/>
+							&nbsp;
+							<html:multibox property="selContractAmendments" value="${idx.count}"/>
+							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							&nbsp;
+							<html:select name="contractAmendment" indexed="true" property="currCode" styleClass="inp-text">
+								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
+							</html:select>
+							&nbsp;
+							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
+							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							</a>
+							&nbsp;
+							<html:text size="12" indexed="true" name="contractAmendment" property="reference" styleClass="inp-text" />							
+						</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</td>
+		</tr>
+	</logic:notEmpty>						
+	</field:display>
 	
+	
+	<tr>
+	<td><br/><br/><br/>
+	<table cellpadding="2" cellspacing="2" width="50%">	
+		<field:display name="Total Amount Donor Contract Funding" feature="Contracting">
+			<tr>
+				<td align="left" colspan="2">
+					<digi:trn>Montant total du contrat part du bailleur</digi:trn>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<html:text property="totAmountDonorContractFunding" style="text-align:right" />
+				</td>
+				<td align="left">
+					<html:select property="totalAmountCurrencyDonor" styleClass="inp-text">
+						<option value="-1"><digi:trn>Devise</digi:trn></option>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+					</html:select>
+				</td>
+			</tr>			
+		</field:display>
+	</table>
+	</td>
+	<td><br/><br/><br/>
+	<table cellpadding="2" cellspacing="2" width="50%">	
+		<field:display name="Total Amount Country Contract Funding" feature="Contracting">
+			<tr>
+				<td align="left" colspan="2">
+					<digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<html:text property="totAmountCountryContractFunding" style="text-align:right" />
+				</td>
+				<td align="left">
+					<html:select property="totalAmountCurrencyCountry" styleClass="inp-text">
+						<option value="-1"><digi:trn>Devise</digi:trn></option>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+					</html:select>
+				</td>
+			</tr>			
+		</field:display>
+	</table>
+	</td>
+	</tr>	
 	<tr>
 		<td colspan="2" align="center">
 			<field:display name="Contracting Save Button" feature="Contracting">

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.IPAContractAmendment;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.FundingDetail;
 
@@ -104,6 +105,38 @@ public class IPAContractForm extends ActionForm  {
     private Integer indexId;
     private Long selContractDisbursements[];
 
+    
+    /**
+     * 
+     */
+    private String donorContractFundinAmount;	
+	private Long donorContractFundingCurrency;
+	
+    private String totAmountDonorContractFunding;	
+	private Long totalAmountCurrencyDonor;
+	
+    private String totAmountCountryContractFunding;	
+	private Long totalAmountCurrencyCountry;	
+
+	private List amendments;	
+
+	private List<IPAContractAmendment> contractAmendments;
+	
+	public IPAContractAmendment getContractAmendment(int index) {
+		int currentSize = contractAmendments.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				contractAmendments.add(new IPAContractAmendment());
+			}
+		}
+		return contractAmendments.get(index);
+	}	
+
+    private Long selContractAmendments[];
+    /**
+     * 
+     */
+	
     public Long[] getSelContractDisbursements() {
         return selContractDisbursements;
     }
@@ -477,6 +510,80 @@ public class IPAContractForm extends ActionForm  {
 
 	public void setContractTotalValue(String contractTotalValue) {
 		this.contractTotalValue = contractTotalValue;
+	}
+
+	public String getDonorContractFundinAmount() {
+		return donorContractFundinAmount;
+	}
+
+	public void setDonorContractFundinAmount(String donorContractFundinAmount) {
+		this.donorContractFundinAmount = donorContractFundinAmount;
+	}
+
+	public Long getDonorContractFundingCurrency() {
+		return donorContractFundingCurrency;
+	}
+
+	public void setDonorContractFundingCurrency(Long donorContractFundingCurrency) {
+		this.donorContractFundingCurrency = donorContractFundingCurrency;
+	}
+
+	public String getTotAmountDonorContractFunding() {
+		return totAmountDonorContractFunding;
+	}
+
+	public void setTotAmountDonorContractFunding(
+			String totAmountDonorContractFunding) {
+		this.totAmountDonorContractFunding = totAmountDonorContractFunding;
+	}
+
+	public Long getTotalAmountCurrencyDonor() {
+		return totalAmountCurrencyDonor;
+	}
+
+	public void setTotalAmountCurrencyDonor(Long totalAmountCurrencyDonor) {
+		this.totalAmountCurrencyDonor = totalAmountCurrencyDonor;
+	}
+
+	public String getTotAmountCountryContractFunding() {
+		return totAmountCountryContractFunding;
+	}
+
+	public void setTotAmountCountryContractFunding(
+			String totAmountCountryContractFunding) {
+		this.totAmountCountryContractFunding = totAmountCountryContractFunding;
+	}
+
+	public Long getTotalAmountCurrencyCountry() {
+		return totalAmountCurrencyCountry;
+	}
+
+	public void setTotalAmountCurrencyCountry(Long totalAmountCurrencyCountry) {
+		this.totalAmountCurrencyCountry = totalAmountCurrencyCountry;
+	}
+
+	public List getAmendments() {
+		return amendments;
+	}
+
+	public void setAmendments(List amendments) {
+		this.amendments = amendments;
+	}
+
+	public Long[] getSelContractAmendments() {
+		return selContractAmendments;
+	}
+
+	public void setSelContractAmendments(Long[] selContractAmendments) {
+		this.selContractAmendments = selContractAmendments;
+	}
+
+	public List<IPAContractAmendment> getContractAmendments() {
+		return contractAmendments;
+	}
+
+	public void setContractAmendments(List<IPAContractAmendment> contractAmendments) {
+		this.contractAmendments = contractAmendments;
 	}
 
 

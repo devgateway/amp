@@ -78,7 +78,7 @@ cursor:pointer;
       <div class="bd">
           <ul class="first-of-typeamp">
             <li class="yuiampmenuitem">
-                <a class="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
                 <digi:trn key="aim:homePage">
                 Home Page
                 </digi:trn>

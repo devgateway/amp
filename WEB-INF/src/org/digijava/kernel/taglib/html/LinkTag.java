@@ -100,7 +100,8 @@ public class LinkTag
      * @return value
      * @throws JspException
      */
-    public int doStartTag() throws JspException {
+    public int doEndTag() throws JspException {
+    	//Moved from doStartTag to doEndTag for changes in struts LinkTag class in struts 1.3.10
 
 //        String contextPath = null;
         String action = null;
@@ -219,6 +220,11 @@ public class LinkTag
         results.append(prepareStyles());
         results.append(prepareEventHandlers());
         results.append(">");
+        // Prepare the textual content and ending element of this hyperlink
+        if (text != null) {
+            results.append(text);
+        }
+        results.append("</a>");
 
         // Print this element to our output writer
         TagUtils.getInstance().write(pageContext, results.toString());

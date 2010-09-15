@@ -124,11 +124,11 @@ $(document).ready(function(){
                   <br />
                   <table width="90%" id="dataTable" cellpadding="4">
                     <tr>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong>Title</strong></td>
-                      <td bgcolor="#cecece" align="center" width="30%"><strong>Description</strong></td>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong>Page Code</strong></td>
-                      <td bgcolor="#cecece" align="center" width="10%"><strong>Current Homepage</strong></td>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong>Action</strong></td>
+                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Title</digi:trn></strong></td>
+                      <td bgcolor="#cecece" align="center" width="30%"><strong><digi:trn>Description</digi:trn></strong></td>
+                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Page Code</digi:trn></strong></td>
+                      <td bgcolor="#cecece" align="center" width="10%"><strong><digi:trn>Current Homepage</digi:trn></strong></td>
+                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Action</digi:trn></strong></td>
                     </tr>
                     <c:if test="${fn:length(requestScope.contentList) eq 0}">
                       <tr bgColor=#f4f4f2>
@@ -160,7 +160,7 @@ $(document).ready(function(){
                           	<digi:link href="/contentManager.do?action=edit&id=${content.ampContentItemId}">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit content</digi:trn>"/>
                             </digi:link>
-                          	<digi:link href="/contentManager.do?action=delete&id=${content.ampContentItemId}">
+                          	<digi:link href="/contentManager.do?action=delete&id=${content.ampContentItemId}" onclick="return confirm('<digi:trn>Are you sure?</digi:trn>');">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete content</digi:trn>"/>
                             </digi:link>
                             <c:if test="${content.isHomepage ne true}">

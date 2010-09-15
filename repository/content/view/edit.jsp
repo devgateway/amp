@@ -171,7 +171,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left>
-    	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> Title
+    	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Title</digi:trn>
                             </td>
                             <td align=left>
 	                            <html:text property="title"></html:text>
@@ -180,7 +180,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left>
-    	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> Page Code
+    	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Page Code</digi:trn>
                             </td>
                             <td align=left>
 	                            <html:text property="pageCode"></html:text>
@@ -189,7 +189,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left>
-    	                        Description
+    	                        <digi:trn>Description</digi:trn>
                             </td>
                             <td align=left>
 	                            <html:text property="description"></html:text>
@@ -204,7 +204,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong>Layout</strong> </td>
+                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Layout</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -240,7 +240,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong>Content</strong> </td>
+                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Content</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -275,7 +275,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong>Thumbnails</strong> </td>
+                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Thumbnails</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -284,21 +284,20 @@ div.fakefile2 input {
                 <td valign="top" align="center">
 					<table cellpadding="3" cellspacing="3" border="0" width="75%"  bgcolor="#FFFFFF" id="dataTable">
 						<tr id="tr_path_thumbnail">
-                            <td bgcolor="#CECECE" width="20%">Thumbnail Id</td>
-                            <td bgcolor="#CECECE" width="40%">Label</td>
-                            <td bgcolor="#CECECE" width="20%">Related File</td>
-                            <td bgcolor="#CECECE" width="20%">Related File</td>
-                            <td bgcolor="#CECECE" width="20%">Action</td>
+                            <td bgcolor="#CECECE" width="20%"><digi:trn>Thumbnail</digi:trn></td>
+                            <td bgcolor="#CECECE" width="40%"><digi:trn>Label</digi:trn></td>
+                            <td bgcolor="#CECECE" width="20%"><digi:trn>Related File</digi:trn></td>
+                            <td bgcolor="#CECECE" width="20%"><digi:trn>Action</digi:trn></td>
                         </tr>
                     <c:forEach  var="content" items="${contentForm.sortedContentThumbnails}" varStatus="loop">
 						<tr id="tr_path_thumbnail">
-                        <td>${content.ampContentItemThumbnailId}</td>
+                        <td><img src="/content/displayThumbnail.do?index=${loop.index}&pageCode=${contentForm.pageCode}" align="middle" width="20" style="border:1px solid #cecece">
+                        </td>
                         <td>${content.thumbnailLabel}</td>
                         <td>${content.optionalFileName}</td>
-                        <td>${content.placeholder}</td>
                         <td>
                         	<c:if test="${loop.index != 0}">
-                          	<a onclick="doAction(${loop.index}, 'moveup')">
+                          	<a onclick="doAction(${loop.index}, 'moveup', false)">
                               <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" border="0" title="<digi:trn>Move up</digi:trn>"/>
                             </a>
                             </c:if>
@@ -306,14 +305,14 @@ div.fakefile2 input {
                             	&nbsp;&nbsp;&nbsp;
                             </c:if>
                         	<c:if test="${loop.index != fn:length(contentForm.sortedContentThumbnails)-1}">
-                          	<a onclick="doAction(${loop.index}, 'movedown')">
+                          	<a onclick="doAction(${loop.index}, 'movedown', false)">
                               <img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" border="0" title="<digi:trn>Move down</digi:trn>"/>
                             </a>
                             </c:if>
                         	<c:if test="${loop.index == fn:length(contentForm.sortedContentThumbnails)-1}">
                             	&nbsp;&nbsp;&nbsp;&nbsp;
                             </c:if>
-                          	<a onclick="doAction(${loop.index}, 'deleteThumb')">
+                          	<a onclick="doAction(${loop.index}, 'deleteThumb', true">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete thumbnail</digi:trn>"/>
                             </a>
                         </td>
@@ -322,9 +321,9 @@ div.fakefile2 input {
                     </table>
                     <br />
                     <br />
-					<table cellpadding="3" cellspacing="3" border="0">
+					<table cellpadding="3" cellspacing="3" style="border:1px solid black;">
 						<tr id="tr_path_thumbnail">
-						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
+						<td><strong><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
 						<td>
                             <html:file property="tempContentThumbnail"/>
 						</td>
@@ -337,7 +336,7 @@ div.fakefile2 input {
 						</tr>
 						<tr>
 							<td> 
-								<strong><digi:trn key="selectOptionalFile">Thumbnail Label:</digi:trn><font color="red"></font></strong>
+								<strong><digi:trn>Thumbnail Label:</digi:trn><font color="red"></font></strong>
 							</td>
 							<td> 
                             	<html:text property="tempContentThumbnailLabel"/>
@@ -345,28 +344,31 @@ div.fakefile2 input {
 						</tr>
 						<tr>
 							<td colspan="2" align="center"> 
-	                        <input type="button" styleClass="dr-menu buton" onclick="upload()" value="<digi:trn>Submit</digi:trn>"/>&nbsp;
+	                        <input type="button" styleClass="dr-menu buton" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
 							</td>
 						</tr>
 						</tr>
 					</table>
+				<br />
+				<br />
                 </td>
               </tr>
 
             </table></td>
         </tr>
-      </table></td>
+      </table>
+		<div align="center">
+		<html:submit>Save</html:submit>
+		</div>
+      </td>
   </tr>
 </table>
-
-
-
-
+<br />
+<br />
 <html:hidden property="htmlblock_1"></html:hidden>
 <html:hidden property="htmlblock_2"></html:hidden>
 <html:hidden property="editKey"></html:hidden>
 <html:hidden property="action" value="save"/>
-<html:submit>Save</html:submit>
 
 
 <script language="javascript">
@@ -407,7 +409,11 @@ function upload() {
 	document.contentForm.target = "_self"
 	document.contentForm.submit();
 }
-function doAction(index, action) {
+function doAction(index, action, confirmation) {
+	if(confirmation){
+		var ret = confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>");
+		if (!ret) return false; 
+	}
 	document.contentForm.action = "/content/contentManager.do?action=" + action +"&index=" + index;
 	document.contentForm.target = "_self"
 	document.contentForm.submit();

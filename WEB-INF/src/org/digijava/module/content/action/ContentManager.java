@@ -255,7 +255,6 @@ public class ContentManager extends DispatchAction {
 
 	{
 
-		System.out.println("You are in edit function.");
 		ContentForm contentForm = (ContentForm) form;
 
 		if (request.getParameter("id") != null) {
@@ -274,14 +273,6 @@ public class ContentManager extends DispatchAction {
 					contentForm.getContentThumbnails());
 		}
 		return mapping.findForward("addEdit");
-
-	}
-
-	public ActionForward search(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		System.out.println("You are in search function");
-		return mapping.findForward("search");
 
 	}
 
@@ -311,7 +302,6 @@ public class ContentManager extends DispatchAction {
 			DbUtil.removeThumbnails(contentItem, contentForm.getContentThumbnailsRemoved());
 		DbUtil.save(contentItem);
 
-		System.out.println("You are in save function");
 		return mapping.findForward("save");
 
 	}

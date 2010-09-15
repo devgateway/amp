@@ -78,24 +78,24 @@ cursor:pointer;
       <div class="bd">
           <ul class="first-of-typeamp">
             <li class="yuiampmenuitem">
-                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
+                <a class="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
                 <digi:trn key="aim:homePage">
                 Home Page
                 </digi:trn>
-	            </digi:link>
+	            </a>
             </li>
             <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
-                <digi:link styleClass="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
+                <a class="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
                 <digi:trn key='aim:PublicSite'>PUBLIC SITE</digi:trn>
-                </digi:link>
+                </a>
             </li>
             <feature:display name="Public Documents" module="Document Management">
             <li class="yuiampmenuitem" style="float:left;">
-                <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
-                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
+                <a class="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
+                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></a>
             </li>
             </feature:display>
 			<li class="yuiampmenuitem" style="float:left;">
@@ -265,9 +265,9 @@ function adminHelp(){
                                           <c:set var="message">
                        							<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                  						  </c:set>
-					                    <digi:link style="border-right:1px solid white;" styleClass="yuiampmenuitemlabel"  href="/admin.do" module="aim" >
+					                    <a style="border-right:1px solid white;" class="yuiampmenuitemlabel"  href="/admin.do" module="aim" >
 					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
-					                    </digi:link>
+					                    </a>
                                         </li>
                           <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem">

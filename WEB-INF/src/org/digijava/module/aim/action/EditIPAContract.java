@@ -359,22 +359,22 @@ public class EditIPAContract extends MultiAction {
             euaf.setDonorContractFundinAmount(String.valueOf(contract.getDonorContractFundinAmount()));
         } else euaf.setDonorContractFundinAmount("");
         if (contract.getDonorContractFundingCurrency() != null) {
-            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getAmpCurrencyId());
-        } else  euaf.setDonorContractFundingCurrency((long)0);
+            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getCurrencyCode());
+        } else  euaf.setDonorContractFundingCurrency(eaf.getCurrCode());
         //
         if (contract.getTotAmountDonorContractFunding() != null) {
             euaf.setTotAmountDonorContractFunding(String.valueOf(contract.getTotAmountDonorContractFunding()));
         } else euaf.setTotAmountDonorContractFunding("");
         if (contract.getTotalAmountCurrencyDonor() != null) {
-            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getAmpCurrencyId());
-        } else  euaf.setTotalAmountCurrencyDonor((long)0);
+            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getCurrencyCode());
+        } else  euaf.setTotalAmountCurrencyDonor(eaf.getCurrCode());
         //
         if (contract.getTotAmountCountryContractFunding() != null) {
             euaf.setTotAmountCountryContractFunding(String.valueOf(contract.getTotAmountCountryContractFunding()));
         } else euaf.setTotAmountCountryContractFunding("");
         if (contract.getTotalAmountCurrencyCountry() != null) {
-            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getAmpCurrencyId());
-        } else  euaf.setTotalAmountCurrencyCountry((long)0);
+            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getCurrencyCode());
+        } else  euaf.setTotalAmountCurrencyCountry(eaf.getCurrCode());
         	/*
         	 * 
         	 */
@@ -421,8 +421,8 @@ public class EditIPAContract extends MultiAction {
         }
         return modeFinalize(mapping, form, request, response);
     }
-
-    public ActionForward modeNew(ActionMapping mapping, ActionForm form,
+    
+	public ActionForward modeNew(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
@@ -431,6 +431,7 @@ public class EditIPAContract extends MultiAction {
         eaf.setContractAmendments(new ArrayList<IPAContractAmendment>());
         eaf.setIndexId(-1);
         Long currId=new Long(-1);
+        String currCode = null;
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
           if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
@@ -442,10 +443,14 @@ public class EditIPAContract extends MultiAction {
                       .getCurrencyId());
               if(curr!=null){
                       currId = curr.getAmpCurrencyId();
+                      currCode = curr.getCurrencyCode();
               }
           }
         eaf.setDibusrsementsGlobalCurrency(currId);
         eaf.setTotalAmountCurrency(currId);
+        eaf.setDonorContractFundingCurrency(currCode);
+        eaf.setTotalAmountCurrencyDonor(currCode);
+        eaf.setTotalAmountCurrencyCountry(currCode);
         eaf.setOrganisations(new ArrayList());
         
         request.setAttribute("editingNew", "editingNew");
@@ -532,16 +537,10 @@ public class EditIPAContract extends MultiAction {
         IPAContractForm eaf = (IPAContractForm) form;
         IPAContractAmendment ica = new IPAContractAmendment();
         eaf.getContractAmendments().add(ica);
-        HttpSession session = request.getSession();
-        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-          if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
-          .getCurrencyId() != null) {
-              AmpCurrency curr=CurrencyUtil.
-                  getAmpcurrency(
-                      tm.getAppSettings()
-                      .getCurrencyId());
-              ica.setCurrency(curr);
-          }
+        
+        AmpCurrency curr=CurrencyUtil.
+        getAmpcurrency(eaf.getDonorContractFundingCurrency());
+        	ica.setCurrency(curr);
 
         return modeFinalize(mapping, form, request, response);
     }

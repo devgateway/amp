@@ -110,13 +110,13 @@ public class IPAContractForm extends ActionForm  {
      * 
      */
     private String donorContractFundinAmount;	
-	private Long donorContractFundingCurrency;
+	private String donorContractFundingCurrency;
 	
     private String totAmountDonorContractFunding;	
-	private Long totalAmountCurrencyDonor;
+	private String totalAmountCurrencyDonor;
 	
     private String totAmountCountryContractFunding;	
-	private Long totalAmountCurrencyCountry;	
+	private String totalAmountCurrencyCountry;	
 
 	private List amendments;	
 
@@ -520,11 +520,11 @@ public class IPAContractForm extends ActionForm  {
 		this.donorContractFundinAmount = donorContractFundinAmount;
 	}
 
-	public Long getDonorContractFundingCurrency() {
+	public String getDonorContractFundingCurrency() {
 		return donorContractFundingCurrency;
 	}
 
-	public void setDonorContractFundingCurrency(Long donorContractFundingCurrency) {
+	public void setDonorContractFundingCurrency(String donorContractFundingCurrency) {
 		this.donorContractFundingCurrency = donorContractFundingCurrency;
 	}
 
@@ -537,11 +537,11 @@ public class IPAContractForm extends ActionForm  {
 		this.totAmountDonorContractFunding = totAmountDonorContractFunding;
 	}
 
-	public Long getTotalAmountCurrencyDonor() {
+	public String getTotalAmountCurrencyDonor() {
 		return totalAmountCurrencyDonor;
 	}
 
-	public void setTotalAmountCurrencyDonor(Long totalAmountCurrencyDonor) {
+	public void setTotalAmountCurrencyDonor(String totalAmountCurrencyDonor) {
 		this.totalAmountCurrencyDonor = totalAmountCurrencyDonor;
 	}
 
@@ -554,11 +554,11 @@ public class IPAContractForm extends ActionForm  {
 		this.totAmountCountryContractFunding = totAmountCountryContractFunding;
 	}
 
-	public Long getTotalAmountCurrencyCountry() {
+	public String getTotalAmountCurrencyCountry() {
 		return totalAmountCurrencyCountry;
 	}
 
-	public void setTotalAmountCurrencyCountry(Long totalAmountCurrencyCountry) {
+	public void setTotalAmountCurrencyCountry(String totalAmountCurrencyCountry) {
 		this.totalAmountCurrencyCountry = totalAmountCurrencyCountry;
 	}
 

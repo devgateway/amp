@@ -9,8 +9,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %> 
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ page import="org.digijava.module.aim.util.CurrencyUtil" %>
+<%@ page import="org.digijava.module.aim.dbentity.AmpCurrency" %>
             
-
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
@@ -161,6 +162,20 @@ var callback =
 	failure:responseFailure 
 };
 
+function miseajourdevise() {
+	var curId = document.getElementsByName("donorContractFundingCurrency")[0].value;
+	//
+	document.getElementsByName("totalAmountCurrencyDonor")[0].value = curId;
+	document.getElementsByName("totalAmountCurrencyCountry")[0].value = curId;
+	//
+	var divId = document.getElementById("ContractAmendmentsList");
+	if (divId != null){
+		var elems = divId.getElementsByTagName("select");
+		for (var i=0; i<elems.length; i++) {
+			elems[i].value = curId;
+		}	
+	}
+}
 
 function getContractDisbursments(){
 	var divId = document.getElementById("ContractDisbursmentsList");
@@ -601,7 +616,7 @@ window.onload=autosum;
 				<td align="left" colspan="4">
 					<digi:trn>Devise</digi:trn>
 					&nbsp;&nbsp;
-					<html:select property="donorContractFundingCurrency" styleClass="inp-text">
+					<html:select property="donorContractFundingCurrency" styleClass="inp-text" onchange="miseajourdevise();">
 						<option value="-1"><digi:trn>Devise</digi:trn></option>
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 					</html:select>
@@ -946,9 +961,10 @@ window.onload=autosum;
 							&nbsp;
 							<html:multibox property="selContractAmendments" value="${idx.count}"/>
 							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
-							&nbsp;
-							<html:select name="contractAmendment" indexed="true" property="currCode" styleClass="inp-text">
-								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
+							&nbsp;			
+							<html:select indexed="true" name="contractAmendment" disabled="true" property="currCode" styleClass="inp-text">
+								<option value="-1"><digi:trn>Devise</digi:trn></option>
+								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 							</html:select>
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
@@ -978,10 +994,10 @@ window.onload=autosum;
 			</tr>
 			<tr>
 				<td align="left">
-					<html:text property="totAmountDonorContractFunding" style="text-align:right" />
+					<html:text property="totAmountDonorContractFunding" style="text-align:right" readonly="true" />
 				</td>
-				<td align="left">
-					<html:select property="totalAmountCurrencyDonor" styleClass="inp-text">
+				<td align="left">				
+					<html:select disabled="true" property="totalAmountCurrencyDonor" styleClass="inp-text">
 						<option value="-1"><digi:trn>Devise</digi:trn></option>
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 					</html:select>
@@ -1002,11 +1018,11 @@ window.onload=autosum;
 				<td align="left">
 					<html:text property="totAmountCountryContractFunding" style="text-align:right" />
 				</td>
-				<td align="left">
-					<html:select property="totalAmountCurrencyCountry" styleClass="inp-text">
+				<td align="left">			
+					<html:select disabled="true" property="totalAmountCurrencyCountry" styleClass="inp-text">
 						<option value="-1"><digi:trn>Devise</digi:trn></option>
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-					</html:select>
+					</html:select>				
 				</td>
 			</tr>			
 		</field:display>

@@ -1090,6 +1090,7 @@
     </action>
     <action name="aimTeamReportsForm" path="/aim/viewTeamReports" scope="session" type="org.digijava.module.aim.action.ShowTeamReports">
       <forward name="forward" path="/showLayout.do?layout=showTeamReports" />
+      <forward name="forwardPublic" path="/showLayout.do?layout=showTeamReportsPublic" />
       <forward name="forwardTabs" path="/showLayout.do?layout=showTeamTabs" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

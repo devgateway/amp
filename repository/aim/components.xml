@@ -158,6 +158,7 @@
 	<page name="teamPagesConfigure" title=" - Configure Team Pages" />
 	<page name="configureTeam" title=" - Configure Team Pages" />
 	<page name="showTeamReports" page="showTeamReports" title=" - Public Team Reports" />
+	<page name="showTeamReportsPublic" page="showTeamReportsPublic" title=" - Public Team Reports" />
 	<page name="showTeamTabs" page="showTeamReports" title=" - Public Team Tabs" />
 	<page name="tabManagerData" page="tabManager/tabManagerData" />
 	<page name="teamConfiguration" title=" - Configure Team" />

@@ -17,6 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -76,8 +78,17 @@ public class ShowTeamReports extends Action {
 		rf.setPagesToShow(10);
 		
 		doPagination(rf, request);
-
-		return mapping.findForward( forwardName );
+		
+		if(tm == null){
+			//Prepare filter for Public View export
+			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+			if(arf==null) arf=new AmpARFilter();		
+			arf.setPublicView(true);
+			session.setAttribute(ArConstants.REPORTS_FILTER,arf);
+			return mapping.findForward("forwardPublic");
+		}
+		else
+			return mapping.findForward( forwardName );
 	}
 	private void doPagination(ReportsForm rf, HttpServletRequest request) {
 		Collection allReports = rf.getReports();

@@ -45,7 +45,7 @@
 #panelForTemplates .bd {     
     /* Apply scrollbars for all browsers. */ 
     height: 400px;
-    min-width:450px; overflow: auto;      
+    width:450px; overflow: auto;      
      
 }
 </style>

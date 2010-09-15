@@ -102,12 +102,12 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-            
-            Iterator itr = contentItem.getContentThumbnails().iterator();
-            while(itr.hasNext()){
-            	org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail)itr.next();
-            	thumb.setContentItem(contentItem);
-//            	session.save(thumb);
+            if(contentItem.getContentThumbnails() != null){
+                Iterator itr = contentItem.getContentThumbnails().iterator();
+                while(itr.hasNext()){
+                	org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail)itr.next();
+                	thumb.setContentItem(contentItem);
+                }
             }
             session.save(contentItem);
             tx.commit();

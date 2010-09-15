@@ -3,15 +3,14 @@ package org.dgfoundation.amp.ar.view.xls;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
-import org.dgfoundation.amp.ar.workers.ComputedDateColWorker;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -36,7 +35,8 @@ public class ComputedDateCellXLS extends TextCellXLS {
 	 * @param ownerId
 	 * @param item
 	 */
-	public ComputedDateCellXLS(HSSFWorkbook wb, HSSFSheet sheet, HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId, Viewable item) {
+	public ComputedDateCellXLS(XSSFWorkbook wb,XSSFSheet sheet, XSSFRow row, IntWrapper rowId, 
+			IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
@@ -56,7 +56,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 
 	public void generate() {
 		TextCell c = (TextCell) item;
-		HSSFCell cell = this.getCell(getAmountStyle());
+		XSSFCell cell = this.getCell(getAmountStyle());
 		String indent = "";
 		if (colId.value == 0)
 			for (int k = 0; k < ((ReportData) c.getColumn().getParent()).getLevelDepth(); k++)

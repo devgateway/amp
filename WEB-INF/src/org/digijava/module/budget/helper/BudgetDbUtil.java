@@ -2,6 +2,7 @@ package org.digijava.module.budget.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -16,8 +17,6 @@ import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import com.rc.retroweaver.runtime.Collections;
 
 public class BudgetDbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);

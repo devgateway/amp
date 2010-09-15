@@ -6,18 +6,16 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -48,7 +46,7 @@ public class TrailCellsXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public TrailCellsXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public TrailCellsXLS(XSSFWorkbook wb ,XSSFSheet sheet, XSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
@@ -72,13 +70,13 @@ public class TrailCellsXLS extends XLSExporter {
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
 		
-			HSSFCellStyle hierarchyStyle;
+			XSSFCellStyle hierarchyStyle;
 			if(grd.getLevelDepth()==2) 
 				hierarchyStyle = this.getHierarchyLevel1Style();
 			else hierarchyStyle=this.getHierarchyOtherStyle();
 			
 			
-			HSSFCell cell = this.getCell(hierarchyStyle);
+			XSSFCell cell = this.getCell(hierarchyStyle);
 			
 			String modifiedName = (grd.getName()==null)?"":grd.getName();
 
@@ -118,8 +116,8 @@ public class TrailCellsXLS extends XLSExporter {
 				if (element!=null){
 					element.invokeExporter(this);
 				}else if (!metadata.getHideActivities()){
-					HSSFCell cell2=this.getCell(hierarchyStyle);
-					cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+					XSSFCell cell2=this.getCell(hierarchyStyle);
+					cell2.setCellType(XSSFCell.CELL_TYPE_STRING);
 					cell2.setCellValue("");
 					colId.inc();
 				}

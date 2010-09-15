@@ -7,6 +7,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -17,18 +18,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Footer;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFPicture;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -71,78 +73,67 @@ public class XLSExportAction extends Action {
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
 		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
-	     response.setContentType("application/msexcel");
-	        response.setHeader("Content-Disposition",
-	                "inline; filename=data.xls");
-
-	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
-	        //
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			response.setHeader("Content-Disposition","attachment; filename=exportedReport");
+			AdvancedReportForm reportForm = (AdvancedReportForm) form;
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
-		
-//			for translation purposes
+			//for translation purposes
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-					
 			String siteId=site.getId().toString();
 			String locale=navigationLanguage.getCode();	
 			
-			
-		String sortBy=(String) session.getAttribute("sortBy");
-		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+			String sortBy=(String) session.getAttribute("sortBy");
+			if(sortBy!=null) rd.setSorterColumn(sortBy); 
 			
 		//XLSExporter.resetStyles();
-	        
-		
-		HSSFWorkbook wb = new HSSFWorkbook();
-		String sheetName=rd.getName();
-		if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
-		sheetName = sheetName.replace('/', '_');
-		sheetName = sheetName.replace('*', '_');
-		sheetName = sheetName.replace('?', '_');
-		sheetName = sheetName.replace(']', '_');
-		sheetName = sheetName.replace('[', '_');
-		sheetName = sheetName.replace('\\', '_');
-		
-		HSSFSheet sheet = wb.createSheet(sheetName);
-		
-		
-		IntWrapper rowId=new IntWrapper();
-		IntWrapper colId=new IntWrapper();
-		
-		HSSFRow row = sheet.createRow(rowId.intValue());
-		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();	    
-	    
-		HSSFFooter footer = sheet.getFooter();
-		footer.setRight( "Page " + HSSFFooter.page() + " of " + HSSFFooter.numPages() );
-			 
-
-		GroupReportDataXLS grdx=new GroupReportDataXLS(wb,sheet, row, rowId,
-				colId,  null, rd);
-		grdx.setMetadata(r);
+			XSSFWorkbook wb = new XSSFWorkbook();
+			String sheetName=rd.getName();
+			if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
+			sheetName = sheetName.replace('/', '_');
+			sheetName = sheetName.replace('*', '_');
+			sheetName = sheetName.replace('?', '_');
+			sheetName = sheetName.replace(']', '_');
+			sheetName = sheetName.replace('[', '_');
+			sheetName = sheetName.replace('\\', '_');
+			XSSFSheet sheet = wb.createSheet(sheetName);
 			
+			IntWrapper rowId=new IntWrapper();
+			IntWrapper colId=new IntWrapper();
 		
-		//show title+desc+logo+statement
-		grdx.makeColSpan(rd.getTotalDepth(),false);	
-		rowId.inc();
-		colId.reset();
-		row=sheet.createRow(rowId.shortValue());
-		HSSFCell cell=row.createCell(colId.shortValue());		
-		if (reportForm.getLogoOptions().equals("0")) {//disabled
+			XSSFRow row = sheet.createRow(rowId.intValue());
+			XSSFDrawing patriarch = sheet.createDrawingPatriarch();	    
+	    
+			Footer footer =  sheet.getFooter();
+			footer.setRight( "Page " +  HSSFFooter.page() + " of " +  HSSFFooter.numPages() );
+			 
+			GroupReportDataXLS grdx=new GroupReportDataXLS(wb,sheet, row, rowId,colId,  null, rd);
+			grdx.setMetadata(r);
+			
+			//show title+desc+logo+statement
+			XLSExporter.resetStyles();
+			grdx.makeColSpan(rd.getTotalDepth(),false);
+			
+			rowId.inc();
+			colId.reset();
+			row=sheet.createRow(rowId.shortValue());
+			XSSFCell cell=row.createCell(colId.shortValue());		
+			if (reportForm.getLogoOptions().equals("0")) {//disabled
 			// do nothing 
-		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
+			}else if(reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
 			if (reportForm.getLogoPositionOptions().equals("0")) {//header
 				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
 				String urlPrefix = request.getRequestURL().substring(0, end);
 				//								
 				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
 			    byte[] bytes = IOUtils.toByteArray(is);
-			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+			    int idImg = wb.addPicture(bytes,  XSSFWorkbook.PICTURE_TYPE_PNG);
 			    is.close();
 			    // ajout de l'image sur l'ancre ( lig, col )  
-			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+			    XSSFClientAnchor ancreImg = new XSSFClientAnchor();
 			    ancreImg.setCol1(colId.shortValue());
 			    ancreImg.setRow1(rowId.shortValue());
-			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+			    XSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
 			    // redim de l'image
 			    Img.resize();
 			} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
@@ -221,15 +212,14 @@ public class XLSExportAction extends Action {
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());
 			cell.setCellValue(/*translatedReportName+" "+*/r.getName());
-			HSSFCellStyle cs = wb.createCellStyle();
-			cs.setFillBackgroundColor(HSSFColor.BROWN.index);
-			HSSFFont font = wb.createFont();
-			font.setFontName(HSSFFont.FONT_ARIAL);
+			XSSFCellStyle cs = wb.createCellStyle();
+			cs.setFillBackgroundColor(IndexedColors.BROWN.getIndex());
+			XSSFFont font = wb.createFont();
+			font.setFontName("Arial");
 			font.setFontHeightInPoints((short)18);			
-			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			font.setBoldweight(font.BOLDWEIGHT_BOLD);
 			cs.setFont(font);		
 			cell.setCellStyle(cs);
-			
 			
 			grdx.makeColSpan(rd.getTotalDepth(),false);
 			
@@ -278,13 +268,13 @@ public class XLSExportAction extends Action {
 				//								
 				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
 			    byte[] bytes = IOUtils.toByteArray(is);
-			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+			    int idImg = wb.addPicture(bytes,  XSSFWorkbook.PICTURE_TYPE_PNG);
 			    is.close();
 			    // ajout de l'image sur l'ancre ( lig, col )  
-			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+			    XSSFClientAnchor ancreImg = new XSSFClientAnchor();
 			    ancreImg.setCol1(colId.shortValue());
 			    ancreImg.setRow1(rowId.shortValue());
-			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+			    XSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
 			    // redim de l'image
 			    Img.resize();
 			}				
@@ -318,8 +308,11 @@ public class XLSExportAction extends Action {
 				cell.setCellValue(stmt);  
 			}				
 		}
-	    wb.write(response.getOutputStream());
-	    
+			OutputStream out = response.getOutputStream();
+			wb.write(out);
+			out.flush();
+			out.close();
+	    	
 		}else{
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);

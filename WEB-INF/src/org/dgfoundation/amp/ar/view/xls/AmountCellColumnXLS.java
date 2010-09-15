@@ -6,9 +6,9 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
@@ -37,7 +37,7 @@ public class AmountCellColumnXLS extends CellColumnXLS {
 	 * @param ownerId
 	 * @param item
 	 */
-	public AmountCellColumnXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public AmountCellColumnXLS(XSSFWorkbook wb,XSSFSheet sheet, XSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb,sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub

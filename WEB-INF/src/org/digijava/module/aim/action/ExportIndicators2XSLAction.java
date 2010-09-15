@@ -10,6 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -299,8 +302,8 @@ public class ExportIndicators2XSLAction extends Action {
 			super(parent, item);
 		}
 
-		public IndicatorsByyear2XLS(HSSFWorkbook wb, HSSFSheet sheet,
-				HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
+		public IndicatorsByyear2XLS(XSSFWorkbook wb, XSSFSheet sheet,
+				XSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
 				Viewable item) {
 			super(wb, sheet, row, rowId, colId, ownerId, item);
 		}

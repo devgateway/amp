@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
-<%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%><jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<%@page import="org.digijava.module.contentrepository.util.DocumentManagerRights"%>
 
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -129,6 +129,54 @@ function setHoveredTable(tableId, hasHeaders) {
 }
 </script>
 <script type="text/javascript">
+	YAHOO.namespace("YAHOO.amp.table");
+	var privateListObj	= null;
+	var teamListObj	= null;
+	function afterPageLoad(e) {
+		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
+		privateListObj.sendRequest();
+		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", ${meTeamMember.teamId}, null);
+		teamListObj.sendRequest();
+		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId");
+		sharedListObj.sendRequest();
+		//YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
+		//YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
+		//YAHOO.amp.table.sharedDoctable	= YAHOO.amp.table.enhanceMarkup("shared_markup");
+		
+		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null);
+		publicListObj.sendRequest();
+		
+		//windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
+		//windowController.populateWithPublicDocs();
+		
+
+		initFileUploads();
+		
+		fPanel	= new FilterAsYouTypePanel("labelButtonId", getLabelFilterCallbackObj(privateListObj), "mainLabels");
+		fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
+		fPanel.initLabelArray(false);
+		fAddPanel.initLabelArray(false);
+		
+		teamFPanel	= new FilterAsYouTypePanel("teamLabelButtonId", getLabelFilterCallbackObj(teamListObj), "teamMainLabels");
+		teamFPanel.initLabelArray(false);
+
+		sharedFPanel	= new FilterAsYouTypePanel("sharedLabelButtonId", getLabelFilterCallbackObj(sharedListObj), "sharedMainLabels");
+		sharedFPanel.initLabelArray(false);
+		
+		/*
+		setStripsTable("team_markup", "tableEven", "tableOdd");
+		setHoveredTable("team_markup", false);
+		setStripsTable("my_markup", "tableEven", "tableOdd");
+		setHoveredTable("my_markup", false);
+		setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
+		setHoveredTable("publicDocumentsDiv", false);
+		setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
+		setHoveredTable("otherDocumentsDiv", false);	
+		*/		
+	}
+	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+</script>
+<script type="text/javascript">
 	var W3CDOM = (document.createElement && document.getElementsByTagName);
 
 	function initFileUploads() {
@@ -177,22 +225,27 @@ function setHoveredTable(tableId, hasHeaders) {
 		}
 		return ret;
 	}
-
-	var labelFileterCallbackObj	= {
-				click: function(e, label) {
-					privateListObj.addRemoveLabelUUID(label.uuid);
-					privateListObj.sendRequest();
-				},
-				applyClick: function(e, uuidArray){
-					for (var i=0; i<uuidArray.length; i++) {
-						privateListObj.addRemoveLabelUUID(uuidArray[i]);
-					}
-					if (uuidArray.length == 0) {
-						privateListObj.emptyLabelUUIDs();
-					}
-					privateListObj.sendRequest();
+	
+	function getLabelFilterCallbackObj( listObj ) {
+		var labelFilterCallbackObj	= {
+					click: function(e, label) {
+						this.listObj.addRemoveLabel(label);
+						this.listObj.sendRequest();
+					},
+					applyClick: function(e, labelArray){
+						for (var i=0; i<labelArray.length; i++) {
+							this.listObj.addRemoveLabel(labelArray[i]);
+						}
+						if (labelArray.length == 0) {
+							this.listObj.emptyLabels();
+						}
+						this.listObj.sendRequest();
+					},
+					listObj: listObj
 				}
-			}
+		
+		return labelFilterCallbackObj;
+	}
 	
 	var labelCallbackObj	= {
 			click: function(e, label) {
@@ -215,10 +268,6 @@ function setHoveredTable(tableId, hasHeaders) {
 			docUUID: "",
 			dynamicList: null
 	}
-	var fPanel	= new FilterAsYouTypePanel("labelButtonId", labelFileterCallbackObj, "mainLabels");
-	var fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
-	fPanel.initLabelArray(false);
-	fAddPanel.initLabelArray(false);
 
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu");
@@ -294,7 +343,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								    	</button>
 								    </td>								    
 								</tr>
-								<tr><td><hr/></td></tr>
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>
 								<tr>
 									<td>
 										<br />
@@ -326,8 +375,15 @@ function setHoveredTable(tableId, hasHeaders) {
 										 -->
 										
 									<%}%>
+										<button id="teamFilterButtonId" class="buton" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId').show();">
+								    		<digi:trn>Filters</digi:trn>
+								    	</button>
+								    	<button id="teamLabelButtonId" class="buton" type="button" onclick="teamFPanel.toggleView();">
+								    		<digi:trn>Labels</digi:trn>
+								    	</button>
 									</td>
-								</tr>							
+								</tr>						
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>	
 								<tr>
 									<td>
 										<br/>
@@ -335,13 +391,12 @@ function setHoveredTable(tableId, hasHeaders) {
 												<jsp:include page="legendForResources.jsp"/>
 											</div>
 											<div id="team_markup" align="left"  class="all_markup">
-												<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-												<bean:define id="tabType" value="team" toScope="request"/>
-												<jsp:include page="documentTable.jsp" flush="true" />
-										</div>
+											</div>
 									</td>
 								</tr>
-							</table>	        
+							</table>	
+							<bean:define id="filterDivId" value="teamFilterDivId" toScope="request" />
+							<jsp:include page="filters/filters.jsp"/>	        
 				        </div>
 					</feature:display>					
 					
@@ -351,16 +406,27 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
 									<td>
+										<button id="sharedFilterButtonId" class="buton" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
+								    		<digi:trn>Filters</digi:trn>
+								    	</button>
+								    	<button id="sharedLabelButtonId" class="buton" type="button" onclick="sharedFPanel.toggleView();">
+								    		<digi:trn>Labels</digi:trn>
+								    	</button>
+									</td>
+								</tr>						
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>	
+								<tr>
+									<td>
 										<br />
 										<div id="shared_markup" align="left" class="all_markup">
-												<bean:define name="crDocumentManagerForm" property="sharedDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-												<bean:define id="tabType" value="shared" toScope="request"/>
-												<jsp:include page="documentTable.jsp" flush="true" />
+												
 										</div>
 										<br />
 									</td>
 								</tr>
-							</table>	        
+							</table>
+							<bean:define id="filterDivId" value="sharedFilterDivId" toScope="request" />
+							<jsp:include page="filters/filters.jsp"/>		        
 				        </div>
 					</feature:display>
 					
@@ -375,7 +441,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									<td>
 										<br />
 										<div id="public_markup" align="left" class="all_markup">
-										<div id="publicDocumentsDiv">&nbsp;</div>
+										
 										</div>
 										<br />
 									</td>
@@ -489,32 +555,3 @@ function setHoveredTable(tableId, hasHeaders) {
 	
 <%@include file="documentManagerDivHelper.jsp" %>
 
-<script type="text/javascript">
-	YAHOO.namespace("YAHOO.amp.table");
-	var privateListObj	= null;
-	function afterPageLoad(e) {
-		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
-		privateListObj.sendRequest();
-		//YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
-		YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
-		YAHOO.amp.table.sharedDoctable	= YAHOO.amp.table.enhanceMarkup("shared_markup");
-		
-		windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
-		windowController.populateWithPublicDocs();
-		
-
-		initFileUploads();
-
-		/*
-		setStripsTable("team_markup", "tableEven", "tableOdd");
-		setHoveredTable("team_markup", false);
-		setStripsTable("my_markup", "tableEven", "tableOdd");
-		setHoveredTable("my_markup", false);
-		setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
-		setHoveredTable("publicDocumentsDiv", false);
-		setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
-		setHoveredTable("otherDocumentsDiv", false);	
-		*/		
-	}
-	YAHOO.util.Event.on(window, "load", afterPageLoad); 
-</script>

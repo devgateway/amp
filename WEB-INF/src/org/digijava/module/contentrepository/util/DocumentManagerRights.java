@@ -365,7 +365,7 @@ public class DocumentManagerRights {
 		HttpSession httpSession		= request.getSession(); 
 		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		
-		if ( tm.getEmail().equals(nw.getCreator()) ) {
+		if ( tm!=null && tm.getEmail()!=null && tm.getEmail().equals(nw.getCreator()) ) {
 			return true;
 		}
 		else

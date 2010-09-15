@@ -210,7 +210,7 @@ public class DocumentManager extends Action {
 				myForm.setOtherDocuments( documentFilter.applyFilter(allPrivateDocs) );
 			}
 		}
-		if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
+		else if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
 			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
 			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
 			
@@ -218,9 +218,19 @@ public class DocumentManager extends Action {
 			myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );			
 		}
 		//shared documents
-		if( DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource()) ){
+		else if( DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource()) ){
 			Collection<DocumentData> allSharedDocs	= this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,showActionsButtons);
 			myForm.setOtherDocuments( documentFilter.applyFilter(allSharedDocs) );
+		}
+		else if ( DocumentFilter.SOURCE_PUBLIC_DOCUMENTS.equals(documentFilter.getSource() )) {
+			myRequest.getSession().setAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER, documentFilter);
+			HashMap<String, CrDocumentNodeAttributes> uuidMap		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+			try {
+				Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet(), myRequest ,CrConstants.PUBLIC_DOCS_TAB,false,showActionsButtons);
+				myForm.setOtherDocuments( documentFilter.applyFilter(otherDocuments) );
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}

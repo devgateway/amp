@@ -242,7 +242,7 @@
                               </td>
                          </tr>
                          
-                         <tr>
+                         	<tr>
 	                         <td class="f-names" nowrap="nowrap">
  	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
  	 				              <c:set var="translation">
@@ -268,7 +268,20 @@
                          </tr>
                          	
                          </module:display>
-
+						<module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION">
+	                         <tr>
+		                         <td class="f-names" nowrap="nowrap">
+	 	 					        <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+	 	 				              <c:set var="translation">
+	 	                                <digi:trn>Click here to manage public filters</digi:trn>
+	 		                          </c:set>  
+	 	 	                          <digi:link module="contentrepository" href="/publicDocTabManager.do?action=show">
+	 	 	                              <digi:trn>Public Filter Manager</digi:trn>
+	 	 	                          </digi:link>                                                                   
+	                              </td>
+	                         </tr>
+                         	
+                         </module:display>
 						  <!-- hidden Lucene Debug! -->
 						  <!-- 
                           <tr>

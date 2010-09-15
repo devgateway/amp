@@ -58,11 +58,12 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/element-beta-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/container-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dragdrop-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/event-min.js'/>" > </script>
-<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tab/tabview-min.js'/>" > </script>
+
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
@@ -778,9 +779,11 @@ function showMenu(e, obj) {
 }
 /* Function that creates AJAX callback object that is used when receiving 
 document list from server. windowController.datatable field will be set to the created datatable. */
-function getCallbackForOtherDocuments(containerElement, windowController) {
+function getCallbackForOtherDocuments(containerElement, windowController, datatableDivId) {
 	var num						= YAHOO.amp.num_of_tables - 1;
 	var divId					= "other_markup" + num;
+	if ( datatableDivId != null )
+		divId		= datatableDivId;
 	callbackForOtherDocuments	= {
 		success: function(o) {
 					//alert(o.responseText);
@@ -1298,6 +1301,41 @@ function switchColors(element) {
 	var tempColor					= element.style.color;
 	element.style.color 			= element.style.backgroundColor;
 	element.style.backgroundColor	= tempColor;
+}
+
+YAHOO.amp.actionPanels	= new Array();
+function showActions(linkId, divId){
+	var actionPanel		= YAHOO.amp.actionPanels[linkId];
+	if (actionPanel == null) {
+		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
+			  visible:false,
+			  width:"150px" } );
+		var actionDivEl	= document.getElementById(divId);
+		actionDivEl.style.display	= "";
+		actionPanel.setBody( actionDivEl );
+		actionPanel.render(document.body);
+		YAHOO.amp.actionPanels[linkId]	= actionPanel;
+	}
+	actionPanel.show();
+	actionPanel.myIsVisible	= true;
+}
+function hideActions(linkId) {
+	var actionPanel		= YAHOO.amp.actionPanels[linkId];
+	actionPanel.hide();
+	actionPanel.myIsVisible	= false;
+}
+function toggleActions(linkId, divId) {
+	var actionPanel		= YAHOO.amp.actionPanels[linkId];
+	if (actionPanel == null) {
+		showActions(linkId, divId);
+	}
+	else {
+		if ( actionPanel.myIsVisible ) {
+			hideActions(linkId);
+		}
+		else
+			showActions(linkId, divId);
+	}
 }
 
 /* Number of possible panels on this page */

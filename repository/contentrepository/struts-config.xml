@@ -12,6 +12,7 @@
     <form-bean name="manageFieldForm" type="org.digijava.module.contentrepository.form.ManageTemplDocFieldForm" />
     <form-bean name="docFromTemplateForm" type="org.digijava.module.contentrepository.form.CreateDocFromTemplateForm" />
     <form-bean name="crLabelForm" type="org.digijava.module.contentrepository.form.LabelForm" />
+    <form-bean name="crDocTabManagerForm" type="org.digijava.module.contentrepository.form.DocTabManagerForm" />
   </form-beans>
   <action-mappings>
   	<action path="/contentrepository/selectDocumentDM" name="crSelectDocumentForm" type="org.digijava.module.contentrepository.action.SelectDocumentDM" scope="session">
@@ -81,6 +82,10 @@
     
     <action path="/contentrepository/labelManager" scope="session" type="org.digijava.module.contentrepository.action.LabelManagerAction" validate="false" name="crLabelManagerForm">
     	<forward name="showHTML" path="/showLayout.do?layout=cr_labelManager" />
+    </action>
+    <action path="/contentrepository/publicDocTabManager" scope="session" type="org.digijava.module.contentrepository.action.DocTabManagerAction" validate="false" name="crDocTabManagerForm">
+    	<forward name="forward" path="/showLayout.do?layout=cr_docTabManager" />
+    	<forward name="publicResources" path="/showLayout.do?layout=cr_publicResources" />
     </action>
     <action path="/contentrepository/label" scope="request" type="org.digijava.module.contentrepository.action.LabelAction" validate="false" name="crLabelForm">
     </action>

@@ -8,6 +8,9 @@ function FilterAsYouTypePanel (alignElId, onClickCallbackObj, nameprefix) {
 	this.visible		= false;
 	this.textboxEl		= null;
 	
+	this.labelArray		= null;
+	this.labelMap		= new Object();
+	
 	this.bigDiv		= document.createElement("div"); //holds all label divs inside
 }
 
@@ -19,6 +22,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 	
 	var myBigDiv				= this.bigDiv;
 	var myOnClickCallbackObj	= this.onClickCallbackObj;
+	var myLabelMap				= this.labelMap;
 	var clickCallbackObj		= {
 			click: function (e, label) {
 				if ( (e.target != null && e.target.tagName.toLowerCase() == "input") || 
@@ -32,17 +36,19 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				}
 			},
 			applyClick: function (e) {
-				var uuidArray	= new Array();
+				var retArray	= new Array();
 				var allInputs	= this.bigDiv.getElementsByTagName("input");
 				for (var i=0; i<allInputs.length; i++) {
 					if (allInputs[i].name == "selectedLabel" && allInputs[i].checked ) {
-						uuidArray.push(allInputs[i].value);
+						var label	= this.labelMap[allInputs[i].value]; 
+						retArray.push( label );
 					}
 				}
-				this.onClickCallbackObj.applyClick.call(this.onClickCallbackObj, e, uuidArray);
+				this.onClickCallbackObj.applyClick.call(this.onClickCallbackObj, e, retArray);
 			},
 			bigDiv: myBigDiv,
-			onClickCallbackObj: myOnClickCallbackObj
+			onClickCallbackObj: myOnClickCallbackObj,
+			labelMap: myLabelMap
 	}
 	
 	var retArray		= new Array();
@@ -61,12 +67,14 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				inputEl.value			= label.uuid;
 				inputEl.type			= "checkbox";
 				
+				
 				spanEl.innerHTML		= label.name;
 				spanEl.id			= divId;
-				spanEl.style.color	= label.color;
+				spanEl.style.color					= label.color;
 				spanEl.style.backgroundColor		= label.backgroundColor;
-				spanEl.style.padding	= "1px";
-				spanEl.style.cursor		= "pointer";
+				spanEl.style.padding				= "1px";
+				spanEl.style.cursor					= "pointer";
+				spanEl.style.verticalAlign			= "middle";
 				
 				divEl.appendChild(inputEl);
 				divEl.appendChild(spanEl);
@@ -103,6 +111,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		applyDivEl.appendChild(applySpanEl);
 		applyDivEl.style.backgroundColor	= "white";
 		applyDivEl.style.padding			= "2px";
+		applyDivEl.style.textAlign			= "center";
 		
 		YAHOO.util.Event.addListener(applyDivEl, "mouseover", mouseoverCallbackObj, applyDivEl, false);
 		YAHOO.util.Event.addListener(applyDivEl, "mouseout", mouseoutCallbackObj, applyDivEl, false);
@@ -126,14 +135,19 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	
 	this.textboxEl	= textboxEl;
 	textboxEl.type			= "text";
-	textboxEl.style.border	= "1px solid gray";
-	textboxEl.style.width	= "150px";
+	textboxEl.style.border	= "1px solid lightgray";
+	textboxEl.style.width	= "140px";
+	var textboxElDiv		= document.createElement("div");
+	textboxElDiv.appendChild(textboxEl);
+	textboxElDiv.style.textAlign			= "center";
 	
 	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true);
 	YAHOO.util.Event.addListener(document,"click", this.outsideClickHide, this, true );
 	
-	this.bigDiv.style.border	= "1px solid gray";
-	this.bigDiv.appendChild(textboxEl);
+	this.bigDiv.style.border			= "1px solid gray";
+	this.bigDiv.style.backgroundColor	= "white";
+	this.bigDiv.style.padding			= "2px";
+	this.bigDiv.appendChild(textboxElDiv);
 	this.bigDiv.appendChild(brEl);
 	
 	
@@ -184,6 +198,7 @@ FilterAsYouTypePanel.prototype.show	= function () {
 		this.overlay.show();
 		this.textboxEl.focus();
 	}
+	this.reposition(this.alignElId);
 }
 
 FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
@@ -193,6 +208,10 @@ FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 					if ( o.responseText.length > 0) {
 						FilterAsYouTypePanel.globalLabelArray	= eval( o.responseText );
 						this.fPanel.labelArray					= FilterAsYouTypePanel.globalLabelArray;
+						for (var i=0; i<this.fPanel.labelArray.length; i++) {
+							var l	= this.fPanel.labelArray[i];
+							this.fPanel.labelMap[l.uuid]	= l;
+						}
 						this.fPanel.render();
 						if (shouldShow) {
 							this.fPanel.overlay.show();
@@ -258,6 +277,7 @@ FilterAsYouTypePanel.prototype.getSearchText	= function () {
 
 }
 FilterAsYouTypePanel.prototype.reposition	= function (elementId) {
+	this.alignElId	= elementId;
 	this.overlay.cfg.setProperty("context",[elementId,"tl","bl"]);
 //	this.overlay.align("tl", "tl");
 }

@@ -127,7 +127,16 @@
 									</script> --%>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
-								<td nowrap="nowrap"> 
+								<td nowrap="nowrap">
+									 		<c:set var="translation">
+												<digi:trn>Click here to see possible actions</digi:trn>
+											</c:set> 
+											<a style="cursor:pointer; text-decoration:none; color: blue" id="Actions<bean:write name='documentData' property='uuid' />"
+											onClick="toggleActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}')" title="${translation}">
+												<digi:trn>Show Actions</digi:trn>
+											</a>
+									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;" 
+										>
 									<c:choose>
 										<c:when test="${documentData.webLink == null}">
 											<c:set var="translation">
@@ -150,7 +159,7 @@
 	
 	
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
-										<span style="color: blue"><strong>|</strong></span>
+										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl},'<%=documentData.getYearofPublication() %>' );showMyPanel(0, 'addDocumentDiv');"
 										title="<digi:trn>Click here to add a new version of this document</digi:trn>">
@@ -161,7 +170,7 @@
 										<digi:trn>Version History</digi:trn>
 									</c:set> 
 									<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
-										<span style="color: blue"><strong>|</strong></span>
+										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 										onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}');"
 										title="<digi:trn>Click here to see a list of versions for this document</digi:trn>">
@@ -171,7 +180,7 @@
 	
 									<logic:equal name="documentData" property="hasMakePublicRights" value="true">
 										<c:if test="${ (!documentData.isPublic) || (!documentData.lastVersionIsPublic) }">
-											<span style="color: blue"><strong>|</strong></span>
+											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
 											title="<digi:trn>Click here to make this document public</digi:trn>">
@@ -183,7 +192,7 @@
 									
 									<logic:equal name="documentData" property="isPublic" value="true">
 										<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
-											<span style="color: blue"><strong>|</strong></span>
+											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
 											title="<digi:trn>Click here to unpublish this document</digi:trn>">
@@ -197,7 +206,7 @@
 											
 											<logic:equal name="documentData" property="needsApproval" value="false">
 												<logic:equal  name="documentData" property="lastVersionIsShared" value="false">
-													<span style="color: blue"><strong>|</strong></span>
+													<br />
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
 													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>','${tabTypeLocal}');" title="<digi:trn>Click here to Share this document</digi:trn>">
 														<digi:trn>Share</digi:trn>
@@ -206,7 +215,7 @@
 											</logic:equal>										
 											<logic:equal name="documentData" property="needsApproval" value="true">
 												<logic:equal name="documentData" property="hasApproveVersionRights" value="true">
-													<span style="color: blue;"><strong>|</strong></span>
+													<br />
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"
 													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>','${tabTypeLocal}');" title="<digi:trn>Click here to Share this document</digi:trn>">
 													<digi:trn>Approve</digi:trn> </a>
@@ -224,7 +233,7 @@
 									
 									<logic:equal name="documentData" property="hasUnshareRights" value="true">
 										<logic:equal name="documentData" property="isShared" value="true">
-											<span style="color: blue;"><strong>|</strong></span>
+											<br />
 											<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;" onClick="unshareDoc('<%=documentData.getUuid() %>','${tabTypeLocal}');" 
 											title="<digi:trn>Click here to UnShare this document</digi:trn>">
 												<digi:trn>UnShare</digi:trn>
@@ -234,23 +243,24 @@
 									
 	
 									<logic:equal name="documentData" property="hasDeleteRights" value="true">
-										<span style="color: blue;"><strong>|</strong></span>
+										<br />
 										<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
 										title="<digi:trn>Click here to delete this document</digi:trn>"><digi:trn>Delete</digi:trn></a>
 									</logic:equal>
 								
-									<span style="color: blue;"><strong>|</strong></span> 
+									<br /> 
 									<a style="cursor:pointer; text-decoration:none; color: blue;" onClick="showOrgsPanel('<%=documentData.getUuid() %>');" title="<digi:trn>Show Participating Organizations</digi:trn>">
 										<digi:trn>Organizations</digi:trn> 
 									</a>
 									
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
-										<span style="color: blue"><strong>|</strong></span>
+										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="addLabelLink_${documentData.uuid}"
 										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleView();fAddPanel.reposition('addLabelLink_${documentData.uuid}');" 
 										title="<digi:trn>Click here to add a new labels to this document</digi:trn>">
 											<digi:trn>Labels</digi:trn>
-									</logic:equal>									
+									</logic:equal>
+									</div>									
 								</td>
 							</tr>
 						</logic:iterate>

@@ -19,6 +19,8 @@
 	<page name="tempFieldPreDefinedValues" page="tempFieldPreDefinedValues"/>
 	<page name="docFromTemplate" page="docFromTemplate"/>
 	<page name="cr_labelManager" page="labelmanager/labelManager" title="Label Manager" />
+	<page name="cr_docTabManager" page="doctabmanager/docTabManager" title="Public Document Manager" />
+	<page name="cr_publicResources" page="doctabmanager/publicResources" title="Public Resources" />
 </secondary-pages>
 
 

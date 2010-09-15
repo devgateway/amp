@@ -14,10 +14,14 @@ import org.digijava.module.contentrepository.jcrentity.Label;
  */
 public class DocumentFilter {
 	
+	public final static String SESSION_LAST_APPLIED_PUBLIC_FILTER	= "SESSION_LAST_APPLIED_PUBLIC_FILTER";
+	
 	public final static String SOURCE_PRIVATE_DOCUMENTS	= "private_documents";
 	public final static String SOURCE_TEAM_DOCUMENTS	= "team_documents";
 	public final static String SOURCE_SHARED_DOCUMENTS	= "shared_documents";
 	public final static String SOURCE_PUBLIC_DOCUMENTS	= "public_documents";
+	
+	private Long id;
 	
 	private String name;
 	private String source;
@@ -36,6 +40,11 @@ public class DocumentFilter {
 	private List<Long> filterTeamIds;
 	private List<String> filterOwners;
 	
+	private Long publicViewPosition;
+	
+	public DocumentFilter( ) {
+		
+	}
 	
 	
 	public DocumentFilter(String source, List<String> filterLabelsUUID, List<Long> filterDocTypeIds,
@@ -101,6 +110,16 @@ public class DocumentFilter {
 		return retCol;
 	}
 	
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -132,12 +151,15 @@ public class DocumentFilter {
 	public void setFilterLabels(List<Label> filterLabels) {
 		this.filterLabels = filterLabels;
 	}
-	public List<Long> getFilterDocType() {
+	
+	public List<Long> getFilterDocTypeIds() {
 		return filterDocTypeIds;
 	}
-	public void setFilterDocType(List<Long> filterDocTypeIds) {
+
+	public void setFilterDocTypeIds(List<Long> filterDocTypeIds) {
 		this.filterDocTypeIds = filterDocTypeIds;
 	}
+
 	public List<String> getFilterFileType() {
 		return filterFileType;
 	}
@@ -181,6 +203,13 @@ public class DocumentFilter {
 		this.baseTeamId = baseTeamId;
 	}
 
+	public Long getPublicViewPosition() {
+		return publicViewPosition;
+	}
+
+	public void setPublicViewPosition(Long publicViewPosition) {
+		this.publicViewPosition = publicViewPosition;
+	}
 	
 	
 }

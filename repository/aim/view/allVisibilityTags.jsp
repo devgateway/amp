@@ -20,7 +20,6 @@
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -56,10 +55,12 @@
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
 <feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>

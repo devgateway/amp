@@ -413,6 +413,18 @@
                    msg=""
                    jsFunction="org.apache.commons.validator.javascript.validateUtilities"/>
 
+		<validator name="identical"
+			       classname="org.digijava.module.um.util.StrutsValidator"
+			       method="validateIdentical"
+			       methodParams="java.lang.Object,
+			                      org.apache.commons.validator.ValidatorAction,
+			                      org.apache.commons.validator.Field,
+			                      org.apache.struts.action.ActionMessages,
+			                      javax.servlet.http.HttpServletRequest"
+			       depends=""
+			       msg="error.registration.NoPasswordMatch"
+			       jsFunction="org.apache.commons.validator.javascript.validateIdentical"/>
+	      
     </global>
 
 </form-validation>

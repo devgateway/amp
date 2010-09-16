@@ -23,11 +23,11 @@
 			</logic:empty>
 			<li id="lid-${label.uuid}" ${liClassString} >
 				<a  class="atree" id="aid-${label.uuid}" style="color: ${label.color};background-color: ${label.backgroundColor}">${label.name}</a>
-				 <logic:notEmpty name="label" property="children">
+				 <c:if test="${label.type=='FOLDER_LABEL' }">
 					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 						title="Add Label" 
 						onclick="addLabel('${label.uuid}')" />
-				</logic:notEmpty>
+				</c:if>
 				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
 						onclick="editLabel('${label.uuid}')" title="Edit" />
 				<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" 

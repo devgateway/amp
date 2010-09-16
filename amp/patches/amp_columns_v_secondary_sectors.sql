@@ -1,0 +1,1 @@
+insert into amp_columns(columnName, cellType, extractorview) values("Responsible Organisation", "org.dgfoundation.amp.ar.cell.TextCell","v_responsible_organisation"); update amp_columns_order set indexOrder = indexOrder +1 where indexOrder>12; insert into amp_columns_order(columnName, indexOrder) values ("Responsible Organisation",12);

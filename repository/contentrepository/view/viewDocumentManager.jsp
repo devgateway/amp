@@ -137,8 +137,10 @@ function setHoveredTable(tableId, hasHeaders) {
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
 		privateListObj.sendRequest();
 		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", ${meTeamMember.teamId}, null);
+		teamListObj.filterInfoDivId	= "teamFilterInfo";
 		teamListObj.sendRequest();
 		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId");
+		sharedListObj.filterInfoDivId	= "sharedFilterInfo";
 		sharedListObj.sendRequest();
 		//YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 		//YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
@@ -271,7 +273,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
-	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu");
+	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true);
 
 </script>
 
@@ -389,9 +391,11 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 										<br/>
-											<div align="right" style="width: 95%" >
+											<div style="width: 80%; float: left" id="teamFilterInfo"></div>
+											<div align="right" style="width: 15%; float: left" >
 												<jsp:include page="legendForResources.jsp"/>
 											</div>
+											<br />
 											<div id="team_markup" align="left"  class="all_markup">
 											</div>
 									</td>
@@ -419,6 +423,8 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>	
 								<tr>
 									<td>
+										<br />
+										<div style="width: 80%; float: left" id="sharedFilterInfo"></div>
 										<br />
 										<div id="shared_markup" align="left" class="all_markup">
 												

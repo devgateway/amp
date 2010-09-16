@@ -1,4 +1,4 @@
-function ActionsMenu(objectId,nameprefix){
+function ActionsMenu(objectId,nameprefix,isTeamMenu){
 	this.objectId		= objectId;
 	this.nameprefix		= nameprefix;
 	
@@ -6,6 +6,11 @@ function ActionsMenu(objectId,nameprefix){
 	this.visible		= false;
 	this.divEl		= null;
 	this.teamView=null;
+	
+	if ( isTeamMenu ) 
+		this.ownerType	= "team";
+	else
+		this.ownerType	= "private";
 }
 
 ActionsMenu.prototype.render=function (){
@@ -21,7 +26,7 @@ ActionsMenu.prototype.render=function (){
 		var retArray	= new Array();
 		//div's content		
 		// add resources link
-		var addResLinkEl	= "<a href=\"javascript:setType('private');javascript:configPanel(0,'','','', '',false); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
+		var addResLinkEl	= "<a href=\"javascript:setType('"+ this.ownerType +"');javascript:configPanel(0,'','','', '',false); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
 		if(this.teamView!=null && ! this.teamView){
 			addResLinkEl+="onclick=\"menuPanelForUser.toggleUserView(); \">";
 		}else{
@@ -32,7 +37,7 @@ ActionsMenu.prototype.render=function (){
 		var addResdivEl		= createActionDiv(addResLinkEl);
 		divEl.appendChild(addResdivEl);
 		//add web url link
-		var addUrlLinkEl	= "<a href=\"javascript:setType('private');javascript:configPanel(0,'','','', '',true); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
+		var addUrlLinkEl	= "<a href=\"javascript:setType('"+ this.ownerType +"');javascript:configPanel(0,'','','', '',true); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
 		if(this.teamView!=null && ! this.teamView){
 			addUrlLinkEl+="onclick=\"menuPanelForUser.toggleUserView(); \">";
 		}else{

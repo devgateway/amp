@@ -149,7 +149,7 @@ public class DocTabManagerAction extends MultiAction {
 					new Comparator<DocumentFilter>() {
 						@Override
 						public int compare(DocumentFilter o1, DocumentFilter o2) {
-							return o1.getPublicViewPosition().compareTo(o2.getPublicViewPosition());
+							return o2.getPublicViewPosition().compareTo(o1.getPublicViewPosition());
 						}
 						
 		});

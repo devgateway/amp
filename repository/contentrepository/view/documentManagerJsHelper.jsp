@@ -362,23 +362,14 @@ was issued in order to delete the respective row/document*/
 function getCallbackForDelete (rows, table) {
 	callbackForDelete = {
 		success: function(o) {
-			//debugger;
 			YAHOO.amp.panels[2].setBody(o.responseText);
 			if (document.getElementById("successfullDiv") != null) {
-				if (rows != null) {
-					if (YAHOO.amp.table.teamtable != null) {
-						for (var i=0; i<rows.length; i++) {
-							YAHOO.amp.table.teamtable.deleteRow(rows[i]);
-						}
-					}
-					if (YAHOO.amp.table.mytable != null)
-						for (var i=0; i<rows.length; i++) {
-							YAHOO.amp.table.mytable.deleteRow(rows[i]);
-						}
+				
+				if (this.myRows != null) {
 					//alert(YAHOO.amp.datatables.length + "|" + YAHOO.amp.num_of_tables);		
 					for (var ii=0; ii<YAHOO.amp.datatables.length; ii++) {
-						for (var i=0; i<rows.length; i++) {
-							YAHOO.amp.datatables[ii].deleteRow(rows[i]);
+						for (var i=0; i<this.myRows.length; i++) {
+							YAHOO.amp.datatables[ii].deleteRow(this.myRows[i]);
 						}
 					}
 				}
@@ -390,7 +381,8 @@ function getCallbackForDelete (rows, table) {
 		failure: function(o) {
 			//YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
 			//alert("${translation3}");
-		}
+		},
+		myRows: rows
 	}
 	return callbackForDelete;
 }
@@ -400,14 +392,14 @@ function deleteRow(uuid, o) {
 	var possibleRows	= new Array();
 	if (links != null) {
 		for (var i=0; i<links.length; i++) {
-			if ( links[i].id == ("a"+uuid) ) {
+			if ( links[i].id == ("aflag"+uuid) ) {
 				var possibleRow	= links[i];
-				while (true) {
-					possibleRow	= possibleRow.parentNode;
+				while ( possibleRow != null ) {
 					if (possibleRow.nodeName.toLowerCase()=="tr") {
 							possibleRows.push(possibleRow);
 							break;
 					}
+					possibleRow	= possibleRow.parentNode;
 				}
 			}
 		}
@@ -1303,8 +1295,14 @@ function switchColors(element) {
 	element.style.backgroundColor	= tempColor;
 }
 
-YAHOO.amp.actionPanels	= new Array();
+YAHOO.amp.actionPanels	= new Object();
 function showActions(linkId, divId){
+	if ( !YAHOO.amp.actionPanels.size ) {
+		YAHOO.amp.actionPanels.size = 0;
+	}
+	if ( YAHOO.amp.actionPanels.size == 0 ) {
+		YAHOO.util.Event.addListener(document,"click", hideActions, this, true );
+	}
 	var actionPanel		= YAHOO.amp.actionPanels[linkId];
 	if (actionPanel == null) {
 		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
@@ -1315,28 +1313,22 @@ function showActions(linkId, divId){
 		actionPanel.setBody( actionDivEl );
 		actionPanel.render(document.body);
 		YAHOO.amp.actionPanels[linkId]	= actionPanel;
+		YAHOO.amp.actionPanels.size++;
 	}
 	actionPanel.show();
 	actionPanel.myIsVisible	= true;
 }
-function hideActions(linkId) {
-	var actionPanel		= YAHOO.amp.actionPanels[linkId];
-	actionPanel.hide();
-	actionPanel.myIsVisible	= false;
-}
-function toggleActions(linkId, divId) {
-	var actionPanel		= YAHOO.amp.actionPanels[linkId];
-	if (actionPanel == null) {
-		showActions(linkId, divId);
-	}
-	else {
-		if ( actionPanel.myIsVisible ) {
-			hideActions(linkId);
-		}
-		else
-			showActions(linkId, divId);
+function hideActions(e) {
+	var clickedEl	= e.target;
+	if ( clickedEl.id.indexOf("Actions") >= 0 ) 
+		return;
+	var panels	= YAHOO.amp.actionPanels;
+	for (var p in panels) {
+		if ( panels[p].hide )
+				panels[p].hide();
 	}
 }
+
 
 /* Number of possible panels on this page */
 YAHOO.amp.panelCounter	= 3;

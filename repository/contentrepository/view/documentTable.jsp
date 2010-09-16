@@ -108,10 +108,12 @@
 								</td>
 								<td>
 									${documentData.cmDocType }
+									<a  id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
 								</td>
 								<td>
 									<logic:notEmpty name="documentData" property="labels">
 										<logic:iterate id="label" name="documentData" property="labels">
+										<span style="white-space: nowrap;">
 											<span style="background-color: ${label.backgroundColor}; color: ${label.color};">
 												${label.name}
 											</span>
@@ -121,6 +123,7 @@
 												style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
 											</logic:equal>
 												&nbsp;&nbsp;
+										</span>
 										</logic:iterate>
 									</logic:notEmpty>
 									<%-- ><bean:write name='documentData' property='description'/>--%
@@ -134,7 +137,7 @@
 												<digi:trn>Click here to see possible actions</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Actions<bean:write name='documentData' property='uuid' />"
-											onClick="toggleActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}')" title="${translation}">
+											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}')" title="${translation}">
 												<digi:trn>Show Actions</digi:trn>
 											</a>
 									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;" 

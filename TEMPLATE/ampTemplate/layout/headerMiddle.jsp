@@ -94,7 +94,7 @@ cursor:pointer;
             </li>
             <feature:display name="Public Documents" module="Document Management">
             <li class="yuiampmenuitem" style="float:left;">
-                <a class="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
+                <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">			
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></a>
             </li>
             </feature:display>

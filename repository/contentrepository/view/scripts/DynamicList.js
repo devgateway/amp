@@ -4,7 +4,11 @@ function RetrieveFilters( dynamicListObj) {
 	RetrieveFilters.prototype.success	= function (o) {
 		if ( o.responseText.length > 0) {
 			var filterWrapper					= eval("(" + o.responseText + ")" );
-			this.dynamicListObj.filterWrapper	= filterWrapper;
+			var fw								= new FilterWrapper();
+			for (var field in filterWrapper) {
+				fw[field]	= filterWrapper[field];
+			}
+			this.dynamicListObj.filterWrapper	= fw;
 			this.dynamicListObj.sendRequest(false);
 		}
 		else
@@ -22,8 +26,64 @@ function FilterWrapper() {
 	this.filterLabels	= new Array();
 	this.filterDocTypeIds	= new Array(); //key-value arrays
 	this.filterFileTypes	= new Array();
-	//this.filterOwners		= new Array();
-	//this.filterTeamIds		= new Array();
+	this.filterOwners		= new Array();
+	this.filterTeamIds		= new Array();
+}
+FilterWrapper.prototype.labelsToHTML	= function() {
+	var ret	= "";
+	ret += "<strong>Labels:</strong> ";
+	if ( this.filterLabels.length > 0) {
+		for (var i=0; i<this.filterLabels.length; i++) {
+			var l	= this.filterLabels[i];
+			ret += "<span style='color:" + l.color + "; background-color:" + l.backgroundColor + "; padding: 1px;'>";
+			ret += l.name + "</span> <strong>+</strong> ";
+		}
+	}
+	else
+		ret += "none";
+	
+	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
+	return ret;
+}
+
+FilterWrapper.prototype.fToHTML	= function() {
+	var ret	= "<strong>Filters:</strong> ";
+	if ( this.filterDocTypeIds.length > 0 ) {
+		var docType		= this.filterDocTypeIds[0];
+		if ( docType.key != "0" ) {
+			ret += "<span>Document Type - ";
+			ret += docType.value;
+			ret += "</span>, ";
+		}
+	}
+	if ( this.filterFileTypes.length > 0 ) {
+		var docType		= this.filterFileTypes[0];
+		if ( docType.key != "-1" ) {
+			ret += "<span>File Type - ";
+			ret += docType.value;
+			ret += "</span>, ";
+		}
+	}
+	if ( this.filterOwners.length > 0 ) {
+		var docType		= this.filterOwners[0];
+		if ( docType.key != "-1" ) {
+			ret += "<span>Creator - ";
+			ret += docType.value;
+			ret += "</span>, ";
+		}
+	}
+	if ( this.filterTeamIds.length > 0 ) {
+		var docType		= this.filterTeamIds[0];
+		if ( docType.key != "-1" ) {
+			ret += "<span>Creator team - ";
+			ret += docType.value;
+			ret += "</span>, ";
+		}
+	}
+	if ( ret.charAt(ret.length-2)==',' ) {
+		ret		= ret.substring(0, ret.length-2);
+	}
+	return ret;
 }
 
 function AbstractDynamicList (containerEl, thisObjName, fDivId) {
@@ -36,6 +96,8 @@ function AbstractDynamicList (containerEl, thisObjName, fDivId) {
 	this.reqString		= "";
 	
 	this.fPanel				= null;
+	
+	this.filterInfoDivId	= null;
 }
 
 AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
@@ -52,6 +114,12 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 			this.reqString, callbackObj );
 	if ( this.fPanel != null)
 		this.fPanel.hide();
+	
+	if ( this.filterInfoDivId != null ) {
+		var divEl	= document.getElementById( this.filterInfoDivId );
+		divEl.innerHTML =
+				this.filterWrapper.labelsToHTML() + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML();
+	}
 }
 
 AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {

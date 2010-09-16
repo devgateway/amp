@@ -183,6 +183,7 @@ public class DocumentManager extends Action {
 			filterTeamIds			= Arrays.asList(myForm.getFilterTeamIds() );
 			filterTeamIds			= new ArrayList<Long> ( filterTeamIds );
 			filterTeamIds.remove(new Long(0));
+			filterTeamIds.remove(new Long(-1));
 		}
 		
 		DocumentFilter documentFilter	= new DocumentFilter(source, filterLablesUUID, filterDocTypes, 

@@ -18,7 +18,7 @@ public class DocumentFilterJson {
 	private List<Label> filterLabels;
 	
 	private List<KeyValue> filterDocTypeIds;
-	private List<KeyValue> filterFileType;
+	private List<KeyValue> filterFileTypes;
 	
 	private List<KeyValue> filterTeamIds;
 	private List<KeyValue> filterOwners;
@@ -42,10 +42,10 @@ public class DocumentFilterJson {
 			}
 		}
 		
-		this.filterFileType		= new ArrayList<KeyValue>();
+		this.filterFileTypes		= new ArrayList<KeyValue>();
 		if ( df.getFilterFileType() != null) {
 			for (String type: df.getFilterFileType() ) {
-				this.filterFileType.add( new KeyValue(type, type) );
+				this.filterFileTypes.add( new KeyValue(type, type) );
 			}
 		}
 		
@@ -77,11 +77,11 @@ public class DocumentFilterJson {
 	public void setFilterDocTypeIds(List<KeyValue> filterDocTypeIds) {
 		this.filterDocTypeIds = filterDocTypeIds;
 	}
-	public List<KeyValue> getFilterFileType() {
-		return filterFileType;
+	public List<KeyValue> getFilterFileTypes() {
+		return filterFileTypes;
 	}
-	public void setFilterFileType(List<KeyValue> filterFileType) {
-		this.filterFileType = filterFileType;
+	public void setFilterFileTypes(List<KeyValue> filterFileTypes) {
+		this.filterFileTypes = filterFileTypes;
 	}
 	public List<KeyValue> getFilterTeamIds() {
 		return filterTeamIds;

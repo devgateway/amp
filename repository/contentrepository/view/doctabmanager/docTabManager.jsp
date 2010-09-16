@@ -35,6 +35,7 @@
 	
 	function afterPageLoad(e) {
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId");
+		publicListObj.filterInfoDivId	= "publicFilterInfoDiv";
 		publicListObj.sendRequest();
 	}
 	function showTitlePanel() {
@@ -198,8 +199,7 @@
 								<tr>
 									<td>
 										<br />
-											<div align="right" style="width: 95%" >
-												<jsp:include page="../legendForResources.jsp"/>
+											<div id="publicFilterInfoDiv"  >
 											</div>
 											<div id="public_markup" align="left">
 											</div>

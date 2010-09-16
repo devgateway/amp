@@ -40,7 +40,7 @@
 
 		myTabsObject.addTab( new YAHOO.widget.Tab({ 
 			labelEl: labelDiv,
-			content: "<div id='replaceableDiv'><div id='replaceableDiv_markup' align='left'>AAA</div></div>",
+			content: "<div id='replaceableDiv'><div style='padding-left: 10px;' id='replaceableFilterInfoDiv'></div><div id='replaceableDiv_markup' align='left'></div></div>",
 			active: true
 		}), myTabsObject.get('tabs').length-1); 
 		
@@ -48,7 +48,8 @@
 		
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
-		replaceableListObj.containerEl	= document.getElementById("replaceableDiv_markup");
+		replaceableListObj.containerEl		= document.getElementById("replaceableDiv_markup");
+		replaceableListObj.filterInfoDivId	= "replaceableFilterInfoDiv";
 		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId='+filterId, 
 				new RetrieveFilters(replaceableListObj) );
 		
@@ -128,6 +129,7 @@
 		publicListObj.sendRequest();
 		<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
 			public${filter.id}ListObj	= new PublicDynamicList(document.getElementById("${filter.id}_markup"), "public${filter.id}ListObj",null);
+			public${filter.id}ListObj.filterInfoDivId	= "FilterInfoDiv${filter.id}";
 			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId=${filter.id}', 
 					new RetrieveFilters(public${filter.id}ListObj) );
 		</c:forEach>
@@ -175,6 +177,8 @@ YAHOO.util.Event.on(window, "load", afterPageLoad);
 			    	</div>
 			    	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
 			    		<div id="Ref${filter.id}">
+			    			<br />
+			    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
 			    			<div id="${filter.id}_markup" align="left"></div>
 			    		</div>
 			    	</c:forEach>

@@ -240,8 +240,8 @@
 	<digi:trn>Document Type</digi:trn>  
 </c:set>
 
-<c:set var="trans_headerDescription">
-	 <digi:trn>Description</digi:trn>
+<c:set var="trans_headerLabels">
+	 <digi:trn>Labels</digi:trn>
 </c:set>
 
 <c:set var="trans_headerActions">
@@ -307,7 +307,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
 	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
 	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:200},
+	        {key:"labels",text:"${trans_headerLabels}",sortable:false,width:200},
 	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:400}
 	    ];
 	}
@@ -321,7 +321,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
     	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
     	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-    	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+    	        {key:"labels",text:"${trans_headerLabels}",sortable:false,width:100},
     	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
     	    ];
 	}else {
@@ -333,7 +333,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
         	    {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
 	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:300},
+	            {key:"labels",text:"${trans_headerLabels}",sortable:false,width:300},
 	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:1000}
 	    ];
 	}

@@ -134,6 +134,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	var teamListObj	= null;
 	function afterPageLoad(e) {
 		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
+		privateListObj.filterInfoDivId	= "privateFilterInfo";
 		privateListObj.sendRequest();
 		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", ${meTeamMember.teamId}, null);
 		teamListObj.sendRequest();
@@ -346,11 +347,12 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>
 								<tr>
 									<td>
-										<br />
-											<div align="right" style="width: 95%" >
+											<div style="width: 80%; float: left" id="privateFilterInfo"></div>
+											<div align="right" style="width: 15%; float: left" >
 												<jsp:include page="legendForResources.jsp"/>
 											</div>
-											<div id="my_markup" align="left">
+											<br />
+											<div id="my_markup" align="left" style="clear: both;">
 											</div>
 									</td>
 								</tr>

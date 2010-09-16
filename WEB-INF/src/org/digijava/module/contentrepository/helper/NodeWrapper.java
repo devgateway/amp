@@ -1,6 +1,5 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.io.InputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -10,13 +9,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
+import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Workspace;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -29,7 +31,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
 import org.digijava.module.contentrepository.jcrentity.Label;
@@ -677,6 +678,30 @@ public class NodeWrapper {
 		ArrayList<Label> labels		= new ArrayList<Label>();
 		try {
 			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			Property pVH				= null;
+			try {
+				pVH	= labelContainerNode.getProperty("jcr:childVersionHistory");
+				VersionHistory vh		= (VersionHistory) pVH.getNode();
+				VersionIterator vIter	= vh.getAllVersions();
+				Version v 				= null;
+				while ( vIter.hasNext() ) {
+					v	= vIter.nextVersion();
+				}
+				if ( v != null ) {
+					NodeIterator nIter		= v.getNodes();
+					if (nIter.hasNext() ) 
+						labelContainerNode		= nIter.nextNode();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if ( labelContainerNode instanceof VersionHistory ) {
+				VersionHistory vh	= (VersionHistory) labelContainerNode;
+				NodeIterator nIter	= vh.getBaseVersion().getNodes();
+				if ( nIter.hasNext() ) {
+					labelContainerNode	= nIter.nextNode();
+				}
+			}
 			PropertyIterator pIter		= labelContainerNode.getProperties();
 			while ( pIter.hasNext() ) {
 				Property p			= pIter.nextProperty();

@@ -115,10 +115,12 @@
 											<span style="background-color: ${label.backgroundColor}; color: ${label.color};">
 												${label.name}
 											</span>
-											<strong>|</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
-											onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
-											style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
-											&nbsp;&nbsp;
+											<logic:equal name="documentData" property="hasVersioningRights" value="true">
+												<strong>|</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
+												onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
+												style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
+											</logic:equal>
+												&nbsp;&nbsp;
 										</logic:iterate>
 									</logic:notEmpty>
 									<%-- ><bean:write name='documentData' property='description'/>--%

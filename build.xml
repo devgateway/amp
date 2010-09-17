@@ -50,7 +50,8 @@
 	
 	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
 
-	<property name="mysql.url" value="jdbc:mysql://localhost?useUnicode=true&amp;characterEncoding=UTF-8"/>
+	<property name="mysql.url" value="jdbc:mysql://localhost"/>
+	<property name="mysql.params" value="useUnicode=true&amp;characterEncoding=UTF-8"/>
 	<property name="clean.db" value="amp_clean"/>
 	
     <!-- Path settings -->
@@ -378,7 +379,7 @@
 		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>
 		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>
 		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}" userid="${mysql.user}" print="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql?${mysql.params}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>	
 			<transaction>CREATE DATABASE ${clean.db} character set utf8 collate utf8_general_ci</transaction>		
@@ -388,12 +389,12 @@
 		<antcall target="database"/>
 	
 		<echo message="Exporting stored functions from ${clean.source}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
+		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql?${mysql.params}" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
 			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema?${mysql.params}" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
 		</sql>
@@ -402,7 +403,7 @@
 	
 
 		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}" userid="${mysql.user}" print="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}?${mysql.params}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>INSERT IGNORE AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
 			<transaction>INSERT IGNORE amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
@@ -499,7 +500,7 @@
 		</sql>
 		
 		<echo message="Importing functions and views into ${clean.db}..."/>
-			<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}" userid="${mysql.user}" print="true" delimiter=";;">
+			<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}?${mysql.params}" userid="${mysql.user}" print="true" delimiter=";;">
 				<classpath refid="compile.classpath"/>	
 				<transaction src="tmp_${clean.db}_ddl_copy.sql"/> 
 			</sql>

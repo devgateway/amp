@@ -12,14 +12,10 @@ public class RequiredTextField extends TextField<String> {
 		setRequired(true);
 	}
 	
-	@Override
-	public boolean isVisible() {
-		System.out.println("Am I visiblesss?");
-		return true;
-	}
 
 	public RequiredTextField(String id, IModel model) {
 		super(id, model);
 		setRequired(true);
 	}
+	
 }

@@ -39,4 +39,16 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>amp-gen-src</name>
+			<type>2</type>
+			<location>/home/mihai/workspace2/amp-1.15-release/gen-src</location>
+		</link>
+		<link>
+			<name>amp-src</name>
+			<type>2</type>
+			<location>/home/mihai/workspace2/amp-1.15-release/WEB-INF/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

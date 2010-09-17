@@ -2,6 +2,8 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
    <wb-module deploy-name="wicket-test">
         <wb-resource deploy-path="/" source-path="/target/wicket-test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/amp-src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/amp-gen-src"/>
         <property name="context-root" value="wicket-test"/>
     </wb-module>
 </project-modules>

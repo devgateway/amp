@@ -168,6 +168,7 @@
 		  ret=
 			"keyword="          +document.getElementsByName("keyword")[0].value+"&"+	
 			"tempNumResults="   +document.getElementsByName("tempNumResults")[0].value+"&"+
+            "sectorScheme="   	+document.getElementsByName("sectorScheme")[0].value+"&"+
 			"sectorReset="      +document.getElementsByName("sectorReset")[0].value;
 		}
 		else if (type==3){//add sectors chosen from the list

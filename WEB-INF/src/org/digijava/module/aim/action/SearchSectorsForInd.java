@@ -48,8 +48,8 @@ public class SearchSectorsForInd extends Action {
 		if(eaForm.getSectors().getKeyword()!=null)
 		if (eaForm.getSectors().getKeyword().trim().length() != 0) {
 			// search based on the given keyword only.
-			
-		col=(SectorUtil.searchForSector(eaForm.getSectors().getKeyword().trim()));
+			// this class seems not to be used any more... need to review indicator code in the future...
+		col=SectorUtil.searchForSector(eaForm.getSectors().getKeyword().trim(),null);
 		
 		int stIndex = 1;
 		int edIndex = eaForm.getSectors().getNumResults();

@@ -35,7 +35,7 @@ public class SectorUtil {
 
 	private static Logger logger = Logger.getLogger(SectorUtil.class);
 
-	public static Collection searchForSector(String keyword) {
+	public static Collection searchForSector(String keyword,Long ampSecSchemeId) {
 		Session session = null;
 		Collection col = new ArrayList();
 
@@ -57,15 +57,20 @@ public class SectorUtil {
 						+ "%' and " + "country.iso = region.country"; */
 
 				String qryStr = "select sector from " + AmpSector.class.getName()
-					+ " sector , "
-					+ AmpSectorScheme.class.getName()
+					+ " sector inner join sector.ampSecSchemeId "
 					+ " sscheme"
 					+ " where lower(sector.name) like '%"
 					+ keyword.toLowerCase()
-					+ "%' and " + "sector.ampSecSchemeId = sscheme.ampSecSchemeId";
+					+ "%'";
+                if (ampSecSchemeId != null) {
+                    qryStr += " and sscheme.ampSecSchemeId=:ampSecSchemeId";
+                }
 
 				Query qry = session.createQuery(qryStr);
 				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
+                if (ampSecSchemeId != null) {
+                qry.setLong("ampSecSchemeId", ampSecSchemeId);
+                }
 				//col =qry.list();
 				Iterator itr = qry.list().iterator();
 

@@ -9,6 +9,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class SearchSectors
@@ -50,7 +51,7 @@ public class SearchSectors
       if (ssForm.getKeyword().trim().length() != 0) {
         // search based on the given keyword only.
 
-        col = (SectorUtil.searchForSector(ssForm.getKeyword().trim()));
+        col = SectorUtil.searchForSector(ssForm.getKeyword().trim(),ssForm.getSectorScheme());
 
         int stIndex = 1;
         int edIndex = ssForm.getNumResults();

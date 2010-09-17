@@ -296,14 +296,16 @@
                                 <c:otherwise>
                                     ${orgProfOrgProfileFilterForm.largestProjectNumb}
                                 </c:otherwise>
-                            </c:choose>|&nbsp;
+                            </c:choose>
+                             <c:if test="${!orgProfOrgProfileFilterForm.fromPublicView}">|&nbsp;
                             <digi:trn>Show data only from this workspace</digi:trn>:
                             <c:if test="${orgProfOrgProfileFilterForm.workspaceOnly}">
                                 <digi:trn>Yes</digi:trn>
                             </c:if>
                             <c:if test="${!orgProfOrgProfileFilterForm.workspaceOnly}">
                                 <digi:trn>No</digi:trn>
-                            </c:if>| <digi:trn>Number of years in time series</digi:trn>: ${orgProfOrgProfileFilterForm.yearsInRange}
+                            </c:if>
+                             </c:if>| <digi:trn>Number of years in time series</digi:trn>: ${orgProfOrgProfileFilterForm.yearsInRange}
                         </td>
 
                         </tbody>

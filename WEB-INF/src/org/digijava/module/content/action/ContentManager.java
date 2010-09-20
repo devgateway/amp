@@ -168,8 +168,10 @@ public class ContentManager extends DispatchAction {
 		if (request.getParameter("id") != null) {
 			Long contentItemId = Long.parseLong(request.getParameter("id"));
 			AmpContentItem currentHome = DbUtil.getHomePage();
-			currentHome.setIsHomepage(false);
-			DbUtil.save(currentHome);
+			if(currentHome != null){
+				currentHome.setIsHomepage(false);
+				DbUtil.save(currentHome);
+			}
 			AmpContentItem contentItem = DbUtil.getContentItem(contentItemId);
 			contentItem.setIsHomepage(true);
 			DbUtil.save(contentItem);

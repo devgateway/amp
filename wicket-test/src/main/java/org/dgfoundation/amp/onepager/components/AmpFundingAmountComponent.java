@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components;
 import java.util.ArrayList;
 
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
@@ -27,7 +28,10 @@ public class AmpFundingAmountComponent extends AmpFormComponentPanel {
 		add(amount);
 		
 		DateTextField date=new DateTextField("transactionDate");
+		date.add(new DatePicker());
 		add(date);
+		
+		
 		
 		ArrayList<AmpCurrency> currencies=new ArrayList<AmpCurrency>();
 		

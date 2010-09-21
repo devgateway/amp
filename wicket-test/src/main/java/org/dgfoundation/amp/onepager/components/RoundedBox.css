@@ -1,0 +1,33 @@
+.roundedBox {
+  width: 80%;
+    margin-bottom: 10px;
+}
+.boxTopLeft {
+  background-image: url(http://i171.photobucket.com/albums/u283/chibireikon/box_tl.gif);
+}
+.boxTopRight {
+  background-image: url(http://i171.photobucket.com/albums/u283/chibireikon/box_tr.gif);
+  background-position: right top;
+  background-repeat: no-repeat;
+  height: 10px;
+}
+.boxBottomLeft {
+  background-image: url(http://i171.photobucket.com/albums/u283/chibireikon/box_bl.gif);
+}
+.boxBottomRight {
+  background-image: url(http://i171.photobucket.com/albums/u283/chibireikon/box_br.gif);
+  background-position: right top;
+  background-repeat: no-repeat;
+  height: 10px;
+}
+.boxContentLeft {
+  background-image: url(/mycontext/images/box_cl.gif);
+  background-position: left top;
+  background-repeat: repeat-y
+}
+.boxContentRight {
+  background-image: url(/mycontext/images/box_cr.gif);
+  background-position: right top;
+  background-repeat: repeat-y;
+  color: #FFF;
+}

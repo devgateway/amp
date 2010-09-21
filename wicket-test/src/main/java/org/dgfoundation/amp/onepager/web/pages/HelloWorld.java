@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.components.AmpFundingDetailComponent;
@@ -25,8 +26,8 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
  */
 public class HelloWorld extends WebPage {
 	private final AmpFundingDetail fd = new AmpFundingDetail();
-	private AmpFundingDetailComponent fdc;
-	private Label response;
+	
+
 	public HelloWorld() {
 
 		fd.setThousandsTransactionAmount(1231232d);
@@ -36,25 +37,36 @@ public class HelloWorld extends WebPage {
 		fd.setAmpCurrencyId(c);
 		add(new FeedbackPanel("feedback"));
 		
-		
-		Form f = new Form("form");
-		 
-		fdc = new AmpFundingDetailComponent(
-				"fundingDetail", new Model<AmpFundingDetail>(fd), "Ceva");
+		Form<AmpFundingDetail> f = new Form<AmpFundingDetail>("form", new CompoundPropertyModel<AmpFundingDetail>(fd));
 		add(f);
-		add(response=new Label("response",new Model<String>("")));
+		f.setOutputMarkupId(true);
+		 
+		final AmpFundingDetailComponent fdc = new AmpFundingDetailComponent(
+				"fundingDetail", "Ceva");
+		fdc.setOutputMarkupId(true);
 		f.add(fdc);
+
+		final Label response = new Label("response",new Model<String>(""));
+		response.setOutputMarkupId(true);
+		add(response);
 		f.add(new AjaxButton("submitButton", new Model("Pressing matters")) {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				fdc = new AmpFundingDetailComponent(
-						"fundingDetail", new Model<AmpFundingDetail>(fd), "Ceva");
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+//				fdc = new AmpFundingDetailComponent(
+//						"fundingDetail", new Model<AmpFundingDetail>(fd), "Ceva");
+				
 				response.setDefaultModelObject("AmpFundingDetail bean: amount="+fd.getThousandsTransactionAmount()+ " transactionDate="+fd.getTransactionDate()+" currency="+fd.getAmpCurrencyId().getCurrencyCode());
+				target.addComponent(response);
+			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.addComponent(response);
 			}
 			
 			
 		});
-		f.setOutputMarkupId(true);
+		
 		AjaxFormValidatingBehavior.addToAllFormComponents(f, "onkeyup", Duration.ONE_SECOND);
 		add(new Link("now") {
 			@Override

@@ -3,7 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
-import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 
@@ -11,7 +11,7 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
  * @author mihai
  *
  */
-public class AmpFormComponentPanel<T> extends FormComponentPanel<T> implements
+public class AmpComponentPanel<T> extends Panel implements
 		AmpFMConfigurable {
 
 	protected String fmName;
@@ -22,7 +22,7 @@ public class AmpFormComponentPanel<T> extends FormComponentPanel<T> implements
 	 */
 	private static final long serialVersionUID = 5847159396251223479L;
 
-	public AmpFormComponentPanel (String id,String fmName, AmpFMBehavior fmBehavior) {
+	public AmpComponentPanel (String id,String fmName, AmpFMBehavior fmBehavior) {
 		super(id);
 		setEnabled(FMUtil.isFMEnabled(this));
 		setVisible(FMUtil.isFMVisible(this));
@@ -30,7 +30,7 @@ public class AmpFormComponentPanel<T> extends FormComponentPanel<T> implements
 		this.fmBehavior=fmBehavior;
 	}
 
-	public AmpFormComponentPanel(String id,String fmName) {
+	public AmpComponentPanel(String id,String fmName) {
 		super(id);
 		setEnabled(FMUtil.isFMEnabled(this));
 		setVisible(FMUtil.isFMVisible(this));
@@ -38,7 +38,7 @@ public class AmpFormComponentPanel<T> extends FormComponentPanel<T> implements
 		this.fmBehavior=AmpFMBehavior.FEATURE;
 	}
 
-	public AmpFormComponentPanel(String id, IModel<T> model,String fmName, AmpFMBehavior fmBehavior) {
+	public AmpComponentPanel(String id, IModel<T> model,String fmName, AmpFMBehavior fmBehavior) {
 		super(id, model);
 		setEnabled(FMUtil.isFMEnabled(this));
 		setVisible(FMUtil.isFMVisible(this));
@@ -46,7 +46,7 @@ public class AmpFormComponentPanel<T> extends FormComponentPanel<T> implements
 		this.fmBehavior=fmBehavior;
 	}
 	
-	public AmpFormComponentPanel(String id, IModel<T> model,String fmName) {
+	public AmpComponentPanel(String id, IModel<T> model,String fmName) {
 		super(id, model);
 		setEnabled(FMUtil.isFMEnabled(this));
 		setVisible(FMUtil.isFMVisible(this));

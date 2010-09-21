@@ -3,11 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
-import java.util.Date;
-
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.apache.wicket.markup.html.border.Border;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
 /**
@@ -15,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
  *
  */
 public class AmpFundingDetailComponent extends
-		AmpFormComponentPanel<AmpFundingDetail> {
+		AmpComponentPanel<AmpFundingDetail> {
 
 	/**
 	 * 
@@ -27,10 +23,12 @@ public class AmpFundingDetailComponent extends
 	 * @param model
 	 * @param fmName
 	 */
-	public AmpFundingDetailComponent(String id, IModel<AmpFundingDetail> model,
+	public AmpFundingDetailComponent(String id,
 			String fmName) {
-		super(id, model, fmName);
-		add(new AmpFundingAmountComponent("amountComp", new CompoundPropertyModel<AmpFundingDetail>(model), "amountComp"));
+		super(id, fmName);
+		Border boxBorder = new RoundedBox("roundedboxborder");
+		add(boxBorder);
+		boxBorder.add(new AmpFundingAmountComponent("amountComp", "amountComp"));
 	}
 	
 }

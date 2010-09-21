@@ -231,7 +231,7 @@ border-right:1px solid white;
 		                <div id="reports2" class="yuiampmenu">
 		                    <div class="bd">                    
 		                        <ul>
-		                        <digi:insert attribute="dropdownLangSwitch" />
+		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
 		                    </div>
 		                </div>                              

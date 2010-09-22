@@ -1131,8 +1131,8 @@ function rejectDoc (uuid,actType){
 	callback.failure	= function(o) {
 							alert('share failed');
 						};
-	var panel		= YAHOO.amp.orgPanels[uuid]; 
-	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	//var panel		= YAHOO.amp.orgPanels[uuid]; 
+	//panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid, callback);
 }
 

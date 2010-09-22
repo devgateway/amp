@@ -215,8 +215,25 @@ public class DocumentManager extends Action {
 			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
 			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
 			
-			Collection<DocumentData> allTeamsDocs	= this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons);
-			myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );			
+			Collection<DocumentData> allTeamsDocs	= this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons);		
+			
+			//resources pending approval
+			TeamMember currentTM = getCurrentTeamMember(myRequest);
+			Collection<DocumentData> pendingResources=null;
+			if(currentTM.getTeamHead()){ //should see all docs that are pending approval for this team
+				List<String> pendingResourcesIds=DocumentManagerUtil.getSharedNodeUUIDs(currentTM.getTeamId(), CrConstants.PENDING_STATUS);
+				if(pendingResourcesIds!=null && pendingResourcesIds.size()>0){
+					pendingResources = getDocuments(pendingResourcesIds,myRequest,CrConstants.TEAM_DOCS_TAB,true,true);
+				}
+			}
+					
+			if(allTeamsDocs!=null){
+				if(pendingResources!=null){
+					allTeamsDocs.addAll(pendingResources);
+				}
+			}
+			
+			myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );
 		}
 		//shared documents
 		else if( DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource()) ){
@@ -368,7 +385,7 @@ public class DocumentManager extends Action {
 		if(teamMember.getTeamHead()){ //should see all docs that are pending approval for this team
 			List<String> pendingResourcesIds=DocumentManagerUtil.getSharedNodeUUIDs(teamMember.getTeamId(), CrConstants.PENDING_STATUS);
 			if(pendingResourcesIds!=null && pendingResourcesIds.size()>0){
-				pendingResources = getDocuments(pendingResourcesIds,request,CrConstants.TEAM_DOCS_TAB,true,true);				
+				pendingResources = getDocuments(pendingResourcesIds,request,CrConstants.TEAM_DOCS_TAB,true,true);
 			}
 		}
 				

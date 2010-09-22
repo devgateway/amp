@@ -680,18 +680,20 @@ public class NodeWrapper {
 			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
 			Property pVH				= null;
 			try {
-				pVH	= labelContainerNode.getProperty("jcr:childVersionHistory");
-				VersionHistory vh		= (VersionHistory) pVH.getNode();
-				VersionIterator vIter	= vh.getAllVersions();
-				Version v 				= null;
-				while ( vIter.hasNext() ) {
-					v	= vIter.nextVersion();
-				}
-				if ( v != null ) {
-					NodeIterator nIter		= v.getNodes();
-					if (nIter.hasNext() ) 
-						labelContainerNode		= nIter.nextNode();
-				}
+				if(labelContainerNode.hasProperty("jcr:childVersionHistory")){
+					pVH	= labelContainerNode.getProperty("jcr:childVersionHistory");
+					VersionHistory vh		= (VersionHistory) pVH.getNode();
+					VersionIterator vIter	= vh.getAllVersions();
+					Version v 				= null;
+					while ( vIter.hasNext() ) {
+						v	= vIter.nextVersion();
+					}
+					if ( v != null ) {
+						NodeIterator nIter		= v.getNodes();
+						if (nIter.hasNext() ) 
+							labelContainerNode		= nIter.nextNode();
+					}
+				}				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

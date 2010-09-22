@@ -166,7 +166,7 @@
 															<digi:trn key="aim:results">Results</digi:trn>&nbsp;
 															<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
 															<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
-															<html:select property="tempNumResults" styleClass="inp-text">
+															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity()">
 																<html:option value="10">10</html:option>
 																<html:option value="20">20</html:option>
 																<html:option value="50">50</html:option>

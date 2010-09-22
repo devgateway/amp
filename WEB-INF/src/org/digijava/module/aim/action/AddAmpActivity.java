@@ -1230,8 +1230,12 @@ private ActionForward showStep9(ActionMapping mapping,
 	            	Iterator it2 = eaForm.getContracts().getContracts().iterator();
 	            	while (it2.hasNext()) {
 	            		IPAContract contr = (IPAContract) it2.next();
-	            		totalEUContrib += contr.getTotalECContribIBAmount();
-	            		totalEUContrib += contr.getTotalECContribINVAmount();
+						if (contr.getTotalECContribIBAmount() != null) {
+							totalEUContrib += contr.getTotalECContribIBAmount();
+						}
+						if (contr.getTotalECContribINVAmount() != null) {
+							totalEUContrib += contr.getTotalECContribINVAmount();
+						}
 	            	}
 	            }
 	            eaForm.getContracts().setIpaBudget(totalEUContrib);

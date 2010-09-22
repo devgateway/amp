@@ -13,6 +13,43 @@ function closeWindow() {
 }
 
 function selectLocation(){
+  var locationLevelIndex=document.aimThemeForm.locationLevelIndex.value;
+  var msg="<digi:trn jsFriendly='true'>Please, select value</digi:trn>"
+  if(locationLevelIndex==2){
+      var regionLevelValue=document.aimThemeForm.impRegion;
+      if(regionLevelValue.value==-1){
+          regionLevelValue.focus();
+          alert(msg);
+          return;
+      }
+  }
+  else{
+      if(locationLevelIndex==3){
+      var zoneLevelValue=document.aimThemeForm.impZone;
+      if(zoneLevelValue.value==-1){
+          zoneLevelValue.focus();
+          alert(msg);
+          return;
+      }
+  }
+  else{
+       if(locationLevelIndex==4){
+      var woredaLevelValue=document.aimThemeForm.impWoreda;
+      if(woredaLevelValue.value==-1){
+          woredaLevelValue.focus();
+          alert(msg);
+          return;
+      }
+
+  }
+   else{
+          if(locationLevelIndex==-1){
+               alert(msg);
+              return;
+          }
+      }
+  }
+  }
   document.getElementById("indAction").value="add";
   document.aimThemeForm.target=window.opener.name;
   document.aimThemeForm.submit();

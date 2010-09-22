@@ -59,30 +59,50 @@ import org.digijava.module.aim.util.LocationUtil;
 	            if (themeForm.getFill().equals("zone")) {
 	              if (themeForm.getImpRegion() != null) {
                       AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
-	            	  themeForm.setZones(selectedRegion.getChildLocations());
+                      if (selectedRegion != null) {
+                          themeForm.setZones(selectedRegion.getChildLocations());
+                      } else {
+                          themeForm.setZones(null);
+                      }
 	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
 	            	  themeForm.setImpZone(null);
 	//            	  themeForm.setImpMultiZone(null);
 	//            	  themeForm.setImpMultiWoreda(null);
-	            	  themeForm.setImpWoreda(null);                
+	            	  themeForm.setImpWoreda(null); 
 	              }
 	            }
 	            else if (themeForm.getFill().equals("woreda")) {
 	              if (themeForm.getImpZone() != null) {
                       AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
                      AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-	            	  themeForm.setWoredas(selectedZone.getChildLocations());
-	            	  themeForm.setZones(selectedRegion.getChildLocations());
+                      if (selectedZone != null) {
+                          themeForm.setWoredas(selectedZone.getChildLocations());
+                      } else {
+                          themeForm.setWoredas(null);
+                      }
+                      if (selectedRegion != null) {
+                          themeForm.setZones(selectedRegion.getChildLocations());
+                      } else {
+                          themeForm.setZones(null);
+                      }
 	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
 	            	  themeForm.setImpWoreda(null);
 	              }
 	            }
 	            else if (themeForm.getFill().equals("woredaSelected")) {
 	              if (themeForm.getImpWoreda() != null) {
-                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                     AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
                      AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-	            	  themeForm.setWoredas(selectedZone.getChildLocations());
-	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	   if (selectedZone != null) {
+                          themeForm.setWoredas(selectedZone.getChildLocations());
+                      } else {
+                          themeForm.setWoredas(null);
+                      }
+                      if (selectedRegion != null) {
+                          themeForm.setZones(selectedRegion.getChildLocations());
+                      } else {
+                          themeForm.setZones(null);
+                      }
 	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
 	            	  //themeForm.setImpWoreda(null);
 	              }

@@ -56,6 +56,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.style.RtfFont;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * @author mihai
@@ -566,7 +567,7 @@ public class ProjectFicheExport extends Action {
 		
 		
 		
-		Collection indicatorsMe=MEIndicatorsUtil.getActivityIndicators(act.getAmpActivityId());
+		Collection indicatorsMe=IndicatorUtil.getActivityIndicatorHelperBeans(act.getAmpActivityId());
 
 		
 		//fische objectives:

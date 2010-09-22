@@ -47,6 +47,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 		
 		
 		/**
@@ -812,6 +814,138 @@ public class IndicatorUtil {
 		}
 		return result;
 	}
+    /**
+	 * Tries to find connection bean between activity and indicator.
+	 * If not found NULL is returned.
+	 * @param activityId
+	 * @param indicatorId
+	 * @return
+	 * @throws DgException
+	 */
+	public static IndicatorActivity findActivityIndicatorConnection(Long activityId,Long indicatorId) throws DgException{
+		IndicatorActivity result=null;
+		Session session=PersistenceManager.getRequestDBSession();
+		String oql="from "+IndicatorActivity.class.getName()+" conn ";
+		oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
+		try {
+			Query query=session.createQuery(oql);
+			query.setLong("actId", activityId);
+			query.setLong("indicId", indicatorId);
+			result=(IndicatorActivity)query.uniqueResult();
+		} catch (HibernateException e) {
+			throw new DgException("Error searching conenction for activity("+activityId+") and indicator("+indicatorId+")!",e);
+		}
+		return result;
+	}
+
+    public static void saveActivityIndicatorConnection(ActivityIndicator actInd) throws DgException {
+        IndicatorActivity indAct = null;
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            indAct = findActivityIndicatorConnection(actInd.getActivityId(), actInd.getIndicatorId());
+            Set<AmpIndicatorValue> values = indAct.getValues();
+            boolean hasRevisedValue = false;
+            if (values != null && !values.isEmpty()) {
+                for (AmpIndicatorValue value : values) {
+                    if (value.getValueType() == AmpIndicatorValue.BASE) {
+                        value.setValue(new Double(actInd.getBaseVal()));
+                        value.setComment(actInd.getBaseValComments());
+                        value.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+                    } else {
+                        if (value.getValueType() == AmpIndicatorValue.TARGET) {
+                            value.setValue(new Double(actInd.getTargetVal()));
+                            value.setComment(actInd.getTargetValComments());
+                            value.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+
+                        } else {
+                            if (value.getValueType() == AmpIndicatorValue.REVISED) {
+                                value.setValue(new Double(actInd.getRevisedTargetVal()));
+                                value.setComment(actInd.getRevisedTargetValComments());
+                                value.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+                                hasRevisedValue = true;
+                            }
+
+                        }
+                    }
+                }
+                if (!hasRevisedValue && actInd.getRevisedTargetValDate() != null) {
+                    AmpIndicatorValue indValRevised = null;
+                    if (actInd.getRevisedTargetVal() != null) {
+                        indValRevised = new AmpIndicatorValue();
+                        indValRevised.setValueType(AmpIndicatorValue.REVISED);
+                        indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
+                        indValRevised.setComment(actInd.getRevisedTargetValComments());
+                        indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+                        AmpIndicatorRiskRatings risk = null;
+                        if (actInd.getRisk() != null) {
+                            risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());
+                        }
+                        AmpCategoryValue categoryValue = null;
+                        if (actInd.getIndicatorsCategory() != null) {
+                            categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId());
+                        }
+                        indValRevised.setRisk(risk);
+                        indValRevised.setLogFrame(categoryValue);
+                        indValRevised.setIndicatorConnection(indAct);
+                        indAct.getValues().add(indValRevised);
+                    }
+
+                }
+            } else {
+                //indAct.setValues(new HashSet<AmpIndicatorValue>());
+                AmpIndicatorRiskRatings risk = null;
+                if (actInd.getRisk() != null) {
+                    risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());
+                }
+                AmpCategoryValue categoryValue = null;
+                if (actInd.getIndicatorsCategory() != null) {
+                    categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId());
+                }
+                AmpIndicatorValue indValTarget = null;
+                if (actInd.getTargetVal() != null) {
+                    indValTarget = new AmpIndicatorValue();
+                    indValTarget.setValueType(AmpIndicatorValue.TARGET);
+                    indValTarget.setValue(new Double(actInd.getTargetVal()));
+                    indValTarget.setComment(actInd.getTargetValComments());
+                    indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+                    indValTarget.setRisk(risk);
+                    indValTarget.setLogFrame(categoryValue);
+                    indValTarget.setIndicatorConnection(indAct);
+                    indAct.getValues().add(indValTarget);
+                }
+                AmpIndicatorValue indValBase = null;
+                if (actInd.getBaseVal() != null) {
+                    indValBase = new AmpIndicatorValue();
+                    indValBase.setValueType(AmpIndicatorValue.BASE);
+                    indValBase.setValue(new Double(actInd.getBaseVal()));
+                    indValBase.setComment(actInd.getBaseValComments());
+                    indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+                    indValBase.setRisk(risk);
+                    indValBase.setLogFrame(categoryValue);
+                    indValBase.setIndicatorConnection(indAct);
+                    indAct.getValues().add(indValBase);
+                }
+
+            }
+
+            session.saveOrUpdate(indAct);
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("error", e);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed", rbf);
+                }
+            }
+
+        }
+    }
+
 	
 	/**
 	 * Loads all indicators for activity.
@@ -993,6 +1127,7 @@ public class IndicatorUtil {
 		//if no revised value then use target as revised target 
 		if (bean.getRevisedTargetVal()==null){
 			bean.setRevisedTargetVal(bean.getTargetVal());
+            bean.setRevisedTargetValDate(bean.getTargetValDate());
 		}
 		
 		//calculate progress if possible 

@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.UpdateIndicatorValuesForm;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class GetActivityIndicators extends Action {
@@ -28,8 +29,8 @@ public class GetActivityIndicators extends Action {
 		HttpSession session = request.getSession();
 		
 		uIndValForm.setActivityId(uIndValForm.getActivityId());
-		//TODO INDIC this should be investigated, why is this list required, and how this can be changed with IndicatorUtil.
-		uIndValForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(
+		
+		uIndValForm.setIndicators(IndicatorUtil.getActivityIndicatorHelperBeans(
 				uIndValForm.getActivityId()));
 		
 		uIndValForm.setIndicatorId(null);

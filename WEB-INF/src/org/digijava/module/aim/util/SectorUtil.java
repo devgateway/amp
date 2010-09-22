@@ -1339,7 +1339,6 @@ public class SectorUtil {
 
         Session session = null;
         Long id = null;
-        Transaction tx = null;
         String queryString = null;
         Query qry = null;
         try {
@@ -1357,14 +1356,7 @@ public class SectorUtil {
             id=(Long)qry.uniqueResult();
 
         } catch (Exception ex) {
-            logger.error("Unable to save config to database " + ex.getMessage());
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
+            logger.error("Unable to get config from database ",ex);
             throw new DgException(ex);
 
         }

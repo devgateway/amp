@@ -399,7 +399,7 @@
 
 																		<c:set target="${urlParams}" property="indValId">
 
-																			<bean:write name="indicator" property="indicatorValId" />
+																			<bean:write name="indicator" property="indicatorId" />
 
 																		</c:set>
 

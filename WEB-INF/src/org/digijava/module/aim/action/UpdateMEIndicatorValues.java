@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.UpdateIndicatorValuesForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class UpdateMEIndicatorValues extends Action {
@@ -47,7 +48,7 @@ public class UpdateMEIndicatorValues extends Action {
 			}
 
 			actInd.setActivityId(uivForm.getActivityId());
-			MEIndicatorsUtil.saveMEIndicatorValues(actInd, 0);
+			IndicatorUtil.saveActivityIndicatorConnection(actInd);
 		} else if (event != null && event.equalsIgnoreCase("delete")) {
 			MEIndicatorsUtil.deleteMEIndicatorValues(uivForm.getIndicatorValId());			
 		}

@@ -601,6 +601,7 @@ public class MEIndicatorsUtil
 		return col;
 	}
 
+@Deprecated
 	public static Collection getActivityIndicators(Long actId)
 	{
 		Session session = null;

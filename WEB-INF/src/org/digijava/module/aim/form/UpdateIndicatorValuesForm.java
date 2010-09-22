@@ -13,9 +13,9 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	private Long indicatorId;
 	private Long indicatorValId;
 	private Long activityId;
-	private float baseVal;
-	private float targetVal;
-	private float revisedTargetVal;
+	private Float baseVal;
+	private Float targetVal;
+	private Float revisedTargetVal;
 	private String baseValDate;
 	private String targetValDate;
 	private String revisedTargetValDate;
@@ -41,13 +41,13 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	/**
 	 * @return Returns the baseVal.
 	 */
-	public float getBaseVal() {
+	public Float getBaseVal() {
 		return baseVal;
 	}
 	/**
 	 * @param baseVal The baseVal to set.
 	 */
-	public void setBaseVal(float baseVal) {
+	public void setBaseVal(Float baseVal) {
 		this.baseVal = baseVal;
 	}
 	/**
@@ -113,13 +113,13 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	/**
 	 * @return Returns the targetVal.
 	 */
-	public float getTargetVal() {
+	public Float getTargetVal() {
 		return targetVal;
 	}
 	/**
 	 * @param targetVal The targetVal to set.
 	 */
-	public void setTargetVal(float targetVal) {
+	public void setTargetVal(Float targetVal) {
 		this.targetVal = targetVal;
 	}
 	/**
@@ -137,13 +137,13 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	/**
 	 * @return Returns the revisedTargetVal.
 	 */
-	public float getRevisedTargetVal() {
+	public Float getRevisedTargetVal() {
 		return revisedTargetVal;
 	}
 	/**
 	 * @param revisedTargetVal The revisedTargetVal to set.
 	 */
-	public void setRevisedTargetVal(float revisedTargetVal) {
+	public void setRevisedTargetVal(Float revisedTargetVal) {
 		this.revisedTargetVal = revisedTargetVal;
 	}
 	/**

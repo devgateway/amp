@@ -335,18 +335,14 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 				</tr>
 				<tr>					
 					<td colspan="2">
+						<c:set var="trnadd"><digi:trn>Add Field</digi:trn></c:set>
+				    	<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnadd}" onclick="addNewField()">
+						&nbsp;
 						<c:set var="trndel"><digi:trn>Remove Selected Fields</digi:trn></c:set>
 				    	<input type="button" style="font-family:verdana;font-size:11px;" name="delValBtn" value="${trndel}" onclick="deleteFields()">
 				    	&nbsp;
-						<c:set var="trnadd"><digi:trn>Add New Field</digi:trn></c:set>
-				    	<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnadd}" onclick="addNewField()">			    	
-				    	
-					</td>
-				</tr>
-							
-				<tr>
-					<td colspan="2">
 						<html:submit onclick="return validateDoc()"><digi:trn>Save Template</digi:trn></html:submit>
+				    	
 					</td>
 				</tr>
 			</table>

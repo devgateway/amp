@@ -1,12 +1,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/content" prefix="content" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:context name="displayThumbnail" property="/content/displayThumbnail.do" />
 <digi:secure authenticated="false">
   <c:set var="thumbnailCount">
-    <content:getThumbnailCount pageCode="${param.pageCode}"/>
+	  ${param.thumbnailCount}
   </c:set>
 </digi:secure>
 <digi:secure authenticated="true">

@@ -1,6 +1,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/content" prefix="content" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<digi:instance property="contentForm" />
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -54,26 +55,17 @@
 
 </script>
 
-<c:if test="${empty param.c}">
-	<c:set var="pageCode"><content:home/></c:set>
-</c:if>
-<c:if test="${!empty param.c}">
-	<c:set var="pageCode">${param.c}</c:set>
-</c:if>
-<c:set var="layout">
-	<content:get pageCode="${pageCode}" attribute="Layout"/>
-</c:set>
-<c:set var="htmlblock_1">
-	<content:get pageCode="${pageCode}" attribute="Htmlblock_1"/>
-</c:set>
-<c:set var="htmlblock_2">
-	<content:get pageCode="${pageCode}" attribute="Htmlblock_2"/>
-</c:set>
+<c:set var="layout" value="${contentForm.layout}"/>
+<c:set var="htmlblock_1" value="${contentForm.htmlblock_1}"/>
+<c:set var="htmlblock_2" value="${contentForm.htmlblock_2}"/>
+<c:set var="pageCode" value="${contentForm.pageCode}"/>
+<c:set var="thumbnailCount" value="${fn:length(contentForm.contentThumbnails)}"/>
 
 <c:import url="/repository/content/view/layout_${layout}.jsp">
-	<c:param name="pageCode" value="${pageCode}"/>
 	<c:param name="htmlblock_1" value="${htmlblock_1}"/>
 	<c:param name="htmlblock_2" value="${htmlblock_2}"/>
+	<c:param name="pageCode" value="${pageCode}"/>
+	<c:param name="thumbnailCount" value="${thumbnailCount}"/>
 </c:import>
 
 

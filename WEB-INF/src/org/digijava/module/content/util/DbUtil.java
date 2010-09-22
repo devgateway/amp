@@ -21,152 +21,158 @@ import org.hibernate.Transaction;
 import org.hibernate.type.StringType;
 
 public class DbUtil {
-    private static Logger logger = Logger.getLogger(DbUtil.class);
+	private static Logger logger = Logger.getLogger(DbUtil.class);
 
-    public DbUtil() {
-    }
-    
+	public DbUtil() {
+	}
 
-    
-    public static Collection<AmpContentItem> getAllContents() {
-        Session session = null;
-        Query qry = null;
-        Collection<AmpContentItem> contents = new ArrayList<AmpContentItem>();
+	public static Collection<AmpContentItem> getAllContents() {
+		Session session = null;
+		Query qry = null;
+		Collection<AmpContentItem> contents = new ArrayList<AmpContentItem>();
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select ac from " + AmpContentItem.class.getName() + " ac";
-            qry = session.createQuery(queryString);
-            contents = qry.list();
-        } catch (Exception e) {
-            logger.error("Unable to get all contents", e);
-        }
-        return contents;
-    }
-    
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select ac from "
+					+ AmpContentItem.class.getName() + " ac";
+			qry = session.createQuery(queryString);
+			contents = qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get all contents", e);
+		}
+		return contents;
+	}
+
 	public static AmpContentItem getContentItem(Long id) {
-        Session session = null;
-        AmpContentItem ampContentItem = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            ampContentItem = (AmpContentItem) session.load(AmpContentItem.class, id);
-        } catch (Exception e) {
-            logger.error("Unable to get object of class " + AmpContentItem.class.getName() + " width id=" + id + ". Error was:" + e);
-        } 
-        return ampContentItem;
+		Session session = null;
+		AmpContentItem ampContentItem = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			ampContentItem = (AmpContentItem) session.load(
+					AmpContentItem.class, id);
+		} catch (Exception e) {
+			logger.error("Unable to get object of class "
+					+ AmpContentItem.class.getName() + " width id=" + id
+					+ ". Error was:" + e);
+		}
+		return ampContentItem;
 	}
 
 	public static AmpContentItem getContentItemByPageCode(String pageCode) {
-        Session session = null;
-        AmpContentItem ampContentItem = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select aci.* from amp_content_item aci " +
-			"where aci.pageCode = :pageCode";
+		Session session = null;
+		AmpContentItem ampContentItem = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select aci.* from amp_content_item aci "
+					+ "where aci.pageCode = :pageCode";
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpContentItem.class);
 			qry.setParameter("pageCode", pageCode, new StringType());
 			Iterator<AmpContentItem> itr = qry.list().iterator();
-            if (itr.hasNext()) {
-            	ampContentItem = (AmpContentItem) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get object of class " + AmpContentItem.class.getName() + " width pageCode=" + pageCode + ". Error was:" + e);
-        } 
-        return ampContentItem;
+			if (itr.hasNext()) {
+				ampContentItem = (AmpContentItem) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get object of class "
+					+ AmpContentItem.class.getName() + " width pageCode="
+					+ pageCode + ". Error was:" + e);
+		}
+		return ampContentItem;
 	}
 
 	public static AmpContentItem getHomePage() {
-        Session session = null;
-        AmpContentItem ampContentItem = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select aci.* from amp_content_item aci " +
-			"where aci.isHomepage = true";
+		Session session = null;
+		AmpContentItem ampContentItem = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select aci.* from amp_content_item aci "
+					+ "where aci.isHomepage = true";
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpContentItem.class);
 			Iterator<AmpContentItem> itr = qry.list().iterator();
-            if (itr.hasNext()) {
-            	ampContentItem = (AmpContentItem) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get object of class " + AmpContentItem.class.getName() + " width homepage pageCode. Error was:" + e);
-        } 
-        return ampContentItem;
+			if (itr.hasNext()) {
+				ampContentItem = (AmpContentItem) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get object of class "
+					+ AmpContentItem.class.getName()
+					+ " width homepage pageCode. Error was:" + e);
+		}
+		
+		return ampContentItem;
 	}
 
 	public static void save(AmpContentItem contentItem) {
-        Session session = null;
-        Transaction tx = null;
+		Session session = null;
+		Transaction tx = null;
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
-            if(contentItem.getContentThumbnails() != null){
-                Iterator itr = contentItem.getContentThumbnails().iterator();
-                while(itr.hasNext()){
-                	org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail)itr.next();
-                	thumb.setContentItem(contentItem);
-                }
-            }
-            session.save(contentItem);
-            tx.commit();
-        } catch (Exception e) {
-            logger.error("Unable to save content", e);
-        }
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			if (contentItem.getContentThumbnails() != null) {
+				Iterator itr = contentItem.getContentThumbnails().iterator();
+				while (itr.hasNext()) {
+					org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail) itr
+							.next();
+					thumb.setContentItem(contentItem);
+				}
+			}
+			session.save(contentItem);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to save content", e);
+		}
 
-		
 	}
-    public static void delete(AmpContentItem contentItem) {
-        Session sess = null;
-        Transaction tx = null;
 
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
-            sess.delete(contentItem);
-            tx.commit();
-        } catch (Exception e) {
-            if (e instanceof JDBCException)
-                throw (JDBCException) e;
-            logger.error("Exception " + e.toString());
-            try {
-                tx.rollback();
-            } catch (HibernateException ex) {
-                logger.error("rollback() failed");
-                logger.error(ex.toString());
-            }
-        }
-    }
+	public static void delete(AmpContentItem contentItem) {
+		Session sess = null;
+		Transaction tx = null;
 
-
+		try {
+			sess = PersistenceManager.getRequestDBSession();
+			tx = sess.beginTransaction();
+			sess.delete(contentItem);
+			tx.commit();
+		} catch (Exception e) {
+			if (e instanceof JDBCException)
+				throw (JDBCException) e;
+			logger.error("Exception " + e.toString());
+			try {
+				tx.rollback();
+			} catch (HibernateException ex) {
+				logger.error("rollback() failed");
+				logger.error(ex.toString());
+			}
+		} 
+	}
 
 	public static void removeThumbnails(AmpContentItem contentItem,
 			Set<AmpContentItemThumbnail> contentThumbnailsRemoved) {
-        Session sess = null;
-        Transaction tx = null;
+		Session sess = null;
+		Transaction tx = null;
 
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
-            Iterator<AmpContentItemThumbnail> itr = contentThumbnailsRemoved.iterator();
-            while(itr.hasNext())
-            {
-            	sess.delete(itr.next());
-            }
-            tx.commit();
-        } catch (Exception e) {
-            if (e instanceof JDBCException)
-                throw (JDBCException) e;
-            logger.error("Exception " + e.toString());
-            try {
-                tx.rollback();
-            } catch (HibernateException ex) {
-                logger.error("rollback() failed");
-                logger.error(ex.toString());
-            }
-        }
-		
+		try {
+			sess = PersistenceManager.getRequestDBSession();
+			tx = sess.beginTransaction();
+			Iterator<AmpContentItemThumbnail> itr = contentThumbnailsRemoved
+					.iterator();
+			while (itr.hasNext()) {
+				sess.delete(itr.next());
+			}
+			tx.commit();
+		} catch (Exception e) {
+			if (e instanceof JDBCException)
+				throw (JDBCException) e;
+			logger.error("Exception " + e.toString());
+			try {
+				tx.rollback();
+			} catch (HibernateException ex) {
+				logger.error("rollback() failed");
+				logger.error(ex.toString());
+			}
+		} 
+
 	}
 
 }

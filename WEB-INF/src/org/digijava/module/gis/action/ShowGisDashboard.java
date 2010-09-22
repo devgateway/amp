@@ -71,7 +71,7 @@ public class ShowGisDashboard extends Action {
 
 		Collection<LabelValueBean> allDonors = new ArrayList <LabelValueBean>() ; 
 		
-		List allDbDonors = DbUtil.getAllDonors();
+		List allDbDonors = DbUtil.getFundingDonors();
 		
 		for (Object donorItem : allDbDonors) {
 			Object[] donorNameId = (Object[]) donorItem;

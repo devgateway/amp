@@ -19,7 +19,9 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
@@ -216,6 +218,24 @@ public class DbUtil {
         return retVal;
     }
     
+    public static List getFundingDonors() {
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            String queryString = null;    
+            queryString="select o.name, o.ampOrgId from " 
+            	+ AmpOrganisation.class.getName()+ " o "
+            	+ "where o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() +" f)";
+                q = session.createQuery(queryString);
+            
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector funding donors from DB", ex);
+        }
+        return retVal;
+    }
     public static List getSectorFoundings(Long sectorId) {
 
         List subSectorIds = null;

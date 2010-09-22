@@ -140,6 +140,9 @@ $(document).ready(function(){
                       </tr>
                     </c:if>
                     <c:if test="${fn:length(requestScope.contentList) gt 0}">
+                    <c:set var="confirmationTrn">
+                    	<digi:trn jsFriendly="true">Are you sure?</digi:trn>
+                    </c:set>
                       <c:forEach  var="content" items="${requestScope.contentList}">
                         <tr bgColor=#f4f4f2>
                           <td align="center"> ${content.title} </td>
@@ -160,7 +163,7 @@ $(document).ready(function(){
                           	<digi:link href="/contentManager.do?action=edit&id=${content.ampContentItemId}">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit content</digi:trn>"/>
                             </digi:link>
-                          	<digi:link href="/contentManager.do?action=delete&id=${content.ampContentItemId}" onclick="return confirm('<digi:trn>Are you sure?</digi:trn>');">
+                          	<digi:link href="/contentManager.do?action=delete&id=${content.ampContentItemId}" onclick="return confirm('${confirmationTrn}');">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete content</digi:trn>"/>
                             </digi:link>
                             <c:if test="${content.isHomepage ne true}">

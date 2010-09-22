@@ -2132,9 +2132,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     
 	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
-			<td></td>
-			<td>
-				<table width="60%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white" align="center">
+            <td colspan="2">
+				<table width="600px" cellSpacing=0 cellPadding=0 border="0" bgcolor="white" align="left">
 					<tr>									
 						<td>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />

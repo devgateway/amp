@@ -291,7 +291,7 @@ div.fakefile2 input {
                         </tr>
                     <c:forEach  var="content" items="${contentForm.sortedContentThumbnails}" varStatus="loop">
 						<tr id="tr_path_thumbnail">
-                        <td><img src="/content/displayThumbnail.do?index=${loop.index}&pageCode=${contentForm.pageCode}" align="middle" width="20" style="border:1px solid #cecece">
+                        <td><img src="/content/displayThumbnail.do?index=${loop.index}&pageCode=${contentForm.pageCode}&isAdmin=true" align="middle" width="20" style="border:1px solid #cecece">
                         </td>
                         <td>${content.thumbnailLabel}</td>
                         <td>${content.optionalFileName}</td>
@@ -312,7 +312,7 @@ div.fakefile2 input {
                         	<c:if test="${loop.index == fn:length(contentForm.sortedContentThumbnails)-1}">
                             	&nbsp;&nbsp;&nbsp;&nbsp;
                             </c:if>
-                          	<a onclick="doAction(${loop.index}, 'deleteThumb', true">
+                          	<a onclick="doAction(${loop.index}, 'deleteThumb', true)">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete thumbnail</digi:trn>"/>
                             </a>
                         </td>

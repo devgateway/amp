@@ -256,16 +256,17 @@ a.itr:hover {
 				                           </tr>
                                           </c:forEach>
                                         </c:if>
-                                        <tr>
-                                          <td colspan="6" align="center">
-                                          	<field:display name="Add New Indicator" feature="Admin">
-                                            	<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
-                                            </field:display>
-                                          </td>
-                                        </tr>
+                                       
                                       </table>
                                     </td>
                                   </tr>
+                                  <tr>
+                                      <td colspan="6" align="center">
+                                  <field:display name="Add New Indicator" feature="Admin">
+                                      <input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                  </field:display>
+                                </td>
+                                </tr>
                                 </table>
                               </td>
                             </tr>

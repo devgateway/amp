@@ -24,6 +24,7 @@
 	white-space: nowrap;
 	font-family:  Arial, sans-serif;
 	font-size: 10px;
+	line-height:1.5em !important;
 }
 .yuiampmenubar ul {
 	*zoom: 1;

@@ -1,8 +1,8 @@
 package org.digijava.module.message.triggers;
 
+import java.net.URLDecoder;
+
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
 
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -28,7 +28,8 @@ public abstract class AbstractResourceShare extends Trigger {
 		Event e = getEvent(); 
 		Node node=(Node) source;
 	    try {
-			e.getParameters().put(PARAM_NAME,DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_TITLE).getString());
+	    	String name	= URLDecoder.decode( DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_TITLE).getString() ,"UTF-8");
+			e.getParameters().put(PARAM_NAME,name);
 			e.getParameters().put(PARAM_SHARED_BY, DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR).getString());
 		    e.getParameters().put(PARAM_CREATOR_TEAM, new Long (DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR_TEAM).getLong()));
 		} catch (Exception e1) {

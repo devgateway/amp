@@ -100,7 +100,7 @@ div.fakefile2 input {
 -->
 </style>
 <digi:instance property="contentForm" />
-<digi:form action="/contentManager.do" method="post" enctype="multipart/form-data">
+<digi:form action="/contentManager.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=1000>
   <tr>
     <td width=14>&nbsp;</td>
@@ -149,19 +149,9 @@ div.fakefile2 input {
                         <table border=0 cellPadding=5 cellSpacing=0 width="100%">
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=left class=title noWrap colspan="2"><!-- digi:errors /-->
-                              <%--                              <logic:notEmpty name="contentForm" property="errors"> <font color="red">
-                                <ul>
-                                  <logic:iterate id="element" name="contentForm" property="errors">
-                                    <li>
-                                      <digi:trn key="${element.key}">
-                                        <bean:write name="element" property="value" />
-                                      </digi:trn>
-                                    </li>
-                                  </logic:iterate>
-                                </ul>
-                                </font> </logic:notEmpty>--%>
-                            </td>
+                            <td align=left class=title noWrap colspan="2">
+								<digi:errors/>                            
+							</td>
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
@@ -373,8 +363,6 @@ div.fakefile2 input {
 
 <script language="javascript">
 $(document).ready( function() {
-
-
 	$('input:radio[name=layout]').each( function(){
 		$(this).click(function () {
 			//When clicking the radio buttons hide every div with layout
@@ -394,19 +382,27 @@ $(document).ready( function() {
 		editKey = href.substring(0, href.indexOf("&"));
 		$(this).attr("href", "javascript:edit('" + editKey + "');");
 	});
-
+	try
+	{
+		setStripsTable("dataTable", "tableEven", "tableOdd");
+		setHoveredTable("dataTable", true);
+	}
+	catch(e) {}
 });
+</script>
+
+<script language="javascript">
 
 function edit(key) {
 	document.contentForm.action = "/content/contentManager.do?action=add";
-	document.contentForm.target = "_self"
+	document.contentForm.target = "_self";
 	document.contentForm.editKey.value = key;
 	document.contentForm.submit();
 }
 
 function upload() {
 	document.contentForm.action = "/content/contentManager.do?action=upload";
-	document.contentForm.target = "_self"
+	document.contentForm.target = "_self";
 	document.contentForm.submit();
 }
 function doAction(index, action, confirmation) {
@@ -415,7 +411,7 @@ function doAction(index, action, confirmation) {
 		if (!ret) return false; 
 	}
 	document.contentForm.action = "/content/contentManager.do?action=" + action +"&index=" + index;
-	document.contentForm.target = "_self"
+	document.contentForm.target = "_self";
 	document.contentForm.submit();
 }
 
@@ -449,18 +445,23 @@ function setHoveredTable(tableId, hasHeaders) {
 		}
 		rows = null;
 	}
-	
-
-
 }
 
-$(document).ready(function(){
-	try
-	{
-		setStripsTable("dataTable", "tableEven", "tableOdd");
-		setHoveredTable("dataTable", true);
+function validateForm(){
+	var strError = "";
+	//Check Title and pageCode
+	if($("input[name=title]").val() == ""){
+		strError = "<digi:trn jsFriendly='true'>Title</digi:trn>\n";
 	}
-	catch(e) {}
-});
+	if($("input[name=pageCode]").val() == ""){
+		strError = strError + "<digi:trn jsFriendly='true'>Page Code</digi:trn>\n";
+	}
+	if (strError != ""){
+		alert("Please complete the following fields:\n" + strError);
+		return false;
+	}
+	return true;
+}
+
 </script>
 </digi:form>

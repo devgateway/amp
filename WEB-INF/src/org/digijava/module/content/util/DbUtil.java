@@ -175,4 +175,12 @@ public class DbUtil {
 
 	}
 
+	public static boolean pageCodeExists(String pageCode, Long contentId) {
+		AmpContentItem contentItem = getContentItemByPageCode(pageCode);
+		if (contentItem != null && contentId != null && contentItem.getAmpContentItemId() != contentId){
+			return true;
+		}
+		return false;
+	}
+
 }

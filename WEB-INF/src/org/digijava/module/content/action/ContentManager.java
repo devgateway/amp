@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -281,8 +282,19 @@ public class ContentManager extends DispatchAction {
 	public ActionForward save(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
 
 		ContentForm contentForm = (ContentForm) form;
+		//Check if pageCode already exists before saving
+		if(DbUtil.pageCodeExists(contentForm.getPageCode(), contentForm.getAmpContentFormId()))
+		{
+	    	ActionErrors errors=new ActionErrors();
+	    	errors.add("pageCodeExists", new ActionMessage("error.content.pageCodeExists"));
+        	if(!errors.isEmpty()){
+        		saveErrors(request, errors);
+        		return mapping.findForward("addEdit");
+        	}
+		}
 
 		AmpContentItem contentItem;
 		if (contentForm.getAmpContentFormId() != null

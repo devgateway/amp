@@ -401,9 +401,11 @@ function edit(key) {
 }
 
 function upload() {
-	document.contentForm.action = "/content/contentManager.do?action=upload";
-	document.contentForm.target = "_self";
-	document.contentForm.submit();
+	if(validateUpload()){
+		document.contentForm.action = "/content/contentManager.do?action=upload";
+		document.contentForm.target = "_self";
+		document.contentForm.submit();
+	}
 }
 function doAction(index, action, confirmation) {
 	if(confirmation){
@@ -457,7 +459,14 @@ function validateForm(){
 		strError = strError + "<digi:trn jsFriendly='true'>Page Code</digi:trn>\n";
 	}
 	if (strError != ""){
-		alert("Please complete the following fields:\n" + strError);
+		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
+		return false;
+	}
+	return true;
+}
+function validateUpload(){
+	if($("input[name=tempContentThumbnail]").val() == ""){
+		alert("<digi:trn jsFriendly='true'>Please select thumbnail to upload</digi:trn>\n");
 		return false;
 	}
 	return true;

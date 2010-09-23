@@ -435,6 +435,11 @@ public class ChartWidgetUtil {
 		format.setMaximumFractionDigits(filter.getDivideThousandsDecimalPlaces());
         format.setMinimumIntegerDigits(1);
 
+        DecimalFormat formatAxis = FormatHelper.getDecimalFormat();
+        formatAxis.setMinimumFractionDigits(0);
+		formatAxis.setMaximumFractionDigits(3);
+        formatAxis.setMinimumIntegerDigits(1);
+
 		DecimalFormat toolTipformat = FormatHelper.getDecimalFormat();
 		toolTipformat.setMaximumFractionDigits(5);
         toolTipformat.setMinimumIntegerDigits(1);
@@ -479,7 +484,7 @@ public class ChartWidgetUtil {
 		plot.setAxisOffset(new RectangleInsets(0,2,2,0));
 
 		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
-		numberAxis.setNumberFormatOverride(format);
+		numberAxis.setNumberFormatOverride(formatAxis);
 		numberAxis.setLabelFont(plainFont);
 		Range oldRange = numberAxis.getRange();
 		Range newRange = Range.expand(oldRange, 0, 0.1);

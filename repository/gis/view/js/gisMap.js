@@ -311,9 +311,15 @@
         
         jQuery.fn.dataForSectorReadyFin = function(data, textStatus) {
                 actionSectorData = false;
-                totalCommitmentFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
-                totalDisbursementFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
-                totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+                if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment")){
+                	totalCommitmentFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
+                }
+                if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement")){
+                	totalDisbursementFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
+                }
+                if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure")){
+                	totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+                }
                 
                 
                 var regionDataList = data.getElementsByTagName('region');
@@ -387,9 +393,15 @@
 		
 		jQuery.fn.dataForSectorReady = function(data, textStatus) {
 				actionSectorData = false;
-				totalCommitmentFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
-				totalDisbursementFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
-				totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+				if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value){
+					totalCommitmentFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
+				}
+				if(data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value){
+					totalDisbursementFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
+				}
+				if(data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value){
+					totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+				}
 				
 				
 				var regionDataList = data.getElementsByTagName('region');
@@ -854,10 +866,15 @@
                 document.getElementById("tooltipDonorContainer").innerHTML = selected_text;
             }
         
-        
-			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
-			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund;
-			document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
+            if(document.getElementById("tooltipTotalCommitmentContainer")){
+            	document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
+            }
+            if(document.getElementById("tooltipTotalDisbursementContainer")){
+				document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund;
+            }
+			if (document.getElementById("tooltipTotalExpenditureContainer")){
+				document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
+			}
 		
 			var regData = getRegFounding(regCode);
 		
@@ -866,10 +883,15 @@
 				note="<font color='red'> (*)</font>";
 			}
 		
-		
-			document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0] + note;
-			document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1] + note;
-			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
+			if(document.getElementById("tooltipCurrentCommitmentContainer")){
+				document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0] + note;
+			}
+			if (document.getElementById("tooltipCurrentDisbursementContainer")){
+				document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1] + note;
+			}
+			if(document.getElementById("tooltipCurrentExpenditureContainer")){
+				document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
+			}
 			
 			
             if (document.getElementById("tooltipIndUnit") != null) {

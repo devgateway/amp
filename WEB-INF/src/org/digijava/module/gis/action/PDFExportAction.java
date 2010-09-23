@@ -1144,6 +1144,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                     layoutResourcesAtAGlance.addCell(
                             layoutResourcesAtAGlanceTable3alone);
                 }
+             else {
+            layoutResourcesAtAGlance.addCell("");
+        }
         layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutResourcesAtAGlanceTable3alone	.addCell(layoutResourcesAtAGlanceTable3);
 		layoutCell.addElement(layoutResourcesAtAGlance);

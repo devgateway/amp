@@ -187,9 +187,22 @@ public class EditTag
 		} catch (WorkerException e) {
 			e.printStackTrace();
 		}
+		//Avoids cutting HTML in half
+		String cutText = text;
+		cutText = cutText.substring(0, maxLength);
+		int openMark = cutText.lastIndexOf('<');
+		if (openMark != -1)
+		{
+			int closeMark = cutText.lastIndexOf('>');
+			if (openMark > closeMark)
+			{
+				cutText = cutText.substring(0, openMark);
+			}
+		}
+		
     	String ret = "<div id='fullTextDiv' style='display: none'> " + text + " </div>";
     	ret += "<div id='showPartTextDiv' style='display: none'><a href='javascript:' onClick='showPartText()'> << " + back + "</a></div>";
-    	ret += "<div id='partTextDiv'>" + text.substring(0, maxLength) + "</div>";
+    	ret += "<div id='partTextDiv'>" + cutText + "</div>";
     	ret += "<div id='showFullTextDiv'><a href='javascript:' onClick='showFullText()'>" + readMore + " >> </a></div>";
     	ret += "<script language='javascript' type='text/javascript'>";
     

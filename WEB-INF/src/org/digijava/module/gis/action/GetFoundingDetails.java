@@ -347,19 +347,12 @@ public class GetFoundingDetails extends Action {
 
                         XML root = new XML("funding");
 
-                        root.addAttribute("totalCommitment",
-                                          formatter.format(totalFunding.
-                                getCommitment()));
-                        root.addAttribute("totalDisbursement",
-                                          formatter.format(totalFunding.
-                                getDisbursement()));
-                        root.addAttribute("totalExpenditure",
-                                          formatter.format(totalFunding.
-                                getExpenditure()));
+                        root.addAttribute("totalCommitment",formatter.format(totalFunding.getCommitment()));
+                        root.addAttribute("totalDisbursement",formatter.format(totalFunding.getDisbursement()));
+                        root.addAttribute("totalExpenditure",formatter.format(totalFunding.getExpenditure()));
 
                         segmendDataInfo.addElement(root);
-                        Iterator locFoundingMapIt = fundingLocationMap.keySet().
-                                                    iterator();
+                        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                         while (locFoundingMapIt.hasNext()) {
                             String key = (String) locFoundingMapIt.next();
                             FundingData ammount = (FundingData) fundingLocationMap.
@@ -687,10 +680,8 @@ public class GetFoundingDetails extends Action {
                             indUnit = "N/A";
                         }
 
-                        request.getSession().setAttribute("AMP_INDICATOR_UNIT",
-                                indUnit);
-                        request.getSession().setAttribute(
-                                "AMP_INDICATOR_VALUES", segmentDataList);
+                        request.getSession().setAttribute("AMP_INDICATOR_UNIT",indUnit);
+                        request.getSession().setAttribute("AMP_INDICATOR_VALUES", segmentDataList);
                     }
 
                     List hilightData = prepareHilightSegments(segmentDataList,
@@ -756,36 +747,20 @@ public class GetFoundingDetails extends Action {
 
                     XML root = new XML("funding");
 
-                    root.addAttribute("totalCommitment",
-                                      formatter.format(totalFunding.
-                            getCommitment()));
-                    root.addAttribute("totalDisbursement",
-                                      formatter.format(totalFunding.
-                            getDisbursement()));
-                    root.addAttribute("totalExpenditure",
-                                      formatter.format(totalFunding.
-                            getExpenditure()));
+                    root.addAttribute("totalCommitment",formatter.format(totalFunding.getCommitment()));
+                    root.addAttribute("totalDisbursement",formatter.format(totalFunding.getDisbursement()));
+                    root.addAttribute("totalExpenditure",formatter.format(totalFunding.getExpenditure()));
 
                     segmendDataInfo.addElement(root);
-                    Iterator locFoundingMapIt = fundingLocationMap.keySet().
-                                                iterator();
+                    Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                     while (locFoundingMapIt.hasNext()) {
                         String key = (String) locFoundingMapIt.next();
-                        FundingData ammount = (FundingData) fundingLocationMap.
-                                              get(key);
+                        FundingData ammount = (FundingData) fundingLocationMap.get(key);
                         XML regionData = new XML("region");
                         regionData.addAttribute("reg-code", key);
-                        regionData.addAttribute("fundingCommitment",
-                                                formatter.
-                                                format(ammount.getCommitment().
-                                intValue()));
-                        regionData.addAttribute("fundingDisbursement",
-                                                formatter.format(ammount.
-                                getDisbursement().intValue()));
-                        regionData.addAttribute("fundingExpenditure",
-                                                formatter.
-                                                format(ammount.getExpenditure().
-                                intValue()));
+                        regionData.addAttribute("fundingCommitment",formatter.format(ammount.getCommitment().intValue()));
+                        regionData.addAttribute("fundingDisbursement",formatter.format(ammount.getDisbursement().intValue()));
+                        regionData.addAttribute("fundingExpenditure",formatter.format(ammount.getExpenditure().intValue()));
                         root.addElement(regionData);
                     }
                     segmendDataInfo.output(sos);
@@ -863,11 +838,9 @@ public class GetFoundingDetails extends Action {
                         DateInterval year = (DateInterval) yearIt.next();
                         XML yearNode = new XML("interval");
                         yearNode.addAttribute("start-value", year.getStartTime());
-                        yearNode.addAttribute("start-caption",
-                                              year.getFormatedStartTime());
+                        yearNode.addAttribute("start-caption",year.getFormatedStartTime());
                         yearNode.addAttribute("end-value", year.getEndTime());
-                        yearNode.addAttribute("end-caption",
-                                              year.getFormatedEndTime());
+                        yearNode.addAttribute("end-caption",year.getFormatedEndTime());
                         root.addElement(yearNode);
                     }
                     availYearsXmlDoc.output(sos);

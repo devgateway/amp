@@ -767,3 +767,7 @@
 <field:display name="Budget Sector" feature="Budget"></field:display>
 <field:display name="Budget Organization" feature="Budget"></field:display>
 <field:display name="Budget Program" feature="Budget"></field:display>
+
+<field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
+<field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
+<field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>

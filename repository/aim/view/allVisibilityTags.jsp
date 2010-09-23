@@ -965,3 +965,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contracting Amendments" feature="Contracting"></field:display> 
 <field:display name="Contracting Add Amendments" feature="Contracting"></field:display>
 <field:display name="Contracting Remove Amendments" feature="Contracting"></field:display>
+
+<field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
+<field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
+<field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>

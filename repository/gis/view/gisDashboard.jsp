@@ -306,9 +306,15 @@
         </td>
         <td>
             <select id="fundingType" onChange="" style="width:350px" value="commitment">
-            <option value="commitment"><digi:trn>Commitment</digi:trn></option>
-            <option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
-            <option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
+            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
+            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
+            </field:display>
+            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
+            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
+            </field:display>
+            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
+            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
+            </field:display>
         </select>
         </td>
     </tr>
@@ -381,34 +387,45 @@
 		    <tr>
 			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
 		    </tr>
+		    <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
 			    <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
 		    </tr>
+		    </field:display>
+		    <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
 		    </tr>
+		    </field:display>
+		    <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
 		    </tr>
-		    
+		    </field:display>
 		    <tr>
 			    <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
 		    </tr>
+		     <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
 		    </tr>
+		    </field:display>
+		     <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
 		    </tr>
+		    </field:display>
+		     <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
 			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
 		    </tr>
+		    </field:display>
 		    <tr>
 			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Indicator</digi:trn></td>
 		    </tr>
@@ -449,34 +466,45 @@
             <tr>
                 <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
             </tr>
+            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
                 <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
             </tr>
+            </field:display>
+            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
                 <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
             </tr>
+            </field:display>
+            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
                 <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
             </tr>
-            
+            </field:display>
             <tr>
                 <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
             </tr>
+            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
                 <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
             </tr>
+            </field:display>
+            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
                 <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
             </tr>
+            </field:display>
+            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
                 <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
                 <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
             </tr>
+            </field:display>
         </table>
         </div> 
     </div>

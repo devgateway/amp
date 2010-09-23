@@ -167,7 +167,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
      	body.appendChild(tr1);
       </feature:display>
       
-      if("${teamType}"!='Management'){
+      //if("${teamType}"!='Management'){
      var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
@@ -177,7 +177,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       	tr1.appendChild(td1);
      	 body.appendChild(tr1);
       </feature:display>
-  	}
+  	//}
      
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');

@@ -1028,51 +1028,44 @@ $(document).ready(function(){
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
 						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" onclick="return unCheckMessages()">
-						<digi:trn key="aim:portfolio">
-						Portfolio
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:MessageModule">
-						Message Module 
-						</digi:trn>
-                                                &nbsp;&gt;&nbsp;
-                                                 <c:choose>
-	                                                <c:when test="${messageForm.tabIndex==1}">
-	                                                   <digi:trn key="message:Messages">Messages</digi:trn>
-	                                                </c:when>
-	                                                <c:when test="${messageForm.tabIndex==2}">
-	                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
-	                                                </c:when>
-	                                                <c:when test="${messageForm.tabIndex==3&&sessionScope.currentMember.teamAccessType != 'Management'}">
-	                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
-	                                                </c:when>
-	                                                <c:otherwise>
-	                                                   <digi:trn key="message:ebents">Calendar Events</digi:trn>
-	                                                </c:otherwise>
-                                                </c:choose>
-                                                <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
-	                                                &nbsp;&gt;&nbsp;
-	                                                <c:choose>
-		                                                 <c:when test="${messageForm.childTab=='inbox'}">
-		                                                    <digi:trn key="message:inbox">Inbox</digi:trn>
-		                                                </c:when>
-		                                                <c:when test="${messageForm.childTab=='sent'}">
-		                                                  <digi:trn key="message:sent">Sent</digi:trn>
-		                                                </c:when>
-		                                                <c:otherwise>
-		                                                     <digi:trn key="message:draft">Draft</digi:trn>	
-		                                                </c:otherwise>
-	                                                </c:choose>                                                    
-                                                </c:if>
-                                             </span>
+						<digi:trn>Portfolio</digi:trn>
+							</digi:link>&nbsp;&gt;&nbsp;
+						<digi:trn>Message Module</digi:trn>&nbsp;&gt;&nbsp;
+                        <c:choose>
+	                    	<c:when test="${messageForm.tabIndex==1}">
+	                        	<digi:trn>Messages</digi:trn>
+	                        </c:when>
+	                        <c:when test="${messageForm.tabIndex==2}">
+	                        	<digi:trn>Alerts</digi:trn>
+	                        </c:when>
+	                        <c:when test="${messageForm.tabIndex==3}">
+	                        	<digi:trn>Approvals</digi:trn>
+	                        </c:when>
+	                        <c:otherwise>
+	                        	<digi:trn>Calendar Events</digi:trn>
+	                        </c:otherwise>
+                        </c:choose>
+                        <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+	                   		&nbsp;&gt;&nbsp;
+	                        <c:choose>
+		                        <c:when test="${messageForm.childTab=='inbox'}">
+		                        	<digi:trn>Inbox</digi:trn>
+		                        </c:when>
+		                        <c:when test="${messageForm.childTab=='sent'}">
+		                        	<digi:trn>Sent</digi:trn>
+		                        </c:when>
+		                        <c:otherwise>
+		                        	<digi:trn>Draft</digi:trn>
+		                    	</c:otherwise>
+	                        </c:choose>
+                        </c:if>
+                       </span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>
-							<digi:trn key="aim:MessageModule">
-								Message Module 
-							</digi:trn>
+					<td height="16" vAlign="center" width="571">
+						<span class="subtitle-blue">
+							<digi:trn>Message Module</digi:trn>
 						</span>
 					</td>
 				</tr>
@@ -1088,7 +1081,7 @@ $(document).ready(function(){
                                          		<LI>
                                             		<a name="node">
                                       					<div>
-															<digi:trn key="message:Messages">Messages</digi:trn>							
+															<digi:trn>Messages</digi:trn>							
                                                			</div>
                                               		</a>
                                                     </LI>
@@ -1097,8 +1090,8 @@ $(document).ready(function(){
                                                 	<LI>
                                                     	<span>
                                     						<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
-                                                        		<div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
-	                 												<digi:trn key="message:Messages">Messages</digi:trn>
+                                                        		<div title='<digi:trn>List of Messages associated with Team</digi:trn>'>
+	                 												<digi:trn>Messages</digi:trn>
                                                             	</div>
 	                 										</a>
                                                         </span>
@@ -1110,7 +1103,7 @@ $(document).ready(function(){
                                             	<LI>
                                                  	<a name="node">
                                                     	<div>
-															<digi:trn key="message:Alerts">Alerts</digi:trn>							
+															<digi:trn>Alerts</digi:trn>							
                                                          </div>
                                                       </a>
                                                  </LI>
@@ -1119,8 +1112,8 @@ $(document).ready(function(){
 											<LI>
                                             	<span>
 													<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
-                                                    	<div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-															<digi:trn key="message:Alerts">Alerts</digi:trn>
+                                                    	<div title='<digi:trn>List of Alerts associated with Team</digi:trn>'>
+															<digi:trn>Alerts</digi:trn>
                                                         </div>
 													</a>							
                                                 </span>
@@ -1128,12 +1121,12 @@ $(document).ready(function(){
 										</c:if>
                                         </feature:display>
                                         <feature:display name="Approval Tab" module="Messages">          
-                                        	<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
+                                        	
 												<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
                                                         <a name="node">
                                                             <div>
-																<digi:trn key="message:approvals">Approvals</digi:trn>
+																<digi:trn>Approvals</digi:trn>
                                                         	</div>
                                                         </a>
                                                     </LI>
@@ -1142,21 +1135,21 @@ $(document).ready(function(){
                                                     <LI>
                                                         <span>
 															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
-                                                            	<div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
-																	<digi:trn key="message:approvals">Approvals</digi:trn>
+                                                            	<div title='<digi:trn>List of Approvals associated with Team</digi:trn>'>
+																	<digi:trn>Approvals</digi:trn>
                                                             	</div>
 															</a>
                                                         </span>
                                                     </LI>
 												</c:if>
-                                            </c:if>
+                                          
                                         </feature:display>          
                                         <feature:display name="Event Tab" module="Messages">     
                                 			<c:if test="${messageForm.tabIndex==4}">
                                             	<LI>
                                                 	<a name="node">
                                                     	<div>
-															<digi:trn key="message:ebents">Calendar Events</digi:trn>
+															<digi:trn>Calendar Events</digi:trn>
                                                         </div>
                                                       </a>
                                                  </LI>
@@ -1165,8 +1158,8 @@ $(document).ready(function(){
                                             		<LI>
                                                 		<span>
 															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
-                                                        		<div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
-																	<digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                        		<div title='<digi:trn>List of Events associated with Team</digi:trn>'>
+																	<digi:trn>Calendar Events</digi:trn>
                                                         		 </div>
 															</a>
                                                      	</span>

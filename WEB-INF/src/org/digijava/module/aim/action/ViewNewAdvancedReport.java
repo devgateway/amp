@@ -39,9 +39,12 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
 
@@ -141,6 +144,8 @@ public class ViewNewAdvancedReport extends Action {
 				filter=new AmpARFilter();
 				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
 				filter.readRequestData(request);
+				String globalCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+				filter.setCurrency(CurrencyUtil.getAmpcurrency(globalCurrency));
 				filter.setPublicView(true);
 			}
 			else

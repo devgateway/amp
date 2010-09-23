@@ -2,18 +2,14 @@ package org.digijava.module.contentrepository.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class FilterValues {
 	public List<String> possibleOwners;
@@ -25,10 +21,13 @@ public class FilterValues {
 		Collection<User> allUsers	= TeamMemberUtil.getAllTeamMemberUsers();
 		if (allUsers != null) {
 			possibleOwners		= new ArrayList<String>();
+			
 			for ( User u: allUsers ) {
-				possibleOwners.add( u.getEmail() );
+				if (!possibleOwners.contains( u.getEmail() ))
+					possibleOwners.add( u.getEmail() );
 			}
 		}
+		Collections.sort(possibleOwners );
 		
 		Collection<AmpTeam> allTeams	= TeamUtil.getAllTeams();
 		if ( allTeams != null ) {

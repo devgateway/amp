@@ -520,6 +520,8 @@ public class DocumentManager extends Action {
 				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
 				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
 				documentData.setLabels( nodeWrapper.getLabels() );
+				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
+				documentData.setCreatorEmail( nodeWrapper.getCreator() );
 								
 				documentData.process(request);
 				documentData.computeIconPath(true);

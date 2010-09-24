@@ -99,6 +99,17 @@ public class Label {
 			throw new LabelPropertiesEmptyCrException("No properties of the Label object should be empty when saving the state to jcr");
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if ( ! (obj instanceof Label) )
+			return false;
+		Label l		= (Label) obj;
+		if ( this.uuid == null || l.getUuid() == null ) {
+			return false;
+		}
+		
+		return this.uuid.equals( l.getUuid() );
+	};
 
 	/**
 	 * @return the name

@@ -165,6 +165,22 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	
 }
 
+FilterAsYouTypePanel.prototype.toggleViewWithSel	= function(uuidArray) {
+	var allInputEls	= this.bigDiv.getElementsByTagName("input");
+	for ( var j=0; j<allInputEls.length; j++ ) {
+		allInputEls[j].checked	= false;
+	}
+	for ( var i=0; i<uuidArray.length; i++ ) {
+		for ( var j=0; j<allInputEls.length; j++ ) {
+			if ( allInputEls[j].value == uuidArray[i] ) {
+				allInputEls[j].checked	= true;
+			}
+			
+		}
+	}
+	this.toggleView();
+}
+
 FilterAsYouTypePanel.prototype.toggleView	= function() {
 	if ( this.visible ) {
 		this.hide();

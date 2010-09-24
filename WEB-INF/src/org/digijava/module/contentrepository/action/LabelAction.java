@@ -3,6 +3,8 @@
  */
 package org.digijava.module.contentrepository.action;
 
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.contentrepository.form.LabelForm;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
@@ -54,11 +57,18 @@ public class LabelAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		if ( form.getDocUUID() != null && form.getDocUUID().length() > 0 && 
-				form.getLabelUUID() != null && form.getLabelUUID().length() > 0) {
-			Node docNode	= DocumentManagerUtil.getWriteNode(form.getDocUUID(), request);
-			Node labelNode	= DocumentManagerUtil.getWriteNode(form.getLabelUUID(), request);
-			NodeWrapper nw	= new NodeWrapper(docNode);
-			nw.addLabel(labelNode);
+				form.getLabelUUIDs() != null && form.getLabelUUIDs().length > 0) {
+			Node docNode				= DocumentManagerUtil.getWriteNode(form.getDocUUID(), request);
+			NodeWrapper nw				= new NodeWrapper(docNode);
+			List<Label> existingLabels	= nw.getLabels();
+			for (int i=0; i<form.getLabelUUIDs().length; i++ ) {
+				Node labelNode	= DocumentManagerUtil.getWriteNode(form.getLabelUUIDs()[i], request);
+				Label label		= new Label(labelNode);
+				if ( existingLabels.contains(label) )
+					nw.removeLabel( labelNode.getUUID() );
+				else
+					nw.addLabel(labelNode);
+			}
 			
 		}
 		
@@ -68,10 +78,12 @@ public class LabelAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		if ( form.getDocUUID() != null && form.getDocUUID().length() > 0 && 
-				form.getLabelUUID() != null && form.getLabelUUID().length() > 0) {
+				form.getLabelUUIDs() != null && form.getLabelUUIDs().length > 0) {
 			Node docNode	= DocumentManagerUtil.getWriteNode(form.getDocUUID(), request);
 			NodeWrapper nw	= new NodeWrapper(docNode);
-			nw.removeLabel( form.getLabelUUID() );
+			for (int i=0; i<form.getLabelUUIDs().length; i++ ) {
+				nw.removeLabel( form.getLabelUUIDs()[i] );
+			}
 			
 		}
 	}

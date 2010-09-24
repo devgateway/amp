@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionForm;
 public class LabelForm extends ActionForm {
 	private String action;
 	private String docUUID;
-	private String labelUUID;
+	private String[] labelUUIDs;
 	public String getAction() {
 		return action;
 	}
@@ -25,10 +25,12 @@ public class LabelForm extends ActionForm {
 	public void setDocUUID(String docUUID) {
 		this.docUUID = docUUID;
 	}
-	public String getLabelUUID() {
-		return labelUUID;
+	public String[] getLabelUUIDs() {
+		return labelUUIDs;
 	}
-	public void setLabelUUID(String labelUUID) {
-		this.labelUUID = labelUUID;
+	public void setLabelUUIDs(String[] labelUUIDs) {
+		this.labelUUIDs = labelUUIDs;
 	}
+
+	
 }

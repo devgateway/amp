@@ -26,6 +26,8 @@
 	<bean:define id="dynamicListLocal" name="dynamicList" toScope="page" />
 </logic:notEmpty>
 
+<% pageContext.setAttribute("currentTimeInMillis", System.currentTimeMillis()); %>
+
 <table id="team_table" bgcolor="white" width="100%">						
 						<tbody>
 						<logic:iterate name="documentDataCollection" id="documentData"	type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
@@ -111,21 +113,24 @@
 									<a  id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
 								</td>
 								<td>
+									<c:set var="labelUUIDs" value="[" />
 									<logic:notEmpty name="documentData" property="labels">
 										<logic:iterate id="label" name="documentData" property="labels">
-										<span style="white-space: nowrap;">
-											<span style="background-color: ${label.backgroundColor}; color: ${label.color};">
-												${label.name}
+											<c:set var="labelUUIDs">${labelUUIDs}'${label.uuid}',</c:set>
+											<span style="white-space: nowrap;">
+												<span style="background-color: ${label.backgroundColor}; color: ${label.color};">
+													${label.name}
+												</span>
+												<logic:equal name="documentData" property="hasVersioningRights" value="true">
+													<strong>|</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
+													onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
+													style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
+												</logic:equal>
+													&nbsp;&nbsp;
 											</span>
-											<logic:equal name="documentData" property="hasVersioningRights" value="true">
-												<strong>|</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
-												onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
-												style="background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
-											</logic:equal>
-												&nbsp;&nbsp;
-										</span>
 										</logic:iterate>
 									</logic:notEmpty>
+									<c:set var="labelUUIDs">${labelUUIDs}'']</c:set>
 									<%-- ><bean:write name='documentData' property='description'/>--%
 									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='description'/>"));
@@ -137,7 +142,7 @@
 												<digi:trn>Click here to see possible actions</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Actions<bean:write name='documentData' property='uuid' />"
-											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}')" title="${translation}">
+											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}', ${currentTimeInMillis})" title="${translation}">
 												<digi:trn>Show Actions</digi:trn>
 											</a>
 									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;" 
@@ -261,8 +266,8 @@
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
 										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="addLabelLink_${documentData.uuid}"
-										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleView();fAddPanel.reposition('addLabelLink_${documentData.uuid}');" 
-										title="<digi:trn>Click here to add a new labels to this document</digi:trn>">
+										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleViewWithSel(${labelUUIDs});fAddPanel.reposition('addLabelLink_${documentData.uuid}');" 
+										title="<digi:trn>Click here to add new labels to this document</digi:trn>">
 											<digi:trn>Labels</digi:trn>
 									</logic:equal>
 									</div>									

@@ -176,6 +176,8 @@ function setHoveredTable(tableId, hasHeaders) {
 		setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
 		setHoveredTable("otherDocumentsDiv", false);	
 		*/		
+		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels");
+		templateFPanel.initLabelArray(false);
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>
@@ -252,11 +254,19 @@ function setHoveredTable(tableId, hasHeaders) {
 	
 	var labelCallbackObj	= {
 			click: function(e, label) {
-				var postStr	= "action=add&docUUID="+this.docUUID+"&labelUUID="+label.uuid;
+				var postStr	= "action=add&docUUID="+this.docUUID+"&labelUUIDs="+label.uuid;
+				this.sendLabelRequest(postStr);
+			},
+			applyClick: function (e, labelArray){
+				debugger;
+				var postStr	= "action=add&docUUID="+this.docUUID;
+				for (var i=0; i<labelArray.length; i++) {
+					postStr	+= "&labelUUIDs="+labelArray[i].uuid;
+				}
 				this.sendLabelRequest(postStr);
 			},
 			remove: function(dUUID, lUUID) {
-				var postStr	= "action=remove&docUUID="+dUUID+"&labelUUID="+lUUID;
+				var postStr	= "action=remove&docUUID="+dUUID+"&labelUUIDs="+lUUID;
 				this.sendLabelRequest(postStr);
 			},
 			sendLabelRequest: function (postStr) {

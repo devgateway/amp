@@ -1296,12 +1296,23 @@ function switchColors(element) {
 }
 
 YAHOO.amp.actionPanels	= new Object();
-function showActions(linkId, divId){
+function showActions(linkId, divId, timestamp){
 	if ( !YAHOO.amp.actionPanels.size ) {
 		YAHOO.amp.actionPanels.size = 0;
 	}
 	if ( YAHOO.amp.actionPanels.size == 0 ) {
 		YAHOO.util.Event.addListener(document,"click", hideActions, this, true );
+	}
+	if ( !YAHOO.amp.actionPanels.timestamp || YAHOO.amp.actionPanels.timestamp != timestamp) { 
+		var panels	= YAHOO.amp.actionPanels;
+		panels.timestamp	= timestamp;
+		for (var p in panels) {
+			if ( panels[p].destroy ) {
+					panels[p].destroy();
+					panels[p]	= null;
+			}
+		}
+		panels.size = 0;
 	}
 	var actionPanel		= YAHOO.amp.actionPanels[linkId];
 	if (actionPanel == null) {
@@ -1329,6 +1340,27 @@ function hideActions(e) {
 	}
 }
 
+function getTemplateLabelsCb(formName, infoDivId) {
+	if ( !YAHOO.amp.templateFilterWrapper ) {
+		YAHOO.amp.templateFilterWrapper	= new FilterWrapper();
+	}
+	var cb	= {
+			click: function(e, label) {
+				var infoDivEl			= document.getElementById(this.infoDivId);
+				YAHOO.amp.templateFilterWrapper.filterLabels.push(label);
+				infoDivEl.innerHTML		= YAHOO.amp.templateFilterWrapper.labelsToHTML();
+			},
+			applyClick: function(e, labelArray){
+				YAHOO.amp.templateFilterWrapper	= new FilterWrapper();
+				for (var i=0; i<labelArray.length; i++) {
+					YAHOO.amp.templateFilterWrapper.filterLabels.push(labelArray[i]);
+				}
+				infoDivEl.innerHTML		= YAHOO.amp.templateFilterWrapper.labelsToHTML();
+			},
+			infoDivId: infoDivId,
+			formName: formName
+	}
+}
 
 /* Number of possible panels on this page */
 YAHOO.amp.panelCounter	= 3;

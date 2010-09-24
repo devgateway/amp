@@ -230,6 +230,7 @@
 <feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
 <feature:display name="Enable Org. Profile in Public View" module="Org Profile"></feature:display>
+<feature:display  name="Org Profile Widget Manager" module="Org Profile"></feature:display>
 
 <feature:display name="Yearly View" module="Calendar"></feature:display>
 <feature:display name="Monthly View" module="Calendar"></feature:display>

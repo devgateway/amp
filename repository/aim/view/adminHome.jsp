@@ -420,7 +420,7 @@
                             </td>
                           </tr>
                           </feature:display>
-                          <feature:display  name="Org Profile Widgets" module="WIDGETS">
+                          <feature:display  name="Org Profile Widget Manager" module="Org Profile">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

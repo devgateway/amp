@@ -77,7 +77,7 @@ div.fakefile2 {
 	top: 0px;
 	left: 217px;
 	width: 300px;
-	padding: 0;
+	padding: 3px;
 	margin: 0;
 	z-index: 1;
 	line-height: 90%;
@@ -106,7 +106,9 @@ div.fakefile2 input{
 </style>
 
 <script language="javascript">
-
+ var uploadDoc="<digi:trn jsFriendly='true'>Upload doc</digi:trn>";
+ var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>"
+ var createFromTemplate="<digi:trn jsFriendly='true'>Create From Template</digi:trn>"
 function setHoveredTable(tableId, hasHeaders) {
 
 	var tableElement = document.getElementById(tableId);

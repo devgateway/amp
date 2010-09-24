@@ -32,7 +32,8 @@ ActionsMenu.prototype.render=function (){
 		}else{
 			addResLinkEl+="onclick=\"menuPanelForTeam.toggleTeamView(); \">";
 		}
-		addResLinkEl+="<digi:trn jsFriendly='true'>Upload doc</digi:trn>";
+        // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :( 
+		addResLinkEl+=uploadDoc;
 		addResLinkEl+="</a>";	
 		var addResdivEl		= createActionDiv(addResLinkEl);
 		divEl.appendChild(addResdivEl);
@@ -43,7 +44,7 @@ ActionsMenu.prototype.render=function (){
 		}else{
 			addUrlLinkEl+="onclick=\"menuPanelForTeam.toggleTeamView(); \">";
 		}
-		addUrlLinkEl+="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
+		addUrlLinkEl+=addWebLink;
 		addUrlLinkEl+="</a>";
 		var addURLdivEl		= createActionDiv(addUrlLinkEl);
 		divEl.appendChild(addURLdivEl);
@@ -54,7 +55,7 @@ ActionsMenu.prototype.render=function (){
 			if(hasCreateDocFromTemplateRights!=null && hasCreateDocFromTemplateRights.value=='true'){
 				//create from template link
 				var createFromTemplateLinkEl="<a href=\"javascript:addFromTemplate()\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" onclick=\"menuPanelForUser.toggleUserView();\">";
-				createFromTemplateLinkEl+="<digi:trn jsFriendly='true'>Create From Template</digi:trn>";
+				createFromTemplateLinkEl+=createFromTemplate;
 				createFromTemplateLinkEl+="</a>";
 				var createFromTempldivEl	= createActionDiv(createFromTemplateLinkEl);
 				divEl.appendChild(createFromTempldivEl);
@@ -69,7 +70,7 @@ ActionsMenu.prototype.render=function (){
 	//bigDiv.style.border	= "1px solid gray";
 	bigDiv.appendChild(divEl);
 	bigDiv.appendChild(brEl);
-	
+
 	this.overlay.setBody(bigDiv);
 	this.overlay.render(document.body);
 }

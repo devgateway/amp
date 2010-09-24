@@ -81,7 +81,7 @@
          </digi:secure> 
          <digi:secure authenticated="false">
           <logic:notPresent name="currentMember" scope="session">
-          <div style="background-color:#376091; border: #9d9da7 1px solid; width: 400">
+          <div style="background-color:#376091; border: #9d9da7 1px solid; width: 400px;height:40px;">
            <form action="/j_acegi_security_check" method="post"">
             <%-- 
               <table width="100%"  cellspacing="0" cellpadding="0" border="0" style=" margin-top: 10px">
@@ -101,10 +101,10 @@
               --%>
 				<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 8px;">
 					<tr>
-					  <td align="center" valign="middle"><input type="text" name="j_username" style="width: 150px; height: 22px;" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
+					  <td align="center" valign="middle"><input type="text" name="j_username" style="width: 150px; height: 22px;-moz-box-sizing:border-box" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
 					  <td align="center" valign="middle">
-					  	<input type="password" name="j_password" class="inp-text inp-upassword" style="width: 150px; height: 22px; display: none;" disabled="disabled"/>
-					  	<input type="text" name="j_username" class="inp-text inp-upastext" style="width: 150px; height: 22px;" value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
+					  	<input type="password" name="j_password" class="inp-text inp-upassword" style="width: 150px; height: 22px; display: none;-moz-box-sizing:border-box" disabled="disabled"/>
+					  	<input type="text" name="j_username" class="inp-text inp-upastext" style="width: 150px; height: 22px;-moz-box-sizing:border-box" value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
 					  </td>
 					  <td><html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit></td>
 					</tr>

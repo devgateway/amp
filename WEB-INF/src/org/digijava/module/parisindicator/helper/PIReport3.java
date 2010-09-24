@@ -142,29 +142,18 @@ public class PIReport3 extends PIAbstractReport {
 									// amounts because of the answers (or the
 									// lack of it).
 									if (showColumn[0] || showColumn[1]) {
-
 										// Calculate exchange rates.
-										if (PIConstants.CURRENCY_USD.equalsIgnoreCase(auxFundingDetail
-												.getAmpCurrencyId().getCurrencyCode())) {
-											fromExchangeRate = 1.0;
-										} else {
-											fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId()
-													.getCurrencyCode(), new java.sql.Date(auxFundingDetail
-													.getTransactionDate().getTime()));
-										}
+										fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId()
+												.getCurrencyCode(), new java.sql.Date(auxFundingDetail
+												.getTransactionDate().getTime()));
 										toExchangeRate = 0;
 										if (currency != null) {
-											if (currency.getCurrencyCode().equals(PIConstants.CURRENCY_USD)) {
-												toExchangeRate = 1.0;
-											} else {
-												toExchangeRate = Util.getExchange(currency.getCurrencyCode(),
-														new java.sql.Date(auxFundingDetail.getTransactionDate()
-																.getTime()));
-											}
+											toExchangeRate = Util.getExchange(currency.getCurrencyCode(),
+													new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
 										}
 										BigDecimal amount = new BigDecimal(CurrencyWorker.convert1(auxFundingDetail
 												.getTransactionAmount(), fromExchangeRate, toExchangeRate));
-
+										
 										// Setup row.
 										if (showColumn[0]) {
 											auxRow.setColumn1(amount);

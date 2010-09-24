@@ -246,6 +246,8 @@ public class GetFoundingDetails extends Action {
                         	selValue = fData.getDisbursement();
                         } else if (fundingType.equals("expenditure")) {
                         	selValue = fData.getExpenditure();
+                        }else{
+                        	selValue = new BigDecimal("0");
                         }
                         
                         

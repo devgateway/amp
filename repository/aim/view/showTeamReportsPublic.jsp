@@ -10,7 +10,11 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
+
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.PUBLIC_VIEW %>" compareWith="On" onTrueEvalBody="true">
+
 <!-- this is for the nice tooltip widgets -->
 
 <DIV id="TipLayer"
@@ -505,3 +509,8 @@ function popup(mylink, windowname)
 </table>
 
 </div>
+</gs:test>
+
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.PUBLIC_VIEW %>" compareWith="Off" onTrueEvalBody="true">
+<br/>
+</gs:test>

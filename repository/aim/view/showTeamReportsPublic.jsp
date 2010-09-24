@@ -42,20 +42,21 @@ function popup(mylink, windowname)
 <style>
 .publicReportsTable THEAD TD {
 	font-family: Arial;
-	font-size:small;
-	background-color:#666666;
+	font-size:10px;
+	background-color:#27415f;
 	color:#FFFFFF;
 	border-bottom:1px solid black;
 	border-right:1px solid black;
 }
 .publicReportsTable TBODY TD {
 	font-family: Arial;
-	font-size:small;
+	font-size:10px;
 	color:black;
+	border-right:1px solid #666666;
 }
 .publicReportsTable TBODY TD A {
 	font-family: Arial;
-	font-size:small;
+	font-size:10px;
 }
 </style>
 
@@ -210,7 +211,7 @@ function popup(mylink, windowname)
               <tr bgColor=#f4f4f2>
                 <td valign="top"><table align=center cellPadding=0 cellSpacing=0 width="100%">
                     <tr>
-                      <td><table border=0 cellPadding=8 cellSpacing=3 width="100%" class="publicReportsTable">
+                      <td><table border=0 cellPadding=4 cellSpacing=3 width="100%" class="publicReportsTable">
 	                      <thead>
                           <tr>
                             <td align="center" height="20" style="text-transform:capitalize;">
@@ -334,7 +335,7 @@ function popup(mylink, windowname)
                                       <digi:trn key="aim:reportBuilder:${measure.measure.aliasName}"> ${measure.measure.aliasName} </digi:trn> <br />
                                   </c:forEach>
 							  </td>
-                              <td align="center"><p style="white-space: nowrap">
+                              <td align="center" style="border:0px none;"><p style="white-space: nowrap">
                                   <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
                                   
                                   <c:set target="${urlParams}" property="rid">

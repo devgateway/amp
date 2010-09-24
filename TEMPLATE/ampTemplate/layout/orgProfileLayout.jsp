@@ -12,7 +12,7 @@
     <digi:context name="digiContext" property="context"/>
 
     <HEAD>
-        <TITLE><digi:trn>Organization Profile</digi:trn></TITLE>
+        <TITLE><digi:trn>Aid Management Platform</digi:trn> - <digi:trn>Organization Profile</digi:trn></TITLE>
 
         <script type="text/javascript">
             function exportPDF() {

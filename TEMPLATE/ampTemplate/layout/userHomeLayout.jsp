@@ -33,7 +33,7 @@
 			String key=(title.replaceAll(" ",""));
 			%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn>Aid Management Platform </digi:trn> 
 				<digi:trn key="${key}">
 					<%=title%>
 				</digi:trn>

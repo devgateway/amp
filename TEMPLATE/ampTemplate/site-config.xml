@@ -52,7 +52,7 @@
 		</layout>
 
 		<layout name="gisDashboardPublicLayout" extends="default" file="gisDashboardPublicLayout.jsp">
-			<put name="title">Results Matrix</put>
+			<put name="title">Aid Management Platform</put>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
@@ -158,7 +158,7 @@
 		
 		
 		<layout name="default">
-			<put name="title">AMP Default Template</put>
+			<put name="title">AMP</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>

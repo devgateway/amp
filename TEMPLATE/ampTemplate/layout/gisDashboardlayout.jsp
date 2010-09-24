@@ -30,7 +30,7 @@
             var fy=document.getElementsByName('selectedFromYear')[0].value;
             //to year
             var ty=document.getElementsByName('selectedToYear')[0].value;
-            var d=document.getElementsByName('selectedDonor')[0].value;
+            var d=document.getElementById('donorsCombo').value;
             var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
             myUrl+=getLegendState();
             myUrl+=getLabelState();

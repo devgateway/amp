@@ -198,6 +198,7 @@
 			var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 			var toYear = document.getElementsByName('selectedToYear')[0].value;
 			var indYear = $("#indicatorYearCombo").val();
+			var donorId = document.getElementById('donorsCombo').value;
 			var uniqueStr = (new Date()).getTime();
 			jQuery.fn.initIndicatorCombo();
 			jQuery.fn.initSubgroupCombo();
@@ -206,7 +207,7 @@
 				mapLevel = 2;
 			}
 			//setBusy(true);
-			var newUrl = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + sect + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+			var newUrl = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&donorId=" + donorId + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + sect + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 			
 			$("#testMap").attr({src: newUrl});
 			if (sect > 0) {
@@ -222,14 +223,14 @@
             var fromYear = document.getElementsByName('selectedFromYear')[0].value;
             var toYear = document.getElementsByName('selectedToYear')[0].value;
             var fundingType = document.getElementById('fundingType').value;
-            
+            var donorId = document.getElementById('donorsCombo').value;
             var uniqueStr = (new Date()).getTime();
             if (mapLevel == null) {
                 mapLevel = 2;
             }
             //setBusy(true);
-            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-            
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            //alert(newUrl);
             $("#testMap").attr({src: newUrl});
             if (sect > -2) {
             	getFundDataValues = true;

@@ -252,7 +252,7 @@ function validateSectorPercentage(){
        
     var i;
     var flag = false;
-    var primConf=document.getElementById('primaryConfig');
+   var primConf=document.getElementById('primaryConfig');
     if(primConf==null){
         return true;
      }
@@ -268,9 +268,10 @@ function validateSectorPercentage(){
         var inputs=sectorDiV.getElementsByTagName("input");
         if(inputs.length==0 && primaryDiv>0){
            alert("${errMsgAddSector}");
+            empty=true;
             return false;
         }
-        
+
         for (j=0; j<inputs.length; j++){
             if (inputs[j].type == "text") {
                 var val=inputs[j].value;

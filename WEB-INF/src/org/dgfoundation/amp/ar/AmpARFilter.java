@@ -393,7 +393,8 @@ public class AmpARFilter extends PropertyListable {
 			
 			
 			
-			if (renderStartYear!=null && calendarType != null && defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+			if (renderStartYear!=null && calendarType != null && renderStartYear!=-1
+					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
@@ -422,7 +423,8 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 			
-			if (renderEndYear!=null && calendarType != null && defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+			if (renderEndYear!=null && calendarType != null && renderStartYear!=-1 
+					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);

@@ -53,6 +53,9 @@ public class DocTabManagerAction extends MultiAction {
 		else if ("publicShow".equals(action) ) {
 			return modePublicShow(mapping, myForm, request, response);
 		}
+		else if ("delete".equals(action) ) {
+			return modeDelete(mapping, myForm, request, response);
+		}
 		
 		
 		return null;
@@ -149,7 +152,7 @@ public class DocTabManagerAction extends MultiAction {
 					new Comparator<DocumentFilter>() {
 						@Override
 						public int compare(DocumentFilter o1, DocumentFilter o2) {
-							return o2.getPublicViewPosition().compareTo(o1.getPublicViewPosition());
+							return o1.getPublicViewPosition().compareTo(o2.getPublicViewPosition());
 						}
 						
 		});
@@ -170,5 +173,20 @@ public class DocTabManagerAction extends MultiAction {
 		
 		return mapping.findForward("publicResources");
 	}
-
+	
+	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		DocTabManagerForm myForm	= (DocTabManagerForm) form;
+		String filterIdStr		= request.getParameter("filterId");
+		if ( filterIdStr != null ) {
+			Long filterId				= Long.parseLong(filterIdStr);
+			DocumentFilterDAO dfDAO		= new DocumentFilterDAO();
+			dfDAO.deleteDocumentFilter(filterId);
+			
+		}
+		return modeShow(mapping, myForm, request, response);
+		
+	}
 }

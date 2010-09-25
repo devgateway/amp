@@ -8,6 +8,7 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class DocumentFilterDAO {
 	private static Logger logger	= Logger.getLogger(DocumentFilterDAO.class);
@@ -47,5 +48,19 @@ public class DocumentFilterDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void deleteDocumentFilter(Long id) {
+		Session hbSession;
+		try{
+			hbSession			= PersistenceManager.getRequestDBSession();
+			Transaction tx		= hbSession.beginTransaction();
+			DocumentFilter	df 	= (DocumentFilter)hbSession.load(DocumentFilter.class, id);
+			
+			hbSession.delete(df);
+			tx.commit();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

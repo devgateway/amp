@@ -108,7 +108,10 @@
 		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
 
 		
-		myTabsObject = new YAHOOAmp.widget.TabView("demo");
+		myTabsObject 	= new YAHOOAmp.widget.TabView("demo");
+		var tabs		= myTabsObject.get("tabs");
+		var moreTab		= myTabsObject.getTab(tabs.length-1);
+		moreTab.set("disabled", true);
 	
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabsTab");
 		var xPos = region.left;

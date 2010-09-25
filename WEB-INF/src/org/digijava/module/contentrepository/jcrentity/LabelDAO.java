@@ -93,7 +93,11 @@ public class LabelDAO {
 	public Label getLabel(String uuid) {
 		
 		if (uuid != null) {
-			Node node		= DocumentManagerUtil.getWriteNode(uuid, this.request);
+			Node node		= null;
+			if ( this.writeable )
+				node		= DocumentManagerUtil.getWriteNode(uuid, this.request);
+			else
+				node		= DocumentManagerUtil.getReadNode(uuid, this.request);
 			Label label		= new Label(node);
 			return label;
 		}

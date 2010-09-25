@@ -334,7 +334,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
 	            {key:"labels",text:"${trans_headerLabels}",sortable:false,width:300},
-	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:1000}
+	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:100}
 	    ];
 	}
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);

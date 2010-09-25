@@ -138,7 +138,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	
 	function loadTab() {
 		for (var i=0; i<4; i++) {
-			tab		= repositoryTabView.getTab(i);
+			var tab		= repositoryTabView.getTab(i);
 			if ( tab.get("active") && !repositoryTabView.activatedLists[i] ) {
 				repositoryTabView.dynLists[i].sendRequest();
 				repositoryTabView.activatedLists[i]		= true;
@@ -364,7 +364,10 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
 						        	<td>
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>...</button>
+						        		<br />
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>
+							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif"> 
+							        	</button>
 								    	<button id="filterButtonId" class="buton" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
@@ -397,8 +400,11 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
 								<tr>
 						        	<td>
+						        	<br />
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
-										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="dr-menu buton">Add Resource...</button>
+										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>
+											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+										</button>
 										<!-- 
 											<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
 			                            		<digi:trn>Add Resource ...</digi:trn>            

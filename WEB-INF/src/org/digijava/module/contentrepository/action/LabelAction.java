@@ -56,6 +56,7 @@ public class LabelAction extends MultiAction {
 	public void modeAdd(ActionMapping mapping, LabelForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		String applyClickAction			= request.getParameter("applyClick");
 		if ( form.getDocUUID() != null && form.getDocUUID().length() > 0 && 
 				form.getLabelUUIDs() != null && form.getLabelUUIDs().length > 0) {
 			Node docNode				= DocumentManagerUtil.getWriteNode(form.getDocUUID(), request);
@@ -64,8 +65,10 @@ public class LabelAction extends MultiAction {
 			for (int i=0; i<form.getLabelUUIDs().length; i++ ) {
 				Node labelNode	= DocumentManagerUtil.getWriteNode(form.getLabelUUIDs()[i], request);
 				Label label		= new Label(labelNode);
-				if ( existingLabels.contains(label) )
-					nw.removeLabel( labelNode.getUUID() );
+				if ( existingLabels.contains(label) ){
+					if ( "true".equals(applyClickAction) )
+						nw.removeLabel( labelNode.getUUID() );
+				}
 				else
 					nw.addLabel(labelNode);
 			}

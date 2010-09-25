@@ -55,14 +55,14 @@ public class DocumentManager extends Action {
 		DocumentManagerForm myForm		= (DocumentManagerForm) form;
 		
 		request.setAttribute("ServletContext", this.getServlet().getServletContext() );		
-		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
-			showOnlyDocs 	= true;
-		else
-			showOnlyDocs	= false;
-		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
-			showOnlyLinks 	= true;
-		else
-			showOnlyLinks	= false;
+//		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
+//			showOnlyDocs 	= true;
+//		else
+//			showOnlyDocs	= false;
+//		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
+//			showOnlyLinks 	= true;
+//		else
+//			showOnlyLinks	= false;
 				
 		
 		if (  myForm.getAjaxDocumentList() ) {
@@ -322,9 +322,9 @@ public class DocumentManager extends Action {
 				}
 			}
 			myForm.setYearOfPublication(null);
-			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
-			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
-			myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request,true));
+			//myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
+			//myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
+			//myForm.setSharedDocuments(this.getSharedDocuments(teamMember, request,true));
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			

@@ -137,12 +137,12 @@
 									</script> --%>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
-								<td nowrap="nowrap">
+								<td>
 									 		<c:set var="translation">
 												<digi:trn>Click here to see possible actions</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Actions<bean:write name='documentData' property='uuid' />"
-											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}', ${currentTimeInMillis})" title="${translation}">
+											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}','${dynamicListLocal}',${currentTimeInMillis})" title="${translation}">
 												<digi:trn>Show Actions</digi:trn>
 											</a>
 									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;" 

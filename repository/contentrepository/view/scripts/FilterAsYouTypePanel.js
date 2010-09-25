@@ -126,6 +126,12 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 }
 
 FilterAsYouTypePanel.prototype.render	= function() {
+	
+	for (var i=0; i<this.labelArray.length; i++) {
+		var l	= this.labelArray[i];
+		this.labelMap[l.uuid]	= l;
+	}
+	
 	this.overlay 	= new YAHOO.widget.Overlay(this.nameprefix, { context:[this.alignElId,"tl","bl"],
 		  visible:false,
 		  width:"150px" } );
@@ -166,6 +172,7 @@ FilterAsYouTypePanel.prototype.render	= function() {
 }
 
 FilterAsYouTypePanel.prototype.toggleViewWithSel	= function(uuidArray) {
+	this.toggleView();
 	var allInputEls	= this.bigDiv.getElementsByTagName("input");
 	for ( var j=0; j<allInputEls.length; j++ ) {
 		allInputEls[j].checked	= false;
@@ -178,7 +185,6 @@ FilterAsYouTypePanel.prototype.toggleViewWithSel	= function(uuidArray) {
 			
 		}
 	}
-	this.toggleView();
 }
 
 FilterAsYouTypePanel.prototype.toggleView	= function() {
@@ -219,17 +225,18 @@ FilterAsYouTypePanel.prototype.show	= function () {
 
 FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 	if ( FilterAsYouTypePanel.globalLabelArray == null ) {
+		FilterAsYouTypePanel.globalLabelArray	= new Array();
 		var callbackObj	= {
 				success: function (o) {
 					if ( o.responseText.length > 0) {
-						FilterAsYouTypePanel.globalLabelArray	= eval( o.responseText );
-						this.fPanel.labelArray					= FilterAsYouTypePanel.globalLabelArray;
+						var tempLabelArray				= eval( o.responseText );
+						this.fPanel.labelArray			= tempLabelArray;
 						for (var i=0; i<this.fPanel.labelArray.length; i++) {
 							var l	= this.fPanel.labelArray[i];
-							this.fPanel.labelMap[l.uuid]	= l;
+							FilterAsYouTypePanel.globalLabelArray.push(l);
 						}
-						this.fPanel.render();
 						if (shouldShow) {
+							this.fPanel.render();
 							this.fPanel.overlay.show();
 							this.fPanel.textboxEl.focus();
 						}
@@ -246,7 +253,14 @@ FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 		var currTime	= new Date().getTime();
 		var request = YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/labelManager.do?time='+currTime, callbackObj);
 	}
-	
+	else {
+		this.labelArray				= FilterAsYouTypePanel.globalLabelArray;
+		if (shouldShow) {
+			this.render();
+			this.overlay.show();
+			this.textboxEl.focus();
+		}
+	}
 }
 
 FilterAsYouTypePanel.prototype.onSearch 	= function () {

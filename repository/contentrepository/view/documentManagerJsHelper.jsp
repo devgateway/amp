@@ -1296,25 +1296,29 @@ function switchColors(element) {
 }
 
 YAHOO.amp.actionPanels	= new Object();
-function showActions(linkId, divId, timestamp){
-	if ( !YAHOO.amp.actionPanels.size ) {
-		YAHOO.amp.actionPanels.size = 0;
+function showActions(linkId, divId, category,timestamp){
+	if ( !YAHOO.amp.actionPanels[category] )
+		YAHOO.amp.actionPanels[category]	= new Object();
+	if ( !YAHOO.amp.actionPanels[category].size ) {
+		YAHOO.amp.actionPanels[category].size = 0;
 	}
-	if ( YAHOO.amp.actionPanels.size == 0 ) {
+	if ( !YAHOO.amp.actionPanels.listenerAdded ) {
 		YAHOO.util.Event.addListener(document,"click", hideActions, this, true );
+		YAHOO.amp.actionPanels.listenerAdded	= true;
 	}
-	if ( !YAHOO.amp.actionPanels.timestamp || YAHOO.amp.actionPanels.timestamp != timestamp) { 
-		var panels	= YAHOO.amp.actionPanels;
+	
+	var panels	= YAHOO.amp.actionPanels[category];
+	if ( !panels.timestamp || panels.timestamp != timestamp) { 
 		panels.timestamp	= timestamp;
 		for (var p in panels) {
-			if ( panels[p].destroy ) {
+			if ( panels[p] && panels[p].destroy ) {
 					panels[p].destroy();
 					panels[p]	= null;
 			}
 		}
 		panels.size = 0;
 	}
-	var actionPanel		= YAHOO.amp.actionPanels[linkId];
+	var actionPanel		= panels[linkId];
 	if (actionPanel == null) {
 		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
 			  visible:false,
@@ -1323,8 +1327,8 @@ function showActions(linkId, divId, timestamp){
 		actionDivEl.style.display	= "";
 		actionPanel.setBody( actionDivEl );
 		actionPanel.render(document.body);
-		YAHOO.amp.actionPanels[linkId]	= actionPanel;
-		YAHOO.amp.actionPanels.size++;
+		panels[linkId]	= actionPanel;
+		panels.size++;
 	}
 	actionPanel.show();
 	actionPanel.myIsVisible	= true;
@@ -1333,11 +1337,17 @@ function hideActions(e) {
 	var clickedEl	= e.target;
 	if ( clickedEl.id.indexOf("Actions") >= 0 ) 
 		return;
-	var panels	= YAHOO.amp.actionPanels;
-	for (var p in panels) {
-		if ( panels[p].hide )
-				panels[p].hide();
+	var categories	= YAHOO.amp.actionPanels;
+	for (var categ in categories) {
+		if ( categories[categ] ) {
+			var panels	= categories[categ];
+			for (var p in panels) {
+				if ( panels[p] && panels[p].hide )
+						panels[p].hide();
+			}
+		}
 	}
+	
 }
 
 function getTemplateLabelsCb(formName, infoDivId) {

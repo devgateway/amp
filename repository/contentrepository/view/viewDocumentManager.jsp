@@ -132,30 +132,52 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.table");
+	
 	var privateListObj	= null;
 	var teamListObj	= null;
+	
+	function loadTab() {
+		for (var i=0; i<4; i++) {
+			tab		= repositoryTabView.getTab(i);
+			if ( tab.get("active") && !repositoryTabView.activatedLists[i] ) {
+				repositoryTabView.dynLists[i].sendRequest();
+				repositoryTabView.activatedLists[i]		= true;
+			}
+		}
+	}
+	
 	function afterPageLoad(e) {
 		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
-		privateListObj.sendRequest();
+		//privateListObj.sendRequest();
 		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", ${meTeamMember.teamId}, null);
 		teamListObj.filterInfoDivId	= "teamFilterInfo";
-		teamListObj.sendRequest();
+		//teamListObj.sendRequest();
 		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId");
 		sharedListObj.filterInfoDivId	= "sharedFilterInfo";
-		sharedListObj.sendRequest();
-		//YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
-		//YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
-		//YAHOO.amp.table.sharedDoctable	= YAHOO.amp.table.enhanceMarkup("shared_markup");
+		//sharedListObj.sendRequest();
+
+		
 		
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null);
-		publicListObj.sendRequest();
+		//publicListObj.sendRequest();
 		
-		//windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
-		//windowController.populateWithPublicDocs();
+		repositoryTabView				= new YAHOOAmp.widget.TabView("demo");
+		repositoryTabView.addListener("activeTabChange", loadTab);
 		
+		repositoryTabView.dynLists	= new Array();
+		repositoryTabView.dynLists.push( privateListObj );
+		repositoryTabView.dynLists.push( teamListObj );
+		repositoryTabView.dynLists.push( sharedListObj );
+		repositoryTabView.dynLists.push( publicListObj );
 
+		repositoryTabView.activatedLists	= new Array();
+		for (var i=0; i<4; i++)
+			repositoryTabView.activatedLists.push(false);
+		
 		initFileUploads();
+		
+		loadTab();
 		
 		fPanel	= new FilterAsYouTypePanel("labelButtonId", getLabelFilterCallbackObj(privateListObj), "mainLabels");
 		fAddPanel	= new FilterAsYouTypePanel("labelButtonId", labelCallbackObj, "addLabelPanel");
@@ -168,16 +190,7 @@ function setHoveredTable(tableId, hasHeaders) {
 		sharedFPanel	= new FilterAsYouTypePanel("sharedLabelButtonId", getLabelFilterCallbackObj(sharedListObj), "sharedMainLabels");
 		sharedFPanel.initLabelArray(false);
 		
-		/*
-		setStripsTable("team_markup", "tableEven", "tableOdd");
-		setHoveredTable("team_markup", false);
-		setStripsTable("my_markup", "tableEven", "tableOdd");
-		setHoveredTable("my_markup", false);
-		setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
-		setHoveredTable("publicDocumentsDiv", false);
-		setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
-		setHoveredTable("otherDocumentsDiv", false);	
-		*/		
+	
 		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels");
 		templateFPanel.initLabelArray(false);
 	}
@@ -240,6 +253,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						this.listObj.sendRequest();
 					},
 					applyClick: function(e, labelArray){
+						this.listObj.emptyLabels();
 						for (var i=0; i<labelArray.length; i++) {
 							this.listObj.addRemoveLabel(labelArray[i]);
 						}
@@ -260,8 +274,7 @@ function setHoveredTable(tableId, hasHeaders) {
 				this.sendLabelRequest(postStr);
 			},
 			applyClick: function (e, labelArray){
-				debugger;
-				var postStr	= "action=add&docUUID="+this.docUUID;
+				var postStr	= "action=add&applyClick=true&docUUID="+this.docUUID;
 				for (var i=0; i<labelArray.length; i++) {
 					postStr	+= "&labelUUIDs="+labelArray[i].uuid;
 				}
@@ -286,6 +299,8 @@ function setHoveredTable(tableId, hasHeaders) {
 
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true);
+	
+	
 
 </script>
 

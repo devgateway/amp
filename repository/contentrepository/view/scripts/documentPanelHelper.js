@@ -27,10 +27,6 @@
 
 	//YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
-
-    var tabView = new YAHOOAmp.widget.TabView("demo");   
-
-
 	YAHOO.namespace("YAHOO.amp");
 
 	function setPanelHeader(panelNum, title) {

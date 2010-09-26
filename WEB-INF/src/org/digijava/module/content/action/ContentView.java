@@ -25,7 +25,7 @@ public class ContentView extends TilesAction {
 
 		String pageCode = request.getParameter("c");
 
-		if (pageCode != null && pageCode.isEmpty()) {
+		if (pageCode != null && !pageCode.isEmpty()) {
 			contentItem = DbUtil.getContentItemByPageCode(pageCode);
 		} else {
 			contentItem = DbUtil.getHomePage();

@@ -1,0 +1,1 @@
+DELETE FROM amp_report_hierarchy WHERE columnId = (SELECT columnId FROM amp_columns WHERE aliasName = 'activityName');

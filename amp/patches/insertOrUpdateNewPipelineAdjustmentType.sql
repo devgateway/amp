@@ -1,0 +1,1 @@
+INSERT INTO amp_measures (measureName, aliasName, type, expression, description) VALUES('Pipeline Commitments', 'Pipeline Commitments', 'A', null, null);

@@ -13,8 +13,8 @@
 
     <!-- Project settings -->
     <property name="project.title" value="DiGiJava "/>
-    <property name="project.distname" value="digijava"/>
-    <property name="project.version" value="1.1"/>
+    <property name="project.distname" value="amp"/>
+    <property name="project.version" value="1.15.0"/>
     <property name="lib" location="./WEB-INF/lib" />
     <property name="webinf" location="./WEB-INF" />
 	<property name="metainf" location="./META-INF" />		
@@ -346,19 +346,14 @@
 
       <mkdir
         dir="${distpath.project}"/>
-      <jar
-        jarfile="${distpath.project}/${project.distname}.jar"
+      <jar compress="true" excludes="**/PersistenceManager.class **/RequestUtils.class"
+        jarfile="${distpath.project}/${project.distname}-${project.version}.jar"
         basedir="${classes}"/>
       <copy
-        file="${distpath.project}/${project.distname}.jar"
+        file="${distpath.project}/${project.distname}-${project.version}.jar"
         todir="${distpath.project}"/>
 
-      <war
-        basedir="./"
-        warfile="${distpath.project}/${project.distname}.war"
-        webxml="web.xml">
-        <exclude name="${distpath.project}/${project.distname}.war"/>
-       </war>
+ 
 
     </target>
 

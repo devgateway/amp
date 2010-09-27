@@ -4,7 +4,7 @@
 .yui-tt{ background: LightYellow; border-color: black }
 
 .all_markup {margin:1em} 
-.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 98%} 
+.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 95%}
 .all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
@@ -344,18 +344,28 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     	    						pageCurrent:1,
 									rowsPerPage:10,
 							        pageLinksLength:2
-	                			  };
+};
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 	dataTable.width='2000px';
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
-	
+	dataTable.subscribe("paginateEvent",hideCategories);
+
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
 		dataTable.showEmptyMessage();
 	}
     return dataTable;
 };
+function hideCategories(){
+var categories	= YAHOO.amp.actionPanels;
+	for (var categ in categories) {
+		if ( categories[categ] ) {
+			var panels	= categories[categ];
+			hidePanels(panels);
+		}
+	}
+}
 
 /* Ajax function that creates a callback object after a delete command 
 was issued in order to delete the respective row/document*/
@@ -1308,8 +1318,8 @@ function showActions(linkId, divId, category,timestamp){
 	}
 	
 	var panels	= YAHOO.amp.actionPanels[category];
-	if ( !panels.timestamp || panels.timestamp != timestamp) { 
-		panels.timestamp	= timestamp;
+	if ( !panels.timestamp || panels.timestamp != timestamp) {
+		panels.timestamp	= timestamp;    
 		for (var p in panels) {
 			if ( panels[p] && panels[p].destroy ) {
 					panels[p].destroy();
@@ -1319,6 +1329,7 @@ function showActions(linkId, divId, category,timestamp){
 		panels.size = 0;
 	}
 	var actionPanel		= panels[linkId];
+    hidePanels(panels);
 	if (actionPanel == null) {
 		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
 			  visible:false,
@@ -1334,20 +1345,18 @@ function showActions(linkId, divId, category,timestamp){
 	actionPanel.myIsVisible	= true;
 }
 function hideActions(e) {
-	var clickedEl	= e.target;
+	var clickedEl	= e.target||e.srcElement;
 	if ( clickedEl.id.indexOf("Actions") >= 0 ) 
 		return;
-	var categories	= YAHOO.amp.actionPanels;
-	for (var categ in categories) {
-		if ( categories[categ] ) {
-			var panels	= categories[categ];
-			for (var p in panels) {
-				if ( panels[p] && panels[p].hide )
-						panels[p].hide();
-			}
-		}
-	}
+	 hideCategories();
 	
+}
+function hidePanels(panels){
+     for (var p in panels) {
+			if ( panels[p] && panels[p].hide ) {
+					panels[p].hide();
+			}
+	}
 }
 
 function getTemplateLabelsCb(formName, infoDivId) {

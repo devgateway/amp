@@ -232,18 +232,16 @@ public class LuceneUtil implements Serializable {
     		}
     	}
     	
-    	if (deleteIndex){
-    		if (idxDir.exists()){
-    			logger.info("Found, deleting ...");
-    			if (deleteDirectory(idxDir))
-    				logger.info("Done");
-    			else
-    				logger.info("Can't delete!");
-    		}
-    		else{
-    			logger.info("Not found ... will be generated!");
-    		}
-    	}
+    	if (idxDir.exists()){
+			logger.info("Found, deleting ...");
+			if (deleteDirectory(idxDir))
+				logger.info("Done");
+			else
+				logger.info("Can't delete!");
+		}
+		else{
+			logger.info("Not found ... will be generated!");
+		}
 
    	
     	if (!idxDir.exists()){ //we need to create the index from 0  
@@ -515,7 +513,7 @@ public class LuceneUtil implements Serializable {
 			}
 			
 			//New fields for Senegal.
-			qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
+			/*qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
 					+ " and amp_activity_id < " + chunkEnd + " ";
 			rs = st.executeQuery(qryStr);
 			rs.last();
@@ -529,7 +527,7 @@ public class LuceneUtil implements Serializable {
 				x.budgetNumber = rs.getString("budget_number");
 				isNext = rs.next();
 			}
-	 	 	
+	 	 	*/
 			conn.close();
 
 			logger.info("Building the index ");

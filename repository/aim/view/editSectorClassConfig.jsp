@@ -16,11 +16,15 @@
     function saveClicked(){
 	   var id = document.getElementById("originalSectorId").value;
 	   var newId = document.getElementById("sctClassId").value;
-	   if(id != newId) {
-			var flag = confirm("<digi:trn jsFriendly='true'>Sectors for activities will have to be changed manually. Proceed anyway?</digi:trn>");
-			if (!flag) {
-				return false;
-			}
+	   // Check if this is edit.
+	   var sectorId = document.getElementById("id").value;
+	   if(sectorId != "") {
+		   if(id != newId) {
+				var flag = confirm("<digi:trn jsFriendly='true'>Sectors for activities will have to be changed manually. Proceed anyway?</digi:trn>");
+				if (!flag) {
+					return false;
+				}
+		   }
 	   }
        document.aimSectorClassConfigForm.event.value = "save";
        document.getElementById("originalSectorId").value = newId;
@@ -35,7 +39,7 @@
     <!--  AMP Admin Logo -->
     <jsp:include page="teamPagesHeader.jsp" flush="true" />
     <!-- End of Logo -->
-    <html:hidden name="aimSectorClassConfigForm" property="id"/>
+    <html:hidden name="aimSectorClassConfigForm" property="id" styleId="id"/>
     <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>
     
     

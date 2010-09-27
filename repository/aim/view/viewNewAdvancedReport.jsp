@@ -175,7 +175,7 @@ session.setAttribute("progressValue", counter);
 						
 						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
+							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
 						</logic:present>
 					</span>
 				</td>
@@ -335,11 +335,11 @@ session.setAttribute("progressValue", counter);
 		             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 						<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
 		                    <c:set var="all" scope="page">
-		                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
+		                	<digi:trn key="rep:pop:SelectedRangeAll">All</digi:trn>
 		                </c:set>
 		                
-		            	<digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
-		                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
+		            	<i><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn></i> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
+		                <i><digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn></i> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
 		              </td>
 		             </tr>
 		           </table>
@@ -440,7 +440,7 @@ session.setAttribute("progressValue", counter);
 				
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
+					<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
 				</logic:present>
 			</span>
 			</td>
@@ -554,7 +554,7 @@ session.setAttribute("progressValue", counter);
 			<c:set var="pageNumber" value="<%=new Integer(0)%>" scope="request"/>
 			<c:set var="paginar" value="<%=new Boolean(true)%>" scope="request"/>
 			<c:if test="${not empty param.pageNumber }">
-				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
+				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter(\"pageNumber\"))%>" scope="request"/>
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
 			<table id='reportTable'  cellSpacing="0" width="900" style="overflow:hidden">

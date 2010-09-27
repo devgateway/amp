@@ -1169,7 +1169,7 @@ $(document).ready(function(){
 											</UL>						
 										</DIV>
                     	<div id="main">
-						<DIV id="subtabs">
+						<DIV id="subtabs" style="width: 99%; background-color: #ccdbff; padding: 2px 2px 2px 2px; min-height: 17px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
 	                        <div style="pa">
 	                        	<UL>
 	                        	<feature:display name="Message tab" module="Messages">
@@ -1304,15 +1304,14 @@ $(document).ready(function(){
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
 														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;"><digi:trn key="message:show">Show more information</digi:trn> &gt;&gt;</div>
-														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn>
-														</div>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn> &lt;&lt; </div>
                                                      </span>
 												   </div>	
                                                    </LI>
                                                 </UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
-			                                        <table  cellpadding="1" cellspacing="1" style="clear:both; padding:4px; border:silver dotted 1px;">
+			                                        <table  cellpadding="1" cellspacing="1" style="clear:both;">
 														<tr>
 															<td colspan="4" class="settings" nowrap>
 																<strong><digi:trn key="message:totalNum">Total Number</digi:trn></strong> :		
@@ -1337,10 +1336,10 @@ $(document).ready(function(){
 														
 															</td>
 															<td colspan="4" class="settings" id="adimSettings">
-																	<digi:trn key="message:refreshtime">Message Refresh Time(minutes)</digi:trn>:  ${messageForm.msgRefreshTimeCurr} |
-																	<digi:trn key="message:storepermess">Message Storage Per Message Type</digi:trn>:  ${messageForm.msgStoragePerMsgTypeCurr} |
-																	<digi:trn key="message:alertwarnings">Days of Advance Alert Warnings</digi:trn>:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
-																	<digi:trn key="message:emailalerts">Email Alerts</digi:trn>:
+																	<i><digi:trn key="message:refreshtime">Message Refresh Time(minutes)</digi:trn>:</i>  ${messageForm.msgRefreshTimeCurr} |
+																	<i><digi:trn key="message:storepermess">Message Storage Per Message Type</digi:trn>:</i>  ${messageForm.msgStoragePerMsgTypeCurr} |
+																	<i><digi:trn key="message:alertwarnings">Days of Advance Alert Warnings</digi:trn>:</i>  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
+																	<i><digi:trn key="message:emailalerts">Email Alerts</digi:trn>:</i>
 																	
 																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">
 																		<digi:trn key="message:No">No</digi:trn>
@@ -1357,7 +1356,6 @@ $(document).ready(function(){
 						
 													</table>
 											   </div>   
-                                                &nbsp;
                                              </DIV>
 					
                                         </div>

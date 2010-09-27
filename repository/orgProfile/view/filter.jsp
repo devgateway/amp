@@ -198,121 +198,125 @@
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-                <div id="orgProfToolbarId" style="display: none;width:99.7%;height:20px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-                    <span style="cursor:pointer;float:left;">
-                        <DIV id="subtabs">
-                            <UL>
-                                <LI>
-                                    <div>
-                                        <a target="_blank" onclick="exportPDF(); return false;">
-                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF'/> <digi:trn>Export to PDF</digi:trn>
-                                        </a>
-                                        <a target="_blank" onclick="exportWord(); return false;">
-                                            <digi:img  hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word'/> <digi:trn>Export to Word</digi:trn>
-                                        </a>
-                                        <div id="changeFilterLink" style="display: inline" title="<digi:trn>Click on this icon to view filter</digi:trn>">
-                                            <a>
-                                                <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter'/>
-                                                <digi:trn>Filter</digi:trn>
-                                            </a>
-
-                                        </div>
-                                        <div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
-                                            <a>
-                                                <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" border="0" alt=''/>
-                                                <digi:trn>Export Options</digi:trn>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </LI>
-                            </UL>
-                        </DIV>
-                    </span>
-                    <span style="cursor:pointer;font-family:Arial; font-size:10px; font-style: italic;float:right;" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
-                    &nbsp;
-                </div>
-                <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
-                    <table cellpadding="0" cellspacing="0" border="0" width="80%" >
-                        <tbody id="filterSettingsTable">
-                            <tr>
-                                <td valign="top">
-                                    <strong>
-                                        <digi:trn>Selected Filters:</digi:trn>
-                                    </strong>
-                                </td>
-                            </tr>
-                        <td>
-                            <digi:trn>Organization Group</digi:trn>:
-                            <c:choose>
-                                <c:when test="${not empty orgProfOrgProfileFilterForm.orgGroupName}">
-                                    ${orgProfOrgProfileFilterForm.orgGroupName}
-                                </c:when>
-                                <c:otherwise>
-                                    <digi:trn>All</digi:trn>
-                                </c:otherwise>
-                            </c:choose>
-                            |&nbsp;
-                            <digi:trn>Organization</digi:trn>:
-                            <c:choose>
-                                <c:when test="${not empty orgProfOrgProfileFilterForm.orgsName}">
-                                    ${orgProfOrgProfileFilterForm.orgsName}
-                                </c:when>
-                                <c:otherwise>
-                                    <digi:trn>All</digi:trn>
-                                </c:otherwise>
-                            </c:choose>
-                            |&nbsp;
-                            <digi:trn>locations</digi:trn>:
-                            <c:choose>
-                                <c:when test="${not empty orgProfOrgProfileFilterForm.locationsName}">
-                                    ${orgProfOrgProfileFilterForm.locationsName}
-                                </c:when>
-                                <c:otherwise>
-                                    <digi:trn>All</digi:trn>
-                                </c:otherwise>
-                            </c:choose>
-                            |&nbsp;
-                            <digi:trn>Year</digi:trn>:${orgProfOrgProfileFilterForm.year}| &nbsp;
-                            <digi:trn>Currency</digi:trn>:${orgProfOrgProfileFilterForm.currencyCode}| &nbsp;
-                            <digi:trn>Transaction Type</digi:trn>:
-                            <c:choose>
-
-                                <c:when test="${orgProfOrgProfileFilterForm.transactionType=='1'}">
-                                    <digi:trn>DISBURSEMENTS</digi:trn>
-                                </c:when>
-                                <c:when test="${orgProfOrgProfileFilterForm.transactionType=='0'}">
-                                    <digi:trn>COMMITMENTS</digi:trn>
-                                </c:when>
-                                <c:otherwise>
-                                    <digi:trn>Commitments & Disbursements</digi:trn>
-                                </c:otherwise>
-                            </c:choose>
-                            |&nbsp;
-                            <digi:trn>Number of project to display</digi:trn>:
-                            <c:choose>
-                                <c:when test="${orgProfOrgProfileFilterForm.largestProjectNumb==-1}">
-                                    <digi:trn>All</digi:trn>
-                                </c:when>
-                                <c:otherwise>
-                                    ${orgProfOrgProfileFilterForm.largestProjectNumb}
-                                </c:otherwise>
-                            </c:choose>
-                             <c:if test="${!orgProfOrgProfileFilterForm.fromPublicView}">|&nbsp;
-                            <digi:trn>Show data only from this workspace</digi:trn>:
-                            <c:if test="${orgProfOrgProfileFilterForm.workspaceOnly}">
-                                <digi:trn>Yes</digi:trn>
-                            </c:if>
-                            <c:if test="${!orgProfOrgProfileFilterForm.workspaceOnly}">
-                                <digi:trn>No</digi:trn>
-                            </c:if>
-                             </c:if>| <digi:trn>Number of years in time series</digi:trn>: ${orgProfOrgProfileFilterForm.yearsInRange}
-                        </td>
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </td>
+				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 2px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
+					<DIV id="subtabs" style="cursor: pointer; float: left; min-height: 20px;">
+			  			<UL>
+							<LI>
+								<div>
+									<a target="_blank" onclick="exportPDF(); return false;">
+									<digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF' />
+									<digi:trn>Export to PDF</digi:trn> 
+									</a> 
+									<a target="_blank" onclick="exportWord(); return false;"> 
+									<digi:img hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word' /> 
+									<digi:trn>Export to Word</digi:trn> 
+									</a>
+									<div id="changeFilterLink" style="display: inline" title="<digi:trn>Click on this icon to view filter</digi:trn>">
+									<a> <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter' /> 
+									<digi:trn>Filter</digi:trn> 
+									</a>
+									</div>
+									<div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
+									<a> 
+									<digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" border="0" alt='' /> 
+									<digi:trn>Export Options</digi:trn> 
+									</a>
+									</div>
+								</div>
+							</LI>
+					</UL>
+				</div>
+			<span style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right;" id="displaySettingsButton">
+			<digi:trn>Show Current Settings</digi:trn>
+			&gt;&gt;
+			</span> &nbsp;
+			<div style="display: none; background-color: #FFFFCC; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
+			<table cellpadding="0" cellspacing="0" border="0" width="80%">
+				<tbody id="filterSettingsTable">
+					<tr>
+						<td style="font-size:11px;" valign="top">
+						<strong> <digi:trn>Selected Filters:</digi:trn></strong> 
+							<i><digi:trn>Organization Group</digi:trn>:</i> 
+								<c:choose>
+									<c:when
+										test="${not empty orgProfOrgProfileFilterForm.orgGroupName}">
+		                                    ${orgProfOrgProfileFilterForm.orgGroupName}
+		                                </c:when>
+									<c:otherwise>
+										<digi:trn>All</digi:trn>
+									</c:otherwise>
+								</c:choose> 
+							|&nbsp;
+							<i><digi:trn>Organization</digi:trn>:</i> 
+								<c:choose>
+									<c:when test="${not empty orgProfOrgProfileFilterForm.orgsName}">
+		                                    ${orgProfOrgProfileFilterForm.orgsName}
+		                                </c:when>
+									<c:otherwise>
+										<digi:trn>All</digi:trn>
+									</c:otherwise>
+								</c:choose> 
+							|&nbsp; 
+							<i><digi:trn>Locations</digi:trn>:</i> 
+								<c:choose>
+									<c:when
+										test="${not empty orgProfOrgProfileFilterForm.locationsName}">
+		                                    ${orgProfOrgProfileFilterForm.locationsName}
+		                                </c:when>
+									<c:otherwise>
+										<digi:trn>All</digi:trn>
+									</c:otherwise>
+								</c:choose> 
+							|&nbsp; 
+							<i><digi:trn>Year</digi:trn>:</i>
+								${orgProfOrgProfileFilterForm.year} 
+							|&nbsp; 
+							<i><digi:trn>Currency</digi:trn>:</i>
+								${orgProfOrgProfileFilterForm.currencyCode} 
+							|&nbsp; 
+							<i><digi:trn>Transaction Type</digi:trn>:</i>
+								<c:choose>
+									<c:when
+										test="${orgProfOrgProfileFilterForm.transactionType=='1'}">
+										<digi:trn>DISBURSEMENTS</digi:trn>
+									</c:when>
+									<c:when
+										test="${orgProfOrgProfileFilterForm.transactionType=='0'}">
+										<digi:trn>COMMITMENTS</digi:trn>
+									</c:when>
+									<c:otherwise>
+										<digi:trn>Commitments & Disbursements</digi:trn>
+									</c:otherwise>
+								</c:choose> 
+							|&nbsp; <i><digi:trn>Number of project to display</digi:trn>:</i>
+								<c:choose>
+									<c:when
+										test="${orgProfOrgProfileFilterForm.largestProjectNumb==-1}">
+										<digi:trn>All</digi:trn>
+									</c:when>
+									<c:otherwise>
+		                                    ${orgProfOrgProfileFilterForm.largestProjectNumb}
+		                                </c:otherwise>
+								</c:choose> 
+							<c:if test="${!orgProfOrgProfileFilterForm.fromPublicView}">
+	                            |&nbsp;
+	                            <i><digi:trn>Show data only from this workspace</digi:trn>:</i>
+								<c:if test="${orgProfOrgProfileFilterForm.workspaceOnly}">
+									<digi:trn>Yes</digi:trn>
+								</c:if>
+								<c:if test="${!orgProfOrgProfileFilterForm.workspaceOnly}">
+									<digi:trn>No</digi:trn>
+								</c:if>
+							</c:if> 
+							|&nbsp; 
+							<i><digi:trn>Number of years in time series</digi:trn>:</i>
+								${orgProfOrgProfileFilterForm.yearsInRange}</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+			</td>
         </tr>
     </table>
     <div id="filter" style="visibility:hidden;display:none;width:700px;height:600px;">

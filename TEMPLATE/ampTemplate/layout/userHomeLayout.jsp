@@ -125,6 +125,9 @@
 									<TR>
 
 										<TD vAlign="top" align="left" width="85%">
+											<logic:notPresent name="currentMember">
+											<br/>
+											</logic:notPresent>
 
 											<digi:insert attribute="body" />
 <br/><br/><br/><br/>

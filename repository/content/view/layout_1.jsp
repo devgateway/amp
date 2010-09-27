@@ -16,15 +16,12 @@
 <div align="center">
   <table width="1000" class="layoutTable" border="0">
     <tr>
-      <td valign="top" rowspan="2"><digi:edit key="${param.htmlblock_2}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <td valign="top"><digi:edit key="${param.htmlblock_2}" maxLength="1500" displayText="Edit HTML"></digi:edit>
       </td>
-      <td valign="top" width="250"><digi:edit key="${param.htmlblock_1}" maxLength="1500" displayText="Edit HTML"></digi:edit>
-      </td>
-    </tr>
-    <tr>
-      <td valign="bottom" align="center"><c:if test="${thumbnailCount > 0}">
-      <br />
-          <table width="230" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom">
+      <td valign="top" width="250">
+      <digi:edit key="${param.htmlblock_1}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <c:if test="${thumbnailCount > 0}">
+          <table width="250" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;">
             <tr>
               <c:forEach var='index' begin='0' end='${thumbnailCount-1}'>
                 <td valign="middle" align="center"><a style="cursor: pointer">
@@ -35,7 +32,7 @@
             </tr>
           </table>
       <br />
-        </c:if>
+      </c:if>
       </td>
     </tr>
   </table>

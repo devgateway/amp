@@ -153,7 +153,7 @@ cursor:pointer;
 															<module:display name="GIS DASHBOARD" >
 																<feature:display name="Show in public view" module="GIS DASHBOARD">
 		                            	<li class="yuiampmenuitem">
-		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do"  onclick="return canExit()">
+		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true"  onclick="return canExit()">
 		                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
 		                                </a> 
 	                                </li>

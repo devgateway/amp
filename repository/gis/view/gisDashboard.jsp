@@ -344,7 +344,9 @@
         </td>
     </tr>
     --%>
-    
+    <c:set var="translation">
+		<digi:trn>Donors who have funded a project at the regional level</digi:trn>
+	</c:set>
     <tr>
         <td nowrap width="200" style="font-size:12px">
              <digi:trn>Select Donor</digi:trn>:
@@ -358,10 +360,11 @@
 			</logic:iterate>
 		</select>
 		</td>
+		<td>
+			<img border="0" title="${translation}" src="../ampTemplate/images/help.gif">
+		</td>
 	</tr>
-    
 </c:if>
-    
 </table>
     </div>
   </div>

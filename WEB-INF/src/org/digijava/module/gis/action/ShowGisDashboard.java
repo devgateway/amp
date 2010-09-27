@@ -14,13 +14,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.util.ChartWidgetUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * GIS Dashboard renderer action.
@@ -80,7 +78,7 @@ public class ShowGisDashboard extends Action {
 		}
 		
 		gisForm.setAllDonorOrgs(allDonors);
-
+			
 
         return mapping.findForward("forward");
     }

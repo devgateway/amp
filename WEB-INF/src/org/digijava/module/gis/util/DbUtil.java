@@ -227,7 +227,9 @@ public class DbUtil {
             String queryString = null;    
             queryString="select o.name, o.ampOrgId from " 
             	+ AmpOrganisation.class.getName()+ " o "
-            	+ "where o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() +" f) order by o.name";
+            	+" where o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
+            	+" f where f.ampActivityId in (select al.activity from "
+            	+ AmpActivityLocation.class.getName()+ " al)) order by o.name";
                 q = session.createQuery(queryString);
             
             retVal = q.list();

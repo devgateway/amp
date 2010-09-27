@@ -107,15 +107,15 @@ else {
         </TD>
     </TR>
     <TR>
-    	<TD>
-				<TABLE width="100" cellPadding="5" cellSpacing="0" vAlign="top" align="left" border="0">
+    	<TD align="center">
+				<TABLE width="100" cellPadding="5" cellSpacing="0" vAlign="top" align="center" border="0">
 					<tr>
 						<td style="width: 600;max-width: 600;">
 							<jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbarPublic.jsp" />
 						</td>
 					</tr>
 					<tr>
-						<TD vAlign="top" align="left" height="100%" rowspan="3" style="width: 600;max-width: 600;">
+						<TD vAlign="top" align="center" height="100%" rowspan="3" style="width: 100%;max-width: 600;">
 							<digi:insert attribute="body" />
 						</TD>
 					</TR>

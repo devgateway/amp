@@ -122,13 +122,13 @@
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		 -->
 		
-		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
+		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;margin-left: auto;margin-right: auto;"><img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		  
 		</td>
 	</tr>
 	
 	<tr>
-		<td colspan="2">
+		<td colspan="2" align="center">
 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>

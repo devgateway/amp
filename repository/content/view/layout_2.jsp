@@ -16,7 +16,7 @@
 <div align="center">
   <table width="1000" class="layoutTable" border="0">
     <tr>
-      <td valign="top" width="250" height="10%"><digi:edit key="${param.htmlblock_1}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <td valign="top" width="250" height="10%"><digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
       <br />
           <table width="100%" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;clear:both;">

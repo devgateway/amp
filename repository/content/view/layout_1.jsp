@@ -19,7 +19,7 @@
       <td valign="top"><digi:edit key="${param.htmlblock_2}" maxLength="1500" displayText="Edit HTML"></digi:edit>
       </td>
       <td valign="top" width="250">
-      <digi:edit key="${param.htmlblock_1}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
           <table width="250" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;clear:both;">
             <tr>

@@ -35,11 +35,13 @@
 	}
 
 	function deleteEUActivity(indexId) {
+		if (confirm("<digi:trn jsFriendly='true'>Are you sure you want to delete the activity?</digi:trn>")) {
 			popupPointer=window.open('about:blank','popper','width=10,height=10,top=5000,left=5000,scrollbars=no,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=no');
 			<digi:context name="editEUActivity" property="context/module/moduleinstance/editEUActivity.do?deleteEU&indexId=" />
 			document.aimEditActivityForm.action = "<%=editEUActivity%>"+indexId;
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
+		}
 	}
 
 

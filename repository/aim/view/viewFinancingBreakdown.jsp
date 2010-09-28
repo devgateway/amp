@@ -360,7 +360,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalDisbOrdered"/></TD>
 							                </field:display>
 							                <field:display name="Total Disbursed" feature="Disbursement">
-							                  <TD align="right" nowrap="nowrap"><bean:write name="breakdown" property="totalDisbursed"/></TD>
+							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalDisbursed"/></TD>
 							                </field:display>
 							                <field:display name="Undisbursed Funds" feature="Funding Information">
 								                <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="unDisbursed"/></TD>

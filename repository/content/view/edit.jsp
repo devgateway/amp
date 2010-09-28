@@ -99,8 +99,56 @@ div.fakefile2 input {
 }
 -->
 </style>
+<script language="javascript" type="text/javascript">
+    function downloadFile(index, pageCode) {
+        if (index != '0') {
+            window.location='/content/downloadFile.do?index='+index+'&pageCode=' + pageCode;
+//            window.location='/aim/downloadFileFromHome.do?index='+index;
+        }
+    }
+
+	var labelText = [];
+	
+    function attachFuncToThumbnail(index, pageCode) {
+		var idThumbnail = "displayThumbnail_" + index;
+        var lastTimeStamp = new Date().getTime();
+        var url = '/content/displayThumbnail.do?index='+index+'&pageCode='+pageCode+'&labelText=true&timestamp='+lastTimeStamp;
+        $.get(url, function(data) {
+        	returnData = data.split('*');
+			hasRelDoc = returnData[0];
+			labelText[index] = returnData[1];
+
+            if (hasRelDoc != 'true')
+			{
+                $("#"+idThumbnail).click(function() {
+                    var msg="<digi:trn>No related documents to download!</digi:trn>"
+                    alert(msg);
+                });
+            }
+            else
+			{
+                $("#"+idThumbnail).click(function() {
+                    downloadFile(index, pageCode);
+                });
+            }
+            
+            if(labelText[index] != null && labelText[index] != "null")
+			{
+				if (labelText[index].length > 0){
+					$("#"+idThumbnail).mouseover(function() {
+						 stm(['<digi:trn>Description</digi:trn>',labelText[index]],Style[1]);
+					});
+					$("#"+idThumbnail).mouseout(function() {
+						 htm();
+					});
+				}
+            }
+        });
+    }
+
+</script>
 <digi:instance property="contentForm" />
-<digi:form action="/contentManager.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+<digi:form action="/contentManager.do?action=save" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=1000>
   <tr>
     <td width=14>&nbsp;</td>
@@ -358,7 +406,6 @@ div.fakefile2 input {
 <html:hidden property="htmlblock_1"></html:hidden>
 <html:hidden property="htmlblock_2"></html:hidden>
 <html:hidden property="editKey"></html:hidden>
-<html:hidden property="action" value="save"/>
 
 
 <script language="javascript">

@@ -167,8 +167,11 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.closingDate")){
 			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.status")){
-			if (ampActivity.getApprovalStatus() != null){
-				parent.setStatus(buildCodeValue(ampActivity.getApprovalStatus()));
+			//if (ampActivity.getApprovalStatus() != null){
+			//AMP-9364
+			CodeValueType buildStatus = buildStatus();
+			if (buildStatus != null){
+				parent.setStatus(buildStatus);
 			} else {
 				String msg = "Status is empty";
 				this.addToLog(ampActivity, msg);
@@ -368,7 +371,13 @@ public class ExportBuilder {
 		return buildCodeValue(ampCategoryValue);
 	}
 
+	private CodeValueType buildStatus() throws AmpExportException{
 
+		AmpCategoryValue ampCategoryValue = 
+			CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,	ampActivity.getCategories());		
+		return buildCodeValue(ampCategoryValue);
+	}
+	
 	private ActivityType.Location buildLocation(AmpLocation location, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType.Location retValue = objectFactory.createActivityTypeLocation();
 		retValue.setLang(location.getLanguage());

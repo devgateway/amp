@@ -92,6 +92,7 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxscheduler_year_view.js"/>" language="JavaScript" type="text/javascript"></script>
+ <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 
@@ -101,7 +102,7 @@
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
- 	<style>
+ 	<style type="text/css">
 		.dhx_cal_container {
 		font-size: 10pt;
 		}
@@ -114,6 +115,12 @@
 		}
 		
 	</style>
+    <style type="text/css" media="print">
+        .noPrint{
+            display: none;
+        }
+
+    </style>
 	<script type="text/javascript" charset="utf-8">
 		  scheduler._click.dhx_cal_tab=function(){
 		   var mode = this.getAttribute("name").split("_")[0];
@@ -123,7 +130,7 @@
 		 }
 	
 	</script>  
-	  <table width="200px" height="40px">
+    <table width="200px" height="40px" class="noPrint">
 	  	<tr>
 	  		<td>	
 	 	
@@ -283,7 +290,7 @@
 	*/
 
 
-	
+
 	} 
 
 function calType(type){

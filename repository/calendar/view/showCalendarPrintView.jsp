@@ -8,17 +8,12 @@
 <digi:instance  property="calendarViewForm"/>
 
 
-<table border="0"  width="100%" height="100%">
-<tr>
-<td   align="center" width="150px" height="500px"></td>
-	<td>
-	<table border="0" align="center" width="1000px" height="500px">
-	<tr>
-		<td width="800px" height="500px" > 
-			<jsp:include page="viewEventsBody.jsp" flush="true"/>
-		</td>
-	</tr>
-	</table>
-  </td>
-</tr>
+
+<table border="0"  width="1000px" height="500px">
+    <tr>
+        <td width="800px" height="500px" >
+            <jsp:include page="viewEventsBody.jsp" flush="true"/>
+        </td>
+    </tr>
 </table>
+

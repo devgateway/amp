@@ -719,6 +719,7 @@
             </module>
             <module name="calendar">
                 <page>printPreviewPopupLayout</page>
+                 <page>printViewPopupLayout</page>
             </module>
 		</page-group>
 	</site-layout>

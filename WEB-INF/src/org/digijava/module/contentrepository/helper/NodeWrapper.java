@@ -141,7 +141,7 @@ public class NodeWrapper {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
 			long docType = 0;
-				String encTitle	= pdfOrWordFile.getDocTitle(); //URLEncoder.encode("Simple Test", "UTF-8");
+				String encTitle	= URLEncoder.encode(pdfOrWordFile.getDocTitle(), "UTF-8"); //URLEncoder.encode("Simple Test", "UTF-8");
 				docType = new Long(0);
 				newNode	= parentNode.addNode( encTitle );
 				newNode.addMixin("mix:versionable");
@@ -162,7 +162,7 @@ public class NodeWrapper {
 			
 			if ( !errorAppeared ) {
 				Calendar yearOfPublicationDate=null;								
-				populateNode(isANewVersion, newNode, encTitle, null, null,pdfOrWordFile.getContentType(), docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+				populateNode(isANewVersion, newNode, pdfOrWordFile.getDocTitle(), null, null,pdfOrWordFile.getContentType(), docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
 			}
 			
 			this.node		= newNode;

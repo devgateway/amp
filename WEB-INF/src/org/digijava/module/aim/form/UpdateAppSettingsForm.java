@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.helper.CrConstants;
 
 public class UpdateAppSettingsForm extends ActionForm {
@@ -65,9 +66,17 @@ public class UpdateAppSettingsForm extends ActionForm {
     
     private Collection<KeyValue> shareResAmongWorkspacesPossibleVals; //share resources among workspaces allowed by
     
+    private Collection<KeyValue> publishResourcesPossibleVals;
+    
 	private Integer allowAddTeamRes	= CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER;
 	
 	private Integer allowShareAccrossWRK	= CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM;
+	
+	private Integer allowPublishingResources	= CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL;
+	
+	private Long [] selTeamMembers;
+	private List<TeamMember> teamMembers;
+	private Boolean resetTeamMembers;
 
   public Collection getReports() {
 		return reports;
@@ -282,8 +291,7 @@ public class UpdateAppSettingsForm extends ActionForm {
 		return shareResAmongWorkspacesPossibleVals;
 	}
 
-	public void setShareResAmongWorkspacesPossibleVals(
-			Collection<KeyValue> shareResAmongWorkspacesPossibleVals) {
+	public void setShareResAmongWorkspacesPossibleVals(Collection<KeyValue> shareResAmongWorkspacesPossibleVals) {
 		this.shareResAmongWorkspacesPossibleVals = shareResAmongWorkspacesPossibleVals;
 	}
 
@@ -293,6 +301,46 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setAllowShareAccrossWRK(Integer allowShareAccrossWRK) {
 		this.allowShareAccrossWRK = allowShareAccrossWRK;
+	}
+
+	public Collection<KeyValue> getPublishResourcesPossibleVals() {
+		return publishResourcesPossibleVals;
+	}
+
+	public void setPublishResourcesPossibleVals(Collection<KeyValue> publishResourcesPossibleVals) {
+		this.publishResourcesPossibleVals = publishResourcesPossibleVals;
+	}
+
+	public Integer getAllowPublishingResources() {
+		return allowPublishingResources;
+	}
+
+	public void setAllowPublishingResources(Integer allowPublishingResources) {
+		this.allowPublishingResources = allowPublishingResources;
+	}
+
+	public Long[] getSelTeamMembers() {
+		return selTeamMembers;
+	}
+
+	public void setSelTeamMembers(Long[] selTeamMembers) {
+		this.selTeamMembers = selTeamMembers;
+	}
+
+	public List<TeamMember> getTeamMembers() {
+		return teamMembers;
+	}
+
+	public void setTeamMembers(List<TeamMember> teamMembers) {
+		this.teamMembers = teamMembers;
+	}
+
+	public Boolean getResetTeamMembers() {
+		return resetTeamMembers;
+	}
+
+	public void setResetTeamMembers(Boolean resetTeamMembers) {
+		this.resetTeamMembers = resetTeamMembers;
 	}
 	
 }

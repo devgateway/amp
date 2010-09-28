@@ -18,6 +18,7 @@
 		<property name="useDefault" column="use_default" type="java.lang.Boolean" />
 		<property name="allowAddTeamRes" column="allow_add_team_res" type="java.lang.Integer" />
 		<property name="allowShareTeamRes" column="allow_share_res_globally" type="java.lang.Integer" />
+		<property name="allowPublishingResources" column="allow_publishing_resources" type="java.lang.Integer" />
 		
 		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
 			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />

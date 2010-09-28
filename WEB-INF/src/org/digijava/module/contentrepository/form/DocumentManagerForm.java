@@ -60,7 +60,6 @@ public class DocumentManagerForm extends ActionForm {
 	private Long yearOfPublication;
 	
 	private Boolean pageCloseFlag	= false;
-	private Boolean hasCreateDocFromTemplateRights;
 	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
@@ -362,15 +361,5 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setFilterLabelsUUID(String[] filterLabelsUUID) {
 		this.filterLabelsUUID = filterLabelsUUID;
-	}
-
-	public Boolean getHasCreateDocFromTemplateRights() {
-		return hasCreateDocFromTemplateRights;
-	}
-
-	public void setHasCreateDocFromTemplateRights(Boolean hasCreateDocFromTemplateRights) {
-		this.hasCreateDocFromTemplateRights = hasCreateDocFromTemplateRights;
-	}
-	
-	
+	}	
 }

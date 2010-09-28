@@ -132,7 +132,6 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.table");
-	
 	var privateListObj	= null;
 	var teamListObj	= null;
 	
@@ -299,12 +298,9 @@ function setHoveredTable(tableId, hasHeaders) {
 
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu");
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true);
-	
-	
 
 </script>
 
-<html:hidden property="hasCreateDocFromTemplateRights" styleId="hasCreateDocFromTemplateRights"/>
 <table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
 	<tr>
 		<td valign="bottom" class="crumb" >

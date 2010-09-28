@@ -12,6 +12,7 @@
 		<property name="readPermission" column="read_permission" type="java.lang.Boolean" />
 		<property name="writePermission" column="write_permission" type="java.lang.Boolean" />
 		<property name="deletePermission" column="delete_permission" type="java.lang.Boolean" />
+		<property name="publishDocPermission" column="publish_doc_permission" type="java.lang.Boolean" />
 
 		<many-to-one name="user" column="user_" class="org.digijava.kernel.user.User" cascade="none" />
 		<many-to-one name="ampTeam" column="amp_team_id"

@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -27,6 +28,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
 
 public class UpdateTeamMembers extends Action {
 
@@ -70,8 +72,7 @@ public class UpdateTeamMembers extends Action {
             }
 
             //ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
-            AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm
-                .getRole());
+            AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm.getRole());
             AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();
             if (role.getRole().equals(teamLead.getRole())) {
                 ActionMessages error = new ActionMessages();
@@ -106,17 +107,29 @@ public class UpdateTeamMembers extends Action {
             ampMember.setReadPermission(new Boolean(true));
             ampMember.setWritePermission(new Boolean(true));
             ampMember.setDeletePermission(new Boolean(true));
+            //publishing permissions
+            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+            Integer docPublishingPermissions=ampAppSettings.getAllowPublishingResources();
+            if(docPublishingPermissions!=null){
+            	if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
+    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead())) ||
+    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS) && ampMember.getPublishDocPermission()!=null && ampMember.getPublishDocPermission())){
+                	ampMember.setPublishDocPermission(true);
+    			}else{
+    				ampMember.setPublishDocPermission(false);
+    			}
+            }           
+            
+            
             ampMember.setUser(UserUtils.getUser(upForm.getUserId()));
             ampMember.setAmpTeam(ampTeam);
-            Collection col = TeamMemberUtil.getAllMemberAmpActivities(upForm
-                .getTeamMemberId());
+            Collection col = TeamMemberUtil.getAllMemberAmpActivities(upForm.getTeamMemberId());
             Set temp = new HashSet();
             temp.addAll(col);
             ampMember.setActivities(temp);
             logger.info(" updating the team member now....");
             DbUtil.update(ampMember);
-            AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam
-                .getAmpTeamId());
+            AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId());
             logger.info(" here finally");
 
             if (ampTeam == null) {

@@ -26,6 +26,7 @@ public class AmpTeamMember implements Serializable {
 	private Set links;
 	private Set logs;
 	private Set<AmpMessageState> messages;
+	private Boolean publishDocPermission; /*whether the team member has permissions to add document using templates*/
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -191,10 +192,16 @@ public class AmpTeamMember implements Serializable {
 		this.messages = messages;
 	}
 
+	public Boolean getPublishDocPermission() {
+		return publishDocPermission;
+	}
+
+	public void setPublishDocPermission(Boolean publishDocPermission) {
+		this.publishDocPermission = publishDocPermission;
+	}	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	
-	
-
-}
+	}

@@ -50,16 +50,13 @@ ActionsMenu.prototype.render=function (){
 		divEl.appendChild(addURLdivEl);
 		
 		
-		if(this.teamView!=null && ! this.teamView){
-			var hasCreateDocFromTemplateRights = document.getElementById("hasCreateDocFromTemplateRights");
-			if(hasCreateDocFromTemplateRights!=null && hasCreateDocFromTemplateRights.value=='true'){
-				//create from template link
-				var createFromTemplateLinkEl="<a href=\"javascript:addFromTemplate()\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" onclick=\"menuPanelForUser.toggleUserView();\">";
-				createFromTemplateLinkEl+=createFromTemplate;
-				createFromTemplateLinkEl+="</a>";
-				var createFromTempldivEl	= createActionDiv(createFromTemplateLinkEl);
-				divEl.appendChild(createFromTempldivEl);
-			}			
+		if(this.teamView!=null && ! this.teamView){			
+			//create from template link
+			var createFromTemplateLinkEl="<a href=\"javascript:addFromTemplate()\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" onclick=\"menuPanelForUser.toggleUserView();\">";
+			createFromTemplateLinkEl+=createFromTemplate;
+			createFromTemplateLinkEl+="</a>";
+			var createFromTempldivEl	= createActionDiv(createFromTemplateLinkEl);
+			divEl.appendChild(createFromTempldivEl);
 		}
 	
 	divEl.style.border	= "1px solid gray";
@@ -70,7 +67,7 @@ ActionsMenu.prototype.render=function (){
 	//bigDiv.style.border	= "1px solid gray";
 	bigDiv.appendChild(divEl);
 	bigDiv.appendChild(brEl);
-
+	
 	this.overlay.setBody(bigDiv);
 	this.overlay.render(document.body);
 }

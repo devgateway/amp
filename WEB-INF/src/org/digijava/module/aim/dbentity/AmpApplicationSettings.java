@@ -41,6 +41,8 @@ public class AmpApplicationSettings implements Serializable {
     private Integer allowAddTeamRes;
     
     private Integer allowShareTeamRes; //across the workspaces
+    
+    private Integer allowPublishingResources;
 
   public AmpReports getDefaultTeamReport() {
 		return defaultTeamReport;
@@ -166,6 +168,14 @@ public class AmpApplicationSettings implements Serializable {
 
 	public void setAllowShareTeamRes(Integer allowShareTeamRes) {
 		this.allowShareTeamRes = allowShareTeamRes;
+	}
+
+	public Integer getAllowPublishingResources() {
+		return allowPublishingResources;
+	}
+
+	public void setAllowPublishingResources(Integer allowPublishingResources) {
+		this.allowPublishingResources = allowPublishingResources;
 	}
 	
 }

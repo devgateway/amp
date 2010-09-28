@@ -45,6 +45,8 @@ public class TeamMember {
 	private boolean translator;
 	
 	private Set activities;
+	
+	private Boolean publishDocuments; /*permissions to make docs public*/
 
 	public TeamMember() {}
 
@@ -280,4 +282,13 @@ public class TeamMember {
 	public void setPledger(Boolean pledger) {
 		this.pledger = pledger;
 	}
+
+	public Boolean getPublishDocuments() {
+		return publishDocuments;
+	}
+
+	public void setPublishDocuments(Boolean publishDocuments) {
+		this.publishDocuments = publishDocuments;
+	}	
+	
 }

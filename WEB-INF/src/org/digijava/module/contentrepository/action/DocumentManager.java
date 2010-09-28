@@ -262,7 +262,6 @@ public class DocumentManager extends Action {
 			myForm.setTeamMember(teamMember);
 			myForm.setTeamLeader( teamMember.getTeamHead() );
 			myForm.setTeamMembers( TeamMemberUtil.getAllTeamMembers(teamMember.getTeamId()) );
-			myForm.setHasCreateDocFromTemplateRights(DocumentManagerRights.hasCreateDocumentFromTemplateRights(request));
 			
 			// AMP-8791: "resourcesTab" is set only when the document is
 			// shared/unshared.

@@ -25,6 +25,7 @@ import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
 
 /**
  * Adds a member to a team
@@ -150,17 +151,24 @@ public class AddTeamMember extends Action {
 			
 			
 			// add the default application settings for the user  
-			AmpApplicationSettings ampAppSettings = DbUtil
-					.getTeamAppSettings(ampTeam.getAmpTeamId());
+			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+			Integer docPublishingPermissions=ampAppSettings.getAllowPublishingResources();
+			if(docPublishingPermissions!=null){
+				if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
+						(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead()))){
+					newMember.setPublishDocPermission(true);
+				}else{
+					newMember.setPublishDocPermission(false);
+				}
+			}			
+			
 			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
 			//newAppSettings.setTeam(ampAppSettings.getTeam());
 			newAppSettings.setTeam(newMember.getAmpTeam());
 			newAppSettings.setMember(newMember);
-			newAppSettings.setDefaultRecordsPerPage(ampAppSettings
-					.getDefaultRecordsPerPage());
+			newAppSettings.setDefaultRecordsPerPage(ampAppSettings.getDefaultRecordsPerPage());
 			newAppSettings.setCurrency(ampAppSettings.getCurrency());
-			newAppSettings.setFiscalCalendar(ampAppSettings
-					.getFiscalCalendar());
+			newAppSettings.setFiscalCalendar(ampAppSettings.getFiscalCalendar());
 			newAppSettings.setLanguage(ampAppSettings.getLanguage());
 			newAppSettings.setUseDefault(new Boolean(true));
 			Site site = RequestUtils.getSite(request);

@@ -42,6 +42,7 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar;
+import org.digijava.module.message.dbentity.AmpMessageState;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -236,6 +237,7 @@ public class TeamMemberUtil {
 		tm.setMemberName(name);
 		tm.setRoleName(role);
 		tm.setEmail(usr.getEmail());
+		tm.setPublishDocuments(ampMem.getPublishDocPermission());
 		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
 				headRole.getAmpTeamMemRoleId())) {
 			tm.setTeamHead(true);
@@ -261,6 +263,7 @@ public class TeamMemberUtil {
 		tm.setMemberName(name);
 		tm.setRoleName(role);
 		tm.setEmail(usr.getEmail());
+		tm.setPublishDocuments(ampMem.getPublishDocPermission());
 		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
 			tm.setTeamHead(true);
 		} else {
@@ -367,8 +370,8 @@ public class TeamMemberUtil {
 				tm.setRoleName(role);
 				tm.setEmail(user.getEmail());
 				tm.setTeamId(teamId);
-				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
-						headRole.getAmpTeamMemRoleId())) {
+				tm.setPublishDocuments(ampMem.getPublishDocPermission());
+				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
 					tm.setTeamHead(true);
 					//System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
 					logger.info("[logger] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
@@ -392,6 +395,95 @@ public class TeamMemberUtil {
 		logger.debug("returning members");
 		Collections.sort((List<TeamMember>)members, new TeamMemberUtil.TeamMemberComparator());
 		return members;
+	}
+	
+	public static List<TeamMember> getAllMembersExcludingTL (Long teamId){
+		Session session = null;
+		Query qry = null;
+		List<TeamMember> members = null;
+		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+		try {
+			session= PersistenceManager.getRequestDBSession();
+			String queryString="select tm from " + AmpTeamMember.class.getName() +" tm where tm.ampTeam=:teamId and tm.ampMemberRole!="+headRole.getAmpTeamMemRoleId()+" order by tm.user.firstNames,tm.user.lastName";
+			qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId,Hibernate.LONG);
+			List<AmpTeamMember> ampTeamMembers = qry.list();
+			if(ampTeamMembers!=null){
+				Iterator<AmpTeamMember> itr = ampTeamMembers.iterator();
+				while (itr.hasNext()) {
+					AmpTeamMember ampMem = (AmpTeamMember) itr.next();
+					Long id = ampMem.getAmpTeamMemId();
+					User user = UserUtils.getUser(ampMem.getUser().getId());
+					String name = user.getName();
+					String role = ampMem.getAmpMemberRole().getRole();
+					TeamMember tm = new TeamMember();
+					tm.setMemberId(id);
+					tm.setMemberName(name);
+					tm.setTeamName(ampMem.getAmpTeam().getName());
+					tm.setRoleName(role);
+					tm.setEmail(user.getEmail());
+					tm.setTeamId(teamId);
+					tm.setPublishDocuments(ampMem.getPublishDocPermission());
+					tm.setTeamHead(false);
+					if(members==null){
+						members=new ArrayList<TeamMember>();
+					}
+					members.add(tm);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get all team members", e);
+		}
+		return members;
+	}
+	
+	/**
+	 * checks whether some tm's have right to make document public and if they shouldn't have this right, changes them
+	 * @param teamId
+	 * @param memberIds
+	 */
+	public static void removeTeamMembersResourcePublishingRights(Long teamId, List<Long> memberIds){
+		Session session = null;
+		Query qry = null;
+		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+		try {
+			session= PersistenceManager.getRequestDBSession();
+			String qhl="update " + AmpTeamMember.class.getName()+" tm set tm.publishDocPermission=false where tm.ampTeam="+teamId+" and tm.publishDocPermission=true and tm.ampMemberRole!="+headRole.getAmpTeamMemRoleId();
+			if(memberIds!=null && memberIds.size()>0){
+				qhl+=" and tm.ampTeamMemId not in (:memberIds)" ;
+			}
+			qry=session.createQuery(qhl);
+			if(memberIds!=null && memberIds.size()>0){
+				qry.setParameterList("memberIds", memberIds);
+			}
+			qry.executeUpdate();
+		} catch (Exception e) {
+			logger.error("couldn't update team members", e);
+		}
+	}
+	
+	/**
+	 * checks whether some tm's have no rights to make document public and if they should have this right, changes them
+	 * @param teamId
+	 * @param selectedMemberIds
+	 */
+	public static void grantMembersResourcePublishingRights (Long teamId, List<Long> selectedMemberIds){
+		Session session = null;
+		Query qry = null;
+		try {
+			session= PersistenceManager.getRequestDBSession();
+			String qhl="update " + AmpTeamMember.class.getName()+" tm set tm.publishDocPermission=true where tm.ampTeam="+teamId+" and (tm.publishDocPermission is null or tm.publishDocPermission=false)";
+			if(selectedMemberIds!=null && selectedMemberIds.size()>0){
+				qhl+=" and tm.ampTeamMemId in (:memberIds)" ;
+			}
+			qry=session.createQuery(qhl);
+			if(selectedMemberIds!=null && selectedMemberIds.size()>0){
+				qry.setParameterList("memberIds", selectedMemberIds);
+			}
+			qry.executeUpdate();
+		} catch (Exception e) {
+			logger.error("couldn't update team members", e);
+		}
 	}
 	
 	private static class TeamMemberComparator implements Comparator<TeamMember> {

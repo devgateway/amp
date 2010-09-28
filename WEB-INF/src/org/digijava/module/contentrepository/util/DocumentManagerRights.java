@@ -92,10 +92,28 @@ public class DocumentManagerRights {
 		
 	public static Boolean hasMakePublicRights (Node node, HttpServletRequest request) {
 		Boolean manuallySetNoMakePublicFlag	= isManuallySetNoMakePublicFlag(request);
-		if ( manuallySetNoMakePublicFlag == null )
-			manuallySetNoMakePublicFlag = true;
-		return true && manuallySetNoMakePublicFlag && isLeaderOfManagementWorkspace( request ) ;
+		if ( manuallySetNoMakePublicFlag == null ){
+			manuallySetNoMakePublicFlag=true;
+		}
+		return manuallySetNoMakePublicFlag && (isTeamLeader(request) || isAllowedToPublishResources(request)) ;
+//		if(isTeamLeader(request)){
+//				return true;
+//		}
+//		return isAllowedToPublishResources(request);
 	}
+	
+	private static boolean isAllowedToPublishResources(HttpServletRequest request) {
+		boolean retVal=false;
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember tm				= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
+		if ( sett.getAllowPublishingResources() != null && (sett.getAllowPublishingResources()>= CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS
+				&& tm.getPublishDocuments()!=null && tm.getPublishDocuments()) ){
+			retVal=true;
+		}		
+		return retVal;
+	}
+	
 	public static Boolean hasDeleteRightsOnPublicVersion(Node node, HttpServletRequest request) {
 		return true && isOwnerOrTeamLeader(node, request);
 	}
@@ -146,12 +164,6 @@ public class DocumentManagerRights {
 		}
 	}
 	
-	/**
-	 * whether user is allowed to create document using templates
-	 */
-	public static Boolean hasCreateDocumentFromTemplateRights (HttpServletRequest request){
-		return isTeamLeader(request);
-	}
 	
 	/**
 	 * is team member allowed to share team resources across workspaces 
@@ -166,25 +178,6 @@ public class DocumentManagerRights {
 	private static Boolean hasUnshareAmongWorkspacesRights(HttpServletRequest request) {
 		return isTeamLeader(request) || isAllowedShareAndUnshareResAcrossWorkspacesForMembers(request);
 	}
-	
-//	public static Boolean hasShareRights(Node node){
-//		Boolean retVal=null;
-//		Session session=null;
-//		Query qry=null;
-//		try {
-//			session=PersistenceManager.getRequestDBSession();
-//			qry=session.createQuery("select count(a) from " + CrSharedDoc.class.getName() +" a where a.nodeUUID='"+node.getUUID()+"'");
-//			int count=(Integer)qry.uniqueResult();
-//			if(count>0){
-//				retVal=false;
-//			}else{
-//				retVal=true;
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
-//		return retVal;
-//	}
 	
 	private static Boolean isTeamLeader( HttpServletRequest request ) {
 		HttpSession httpSession		= request.getSession(); 

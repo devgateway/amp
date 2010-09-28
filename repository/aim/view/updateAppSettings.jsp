@@ -22,34 +22,56 @@ var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, ple
 var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater than "1"</digi:trn>';
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 function validade(){
-  var defReportsPerPage = document.getElementById("defRecsPerPage");
-  if(parseInt(defReportsPerPage.value)<1){
+	var defReportsPerPage = document.getElementById("defRecsPerPage");
+  	if(parseInt(defReportsPerPage.value)<1){
 	  alert(helpBodyAct);
 	  return false;
-  }
-  var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
-  var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
+  	}
+  	var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
+  	var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
 
-  if ( !checkYear( startYear, BASE_YEAR, 200 ) ) {
-	aimUpdateAppSettingsForm.reportStartYear.focus();
-	alert("<digi:trn>Chosen report start year is not realistic</digi:trn>");
-	return false;
-  }
-  if ( !checkYear( endYear, BASE_YEAR, 200 ) ) {
-	aimUpdateAppSettingsForm.reportEndYear.focus();
-	alert("<digi:trn>Chosen report end year is not realistic</digi:trn>");
-	return false;
-  }
-  if ( startYear > endYear ) {
+  	if ( !checkYear( startYear, BASE_YEAR, 200 ) ) {
+		aimUpdateAppSettingsForm.reportStartYear.focus();
+		alert("<digi:trn>Chosen report start year is not realistic</digi:trn>");
+		return false;
+  	}
+  	if ( !checkYear( endYear, BASE_YEAR, 200 ) ) {
+		aimUpdateAppSettingsForm.reportEndYear.focus();
+		alert("<digi:trn>Chosen report end year is not realistic</digi:trn>");
+		return false;
+  	}
+  	if ( startYear > endYear ) {
 	  aimUpdateAppSettingsForm.reportStartYear.focus();
 	  alert("<digi:trn>Start year greater than end year</digi:trn>");
 	  return false;
- }
-
-  document.aimUpdateAppSettingsForm.save.value = "save";
-  document.aimUpdateAppSettingsForm.submit();
-  return true;
+  	}
+	//tms 
+	var chosenRights=document.getElementById("publResRights"); //right for publishing docs  
+	var tms= document.getElementById("selTeamMembers");
+	if(tms!=null && tms.value!='' && tms.value!=0 && chosenRights.value==2){
+		document.getElementById('setectedTMs').value=false;
+	}else{
+		document.getElementById('setectedTMs').value=true;
+	}
+	
+  	document.aimUpdateAppSettingsForm.save.value = "save";
+  	document.aimUpdateAppSettingsForm.submit();
+  	return true;
 }
+
+function publishingRigthsChanged(){
+	var chosenRights=document.getElementById("publResRights");
+	var membersListDiv=document.getElementById("membersDiv"); memDiv
+	var memDiv=document.getElementById("memDiv");
+	if(chosenRights.value==2){
+		memDiv.style.display	= 'block';
+		membersListDiv.style.display	= 'block';
+	}else{
+		memDiv.style.display	= 'none';
+		membersListDiv.style.display	= 'none';
+	}
+}
+
 function checkYear( year, base, range ) {
 	if ( year == 0 )
 		return true;
@@ -80,7 +102,7 @@ function loadShareRules(){
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 <html:hidden property="save" />
-
+<html:hidden styleId="setectedTMs" value="${aimAddOrgForm.resetTeamMembers}" name="aimAddOrgForm" property="resetTeamMembers"/>
 <!-- Start include of reportDescriptionSheet.jsp  -->
 	<%@include file="reportDescriptionSheet.jsp"%>
 <!-- END include of reportDescriptionSheet.jsp  -->
@@ -331,6 +353,48 @@ function loadShareRules(){
 																</c:forEach>
 															</html:select>
 														</td>
+													</tr>
+													<tr>
+														<td bgcolor="#f4f4f2"  align="right" width="50%">
+															<digi:trn>Rights For Publishing Resources</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:select property="allowPublishingResources" styleClass="inp-text" onchange="publishingRigthsChanged()" styleId="publResRights">
+																<c:forEach var="element" items="${aimUpdateAppSettingsForm.publishResourcesPossibleVals}">
+																	<c:set var="trn">
+																		<digi:trn>${element.value}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.key}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+															</html:select>
+														</td>
+													</tr>
+													<tr>
+														<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources!=2}">
+																<c:set var="displayDiv">display: none;</c:set>
+														</c:if>
+														<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
+															<c:set var="displayDiv"></c:set>
+														</c:if>
+														<td bgcolor="#f4f4f2"  align="right" width="50%">
+															<div style="${displayDiv}"  id="memDiv">
+																<digi:trn>Members</digi:trn>
+															</div>															
+														</td>
+														<td bgcolor="#f4f4f2" width="50%">															
+															<div style="${displayDiv}"  id="membersDiv">
+																<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">
+																	<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+																</logic:empty>
+																<logic:notEmpty name="aimUpdateAppSettingsForm"  property="teamMembers" >
+																	<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px">
+																		<html:optionsCollection name="aimUpdateAppSettingsForm" property="teamMembers" value="memberId" label="memberName"/>
+																	</html:select>
+																</logic:notEmpty>
+															</div>
+														</td>														
 													</tr>
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2" >

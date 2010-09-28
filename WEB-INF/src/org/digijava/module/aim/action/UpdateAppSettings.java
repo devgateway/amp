@@ -49,6 +49,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 public class UpdateAppSettings extends Action {
 
 	private static Logger logger = Logger.getLogger(UpdateAppSettings.class);
@@ -60,6 +62,8 @@ public class UpdateAppSettings extends Action {
 		String shareResAction=request.getParameter("shareResAction");
 		
 		this.populatePossibleValsAddTR(uForm);
+		
+		this.populatePublishResourcesPossibleVals(uForm);
 		
 		this.populateShareResAmongWorkspacesPossibleVals(uForm);
 		
@@ -123,11 +127,9 @@ public class UpdateAppSettings extends Action {
 			}
 			if (ampAppSettings != null && loadValues) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
-				uForm.setDefRecsPerPage(ampAppSettings
-						.getDefaultRecordsPerPage());
+				uForm.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
 
-				Integer reportsPerPage = ampAppSettings
-						.getDefaultReportsPerPage();
+				Integer reportsPerPage = ampAppSettings.getDefaultReportsPerPage();
 				if (reportsPerPage == null) {
 					reportsPerPage = 0;
 				}
@@ -144,27 +146,49 @@ public class UpdateAppSettings extends Action {
 					this.populateShareResAmongWorkspacesPossibleVals(uForm);
 				}
 				uForm.setAllowShareAccrossWRK(ampAppSettings.getAllowShareTeamRes());
+				uForm.setAllowPublishingResources(ampAppSettings.getAllowPublishingResources());
+				//get team members
+				Long currentTeamId=tm.getTeamId();
+				List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
+				uForm.setTeamMembers(members);
+				if(uForm.getAllowPublishingResources()!=null && uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS)){
+					//Long currentTeamId=tm.getTeamId();
+					//List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
+					//uForm.setTeamMembers(members);
+					if(members!=null){
+						List<Long> selMembersIds= null; 
+						for (TeamMember teamMember : members) {
+							if(teamMember.getPublishDocuments()!=null && teamMember.getPublishDocuments()){
+								if(selMembersIds==null){
+									selMembersIds=new ArrayList<Long>();
+								}
+								selMembersIds.add(teamMember.getMemberId());
+							}
+						}
+						if(selMembersIds!=null && selMembersIds.size()>0){
+							uForm.setSelTeamMembers(selMembersIds.toArray(new Long[selMembersIds.size()] ));
+						}
+					}
+				}
 				uForm.setDefReportsPerPage(reportsPerPage);
 				uForm.setReportStartYear(reportStartYear);
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setValidation(ampAppSettings.getValidation());
-				uForm.setCurrencyId(ampAppSettings.getCurrency()
-						.getAmpCurrencyId());
+				uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
                 if(ampAppSettings.getFiscalCalendar()!=null){
-				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar()
-						.getAmpFiscalCalId());
+				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
                 }
 
-				if (ampAppSettings.getDefaultTeamReport() != null)
-					uForm.setDefaultReportForTeamId(ampAppSettings
-							.getDefaultTeamReport().getAmpReportId());
-				else
+				if (ampAppSettings.getDefaultTeamReport() != null){
+					uForm.setDefaultReportForTeamId(ampAppSettings.getDefaultTeamReport().getAmpReportId());
+				}else{
 					uForm.setDefaultReportForTeamId(new Long(0));
+				}
+					
 			}
 			/* Select only the reports that are shown as tabs */
-			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,
-					null, null, true, tm.getMemberId());
+			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,null, null, true, tm.getMemberId());
 			if (reports != null) {
 				Iterator iterator = reports.iterator();
 				while (iterator.hasNext()) {
@@ -190,13 +214,10 @@ public class UpdateAppSettings extends Action {
 			uForm.setFisCalendars(DbUtil.getAllFisCalenders());
 
 			// set Navigation languages
-			Set languages = SiteUtils.getUserLanguages(RequestUtils
-					.getSite(request));
+			Set languages = SiteUtils.getUserLanguages(RequestUtils.getSite(request));
 
 			HashMap translations = new HashMap();
-			Iterator iterator = TrnUtil.getLanguages(
-					RequestUtils.getNavigationLanguage(request).getCode())
-					.iterator();
+			Iterator iterator = TrnUtil.getLanguages(RequestUtils.getNavigationLanguage(request).getCode()).iterator();
 			while (iterator.hasNext()) {
 				TrnLocale item = (TrnLocale) iterator.next();
 				translations.put(item.getCode(), item);
@@ -273,6 +294,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 				ampAppSettings.setAllowAddTeamRes( uForm.getAllowAddTeamRes() );
 				ampAppSettings.setAllowShareTeamRes(uForm.getAllowShareAccrossWRK());
+				ampAppSettings.setAllowPublishingResources(uForm.getAllowPublishingResources());
 				//
 				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				//
@@ -305,6 +327,34 @@ public class UpdateAppSettings extends Action {
 				}
 				try {
 					DbUtil.update(ampAppSettings);
+					//update team members
+					if(uForm.getResetTeamMembers()!=null && uForm.getResetTeamMembers()){
+						uForm.setSelTeamMembers(null);
+					}
+					if(uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL)){//allowed only to WM
+						//remove rights to other tms
+						TeamMemberUtil.removeTeamMembersResourcePublishingRights(tm.getTeamId(),null);
+						//give permissions to TL
+						AmpTeamMember teamHead= TeamMemberUtil.getTeamHead(tm.getTeamId());
+						if(teamHead.getPublishDocPermission()==null){
+							teamHead.setPublishDocPermission(true);
+							DbUtil.saveOrUpdateObject(teamHead);
+						}
+					}else if (uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS)){//allowed specific users
+						if(uForm.getSelTeamMembers()!=null && uForm.getSelTeamMembers().length!=0){							
+							List<Long> selTMs=Arrays.asList(uForm.getSelTeamMembers());
+							//remove rights to other tms
+							TeamMemberUtil.removeTeamMembersResourcePublishingRights(tm.getTeamId(),selTMs);
+							//grant publishing rights to selected tms
+							TeamMemberUtil.grantMembersResourcePublishingRights(tm.getTeamId(), selTMs);
+						}else{
+							TeamMemberUtil.removeTeamMembersResourcePublishingRights(tm.getTeamId(),null); //in case every user was unselected
+						}
+					}else if (uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM)){//allowed to all users
+						//grant publishing rights to everyone
+						TeamMemberUtil.grantMembersResourcePublishingRights(tm.getTeamId(), null);
+					}					
+					
 					uForm.setUpdated(true);
 				} catch (Exception e) {
 					uForm.setUpdated(false);
@@ -390,20 +440,16 @@ public class UpdateAppSettings extends Action {
 		logger.debug("restoreApplicationSettings() returning");
 	}
 
-	public ApplicationSettings getReloadedAppSettings(
-			AmpApplicationSettings ampAppSettings) {
+	public ApplicationSettings getReloadedAppSettings(AmpApplicationSettings ampAppSettings) {
 		ApplicationSettings appSettings = new ApplicationSettings();
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
 		appSettings.setReportStartYear(ampAppSettings.getReportStartYear());
 		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
 
-		appSettings.setDefReportsPerPage(ampAppSettings
-				.getDefaultReportsPerPage());
-		appSettings.setCurrencyId(ampAppSettings.getCurrency()
-				.getAmpCurrencyId());
-		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-				.getAmpFiscalCalId());
+		appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
+		appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
 		appSettings.setLanguage(ampAppSettings.getLanguage());
 		appSettings.setValidation(ampAppSettings.getValidation());
 		appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
@@ -424,8 +470,7 @@ public class UpdateAppSettings extends Action {
 			Iterator iterator = reports.iterator();
 
 			while (iterator.hasNext()) {
-				AmpApplicationSettings setting = (AmpApplicationSettings) iterator
-						.next();
+				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
 				setting.setDefaultTeamReport(ampReport);
 			}
 
@@ -467,6 +512,19 @@ public class UpdateAppSettings extends Action {
 		if(selectedTeamResourceRight!=null && selectedTeamResourceRight.equals(CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER)){
 			KeyValue elem2	= new KeyValue(CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_TM.toString(), "Workspace Members Allowed to Share Resources Across Workspaces");
 			uForm.getShareResAmongWorkspacesPossibleVals().add(elem2);
+		}
+	}
+	
+	private void populatePublishResourcesPossibleVals(UpdateAppSettingsForm uForm){
+		if(uForm.getPublishResourcesPossibleVals()==null || uForm.getPublishResourcesPossibleVals().size() ==0){
+			KeyValue elem1	= new KeyValue(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL.toString(), "Managed by Workspace Manager");
+			KeyValue elem2	= new KeyValue(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM.toString(), "All Team Members are allowed to publish documents");
+			KeyValue elem3	= new KeyValue(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS.toString(), "Only selected members are allowed to publish documents");
+			
+			uForm.setPublishResourcesPossibleVals(new ArrayList<KeyValue>() );
+			uForm.getPublishResourcesPossibleVals().add(elem1);
+			uForm.getPublishResourcesPossibleVals().add(elem2);
+			uForm.getPublishResourcesPossibleVals().add(elem3);
 		}
 	}
 }

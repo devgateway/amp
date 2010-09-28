@@ -127,13 +127,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 				//last approved version
 				 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
 				 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
-				 DbUtil.saveOrUpdateObject(lastAppVersion);
-				 //public resource
-				 CrDocumentNodeAttributes docAttributes=new CrDocumentNodeAttributes();
-				 docAttributes.setPublicDocument(true);
-				 docAttributes.setUuid(nodeuuid);
-				 docAttributes.setPublicVersionUUID(lastApprovedNodeVersionUUID);
-				 DbUtil.saveOrUpdateObject(docAttributes);
+				 DbUtil.saveOrUpdateObject(lastAppVersion);				 
 			} 
 			
 			clearForm(myForm);

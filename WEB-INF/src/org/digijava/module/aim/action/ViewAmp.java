@@ -315,6 +315,7 @@ public class ViewAmp
             tm.setWrite(member.getWritePermission().booleanValue());
             tm.setDelete(member.getDeletePermission().booleanValue());
             tm.setAppSettings(appSettings);
+            tm.setPublishDocuments(member.getPublishDocPermission());
             if (usr != null) {
                 tm.setEmail(usr.getEmail());
             }

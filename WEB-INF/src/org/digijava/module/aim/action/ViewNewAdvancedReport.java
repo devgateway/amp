@@ -106,7 +106,7 @@ public class ViewNewAdvancedReport extends Action {
 				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
 			}
 		}else{
-			request.setAttribute("recordsPerPage", new Integer(25));
+			request.setAttribute("recordsPerPage", new Integer(100));
 		}
 		
 		

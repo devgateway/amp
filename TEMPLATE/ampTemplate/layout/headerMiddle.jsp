@@ -84,14 +84,14 @@ cursor:pointer;
                 </digi:trn>
 	            </a>
             </li>
-<!--        <li class="yuiampmenuitem" style="float:left;">
+                   <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
                 <a class="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
                 <digi:trn key='aim:PublicSite'>PUBLIC SITE</digi:trn>
                 </a>
-            </li> -->
+            </li> 
             <feature:display name="Public Documents" module="Document Management">
             <li class="yuiampmenuitem" style="float:left;">
                 <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">			

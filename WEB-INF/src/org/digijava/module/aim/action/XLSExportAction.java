@@ -74,7 +74,7 @@ public class XLSExportAction extends Action {
 		
 		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.setHeader("Content-Disposition","attachment; filename=exportedReport");
+			response.setHeader("Content-Disposition","attachment; filename=exportedReport.xls");
 			AdvancedReportForm reportForm = (AdvancedReportForm) form;
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 			//for translation purposes
@@ -118,7 +118,7 @@ public class XLSExportAction extends Action {
 			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
 			XSSFCell cell=row.createCell(colId.shortValue());		
-			if (reportForm.getLogoOptions().equals("0")) {//disabled
+			if (reportForm.getLogoOptions() == null || reportForm.getLogoOptions().equals("0")) {//disabled
 			// do nothing 
 			}else if(reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
 			if (reportForm.getLogoPositionOptions().equals("0")) {//header
@@ -140,7 +140,7 @@ public class XLSExportAction extends Action {
 				// see endPage function
 			}				
 		}
-        if (reportForm.getStatementOptions().equals("0")) {//disabled
+        if (reportForm.getStatementOptions() == null || reportForm.getStatementOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
 			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("0"))) { 
@@ -257,7 +257,7 @@ public class XLSExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		cell=row.createCell(colId.shortValue());
-		if (reportForm.getLogoOptions().equals("0")) {//disabled
+		if (reportForm.getLogoOptions() == null || reportForm.getLogoOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
 			if (reportForm.getLogoPositionOptions().equals("0")) {//header
@@ -279,7 +279,7 @@ public class XLSExportAction extends Action {
 			    Img.resize();
 			}				
 		}
-		if (reportForm.getStatementOptions().equals("0")) {//disabled
+		if (reportForm.getStatementOptions() == null || reportForm.getStatementOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
 			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("1"))) { 

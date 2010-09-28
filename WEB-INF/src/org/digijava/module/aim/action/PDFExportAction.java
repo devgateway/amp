@@ -220,7 +220,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		String translatedReportDescription="Description:";
 		String siteId=site.getSiteId();
 		// HEADER/FOOTER logo/statement				
-		if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
+		if ( this.request.getAttribute("logoOptions") == null ||  this.request.getAttribute("logoOptions").equals("0")) {//disabled
 			// do nothing 
 		} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
 			if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
@@ -247,7 +247,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				// see endPage function
 			}				
 		}
-		if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
+		if ( this.request.getAttribute("statementOptions") == null || this.request.getAttribute("statementOptions").equals("0")) {//disabled
 			// do nothing 
 		} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
 			String stmt = "";
@@ -385,7 +385,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     	    r.setLocale(locale);
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);
     	    // HEADER/FOOTER logo/statement				
-    	    if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
+    	    if (this.request.getAttribute("logoOptions") ==null || this.request.getAttribute("logoOptions").equals("0")) {//disabled
 				// do nothing 
 			} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
 				if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
@@ -410,7 +410,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		    	    cb.endText();
 				}				
 			}
-            if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
+            if (this.request.getAttribute("statementOptions") == null || this.request.getAttribute("statementOptions").equals("0")) {//disabled
 				// do nothing 
 			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
 				String stmt = "";

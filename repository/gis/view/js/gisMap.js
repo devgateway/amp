@@ -1256,9 +1256,10 @@
 		var sec = document.getElementById("sectorsMapCombo") != null ? document.getElementById("sectorsMapCombo").value:document.getElementById("sectorsMapComboFin").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
-		
+		var donorId = document.getElementById('donorsCombo').value;
 	
-		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorId=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear;
+		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorId=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
+		//alert(regRepUrl);
 		var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		
 		popup.focus();

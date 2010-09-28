@@ -276,7 +276,48 @@ public class DbUtil {
         }
         return retVal;
     }
-
+    
+    public static List getSectorFoundingsByDonor(Long sectorId, Long donorid) {
+    	List subSectorIds = null;
+        if (sectorId > -1) {
+            subSectorIds = getSubSectorIdsWhereclause(sectorId);
+        }
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer donorwhere = new StringBuffer("select f.ampActivityId from "+ AmpFunding.class.getName()  
+            		+" f where f.ampDonorOrgId ="+donorid);
+            if (sectorId > -1) {
+            	StringBuffer whereCaluse = new StringBuffer();
+            	Iterator parentIt = subSectorIds.iterator();
+                while (parentIt.hasNext()) {
+                    Long parSecId = (Long) parentIt.next();
+                    whereCaluse.append(parSecId.longValue());
+                    if (parentIt.hasNext()) {
+                        whereCaluse.append(",");
+                    }
+                }
+                StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+                qs.append(AmpActivitySector.class.getName());
+                qs.append(" sec where sec.sectorId in (");
+                qs.append(whereCaluse);
+                qs.append(")");
+                qs.append(" and sec.activityId.team is not null and sec.activityId in ("+donorwhere+")");
+                q = session.createQuery(qs.toString());
+           } else {
+                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() 
+                + " sec where sec.activityId in ("+donorwhere+")");
+            }
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector fundings from DB", ex);
+        }
+        return retVal;
+    }
+    
+    
     public static List getSubSectorIdsWhereclause(Long sectorId) {
         List param = new ArrayList();
         param.add(sectorId);

@@ -73,9 +73,15 @@ public class ShowRegionReport extends Action {
                          31, 23, 59, 59);
 
         }
-
-        List secFundings = DbUtil.getSectorFoundings(gisRegReportForm.
-                getSectorId());
+        List secFundings;
+        if (request.getParameter("donorid")!=null){	
+        	Long donorid =new Long(request.getParameter("donorid"));
+        	secFundings = DbUtil.getSectorFoundingsByDonor(gisRegReportForm.
+                getSectorId(),donorid);
+        }else{
+        	secFundings = DbUtil.getSectorFoundings(gisRegReportForm.
+                    getSectorId());
+        }
 
         String numberFormat = FeaturesUtil.getGlobalSettingValue(
                             "Default Number Format");

@@ -299,7 +299,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	var dt = "<%= dt %>";
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 	    this.columnHeaders = [
-			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
 			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 		    {key:"type",text:"${trans_headerType}",sortable:true},
 	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
@@ -313,7 +312,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
 		this.columnHeaders = [
-    			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
     			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
     		    {key:"type",text:"${trans_headerType}",sortable:true},
     	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},

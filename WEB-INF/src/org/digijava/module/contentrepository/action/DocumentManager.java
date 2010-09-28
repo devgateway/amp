@@ -35,6 +35,7 @@ import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.digijava.module.contentrepository.exception.CrException;
+import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -134,6 +135,7 @@ public class DocumentManager extends Action {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				return false;
 		}
 		
 		//for selectDocumentDM
@@ -611,8 +613,13 @@ public class DocumentManager extends Action {
 					if(! documentNodeBaseVersionUUID.equals(uuid)){ //this means that document data version that was passed to function,was hidden and we fund it's last not hidden version
 						lastVerUUID	=uuid;
 					}else{
-						lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-						lastVerUUID	= lastVersion.getUUID();
+						try{
+							lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+							lastVerUUID	= lastVersion.getUUID();
+						}
+						catch (NoVersionsFoundException e) {
+							logger.warn(e.getMessage());
+						}
 					}
 					
 					if(sharedNodeVersionId!=null && sharedNodeVersionId.size()>0){

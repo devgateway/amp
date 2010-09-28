@@ -1209,8 +1209,7 @@ public class DEImportBuilder {
 					logger.getItems().add(new DESectorMissingLog(sectorAux));
 			}
 			if(percentage != 100){
-				//errors.add("The sum of sectors is not 100%");
-				logger.getItems().add(new DESectorPercentageLog());
+				;//logger.getItems().add(new DESectorPercentageLog());
 			}
 		}
 		
@@ -1888,7 +1887,7 @@ public class DEImportBuilder {
 					}
 					acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 			}
-			if(acv!=null)
+			if(acv==null)
 			{
 				logger.getItems().add(new DEImplLevelMissingLog(cvt));
 			}
@@ -1896,7 +1895,7 @@ public class DEImportBuilder {
 			//added here for Senegal
 			AmpCategoryValue acv1= new AmpCategoryValue();
 			if( actType.getImplementationLevels()!=null ){
-				
+						
 				if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
 				{
 					CodeValueType cvt1 = new CodeValueType();

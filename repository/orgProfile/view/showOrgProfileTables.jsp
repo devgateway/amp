@@ -133,7 +133,7 @@
                     <digi:trn>${value.name}</digi:trn>
                 </td>
                 <c:forEach var="amount" items="${value.values}">
-                    <td align="center">${amount}</td>
+                    <td align="right">${amount}</td>
                 </c:forEach>
             </tr>
         </c:forEach>

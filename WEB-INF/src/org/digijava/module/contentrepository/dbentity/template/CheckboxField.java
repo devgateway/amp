@@ -14,14 +14,13 @@ public class CheckboxField extends TemplateField {
 	public String getRendered() {
 		String retVal=null;
 		if(getPossibleValuesList()!=null){
-			//submits in request parameter "doc_checkbox_5" if checkbox  for this template is 5th field.
-			retVal="<input type=\"checkbox\" name=\"doc_checkbox_"+getOrdinalNumber().intValue()+"\">";
 			for (PossibleValue posVal : getPossibleValuesList()) {
+			//submits in request parameter "doc_checkbox_5" if checkbox  for this template is 5th field.			
+			retVal="<input type=\"checkbox\" name=\"doc_checkbox_"+getOrdinalNumber().intValue()+"\" value=\""+posVal.getValue()+"\">";			
 				retVal+=posVal.getValue();
 			}
 			retVal+="</input>";
 		}		
 		return retVal;
 	}
-
 }

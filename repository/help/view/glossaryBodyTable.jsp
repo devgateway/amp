@@ -102,7 +102,9 @@
 </div>							
 </div>
 </div>							
+					<digi:secure group="Help Administrators">
 							<a href="/help/showAddGlossary.do"><digi:trn>Add top level topic</digi:trn> </a>
+					</digi:secure>
 						</td>
 						<td valign="top" width="100%">
 						

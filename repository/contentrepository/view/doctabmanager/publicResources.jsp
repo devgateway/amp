@@ -109,9 +109,11 @@
 
 		
 		myTabsObject 	= new YAHOOAmp.widget.TabView("demo");
-		var tabs		= myTabsObject.get("tabs");
-		var moreTab		= myTabsObject.getTab(tabs.length-1);
-		moreTab.set("disabled", true);
+		<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
+			var tabs		= myTabsObject.get("tabs");
+			var moreTab		= myTabsObject.getTab(tabs.length-1);
+			moreTab.set("disabled", true);
+		</logic:notEmpty>
 	
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabsTab");
 		var xPos = region.left;
@@ -133,7 +135,7 @@
 		<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
 			public${filter.id}ListObj	= new PublicDynamicList(document.getElementById("${filter.id}_markup"), "public${filter.id}ListObj",null);
 			public${filter.id}ListObj.filterInfoDivId	= "FilterInfoDiv${filter.id}";
-			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId=${filter.id}', 
+			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId=${filter.id}', 
 					new RetrieveFilters(public${filter.id}ListObj) );
 		</c:forEach>
 		
@@ -170,9 +172,11 @@ YAHOO.util.Event.on(window, "load", afterPageLoad);
 				<ul class="yui-nav">
 					<li id="allPublicResourcesTab" class="selected"><a href="#allPublicResourcesRef"><div><digi:trn>All Public Documents</digi:trn></div></a>
 					<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
-						<li id="Tab${filter.id}"><a href="#Ref${filter.id}"><div>${filter.name}</div></a>
+						<li id="Tab${filter.id}"><a href="#Ref${filter.id}"><div>${filter.name}</div></a> </li>
 					</c:forEach>
-					<li id="moreTabsTab"><a><div onclick="allTabsPanel.show()"><digi:trn>More Tabs</digi:trn>...</div></a>
+					<logic:notEmpty name="myForm" property="publicFiltersUnpositioned">
+						<li id="moreTabsTab"><a><div onclick="allTabsPanel.show()"><digi:trn>More Tabs</digi:trn>...</div></a></li>
+					</logic:notEmpty>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
 			    	<div id="allPublicResourcesRef">

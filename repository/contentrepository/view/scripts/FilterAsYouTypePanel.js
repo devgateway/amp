@@ -64,8 +64,8 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				var inputEl			= document.createElement("input");
 				
 				inputEl.name			= "selectedLabel";
-				inputEl.value			= label.uuid;
 				inputEl.type			= "checkbox";
+				inputEl.value			= label.uuid;
 				
 				
 				spanEl.innerHTML		= label.name;
@@ -141,11 +141,12 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	
 	this.textboxEl	= textboxEl;
 	textboxEl.type			= "text";
-	textboxEl.style.border	= "1px solid lightgray";
+	textboxEl.style.border	= "1px solid lightgrey";
 	textboxEl.style.width	= "140px";
 	var textboxElDiv		= document.createElement("div");
 	textboxElDiv.appendChild(textboxEl);
 	textboxElDiv.style.textAlign			= "center";
+	
 	
 	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true);
 	YAHOO.util.Event.addListener(document,"click", this.outsideClickHide, this, true );
@@ -161,14 +162,12 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	this.overlay.render(document.body);
 	
 	
-	
 	if ( divArray != null && divArray.length > 0 ) {
 		for (var i=0; i < divArray.length; i++) {
 			var divEl	= divArray[i];
 			this.bigDiv.appendChild(divEl);
 		}
 	}
-	
 }
 
 FilterAsYouTypePanel.prototype.toggleViewWithSel	= function(uuidArray) {

@@ -556,7 +556,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						<tr style="display: none" id="tr_url">
 							<td><strong><digi:trn>URL:</digi:trn><font color="red">*</font></strong></td>
 							<td><html:text property="webLink" size="32"></html:text></td>
-						</tr>												
+						</tr>
 						<tr>
 							<td align="right">
 								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
@@ -570,8 +570,8 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>
 					</table>
 				</digi:form>
-				</div>			        
-		    </div>		
+				</div>
+		    </div>
 		</td></tr></table>
 		<%-- END -- Table for "My Documents" --%>
         <br />

@@ -24,38 +24,60 @@ ActionsMenu.prototype.render=function (){
 	this.divEl	= divEl;
 		var divInnerHTML='';
 		var retArray	= new Array();
-		//div's content		
+		//div's content
+		var ownType=this.ownerType;
+		var teamView=this.teamView;
 		// add resources link
-		var addResLinkEl	= "<a href=\"javascript:setType('"+ this.ownerType +"');javascript:configPanel(0,'','','', '',false); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
-		if(this.teamView!=null && ! this.teamView){
-			addResLinkEl+="onclick=\"menuPanelForUser.toggleUserView(); \">";
-		}else{
-			addResLinkEl+="onclick=\"menuPanelForTeam.toggleTeamView(); \">";
-		}
-        // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :( 
-		addResLinkEl+=uploadDoc;
-		addResLinkEl+="</a>";	
-		var addResdivEl		= createActionDiv(addResLinkEl);
+		var addResLinkEl	= "<a  style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";
+		addResLinkEl+=uploadDoc; // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :(
+		addResLinkEl+="</a>";		
+		
+		var addResdivEl = document.createElement("div");		
+		var clickActionsForAddDoc	= function (e, addResdivEl) {
+			if(teamView!=null && ! teamView){
+				menuPanelForUser.toggleUserView();
+			}else{
+				menuPanelForTeam.toggleTeamView();
+			}
+			setType(ownType);
+			configPanel(0,'','','', false);
+			showMyPanel(0, 'addDocumentDiv');
+		};
+		createActionDiv(addResdivEl,addResLinkEl,clickActionsForAddDoc);
 		divEl.appendChild(addResdivEl);
+		
+		
 		//add web url link
-		var addUrlLinkEl	= "<a href=\"javascript:setType('"+ this.ownerType +"');javascript:configPanel(0,'','','', '',true); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" ";
-		if(this.teamView!=null && ! this.teamView){
-			addUrlLinkEl+="onclick=\"menuPanelForUser.toggleUserView(); \">";
-		}else{
-			addUrlLinkEl+="onclick=\"menuPanelForTeam.toggleTeamView(); \">";
-		}
+		var addUrlLinkEl	= "<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";		
 		addUrlLinkEl+=addWebLink;
 		addUrlLinkEl+="</a>";
-		var addURLdivEl		= createActionDiv(addUrlLinkEl);
+		
+		var addURLdivEl = document.createElement("div");
+		var clickActionsForAddLink = function (e, addURLdivEl) {
+			if(teamView!=null && ! teamView){
+				menuPanelForUser.toggleUserView();
+			}else{
+				menuPanelForTeam.toggleTeamView();
+			}
+			setType(ownType);
+			configPanel(0,'','','', '',true);
+			showMyPanel(0, 'addDocumentDiv');
+		};
+		createActionDiv(addURLdivEl,addUrlLinkEl,clickActionsForAddLink);
 		divEl.appendChild(addURLdivEl);
 		
 		
-		if(this.teamView!=null && ! this.teamView){			
+		if(this.teamView!=null && ! this.teamView){
 			//create from template link
-			var createFromTemplateLinkEl="<a href=\"javascript:addFromTemplate()\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" onclick=\"menuPanelForUser.toggleUserView();\">";
+			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";
 			createFromTemplateLinkEl+=createFromTemplate;
 			createFromTemplateLinkEl+="</a>";
-			var createFromTempldivEl	= createActionDiv(createFromTemplateLinkEl);
+			var createFromTempldivEl	= document.createElement("div");
+			var clickActionsForTemplate = function (e, createFromTempldivEl) {
+				menuPanelForUser.toggleUserView();
+				addFromTemplate();
+			};
+			createActionDiv(createFromTempldivEl,createFromTemplateLinkEl,clickActionsForTemplate);
 			divEl.appendChild(createFromTempldivEl);
 		}
 	
@@ -105,17 +127,16 @@ ActionsMenu.prototype.showOrHideMenu = function (){
 	return;
 }
 
-function createActionDiv (divInnerHTML){
-	var divEl = document.createElement("div");
-	var addResinputEl	= "<a href=\"javascript:setType('private');javascript:configPanel(0,'','','', false); javascript:showMyPanel(0, 'addDocumentDiv');\" style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";
-	addResinputEl+="<digi:trn jsFriendly='true'>Upload doc/Add Url</digi:trn>";
-	addResinputEl+="</a>";
+function createActionDiv (divEl,divInnerHTML,clickActionsForDiv){
 	
 	divEl.innerHTML=divInnerHTML;
+	
 	var mouseoverCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="#ECF3FD";};
-	var mouseoutCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="white";};
+	var mouseoutCallbackObj	= function (e, divEl) {divEl.style.backgroundColor="white";};	
+	
 	
 	YAHOO.util.Event.addListener(divEl, "mouseover", mouseoverCallbackObj, divEl, false);
 	YAHOO.util.Event.addListener(divEl, "mouseout", mouseoutCallbackObj, divEl, false);
+	YAHOO.util.Event.addListener(divEl, "click", clickActionsForDiv, divEl, false);
 	return divEl;
 }

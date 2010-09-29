@@ -255,7 +255,9 @@
         <c:choose>
             <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
             </table>
+             <c:if test="${!sessionScope.orgProfileFilter.fromPublicView}">
             <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
+             </c:if>
             <table width="100%" cellSpacing="0" cellPadding="0" align="left"  class="tableElement" border="0">
                 <thead>
                     <tr>

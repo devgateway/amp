@@ -80,7 +80,7 @@
 	
 	
 	function retrieveFilterData(filterId) {
-		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?action=jsonfilter&filterId='+filterId, new RetrieveFilters(publicListObj) );
+		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId='+filterId, new RetrieveFilters(publicListObj) );
 	}
 	
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
@@ -135,52 +135,60 @@
 								<tr>
 									<td>
 										<form name="publicViewPositionForm" method="POST" action="/contentrepository/publicDocTabManager.do?action=savePositions">
-										<digi:trn>Position 1</digi:trn>:
-										<select name="publicViewPosition" class="inp-text">
-											<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-											<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-												<c:set var="optionSelected"> </c:set>
-												<c:if test="${filter.publicViewPosition==0}">
-													<c:set var="optionSelected">selected="selected"</c:set>
-												</c:if>
-												<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-											</c:forEach>
-										</select>
-										<digi:trn>Position 2</digi:trn>:
-										<select name="publicViewPosition" class="inp-text">
-											<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-											<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-												<c:set var="optionSelected"> </c:set>
-												<c:if test="${filter.publicViewPosition==1}">
-													<c:set var="optionSelected">selected="selected"</c:set>
-												</c:if>
-												<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-											</c:forEach>
-										</select>
-										<digi:trn>Position 3</digi:trn>:
-										<select name="publicViewPosition" class="inp-text">
-											<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-											<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-												<c:set var="optionSelected"> </c:set>
-												<c:if test="${filter.publicViewPosition==2}">
-													<c:set var="optionSelected">selected="selected"</c:set>
-												</c:if>
-												<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-											</c:forEach>
-										</select>
-										<digi:trn>Position 4</digi:trn>:
-										<select name="publicViewPosition" class="inp-text">
-											<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-											<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-												<c:set var="optionSelected"> </c:set>
-												<c:if test="${filter.publicViewPosition==3}">
-													<c:set var="optionSelected">selected="selected"</c:set>
-												</c:if>
-												<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-											</c:forEach>
-										</select>
-										&nbsp;&nbsp;&nbsp; 
-										<input type="submit" value="<digi:trn>Submit</digi:trn>" />
+										<span style="white-space: nowrap;">
+											<digi:trn>Position 1</digi:trn>:
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px;">
+												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
+												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+													<c:set var="optionSelected"> </c:set>
+													<c:if test="${filter.publicViewPosition==0}">
+														<c:set var="optionSelected">selected="selected"</c:set>
+													</c:if>
+													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
+												</c:forEach>
+											</select>
+										</span>
+										<span style="white-space: nowrap;">
+											<digi:trn>Position 2</digi:trn>:
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
+												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
+												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+													<c:set var="optionSelected"> </c:set>
+													<c:if test="${filter.publicViewPosition==1}">
+														<c:set var="optionSelected">selected="selected"</c:set>
+													</c:if>
+													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
+												</c:forEach>
+											</select>
+										</span>
+										<span style="white-space: nowrap;">
+											<digi:trn>Position 3</digi:trn>:
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
+												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
+												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+													<c:set var="optionSelected"> </c:set>
+													<c:if test="${filter.publicViewPosition==2}">
+														<c:set var="optionSelected">selected="selected"</c:set>
+													</c:if>
+													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
+												</c:forEach>
+											</select>
+										</span>
+										<span style="white-space: nowrap;">
+											<digi:trn>Position 4</digi:trn>:
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
+												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
+												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+													<c:set var="optionSelected"> </c:set>
+													<c:if test="${filter.publicViewPosition==3}">
+														<c:set var="optionSelected">selected="selected"</c:set>
+													</c:if>
+													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
+												</c:forEach>
+											</select>
+										</span>
+										<br/><br/>
+										<input type="submit" class="buton" value="<digi:trn>Submit</digi:trn>" />
 										</form>
 										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />
 									</td>

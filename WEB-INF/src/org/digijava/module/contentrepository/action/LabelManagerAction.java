@@ -92,8 +92,8 @@ public class LabelManagerAction extends MultiAction {
 		
 		System.out.println(jsonArray.toString());
 		response.setContentType("text/json");
-		response.setCharacterEncoding("UTF-16");
-		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-16" );
+		response.setCharacterEncoding("UTF-8");
+		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-8" );
 		ps.print( jsonArray.toString() );
 		
 		return null;

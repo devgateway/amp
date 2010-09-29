@@ -199,6 +199,8 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 }
 FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
 	var clickedEl	= e.target;
+	if ( !clickedEl )
+		clickedEl	= e.srcElement;
 	var nodeName	= clickedEl.nodeName.toLowerCase();		
 	if (nodeName != "button" && nodeName != "a" && nodeName != "input") {
 		this.hide();

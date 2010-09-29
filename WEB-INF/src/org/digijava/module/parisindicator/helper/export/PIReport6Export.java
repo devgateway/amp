@@ -142,7 +142,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		ps
 				.println("					<textElement textAlignment='Left' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 		ps
-				.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+				.println("						<font fontName='DejaVu Sans' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 		ps.println("					</textElement>");
 		ps
 				.println("				<textFieldExpression class='java.lang.String'><![CDATA[$P{PI_REPORT_NUMBER}]]></textFieldExpression>");
@@ -174,7 +174,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		ps
 				.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 		ps
-				.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+				.println("						<font fontName='DejaVu Sans' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 		ps.println("					</textElement>");
 		ps.println("				<textFieldExpression class='java.lang.String'><![CDATA[$P{PI_COL1}]]></textFieldExpression>");
 		ps.println("				</textField>");
@@ -205,7 +205,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 			ps
 					.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			ps
-					.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+					.println("						<font fontName='DejaVu Sans' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			ps.println("					</textElement>");
 			ps.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{" + ctextkey
 					+ "}]]></textFieldExpression>");
@@ -315,7 +315,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		ps
 				.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 		ps
-				.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+				.println("						<font fontName='DejaVu Sans' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 		ps.println("					</textElement>");
 		ps.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
 		ps.println("				</textField>");
@@ -343,7 +343,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 			ps
 					.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			ps
-					.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+					.println("						<font fontName='DejaVu Sans' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			ps.println("					</textElement>");
 			ps.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{" + ctextkey
 					+ "}]]></textFieldExpression>");
@@ -435,7 +435,7 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		ps.println("isPrintWhenDetailOverflows='false'/>");
 		ps.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
 		ps
-				.println("<font fontName='Arial' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+				.println("<font fontName='DejaVu Sans' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
 		ps.println("</textElement>");
 		ps
 				.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Page \" + $V{PAGE_NUMBER} + \" of \" + $V{PAGE_COUNT}]]></textFieldExpression>");

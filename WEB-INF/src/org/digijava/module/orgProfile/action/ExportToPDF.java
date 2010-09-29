@@ -542,22 +542,24 @@ public class ExportToPDF extends Action {
                                     PdfPCell orgDnGrpCell = new PdfPCell();
                                     orgDnGrpCell.addElement(new Paragraph(grpName, OrgProfileUtil.PLAINFONT));
                                     orgSummaryTbl.addCell(orgDnGrpCell);
+                                    if (!filter.getFromPublicView()) {
 
-                                    PdfPCell orgBackgroundCell = new PdfPCell();
-                                    orgBackgroundCell.addElement(new Paragraph(TranslatorWorker.translateText("Background of donor", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(orgBackgroundCell);
+                                        PdfPCell orgBackgroundCell = new PdfPCell();
+                                        orgBackgroundCell.addElement(new Paragraph(TranslatorWorker.translateText("Background of donor", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(orgBackgroundCell);
 
-                                    PdfPCell orgBackgroundValue = new PdfPCell();
-                                    orgBackgroundValue.addElement(new Paragraph(orgBackground, OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(orgBackgroundValue);
+                                        PdfPCell orgBackgroundValue = new PdfPCell();
+                                        orgBackgroundValue.addElement(new Paragraph(orgBackground, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(orgBackgroundValue);
 
-                                    PdfPCell orgDescCell = new PdfPCell();
-                                    orgDescCell.addElement(new Paragraph(TranslatorWorker.translateText("Description", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(orgDescCell);
+                                        PdfPCell orgDescCell = new PdfPCell();
+                                        orgDescCell.addElement(new Paragraph(TranslatorWorker.translateText("Description", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(orgDescCell);
 
-                                    PdfPCell orgDescCellValue = new PdfPCell();
-                                    orgDescCellValue.addElement(new Paragraph(orgDesc, OrgProfileUtil.PLAINFONT));
-                                    orgSummaryTbl.addCell(orgDescCellValue);
+                                        PdfPCell orgDescCellValue = new PdfPCell();
+                                        orgDescCellValue.addElement(new Paragraph(orgDesc, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(orgDescCellValue);
+                                    }
 
 
                                     PdfPCell orgWbLinkTitleCell = new PdfPCell();

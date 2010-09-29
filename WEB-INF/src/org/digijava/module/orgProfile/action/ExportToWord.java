@@ -538,6 +538,8 @@ public class ExportToWord extends Action {
                                     orgDnGrpCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     orgSummaryTbl.addCell(orgDnGrpCell);
 
+                                    if (!filter.getFromPublicView()) {
+
                                     RtfCell orgBackgroundCell = new RtfCell();
                                     orgBackgroundCell.addElement(new Paragraph(TranslatorWorker.translateText("Background of donor", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
                                     orgSummaryTbl.addCell(orgBackgroundCell);
@@ -555,6 +557,7 @@ public class ExportToWord extends Action {
                                     orgDescCellValue.addElement(new Paragraph(orgDesc, OrgProfileUtil.PLAINFONT));
                                     orgDescCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
                                     orgSummaryTbl.addCell(orgDescCellValue);
+                                    }
 
                                     RtfCell orgWbLinkTitleCell = new RtfCell();
                                     orgWbLinkTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Web Link", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));

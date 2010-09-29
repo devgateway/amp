@@ -210,12 +210,15 @@ public class GetFoundingDetails extends Action {
                     //Get segments with funding for dashed paint map
                     List secFundings = null;
 
+                   if (request.getSession().getAttribute("publicuser")!=null){
+                	   secFundings = DbUtil.getSectorFoundingsPublic(secId);
+                   }else{
                     if (secId.longValue() > -2l) {
                         secFundings = DbUtil.getSectorFoundings(secId);
                     } else {
                         secFundings = new ArrayList();
                     }
-
+                   }
                     Object[] fundingList = getFundingsByLocations(secFundings,
                             Integer.parseInt(mapLevel),
                             fStartDate.getTime(),

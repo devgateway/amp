@@ -79,7 +79,9 @@ public class ShowGisDashboard extends Action {
 		
 		gisForm.setAllDonorOrgs(allDonors);
 			
-
+		if (request.getParameter("public")!=null){
+			request.getSession().setAttribute("publicuser", true);
+		}
         return mapping.findForward("forward");
     }
 

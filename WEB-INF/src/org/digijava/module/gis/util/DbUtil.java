@@ -13,6 +13,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -21,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
@@ -269,6 +271,52 @@ public class DbUtil {
                 q = session.createQuery(qs.toString());
            } else {
                 q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
+            }
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector fundings from DB", ex);
+        }
+        return retVal;
+    }
+    
+    
+    public static List getSectorFoundingsPublic(Long sectorId) {
+
+        List subSectorIds = null;
+        if (sectorId > -1) {
+            subSectorIds = getSubSectorIdsWhereclause(sectorId);
+        }
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from " 
+            		+ AmpActivity.class.getName() 
+            		+ " aa where aa.team in (select distinct at.parentTeamId from " 
+            		+ AmpTeam.class.getName() + " at)");
+            
+            if (sectorId > -1) {
+            	StringBuffer whereCaluse = new StringBuffer();
+                Iterator parentIt = subSectorIds.iterator();
+                while (parentIt.hasNext()) {
+                    Long parSecId = (Long) parentIt.next();
+                    whereCaluse.append(parSecId.longValue());
+                    if (parentIt.hasNext()) {
+                        whereCaluse.append(",");
+                    }
+                }
+                StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+                qs.append(AmpActivitySector.class.getName());
+                qs.append(" sec where sec.sectorId in (");
+                qs.append(whereCaluse);
+                qs.append(") and sec.activityId in (" + publicwhere);
+                qs.append(") and sec.activityId.team is not null");
+                q = session.createQuery(qs.toString());
+           } else {
+                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " 
+                		+AmpActivitySector.class.getName() 
+                		+ " sec where sec.activityId in ("+publicwhere+")");
             }
             retVal = q.list();
         } catch (Exception ex) {

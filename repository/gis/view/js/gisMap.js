@@ -258,7 +258,6 @@
             }
             //setBusy(true);
             var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + selSector + "&donorId=" + donorId + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-            
             $("#testMap").attr({src: newUrl});
             getFundDataValues = true;
             actionImgLoading = true;

@@ -686,7 +686,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<html:text name="aimEditActivityForm" property="identification.govAgreementNumber"/>
+												<html:text name="aimEditActivityForm" property="identification.govAgreementNumber" styleClass="inp-text"/>
 											</td></tr>	
 											</field:display>
 											
@@ -701,7 +701,7 @@ target.style.cursor = "default"
 											</td>
 											<td valign="top" align="left">
 											<div id="myAutoComplete">
-												<html:text name="aimEditActivityForm" styleId="myInput" property="identification.budgetCodeProjectID" style="font-size: 9pt"/>
+												<html:text name="aimEditActivityForm" styleId="myInput" property="identification.budgetCodeProjectID" styleClass="inp-text" style="Font-size:11px;width:96%;"/>
 												<div id="myContainer"></div>
 											</div>	
 											</td></tr>	
@@ -734,21 +734,14 @@ target.style.cursor = "default"
 													</a>
 												</td>
 											<td>
-											
-											<table cellpadding="7" cellspacing="5">
-
-												<field:display name="On/Off Budget" feature="Budget">	
-											 <tr>
-											 	<td valign="top" align="left" colspan="9">
-													<html:select property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
-											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
-											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
-											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
-											 		</html:select>
-												</td>
-											</tr>
+											<field:display name="On/Off Budget" feature="Budget">	
+												<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
+										 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
+										 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
+										 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
+										 		</html:select>
 												</field:display>
-												
+											<table cellpadding="2" cellspacing="2">
 											<field:display name="Imputation" feature="Budget">
 											<td valign="top" id="Imputation" align="center"  >
 												<a title="<digi:trn>Imputation</digi:trn>">
@@ -1001,9 +994,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left">
-												<digi:trn key="aim:yes">Yes</digi:trn>
-												<html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn>
-												<html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="false"/>
 									</td></tr>
 								</field:display>	
 								
@@ -1045,7 +1036,7 @@ target.style.cursor = "default"
 											</a>
 										</td>
 										<td valign="top" align="left">
-										    <html:text name="aimEditActivityForm" property="identification.crisNumber" size="12"/>
+										    <html:text name="aimEditActivityForm" property="identification.crisNumber" size="12" styleClass="inp-text" />
 										</td>
 									</tr>
 								</field:display>	

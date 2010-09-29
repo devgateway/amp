@@ -25,7 +25,7 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+										<table width="100%" bgcolor="#ffffff" cellSpacing=1 cellPadding=5>
 										    <logic:notEmpty name="step" property="customFields">
 											<logic:iterate name="step" property="customFields" id="customField" indexId="index">
 											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
@@ -39,7 +39,7 @@
 														<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">
 														<c:choose>
 															<c:when test="<%=customField instanceof ComboBoxCustomField%>">
-																<html:select name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value">
+																<html:select name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" styleClass="inp-text">
 																	<html:optionsCollection  name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].options" value="key" label="value"/>
 																</html:select>											
 															</c:when>

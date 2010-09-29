@@ -587,7 +587,7 @@
 						
 						<td valign="bottom" align="center">
 						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
-						<html:select indexed="true" name="mtefProjection" property="projected" disabled="${contentDisabled}">
+						<html:select indexed="true" name="mtefProjection" property="projected" disabled="${contentDisabled}" styleClass="inp-text">
 							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
 								<digi:trn key="<%= org.digijava.module.categorymanager.util.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
@@ -655,7 +655,7 @@
 						<table cellPadding="3">
 							<tr>
 								<td>
-									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm" disabled="${contentDisabled}">
+									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm" disabled="${contentDisabled}" styleClass="inp-text">
 										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" label="value" value="key"/>
 									</html:select>
 									<c:if test="${contentDisabled=='true'}">
@@ -742,7 +742,7 @@
 												<td valign="bottom" align="center">
 													<c:set var="index" value="${index+1}"/>
 													<c:if test="${aimEditActivityForm.identification.statusId==1}">
-														<html:select name="fundingDetail" indexed="true" property="adjustmentType"  disabled="${contentDisabled}">
+														<html:select name="fundingDetail" indexed="true" property="adjustmentType"  disabled="${contentDisabled}" styleClass="inp-text">
 															<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 														</html:select>
 	                                                </c:if>	
@@ -767,7 +767,7 @@
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="bottom" align="center">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);" styleClass="inp-text">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>		
@@ -797,7 +797,7 @@
 												</td>
 											<field:display name="Related Pledge" feature="Commitments">
 												<td valign="bottom" align="center">
-													<html:select name="fundingDetail" indexed="true" property="pledge">
+													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
 														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		
@@ -974,7 +974,7 @@
 											</c:if>
 												<td valign="center" align="center">
 													<c:set var="index" value="${index+1}"/>
-													<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}">
+													<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}" styleClass="inp-text">
 														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													</html:select>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
@@ -993,7 +993,7 @@
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="center" align="center">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" >
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" styleClass="inp-text">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1187,12 +1187,12 @@
 											<td valign="middle">
 												<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.identification.statusId==1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" >
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 											<c:if test="${aimEditActivityForm.identification.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="${contentDisabled}" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
@@ -1214,7 +1214,7 @@
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="middle">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" styleClass="inp-text">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1253,7 +1253,7 @@
                                            <feature:display module="Funding" name="Disbursement Orders">
 	  											<td valign="middle" align="center">
 	                                                <c:if test="${aimEditActivityForm.funding.disbursementOrders}">
-													 <html:select name="fundingDetail" indexed="true" property="disbOrderId" disabled="${contentDisabled}">
+													 <html:select name="fundingDetail" indexed="true" property="disbOrderId" disabled="${contentDisabled}" styleClass="inp-text">
 														<html:option value="">&nbsp;</html:option>
 			   										    <c:forEach var="funding" items="${aimEditActivityForm.funding.fundingDetails}">
 															<c:if test="${funding.transactionType==4}">
@@ -1295,7 +1295,7 @@
 											
 											<field:display name="Related Pledge" feature="Disbursement">
 											<td valign="middle">
-													<html:select name="fundingDetail" indexed="true" property="pledge" >
+													<html:select name="fundingDetail" indexed="true" property="pledge" styleClass="inp-text">
 														<html:option value="0"><digi:trn>Select Pledge</digi:trn> </html:option>
 														<html:optionsCollection name="aimEditActivityForm" property="funding.pledgeslist" value="id" label="title"/>
 												</html:select>		

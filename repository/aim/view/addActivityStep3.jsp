@@ -525,20 +525,21 @@ ${fn:replace(message,quote,escapedQuote)}
                                             <table width="95%" cellSpacing="1" cellPadding="0" border="0" align="center">
                                               <tr>
                                                 <td>
-                                                  <table cellSpacing="8" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
+                                                  <table cellSpacing="0" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
                                                       <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
                                                         <tr>
                                                           <td>
 	                                                          	<table>
 	                                                        	  <tr>
-		                                                          		<td colspan="3">
+		                                                          		<td>
 		                                                          			<field:display name="Organizations Selector" feature="Funding Information">
 				                                                            	<html:multibox property="funding.selFundingOrgs" styleId="selFundingOrgs">
 					                                                          		<bean:write name="fundingOrganization" property="ampOrgId"/>
 					                                                        	</html:multibox>
 					                                                        </field:display>
 			                                                            	<bean:write name="fundingOrganization" property="orgName"/>
+			                                                            	<br/>
 				                                                            <field:display name="Organizations Selector" feature="Funding Information">
 																				<aim:addOrganizationButton callBackFunction="doNothing();" aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations"  form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu"> <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
 																			</field:display>
@@ -546,8 +547,8 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
 		                                                            <field:display name="Active Funding Organization" feature="Funding Information">
-		                                                            <td> &nbsp;&nbsp;
-		                          										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
+		                                                            <td valign="top"> &nbsp;&nbsp;
+		                          										<html:select property="fundingActive" indexed="true" name="fundingOrganization" styleClass="inp-text">
 		                          											<html:option value="true">Active</html:option>
 		                          											<html:option value="false">Inactive</html:option>
 		                          										</html:select>
@@ -555,13 +556,13 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                                            </field:display>
 		                                                            
 		                                                            <field:display name="Delegated Cooperation" feature="Funding Information">
-			                                                            <td>
+			                                                            <td valign="top">
 				                          									<digi:trn key="aim:DelegatedCooperation">Delegated Cooperation</digi:trn><html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
 										   									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
 			                                                            </td>
 		                                                            </field:display>
 		                                                            <field:display name="Delegated Partner" feature="Funding Information">
-			                                                            <td>
+			                                                            <td valign="top">
 				                          									<digi:trn key="aim:DelegatedPartner">Delegated Partner</digi:trn><html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
 				                          									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
 			                          							        </td>
@@ -994,7 +995,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</logic:notEmpty>
 
 																<tr>
-																	<td>
+																	<td style="padding:10px 0px 10px 4px;">
 																		<field:display name="Add Donor Funding Button" feature="Funding Information">
 																			<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
 																		</field:display>

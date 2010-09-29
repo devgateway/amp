@@ -26,7 +26,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+										<table width="100%" bgcolor="#ffffff" cellSpacing=1 cellPadding=5>
 										<field:display name="Line Ministry Rank" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">

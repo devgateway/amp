@@ -120,8 +120,10 @@
 														</logic:equal>
                                                     <table cellSpacing="0" cellPadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                        <tbody>
+                                                         <c:set var="configNotEmpty">false</c:set>
                                                         <c:forEach var="activitySectors" items="${aimEditActivityForm.sectors.activitySectors}" varStatus="index">
                                                             <c:if test="${activitySectors.configId==config.id}">
+                                                                 <c:set var="configNotEmpty">true</c:set>
                                                                 <tr> 
                                                                     <td width="3%" vAlign="middle">
                                                                         <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}">
@@ -188,11 +190,13 @@
                                                             </c:if>
                                                         </td>
                                                         <td>
+                                                            <c:if test="${configNotEmpty}">
                                                             <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
                                                                 <html:button styleClass="dr-menu" property="submitButton" disabled="${contentDisabled}" onclick="return removeSelSectors(${config.id})">
                                                                     <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
                                                                 </html:button>
                                                             </field:display>
+                                                             </c:if>
                                                         </td>
                                                     </tr>
                                                 </table>

@@ -106,11 +106,6 @@ public class PIExportUseCase {
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			ServletOutputStream servletOutputStream = response.getOutputStream();
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
-			HashMap fontMap = new HashMap();
-			fontMap.put("sansserif", "DejaVu Sans");
-            fontMap.put("serif", "DejaVu Serif");
-            fontMap.put("monospaced", "DejaVu Sans Mono");
-			exporter.setParameter(JRExporterParameter.FONT_MAP, fontMap);
 			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
 			exporter.exportReport();
 			servletOutputStream.flush();

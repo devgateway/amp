@@ -1,4 +1,4 @@
 	function openGIS() {
-		openNewWindowWithMenubar(1000, 600);
+		openNewWindowWithMenubar(1100, 800);
 		popupPointer.location.href = "/gis/showGisDashboard.do";
 	}

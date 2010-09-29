@@ -41,7 +41,66 @@ function resetAll()
 	return true;
 }
 
+//funding.selFundingOrgs
+function checkIfSelect(orgs){
+	var length = document.getElementsByName(orgs).length;
+	var flag = 0;
+	for (i = 0;i < length;i ++) {
+		if (document.getElementsByName(orgs)[i].checked == true) {
+			flag = 1;
+			break;
+		}
+	}
+
+	return flag;
+//	if (flag == 0) {
+//		alert("Please choose a funding organization to remove");
+//		return false;
+//	}
+}
+
 function removeSelOrgs(value) {
+	
+	if( value == 1 )
+		if( checkIfSelect("agencies.selExAgencies") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 2 )
+		if( checkIfSelect("agencies.selImpAgencies") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 4 )
+		if( checkIfSelect("agencies.selReportingOrgs") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 5 )
+		if( checkIfSelect("agencies.selBenAgencies") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 6 )
+		if( checkIfSelect("agencies.selConAgencies") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 7 )
+		if( checkIfSelect("agencies.selRegGroups") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 8 )
+		if( checkIfSelect("agencies.selSectGroups") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
+	if( value == 9 )
+		if( checkIfSelect("agencies.selRespOrganisations") == 0 ){
+			alert("Please choose a funding organization to remove");
+			return false;
+		}
 	document.getElementsByName("agencies.item")[0].value = value;
 	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remOrgs %>";

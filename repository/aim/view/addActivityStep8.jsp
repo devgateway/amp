@@ -544,7 +544,10 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
-																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>																					
+																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryDonorContId" value="${donorContact.contact.temporaryId}"/>
+																						<%--
+																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryDonorContIds" styleId="donors_${stat.index}" value="${donorContact.contact.temporaryId}" onchange="changePrimaryState('donor')"/>
+																					--%>
 																				</td>
 																				<td>	
 																					<c:set var="ampContactId">
@@ -634,7 +637,10 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryMofedContId" value="${mofedContact.contact.temporaryId}"/>
+																						<%--
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryMofedContIds" styleId="mofed_${stat.index}" value="${mofedContact.contact.temporaryId}" onchange="changePrimaryState('mofed')"/>
+																					--%>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">
@@ -724,7 +730,10 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryProjCoordContId" value="${projCoordinator.contact.temporaryId}"/>
+																						<%--
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryProjCoordContIds" styleId="proj_${stat.index}" value="${projCoordinator.contact.temporaryId}" onchange="changePrimaryState('proj')"/>
+																					--%>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">
@@ -814,7 +823,10 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																					<html:radio name="aimEditActivityForm" property="contactInformation.primarySecMinContId" value="${sectorMinistry.contact.temporaryId}"/>
+																						<%--
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primarySecMinContIds" styleId="secMin_${stat.index}" value="${sectorMinistry.contact.temporaryId}" onchange="changePrimaryState('secMin')"/>
+																					--%>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">
@@ -905,7 +917,10 @@ function resetAll()
 																					</c:forEach>
 																				</td>
 																				<td align="left">
+																					<html:radio name="aimEditActivityForm" property="contactInformation.primaryImplExecutingContId" value="${implExecAgency.contact.temporaryId}"/>
+																						<%--
 																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryImplExecutingContIds" styleId="implExecuting_${stat.index}" value="${implExecAgency.contact.temporaryId}" onchange="changePrimaryState('implExecuting')"/>
+																					--%>
 																				</td>
 																				<td>
 																					<c:set var="ampContactId">

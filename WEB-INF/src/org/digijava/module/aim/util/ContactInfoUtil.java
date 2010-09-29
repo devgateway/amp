@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -563,6 +564,65 @@ public class ContactInfoUtil {
         }
 
         return retVal.toString();
+    }
+
+    /*
+        Normalizes primary contacts. If no primary contact selected for any contact type it will select
+        te first one from the list.
+    */
+    public static void normalizeActivityContacts (EditActivityForm.ActivityContactInfo contactInfo) {
+        //Donor contacts
+        if (contactInfo.getDonorContacts() != null && !contactInfo.getDonorContacts().isEmpty()) {
+            if (contactInfo.getPrimaryDonorContId() == null ) {
+                contactInfo.setPrimaryDonorContId(new String());
+            }
+            contactInfo.setPrimaryDonorContId(getCategoryPrimaryContactId (contactInfo.getDonorContacts()));
+        }
+
+        //MOFED contacts
+        if (contactInfo.getMofedContacts() != null && !contactInfo.getMofedContacts().isEmpty()) {
+            contactInfo.setPrimaryMofedContId(getCategoryPrimaryContactId (contactInfo.getMofedContacts()));
+        }
+
+        //projCoordinator contacts
+        if (contactInfo.getProjCoordinatorContacts() != null && !contactInfo.getProjCoordinatorContacts().isEmpty()) {
+            contactInfo.setPrimaryProjCoordContId(getCategoryPrimaryContactId (contactInfo.getProjCoordinatorContacts()));
+        }
+
+        //SecMinCont contacts
+        if (contactInfo.getSectorMinistryContacts() != null && !contactInfo.getSectorMinistryContacts().isEmpty()) {
+            contactInfo.setPrimarySecMinContId(getCategoryPrimaryContactId (contactInfo.getSectorMinistryContacts()));
+        }
+
+        //primaryImplExecuting contacts
+        if (contactInfo.getImplExecutingAgencyContacts() != null && !contactInfo.getImplExecutingAgencyContacts().isEmpty()) {
+            contactInfo.setPrimaryImplExecutingContId(getCategoryPrimaryContactId (contactInfo.getImplExecutingAgencyContacts()));
+        }
+    }
+
+    private static String getCategoryPrimaryContactId (List <AmpActivityContact> contacts) {
+            boolean hasPrimary = false;
+            String primaryContactTmpId = null;
+            String primaryId = null;
+
+            for (AmpActivityContact contact : contacts) {
+                if (!hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
+                    hasPrimary = true;
+                    primaryContactTmpId = contact.getContact().getTemporaryId();
+                } else if (hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
+                    //If somehow we have 2 contacts set as primary
+                    contact.setPrimaryContact(new Boolean(false));
+                }
+            }
+
+            if (hasPrimary) {
+                primaryId = primaryContactTmpId;
+            } else {
+                //Set first as a primary if no primary exists
+                primaryId = contacts.get(0).getContact().getTemporaryId();
+                contacts.get(0).setPrimaryContact(new Boolean(true));
+            }
+        return primaryId;
     }
 		
 }

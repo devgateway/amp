@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.AmpContactsWorker;
+import org.digijava.module.aim.util.ContactInfoUtil;
 
 public class ActivityContactInformationAction extends Action {
 	
@@ -25,6 +26,7 @@ public class ActivityContactInformationAction extends Action {
 			eaForm.getContactInformation().setTemporaryId(request.getParameter("tempId"));
 			eaForm.getContactInformation().setContactType(contactType);
 			processDelete(eaForm);
+            ContactInfoUtil.normalizeActivityContacts(eaForm.getContactInformation()); 
 		}
 		return mapping.findForward("step8");
 	}

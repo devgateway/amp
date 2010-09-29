@@ -128,6 +128,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String[] primaryProjCoordContIds;
 		private String[] primarySecMinContIds;
 		private String[] primaryImplExecutingContIds;
+
+        private String primaryDonorContId;
+		private String primaryMofedContId;
+		private String primaryProjCoordContId;
+		private String primarySecMinContId;
+		private String primaryImplExecutingContId;
+
+
 		private Boolean resetDonorIds;
 		private Boolean resetMofedIds;
 		private Boolean resetProjCoordIds;
@@ -274,8 +282,47 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setTemporaryId(String temporaryId) {
 			this.temporaryId = temporaryId;
 		}
-		
-	}
+
+        public String getPrimaryDonorContId() {
+            return primaryDonorContId;
+        }
+
+        public void setPrimaryDonorContId(String primaryDonorContId) {
+            this.primaryDonorContId = primaryDonorContId;
+        }
+
+        public String getPrimaryMofedContId() {
+            return primaryMofedContId;
+        }
+
+        public void setPrimaryMofedContId(String primaryMofedContId) {
+            this.primaryMofedContId = primaryMofedContId;
+        }
+
+        public String getPrimaryProjCoordContId() {
+            return primaryProjCoordContId;
+        }
+
+        public void setPrimaryProjCoordContId(String primaryProjCoordContId) {
+            this.primaryProjCoordContId = primaryProjCoordContId;
+        }
+
+        public String getPrimarySecMinContId() {
+            return primarySecMinContId;
+        }
+
+        public void setPrimarySecMinContId(String primarySecMinContId) {
+            this.primarySecMinContId = primarySecMinContId;
+        }
+
+        public String getPrimaryImplExecutingContId() {
+            return primaryImplExecutingContId;
+        }
+
+        public void setPrimaryImplExecutingContId(String primaryImplExecutingContId) {
+            this.primaryImplExecutingContId = primaryImplExecutingContId;
+        }
+    }
 	
 	public class Contracts {
 		private List contracts;

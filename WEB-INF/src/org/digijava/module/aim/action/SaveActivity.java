@@ -1684,7 +1684,8 @@ public class SaveActivity extends Action {
 		if(contactInfo.getResetImplExecutingIds()!=null && contactInfo.getResetImplExecutingIds()){
 			contactInfo.setPrimaryImplExecutingContIds(null);
 		}
-		
+
+        /*
 		String[] donorContsIds=null;
 		String[] mofedContsIds=null;
 		String[] projCoordContsIds=null;
@@ -1739,6 +1740,7 @@ public class SaveActivity extends Action {
 				throw err;
 			}
 		}
+		*/
 		
 		//Do the initializations and all the information transfer between beans here
 		List<AmpActivityContact> allContacts=new ArrayList<AmpActivityContact>(); //eaForm.getContactInformation().getActivityContacts();
@@ -1762,15 +1764,15 @@ public class SaveActivity extends Action {
 			for (AmpActivityContact ampActContact : allContacts) {
 				ampActContact.setActivity(activity);
 				if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
-					fillActivityContactPrimaryField(donorContsIds,ampActContact);
+					fillActivityContactPrimaryField(contactInfo.getPrimaryDonorContId(),ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.MOFED_CONTACT)){
-					fillActivityContactPrimaryField(mofedContsIds, ampActContact);
+					fillActivityContactPrimaryField(contactInfo.getPrimaryMofedContId(), ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
-					fillActivityContactPrimaryField(projCoordContsIds,	ampActContact);
+					fillActivityContactPrimaryField(contactInfo.getPrimaryProjCoordContId(),	ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
-					fillActivityContactPrimaryField(sectorMinContsIds,	ampActContact);
+					fillActivityContactPrimaryField(contactInfo.getPrimarySecMinContId(),	ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
-					fillActivityContactPrimaryField(implExecutingContsIds,	ampActContact);
+					fillActivityContactPrimaryField(contactInfo.getPrimaryImplExecutingContId(),	ampActContact);
 				}
 			}
 		}
@@ -1789,6 +1791,7 @@ public class SaveActivity extends Action {
 		activity.setActivityContacts(new HashSet(allContacts));
 	}
 
+    /*
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {
 		String actContId=ampActContact.getContact().getTemporaryId()==null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();
 		if(actContactIds!=null && actContactIds.length>0){
@@ -1799,6 +1802,20 @@ public class SaveActivity extends Action {
 					ampActContact.setPrimaryContact(false);
 				}
 			}
+		}else{
+			ampActContact.setPrimaryContact(false);
+		}
+	}
+	*/
+
+    private void fillActivityContactPrimaryField(String actContactId,AmpActivityContact ampActContact) {
+		String actContId=ampActContact.getContact().getTemporaryId()==null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();
+		if(actContactId!=null && actContactId.length() >0){
+            if(actContId.equals(actContactId)){
+                ampActContact.setPrimaryContact(true);
+            }else{
+                ampActContact.setPrimaryContact(false);
+            }
 		}else{
 			ampActContact.setPrimaryContact(false);
 		}

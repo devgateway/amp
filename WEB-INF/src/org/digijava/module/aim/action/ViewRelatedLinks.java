@@ -79,7 +79,7 @@ public class ViewRelatedLinks extends Action {
 			page = 1;
 		}
 		
-		Collection pagedCol = rlForm.getAllDocuments();
+		Collection pagedCol = null;
 
 		if (pagedCol == null || pagedCol.size() == 0) {
 			pagedCol = new ArrayList();

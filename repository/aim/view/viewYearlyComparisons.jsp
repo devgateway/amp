@@ -174,11 +174,9 @@ function preview(id)
 
 
 
-<digi:form action="/viewYearlyComparisonsFilter.do" name="aimYearlyComparisonsForm"
+<digi:form action="/yearlyComparisonsFilter.do" name="aimYearlyComparisonsForm"
 
 type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
-
-
 
 <html:hidden property="ampActivityId" />
 

@@ -16,6 +16,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+
 
 <style>
 
@@ -149,7 +151,6 @@ function preview(id)
 <c:set target="${urlFinancialOverview}" property="tabIndex">
 	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
 </c:set>
-
 
 
 <jsp:useBean id="urlAll" type="java.util.Map" class="java.util.HashMap"/>
@@ -369,79 +370,7 @@ function preview(id)
 				<TR bgColor=#f4f4f2>
 
             	<TD align=left>
-						<!-- 
-						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
-
-							<TR>
-
-								<TD align="left">
-
-						<SPAN class=crumb>
-
-              			<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
-
-							<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
-
-								<bean:write name="aimYearlyInfoForm" property="ampActivityId"/>
-
-							</c:set>
-
-							<c:set target="${urlFinancingBreakdown}" property="tabIndex">
-								<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
-							</c:set>
-
-							<c:set var="translation">
-
-								<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-
-							</c:set>
-
-							<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%translation%>" >
-
-								<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-
-							</digi:link>
-
-              			 &gt;
-
-							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="0">
-
-                     	<digi:trn key="aim:yearlyCommitments">Yearly Commitments</digi:trn>
-
-							</logic:equal>
-                            <logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
-
-                  	  	<digi:trn key="aim:yearlyDisbursementsOrders">Yearly Disbursement Orders</digi:trn>
-
-							</logic:equal>
-
-
-							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
-
-                  	  	<digi:trn key="aim:yearlyDisbursements">Yearly Disbursements</digi:trn>
-
-							</logic:equal>
-
-							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
-
-                     	<digi:trn key="aim:yearlyExpenditures">Yearly Expenditures</digi:trn>
-
-							</logic:equal>
-
-						</SPAN>
-
-								</TD>
-
-								<TD align="right">&nbsp;
-
-									
-
-								</TD>
-
-							</TR>
-
-						</TABLE>
-						-->
+            		
 					</TD>
 
 				</TR>

@@ -311,7 +311,7 @@
       <forward name="forward" path="/showLayout.do?layout=aim_editIPAContract" />
     </action>
 
-    <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
+    <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter1" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
     <action parameter="/showLayout.do?layout=aim_editableTasks" path="/aim/viewEditableTasks" type="org.apache.struts.actions.ForwardAction" />

@@ -22,6 +22,7 @@ import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.helper.YearlyComparison;
 import org.digijava.module.aim.helper.YearlyComparisonsWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -35,6 +36,7 @@ public class YearlyComparisonsFilter extends TilesAction	{
 								 HttpServletResponse response)
 								 throws java.lang.Exception 	{
 
+		logger.debug("Yearly comparision filter start");
 		YearlyComparisonsForm formBean = (YearlyComparisonsForm) form;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("currentMember") == null) {
@@ -80,8 +82,7 @@ public class YearlyComparisonsFilter extends TilesAction	{
 			session.setAttribute("filterParams",fp);
 			formBean.setYears(YearUtil.getYears());
 
-
-			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
+			Collection<YearlyComparison> c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
 			if ( c.size() != 0 ){
 				formBean.setYearlyComparisons(c);
 				AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(c);
@@ -92,14 +93,12 @@ public class YearlyComparisonsFilter extends TilesAction	{
 				formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 			}
 			
-
-
-			
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			
 		}
+		logger.debug("Yearly comparision filter finished");
 		return null;
 	}
 }

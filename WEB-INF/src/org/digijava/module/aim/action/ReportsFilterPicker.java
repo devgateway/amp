@@ -463,36 +463,38 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootApprovalStatus	= new HierarchyListableImplementation();
-			rootApprovalStatus.setLabel("All");
-			rootApprovalStatus.setUniqueId("-1");
-			rootApprovalStatus.setChildren( children );
-			HierarchyListableImplementation newDraftDO	= new HierarchyListableImplementation();
-			newDraftDO.setLabel( TranslatorWorker.translateText("New Draft", locale, siteId) );
-			newDraftDO.setUniqueId("1");
-			children.add(newDraftDO);
-			HierarchyListableImplementation newUnvalidatedDO	= new HierarchyListableImplementation();
-			newUnvalidatedDO.setLabel( TranslatorWorker.translateText("New Unvalidated", locale, siteId) );
-			newUnvalidatedDO.setUniqueId("2");
-			children.add(newUnvalidatedDO);
-			HierarchyListableImplementation validatedActDO	= new HierarchyListableImplementation();
-			validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities", locale, siteId) );
-			validatedActDO.setUniqueId("4");
-			children.add(validatedActDO);
-			HierarchyListableImplementation existingDraftDO	= new HierarchyListableImplementation();
-			existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft", locale, siteId) );
-			existingDraftDO.setUniqueId("3");
-			children.add(existingDraftDO);
-			HierarchyListableImplementation existingUnvalidatedDO	= new HierarchyListableImplementation();
-			existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated", locale, siteId) );
-			existingUnvalidatedDO.setUniqueId("0");
-			children.add(existingUnvalidatedDO);
-			GroupingElement<HierarchyListableImplementation> approvalStatusElement	=
-					new GroupingElement<HierarchyListableImplementation>("Approval Status", "filter_approval_status_div", 
-							rootApprovalStatus, "approvalStatusSelected");
-			filterForm.getOtherCriteriaElements().add(approvalStatusElement);
+			if(teamMember!=null){
+				Collection<HierarchyListableImplementation> children	= 
+					new ArrayList<HierarchyListableImplementation>();
+				HierarchyListableImplementation rootApprovalStatus	= new HierarchyListableImplementation();
+				rootApprovalStatus.setLabel("All");
+				rootApprovalStatus.setUniqueId("-1");
+				rootApprovalStatus.setChildren( children );
+				HierarchyListableImplementation newDraftDO	= new HierarchyListableImplementation();
+				newDraftDO.setLabel( TranslatorWorker.translateText("New Draft", locale, siteId) );
+				newDraftDO.setUniqueId("1");
+				children.add(newDraftDO);
+				HierarchyListableImplementation newUnvalidatedDO	= new HierarchyListableImplementation();
+				newUnvalidatedDO.setLabel( TranslatorWorker.translateText("New Unvalidated", locale, siteId) );
+				newUnvalidatedDO.setUniqueId("2");
+				children.add(newUnvalidatedDO);
+				HierarchyListableImplementation validatedActDO	= new HierarchyListableImplementation();
+				validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities", locale, siteId) );
+				validatedActDO.setUniqueId("4");
+				children.add(validatedActDO);
+				HierarchyListableImplementation existingDraftDO	= new HierarchyListableImplementation();
+				existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft", locale, siteId) );
+				existingDraftDO.setUniqueId("3");
+				children.add(existingDraftDO);
+				HierarchyListableImplementation existingUnvalidatedDO	= new HierarchyListableImplementation();
+				existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated", locale, siteId) );
+				existingUnvalidatedDO.setUniqueId("0");
+				children.add(existingUnvalidatedDO);
+				GroupingElement<HierarchyListableImplementation> approvalStatusElement	=
+						new GroupingElement<HierarchyListableImplementation>("Approval Status", "filter_approval_status_div", 
+								rootApprovalStatus, "approvalStatusSelected");
+				filterForm.getOtherCriteriaElements().add(approvalStatusElement);
+			}
 		}
 		
 		if ( FeaturesUtil.isVisibleField("Line Ministry Rank", ampContext)) {
@@ -532,24 +534,26 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(planMinRankElement);
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation();
-			rootArchivedStatus.setLabel("All");
-			rootArchivedStatus.setUniqueId("0");
-			rootArchivedStatus.setChildren( children );
-			HierarchyListableImplementation unarchivedDO	= new HierarchyListableImplementation();
-			unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities", locale, siteId) );
-			unarchivedDO.setUniqueId("1");
-			children.add(unarchivedDO);
-			HierarchyListableImplementation archivedDO	= new HierarchyListableImplementation();
-			archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities", locale, siteId) );
-			archivedDO.setUniqueId("2");
-			children.add(archivedDO);
-			GroupingElement<HierarchyListableImplementation> archivedElement	=
-					new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", 
-							rootArchivedStatus, "selectedArchivedStatus");
-			filterForm.getOtherCriteriaElements().add(archivedElement);
+			if(teamMember!=null){
+				Collection<HierarchyListableImplementation> children	= 
+					new ArrayList<HierarchyListableImplementation>();
+				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation();
+				rootArchivedStatus.setLabel("All");
+				rootArchivedStatus.setUniqueId("0");
+				rootArchivedStatus.setChildren( children );
+				HierarchyListableImplementation unarchivedDO	= new HierarchyListableImplementation();
+				unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities", locale, siteId) );
+				unarchivedDO.setUniqueId("1");
+				children.add(unarchivedDO);
+				HierarchyListableImplementation archivedDO	= new HierarchyListableImplementation();
+				archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities", locale, siteId) );
+				archivedDO.setUniqueId("2");
+				children.add(archivedDO);
+				GroupingElement<HierarchyListableImplementation> archivedElement	=
+						new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", 
+								rootArchivedStatus, "selectedArchivedStatus");
+				filterForm.getOtherCriteriaElements().add(archivedElement);
+			}
 		}
 
 		/**

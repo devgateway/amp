@@ -152,7 +152,7 @@
     
     
     function addIPAContract() {
-        openNewWindow(900, 600);
+        openNewWindow(900, 700);
         <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?new" />
         document.aimEditActivityForm.action = "<%= editIPAContract %>";
         document.aimEditActivityForm.target = popupPointer.name;
@@ -774,6 +774,71 @@
 			                                                               </tr>
 			                                                               </c:if>
 			                                                               </logic:equal>
+			                                                           </c:forEach>
+		                                                           </table>
+		                                                       </logic:notEmpty>						
+			                                               </td>		
+			                                           </tr>
+		                                            </field:display> 
+		                                               
+			                                     
+		                                          <field:display name="Contracting Amendments" feature="Contracting">
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; ${contract.donorContractFundinAmount} &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; ${contract.totAmountDonorContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; ${contract.totAmountCountryContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td colspan="2">
+			                                                  <b><digi:trn>Amendments :</digi:trn></b>
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td>&nbsp;
+			                                              </td>
+			                                              <td>
+		                                                      <logic:notEmpty name="contract" property="amendments">
+		                                                           <table width="100%">
+																    <tr>
+																		<th><digi:trn>Amount</digi:trn></th>
+																		<th><digi:trn>Currency</digi:trn></th>
+																		<th><digi:trn>Date</digi:trn></th>
+																		<th><digi:trn>Reference</digi:trn></th>																		
+																	</tr>
+			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >
+			                                                               <tr>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.amount}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.currency.currencyName}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                      ${amendment.amendDate} 
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.reference}
+			                                                                   </td>
+			                                                               </tr>
 			                                                           </c:forEach>
 		                                                           </table>
 		                                                       </logic:notEmpty>						

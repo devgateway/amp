@@ -74,7 +74,9 @@ function autosum(){
 	var v4 = document.aimIPAContractForm.totalNationalContribIFIAmount ? document.aimIPAContractForm.totalNationalContribIFIAmount.value:0;
 	var v5 = document.aimIPAContractForm.totalNationalContribRegionalAmount ? document.aimIPAContractForm.totalNationalContribRegionalAmount.value:0;
 	var v6 = document.aimIPAContractForm.totalPrivateContribAmount ? document.aimIPAContractForm.totalPrivateContribAmount.value:0;
-	document.aimIPAContractForm.totalAmount.value = (v1*1)+(v2*1)+(v3*1)+(v4*1)+(v5*1)+(v6*1);
+	if (document.aimIPAContractForm.totalAmount) {		
+		document.aimIPAContractForm.totalAmount.value = (v1*1)+(v2*1)+(v3*1)+(v4*1)+(v5*1)+(v6*1);
+	}	
 	return true; 
 }
 
@@ -102,17 +104,25 @@ function validate(){
 	 
       }
       else{
-	    if((document.aimIPAContractForm.totalECContribIBAmount.value!='' ||
-	   		document.aimIPAContractForm.totalECContribINVAmount.value!='' ||
-	    	document.aimIPAContractForm.totalNationalContribIFIAmount.value!='' ||
-	    	document.aimIPAContractForm.totalNationalContribCentralAmount.value!='' ||
-	    	document.aimIPAContractForm.totalNationalContribRegionalAmount.value!='' ||
-	    	document.aimIPAContractForm.totalPrivateContribAmount.value!='') &&
-	        (document.aimIPAContractForm.totalAmountCurrency.value==-1))
-	    {
-	        alert("${errMsgSelectCurrency}");
-	        return false;
-	    }
+    	  if((document.aimIPAContractForm.totalECContribIBAmount &&
+    		   		document.aimIPAContractForm.totalECContribINVAmount &&
+    		    	document.aimIPAContractForm.totalNationalContribIFIAmount &&
+    		    	document.aimIPAContractForm.totalNationalContribCentralAmount &&
+    		    	document.aimIPAContractForm.totalNationalContribRegionalAmount &&
+    		    	document.aimIPAContractForm.totalPrivateContribAmount) &&
+    		        (document.aimIPAContractForm.totalAmountCurrency)) {
+		    if((document.aimIPAContractForm.totalECContribIBAmount.value!='' ||
+		   		document.aimIPAContractForm.totalECContribINVAmount.value!='' ||
+		    	document.aimIPAContractForm.totalNationalContribIFIAmount.value!='' ||
+		    	document.aimIPAContractForm.totalNationalContribCentralAmount.value!='' ||
+		    	document.aimIPAContractForm.totalNationalContribRegionalAmount.value!='' ||
+		    	document.aimIPAContractForm.totalPrivateContribAmount.value!='') &&
+		        (document.aimIPAContractForm.totalAmountCurrency.value==-1))
+		    {
+		        alert("${errMsgSelectCurrency}");
+		        return false;
+		    }
+    	  }
 	    }
 			    
         mySaveReportEngine.saveContract();
@@ -141,6 +151,7 @@ var responseSuccess = function(o){
  * o.responseXML
  * o.argument
  */
+ 
 	var response = o.responseText; 
 	var content = document.getElementById("myContractContent");
     //response = response.split("<!")[0];
@@ -204,7 +215,6 @@ function calculer1() {
 		  return true;
 	  }
 }
-
 
 function miseajourdevise() {
 	var curId = document.getElementsByName("donorContractFundingCurrency")[0].value;
@@ -292,9 +302,9 @@ function generateFields(){
 						</field:display>
 						<field:display name="Contract Total Value" feature="Contracting">
 							+ "contractTotalValue="+document.getElementsByName("contractTotalValue")[0].value+"&"
-						</field:display>
+							+ "totalAmountCurrency="+document.getElementsByName("totalAmountCurrency")[0].value+"&"
+						</field:display>				
 						
-						+ "totalAmountCurrency="+document.getElementsByName("totalAmountCurrency")[0].value+"&"
 						<field:display name="Contracting IB" feature="Contracting">
 							+ "totalECContribIBAmount="+document.getElementsByName("totalECContribIBAmount")[0].value+"&"
 							+ "totalECContribIBAmountDate="+document.getElementsByName("totalECContribIBAmountDate")[0].value+"&"
@@ -329,15 +339,15 @@ function generateFields(){
 						+ "dibusrsementsGlobalCurrency="+document.getElementsByName("dibusrsementsGlobalCurrency")[0].value
 						+ "&"
 						</field:display>
-						<field:display name="Donor Contract Fundin" feature="Contracting">
+						<field:display name="Contracting Amendments" feature="Contracting">
 							+ "donorContractFundinAmount="+document.getElementsByName("donorContractFundinAmount")[0].value+"&"
 							+ "donorContractFundingCurrency="+document.getElementsByName("donorContractFundingCurrency")[0].value+"&"
 						</field:display>
-						<field:display name="Total Amount Donor Contract Funding" feature="Contracting">
+							<field:display name="Contracting Amendments" feature="Contracting">
 							+ "totAmountDonorContractFunding="+document.getElementsByName("totAmountDonorContractFunding")[0].value+"&"
 							+ "totalAmountCurrencyDonor="+document.getElementsByName("totalAmountCurrencyDonor")[0].value+"&"
 						</field:display>
-						<field:display name="Total Amount Country Contract Funding" feature="Contracting">
+							<field:display name="Contracting Amendments" feature="Contracting">
 							+ "totAmountCountryContractFunding="+document.getElementsByName("totAmountCountryContractFunding")[0].value+"&"
 							+ "totalAmountCurrencyCountry="+document.getElementsByName("totalAmountCurrencyCountry")[0].value+"&"
 						</field:display>
@@ -350,7 +360,7 @@ function generateFields(){
 				ret = ret + "typeId="+document.getElementsByName("typeId")[0].value+"&";
 			}
 			if(document.getElementsByName("contractTypeId")[0] != null){
-				ret = ret + + "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
+				ret = ret + "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
 			}
 		</field:display>
 		//alert(ret);
@@ -649,7 +659,7 @@ window.onload=autosum;
 	<tr>
 	<td colspan="2">
 	<table cellpadding="2" cellspacing="2" width="100%">	
-		<field:display name="Donor Contract Fundin" feature="Contracting">
+		<field:display name="Contracting Amendments" feature="Contracting">
 			<tr>
 				<td align="left">
 					<digi:trn>Montant</digi:trn>
@@ -661,8 +671,7 @@ window.onload=autosum;
 					<digi:trn>Devise</digi:trn>
 					&nbsp;&nbsp;
 					<html:select property="donorContractFundingCurrency" styleClass="inp-text" onchange="miseajourdevise();">
-						<option value="-1"><digi:trn>Devise</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 					</html:select>
 				</td>
 			</tr>			
@@ -986,7 +995,7 @@ window.onload=autosum;
 			</field:display>
 			&nbsp;	
 			<field:display name="Contracting Remove Amendments" feature="Contracting">
-				<html:button styleClass="dr-menu" property="delamendments" onclick="delAmendment();">
+				<html:button styleClass="dr-menu" property="delamendments" onclick="delAmendment();calculer1();">
 					<digi:trn>Remove Amendments</digi:trn>
 				</html:button>			
 			</field:display>				
@@ -1004,11 +1013,10 @@ window.onload=autosum;
 							<html:hidden property="${contractAmendment}" value="${id}"/>
 							&nbsp;
 							<html:multibox property="selContractAmendments" value="${idx.count}"/>
-							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="calculer1();"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="fnChk(this);calculer1();"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							&nbsp;			
 							<html:select indexed="true" name="contractAmendment" disabled="true" property="currCode" styleClass="inp-text">
-								<option value="-1"><digi:trn>Devise</digi:trn></option>
-								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 							</html:select>
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
@@ -1030,7 +1038,7 @@ window.onload=autosum;
 	<tr>
 	<td><br/><br/><br/>
 	<table cellpadding="2" cellspacing="2" width="50%">	
-		<field:display name="Total Amount Donor Contract Funding" feature="Contracting">
+		<field:display name="Contracting Amendments" feature="Contracting">
 			<tr>
 				<td align="left" colspan="2">
 					<digi:trn>Montant total du contrat part du bailleur</digi:trn>
@@ -1042,8 +1050,7 @@ window.onload=autosum;
 				</td>
 				<td align="left">				
 					<html:select disabled="true" property="totalAmountCurrencyDonor" styleClass="inp-text">
-						<option value="-1"><digi:trn>Devise</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 					</html:select>
 				</td>
 			</tr>			
@@ -1052,7 +1059,7 @@ window.onload=autosum;
 	</td>
 	<td><br/><br/><br/>
 	<table cellpadding="2" cellspacing="2" width="50%">	
-		<field:display name="Total Amount Country Contract Funding" feature="Contracting">
+		<field:display name="Contracting Amendments" feature="Contracting">
 			<tr>
 				<td align="left" colspan="2">
 					<digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>
@@ -1064,8 +1071,7 @@ window.onload=autosum;
 				</td>
 				<td align="left">			
 					<html:select disabled="true" property="totalAmountCurrencyCountry" styleClass="inp-text">
-						<option value="-1"><digi:trn>Devise</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 					</html:select>				
 				</td>
 			</tr>			

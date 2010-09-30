@@ -359,21 +359,21 @@ public class EditIPAContract extends MultiAction {
             euaf.setDonorContractFundinAmount(String.valueOf(contract.getDonorContractFundinAmount()));
         } else euaf.setDonorContractFundinAmount("");
         if (contract.getDonorContractFundingCurrency() != null) {
-            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getAmpCurrencyId().toString());
+            euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getCurrencyCode());
         } else  euaf.setDonorContractFundingCurrency(eaf.getCurrCode());
         //
         if (contract.getTotAmountDonorContractFunding() != null) {
             euaf.setTotAmountDonorContractFunding(String.valueOf(contract.getTotAmountDonorContractFunding()));
         } else euaf.setTotAmountDonorContractFunding("");
         if (contract.getTotalAmountCurrencyDonor() != null) {
-            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getAmpCurrencyId().toString());
+            euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getCurrencyCode());
         } else  euaf.setTotalAmountCurrencyDonor(eaf.getCurrCode());
         //
         if (contract.getTotAmountCountryContractFunding() != null) {
             euaf.setTotAmountCountryContractFunding(String.valueOf(contract.getTotAmountCountryContractFunding()));
         } else euaf.setTotAmountCountryContractFunding("");
         if (contract.getTotalAmountCurrencyCountry() != null) {
-            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getAmpCurrencyId().toString());
+            euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getCurrencyCode());
         } else  euaf.setTotalAmountCurrencyCountry(eaf.getCurrCode());
         	/*
         	 * 
@@ -446,6 +446,12 @@ public class EditIPAContract extends MultiAction {
                       currCode = curr.getCurrencyCode();
               }
           }
+          //
+          eaf.setDonorContractFundinAmount("");
+          eaf.setTotalAmountCurrencyCountry("");
+          eaf.setTotalAmountCurrencyDonor("");
+          eaf.setTotAmountCountryContractFunding("");
+          eaf.setTotAmountDonorContractFunding("");
         eaf.setDibusrsementsGlobalCurrency(currId);
         eaf.setTotalAmountCurrency(currId);
         eaf.setDonorContractFundingCurrency(currCode);
@@ -536,11 +542,17 @@ public class EditIPAContract extends MultiAction {
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
         IPAContractAmendment ica = new IPAContractAmendment();
-        eaf.getContractAmendments().add(ica);
-        
-        AmpCurrency curr=CurrencyUtil.
-        getAmpcurrency(eaf.getDonorContractFundingCurrency());
-        	ica.setCurrency(curr);
+        //
+        String curr = new String();
+        if (request.getParameter("donorContractFundingCurrency") != null) {
+        	curr = request.getParameter("donorContractFundingCurrency");
+        	AmpCurrency ampcurr=CurrencyUtil.getAmpcurrency(curr);
+            ica.setCurrency(ampcurr);
+            ica.setCurrCode(ampcurr.getCurrencyCode());
+        }        
+        ica.setAmount(new Double(0).doubleValue());
+        //
+        eaf.getContractAmendments().add(ica); 
 
         return modeFinalize(mapping, form, request, response);
     }
@@ -576,6 +588,16 @@ public class EditIPAContract extends MultiAction {
             }
             eaf.getContractAmendments().removeAll(toRemove);
             eaf.setSelContractAmendments(null);
+            //
+            List< IPAContractAmendment> icas = eaf.getContractAmendments();
+            IPAContractAmendment ica = null;
+            Double d = new Double(0);
+            for (int i=0; i<icas.size();i++) {
+            	ica = icas.get(i);            	
+            	d += ica.getAmount();
+            }
+            d += Double.valueOf(eaf.getDonorContractFundinAmount());
+            eaf.setTotAmountDonorContractFunding(String.valueOf(d.doubleValue()));
         }
 
         return modeFinalize(mapping, form, request, response);
@@ -782,21 +804,21 @@ public class EditIPAContract extends MultiAction {
           * 
           */
          if (euaf.getDonorContractFundinAmount() != null && !euaf.getDonorContractFundinAmount().equals("")) {
-             eua.setDonorContractFundinAmount(Double.parseDouble(euaf.getDonorContractFundinAmount()));
+             eua.setDonorContractFundinAmount(Double.valueOf(euaf.getDonorContractFundinAmount()));
          }         
          if (euaf.getDonorContractFundingCurrency() != null && !euaf.getDonorContractFundingCurrency().equals("") && !euaf.getDonorContractFundingCurrency().equals(new Long(-1))) {
          	eua.setDonorContractFundingCurrency(CurrencyUtil.getAmpcurrency(euaf.getDonorContractFundingCurrency()));
          }
          //
          if (euaf.getTotAmountDonorContractFunding() != null && !euaf.getTotAmountDonorContractFunding().equals("")) {
-             eua.setTotAmountDonorContractFunding(Double.parseDouble(euaf.getTotAmountDonorContractFunding()));
+             eua.setTotAmountDonorContractFunding(Double.valueOf(euaf.getTotAmountDonorContractFunding()));
          }         
          if (euaf.getTotalAmountCurrencyDonor() != null && !euaf.getTotalAmountCurrencyDonor().equals("") && !euaf.getTotalAmountCurrencyDonor().equals(new Long(-1))) {
          	eua.setTotalAmountCurrencyDonor(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrencyDonor()));
          }
          //
          if (euaf.getTotAmountCountryContractFunding() != null && !euaf.getTotAmountCountryContractFunding().equals("")) {
-             eua.setTotAmountCountryContractFunding(Double.parseDouble(euaf.getTotAmountCountryContractFunding()));
+             eua.setTotAmountCountryContractFunding(Double.valueOf(euaf.getTotAmountCountryContractFunding()));
          }         
          if (euaf.getTotalAmountCurrencyCountry() != null && !euaf.getTotalAmountCurrencyCountry().equals("") && !euaf.getTotalAmountCurrencyDonor().equals(new Long(-1))) {
          	eua.setTotalAmountCurrencyCountry(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrencyCountry()));

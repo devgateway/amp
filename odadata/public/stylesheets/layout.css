@@ -431,4 +431,5 @@ div.info {
 #logo_3 {
     border:4px solid white;
     background-color:white;
+    clear:right;
 }

@@ -120,11 +120,13 @@ function preview(id)
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex" value="2">
+<c:set target="${urlSubTabs}" property="tabIndex" >
 	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
 </c:set>
 
-<c:set target="${urlSubTabs}" property="transactionType" value="0"/>
+<c:set target="${urlSubTabs}" property="transactionType" >
+	<%=new String("0")%>
+</c:set>
 
 
 
@@ -192,7 +194,7 @@ function preview(id)
 </c:set>
 
 
-<digi:form action="/viewYearlyInfoFilter.do" name="aimYearlyInfoForm" type="org.digijava.module.aim.form.YearlyInfoForm" method="post">
+<digi:form action="/yearlyInfoFilter.do" name="aimYearlyInfoForm" type="org.digijava.module.aim.form.YearlyInfoForm" method="post">
 
 
 
@@ -268,7 +270,9 @@ function preview(id)
                  <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
                 	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
 
-              		<c:set target="${urlSubTabs}" property="transactionType" value="4"/>
+              		<c:set target="${urlSubTabs}" property="transactionType" >
+              			<%=new String("4")%>
+              		</c:set>
 
 						<c:set var="translation">
 
@@ -297,7 +301,9 @@ function preview(id)
 
               	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="1">
 
-              		<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
+              		<c:set target="${urlSubTabs}" property="transactionType">
+              			<%=new String("1")%>
+					</c:set>
 
 						<c:set var="translation">
 
@@ -325,7 +331,9 @@ function preview(id)
 
               	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="2">
 
-               	<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
+               	<c:set target="${urlSubTabs}" property="transactionType" >
+               		<%=new String("2")%>
+               	</c:set>
 
 			<c:set var="translation">
 

@@ -146,7 +146,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 
-<digi:form action="/viewQuarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm"
+<digi:form action="/quarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm"
 
 type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 

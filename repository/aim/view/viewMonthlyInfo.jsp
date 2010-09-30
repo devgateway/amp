@@ -189,7 +189,7 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 
 
-<digi:form action="/viewMonthlyInfo.do" name="aimMonthlyInfoForm" type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
+<digi:form action="/monthlyInfo.do" name="aimMonthlyInfoForm" type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
     
     
     

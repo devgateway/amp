@@ -195,7 +195,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 
-<digi:form action="/viewQuarterlyInfoFilter.do" name="aimQuarterlyInfoForm"
+<digi:form action="/quarterlyInfoFilter.do" name="aimQuarterlyInfoForm"
 
 type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
@@ -636,7 +636,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			                           				</div>
 
 					                          		</td>
-													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+													<logic:notEqual name="aimQuarterlyInfoForm" property="transactionType" value="4">
 					                          		<td bgcolor="#999999">
 														<div align="center" style="font-weight:bold;color:black;">
 															<FONT color="blue">*</FONT>
@@ -756,7 +756,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 							                          		</logic:equal>
 
 						                          		</td>
-													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+													<logic:notEqual name="aimQuarterlyInfoForm" property="transactionType" value="4">
 			                   			       			<td valign="baseline" align="right">
 													         <aim:formatNumber value="${qtr.plannedAmount}"/>
 														</td>
@@ -778,7 +778,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 															<digi:trn key="aim:total">Total</digi:trn>
                                                            	</span>
 														</td>
-														<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+														<logic:notEqual name="aimQuarterlyInfoForm" property="transactionType" value="4">
 														<td>
 															<div align="right" class="note">
 																<bean:write name="aimQuarterlyInfoForm" property="totalPlanned" />

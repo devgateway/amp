@@ -94,6 +94,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 				if(field instanceof StaticTextField){
 					PossibleValue posVal=(PossibleValue)field.getPossibleValues().toArray()[0];
 					subValHolder=new SubmittedValueHolder(field.getOrdinalNumber(), posVal.getValue());
+					subValHolder.setNeedsNewParagraph(true);
 					submittedValsHolder.add(subValHolder);
 				}
 			}
@@ -109,6 +110,11 @@ public class DocumentFromTemplateActions extends DispatchAction {
 							}
 							Integer ordNumber=new Integer(parameter.substring(parameter.lastIndexOf("_")+1));
 							subValHolder=new SubmittedValueHolder(ordNumber, submittedParameterValues[i]);
+							if(i==0){
+								subValHolder.setNeedsNewParagraph(true);
+							}else{
+								subValHolder.setNeedsNewParagraph(false);
+							}
 							submittedValsHolder.add(subValHolder);
 						}
 					}
@@ -156,9 +162,11 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         doc.add(pageTitle);
 	         doc.add(new Paragraph(" "));
 	         for (SubmittedValueHolder pdfContentElement : pdfContent) {
-	        	 Paragraph pdfContentEl = new Paragraph(pdfContentElement.getSubmittedValue(), plainFont);
+	        	 if(pdfContentElement.isNeedsNewParagraph()){
+	        		 doc.add(new Paragraph(" "));
+	        	 }
+	        	 Paragraph pdfContentEl = new Paragraph(pdfContentElement.getSubmittedValue(), plainFont);	        	 
 	        	 doc.add(pdfContentEl);
-		         doc.add(new Paragraph(" "));
 	 		 }
 	         doc.close();
 	         byte[] pdfbody= baos.toByteArray();
@@ -192,9 +200,11 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	        doc.add(pageTitle);
 	        doc.add(new Paragraph(" "));
 	        for (SubmittedValueHolder pdfContentElement : docContent) {
+	        	if(pdfContentElement.isNeedsNewParagraph()){
+	        		 doc.add(new Paragraph(" "));
+	        	 }
 	        	 Paragraph docContentEl = new Paragraph(pdfContentElement.getSubmittedValue(), plainFont);
-	        	 doc.add(docContentEl);
-		         doc.add(new Paragraph(" "));
+	        	 doc.add(docContentEl);		        
 	 		}
 	        doc.close();
 	        byte[] docbody= baos.toByteArray();

@@ -3,6 +3,7 @@ package org.digijava.module.contentrepository.helper.template;
 public class SubmittedValueHolder {
 	private Integer fieldOrdinalValue;
 	private String submittedValue;
+	private boolean needsNewParagraph; //whether there should be an empty line before this entity
 	
 	public SubmittedValueHolder(Integer fieldOrdNum, String value){
 		this.fieldOrdinalValue=fieldOrdNum;
@@ -24,5 +25,14 @@ public class SubmittedValueHolder {
 	}
 	public void setSubmittedValue(String submittedValue) {
 		this.submittedValue = submittedValue;
-	}	
+	}
+
+	public boolean isNeedsNewParagraph() {
+		return needsNewParagraph;
+	}
+
+	public void setNeedsNewParagraph(boolean needsNewParagraph) {
+		this.needsNewParagraph = needsNewParagraph;
+	}
+	
 }

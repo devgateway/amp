@@ -160,7 +160,7 @@
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
  <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
-<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> 
+<feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>

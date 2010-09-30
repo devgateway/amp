@@ -68,18 +68,26 @@ public class OrgProfileFilterAction extends Action {
                 orgForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
             }
         }
-        if (fromPublicView == false) {
-			if (orgForm.getCurrencyId() == null) {
-				Long currId = tm.getAppSettings().getCurrencyId();
-				if (currId != null) {
-					orgForm.setCurrencyId(currId);
-				} else {
-					orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
-				}
-			}
-		} else {
-			orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
-		}
+		 if (orgForm.getCurrencyId() == null) {
+            if (fromPublicView == false) {
+                Long currId = tm.getAppSettings().getCurrencyId();
+                if (currId != null) {
+                    orgForm.setCurrencyId(currId);
+                } else {
+                    String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+                    if (baseCurr == null) {
+                        baseCurr = "USD";
+                    }
+                    orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency(baseCurr).getAmpCurrencyId());
+                }
+            } else {
+                String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+                if (baseCurr == null) {
+                    baseCurr = "USD";
+                }
+                orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency(baseCurr).getAmpCurrencyId());
+            }
+        }
         List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
         orgForm.setOrgGroups(orgGroups);
         List<AmpOrganisation> orgs = null;

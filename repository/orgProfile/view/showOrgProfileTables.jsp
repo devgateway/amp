@@ -26,7 +26,7 @@
         </c:otherwise>
     </c:choose>
 </c:set>
-    <table border="0" class="tableElement" bgcolor="#dddddd" width="100%" cellspacing="0" cellpadding="0">
+    <table border="0" class="tableElement" bgcolor="#dddddd" width="96%" cellspacing="0" cellpadding="0">
         <tr>
             <th colspan="${6*colSpan}" class="tableHeaderCls">
                 <c:choose> 

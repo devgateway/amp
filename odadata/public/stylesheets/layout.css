@@ -420,3 +420,15 @@ div.info {
 .columns > div > div {
   padding: 0 5px;
 }
+
+#logo_1, #logo_2, #logo_3 {
+    float:left;
+}
+#logo_2 {
+    margin-top:10px;
+    margin-right:10px;
+}
+#logo_3 {
+    border:4px solid white;
+    background-color:white;
+}

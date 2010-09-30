@@ -13,7 +13,7 @@
 				:media => :all, :cache => false) %>
 		<%# TODO: Set cache back to styles upon production deployment!!! %>
 		<%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
-		<%= javascript_include_tag('jquery-1.4.2.min', 'jquery-ui-1.8.custom.min', 'jquery.livequery.min', 'behavior/menu') %>
+		<%= javascript_include_tag('swfobject', 'jquery-1.4.2.min', 'jquery-ui-1.8.custom.min', 'jquery.livequery.min', 'behavior/menu') %>
     	
 		<%= yield :head %>
 	</head>

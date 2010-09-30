@@ -99,18 +99,18 @@ $(document).ready(function(){
     <td width=14>&nbsp;</td>
     <td align=left vAlign=top width=750><table cellPadding=5 cellSpacing=0 width="100%">
         <tr>
-          <td height=33 colspan="2"><span class=crumb>
-            <c:set var="translation">
-              <digi:trn>Click here to view MyDesktop</digi:trn>
-            </c:set>
-            <digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
-              <digi:trn>Admin Home</digi:trn>
-            </digi:link>
-            &nbsp;&gt;&nbsp;
-            <digi:trn>Tools</digi:trn>
-            &nbsp;&gt;&nbsp;
-            <digi:trn>Search</digi:trn>
-            </span> </td>
+          <td height=33 colspan="2">
+          	<span class=crumb>
+	            <c:set var="translation">
+	              <digi:trn>Click here to goto Admin Home</digi:trn>
+	            </c:set>
+	            <digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
+	              <digi:trn>Admin Home</digi:trn>
+	            </digi:link>
+	            &nbsp;&gt;&nbsp;
+	            <digi:trn>Public View Content</digi:trn>
+            </span>
+          </td>
         </tr>
         <tr>
           <td height=16 vAlign=center colspan="2"><span class=subtitle-blue>

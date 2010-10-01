@@ -13,11 +13,11 @@
 
 <field:display feature="${largeTextFeature}" name="${largeTextLabel}">
 	<tr>
-		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2"><digi:trn
+		<td class="t-name" width="30%" align="right" bgcolor="#f0f0f0"><digi:trn
 			key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn></td>
-		<td bgcolor="#f4f4f2"><c:if
+		<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0"><c:if
 			test="${largeTextKey!=null}">
 			<digi:edit key="${largeTextKey}"></digi:edit>
-		</c:if></td>
+		</c:if>&nbsp;</td>
 	</tr>
 </field:display>

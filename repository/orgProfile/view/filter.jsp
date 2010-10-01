@@ -198,8 +198,8 @@
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 15px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
-					<DIV id="subtabs" style="cursor: pointer; min-height: 20px; background-color: ;">
+				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 20px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
+					<DIV id="subtabs" style="cursor: pointer; min-height: 15px; background-color: ;">
 			  			<UL>
 							<LI>
 								<div style="background-color: ">
@@ -225,7 +225,7 @@
 								</div>
 							</LI>
 					</UL>
-					<div style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right; vertical-align: middle;" id="displaySettingsButton">
+					<div style="cursor: pointer; font-family: Arial; min-height: 15px; font-size: 11px; font-style: italic; float: right; vertical-align: middle;" id="displaySettingsButton">
 						<%String styleHideShow = "";%>
 						<logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
 							<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;
@@ -236,11 +236,13 @@
 						</logic:notEqual>
 					</div>
 				</div>
-			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
+				<DIV id="subtabs" style="cursor: pointer; min-height: 2px; background-color: ;">
+				</div>
+			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 1px 1px 5px 5px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">
 					<tr>
-						<td style="font-size:11px;" valign="top">
+						<td style="font-size:11px;" valign="bottom">
 						<strong> <digi:trn>Selected Filters:</digi:trn></strong> 
 							<i><digi:trn>Organization Group</digi:trn>:</i> 
 								<c:choose>

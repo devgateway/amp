@@ -74,7 +74,7 @@
 
             $("#displaySettingsButton").click(function () {
                 $("#currentDisplaySettings").toggle();
-                var title=$("#displaySettingsButton").text();
+                var title=$("#displaySettingsButton").text().trim();
                 var titleEnd=title.substr(title.length-2,2);
                 if(titleEnd=='>>'){
                     $("#displaySettingsButton").html('<digi:trn jsFriendly="true">Hide Current Settings</digi:trn> &lt;&lt;')
@@ -227,10 +227,16 @@
 					</UL>
 				</div>
 			<span style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right;" id="displaySettingsButton">
-			<digi:trn>Hide Current Settings</digi:trn>
-			&gt;&gt;
+			<%String styleHideShow = "";%>
+			<logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
+				<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;
+			</logic:equal>
+			<logic:notEqual value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
+				<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
+				<%styleHideShow = "display: none; ";%>
+			</logic:notEqual>
 			</span> &nbsp;
-			<div style="background-color: #FFFFCC; padding: 15px 2px 2px 2px;" id="currentDisplaySettings">
+			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 15px 2px 2px 2px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">
 					<tr>

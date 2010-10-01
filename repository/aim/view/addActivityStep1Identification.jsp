@@ -307,7 +307,6 @@ target.style.cursor = "default"
 
 <digi:instance property="aimEditActivityForm" />
 
-										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<bean:define id="contentDisabled">false</bean:define>
 											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
 											</c:set>
@@ -1109,7 +1108,6 @@ target.style.cursor = "default"
 									</td></tr>	
 								</field:display>
 								
-						</table>
 						<script>
 							InitBud();
 						</script>

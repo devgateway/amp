@@ -487,20 +487,20 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									
-									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
-									</td></tr>
+									<tr>
+										<td>
+											<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+												<jsp:include page="addActivityStep1Identification.jsp"/>
+												<feature:display name="Identification" module="Project ID and Planning">
+													<field:display name="Organizations and Project ID" feature="Identification">
+														<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
+													</field:display>
+												</feature:display>
+											</table>
+										</td>
+									</tr>
 									
 
-									<tr><td>&nbsp;
-										
-									</td></tr>
-									<feature:display name="Identification" module="Project ID and Planning">
-										<field:display name="Organizations and Project ID" feature="Identification">
-											<tr><td>
-												<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
-											</td></tr>
-										</field:display>
-									</feature:display>
 									<tr><td>&nbsp;
 										
 									</td></tr>

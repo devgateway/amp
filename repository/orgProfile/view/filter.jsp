@@ -198,11 +198,11 @@
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
-					<DIV id="subtabs" style="cursor: pointer; float: left; min-height: 20px;">
+				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 15px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
+					<DIV id="subtabs" style="cursor: pointer; min-height: 20px; background-color: ;">
 			  			<UL>
 							<LI>
-								<div>
+								<div style="background-color: ">
 									<a target="_blank" onclick="exportPDF(); return false;">
 									<digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF' />
 									<digi:trn>Export to PDF</digi:trn> 
@@ -225,18 +225,18 @@
 								</div>
 							</LI>
 					</UL>
+					<div style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right; vertical-align: middle;" id="displaySettingsButton">
+						<%String styleHideShow = "";%>
+						<logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
+							<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;
+						</logic:equal>
+						<logic:notEqual value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
+							<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
+							<%styleHideShow = "display: none; ";%>
+						</logic:notEqual>
+					</div>
 				</div>
-			<span style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right;" id="displaySettingsButton">
-			<%String styleHideShow = "";%>
-			<logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
-				<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;
-			</logic:equal>
-			<logic:notEqual value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
-				<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
-				<%styleHideShow = "display: none; ";%>
-			</logic:notEqual>
-			</span> &nbsp;
-			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 15px 2px 2px 2px;" id="currentDisplaySettings">
+			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">
 					<tr>

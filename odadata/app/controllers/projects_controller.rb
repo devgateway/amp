@@ -8,9 +8,15 @@ class ProjectsController < ApplicationController
 
   def index
     @status = params[:status].to_i || 0
+    @prj_status = params[:prj_status]
     MultiCurrency.output_currency = params[:currency] || current_donor.currency
-    @projects = current_donor.projects.paginate(:all, :conditions => { :data_status => @status },
-      :page => params[:page], :per_page => 15, :order => "donor_project_number ASC")
+    if @prj_status.nil?
+      @projects = current_donor.projects.paginate(:all, :conditions => { :data_status => @status },
+        :page => params[:page], :per_page => 15, :order => "donor_project_number ASC")
+    else
+      @projects = current_donor.projects.paginate(:all, :conditions => { :data_status => @status, :prj_status => @prj_status.to_i },
+        :page => params[:page], :per_page => 15, :order => "donor_project_number ASC")
+    end
   end
   
   def show

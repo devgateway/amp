@@ -174,6 +174,8 @@ en:
         new_project: Add New
         draft_projects: Draft
         published_projects: Published
+        published_ongoing_projects: Published Ongoing
+        published_completed_projects: Published Completed
         deleted_projects: Recycle Bin
         projects: Projects
         donor_info: Donor Info
@@ -245,6 +247,7 @@ en:
       delete: Delete project
       publish: Publish project
       edit_and_draft: Edit project (moves it to drafts)
+      draft: Move project to drafts
       clone: Clone & Edit
       recycle: Restore project
       delete_confirmation: Are you sure that you would like to move "{{project}}" to the delete projects?
@@ -287,7 +290,7 @@ en:
       total_commitments: Total Committed
       disbursed: Disbursed {{year}}
       disbursement_forecast: Disbursement Forecast {{year}}
-      title: List <i>{{status}}</i> Projects
+      title: List <i>{{status}}</i> Projects {{prj_status}}
       empty: Please add your projects.
     new:
       title: Add New Project

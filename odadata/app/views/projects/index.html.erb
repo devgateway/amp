@@ -1,6 +1,16 @@
 <% stylesheet 'pagination' %>
 
-<h2><%= header t('.title', :status => option_text_by_id(Project, :data_status, Project::DATA_STATUS_OPTIONS, @status)) %></h2>
+<%
+if @prj_status.nil?
+%>
+<h2><%= header t('.title', :status => option_text_by_id(Project, :data_status, Project::DATA_STATUS_OPTIONS, @status), :prj_status => "" ) %></h2>
+<%
+else
+%>
+<h2><%= header t('.title', :status => option_text_by_id(Project, :data_status, Project::DATA_STATUS_OPTIONS, @status), :prj_status => option_text_by_id(Project, :prj_status, Project::STATUS_OPTIONS, @prj_status.to_i)) %></h2>
+<%
+end
+%>
 
 <table>
 	<% if @projects.blank? then %>

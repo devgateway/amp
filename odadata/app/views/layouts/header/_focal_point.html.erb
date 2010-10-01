@@ -79,6 +79,8 @@
 				<li><%= link_to t('.draft_projects'), projects_path(:status => Project::DRAFT) %></li>
 				<li><%= link_to t('.published_projects'), projects_path(:status => Project::PUBLISHED) %></li>
 				<li><%= link_to t('.deleted_projects'), projects_path(:status => Project::DELETED) %></li>
+				<li><%= link_to t('.published_ongoing_projects'), projects_path(:status => Project::PUBLISHED, :prj_status => Project::STATUS_ONGOING )%></li>
+				<li><%= link_to t('.published_completed_projects'), projects_path(:status => Project::PUBLISHED, :prj_status => Project::STATUS_COMPLETED )%></li>
 			</ul>
 		</li>
 

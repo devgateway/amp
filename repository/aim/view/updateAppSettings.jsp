@@ -384,15 +384,15 @@ function loadShareRules(){
 															</div>															
 														</td>
 														<td bgcolor="#f4f4f2" width="50%">															
-															<div style="${displayDiv}"  id="membersDiv">
-																<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">
-																	<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
-																</logic:empty>
-																<logic:notEmpty name="aimUpdateAppSettingsForm"  property="teamMembers" >
-																	<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px">
+															<div style="${displayDiv}"  id="membersDiv">																	
+																<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px">
+																	<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">
+																		<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+																	</logic:empty>
+																	<logic:notEmpty name="aimUpdateAppSettingsForm"  property="teamMembers" >
 																		<html:optionsCollection name="aimUpdateAppSettingsForm" property="teamMembers" value="memberId" label="memberName"/>
-																	</html:select>
-																</logic:notEmpty>
+																	</logic:notEmpty>																		
+																</html:select>																
 															</div>
 														</td>														
 													</tr>

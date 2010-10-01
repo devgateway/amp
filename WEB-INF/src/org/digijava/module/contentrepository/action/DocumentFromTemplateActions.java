@@ -126,9 +126,9 @@ public class DocumentFromTemplateActions extends DispatchAction {
 			String nodeuuid=null;
 			if(myForm.getDocType()!=null){
 				if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_PDF)){
-					nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),request);
+					nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),myForm.getDocOwnerType(), request);
 				}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
-					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),request);
+					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),myForm.getDocOwnerType(),request);
 				}
 				//last approved version
 				 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
@@ -137,6 +137,8 @@ public class DocumentFromTemplateActions extends DispatchAction {
 			} 
 			
 			clearForm(myForm);
+			request.getSession().setAttribute("resourcesTab", myForm.getDocOwnerType());
+			myForm.setDocOwnerType(null);
 		}
 		
 		return mapping.findForward("showResources");
@@ -149,7 +151,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	 * @param request 
 	 * @return
 	 */
-	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,HttpServletRequest request){
+	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,String documentOwnerType,HttpServletRequest request){
 		com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    try {
@@ -174,8 +176,14 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         PdfFileHelper pdfHelper=new PdfFileHelper(pdfName, contentType, pdfbody);
 	         //create jcr node
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
-	         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
-	         NodeWrapper nodeWrapper		= new NodeWrapper(pdfHelper, request, userHomeNode, false, new ActionErrors());
+	         Node userOrTeamHomeNode = null;
+	         if(documentOwnerType.equals("team")){
+	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request));
+	         }else if (documentOwnerType.equals("private")){
+	        	 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+	         }
+	         //Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+	         NodeWrapper nodeWrapper		= new NodeWrapper(pdfHelper, request, userOrTeamHomeNode, false, new ActionErrors());
 			 if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
 					nodeWrapper.saveNode(jcrWriteSession);
 			 }
@@ -187,7 +195,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	}
 	
 	
-	private String createWord(List<SubmittedValueHolder> docContent, String docName,HttpServletRequest request){
+	private String createWord(List<SubmittedValueHolder> docContent, String docName,String documentOwnerType,HttpServletRequest request){
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -212,8 +220,14 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	        WordDocumentHelper wordDocHelper=new WordDocumentHelper(docName, contentType, docbody);
 	        //create jcr node
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
-	         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
-	         NodeWrapper nodeWrapper		= new NodeWrapper(wordDocHelper, request, userHomeNode, false, new ActionErrors());
+	         Node userOrTeamHomeNode = null;
+	         if(documentOwnerType.equals("team")){
+	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request));
+	         }else if (documentOwnerType.equals("private")){
+	        	 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+	         }
+	        // Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+	         NodeWrapper nodeWrapper		= new NodeWrapper(wordDocHelper, request, userOrTeamHomeNode, false, new ActionErrors());
 			 if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
 					nodeWrapper.saveNode(jcrWriteSession);
 			 }
@@ -236,6 +250,6 @@ public class DocumentFromTemplateActions extends DispatchAction {
 		form.setTemplates(null);
 		form.setFields(null);
 		form.setDocumentName(null);
-		form.setDocType(null);
+		form.setDocType(null);		
 	}
 }

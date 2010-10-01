@@ -67,19 +67,23 @@ ActionsMenu.prototype.render=function (){
 		divEl.appendChild(addURLdivEl);
 		
 		
-		if(this.teamView!=null && ! this.teamView){
+		//if(this.teamView!=null && ! this.teamView){
 			//create from template link
 			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";
 			createFromTemplateLinkEl+=createFromTemplate;
 			createFromTemplateLinkEl+="</a>";
 			var createFromTempldivEl	= document.createElement("div");
 			var clickActionsForTemplate = function (e, createFromTempldivEl) {
-				menuPanelForUser.toggleUserView();
-				addFromTemplate();
+				if(teamView!=null && ! teamView){
+					menuPanelForUser.toggleUserView();
+				}else{
+					menuPanelForTeam.toggleTeamView();
+				}
+				addFromTemplate(ownType);
 			};
 			createActionDiv(createFromTempldivEl,createFromTemplateLinkEl,clickActionsForTemplate);
 			divEl.appendChild(createFromTempldivEl);
-		}
+		//}
 	
 	divEl.style.border	= "1px solid gray";
 	divEl.style.backgroundColor="white";

@@ -10,7 +10,6 @@
 
 <digi:form action="/docFromTemplate.do?actType=saveDocument" method="post">
 
-
 <table width="98%" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">	
   <tr>
   	<td width="100%" colspan="2">

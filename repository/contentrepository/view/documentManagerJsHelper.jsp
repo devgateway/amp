@@ -1253,7 +1253,7 @@ function getCallbackForTemplates (panel) {
 
 }
 
-function addFromTemplate() {
+function addFromTemplate(ownType) {
 	if ( YAHOO.amp.tempPanels == null ) {
 		YAHOO.amp.tempPanels	= new Object;
 	}
@@ -1270,17 +1270,12 @@ function addFromTemplate() {
 	templatesPanel.show();
 
 	//YAHOO.amp.orgPanels.lastUuid	= uuid;
-	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docFromTemplate.do?actType=loadTemplates', getCallbackForTemplates(templatesPanel) );
+	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docFromTemplate.do?actType=loadTemplates&docOwnerType='+ownType, getCallbackForTemplates(templatesPanel) );
 
 }
 
 function templateNameSelected(){
 	var templateId=document.getElementById('selTempName').value;
-	//var docName=document.getElementById('docName').value;
-	//if(templateId==-1){
-	//	alert('Please Select Template');
-	//	return false;
-	//}
 	var myDiv=document.getElementById('tempLoadingDiv');
 	myDiv.style.display="block";
 	<digi:context name="loadTemp" property="context/module/moduleinstance/docFromTemplate.do?actType=getTemplate"/>;

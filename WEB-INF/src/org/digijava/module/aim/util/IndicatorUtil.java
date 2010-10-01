@@ -1000,11 +1000,10 @@ public class IndicatorUtil {
 	 * @throws DgException
 	 */
 	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
-		List<ActivityIndicator> result=null;
+		List<ActivityIndicator> result = new ArrayList<ActivityIndicator>();;
 		if (activity==null) return null;
 		Set<IndicatorActivity> indicators =activity.getIndicators();
 		if (indicators!=null && indicators.size()>0){
-			result=new ArrayList<ActivityIndicator>();
 			for (IndicatorActivity connection : indicators) {
 				ActivityIndicator helper=new ActivityIndicator();
 				

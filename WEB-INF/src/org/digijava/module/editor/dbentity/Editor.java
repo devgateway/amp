@@ -23,12 +23,10 @@
 package org.digijava.module.editor.dbentity;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.log4j.Logger;
 import org.digijava.kernel.user.User;
 
 /**
@@ -43,7 +41,9 @@ import org.digijava.kernel.user.User;
 public class Editor
     implements Serializable {
 
-    private static Logger logger = Logger.getLogger(Editor.class);
+	private static final long serialVersionUID = 1L;
+
+//	private static Logger logger = Logger.getLogger(Editor.class);
 
     private String siteId;
     private String editorKey;

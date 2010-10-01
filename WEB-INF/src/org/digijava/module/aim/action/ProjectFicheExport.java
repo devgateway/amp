@@ -42,12 +42,13 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.editor.exception.EditorException;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Cell;
@@ -56,7 +57,6 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.style.RtfFont;
-import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * @author mihai
@@ -151,8 +151,8 @@ public class ProjectFicheExport extends Action {
 		//2. OVERALL OBJECTIVE
 		document.add(newParagraph("2. Overall Objective and Project Purpose",rootSectionFont,1));
 
-		document.add(newParagraph("2.1 Overall Objective: "+Util.getEditorBody(site,act.getObjective(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("2.2 Project Purpose: "+Util.getEditorBody(site,act.getPurpose(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("2.1 Overall Objective: "+getEditorBody(site,act.getObjective(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("2.2 Project Purpose: "+getEditorBody(site,act.getPurpose(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("2.3 Link with AP/NPAA/EP/SAA: ",regularFont,1));
 		document.add(newParagraph("2.4 Link with MIPD: ",regularFont,1));
 		document.add(newParagraph("2.5 Link with National Development Plan (where applicable): "+Util.toCSString(ActivityUtil.getActivityPrograms(act.getAmpActivityId())),regularFont,1));
@@ -162,10 +162,10 @@ public class ProjectFicheExport extends Action {
 		//2. DESCRIPTION OF PROJECT
 		document.add(newParagraph("3. Description of Project",rootSectionFont,1));
 		
-		document.add(newParagraph("3.1 Background and justification: "+Util.getEditorBody(site,act.getDescription(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.2 Assessment of Project Impact, Catalytic Effect, Sustainability and Cross Border Impact (where applicable) : "+Util.getEditorBody(site,act.getProjectImpact(),navigationLanguage),regularFont,1));		
-		document.add(newParagraph("3.3 Results and measurable indicators: "+Util.getEditorBody(site,act.getResults(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.4 Activities: "+Util.getEditorBody(site,act.getActivitySummary(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.1 Background and justification: "+getEditorBody(site,act.getDescription(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.2 Assessment of Project Impact, Catalytic Effect, Sustainability and Cross Border Impact (where applicable) : "+getEditorBody(site,act.getProjectImpact(),navigationLanguage),regularFont,1));		
+		document.add(newParagraph("3.3 Results and measurable indicators: "+getEditorBody(site,act.getResults(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.4 Activities: "+getEditorBody(site,act.getActivitySummary(),navigationLanguage),regularFont,1));
 		
 		/*
 		i=act.getCosts().iterator();
@@ -210,9 +210,9 @@ public class ProjectFicheExport extends Action {
 		}
 		*/
 
-		document.add(newParagraph("3.6 Conditionality and sequencing: "+Util.getEditorBody(site,act.getCondSeq(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.7 Linked activities: "+Util.getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.8 Lessons learned: "+Util.getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.6 Conditionality and sequencing: "+getEditorBody(site,act.getCondSeq(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.7 Linked activities: "+getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.8 Lessons learned: "+getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
 		
 		document.add(newParagraph("4. Indicative Budget (amounts in ME)",rootSectionFont,1));
 		
@@ -514,9 +514,9 @@ public class ProjectFicheExport extends Action {
 		document.add(tbl);
 		
 		document.add(newParagraph("6. Cross Cutting Issues (where applicable)",rootSectionFont,1));
-		document.add(newParagraph("6.1 Equal Opportunity"+Util.getEditorBody(site,act.getEqualOpportunity(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("6.2 Environment"+Util.getEditorBody(site,act.getEnvironment(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("6.3 Minorities"+Util.getEditorBody(site,act.getMinorities(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("6.1 Equal Opportunity"+getEditorBody(site,act.getEqualOpportunity(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("6.2 Environment"+getEditorBody(site,act.getEnvironment(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("6.3 Minorities"+getEditorBody(site,act.getMinorities(),navigationLanguage),regularFont,1));
 		
 		
 		//LOGFRAME
@@ -567,15 +567,15 @@ public class ProjectFicheExport extends Action {
 		
 		
 		
-		Collection indicatorsMe=IndicatorUtil.getActivityIndicatorHelperBeans(act.getAmpActivityId());
+		List<ActivityIndicator> indicatorsMe=IndicatorUtil.getActivityIndicatorHelperBeans(act.getAmpActivityId());
 
 		
 		//fische objectives:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getObjective(),navigationLanguage), CategoryConstants.LOGFRAME_OBJECTIVE ,indicatorsMe);
+		addIndicatorsLine(allComments,tbl,getEditorBody(site,act.getObjective(),navigationLanguage), CategoryConstants.LOGFRAME_OBJECTIVE ,indicatorsMe);
 		//fische purpose:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getPurpose(),navigationLanguage), CategoryConstants.LOGFRAME_PURPOSE,indicatorsMe);	
+		addIndicatorsLine(allComments,tbl,getEditorBody(site,act.getPurpose(),navigationLanguage), CategoryConstants.LOGFRAME_PURPOSE,indicatorsMe);	
 		//fische results:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getResults(),navigationLanguage),CategoryConstants.LOGFRAME_RESULTS,indicatorsMe);
+		addIndicatorsLine(allComments,tbl,getEditorBody(site,act.getResults(),navigationLanguage),CategoryConstants.LOGFRAME_RESULTS,indicatorsMe);
 		
 		tbl.addCell(getLogframeHeadingCell("Activities"));
 		tbl.addCell(getLogframeHeadingCell("Contributions"));
@@ -831,7 +831,7 @@ public class ProjectFicheExport extends Action {
 
 		document.add(newParagraph("ANNEX 4: Details per EU Funded Contract",annexFont,1));
 		
-		document.add(newParagraph(Util.getEditorBody(site,act.getContractDetails(),navigationLanguage),regularFont,1));
+		document.add(newParagraph(getEditorBody(site,act.getContractDetails(),navigationLanguage),regularFont,1));
 		
 		document.close();
 		
@@ -942,5 +942,20 @@ public class ProjectFicheExport extends Action {
 	
 	public static double convertToThousands(double amount) {
 		return amount*1000;
+	}
+	
+	/**
+	 * This is just wrapper to hide 1) long package name 2) correctly converting siteID to string.
+	 * About site ID: there are two ID's, 1) numeric PK of the record, and 2) string unique name of 
+	 * the site also called siteId. People mess them frequently and this causes too much bad problems.  
+	 * @param site
+	 * @param key
+	 * @param navLang
+	 * @return
+	 * @throws EditorException 
+	 */
+	private static String getEditorBody(Site site,String key,  Locale navLang) throws EditorException{
+		String result = org.digijava.module.editor.util.DbUtil.getEditorBodyFiltered(site.getSiteId(), key, navLang.getCode());
+		return result;
 	}
 }

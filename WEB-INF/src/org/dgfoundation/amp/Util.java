@@ -38,6 +38,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -180,8 +181,18 @@ public final class Util {
 
 	}
 	
-	public static String getEditorBody(Site site,String key,  Locale navLang)
-			throws EditorException {
+	/**
+	 * This was retrieving editor body text very strangely 
+	 * and was duplicating functionality of editor module.
+	 * @deprecated use same method from {@link DbUtil}. There is an filtering one also.  
+	 * @param site
+	 * @param key
+	 * @param navLang
+	 * @return
+	 * @throws EditorException
+	 */
+	@Deprecated
+	public static String getEditorBody(Site site,String key,  Locale navLang) throws EditorException {
 		String editorBody = null;
 		
 		Session session=null;

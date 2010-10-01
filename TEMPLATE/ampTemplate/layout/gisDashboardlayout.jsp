@@ -11,13 +11,13 @@
 <!--
 	var lastTimeStamp;
 	
-	function donorChanged(donor){
-		rechart(donor);
+	function donorChanged(){
+		rechart();
 	}
 	function yearChanged(){
 		rechart()
 	}
-	function rechart(donor){
+	function rechart(){
             lastTimeStamp = new Date().getTime();
             var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
             var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
@@ -30,11 +30,7 @@
             var fy=document.getElementsByName('selectedFromYear')[0].value;
             //to year
             var ty=document.getElementsByName('selectedToYear')[0].value;
-            if (donor){
-            	var d=donor;
-            }else{
-            	var d=document.getElementById('donorsCombo').value;
-            }
+            var d=document.getElementsByName('selectedDonor')[0].value;
             var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
             myUrl+=getLegendState();
             myUrl+=getLabelState();

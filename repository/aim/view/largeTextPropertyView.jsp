@@ -13,9 +13,9 @@
 
 <field:display feature="${largeTextFeature}" name="${largeTextLabel}">
 	<tr>
-		<td class="t-name" width="30%" align="right" bgcolor="#fffff0"><digi:trn
+		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2"><digi:trn
 			key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn></td>
-		<td bgcolor="#ffffff"><c:if
+		<td bgcolor="#f4f4f2"><c:if
 			test="${largeTextKey!=null}">
 			<digi:edit key="${largeTextKey}"></digi:edit>
 		</c:if></td>

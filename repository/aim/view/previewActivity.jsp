@@ -175,8 +175,8 @@ function collapseAll() {
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="780" vAlign="top" align="left" border=0>
 	<tr>
-		<td class=r-dotted-lg width="10" align="left" vAlign="top">&nbsp;</td>
-		<td class=r-dotted-lg align=left vAlign=top>
+		<td width="10" align="left" vAlign="top">&nbsp;</td>
+		<td align=left vAlign=top>
 			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
 					<tr><td>
 					<logic:present name="currentMember" scope="session">
@@ -326,33 +326,36 @@ function collapseAll() {
 						<tr><td width="100%" vAlign="top">
 						<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
 							<tr>
-								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-										<tr>
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-											</td>
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:previewActivity">
-													Preview Activity
-												</digi:trn>
-											</td>
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-											</td>
-										</tr>
+								<td width="100%" style="border-bottom:2px solid #222E5D;">
+									<table width="100" cellpadding="0" cellspacing="0" style="background: #222E5D;">
+							  			<tr>
+							    			<td align="left">
+							    				<img src="images/tableftcorner.gif"/>
+							    			</td>
+							    			<td align="center" nowrap="nowrap" style="font-family: Arial;color:white;font-size:8pt;">
+											<digi:trn>
+												Preview Activity
+											</digi:trn>
+							    			</td>
+							    			<td align="right">
+							    				<img src="images/tabrightcorner.gif" />
+							    			</td>
+							  			</tr>
 									</table>
 								</td>
 							</tr>
-							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr>
-							<td align="center" vAlign="top" bgcolor="#ffffff">
-								<table width="100%" cellpadding=3 cellSpacing=1 bgcolor="#dddddd">
+							<td width="100%" bgcolor="#f4f4f2">
+							<table width="100%" border="0" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+							<tr>
+							<td align="center" vAlign="top" bgcolor="#c9c9c7">
+							<table width="100%" cellpadding=3 cellSpacing=1 bgcolor="#dddddd" border="0">
 							<feature:display name="Identification" module="Project ID and Planning">
 								<field:display name="AMP ID" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ampId">
 											 AMP ID</digi:trn>										</td>
-										<td class="v-name" bgcolor="#ffffff">
+										<td class="v-name" bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.ampId}"/>										</td>
 									</tr>
 								</field:display>
@@ -361,7 +364,7 @@ function collapseAll() {
 	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        
 	                                        	<digi:trn key="aim:convenionumcont">Contract Number</digi:trn>                                       	      
 	                                        </td>
-	                                        <td bgcolor="#FFFFFF">
+	                                        <td bgcolor="#f4f4f2">
 	                                        	<c:out value="${aimEditActivityForm.identification.convenioNumcont}"/>
 	                                        </td>
                                         </tr>
@@ -370,7 +373,7 @@ function collapseAll() {
 									<field:display name="Project Title" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:projectTitle">Project title</digi:trn>										</td>
-										<td class="v-name"  bgcolor="#ffffff">
+										<td class="v-name"  bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.title}"/>										</td>
 									</tr>
 									</field:display>
@@ -379,7 +382,7 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
                                         <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
 											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
 											<digi:edit key="${projcomKey}"></digi:edit>
@@ -390,7 +393,7 @@ function collapseAll() {
                                   <field:display name="NPD Clasification" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
-										<td class="v-name"  bgcolor="#ffffff">
+										<td class="v-name"  bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>										
 										</td>
 									</tr>
@@ -404,7 +407,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:objectives">Objectives</digi:trn>										
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
                                           <c:if test="${aimEditActivityForm.identification.objectives!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.identification.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
@@ -422,7 +425,7 @@ function collapseAll() {
 									</digi:trn></field:display>								
 									</td>
 										
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 <field:display feature="Identification" name="Objective Assumption">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
@@ -462,7 +465,7 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:description">
 											 Description</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
                                         <c:if test="${aimEditActivityForm.identification.description!=null}">
 											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
 											<digi:edit key="${descKey}"></digi:edit>
@@ -475,7 +478,7 @@ function collapseAll() {
 											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 												<digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn>
 											</td>
-											<TD bgcolor="#ffffff">																			
+											<TD bgcolor="#f4f4f2">																			
 												<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
 													<bean:define id="lessonsLearnedKey"><c:out value="${aimEditActivityForm.identification.lessonsLearned}"/></bean:define>
 													<digi:edit key="<%=lessonsLearnedKey%>"/>
@@ -551,7 +554,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:purpose">Purpose</digi:trn>										
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
                                           <c:if test="${aimEditActivityForm.identification.purpose!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.identification.purpose}" />
 											<digi:edit key="${objKey}"></digi:edit>
@@ -562,7 +565,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:purposeComments">Purpose Comments</digi:trn>										
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
@@ -595,7 +598,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:results">Results</digi:trn>										
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
                                           <c:if test="${aimEditActivityForm.identification.results!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.identification.results}" />
 											<digi:edit key="${objKey}"></digi:edit>
@@ -606,7 +609,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:resultsComments">Results Comments</digi:trn>										
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
@@ -638,7 +641,7 @@ function collapseAll() {
                                 	<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
 											</c:if>
@@ -648,7 +651,7 @@ function collapseAll() {
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:acChapter">A.C. Chapter</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
 											</c:if>
@@ -658,7 +661,7 @@ function collapseAll() {
 									<field:display name="Cris Number" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:crisNumber">Cris Number</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.crisNumber}"/>	
 &nbsp;									</td>
 									</tr>
@@ -666,7 +669,7 @@ function collapseAll() {
 									<field:display name="Procurement System" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
 											</c:if>
@@ -676,7 +679,7 @@ function collapseAll() {
 									<field:display name="Reporting System" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
 											</c:if>
@@ -686,7 +689,7 @@ function collapseAll() {
 									<field:display name="Audit System" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:AuditSystem">Audit System</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
 											</c:if>
@@ -696,7 +699,7 @@ function collapseAll() {
 									<field:display name="Institutions" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:Institutions">Institutions</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
 											</c:if>
@@ -707,7 +710,7 @@ function collapseAll() {
                                 	<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProjectCategory">Project Category</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
 											</c:if>
@@ -718,7 +721,7 @@ function collapseAll() {
                                 	<field:display name="Government Agreement Number" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
 										</td>
 									</tr>
@@ -733,7 +736,7 @@ function collapseAll() {
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="budget_plus"  onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 											<img id="budget_minus" onclick="toggleGroup('budget')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 										<digi:trn key="aim:actBudget">Budget</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 										<div id="budget_dots">...</div>
 										<div id="act_budget" style="display: none;">
 										<field:display name="On/Off Budget" feature="Budget">	
@@ -830,7 +833,7 @@ function collapseAll() {
                                     		<field:display feature="Identification" name="Organizations and Project ID">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs											</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.identification.selectedOrganizations}" >
@@ -852,7 +855,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:humanitarianaid">
 											 Humanitarian Aid</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
 												<digi:trn key="aim:no">No</digi:trn>
 											</c:if>
@@ -867,7 +870,7 @@ function collapseAll() {
                                     <tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
-											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#ffffff">
+											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#f4f4f2">
 											<div id="group_planning_dots">...</div>
 											<div id="act_group_planning" style="display: none;">
 											<table width="100%" cellSpacing=2 cellPadding=1>
@@ -998,20 +1001,20 @@ function collapseAll() {
                                     <field:display name="Status" feature="Identification">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
-	                                        <td bgcolor="#FFFFFF">
+	                                        <td bgcolor="#f4f4f2">
 	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
 	                                        </td>
                                         </tr>
                                         <tr>
 	                                        <td valign="top" nowrap="nowrap" bgcolor="#f4f4f2"></td>
-	                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
+	                                        <td bgcolor="#f4f4f2" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
                                         </tr>
                                     </field:display>                                   
                                    
 								<module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:References">References</digi:trn>									</td>
-									<td bgcolor="#ffffff">
+									<td bgcolor="#f4f4f2">
 									<c:forEach items="${aimEditActivityForm.documents.referenceDocs}" var="refDoc" varStatus="loopstatus">
 										<table border="0">
 											<tr>
@@ -1033,7 +1036,7 @@ function collapseAll() {
 											<img id="location_minus" onclick="toggleGroup('location')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:location">
 											Location</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="location_dots">...</div>
 											<div id="act_location" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
@@ -1084,7 +1087,7 @@ function collapseAll() {
                                     <field:display name="Implementation Level" feature="Location">	  
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:level">Level</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.location.levelId>0}" >
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
 											</c:if>										</td>
@@ -1098,7 +1101,7 @@ function collapseAll() {
                                                 <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
                                                     <img id="sector_minus" onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
                                               <digi:trn key="aim:sector">	Sector</digi:trn>										</td>
-                                      <td bgcolor="#ffffff">
+                                      <td bgcolor="#f4f4f2">
                                                     <div id="sector_dots">...</div>
                                                     <div id="act_sector" style="display: none;">
 							                            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
@@ -1170,7 +1173,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="component_sector_dots">...</div>
 											<div id="act_component_sector" style="display: none;">
 												<table>
@@ -1198,7 +1201,7 @@ function collapseAll() {
 																		<b>
 						                        <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 
-					      <TD bgcolor="#ffffff">
+					      <TD bgcolor="#f4f4f2">
 														<div id="npd_npo_dots">...</div>
 														<div id="act_npd_npo" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
@@ -1214,7 +1217,7 @@ function collapseAll() {
 																		<b>
 						                        <digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
 
-      <TD bgcolor="#ffffff">
+      <TD bgcolor="#f4f4f2">
 															<div id="npd_primaryprog_dots">...</div>
 															<div id="act_npd_primaryprog" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
@@ -1230,7 +1233,7 @@ function collapseAll() {
 																		<b>
 																		<digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
 
-																		<TD bgcolor="#ffffff">
+																		<TD bgcolor="#f4f4f2">
 															<div id="npd_secondprog_dots">...</div>
 															<div id="act_npd_secondprog" style="display: none;">
                                                                 <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
@@ -1256,38 +1259,38 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:regionalFunding">
 										    Regional Funding</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${!empty aimEditActivityForm.funding.regionalFundings}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
 												<c:forEach var="regFunds" items="${aimEditActivityForm.funding.regionalFundings}">
-													<tr><td bgcolor="#ffffff">
+													<tr><td bgcolor="#f4f4f2">
 														<table width="100%" cellSpacing="1" cellPadding="1">
-															<tr><td bgcolor="#ffffff"><b>
+															<tr><td bgcolor="#f4f4f2"><b>
 																<c:out value="${regFunds.regionName}"/></b>
 															</td></tr>
 															<feature:display module="Funding" name="Commitments">
 															<c:if test="${!empty regFunds.commitments}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding" border="1">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:commitments">
 																				Commitments</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.commitments}">
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																								<c:out value="${fd.adjustmentTypeName}"/></digi:trn></td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																							<!-- <FONT color=blue>*</FONT> -->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																																																																						
 																							</td>
 																						</tr>
@@ -1300,29 +1303,29 @@ function collapseAll() {
 															</feature:display>
 															<feature:display module="Funding" name="Disbursement">
 															<c:if test="${!empty regFunds.disbursements}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:disbursements">
 																				Disbursements</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.disbursements}">
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																								<c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>
 																						</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																							<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								
 																								</td>
 																						</tr>
@@ -1335,29 +1338,29 @@ function collapseAll() {
 															</feature:display>
                                                             <feature:display module="Funding" name="Expenditures">
 															<c:if test="${!empty regFunds.expenditures}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:expenditures">
 																				Expenditures</digi:trn>																		</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.expenditures}">
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																								<c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>
 																							</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																							<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								
 																							</td>
 																						</tr>
@@ -1371,7 +1374,7 @@ function collapseAll() {
 														</table>
 													</td></tr>
 												</c:forEach>
-												<tr><td bgcolor="#ffffff">
+												<tr><td bgcolor="#f4f4f2">
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
  													<FONT color=blue>*
 													<digi:trn key="aim:theAmountEnteredAreInThousands">
@@ -1392,7 +1395,7 @@ function collapseAll() {
 											<digi:trn key="aim:components">
 											Components</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="components_dots">...</div>
 											<div id="act_components" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
@@ -1411,33 +1414,33 @@ function collapseAll() {
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>
 															<c:if test="${!empty comp.commitments}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:commitments">
 																				Commitments</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.commitments}">
 																						<tr>
 																							<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step">
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>
 																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Commitments" feature="Activity - Component Step">
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Commitments" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Commitments" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																						</tr>
@@ -1448,32 +1451,32 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															<c:if test="${!empty comp.disbursements}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:disbursements">
 																				Disbursements</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.disbursements}">
 																						<tr>
 																							<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step">
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Disbursements" feature="Activity - Component Step">
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Disbursements" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Disbursements" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																						</tr>
@@ -1484,32 +1487,32 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															<c:if test="${!empty comp.expenditures}">
-																<tr><td bgcolor="#ffffff">
+																<tr><td bgcolor="#f4f4f2">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<digi:trn key="aim:expenditures">
 																				Expenditures</digi:trn>																			</td>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.expenditures}">
-																						<tr bgcolor="#ffffff">
+																						<tr bgcolor="#f4f4f2">
 																							<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step">
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td align="right" width="100" bgcolor="#f4f4f2">
 																								<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Expenditures" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff">
+																							<td bgcolor="#f4f4f2">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Expenditures" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff" width="70">
+																							<td bgcolor="#f4f4f2" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																						</tr>
@@ -1519,7 +1522,7 @@ function collapseAll() {
 																	</table>
 																</td></tr>
 															</c:if>
-															<tr><td bgcolor="#ffffff">
+															<tr><td bgcolor="#f4f4f2">
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 																<FONT color="blue">*
 																	<digi:trn key="aim:theAmountEnteredAreInThousands">
@@ -1567,7 +1570,7 @@ function collapseAll() {
 											<digi:trn key="aim:components">
 											Components</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="components_resume_dots">...</div>
 											<div id="act_components_resume" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
@@ -1590,38 +1593,38 @@ function collapseAll() {
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>																
 																<tr>
-																	<td bgcolor="#ffffff">
+																	<td bgcolor="#f4f4f2">
 																		<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
 																		<c:forEach var="financeByYearInfo" items="${comp.financeByYearInfo}">
 																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
+																			<td valign="top" width="100" bgcolor="#f4f4f2">
 																				<c:out value="${financeByYearInfo.key}"/>
 																			</td>
 																			<c:set var="financeByYearInfoMap" value="${financeByYearInfo.value}"/>
-																			<td bgcolor="#ffffff">
+																			<td bgcolor="#f4f4f2">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																				<fmt:timeZone value="US/Eastern">
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:preview_plannedcommitments_sum">Planned Commitments Sum</digi:trn>																							
 																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																								
+																							<td align="right" width="100" bgcolor="#f4f4f2">																								
 																								<aim:formatNumber value="${financeByYearInfoMap['MontoProgramado']}" />	USD																				
 																							</td>																																													
 																						</tr>
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:preview_actualcommitments_sum">Actual Commitments Sum</digi:trn>																																															
 																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																																															
+																							<td align="right" width="100" bgcolor="#f4f4f2">																																															
 																								<aim:formatNumber value="${financeByYearInfoMap['MontoReprogramado']}" />	USD																																														
 																							</td>																						
 																						</tr>																																																																		
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
+																							<td width="50" bgcolor="#f4f4f2">
 																								<digi:trn key="aim:preview_plannedexpenditures_sum">Actual Expenditures Sum</digi:trn>																																															
 																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																																															
+																							<td align="right" width="100" bgcolor="#f4f4f2">																																															
 																								<aim:formatNumber value="${financeByYearInfoMap['MontoEjecutado']}" />		USD																						
 																							</td>																						
 																						</tr>
@@ -1665,7 +1668,7 @@ function collapseAll() {
 											<img id="issues_minus" onclick="toggleGroup('issues')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:issues">
 											Issues</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="issues_dots">...</div>
 											<div id="act_issues" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.issues.issues}">
@@ -1718,7 +1721,7 @@ function collapseAll() {
 											<digi:trn key="aim:relatedDocuments">
 											Related Documents</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<div id="related_documents_dots">...</div>
 											<div id="act_related_documents" style="display: none;">
 											<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
@@ -1728,7 +1731,7 @@ function collapseAll() {
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
 													 <table width="100%" class="box-border-nopadding">
-													 	<tr bgcolor="#ffffff">
+													 	<tr bgcolor="#f4f4f2">
 															<td vAlign="center" align="left">
 																&nbsp;<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
@@ -1759,7 +1762,7 @@ function collapseAll() {
 														<td>
 														<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
 															<table width="100%" class="box-border-nopadding">
-															 	<tr bgcolor="#ffffff">
+															 	<tr bgcolor="#f4f4f2">
 																	<td vAlign="center" align="left">
 																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
 																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
@@ -1821,7 +1824,7 @@ function collapseAll() {
 											<img id="orgz_minus" onclick="toggleGroup('orgz')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 										<feature:display module="Organizations" name="Responsible Organization"></feature:display>
 
 										<feature:display module="Organizations" name="Responsible Organization">
@@ -2044,7 +2047,7 @@ function collapseAll() {
 												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 													<digi:trn>Donor funding contact information</digi:trn>
 												</td>
-												<td bgcolor="#ffffff">
+												<td bgcolor="#f4f4f2">
 													<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 														<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
 															<div>
@@ -2066,7 +2069,7 @@ function collapseAll() {
 												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 													<digi:trn>MOFED contact information</digi:trn>
 												</td>
-												<td bgcolor="#ffffff">
+												<td bgcolor="#f4f4f2">
 													<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 														<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
 															<div>
@@ -2088,7 +2091,7 @@ function collapseAll() {
 												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
 												</td>
-												<td bgcolor="#ffffff">
+												<td bgcolor="#f4f4f2">
 													<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 														<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 															<div>
@@ -2110,7 +2113,7 @@ function collapseAll() {
 												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
 												</td>
-												<td bgcolor="#ffffff">
+												<td bgcolor="#f4f4f2">
 													<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 														<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 															<div>
@@ -2129,10 +2132,10 @@ function collapseAll() {
 										</feature:display>
 										<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+												<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
 												</td>
-												<td bgcolor="#ffffff">
+												<td bgcolor="#f4f4f2">
 													<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 														<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 															<div>
@@ -2164,7 +2167,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityPerformance">
 										    Activity - Performance</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<% if (actPerfChartUrl != null) { %>
 												<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
 											<% } else { %>
@@ -2179,7 +2182,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityRisk">
 										    Activity - Risk</digi:trn> <br /><digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn></td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<% if (actRiskChartUrl != null) { %>
 												<img src="<%= actRiskChartUrl %>"  align="bottom" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
 												<br><br>
@@ -2195,20 +2198,20 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:proposedPrjectCost"> Proposed Project Cost</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
-                                                      <tr bgcolor="#ffffff">
+                                                      <tr bgcolor="#f4f4f2">
 															<td><digi:trn key="aim:cost">Cost</digi:trn></td>
-                                                        <td bgcolor="#FFFFFF" align="left" >
+                                                        <td bgcolor="#f4f4f2" align="left" >
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
 																 	<!--<FONT color=blue>*</FONT>-->
 																 	 ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          </c:if>&nbsp;
 																<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
-																		  <tr bgcolor="#ffffff">
+																		  <tr bgcolor="#f4f4f2">
 															<td><digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn></td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                        <td bgcolor="#f4f4f2" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
                                                              ${aimEditActivityForm.funding.proProjCost.funDate}                                                          </c:if>                                                        </td>
                                                       </tr>
@@ -2223,7 +2226,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:costing">
 										    Costing</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											&nbsp;&nbsp;&nbsp;
 											<table width="100%">
 												<tr>
@@ -2245,7 +2248,7 @@ function collapseAll() {
                                            <img id="contract_minus" onclick="toggleGroup('contract')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:IPAContracting">IPA Contracting</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">&nbsp;&nbsp;&nbsp;
+										<td bgcolor="#f4f4f2">&nbsp;&nbsp;&nbsp;
                                             <div id="contract_dots">...</div>
 											<div id="act_contract" style="display: none;">
 											<table width="100%">
@@ -2681,7 +2684,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityCreatedBy">
 										    Activity created by</digi:trn>										</td>
-										<td width="69%" bgcolor="#ffffff">
+										<td width="69%" bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
 											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
 											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>										</td>
@@ -2691,7 +2694,7 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>										</td>
-										<td width="69%" bgcolor="#ffffff">
+										<td width="69%" bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.name}"/> - <c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.accessType}"/>
 										</td>
 									</tr>
@@ -2701,7 +2704,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:computation">Computation</digi:trn>
 										</td>
-										<td width="69%" bgcolor="#ffffff">
+										<td width="69%" bgcolor="#f4f4f2">
 											<c:if test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'true'}">
 												  <digi:trn key="aim:yes">Yes</digi:trn>
 											</c:if>
@@ -2716,7 +2719,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:dataSource">
 										    Data Source</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.actAthAgencySource}"/>										</td>
 									</tr>
 									</field:display>
@@ -2726,7 +2729,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedOn">
 											 Activity updated on</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
 											<logic:present name="isUserLogged" scope="session">
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges()">
@@ -2744,7 +2747,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedBy">
 											 Activity updated by</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.updatedBy.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.identification.updatedBy.user.lastName}"/>	-
 											<c:out value="${aimEditActivityForm.identification.updatedBy.user.email}"/>										</td>
@@ -2757,7 +2760,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityCreatedOn">
 											 Activity created on</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
 									</tr>
 									</logic:notEmpty>
@@ -2768,7 +2771,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityTeamLeader">
 											 Data Team Leader</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#f4f4f2">
 											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
 											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>										</td>
@@ -2783,7 +2786,7 @@ function collapseAll() {
 											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">														
 												<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>														
 											</td>
-											<td bgcolor="#ffffff">
+											<td bgcolor="#f4f4f2">
 												<c:choose>
 													<c:when test="<%=customField instanceof ComboBoxCustomField%>">
 														<c:set var="idx" value="${customField.value}"/>	
@@ -2822,7 +2825,7 @@ function collapseAll() {
 									</logic:iterate>
 									</logic:notEmpty>
 									<c:if test="${aimEditActivityForm.pageId == 1}">
-									<tr><td bgColor="#ffffff" align="center" colspan="2">
+									<tr><td bgColor="#f4f4f2" align="center" colspan="2">
 										<table cellPadding=3>
 											<tr>
 												<td>
@@ -2834,7 +2837,7 @@ function collapseAll() {
 									</td></tr>
 									</c:if>
 									<c:if test="${aimEditActivityForm.pageId > 2}">
-									<tr><td bgColor="#ffffff" align="center" colspan="2">
+									<tr><td bgColor="#f4f4f2" align="center" colspan="2">
 										<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<digi:trn key="btn:back">Back</digi:trn>' />
 									</td></tr>
 									</c:if>
@@ -2875,3 +2878,8 @@ function collapseAll() {
 </td>
 </tr>
 </table></digi:form>
+
+<script language="javascript">
+$(document).ready(function(){
+	expandAll();
+	 });</script>

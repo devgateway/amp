@@ -178,7 +178,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
 	         Node userOrTeamHomeNode = null;
 	         if(documentOwnerType.equals("team")){
-	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request));
+	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request).getTeamId());
 	         }else if (documentOwnerType.equals("private")){
 	        	 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
 	         }
@@ -222,7 +222,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
 	         Node userOrTeamHomeNode = null;
 	         if(documentOwnerType.equals("team")){
-	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request));
+	        	 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request).getTeamId());
 	         }else if (documentOwnerType.equals("private")){
 	        	 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
 	         }

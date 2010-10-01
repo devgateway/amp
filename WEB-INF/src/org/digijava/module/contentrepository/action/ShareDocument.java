@@ -55,7 +55,7 @@ public class ShareDocument extends Action {
 					}
 					
 					Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
-					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
+					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
 					
 					/**
 					 * if tm shared document,which was yet unapproved by TL and in the meantime he(TM) added new version to this private document,

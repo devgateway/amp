@@ -143,7 +143,7 @@ public class TemporaryDocumentData extends DocumentData {
 		
 		// 
 //		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-		Node homeNode				= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
+		Node homeNode				= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
 	
 		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
 		

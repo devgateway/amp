@@ -36,6 +36,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -537,6 +538,14 @@ public class DocumentManagerUtil {
 		
 		return size;
 	}
+	
+	public static Node getTeamNode(Session jcrWriteSession, Long teamId){
+		//String teamId		= "" + team.getAmpTeamId();		
+		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
+	}
+	
+	@Deprecated
+	//please use getTeamNode(Session jcrWriteSession, Long teamId) instead
 	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
 		String teamId		= "" + teamMember.getTeamId();
 		

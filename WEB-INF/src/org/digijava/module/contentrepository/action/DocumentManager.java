@@ -24,12 +24,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
@@ -214,8 +216,7 @@ public class DocumentManager extends Action {
 			}
 		}
 		else if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
-			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
-			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
+			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, myForm.getOtherTeamId());
 			
 			Collection<DocumentData> allTeamsDocs	= this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons);		
 			
@@ -295,7 +296,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
 				
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
+					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
 					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false, errors);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
@@ -373,7 +374,7 @@ public class DocumentManager extends Action {
 		Collection<DocumentData> retVal=null;
 		ArrayList<DocumentData> documents	= new ArrayList<DocumentData>();
 		try {
-			teamNode	= DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember);
+			teamNode	= DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

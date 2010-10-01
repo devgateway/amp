@@ -224,26 +224,28 @@ public class TeamMemberUtil {
 	}
 
 	public static TeamMember getTMTeamHead(Long teamId) {
+		TeamMember tm = null;
 		AmpTeamMember ampMem	= getTeamHead(teamId);
-		Long id 	= ampMem.getAmpTeamMemId();
-		User usr 	= UserUtils.getUser(ampMem.getUser().getId());
-		String name = usr.getName();
-		String role = ampMem.getAmpMemberRole().getRole();
-		AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-		TeamMember tm = new TeamMember();
-		tm.setMemberId(id);
-		tm.setTeamId(teamId);
-		tm.setMemberName(name);
-		tm.setRoleName(role);
-		tm.setEmail(usr.getEmail());
-		tm.setPublishDocuments(ampMem.getPublishDocPermission());
-		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
-				headRole.getAmpTeamMemRoleId())) {
-			tm.setTeamHead(true);
-		} else {
-			tm.setTeamHead(false);
-		}
+		if(ampMem!=null){
+			Long id 	= ampMem.getAmpTeamMemId();
+			User usr 	= UserUtils.getUser(ampMem.getUser().getId());
+			String name = usr.getName();
+			String role = ampMem.getAmpMemberRole().getRole();
+			AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
+			AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+			tm = new TeamMember();
+			tm.setMemberId(id);
+			tm.setTeamId(teamId);
+			tm.setMemberName(name);
+			tm.setRoleName(role);
+			tm.setEmail(usr.getEmail());
+			tm.setPublishDocuments(ampMem.getPublishDocPermission());
+			if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
+				tm.setTeamHead(true);
+			} else {
+				tm.setTeamHead(false);
+			}
+		}	
 
 		return tm;
 

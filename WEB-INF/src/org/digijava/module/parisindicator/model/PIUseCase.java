@@ -372,7 +372,7 @@ public class PIUseCase {
 				auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeam().getAmpTeamId());
 
 				// Get the main team node for this team member.
-				Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember);
+				Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
 
 				// Iterate documents and get organizations.
 				Iterator<Node> iter = teamNode.getNodes();

@@ -330,7 +330,7 @@ public class DocumentManagerRights {
 		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
 		if ( sett.getAllowAddTeamRes() == null )
 			return false;
-		return sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER ;		
+		return sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER ;
 		
 	}
 	private static Boolean isAllowedVersioningTeamResourcesForMembers (HttpServletRequest request) {

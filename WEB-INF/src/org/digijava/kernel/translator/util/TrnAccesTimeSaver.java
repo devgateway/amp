@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
  * Reads messages from queue and saves then in db.
  * Usually this should be low priority thread.
  * Priority and queue are specified in constructor.
+ * Note: note used since AMP-9402
  * @author Irakli Kobiashvili
  *
  */

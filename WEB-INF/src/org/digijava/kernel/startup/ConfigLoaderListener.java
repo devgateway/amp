@@ -37,8 +37,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -53,7 +51,6 @@ import org.digijava.kernel.security.DigiPolicy;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.service.WebappServiceContext;
-import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.util.AccessLogger;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -64,7 +61,7 @@ import org.hibernate.engine.SessionFactoryImplementor;
 
 /**
  * Parses digi.xml configuration file,
- * this class initialize when wheb context load
+ * this class initialize when web context load
  * @author Lasha Dolidze
  * @version 1.0
  */
@@ -84,9 +81,6 @@ public class ConfigLoaderListener
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
     
-    private static ExecutorService exec ;
-    private static TrnAccesTimeSaver tats;
-
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
     		int indexOf = completeProductVersion.indexOf(versionPrefix);
     		String bugFixingVersionString="";
@@ -103,23 +97,18 @@ public class ConfigLoaderListener
         //ResourceStreamHandlerFactory.installIfNeeded();
 
         try {
-            String jaasConfPath = sce.getServletContext().getRealPath(
-                "/WEB-INF/jaas.config");
+            String jaasConfPath = sce.getServletContext().getRealPath("/WEB-INF/jaas.config");
             if (jaasConfPath != null) {
                 File file = new File(jaasConfPath);
                 if (file.exists()) {
-                    System.setProperty("java.security.auth.login.config",
-                                       jaasConfPath);
+                    System.setProperty("java.security.auth.login.config", jaasConfPath);
                 }
             }
 
             // Custom cache manager must be initialized first
-            DigiConfigManager.initialize(sce.getServletContext().
-                                         getRealPath(
-                                             "/repository"));
+            DigiConfigManager.initialize(sce.getServletContext().getRealPath("/repository"));
             // Initialize services
-            ServiceContext serviceContext = new WebappServiceContext(sce.
-                getServletContext());
+            ServiceContext serviceContext = new WebappServiceContext(sce.getServletContext());
             ServiceManager.getInstance().init(serviceContext, 0);
 
             DigiCacheManager.getInstance();
@@ -143,8 +132,7 @@ public class ConfigLoaderListener
             Map listeners = getModuleContextInitializers();
             Iterator iter = listeners.values().iterator();
             while (iter.hasNext()) {
-                ServletContextListener item = (ServletContextListener) iter.
-                    next();
+                ServletContextListener item = (ServletContextListener) iter.next();
                 item.contextInitialized(sce);
             }
             sce.getServletContext().setAttribute(MODULE_LISTENERS, listeners);
@@ -157,11 +145,6 @@ public class ConfigLoaderListener
             
             // patches translations to hash code keys if this is not already done. 
             HashKeyPatch.patchTranslationsIfNecessary();
-            
-            tats=new TrnAccesTimeSaver();
-            exec = Executors.newSingleThreadExecutor();      
-            exec.execute(tats);
-
             
         
         }
@@ -267,13 +250,11 @@ public class ConfigLoaderListener
         ClassCastException {
         // Initialize modules
         Map contextListeners = new HashMap();
-        Iterator moduleConfigIter = DigiConfigManager.getModulesConfig().
-            entrySet().iterator();
+        Iterator moduleConfigIter = DigiConfigManager.getModulesConfig().entrySet().iterator();
         while (moduleConfigIter.hasNext()) {
             Map.Entry configRecord = (Map.Entry) moduleConfigIter.next();
             ModuleConfig moduleConfig = (ModuleConfig) configRecord.getValue();
-            Iterator moduleLsnrIter = moduleConfig.getWebappContextListeners().
-                iterator();
+            Iterator moduleLsnrIter = moduleConfig.getWebappContextListeners().iterator();
             while (moduleLsnrIter.hasNext()) {
                 String listenerClassName = (String) moduleLsnrIter.next();
                 if (!contextListeners.containsKey(listenerClassName)) {
@@ -281,8 +262,7 @@ public class ConfigLoaderListener
                                  listenerClassName + " for module " +
                                  ( (String) configRecord.getKey()));
                     Class listenerClass = Class.forName(listenerClassName);
-                    ServletContextListener listenerObj = (
-                        ServletContextListener) listenerClass.newInstance();
+                    ServletContextListener listenerObj = (ServletContextListener) listenerClass.newInstance();
                     contextListeners.put(listenerClassName, listenerObj);
                 }
             }
@@ -296,10 +276,6 @@ public class ConfigLoaderListener
      */
     public void contextDestroyed(ServletContextEvent sce) {
     	
-    	
-    	//destroy the translator thread
-    	tats.shutdown();
-    	exec.shutdownNow();
     	
         ServiceManager.getInstance().shutdown(1);
         try {

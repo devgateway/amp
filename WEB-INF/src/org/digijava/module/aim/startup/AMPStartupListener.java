@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.concurrent.ExecutorService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -130,8 +129,7 @@ public class AMPStartupListener extends HttpServlet implements
 			Scheduler scheduler = factory.getScheduler();
 			SchedulerMetaData metaData = scheduler.getMetaData();
 
-			scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT,
-					ampContext);
+			scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, ampContext);
 
 			scheduler.start();
 
@@ -160,8 +158,7 @@ public class AMPStartupListener extends HttpServlet implements
 			ampContext.setAttribute(Constants.SA_FEATURE, new Boolean(true));
 
 			if (FeaturesUtil.getDefaultFlag() != null)
-				ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(
-						true));
+				ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 			// get the default amp template!!!

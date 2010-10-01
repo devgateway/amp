@@ -150,7 +150,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         	if(overwriteKeywords && keywords!=null){
         		foundMessage.setKeyWords(keywords);
         	}
-        	updateTimeStamp(foundMessage);
+        	//updateTimeStamp(foundMessage);
             return foundMessage;
         }
     }

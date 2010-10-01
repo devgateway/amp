@@ -47,8 +47,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.UrlTouchService;
-import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
-import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
@@ -94,7 +92,7 @@ public class TranslatorWorker {
 
     private final static Timestamp expTimestamp = new Timestamp(10000);
     private boolean caseSensitiveKeys = true;
-    private TrnAccessUpdateQueue timeStampQueue = TrnAccessUpdateQueue.getQueue();
+    //private TrnAccessUpdateQueue timeStampQueue = TrnAccessUpdateQueue.getQueue();
     private Site ampSite = null;
 
     // Factory methods
@@ -449,7 +447,7 @@ public class TranslatorWorker {
             session = PersistenceManager.getSession();
             Message message = (Message) session.load(Message.class, mesageKey);
             message.setKeyWords(keyWords);
-            updateTimeStamp(message);
+            //updateTimeStamp(message);
             return message;
         }
         catch (ObjectNotFoundException onfe) {
@@ -1165,9 +1163,9 @@ public class TranslatorWorker {
      * @see TrnAccessUpdateQueue
      * @see TrnAccesTimeSaver
      */
-    protected void updateTimeStamp(Message message){
-    	timeStampQueue.put(message);
-    }
+//    protected void updateTimeStamp(Message message){
+//    	timeStampQueue.put(message);
+//    }
     
     /**
      * Saves message in db.
@@ -1197,7 +1195,7 @@ public class TranslatorWorker {
             }
             
             //Remove from queue if this message is there because here we are doing same.
-            timeStampQueue.remove(message);
+            //timeStampQueue.remove(message);
             
             ses.saveOrUpdate(message);
             tx.commit();
@@ -1290,7 +1288,7 @@ public class TranslatorWorker {
             }
             message.setLastAccessed(new Timestamp(System.currentTimeMillis()));
             //Remove from queue if this message is there because here we are doing same. note, this is not transactional
-            timeStampQueue.remove(message);
+            //timeStampQueue.remove(message);
             
             ses.update(message);
             tx.commit();
@@ -1355,7 +1353,7 @@ public class TranslatorWorker {
             tx = ses.beginTransaction();
 
             //Remove from queue too.
-            timeStampQueue.remove(message);
+            //timeStampQueue.remove(message);
             
             ses.delete(message);
             tx.commit();
@@ -1449,7 +1447,7 @@ public class TranslatorWorker {
                 msg.setLastAccessed(timestamp);
 
                 //Remove from queue if this message is there because here we are doing same.
-                timeStampQueue.remove(msg);
+                //timeStampQueue.remove(msg);
                 
                 ses.update(msg);
             }

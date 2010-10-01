@@ -198,7 +198,7 @@
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 2px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
+				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
 					<DIV id="subtabs" style="cursor: pointer; float: left; min-height: 20px;">
 			  			<UL>
 							<LI>
@@ -227,10 +227,10 @@
 					</UL>
 				</div>
 			<span style="cursor: pointer; font-family: Arial; min-height: 20px; font-size: 11px; font-style: italic; float: right;" id="displaySettingsButton">
-			<digi:trn>Show Current Settings</digi:trn>
+			<digi:trn>Hide Current Settings</digi:trn>
 			&gt;&gt;
 			</span> &nbsp;
-			<div style="display: none; background-color: #FFFFCC; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
+			<div style="background-color: #FFFFCC; padding: 15px 2px 2px 2px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">
 					<tr>
@@ -318,6 +318,16 @@
 			</div>
 			</td>
         </tr>
+        <logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
+	        <tr><td>&nbsp;</td></tr>
+	        <tr><td>
+	        	<div id="helpTips" style="width: 99%; background-color: #E7FFDF; padding: 1px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif; vertical-align: middle;">
+					<img alt="<digi:trn>Click on Export options to change output formatting</digi:trn>" style="width: 16px; height: 16px; vertical-align: bottom;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Export options to change output formatting</digi:trn>
+					&nbsp;|&nbsp;
+					<img alt="<digi:trn>Click on Filter to select individual donors</digi:trn>" style="width: 16px; height: 16px; vertical-align: bottom;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Filter to select individual donors</digi:trn>
+				</div>
+			</td></tr>
+		</logic:equal>
     </table>
     <div id="filter" style="visibility:hidden;display:none;width:700px;height:600px;">
         <div style="width:450px;float:left">

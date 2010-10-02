@@ -120,6 +120,9 @@ public class AmpAuthenticationProcessingFilter
         if(session.getAttribute("ampAdmin") != null) {
             session.removeAttribute("ampAdmin");
         }
+        if(session.getAttribute("publicuser") != null) {
+        	session.removeAttribute("publicuser");
+        }
     }
 
     protected User getUser(Authentication currentAuth) throws DgException {

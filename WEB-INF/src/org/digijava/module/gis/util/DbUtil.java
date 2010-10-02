@@ -293,8 +293,8 @@ public class DbUtil {
             Query q = null;
             StringBuffer publicwhere= new StringBuffer("select distinct aa.ampActivityId from " 
             		+ AmpActivity.class.getName() 
-            		+ " aa where aa.team in (select distinct at.parentTeamId from " 
-            		+ AmpTeam.class.getName() + " at)");
+            		+ " aa where aa.team in (select at.ampTeamId from " 
+            		+ AmpTeam.class.getName() + " at where parentTeamId is not null)");
             
             if (sectorId > -1) {
             	StringBuffer whereCaluse = new StringBuffer();

@@ -74,7 +74,7 @@ public class ShowRegionReport extends Action {
 
         }
         List secFundings;
-        if (request.getParameter("donorid")!=null){	
+        if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){	
         	Long donorid =new Long(request.getParameter("donorid"));
         	secFundings = DbUtil.getSectorFoundingsByDonor(gisRegReportForm.
                 getSectorId(),donorid);

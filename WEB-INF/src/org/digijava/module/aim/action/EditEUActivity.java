@@ -58,10 +58,12 @@ public class EditEUActivity extends MultiAction {
 	}
 
 	public boolean hasUnselectedItems(List items) {
-		Iterator i=items.iterator();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
-			if("-1".equals(element.toString())) return true;
+			if (element == null || "-1".equals(element.toString()) || "0".equals(element.toString())) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -110,8 +112,28 @@ public class EditEUActivity extends MultiAction {
 			eaf.getContrDonorIdList().addAll(Arrays.asList(eaf.getContrDonorId()));
 			eaf.getContrDonorNameList().addAll(Arrays.asList(eaf.getContrDonorName()));
 			
-			if (eaf.getContrFinInstrId()!=null) eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
-			if (eaf.getContrFinTypeId()!=null) eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
+			if (eaf.getContrFinInstrId() != null) {
+				List auxInstrs = Arrays.asList(eaf.getContrFinInstrId());
+				Iterator iterInstr = auxInstrs.iterator();
+				while(iterInstr.hasNext()) {
+					Long auxInst = (Long) iterInstr.next();
+					if(auxInst != null) {
+						eaf.getContrFinInstrIdList().add(auxInst);
+					}
+				}
+				//eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
+			}
+			if (eaf.getContrFinTypeId() != null) {
+				List auxFinTypes = Arrays.asList(eaf.getContrFinTypeId());
+				Iterator iterFin = auxFinTypes.iterator();
+				while(iterFin.hasNext()) {
+					Long auxFinType = (Long) iterFin.next();
+					if(auxFinType != null) {
+						eaf.getContrFinTypeIdList().add(auxFinType);
+					}
+				}
+				//eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
+			}
 		}
 
 
@@ -365,11 +387,11 @@ public class EditEUActivity extends MultiAction {
 		EUActivityForm eaf = (EUActivityForm) form;
 		for(int i=0;i<eaf.getDeleteContrib().length;i++) {
 			eaf.getContrAmountList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
-			eaf.getContrCurrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
+			/*eaf.getContrCurrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrDonorIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrDonorNameList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrFinInstrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
-			eaf.getContrFinTypeIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
+			eaf.getContrFinTypeIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);*/
 			
 			//eaf.getContrDonorNameList().set(Long.parseLong(eaf.getDeleteContrib().), element)
 		}

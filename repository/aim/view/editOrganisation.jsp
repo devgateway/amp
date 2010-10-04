@@ -572,7 +572,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								}
 								var url		= "/contentrepository/selectDocumentDM.do?documentsType="+documentsType+"&showTheFollowingDocuments="+showTheFollowingDocuments;
 								var popupName	= 'my_popup';
-								window.open(url, popupName, 'width=900, height=300');
+								window.open(url, popupName, 'width=900, height=300,scrollbars=yes,resizable=yes');
 								document.forms[0].action=url;
 								document.forms[0].target=popupName;
 								document.forms[0].submit();

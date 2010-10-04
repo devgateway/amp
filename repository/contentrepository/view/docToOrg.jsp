@@ -10,6 +10,12 @@
 <digi:instance property="crDocToOrgForm" />
 <bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
 
+<logic:notEmpty name="myForm" property="orgsAddedMsg">
+	<div style="text-align: center;">
+		 <font color="#FF0000">${myForm.orgsAddedMsg}</font>
+	</div>
+</logic:notEmpty>
+
 <logic:notEmpty name="myForm" property="orgs">
 	<ul>
 		<c:forEach var="org" items="${myForm.orgs}">
@@ -36,5 +42,8 @@
 <c:if test="${myForm.hasAddParticipatingOrgRights}">
 	<aim:addOrganizationButton callBackFunction="showOrgsPanel();"  refreshParentDocument="false" collection="addedOrgs" 
 				form="${crDocToOrgForm}" styleClass="buton"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+	 
+	 <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>
+	 <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide()">
 </c:if>
 

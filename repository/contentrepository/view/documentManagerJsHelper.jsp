@@ -1188,6 +1188,8 @@ function checkDocumentUuid(uuid) {
 	return true;
 }
 
+var organisationPanel;
+
 function getCallbackForOrgs (panel) {
 	var callbackObj	= {
 			success: function (o) {
@@ -1210,21 +1212,21 @@ function showOrgsPanel(uuid) {
 	if (uuid == null) {
 		uuid	= YAHOO.amp.orgPanels.lastUuid;
 	}
-	var panel	= YAHOO.amp.orgPanels[uuid]; 
-	if (panel == null) {
-		panel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, draggable:true, close:true, modal:true } );
-		panel.setHeader('<digi:trn>Participating Organizations</digi:trn>');
-		panel.setBody("");
+	organisationPanel	= YAHOO.amp.orgPanels[uuid]; 
+	if (organisationPanel == null) {
+		organisationPanel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, draggable:true, close:true, modal:true } );
+		organisationPanel.setHeader('<digi:trn>Participating Organizations</digi:trn>');
+		organisationPanel.setBody("");
 		//panel.setFooter("End of Panel #2");
-		panel.render(document.body);
-		YAHOO.amp.orgPanels[uuid]	= panel;
-		panel.center();
+		organisationPanel.render(document.body);
+		YAHOO.amp.orgPanels[uuid]	= organisationPanel;
+		organisationPanel.center();
 	}
-	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
-	panel.show();
+	organisationPanel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	organisationPanel.show();
 
 	YAHOO.amp.orgPanels.lastUuid	= uuid;
-	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(panel) );
+	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(organisationPanel) );
 
 }
 

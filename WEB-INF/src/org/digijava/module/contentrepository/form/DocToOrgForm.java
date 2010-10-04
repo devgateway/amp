@@ -22,7 +22,8 @@ public class DocToOrgForm extends ActionForm {
 	
 	String removingUuid;
 	Long removingOrgId;
-
+	
+	private String orgsAddedMsg;
 	
 	
 	/**
@@ -110,7 +111,14 @@ public class DocToOrgForm extends ActionForm {
 	public void setRemovingOrgId(Long removingOrgId) {
 		this.removingOrgId = removingOrgId;
 	}
-	
+
+	public String getOrgsAddedMsg() {
+		return orgsAddedMsg;
+	}
+
+	public void setOrgsAddedMsg(String orgsAddedMsg) {
+		this.orgsAddedMsg = orgsAddedMsg;
+	}	
 	
 	
 }

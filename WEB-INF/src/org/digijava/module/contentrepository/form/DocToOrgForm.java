@@ -23,8 +23,7 @@ public class DocToOrgForm extends ActionForm {
 	String removingUuid;
 	Long removingOrgId;
 	
-	private String orgsAddedMsg;
-	
+	private List <String> messages;
 	
 	/**
 	 * @return the hasAddParticipatingOrgRights
@@ -112,12 +111,13 @@ public class DocToOrgForm extends ActionForm {
 		this.removingOrgId = removingOrgId;
 	}
 
-	public String getOrgsAddedMsg() {
-		return orgsAddedMsg;
+
+	public List<String> getMessages() {
+		return messages;
 	}
 
-	public void setOrgsAddedMsg(String orgsAddedMsg) {
-		this.orgsAddedMsg = orgsAddedMsg;
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
 	}	
 	
 	

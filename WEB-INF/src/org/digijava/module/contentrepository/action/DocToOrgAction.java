@@ -43,7 +43,7 @@ public class DocToOrgAction extends MultiAction {
 			throws Exception {
 		
 		DocToOrgForm docToOrgForm	= (DocToOrgForm) form;
-		docToOrgForm.setOrgsAddedMsg(null);
+		docToOrgForm.setMessages(null);
 		if ( docToOrgForm.getAddedOrgs() == null )
 			docToOrgForm.setAddedOrgs(new ArrayList<AmpOrganisation>() );
 		String uuid					= request.getParameter("orgsforuuid");
@@ -93,7 +93,10 @@ public class DocToOrgAction extends MultiAction {
 		
 		docToOrgForm.getAddedOrgs().clear();
 		if(orgAdded){			
-			docToOrgForm.setOrgsAddedMsg(TranslatorWorker.translateText("Org(s) added to Document.", request));
+			if(docToOrgForm.getMessages()==null){
+				docToOrgForm.setMessages(new ArrayList<String>());
+			}
+			docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) added to the document.", request));
 		}
 		
 	}
@@ -108,6 +111,10 @@ public class DocToOrgAction extends MultiAction {
 			Node n		= DocumentManagerUtil.getReadNode(docToOrgForm.getRemovingUuid(), request);
 			if (n != null && DocumentManagerRights.hasAddParticipatingOrgRights(n, request)) {
 				DocToOrgDAO.deleteDocToOrgObjs(docToOrgForm.getRemovingUuid(), docToOrgForm.getRemovingOrgId() );
+				if(docToOrgForm.getMessages()==null){
+					docToOrgForm.setMessages(new ArrayList<String>());
+				}
+				docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) removed from the Document.", request));
 			}
 		}
 		

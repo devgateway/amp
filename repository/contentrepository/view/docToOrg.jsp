@@ -10,10 +10,12 @@
 <digi:instance property="crDocToOrgForm" />
 <bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
 
-<logic:notEmpty name="myForm" property="orgsAddedMsg">
-	<div style="text-align: center;">
-		 <font color="#FF0000">${myForm.orgsAddedMsg}</font>
-	</div>
+<logic:notEmpty name="myForm" property="messages">
+	<c:forEach var="msg" items="${myForm.messages}">
+		<div style="text-align: center;">	
+			 <font color="#FF0000">${msg}</font>
+		</div>
+	</c:forEach>	
 </logic:notEmpty>
 
 <logic:notEmpty name="myForm" property="orgs">

@@ -8,13 +8,20 @@ package org.dgfoundation.amp.ar.view.xls;
 
 import java.util.Iterator;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -41,7 +48,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public ColumnReportDataXLS(XSSFWorkbook wb,XSSFSheet sheet, XSSFRow row, IntWrapper rowId,
+	public ColumnReportDataXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
@@ -72,7 +79,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 				Iterator ii = columnReport.getItems().iterator();
 				if ( this.regularStyle == null )
 					this.getRegularStyle();
-				XSSFCell cell=this.getCell(regularStyle);
+				HSSFCell cell=this.getCell(regularStyle);
 				colId.inc();
 				while (ii.hasNext()) {
 					Viewable velement = (Viewable) ii.next();

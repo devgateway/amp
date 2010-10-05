@@ -9,10 +9,10 @@ package org.dgfoundation.amp.ar.view.xls;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -45,7 +45,7 @@ public class TextCellXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public TextCellXLS(XSSFWorkbook wb,XSSFSheet sheet, XSSFRow row, IntWrapper rowId,
+	public TextCellXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
@@ -67,7 +67,7 @@ public class TextCellXLS extends XLSExporter {
 	@Override
 	public void generate() {
 		TextCell c=(TextCell) item;
-		XSSFCell cell=this.getRegularCell();
+		HSSFCell cell=this.getRegularCell();
 		String indent = "";
 	
 		//PLEASE USE TRNTEXTCELL.JAVA IF YOU NEED A TRANSLATION-ENABLED CELL.

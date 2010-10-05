@@ -18,10 +18,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -73,18 +69,18 @@ public class CSVExportAction
 	    response.setHeader("Content-Disposition",
 	                       "inline; filename=data.csv ");
 	
-	    XSSFWorkbook wb = new XSSFWorkbook();
+	    HSSFWorkbook wb = new HSSFWorkbook();
 	
 	    String sheetName = rd.getName();
 	    if (sheetName.length() > 31)
 	      sheetName = sheetName.substring(0, 31);
 	
-	    XSSFSheet sheet = wb.createSheet(getCleanName(sheetName));
+	    HSSFSheet sheet = wb.createSheet(getCleanName(sheetName));
 	
 	    IntWrapper rowId = new IntWrapper();
 	    IntWrapper colId = new IntWrapper();
 	
-	    XSSFRow row = sheet.createRow(rowId.intValue());
+	    HSSFRow row = sheet.createRow(rowId.intValue());
 	
 	    GroupReportDataXLS grdx = new GroupReportDataXLS(wb, sheet, row, rowId,
 	        colId, null, rd);
@@ -99,7 +95,7 @@ public class CSVExportAction
 	    rowId.inc();
 	    colId.reset();
 	    row = sheet.createRow(rowId.shortValue());
-	    XSSFCell cell = row.createCell(colId.shortValue());
+	    HSSFCell cell = row.createCell(colId.shortValue());
 	
 	    Site site = RequestUtils.getSite(request);
 	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);

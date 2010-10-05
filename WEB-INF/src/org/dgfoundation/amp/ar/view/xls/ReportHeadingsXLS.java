@@ -7,11 +7,11 @@ package org.dgfoundation.amp.ar.view.xls;
 
 import java.util.Iterator;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -44,7 +44,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public ReportHeadingsXLS(XSSFWorkbook wb, XSSFSheet sheet, XSSFRow row,
+	public ReportHeadingsXLS(HSSFWorkbook wb, HSSFSheet sheet, HSSFRow row,
 			IntWrapper rowId, IntWrapper colId, Long ownerId, Viewable item) {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
@@ -70,7 +70,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
 			
-			XSSFCell cell1 =  this.getCell(row,this.getRegularStyle());
+			HSSFCell cell1 =  this.getCell(row,this.getRegularStyle());
 			cell1.setCellValue("");
 			colId.inc();			
 			Iterator i = columnReport.getItems().iterator();
@@ -104,8 +104,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 						
 						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
 						
-						XSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
-						XSSFCellStyle style = null;
+						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
+						HSSFCellStyle style = null;
 						try{	
 							style = cell.getCellStyle();
 						}
@@ -157,17 +157,13 @@ public class ReportHeadingsXLS extends XLSExporter {
 						else 
 							cell.setCellValue(translatedCellValue);
 
-						if(rowsp>1){
-							makeRowSpan(rowsp-1,true);
-							cell.setCellStyle(getSpanStyle(true));
-						}
+						if(rowsp>1) makeRowSpan(rowsp-1,true);
 						
-						if (element2.getWidth() > 1){
+						if (element2.getWidth() > 1)
 							makeColSpan(element2.getWidth(),true);
-							cell.setCellStyle(getSpanStyle(true));
-						}else{
+						else
 							colId.inc();
-						}
+						
 					}
 					}		
 				}
@@ -177,9 +173,9 @@ public class ReportHeadingsXLS extends XLSExporter {
 					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
 						if(col.getWidth()>1) {
 							for(int k=0;k<col.getWidth();k++) {
-								XSSFCell cell = row.getCell(colId.intValue()+k);
+								HSSFCell cell = row.getCell(colId.intValue()+k);
 								if(cell==null) cell=row.createCell(colId.intValue()+k);
-								XSSFCellStyle cellstyle = wb.createCellStyle();
+								HSSFCellStyle cellstyle = wb.createCellStyle();
 								cellstyle.cloneStyleFrom(this.getHighlightedStyle());
 								cell.setCellStyle(cellstyle);
 							}

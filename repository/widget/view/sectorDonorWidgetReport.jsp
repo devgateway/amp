@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 
 
@@ -46,18 +47,24 @@
 				<td class="tableMainHeader"><digi:trn>Year Range</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="startYear"/> - <bean:write name="sectorDonorWidgetReportForm" property="endYear"/></td>
 			</tr>
+            <feature:display module="Funding" name="Commitments">
 			<tr>
 				<td class="tableMainHeader"><digi:trn>Actual Commitments</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
+            </feature:display>
+            <feature:display module="Funding" name="Disbursement">
 			<tr>
 				<td class="tableMainHeader"><digi:trn>Actual Disbursements</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
+            </feature:display>
+            <feature:display module="Funding" name="Expenditures">
 			<tr>
 				<td class="tableMainHeader tableHeadColorStyle"><digi:trn>Actual Expenditures</digi:trn></td>
 				<td>&nbsp;<bean:write name="sectorDonorWidgetReportForm" property="actualExpendituresStr"/></td>
 			</tr>
+            </feature:display>
 			<tr>
                             <td colspan="2" align="center">
                             	<font color="red" style="font-size:11px"><digi:trn>Note: all numbers are in</digi:trn> ${sectorDonorWidgetReportForm.selectedCurrency}</font>
@@ -79,7 +86,7 @@
 						<thead>
 
 						<tr>
-								<td colspan="4" class="tableHeader" >
+								<td colspan="3" class="tableHeader" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Overall information</digi:trn>
@@ -118,27 +125,33 @@
 										</div>
 
 								</td>
-								<td width="10%"  class="tableHeader">
+                                <feature:display module="Funding" name="Commitments">
+                                        <td width="10%"  class="tableHeader">
 
-										<div class="gisReportTableBevelCell">
-											<digi:trn>Commitments</digi:trn>
-										</div>
+                                        <div class="gisReportTableBevelCell">
+                                            <digi:trn>Commitments</digi:trn>
+                                        </div>
 
-								</td>
+                                    </td>
+                                </feature:display>
+                                <feature:display module="Funding" name="Disbursement">
 								<td width="10%" class="tableHeader">
-
-										<div class="gisReportTableBevelCell">
-											<digi:trn>Disbursements</digi:trn>
-										</div>
-
+                                  
+                                        <div class="gisReportTableBevelCell">
+                                            <digi:trn>Disbursements</digi:trn>
+                                        </div>
+                                  
 								</td>
+                                </feature:display>
+                                <feature:display module="Funding" name="Expenditures">
 								<td width="10%" class="tableHeader">
-
-										<div class="gisReportTableBevelCell">
-											<digi:trn>Expenditures</digi:trn>
-										</div>
-
+                                    
+                                        <div class="gisReportTableBevelCell">
+                                            <digi:trn>Expenditures</digi:trn>
+                                        </div>
+                                    
 								</td>
+                                </feature:display>
 								
 						</tr>
 						</thead>
@@ -191,6 +204,7 @@
 										</div>
 									</div>
 								</td>
+                                 <feature:display module="Funding" name="Commitments">
 								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
@@ -206,6 +220,8 @@
 
 									</div>
 								</td>
+                                </feature:display>
+                                <feature:display module="Funding" name="Disbursement">
 								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
@@ -220,6 +236,8 @@
 									</div>
 									</div>
 								</td>
+                                 </feature:display>
+                                <feature:display module="Funding" name="Expenditures">
 								<td width="10%">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell
@@ -234,6 +252,7 @@
 									</div>
 									</div>
 								</td>
+                                </feature:display>
 				
 							</tr>
 						</logic:iterate>

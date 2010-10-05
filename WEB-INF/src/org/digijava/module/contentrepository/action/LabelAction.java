@@ -66,7 +66,7 @@ public class LabelAction extends MultiAction {
 				Node labelNode	= DocumentManagerUtil.getWriteNode(form.getLabelUUIDs()[i], request);
 				Label label		= new Label(labelNode);
 				if ( existingLabels.contains(label) ){
-					if ( "true".equals(applyClickAction) )
+					if ( !"true".equals(applyClickAction) )
 						nw.removeLabel( labelNode.getUUID() );
 				}
 				else

@@ -291,6 +291,11 @@ html>body #mainEmpty {
 
 <input name="tempActivity" type="hidden" value='<%=request.getParameter("ampActivityId")%>' id="tempActivity">
 <input name="showBottomBorder" type="hidden" value="1" id="showBottomBorder">
+<c:set var="activityExists">
+${aimMainProjectDetailsForm.activityExists}
+</c:set>
+<c:choose>
+<c:when test="${activityExists}">
 
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 	<tr><td>&nbsp;</td></tr>
@@ -643,4 +648,11 @@ html>body #mainEmpty {
 		</TD>
 	</TR>
 </TABLE>
+</c:when>
+<c:otherwise>
+    <div style="font-size: 12px;text-align: center;color:red">
+<digi:trn>Couldn't find activity! It may be no longer exists in the system.</digi:trn>
+    </div>
+</c:otherwise>
+</c:choose>
 </logic:equal>

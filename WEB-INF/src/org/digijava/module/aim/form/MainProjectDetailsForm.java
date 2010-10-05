@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -18,6 +21,7 @@ import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 public class MainProjectDetailsForm extends ValidatorForm
@@ -450,5 +454,17 @@ public class MainProjectDetailsForm extends ValidatorForm
 	public void setProjectComments(String projectComments) {
 		this.projectComments = projectComments;
 	}
+    public boolean getActivityExists() throws DgException {
+        boolean exists = true;
+        try {
+            AmpActivity activity = ActivityUtil.loadActivity(getAmpActivityId());
+            if (activity == null) {
+                exists = false;
+            }
+        } catch (DgException e) {
+           throw new DgException("Cannot load AmpActivity with id " + getAmpActivityId(), e);
+        }
+        return exists;
+    }
 	
 }

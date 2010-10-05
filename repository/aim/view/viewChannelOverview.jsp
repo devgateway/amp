@@ -90,9 +90,9 @@ function commentWin(val, commentId) {
 		<p align="center"><html:submit styleClass="dr-menu" value="Log In"
 			onclick="login()" /></p>
 	</logic:equal>
-
 	<logic:equal name="aimChannelOverviewForm" property="validLogin"
 		value="true">
+        <c:if test="${not empty aimChannelOverviewForm.activity}">
 		<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0
 			width=100%>
 			<TR>
@@ -2389,7 +2389,7 @@ function commentWin(val, commentId) {
 				<TD>&nbsp;</TD>
 			</TR>
 		</TABLE>
-
+      </c:if>
 	</logic:equal>
 </digi:form>
 <script>

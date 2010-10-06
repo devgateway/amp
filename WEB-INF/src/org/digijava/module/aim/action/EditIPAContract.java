@@ -596,7 +596,8 @@ public class EditIPAContract extends MultiAction {
             	ica = icas.get(i);            	
             	d += ica.getAmount();
             }
-            d += Double.valueOf(eaf.getDonorContractFundinAmount());
+            d += Double.valueOf(eaf.getDonorContractFundinAmount().equals("") ? "0" : eaf
+					.getDonorContractFundinAmount());
             eaf.setTotAmountDonorContractFunding(String.valueOf(d.doubleValue()));
         }
 

@@ -624,9 +624,11 @@ window.onload=autosum;
 			<field:display name="Contract Organization" feature="Contracting">
 				<aim:addOrganizationButton form="${aimIPAContractForm}" collection="organisations" refreshParentDocument="false" callBackFunction="orgsAdded()" useClient="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 				&nbsp;
-				<html:button styleClass="dr-menu" property="deleteOrgs" onclick="delOrgs();">
-					<digi:trn key="aim:IPA:newPopup:removeOrganizations">Remove Organizations</digi:trn>
-				</html:button>	
+				<c:if test="${!empty aimIPAContractForm.organisations}">
+					<html:button styleClass="dr-menu" property="deleteOrgs" onclick="delOrgs();">
+						<digi:trn key="aim:IPA:newPopup:removeOrganizations">Remove Organizations</digi:trn>
+					</html:button>
+				</c:if>
 			</field:display>
 		</td>
 	</tr>
@@ -673,6 +675,10 @@ window.onload=autosum;
 					<html:select property="donorContractFundingCurrency" styleClass="inp-text" onchange="miseajourdevise();">
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 					</html:select>
+					
+<!--					<html:select property="donorContractFundingCurrency" styleClass="inp-text" onchange="miseajourdevise();">-->
+<!--						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>-->
+<!--					</html:select>-->
 				</td>
 			</tr>			
 		</field:display>
@@ -920,9 +926,11 @@ window.onload=autosum;
 			</field:display>
 			&nbsp;	
 			<field:display name="Contracting Remove Disbursements" feature="Contracting">
-				<html:button styleClass="dr-menu" property="deldisbursement" onclick="delDisb();">
-					<digi:trn key="aim:IPA:newPopup:removeDisbursements">Remove Disbursements</digi:trn>
-				</html:button>			
+				<c:if test="${!empty aimIPAContractForm.contractDisbursements}">
+					<html:button styleClass="dr-menu" property="deldisbursement" onclick="delDisb();">
+						<digi:trn key="aim:IPA:newPopup:removeDisbursements">Remove Disbursements</digi:trn>
+					</html:button>
+				</c:if>			
 			</field:display>				
 		</td>
 	</tr>
@@ -995,9 +1003,11 @@ window.onload=autosum;
 			</field:display>
 			&nbsp;	
 			<field:display name="Contracting Remove Amendments" feature="Contracting">
-				<html:button styleClass="dr-menu" property="delamendments" onclick="delAmendment();calculer1();">
-					<digi:trn>Remove Amendments</digi:trn>
-				</html:button>			
+				<c:if test="${!empty aimIPAContractForm.contractAmendments}">
+					<html:button styleClass="dr-menu" property="delamendments" onclick="delAmendment();calculer1();">
+						<digi:trn>Remove Amendments</digi:trn>
+					</html:button>
+				</c:if>			
 			</field:display>				
 		</td>
 	</tr>
@@ -1024,7 +1034,7 @@ window.onload=autosum;
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 							&nbsp;
-							<html:text size="12" indexed="true" name="contractAmendment" property="reference" styleClass="inp-text" />							
+							<digi:trn>Reference:</digi:trn>&nbsp;<html:text size="12" indexed="true" name="contractAmendment" property="reference" styleClass="inp-text" />							
 						</td>
 						</tr>
 					</c:forEach>

@@ -130,10 +130,12 @@ public class DocumentFromTemplateActions extends DispatchAction {
 				}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
 					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),myForm.getDocOwnerType(),request);
 				}
-				//last approved version
-				 String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
-				 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
-				 DbUtil.saveOrUpdateObject(lastAppVersion);				 
+				//last approved version only for Team Document,not Private !
+				if(myForm.getDocOwnerType().equals("team")){
+					String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
+					 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
+					 DbUtil.saveOrUpdateObject(lastAppVersion);
+				}				 				 
 			} 
 			
 			clearForm(myForm);

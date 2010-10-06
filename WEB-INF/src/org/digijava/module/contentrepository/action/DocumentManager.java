@@ -434,14 +434,18 @@ public class DocumentManager extends Action {
 				Node documentNode	= (Node)nodeIterator.next();
 				Node baseNode=documentNode; //in case document node last version should be hidden and another should be shown
 				String documentNodeBaseVersionUUID=documentNode.getUUID();
+				
+				
 				/**
 				 * If this version of node is pending to be approved, then it should be visible only to the creator of the node or the TL
 				 * other users should see last approved version of this node, so get version number from sharedDoc entry and load that version
 				 */
+				NodeLastApprovedVersion nlpv	= DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
 				if(tabName!=null && !tabName.equals(CrConstants.PUBLIC_DOCS_TAB) //in public docs case documentNode is non-versionable,but public version of some node 
-						&& DocumentManagerUtil.isGivenVersionPendingApproval(DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request).getUUID())!=null){
+						&& (DocumentManagerUtil.isGivenVersionPendingApproval(DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request).getUUID())!=null
+						|| (nlpv!=null && ! nlpv.getNodeUUID().equals(documentNodeBaseVersionUUID)))
+				){					
 					
-					NodeLastApprovedVersion nlpv	= DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
 					String sharedVersionId			= null;
 					if ( nlpv != null ) {
 						sharedVersionId			= nlpv.getVersionID();

@@ -21,15 +21,15 @@
 <script language="JavaScript">
 <!--
 
-	var invalidBaseValue="<digi:trn key='aim:invalidBaseValue'>Invalid Base value or Base value not entered</digi:trn>";
-	var baseValueDateNotEntered="<digi:trn key='aim:baseValueDateNotEntered'>Base value date not entered</digi:trn>";
-	var targetValueNotEntered="<digi:trn key='aim:targetValueNotEntered'>Target value not entered</digi:trn>";
-	var targetValueDateNotEntered="<digi:trn key='aim:targetValueDateNotEntered'>Target value date not entered</digi:trn>";
-	var currValueNotEntered="<digi:trn key='aim:currValueNotEntered'>Current value not entered</digi:trn>";
-	var currValueDateNotEntered="<digi:trn key='aim:currValueDateNotEntered'>Current value date not entered</digi:trn>";
-	var invalidRevisedTargetValue="<digi:trn key='aim:invalidRevisedTargetValue'>Invalid Revised target value or Revised target value not entered</digi:trn>";
-	var revisedTargetValueDateNotEntered="<digi:trn key='aim:revisedTargetValueDateNotEntered'>Revised target value date not entered</digi:trn>";
-	var deleteThisIndicator="<digi:trn key='aim:deleteThisIndicator'>Are you sure you want to delete this Indicator?</digi:trn>";
+	var invalidBaseValue="<digi:trn>Invalid Base value or Base value not entered</digi:trn>";
+	var baseValueDateNotEntered="<digi:trn>Base value date not entered</digi:trn>";
+	var targetValueNotEntered="<digi:trn>Target value not entered</digi:trn>";
+	var targetValueDateNotEntered="<digi:trn>Target value date not entered</digi:trn>";
+	var currValueNotEntered="<digi:trn>Current value not entered</digi:trn>";
+	var currValueDateNotEntered="<digi:trn>Current value date not entered</digi:trn>";
+	var invalidRevisedTargetValue="<digi:trn>Invalid Revised target value or Revised target value not entered</digi:trn>";
+	var revisedTargetValueDateNotEntered="<digi:trn>Revised target value date not entered</digi:trn>";
+	var deleteThisIndicator="<digi:trn>Are you sure you want to delete this Indicator?</digi:trn>";
 
 	var numericValueNeeded="<digi:trn>Please enter a numeric value</digi:trn>";
 	
@@ -256,7 +256,7 @@
 								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
-										<digi:trn key="aim:AmpAdminHome">
+										<digi:trn>
 											Admin Home
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
@@ -266,7 +266,7 @@
 
 
 <c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+<digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 </c:set>
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>
@@ -276,7 +276,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')"
 									title="Click here to view MyDesktop ">
-										<digi:trn key="aim:portfolio">
+										<digi:trn>
 											Portfolio
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
@@ -297,12 +297,12 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
                                                                                  <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                     <digi:trn key="aim:editActivityStep1">
+                                                                                     <digi:trn>
                                                                                          Edit Activity - Step 1
                                                                                      </digi:trn>
                                                                                  </c:if>
                                                                                  <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                     <digi:trn key="aim:addActivityStep1">
+                                                                                     <digi:trn>
                                                                                          Add Activity - Step 1
                                                                                      </digi:trn>
                                                                                  </c:if>
@@ -329,12 +329,12 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
                                                                              <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                 <digi:trn key="aim:editActivityStep1">
+                                                                                 <digi:trn>
                                                                                      Edit Activity - Step 1
                                                                                  </digi:trn>
                                                                              </c:if>
                                                                              <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                 <digi:trn key="aim:addActivityStep1">
+                                                                                 <digi:trn>
                                                                                      Add Activity - Step 1
                                                                                  </digi:trn>
                                                                              </c:if>
@@ -367,12 +367,12 @@ ${fn:replace(message,quote,escapedQuote)}
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addNewActivity">
+									<digi:trn>
 										Add New Activity
 									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">
+									<digi:trn>
 										Edit Activity
 									</digi:trn>:
 										<bean:write name="aimEditActivityForm" property="identification.title"/>
@@ -395,7 +395,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												<digi:trn>
 													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
                                                                                                  ${fn:length(aimEditActivityForm.steps)}:
-                                                                                                 <digi:trn key="aim:activity:MonitoringAndEvaluation">
+                                                                                                 <digi:trn>
                                                                                                      Monitoring and Evaluation
                                                                                                  </digi:trn>
 											</td>
@@ -411,22 +411,22 @@ ${fn:replace(message,quote,escapedQuote)}
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
-										<b><digi:trn key="aim:MonitorEvaluate">Monitoring and Evaluation</digi:trn></b>xxxx
+										<a title="<digi:trn>Monitoring and Evaluation - Indicators</digi:trn>">
+										<b><digi:trn>Monitoring and Evaluation</digi:trn></b>
 										</a>
 									</td></tr>
 									<tr><td>
 										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
 											<tr>
 												<td width="32%" align="center" colspan="6"><b>
-													<digi:trn key="aim:meIndicators">Indicators</digi:trn>
+													<digi:trn>Indicators</digi:trn>
 													</b>
 												</td>
 											</tr>
 											<logic:empty name="aimEditActivityForm" property="indicator.indicatorsME">
 											<tr>
 												<td width="32%" bgcolor="#f4f4f2" align="center" colspan="6"><font color="red"><b>
-													<digi:trn key="aim:meNoActivityGlobalIndicators">No Activity specific Indicators & No Global Indicators present</digi:trn>
+													<digi:trn>No Activity specific Indicators & No Global Indicators present</digi:trn>
 													</b></font>
 												</td>
 											</tr>
@@ -483,7 +483,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<field:display name="Logframe Category" feature="Activity">
 															<tr>
 																<td >
-																	<digi:trn key="aim:logframeCategory">Logframe Category</digi:trn>
+																	<digi:trn>Logframe Category</digi:trn>
 																</td>
 																<td>
 																	<category:showoptions name="aimEditActivityForm" property="indicator.logframeCategory" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LOGFRAME_KEY %>" styleClass="inp-text" />
@@ -495,7 +495,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															<tr>
 																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
-																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
+																	<digi:trn>Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
 																<td>
 																<html:text property="indicator.baseVal" size="10" maxlength="10" styleId="txtBaseValue"/>
@@ -504,7 +504,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<field:display name="Date Base Value" feature="Activity"></field:display>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<digi:trn>Date</digi:trn>
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
@@ -526,7 +526,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</tr>
 															<field:display name="Comments Base Value" feature="Activity"></field:display>
 															<tr>
-																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
+																<td><digi:trn>Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="indicator.baseValComments" cols="38" rows="2" styleClass="inp-text"/>
@@ -536,7 +536,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															<tr>
 															<field:display name="Target Value" feature="Activity"></field:display>
 																<td><b>
-																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>
+																	<digi:trn>Target Value</digi:trn>
 																	</b><font color="red">*</font>
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
@@ -546,7 +546,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<digi:trn>Date</digi:trn>
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
@@ -575,7 +575,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<digi:trn>Date</digi:trn>
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
@@ -586,7 +586,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</c:if>
 															</tr>
 															<tr>
-																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
+																<td><digi:trn>Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="indicator.targetValComments" cols="38" rows="2" styleClass="inp-text"/>
@@ -596,7 +596,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															<c:if test="${indicator.targetValDate != null}">
 															<tr>
 																<td><b>
-																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn>
+																	<digi:trn>Revised Target Value</digi:trn>
 																	</b><font color="red">*</font>
 																</td>
 																<td>
@@ -623,7 +623,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															<tr>
-																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
+																<td><digi:trn>Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="indicator.revTargetValComments" cols="38" rows="2" styleClass="inp-text"/>
@@ -635,7 +635,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 														<logic:notEmpty name="indicator" property="priorValues" >
 															<tr bgColor="#dddddb"><td bgColor=#dddddb align="left" colspan="5"><b>
-																<digi:trn key="aim:mePriorValues">Prior Values</digi:trn> :</b>
+																<digi:trn>Prior Values</digi:trn> :</b>
 															</td></tr>
 															<logic:iterate name="indicator" property="priorValues"
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
@@ -648,14 +648,14 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</td>
 																	<td>&nbsp;&nbsp;&nbsp;</td>
 																	<td align="right">
-																		<digi:trn key="aim:meDate">Date</digi:trn>:
+																		<digi:trn>Date</digi:trn>:
 																	</td>
 																	<td align="left">&nbsp;&nbsp;
 																		<bean:write name="priorValues" property="currValDate" />
 																	</td>
 																</tr>
 																<tr>
-																	<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
+																	<td><digi:trn>Comments</digi:trn>
 																	</td>
 																	<td colspan="4">
 																		<bean:write name="priorValues" property="comments" />
@@ -667,7 +667,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															<field:display name="Current Value" feature="Activity">
 															<tr>																
 																<td><b>
-																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
+																	<digi:trn>Current Value</digi:trn>
 																	<font color="red">*</font>
 																</b></td>
 																<td>
@@ -678,7 +678,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</field:display>
 																<field:display name="Date Current Value" feature="Activity">
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<digi:trn>Date</digi:trn>
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
@@ -697,7 +697,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</field:display>
 															<field:display name="Comments Current Value" feature="Activity">
 															<tr>
-																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
+																<td><digi:trn>Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="indicator.currentValComments" cols="38" rows="2" styleClass="inp-text"/>
@@ -709,7 +709,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<tr>
 															<td>&nbsp;&nbsp;&nbsp;</td>
 															<td align="right"><b>
-															<digi:trn key="aim:meRisk">Risk</digi:trn>
+															<digi:trn>Risk</digi:trn>
 															</b></td>
 															<td>
 																<html:select property="indicator.indicatorRisk" styleClass="inp-text">

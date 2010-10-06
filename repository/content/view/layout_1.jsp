@@ -16,7 +16,7 @@
 <div align="center">
   <table width="1000" class="layoutTable" border="0">
     <tr>
-      <td valign="top"><digi:edit key="${param.htmlblock_2}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <td valign="top"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
       <td valign="top" width="250">
       <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>

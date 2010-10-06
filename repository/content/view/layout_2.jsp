@@ -33,7 +33,7 @@
        </c:if>
       </td>
       <td valign="top">
-      <digi:edit key="${param.htmlblock_2}" maxLength="1500" displayText="Edit HTML"></digi:edit>
+      <digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
     </tr>
   </table>

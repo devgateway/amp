@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
@@ -351,45 +353,65 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutTable1.setWidthPercentage(100);
 		layoutTable1.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-		PdfPTable resourcesBox = getResourcesBox();
-		PdfPTable mdgsBox = getMDGSBox();
+        ServletContext ampContext = getServlet().getServletContext();
+        AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
-		layoutTable1.addCell(mdgsBox);
-		layoutTable1.addCell(resourcesBox);
+        if (FeaturesUtil.getFieldVisibility("Millennium Development Goals").isFieldActive(ampTreeVisibility)) {
+            PdfPTable mdgsBox = getMDGSBox();
+            layoutTable1.addCell(mdgsBox);
+        } else {
+            layoutTable1.addCell(" ");            
+        }
 
-		layoutTable1.addCell(" ");
-		layoutTable1.addCell(" ");
+        if (FeaturesUtil.getFieldVisibility("Resources at a glance").isFieldActive(ampTreeVisibility)) {
+            PdfPTable resourcesBox = getResourcesBox();
+		    layoutTable1.addCell(resourcesBox);
+            layoutTable1.addCell(" ");
+		    layoutTable1.addCell(" ");
+        }
 
-		PdfPTable aeProcessIndicatorBox = getAEPIBox();
-		PdfPCell tempCell = new PdfPCell(aeProcessIndicatorBox);
-		tempCell.setColspan(2);
-		layoutTable1.addCell(tempCell);
+        PdfPCell tempCell = null;
 
-		layoutTable1.addCell(" ");
-		layoutTable1.addCell(" ");
+        if (FeaturesUtil.getFieldVisibility("Aid Effectiveness Process Indicators").isFieldActive(ampTreeVisibility)) {
+            PdfPTable aeProcessIndicatorBox = getAEPIBox();
+            tempCell = new PdfPCell(aeProcessIndicatorBox);
+            tempCell.setColspan(2);
+            layoutTable1.addCell(tempCell);
+            layoutTable1.addCell(" ");
+		    layoutTable1.addCell(" ");
+        }
 
-		PdfPTable IOBox = getIntermediateOutputBox();
-		tempCell = new PdfPCell(IOBox);
-		tempCell.setColspan(2);
-		tempCell.setBorder(Rectangle.NO_BORDER);
-		tempCell.setPaddingBottom(10);
-		layoutTable1.addCell(tempCell);
 
-		PdfPTable totalResourcesBox = getTotalResourcesBox();
-		tempCell = new PdfPCell(totalResourcesBox);
-		tempCell.setColspan(2);
-		tempCell.setBorder(Rectangle.NO_BORDER);
-		layoutTable1.addCell(tempCell);
 
-		layoutTable1.addCell(" ");
-		layoutTable1.addCell(" ");
+        if (FeaturesUtil.getFieldVisibility("Output Indicators").isFieldActive(ampTreeVisibility)) {
+            PdfPTable IOBox = getIntermediateOutputBox();
+            tempCell = new PdfPCell(IOBox);
+            tempCell.setColspan(2);
+            tempCell.setBorder(Rectangle.NO_BORDER);
+            tempCell.setPaddingBottom(10);
+            layoutTable1.addCell(tempCell);
+        }
 
-		PdfPTable EAResourcesBox = getEAResourcesBox();
-		tempCell = new PdfPCell(EAResourcesBox);
-		tempCell.setColspan(2);
-		tempCell.setBorder(Rectangle.NO_BORDER);
-		tempCell.setPaddingBottom(10);
-		layoutTable1.addCell(tempCell);
+        if (FeaturesUtil.getFieldVisibility("Total resources").isFieldActive(ampTreeVisibility)) {
+            PdfPTable totalResourcesBox = getTotalResourcesBox();
+            tempCell = new PdfPCell(totalResourcesBox);
+            tempCell.setColspan(2);
+            tempCell.setBorder(Rectangle.NO_BORDER);
+            layoutTable1.addCell(tempCell);
+            layoutTable1.addCell(" ");
+		    layoutTable1.addCell(" ");
+        }
+
+
+
+        if (FeaturesUtil.getFieldVisibility("External Aid Resources").isFieldActive(ampTreeVisibility)) {
+            PdfPTable EAResourcesBox = getEAResourcesBox();
+            tempCell = new PdfPCell(EAResourcesBox);
+            tempCell.setColspan(2);
+            tempCell.setBorder(Rectangle.NO_BORDER);
+            tempCell.setPaddingBottom(10);
+            layoutTable1.addCell(tempCell);
+        }
 
 		document.open();
 		String countryName = "";

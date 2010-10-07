@@ -231,7 +231,7 @@ public class TeamUtil {
         Session session = null;
         Collection col = new ArrayList();
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             String query = "select team from " + AmpTeam.class.getName()
                 + " team where (team.parentTeamId.ampTeamId=:pid) order by name";
             Query qry = session.createQuery(query);
@@ -241,14 +241,6 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
         }
        return col;
     }

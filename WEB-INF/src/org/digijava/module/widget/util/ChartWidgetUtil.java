@@ -1998,11 +1998,11 @@ public class ChartWidgetUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and act.approvalStatus in ('approved','edited')";
+                qr += " and act.draft=false and act.approvalStatus ='approved' ";
             }
             qr += " and (";
             for (AmpTeam tm : teams) {
-                if (team.getComputation() != null && team.getComputation()) {
+                if (tm.getComputation() != null && tm.getComputation()) {
                     relatedOrgs += getComputationOrgsQry(tm);
                 }
                 teamIds += tm.getAmpTeamId() + ",";

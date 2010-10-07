@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -355,13 +356,15 @@ function removeSelPhyProgress() {
 
     }
     function totalsPage() {
-       var currency=document.aimEditActivityForm.fundingCurrCode.value;
-       //alert (currency);
-       // the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true&edit=true';
-       var async=new Asynchronous();
-       async.complete=buildFundingTotalsForPage;
-       async.call(url);
+       if(document.aimEditActivityForm.fundingCurrCode != undefined) {
+           var currency = document.aimEditActivityForm.fundingCurrCode.value;
+           //alert (currency);
+           // the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
+           var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true&edit=true';
+           var async=new Asynchronous();
+           async.complete=buildFundingTotalsForPage;
+           async.call(url);
+       }
     }
        function buildFundingTotalsForPage(status, statusText, responseText, responseXML){
         var root=responseXML.getElementsByTagName('total')[0];

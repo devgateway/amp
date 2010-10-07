@@ -23,7 +23,7 @@
 	SELECT {
 	Font-size:10px;
 	font-family:Verdana,Arial,Helvetica,sans-serif;
-	width:240px;
+	width:200px;
 }
 </style>
 
@@ -72,9 +72,7 @@ else {
 			}
 		-->
 		</script>	
-        <!--	
-				<jsp:include page="/TEMPLATE/ampTemplate/layout/gisScripts.jsp" />
-				-->
+
         	
 	</HEAD>
 	

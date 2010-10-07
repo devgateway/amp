@@ -54,7 +54,49 @@
 						</tr>
 					</table>				
 			</td>
+			<td>
+				<table border="0" align="center" bgcolor="#EDF5FF">
+						<tr>
+							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
+								<a target="_blank" onclick="exportPDF(); return false;">
+									<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+								</a>
+							</td>
+
+							<td noWrap align=left valign="middle">
+                                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
+                                </digi:link>
+							</td>
+						</tr>
+					</table>
+			</td>
 		</tr>
 	</table>
 
 <br>
+
+<script language="javascript">
+	function exportPDF() {
+  
+	var selectedFromYear = document.getElementsByName("selectedFromYear")[0].value;
+	var selectedToYear = document.getElementsByName("selectedToYear")[0].value;
+
+
+	if (showDevinfo) {
+			var sectorId =  document.getElementById("sectorsMapCombo").value;
+			var indicatorId = document.getElementById("indicatorsCombo").value;	
+			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
+			var timeInterval = document.getElementById("indicatorYearCombo").value;
+		  
+			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + "&indYear=" + timeInterval, 780, 500);
+		} else {
+			var sectorId =  document.getElementById("sectorsMapComboFin").value;
+			var fundingType = document.getElementById("fundingType").value;	
+			var donorId = document.getElementById("donorsCombo").value;
+		  
+			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&publicMode=true&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId , 780, 500);
+
+		}
+  }
+</script>

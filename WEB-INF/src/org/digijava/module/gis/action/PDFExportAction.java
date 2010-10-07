@@ -140,6 +140,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		Boolean showLabels = true;
 		Boolean showLegends = true;
 		String selectedDonorName = "";
+        boolean publicMode = false;
+
+        if (request.getParameter("publicMode") != null && request.getParameter("publicMode").equals("true")) {
+			publicMode = true;
+		}
+
 
 		// Breakdown by sector parameters
 
@@ -343,7 +349,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             imagesTable.addCell(getImageMap(imgMap, sectorName, null, null, null, donorName, request.getParameter("fundingType"), request.getParameter("mapMode") ));
             String fundingType = request.getParameter("fundingType");
         }
-		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear, selectedTotYear));
+
+		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear, selectedTotYear, publicMode));
 		// imagesTable.addCell(" ");
 
 		// First batch of widgets
@@ -353,64 +360,68 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutTable1.setWidthPercentage(100);
 		layoutTable1.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-        ServletContext ampContext = getServlet().getServletContext();
-        AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
-        if (FeaturesUtil.getFieldVisibility("Millennium Development Goals").isFieldActive(ampTreeVisibility)) {
-            PdfPTable mdgsBox = getMDGSBox();
-            layoutTable1.addCell(mdgsBox);
-        } else {
-            layoutTable1.addCell(" ");            
-        }
+        if (!publicMode) {
 
-        if (FeaturesUtil.getFieldVisibility("Resources at a glance").isFieldActive(ampTreeVisibility)) {
-            PdfPTable resourcesBox = getResourcesBox();
-		    layoutTable1.addCell(resourcesBox);
-            layoutTable1.addCell(" ");
-		    layoutTable1.addCell(" ");
-        }
+            ServletContext ampContext = getServlet().getServletContext();
+            AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
-        PdfPCell tempCell = null;
+            if (FeaturesUtil.getFieldVisibility("Millennium Development Goals").isFieldActive(ampTreeVisibility)) {
+                PdfPTable mdgsBox = getMDGSBox();
+                layoutTable1.addCell(mdgsBox);
+            } else {
+                layoutTable1.addCell(" ");
+            }
 
-        if (FeaturesUtil.getFieldVisibility("Aid Effectiveness Process Indicators").isFieldActive(ampTreeVisibility)) {
-            PdfPTable aeProcessIndicatorBox = getAEPIBox();
-            tempCell = new PdfPCell(aeProcessIndicatorBox);
-            tempCell.setColspan(2);
-            layoutTable1.addCell(tempCell);
-            layoutTable1.addCell(" ");
-		    layoutTable1.addCell(" ");
-        }
+            if (FeaturesUtil.getFieldVisibility("Resources at a glance").isFieldActive(ampTreeVisibility)) {
+                PdfPTable resourcesBox = getResourcesBox();
+                layoutTable1.addCell(resourcesBox);
+                layoutTable1.addCell(" ");
+                layoutTable1.addCell(" ");
+            }
 
+            PdfPCell tempCell = null;
 
-
-        if (FeaturesUtil.getFieldVisibility("Output Indicators").isFieldActive(ampTreeVisibility)) {
-            PdfPTable IOBox = getIntermediateOutputBox();
-            tempCell = new PdfPCell(IOBox);
-            tempCell.setColspan(2);
-            tempCell.setBorder(Rectangle.NO_BORDER);
-            tempCell.setPaddingBottom(10);
-            layoutTable1.addCell(tempCell);
-        }
-
-        if (FeaturesUtil.getFieldVisibility("Total resources").isFieldActive(ampTreeVisibility)) {
-            PdfPTable totalResourcesBox = getTotalResourcesBox();
-            tempCell = new PdfPCell(totalResourcesBox);
-            tempCell.setColspan(2);
-            tempCell.setBorder(Rectangle.NO_BORDER);
-            layoutTable1.addCell(tempCell);
-            layoutTable1.addCell(" ");
-		    layoutTable1.addCell(" ");
-        }
+            if (FeaturesUtil.getFieldVisibility("Aid Effectiveness Process Indicators").isFieldActive(ampTreeVisibility)) {
+                PdfPTable aeProcessIndicatorBox = getAEPIBox();
+                tempCell = new PdfPCell(aeProcessIndicatorBox);
+                tempCell.setColspan(2);
+                layoutTable1.addCell(tempCell);
+                layoutTable1.addCell(" ");
+                layoutTable1.addCell(" ");
+            }
 
 
 
-        if (FeaturesUtil.getFieldVisibility("External Aid Resources").isFieldActive(ampTreeVisibility)) {
-            PdfPTable EAResourcesBox = getEAResourcesBox();
-            tempCell = new PdfPCell(EAResourcesBox);
-            tempCell.setColspan(2);
-            tempCell.setBorder(Rectangle.NO_BORDER);
-            tempCell.setPaddingBottom(10);
-            layoutTable1.addCell(tempCell);
+            if (FeaturesUtil.getFieldVisibility("Output Indicators").isFieldActive(ampTreeVisibility)) {
+                PdfPTable IOBox = getIntermediateOutputBox();
+                tempCell = new PdfPCell(IOBox);
+                tempCell.setColspan(2);
+                tempCell.setBorder(Rectangle.NO_BORDER);
+                tempCell.setPaddingBottom(10);
+                layoutTable1.addCell(tempCell);
+            }
+
+            if (FeaturesUtil.getFieldVisibility("Total resources").isFieldActive(ampTreeVisibility)) {
+                PdfPTable totalResourcesBox = getTotalResourcesBox();
+                tempCell = new PdfPCell(totalResourcesBox);
+                tempCell.setColspan(2);
+                tempCell.setBorder(Rectangle.NO_BORDER);
+                layoutTable1.addCell(tempCell);
+                layoutTable1.addCell(" ");
+                layoutTable1.addCell(" ");
+            }
+
+
+
+            if (FeaturesUtil.getFieldVisibility("External Aid Resources").isFieldActive(ampTreeVisibility)) {
+                PdfPTable EAResourcesBox = getEAResourcesBox();
+                tempCell = new PdfPCell(EAResourcesBox);
+                tempCell.setColspan(2);
+                tempCell.setBorder(Rectangle.NO_BORDER);
+                tempCell.setPaddingBottom(10);
+                layoutTable1.addCell(tempCell);
+            }
         }
 
 		document.open();
@@ -730,7 +741,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedStartYear, Integer selectedEndYear) throws WorkerException {
+	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedStartYear, Integer selectedEndYear, boolean isPublic) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 
@@ -749,67 +760,79 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		// gis:breakdownbysector
 
-		Paragraph paragraph = new Paragraph("Breakdown by sector" + "\n", new Font(Font.HELVETICA, 7, Font.BOLD, new Color(255, 255, 255)));
-		paragraph.setAlignment(Element.ALIGN_CENTER);
-		firstCell.setCellEvent(border);
-		firstCell.addElement(paragraph);
-		firstCell.setColspan(4);
+        PdfPCell layoutCell = new PdfPCell();
+        if (!isPublic) {
+            Paragraph paragraph = new Paragraph("Breakdown by sector" + "\n", new Font(Font.HELVETICA, 7, Font.BOLD, new Color(255, 255, 255)));
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            firstCell.setCellEvent(border);
+            firstCell.addElement(paragraph);
+            firstCell.setColspan(4);
 
-		PdfPCell secondCell = new PdfPCell();
-		secondCell.setPadding(0);
-		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
 
-		// Add rounded tab
-		headerTable.addCell(firstCell);
-		// Add empty space
-		headerTable.addCell(secondCell);
+            PdfPCell secondCell = new PdfPCell();
+            secondCell.setPadding(0);
+            secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
 
-		// add the table with the rounded tab and the empty space to the cell
-		headerCell.addElement(headerTable);
-		// add the full header cell to the general layout of the box
-		generalBox.addCell(headerCell);
-		PdfPCell lineCell = new PdfPCell();
-		lineCell.setBorder(Rectangle.NO_BORDER);
-		lineCell.setBackgroundColor(new Color(34, 46, 93));
-		lineCell.setPadding(0);
-		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
-		generalBox.addCell(lineCell);
+            // Add rounded tab
+            headerTable.addCell(firstCell);
+            // Add empty space
+            headerTable.addCell(secondCell);
+
+            // add the table with the rounded tab and the empty space to the cell
+            headerCell.addElement(headerTable);
+            // add the full header cell to the general layout of the box
+            generalBox.addCell(headerCell);
+
+
+            PdfPCell lineCell = new PdfPCell();
+            lineCell.setBorder(Rectangle.NO_BORDER);
+            lineCell.setBackgroundColor(new Color(34, 46, 93));
+            lineCell.setPadding(0);
+            lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+            generalBox.addCell(lineCell);
 		// Work the layout
-		PdfPCell layoutCell = new PdfPCell();
-		layoutCell.setPadding(2);
-		layoutCell.setBackgroundColor(new Color(206, 226, 251));
-		layoutCell.addElement(imgChart);
-        layoutCell.setBorder(Rectangle.NO_BORDER);
 
-		PdfPCell textCell = new PdfPCell();
-		textCell.setPadding(2);
-		textCell.setBackgroundColor(new Color(206, 226, 251));
-		// widget:piechart:allAmountsin000USD
-		String selectedDonorTranslation = "Selected donor";
-		if (selectedDonorTranslation == null || selectedDonorTranslation.equals(""))
-			selectedDonorTranslation = "Selected donor";
-		String selectedStartYearTranslation = "Start year";
-		if (selectedStartYearTranslation == null || selectedStartYearTranslation.equals(""))
-			selectedStartYearTranslation = "Start year";
-		String selectedEndYearTranslation = "End year";
-		if (selectedEndYearTranslation == null || selectedEndYearTranslation.equals(""))
-			selectedEndYearTranslation = "End year";
 
-		textCell.addElement(new Paragraph("All amounts in 000s of USD" + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n"
-				+ selectedStartYearTranslation + ": " + selectedStartYear + "\n" + selectedEndYearTranslation + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
-		textCell.setBorder(Rectangle.NO_BORDER);
-        generalBox.addCell(textCell);
-		PdfPCell text2Cell = new PdfPCell();
-		text2Cell.setPadding(2);
-		text2Cell.setBackgroundColor(new Color(206, 226, 251));
-		// widget:SourceAmpdatabase
+            layoutCell.setPadding(2);
+            layoutCell.setBackgroundColor(new Color(206, 226, 251));
+            layoutCell.addElement(imgChart);
+            layoutCell.setBorder(Rectangle.NO_BORDER);
 
-		text2Cell.addElement(new Paragraph("Source: AMP database", new Font(Font.HELVETICA, 6)));
-        text2Cell.setBorder(Rectangle.NO_BORDER);
 
-		generalBox.addCell(layoutCell);
-		generalBox.addCell(text2Cell);
+            PdfPCell textCell = new PdfPCell();
+            textCell.setPadding(2);
+            textCell.setBackgroundColor(new Color(206, 226, 251));
+            // widget:piechart:allAmountsin000USD
+            String selectedDonorTranslation = "Selected donor";
+            if (selectedDonorTranslation == null || selectedDonorTranslation.equals(""))
+                selectedDonorTranslation = "Selected donor";
+            String selectedStartYearTranslation = "Start year";
+            if (selectedStartYearTranslation == null || selectedStartYearTranslation.equals(""))
+                selectedStartYearTranslation = "Start year";
+            String selectedEndYearTranslation = "End year";
+            if (selectedEndYearTranslation == null || selectedEndYearTranslation.equals(""))
+                selectedEndYearTranslation = "End year";
+
+            textCell.addElement(new Paragraph("All amounts in 000s of USD" + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n"
+                    + selectedStartYearTranslation + ": " + selectedStartYear + "\n" + selectedEndYearTranslation + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
+
+            textCell.setBorder(Rectangle.NO_BORDER);
+            generalBox.addCell(textCell);
+
+            PdfPCell text2Cell = new PdfPCell();
+            text2Cell.setPadding(2);
+            text2Cell.setBackgroundColor(new Color(206, 226, 251));
+            // widget:SourceAmpdatabase
+
+            text2Cell.addElement(new Paragraph("Source: AMP database", new Font(Font.HELVETICA, 6)));
+            text2Cell.setBorder(Rectangle.NO_BORDER);
+
+
+		    generalBox.addCell(layoutCell);
+            generalBox.addCell(text2Cell);
+        }
+
 
 		return generalBox;
 	}

@@ -7,7 +7,9 @@
 		<action login-required="true" pattern="/gisService" /> 
 		<action login-required="false" pattern="/getFoundingDetails" /> 
 		<action login-required="false" pattern="/showPublicGis" />
-		<action login-required="false" pattern="/ShowRegionReport" />  
+		<action login-required="false" pattern="/ShowRegionReport" />
+		<action login-required="false" pattern="/pdfExport" />
+
 		
 
 	</security>

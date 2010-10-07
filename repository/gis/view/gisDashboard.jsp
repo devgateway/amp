@@ -121,8 +121,14 @@
 		  <!--
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		 -->
-		
-		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;margin-left: auto;margin-right: auto;"><img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
+		 <div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;margin-left: auto;margin-right: auto;">
+			<c:if test="${isDevInfoMode == true}">
+				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
+			</c:if>
+			<c:if test="${isDevInfoMode == false}">
+				<img onLoad="" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=2&donorId=-1&fromYear=2009&toYear=2010&sectorId=-1&fundingType=commitment&uniqueStr=0&width=500&height=500">
+			</c:if>
+			</div>
 		  
 		</td>
 	</tr>
@@ -324,7 +330,9 @@
         </td>
         <td>
             <select id="sectorsMapComboFin" onChange="" style="width:350px">
+            	<%--
             <option value="-2"><digi:trn>Select Sector</digi:trn></option>
+            --%>
             <option value="-1"><digi:trn>All Sectors</digi:trn></option>
             <logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
                 <option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>

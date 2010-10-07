@@ -807,7 +807,9 @@ function adminHelp(){
 										
 										<feature:display name="Glossary" module="HELP">
                                         <li>	
-                                        	<a href="/help/glossary.do"><digi:trn>Glossary</digi:trn></a>
+                                        <a href="/help/glossary.do">
+                                        <digi:trn>Glossary</digi:trn>
+                                        </a>
                                         </li>
 										</feature:display>
 										

@@ -226,19 +226,12 @@
 							</LI>
 					</UL>
 					<div style="cursor: pointer; font-family: Arial; min-height: 15px; font-size: 11px; font-style: italic; float: right; vertical-align: middle;" id="displaySettingsButton">
-						<%String styleHideShow = "";%>
-						<logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
-							<digi:trn>Hide Current Settings</digi:trn> &lt;&lt;
-						</logic:equal>
-						<logic:notEqual value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
-							<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
-							<%styleHideShow = "display: none; ";%>
-						</logic:notEqual>
+						<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
 					</div>
 				</div>
 				<DIV id="subtabs" style="cursor: pointer; min-height: 2px; background-color: ;">
 				</div>
-			<div style="<%=styleHideShow%> background-color: #FFFFCC; padding: 1px 1px 5px 5px;" id="currentDisplaySettings">
+			<div style="display:none; background-color: #FFFFCC; padding: 1px 1px 5px 5px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">
 					<tr>
@@ -328,8 +321,8 @@
         </tr>
         <logic:equal value="true" name="orgProfOrgProfileFilterForm" property="fromPublicView">
 	        <tr><td>&nbsp;</td></tr>
-	        <tr><td>
-	        	<div id="helpTips" style="width: 99%; background-color: #E7FFDF; padding: 1px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif; vertical-align: middle;">
+	        <tr><td style="padding:0px 0px 0px 3px;">
+	        	<div id="helpTips" style="width: 1220px; background-color: #E7FFDF; padding: 1px 2px 2px 2px; min-height: 22px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif; vertical-align: middle;">
 					<img alt="<digi:trn>Click on Export options to change output formatting</digi:trn>" style="width: 16px; height: 16px; vertical-align: bottom;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Export options to change output formatting</digi:trn>
 					&nbsp;|&nbsp;
 					<img alt="<digi:trn>Click on Filter to select individual donors</digi:trn>" style="width: 16px; height: 16px; vertical-align: bottom;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Filter to select individual donors</digi:trn>

@@ -241,10 +241,6 @@ public class OrgProfileUtil {
                 qry = session.createQuery(queryString);
                 qry.setDate("startDate", startDate);
                 qry.setDate("endDate", endDate);
-                if (member != null) {
-                    qry.setLong("teamId", member.getTeamId());
-
-                }
                 if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
                     qry.setLong("orgGroupId", orgGroupId);
                 }
@@ -310,10 +306,6 @@ public class OrgProfileUtil {
             Query qry = session.createQuery(queryString);
             qry.setDate("startDate", startDate);
             qry.setDate("endDate", endDate);
-            if (member != null) {
-                qry.setLong("teamId", member.getTeamId());
-
-            }
             if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
                 qry.setLong("orgGroupId", orgGroupId);
             }
@@ -493,11 +485,6 @@ public class OrgProfileUtil {
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
             }
-            if (teamMember != null) {
-                query.setLong("teamId", teamMember.getTeamId());
-
-            }
-
             if (locationCondition) {
                 query.setParameterList("locations", locationIds);
             }
@@ -790,10 +777,6 @@ public class OrgProfileUtil {
         qry = session.createQuery(queryString);
         qry.setDate("startDate", startDate);
         qry.setDate("endDate", endDate);
-        if (teamMember != null) {
-            qry.setLong("teamId", teamMember.getTeamId());
-
-        }
         qry.setInteger("adjustmentType", adjustmentType);
         if (orgIds == null && orgGroupId != null && orgGroupId != -1) {
             qry.setLong("orgGroupId", orgGroupId);

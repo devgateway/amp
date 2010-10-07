@@ -1217,10 +1217,6 @@ public class ChartWidgetUtil {
                 query.setLong("transactionType", transactionType);
                  }
 
-                if (teamMember != null) {
-                    query.setLong("teamId", teamMember.getTeamId());
-
-                }
                 List<AmpFundingDetail> fundingDets = query.list();
                 return fundingDets;
         
@@ -1283,10 +1279,6 @@ public class ChartWidgetUtil {
                 query.setLong("transactionType", transactionType);
             }
 
-            if (teamMember != null) {
-                query.setLong("teamId", teamMember.getTeamId());
-
-            }
             Collection<Long> locationIds = filter.getLocationIds();
             if (regionId != null && regionId != -1) {
                 query.setParameterList("locations", locationIds);
@@ -1484,10 +1476,6 @@ public class ChartWidgetUtil {
         if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
             query.setLong("transactionType", transactionType);
         }
-        if (tm != null) {
-            query.setLong("teamId", tm.getTeamId());
-
-        }
         List<AmpFundingDetail> fundingDets = query.list();
         return fundingDets;
 
@@ -1558,9 +1546,6 @@ public class ChartWidgetUtil {
             }
             if (filter.getTransactionType() < 2) {
                 query.setLong("transactionType", transactionType);
-            }
-            if (tm != null) {
-                query.setLong("teamId", tm.getTeamId());
             }
             if (locationCondition) {
                 query.setParameterList("locations", locationIds);
@@ -1772,10 +1757,6 @@ public class ChartWidgetUtil {
         if (sectorId != null) {
             query.setLong("sectorId", sectorId);
         }
-        if (tm != null) {
-            query.setLong("teamId", tm.getTeamId());
-
-        }
         if (locationCondition) {
             query.setParameterList("locations", locationIds);
         }
@@ -1904,10 +1885,6 @@ public class ChartWidgetUtil {
             }
             query.setLong("transactionType", transactionType);
             query.setLong("adjustmentType",adjustmentType);
-            if (tm != null) {
-                query.setLong("teamId", tm.getTeamId());
-
-            }
             if (locationCondition) {
                 query.setParameterList("locations", locationIds);
             }
@@ -2016,41 +1993,31 @@ public class ChartWidgetUtil {
         String qr = "";
         if (teamMember != null) {
             AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-            if (team.getComputation() != null && team.getComputation()) {
-                String ids = getComputationOrgsQry(team);
-                if (ids.length() > 1) {
-                    ids = ids.substring(0, ids.length() - 1);
-                    qr += "  and ( act.team.ampTeamId =:teamId or  f.ampDonorOrgId in(" + ids + ")) ";
+            List<AmpTeam> teams = new ArrayList<AmpTeam>();
+            getTeams(team, teams);
+            String relatedOrgs = "";
+            String teamIds = "";
+            if (teamMember.getTeamAccessType().equals("Management")) {
+                qr += " and act.draft=false and act.approvalStatus in ('approved','edited')";
+            }
+            qr += " and (";
+            for (AmpTeam tm : teams) {
+                if (team.getComputation() != null && team.getComputation()) {
+                    relatedOrgs += getComputationOrgsQry(tm);
                 }
-            } else {
-                if (!teamMember.getTeamAccessType().equals("Management")) {
-                    qr += " and ( act.team.ampTeamId =:teamId ) ";
-                } else {
-                    qr = " and ( act.team.ampTeamId =:teamId or ";
-                    Collection<AmpTeam> childrenTeams = TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
-                    Iterator<AmpTeam> iter = childrenTeams.iterator();
-                    String teamIds = "";
-                    String orgIds = "";
-                    while (iter.hasNext()) {
-                        AmpTeam childTeam = iter.next();
-                        orgIds += getComputationOrgsQry(childTeam);
-                        teamIds += childTeam.getAmpTeamId() + ",";
-                    }
-
-                    if (teamIds.length() > 1) {
-                        teamIds = teamIds.substring(0, teamIds.length() - 1);
-                        qr += "  act.team.ampTeamId in ( " + teamIds + ")";
-                    }
-                    if (orgIds.length() > 1) {
-                        orgIds = orgIds.substring(0, orgIds.length() - 1);
-                        qr += " or f.ampDonorOrgId in(" + orgIds + ")";
-                    }
-
-
-                    qr += " ) and act.draft=false and act.approvalStatus in ('approved','edited') ";
-                }
+                teamIds += tm.getAmpTeamId() + ",";
 
             }
+            if (teamIds.length() > 1) {
+                teamIds = teamIds.substring(0, teamIds.length() - 1);
+                qr += " act.team.ampTeamId in ( " + teamIds + ")";
+
+            }
+            if (relatedOrgs.length() > 1) {
+                relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
+                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+            }
+            qr += ")";
 
         } else {
             qr += "  and act.team is not null ";
@@ -2070,6 +2037,16 @@ public class ChartWidgetUtil {
 
         }
         return orgIds;
+    }
+
+    public static void getTeams(AmpTeam team, List<AmpTeam> teams) {
+        teams.add(team);
+        Collection<AmpTeam> childrenTeams =  TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+        if (childrenTeams != null) {
+            for (AmpTeam tm : childrenTeams) {
+                getTeams(tm, teams);
+            }
+        }
     }
 
     public static String getOrganizationQuery(boolean orgGroupView, Long[] orgIds) {
@@ -2156,10 +2133,6 @@ public class ChartWidgetUtil {
             query.setDate("endDate", endDate);
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
-            }
-            if (tm != null) {
-                query.setLong("teamId", tm.getTeamId());
-
             }
             if (zoneCondition) {
                 query.setParameterList("zones", zones);

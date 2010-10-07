@@ -51,6 +51,8 @@ public class ShowRegionReport extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
+        response.setContentType("text/html");
+
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
         if (baseCurr == null) {

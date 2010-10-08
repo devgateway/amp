@@ -286,15 +286,24 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                 }
             }
         } else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
+        	
+    		if (request.getParameter("sectorId") != null) {
+    			secId = Long.parseLong(request.getParameter("sectorId"));
+    		}
 
-
-            if (secId.longValue() == -2f) {
-                sectorName = "None";
-            } else if (secId.longValue() == -1f) {
-                sectorName = "All";
-            } else {
-                sectorName = SectorUtil.getAmpSector(secId).getName();
-            }
+        	if (secId.longValue() == -1f) {
+        		sectorName = "All Sectors";
+        	} else {
+        		sectorName = SectorUtil.getAmpSector(secId).getName();
+        	}
+        		//Old if, when the <select> had -2 as "select sector".
+//            if (secId.longValue() == -2f) {
+//                sectorName = "None";
+//            } else if (secId.longValue() == -1f) {
+//                sectorName = "All";
+//            } else {
+//                sectorName = SectorUtil.getAmpSector(secId).getName();
+//            }
 
 
             String fromYear = request.getParameter("selectedFromYear");

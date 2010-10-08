@@ -126,57 +126,58 @@ public class XLSExportAction extends Action {
 		row=sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());
 		if(reportForm.getLogoOptions() != null)
-		if (reportForm.getLogoOptions().equals("0")) {//disabled
-			// do nothing 
-		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
-			if (reportForm.getLogoPositionOptions().equals("0")) {//header
-				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
-				String urlPrefix = request.getRequestURL().substring(0, end);
-				//								
-				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
-			    byte[] bytes = IOUtils.toByteArray(is);
-			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
-			    is.close();
-			    // ajout de l'image sur l'ancre ( lig, col )  
-			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
-			    ancreImg.setCol1(colId.shortValue());
-			    ancreImg.setRow1(rowId.shortValue());
-			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
-			    // redim de l'image
-			    Img.resize();
-			} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
-				// see endPage function
-			}				
-		}
-        if (reportForm.getStatementOptions().equals("0")) {//disabled
-			// do nothing 
-		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
-			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("0"))) { 
-				// creation d'une nouvelle cellule pour le statement	
-				grdx.makeColSpan(rd.getTotalDepth(),false);	
-				rowId.inc();
-				colId.reset();
-				row=sheet.createRow(rowId.shortValue());
-				cell=row.createCell(colId.shortValue());						
+			if (reportForm.getLogoOptions().equals("0")) {//disabled
+				// do nothing 
+			} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
+				if (reportForm.getLogoPositionOptions().equals("0")) {//header
+					int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
+					String urlPrefix = request.getRequestURL().substring(0, end);
+					//								
+					InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
+				    byte[] bytes = IOUtils.toByteArray(is);
+				    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+				    is.close();
+				    // ajout de l'image sur l'ancre ( lig, col )  
+				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+				    ancreImg.setCol1(colId.shortValue());
+				    ancreImg.setRow1(rowId.shortValue());
+				    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+				    // redim de l'image
+				    Img.resize();
+				} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
+					// see endPage function
+				}				
 			}
-			String stmt = "";
-			try {
-				//TODO TRN: key is all right but lets use default text. Or remove this todo tag.
-				stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
-			} catch (WorkerException e){
-			    e.printStackTrace();}
-			stmt += " " + FeaturesUtil.getCurrentCountryName();
-			if (reportForm.getDateOptions().equals("0")) {//disabled
-				// no date
-			} else if (reportForm.getDateOptions().equals("1")) {//enable		
-				stmt += " " + TranslatorWorker.translateText("on", locale,siteId)+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
-			}				 	                	                
-			if (reportForm.getStatementPositionOptions().equals("0")) {//header		
-				cell.setCellValue(stmt);  
-			} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
-				// 
-			}				
-		}
+		if(reportForm.getStatementOptions() != null)
+	        if (reportForm.getStatementOptions().equals("0")) {//disabled
+				// do nothing 
+			} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
+				if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("0"))) { 
+					// creation d'une nouvelle cellule pour le statement	
+					grdx.makeColSpan(rd.getTotalDepth(),false);	
+					rowId.inc();
+					colId.reset();
+					row=sheet.createRow(rowId.shortValue());
+					cell=row.createCell(colId.shortValue());						
+				}
+				String stmt = "";
+				try {
+					//TODO TRN: key is all right but lets use default text. Or remove this todo tag.
+					stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
+				} catch (WorkerException e){
+				    e.printStackTrace();}
+				stmt += " " + FeaturesUtil.getCurrentCountryName();
+				if (reportForm.getDateOptions().equals("0")) {//disabled
+					// no date
+				} else if (reportForm.getDateOptions().equals("1")) {//enable		
+					stmt += " " + TranslatorWorker.translateText("on", locale,siteId)+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+				}				 	                	                
+				if (reportForm.getStatementPositionOptions().equals("0")) {//header		
+					cell.setCellValue(stmt);  
+				} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
+					// 
+				}				
+			}
 		grdx.makeColSpan(rd.getTotalDepth(),false);	
 		rowId.inc();
 		colId.reset();

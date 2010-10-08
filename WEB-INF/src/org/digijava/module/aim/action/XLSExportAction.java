@@ -124,7 +124,8 @@ public class XLSExportAction extends Action {
 		rowId.inc();
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
-		HSSFCell cell=row.createCell(colId.shortValue());		
+		HSSFCell cell=row.createCell(colId.shortValue());
+		if(reportForm.getLogoOptions() != null)
 		if (reportForm.getLogoOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                

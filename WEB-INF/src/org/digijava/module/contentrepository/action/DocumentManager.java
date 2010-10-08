@@ -144,15 +144,20 @@ public class DocumentManager extends Action {
 		
 		myRequest.setAttribute("dynamicList", myRequest.getParameter("dynamicList") );
 		String source	= null;
-		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) 
+		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
-		else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null )
+			myForm.setType("private");
+		}else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_TEAM_DOCUMENTS;
-		else if(myForm.getShowSharedDocs()!=null){
+			myForm.setType("team");
+		}else if(myForm.getShowSharedDocs()!=null){
 			source		= DocumentFilter.SOURCE_SHARED_DOCUMENTS;
-		}
-		else 
+			myForm.setType("shared");
+		}else {
 			source			= DocumentFilter.SOURCE_PUBLIC_DOCUMENTS;
+		}
+		
+		myRequest.setAttribute("tabType", myForm.getType());
 		
 		List<String> filterLablesUUID	= null;
 		if ( myForm.getFilterLabelsUUID() != null ){

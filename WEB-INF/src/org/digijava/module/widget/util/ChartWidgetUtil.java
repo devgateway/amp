@@ -1200,7 +1200,13 @@ public class ChartWidgetUtil {
                     oql += getOrganizationQuery(false, orgIds);
                 }
                 oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and  loc.id=  " + location.getId();
-                oql += getTeamQuery(teamMember);
+                if(filter.getFromPublicView() == true){
+                    oql += getTeamQueryManagement();
+                }
+                else
+                {
+                    oql += getTeamQuery(teamMember);
+                }
                 
                 if (filter.getShowOnlyApprovedActivities()) {
                 	oql += ActivityUtil.getApprovedActivityQueryString("act");
@@ -1258,7 +1264,14 @@ public class ChartWidgetUtil {
                 oql += getOrganizationQuery(false, orgIds);
             }
             oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            oql += getTeamQuery(teamMember);
+            
+            if(filter.getFromPublicView() == true){
+                oql += getTeamQueryManagement();
+            }
+            else
+            {
+                oql += getTeamQuery(teamMember);
+            }
             if (regionId != null && regionId != -1) {
                 oql += " and loc.id in (:locations) ";
             }
@@ -1460,7 +1473,14 @@ public class ChartWidgetUtil {
             oql += getOrganizationQuery(false, orgIds);
         }
      
-        oql += getTeamQuery(tm);
+        if(filter.getFromPublicView() == true){
+            oql += getTeamQueryManagement();
+        }
+        else
+        {
+            oql += getTeamQuery(tm);
+        }
+        
         oql += " and actloc is NULL ";
 
         if (filter.getShowOnlyApprovedActivities()) {
@@ -1530,7 +1550,13 @@ public class ChartWidgetUtil {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
         
-        oql += getTeamQuery(tm);
+        if(filter.getFromPublicView() == true){
+            oql += getTeamQueryManagement();
+        }
+        else
+        {
+            oql += getTeamQuery(tm);
+        }
         if (locationCondition) {
             oql += " and loc.id in (:locations) ";
         }
@@ -1735,7 +1761,13 @@ public class ChartWidgetUtil {
         if (sectorId != null) {
             oql += " and  sec.ampSectorId=:sectorId  ";
         }
-        oql += getTeamQuery(tm);
+        if(filter.getFromPublicView()){
+            oql += getTeamQueryManagement();
+        }
+        else
+        {
+        	oql += getTeamQuery(tm);
+        }
         if (locationCondition) {
             oql += " and loc.id in (:locations) ";
         }
@@ -1865,8 +1897,13 @@ public class ChartWidgetUtil {
         if (filter.getShowOnlyApprovedActivities()) {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
-        
-        oql += getTeamQuery(tm);
+        if(filter.getFromPublicView()){
+            oql += getTeamQueryManagement();
+        }
+        else
+        {
+            oql += getTeamQuery(tm);
+        }
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -2022,6 +2059,14 @@ public class ChartWidgetUtil {
         } else {
             qr += "  and act.team is not null ";
         }
+        return qr;
+    }
+    
+    public static String getTeamQueryManagement() {
+        String qr = "";
+        qr += "  and act.team is not null and act.team in (select at.ampTeamId from " 
+		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
+        
         return qr;
     }
 

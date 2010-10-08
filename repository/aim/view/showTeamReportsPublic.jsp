@@ -355,11 +355,13 @@ function popup(mylink, windowname)
                                         <digi:trn>Get report in PDF format&nbsp;</digi:trn>
                                     </c:set>
                                     <digi:link href="/pdfExport.do?ampReportId=${report.ampReportId}" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0"/></digi:link>
-                                    &nbsp;
-                                    <c:set var="translation">
-                                        <digi:trn>Get report in printer friendly version&nbsp;</digi:trn>
-                                    </c:set>
-                                    <digi:link href="/viewNewAdvancedReport.do?viewFormat=print&widget=false"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0"/></digi:link>
+                                    <feature:display name="Show Printer Friendly option" module="Public Reports">
+	                                    &nbsp;
+	                                    <c:set var="translation">
+	                                        <digi:trn>Get report in printer friendly version&nbsp;</digi:trn>
+	                                    </c:set>
+	                                    <digi:link href="/viewNewAdvancedReport.do?viewFormat=print&widget=false"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');" title="${translation}"><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0"/></digi:link>
+                                    </feature:display>
                                 </p>
                                 </td>
                             </tr>
@@ -491,13 +493,15 @@ function popup(mylink, windowname)
                   <br />
                 </TD>
               </TR>
-              <TR>
-                <TD><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0"/>
-                  <digi:trn>Click on this icon to get report in printer friendly format&nbsp;</digi:trn>
-                  <br />
-                </TD>
-                <TD>&nbsp;</TD>
-              </TR>
+              <feature:display name="Show Printer Friendly option" module="Public Reports">
+	              <TR>
+	                <TD><digi:img  hspace="0" vspace="0" height="16" width="16" src="/TEMPLATE/ampTemplate/images/print_icon.gif" border="0"/>
+	                  <digi:trn>Click on this icon to get report in printer friendly format&nbsp;</digi:trn>
+	                  <br />
+	                </TD>
+	                <TD>&nbsp;</TD>
+	              </TR>
+			 </feature:display>
           </TABLE>
             </div>
             <br />

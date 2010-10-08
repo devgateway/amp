@@ -219,11 +219,13 @@ addLoadEvent(addpanel);
 			</digi:link>
 		</td>
  -->		
-		<td noWrap align=left valign="center">
-			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
-				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
-			</digi:link>
-		</td>
+		<feature:display name="Show Printer Friendly option" module="Public Reports">
+			<td noWrap align=left valign="center">
+				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
+					<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+				</digi:link>
+			</td>
+		</feature:display>
 	</tr>
 </table>
 </div>

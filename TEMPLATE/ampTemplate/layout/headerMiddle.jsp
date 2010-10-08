@@ -46,10 +46,10 @@
 <c:set var="message">
     <c:choose>
       <c:when test="${sessionScope.currentMember.addActivity == 'true'}">
-      	<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
+      	<digi:trn>You did not save your activity. Do you want proceed without saving it ?</digi:trn>
       </c:when>
       <c:otherwise>
-      	<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+      	<digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
       </c:otherwise>
     </c:choose>
 </c:set>
@@ -79,28 +79,35 @@ cursor:pointer;
           <ul class="first-of-typeamp">
             <li class="yuiampmenuitem">
                 <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
-                <digi:trn key="aim:homePage">
+                <digi:trn>
                 Home Page
                 </digi:trn>
 	            </a>
             </li>
-                   <li class="yuiampmenuitem" style="float:left;">
+            
+            <module:display name="Public Site" parentModule="PUBLIC VIEW">
+            <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
-                <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+                <digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
                 <a class="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
-                <digi:trn key='aim:PublicSite'>PUBLIC SITE</digi:trn>
+                <digi:trn>PUBLIC SITE</digi:trn>
                 </a>
-            </li> 
-            <feature:display name="Public Documents" module="Document Management">
+            </li>
+            </module:display>
+             
+            <module:display name="Public Documents" parentModule="PUBLIC VIEW">
             <li class="yuiampmenuitem" style="float:left;">
                 <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">			
-                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></a>
+                <digi:trn>Public Documents</digi:trn></a>
             </li>
-            </feature:display>
+            </module:display>
+            
+            
+           	<module:display name="Public Reports" parentModule="PUBLIC VIEW">
 			<li class="yuiampmenuitem" style="float:left;">
 				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;"  onclick="return canExit()">
-                    <digi:trn key="aim:publicReports">Public Reports</digi:trn>
+                    <digi:trn>Public Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
                 	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;background-color:#376091;text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
@@ -111,7 +118,7 @@ cursor:pointer;
 	                		<ul>
 	           					<li class="yuiampmenuitem" style="float:left;">
 	               					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
-	                   					<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
+	                   					<digi:trn>Multi-dimensional Reports</digi:trn>
 	                   				</digi:link>
 	               				</li>
 	            			</ul>
@@ -119,17 +126,23 @@ cursor:pointer;
 	            	</div>
 				</module:display>
            	</li>
+           	</module:display>
+           	
            	<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
+	           	<module:display name="Public Calendar" parentModule="PUBLIC VIEW">
                 <li class="yuiampmenuitem" style="float:left;">
                 	<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
-                       <digi:trn key="aim:calendar">Calendar</digi:trn>
+                       <digi:trn>Calendar</digi:trn>
                     </a>
                 </li>
+                </module:display>
             </module:display>
+            
            	<%--
            	<module:display name="Org Profile" >
 	           	<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
 	           	--%>
+	           	<module:display name="Public Dashboards" parentModule="PUBLIC VIEW">
 	                <li class="yuiampmenuitem" style="float:left;">
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
@@ -163,15 +176,16 @@ cursor:pointer;
 						</div>
 						</div>                    
 					</li>
+				</module:display>
 					<%--
 	           	</feature:display>
            	</module:display>
           --%> 	
-           	
-           	<feature:display name="Language Option" module="Tools">
+           	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
+           		<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
-		                <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                <digi:trn>Language</digi:trn>
 		                </span>
 		                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
@@ -184,7 +198,8 @@ cursor:pointer;
 		                    </div>
 		                </div>                              
 		            </li>
-		  </feature:display>
+		  	</feature:display>
+		  </module:display>
           </ul>            
       </div>
   </div>

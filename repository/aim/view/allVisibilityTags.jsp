@@ -957,7 +957,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
-
+<!-- AMP-9437 -->
+<module:display name="Public Site" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Public Reports" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Public Calendar" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 
 <field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 

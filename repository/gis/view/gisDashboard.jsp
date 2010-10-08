@@ -115,9 +115,9 @@
 <div class="navHiden" id="mapNav" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick=""><digi:trn>Map navigation</digi:trn></div>
 
 	
-<table cellpadding="5" cellspacing="1">
+<table cellpadding="5" cellspacing="1" border="0">
 	<tr>
-		<td colspan="2">
+		<td colspan="3">
 		  <!--
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		 -->
@@ -134,7 +134,7 @@
 	</tr>
 	
 	<tr>
-		<td colspan="2" align="center">
+		<td colspan="3" align="center">
 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
@@ -161,7 +161,7 @@
     <!-- DevInfo block -->
 <c:if test="${isDevInfoMode == true}">
 	<tr>
-		<td colspan="2">
+		<td colspan="3">
 			<span>
 				<digi:trn key="gis:minmax:message">
 				Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
@@ -177,7 +177,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">
+		<td colspan="3">
 			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">
 		</td>
 	</tr>
@@ -207,7 +207,7 @@
         <td nowrap width="200" style="font-size:12px">
              <digi:trn>Select Sector</digi:trn>:
         </td>
-		<td>
+		<td colspan="2">
 		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->
 			<select id="sectorsMapCombo" onChange="" style="width:350px">
 			<option value="-1"><digi:trn>Select sector</digi:trn></option>
@@ -220,7 +220,7 @@
 	<tr>
        <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Indicator</digi:trn>:
-		<td>
+		<td colspan="2">
 		<!-- <select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px"> -->
 		<select id="indicatorsCombo" onchange="" style="width:350px">	
 			<option value=-1><digi:trn>Select Indicator</digi:trn></option>
@@ -231,7 +231,7 @@
         <td width="200" style="font-size:12px">
             <digi:trn>Select Subgroup</digi:trn>:
         </td>
-		<td>
+		<td colspan="2">
 			<!-- <select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">  -->
 			<select id="indicatorSubgroupCombo" onChange="" style="width:350px">
 				<option value="-1"><digi:trn>Select subgroup</digi:trn></option>
@@ -242,7 +242,7 @@
         <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Time Interval</digi:trn>:
         </td>
-		<td>
+		<td colspan="2">
 			<select id="indicatorYearCombo" style="width:350px">
 				<option value="-1"><digi:trn>Select Time Interval</digi:trn></option>
 			</select>
@@ -265,12 +265,18 @@
 <!-- Financial data block -->    
 <c:if test="${isDevInfoMode == false}">
     <tr>
-        <td colspan="2">
+        <td colspan="3">
             <span>
+				<img alt="" style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Filter to select individual donors</digi:trn>
                 <digi:trn key="gis:minmax:message_fin">
                 Regions with the lowest (MIN) values for the selected funding type are shaded dark green. 
                 Regions with the highest (MAX) value are shaded light green. 
                 </digi:trn>
+            </span>
+            <br>
+            <br>
+            <span>
+				<img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on a region to view list of projects implemented in that Municipality</digi:trn>
             </span>
             <br>
             <br>
@@ -280,7 +286,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td colspan="3">
             <img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif">
         </td>
     </tr>
@@ -308,7 +314,8 @@
 
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Funding type</digi:trn>:
+             <digi:trn>Funding type</digi:trn>&nbsp;: 
+             <br>
         </td>
         <td>
             <select id="fundingType" onChange="" style="width:350px" value="commitment">
@@ -323,6 +330,9 @@
             </field:display>
         </select>
         </td>
+		<td>
+	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
+		</td>
     </tr>
     <tr>
         <td nowrap width="200" style="font-size:12px">
@@ -339,6 +349,9 @@
             </logic:iterate>
         </select>
         </td>
+		<td>
+	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
+		</td>
     </tr>
     
     <%--
@@ -353,7 +366,7 @@
     </tr>
     --%>
     <c:set var="translation">
-		<digi:trn>Donors who have funded a project at the regional level</digi:trn>
+		<digi:trn>Select the funding organization for which you'd like to see the funding information on the map</digi:trn>
 	</c:set>
     <tr>
         <td nowrap width="200" style="font-size:12px">
@@ -369,7 +382,8 @@
 		</select>
 		</td>
 		<td>
-			<img border="0" title="${translation}" src="../ampTemplate/images/help.gif">
+	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
+<%--			<img border="0" title="${translation}" src="../ampTemplate/images/help.gif"> --%>
 		</td>
 	</tr>
 </c:if>

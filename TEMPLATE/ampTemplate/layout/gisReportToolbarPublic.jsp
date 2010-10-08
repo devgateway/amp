@@ -35,6 +35,11 @@
 			<td>
 					<table width="100%" border="0" align="left" bgcolor="#EDF5FF" >
 						<tr>
+							<td height="30px" colspan="4">
+						        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" /> Select the date range for the funding information on the map
+							</td>
+						</tr>
+						<tr>
 							<td nowrap="nowrap" height="30px">
 								<digi:trn>From Date:</digi:trn>
 							</td>
@@ -54,7 +59,7 @@
 						</tr>
 					</table>				
 			</td>
-			<td>
+			<td bgcolor="#EDF5FF">
 				<table border="0" align="center" bgcolor="#EDF5FF">
 						<tr>
 							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">

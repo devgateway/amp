@@ -125,7 +125,8 @@ public class XLSExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());
-		if(reportForm.getLogoOptions() != null)
+	
+		if(reportForm != null && reportForm.getLogoOptions() != null)
 			if (reportForm.getLogoOptions().equals("0")) {//disabled
 				// do nothing 
 			} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
@@ -148,7 +149,7 @@ public class XLSExportAction extends Action {
 					// see endPage function
 				}				
 			}
-		if(reportForm.getStatementOptions() != null)
+		if(reportForm != null && reportForm.getStatementOptions() != null)
 	        if (reportForm.getStatementOptions().equals("0")) {//disabled
 				// do nothing 
 			} else if (reportForm.getStatementOptions().equals("1")) {//enabled										

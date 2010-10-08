@@ -267,7 +267,7 @@
     <tr>
         <td colspan="3">
             <span>
-				<img alt="" style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on Filter to select individual donors</digi:trn>
+				<img alt="" style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;
                 <digi:trn key="gis:minmax:message_fin">
                 Regions with the lowest (MIN) values for the selected funding type are shaded dark green. 
                 Regions with the highest (MAX) value are shaded light green. 
@@ -276,7 +276,7 @@
             <br>
             <br>
             <span>
-				<img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on a region to view list of projects implemented in that Municipality</digi:trn>
+				<img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on a region to view list of projects implemented in that Region</digi:trn>
             </span>
             <br>
             <br>

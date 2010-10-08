@@ -207,11 +207,14 @@ function toggleBudgetFields(show) {
 	</field:display> 
 	<field:display name="Budget Department" feature="Budget">
 		toggleElement("budgetdepart", show);
+		toggleElement("budgetdepart1", show);
 	</field:display>
 	<field:display name="Budget Program" feature="Budget">
 		toggleElement("budgetprog", show);
+		toggleElement("budgetprog1", show);
 	</field:display>
-	
+
+	toggleElement("budgetTable", show);
 	toggleElement("Imputation", show);
 	toggleElement("FY", show);
 	toggleElement("Vote", show);
@@ -732,186 +735,146 @@ target.style.cursor = "default"
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 													</a>
 												</td>
+												<td>
+												<field:display name="On/Off Budget" feature="Budget">	
+													<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
+											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
+											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
+											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
+											 		</html:select>
+													</field:display>
+												</td>
+											</tr>
+											<tr bgcolor="#ffffff"/>
+											<tr bgcolor="#ffffff">
 											<td>
-											<field:display name="On/Off Budget" feature="Budget">	
-												<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
-										 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
-										 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
-										 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
-										 		</html:select>
-												</field:display>
-											<table cellpadding="2" cellspacing="2">
-											<field:display name="Imputation" feature="Budget">
-											<td valign="top" id="Imputation" align="center"  >
-												<a title="<digi:trn>Imputation</digi:trn>">
-												<digi:trn>
-													Imputation
-												</digi:trn>
-												</a>
 											</td>
+											
+											<td>
+											<table id="budgetTable" class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
+											<field:display name="Imputation" feature="Budget">
+											<tr valign="top" id="Imputation" align="left"  >
+												<td>
+													<a title="<digi:trn>Imputation</digi:trn>">
+													<digi:trn>
+														Imputation
+													</digi:trn>
+													</a>
+												</td>
+												<td align="right">
+													<html:text property="identification.FY" size="18" styleId="ImputationField" styleClass="inp-text" onkeyup="imputationRules.check();"/>
+												</td>
+											</tr>
 											</field:display>
 											
 											<field:display name="Code Chapitre" feature="Budget">
-											<td valign="top" id="CodeChapitre" align="center"  >
-												<a title="<digi:trn>Code Chapitre</digi:trn>">
-												<digi:trn>
-													Code Chapitre
-												</digi:trn>
-												</a>
-											</td>
+											<tr valign="top" id="CodeChapitre" align="left"  >
+												<td>
+													<a title="<digi:trn>Code Chapitre</digi:trn>">
+													<digi:trn>
+														Code Chapitre
+													</digi:trn>
+													</a>
+												</td>
+												<td align="right">
+													<html:text property="identification.projectCode" size="18" styleId="CodeChapitreField" styleClass="inp-text" onkeyup="codeChapitreRules.check();"/>
+												</td>
+											</tr>
 											</field:display>
 											
 											<field:display name="FY" feature="Budget">
-											<td valign="top" id="FY" align="center" >
-												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
-												<digi:trn key="aim:actFY">
-												FY
-												</digi:trn>
-												</a>
-											</td>
+											<tr valign="top" id="FY" align="left" >
+												<td>
+													<a title="<digi:trn key="aim:FY">FY</digi:trn>">
+													<digi:trn key="aim:actFY">
+													FY
+													</digi:trn>
+													</a>
+												</td>
+												<td align="right">
+													<html:text property="identification.FY" size="18" styleClass="inp-text"/>
+												</td>
+											</tr>
 											</field:display>
 											
 										<field:display name="Vote" feature="Budget" >
-											<td valign="top"  id="Vote" align="center" >
-												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
-												<digi:trn key="aim:actVote">
-												Vote
-												</digi:trn>
-												</a>
-											</td>	
+											<tr valign="top"  id="Vote" align="left" >
+												<td>
+													<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
+													<digi:trn key="aim:actVote">
+													Vote
+													</digi:trn>
+													</a>
+												</td>
+												<td align="right">
+													<html:text property="identification.vote" size="18" styleClass="inp-text"/>
+												</td>
+											</tr>	
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top" id="Sub-Vote" align="center" >
-												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
-												<digi:trn key="aim:actSub-Vote">
-												Sub-Vote
-												</digi:trn>
-												</a>
-											</td>
-											</field:display>
-											
-	
+											<tr valign="top" id="Sub-Vote" align="left" >
+												<td>
+													<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
+													<digi:trn key="aim:actSub-Vote">
+													Sub-Vote
+													</digi:trn>
+													</a>
+												</td>
+												<td align="right">
+													<html:text property="identification.subVote" size="18" styleClass="inp-text"/>
+												</td>
+											</tr>
+										</field:display>
 											
 									<field:display name="Sub-Program" feature="Budget">
-										<td valign="top" id="Sub-Program" align="center">
-											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
-											<digi:trn key="aim:actSubProgram">
+										<tr valign="top" id="Sub-Program" align="left">
+											<td>
+												<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
+												<digi:trn key="aim:actSubProgram">
 												Sub-Program
 												</digi:trn>
 												</a>
-										</td>
+											</td>
+											<td align="right">
+												<html:text property="identification.subProgram" size="18" styleClass="inp-text"/>
+											</td>
+										</tr>
 									</field:display>
 											
-								<field:display name="Project Code" feature="Budget">
-										<td valign="top" id="ProjectCode" align="center" >
-											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
-											<digi:trn key="aim:actProjectCode">
+									<field:display name="Project Code" feature="Budget">
+										<tr valign="top" id="ProjectCode" align="left" >
+											<td>
+												<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
+												<digi:trn key="aim:actProjectCode">
 												Project Code
 												</digi:trn>
 												</a>
-								</td>
-								</field:display>			
-											<tr>
-											<field:display name="Imputation" feature="Budget">
-												<td valign="top"  id="Imputation1" align="center"  >
-														<html:text property="identification.FY" size="22" styleId="ImputationField" onkeyup="imputationRules.check();"/>
-												</td>
-											</field:display>
-										
-											<field:display name="Code Chapitre" feature="Budget">
-												<td valign="top"  id="CodeChapitre1" align="center">
-														<html:text property="identification.projectCode" size="11" styleId="CodeChapitreField" onkeyup="codeChapitreRules.check();"/>
-												</td>
-											</field:display>
-										
-											<field:display name="FY" feature="Budget">
-												<td valign="top"  id="FY1" align="center"  >
-														<html:text property="identification.FY" size="12"/>
-												</td>
-											</field:display>
-											
-											<field:display name="Vote" feature="Budget">
-												<td valign="top"  id="Vote1" align="center">
-													<html:text property="identification.vote" size="12"/>
-												</td>	
-											</field:display>
-											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top"  id="Sub-Vote1" align="center" >
-												<html:text property="identification.subVote" size="12"/>
 											</td>
-											</field:display>
-											<field:display name="Sub-Program" feature="Budget">
-												<td valign="top" id="Sub-Program1" align="center" >
-													<html:text property="identification.subProgram" size="12"/>
-												</td>
-											</field:display>
-											<field:display name="Project Code" feature="Budget">
-												<td valign="top" id="ProjectCode1" align="center" >
-													<html:text property="identification.projectCode" size="12"/>
-												</td>
-											</field:display>	
-										</tr>
-										<tr>
-											<field:display name="Imputation" feature="Budget">
-												<td valign="top"  id="Imputation2" align="center" >
-														<span id="ImputationSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											
-											<field:display name="Code Chapitre" feature="Budget">
-												<td valign="top"  id="CodeChapitre2" align="center">
-													<span id="CodeChapitreSpan">&nbsp;</span>
-												</td>	
-											</field:display>
-											
-											<field:display name="FY" feature="Budget">
-												<td valign="top"  id="FY2" align="center"  >
-														<span id="FYSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											
-											<field:display name="Vote" feature="Budget">
-												<td valign="top"  id="Vote2" align="center">
-													<span id="VoteSpan">&nbsp;</span>
-												</td>	
-											</field:display>
-											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top"  id="Sub-Vote2" align="center">
-												<span id="SubVoteSpan">&nbsp;</span>
+											<td align="right">
+												<html:text property="identification.projectCode" size="18" styleClass="inp-text"/>
 											</td>
-											</field:display>
-											<field:display name="Sub-Program" feature="Budget">
-												<td valign="top" id="Sub-Program2" align="center">
-													<span id="SubProgramSpan">&nbsp;</span>
-												</td>
-											</field:display>
-											<field:display name="Project Code" feature="Budget">
-												<td valign="top" id="ProjectCode2" align="center">
-													<span id="ProjectCodeSpan">&nbsp;</span>
-												</td>
-											</field:display>	
 										</tr>
-												
-												
-											 <tr id="CodeChapitreDrop">
-											 <td>
-											<field:display name="Code Chapitre Dropdown" feature="Budget">										
-											 <html:select property="identification.chapterYear" onchange="submitAfterSelectingChapterYear();">
+									</field:display>
+								 <tr id="CodeChapitreDrop">
+									<field:display name="Code Chapitre Dropdown" feature="Budget">
+										<td>										
+											 <html:select property="identification.chapterYear" styleClass="inp-text" onchange="submitAfterSelectingChapterYear();">
 											 	<html:option value="0"><digi:trn>Select Code Year</digi:trn></html:option>
 											 	<html:optionsCollection property="identification.chapterYears" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
-											 
+										</td>
+										<td>
 											<logic:present name="aimEditActivityForm" property="identification.chapterCodes"> 
-											<html:select property="identification.chapterCode">
+											<html:select property="identification.chapterCode" styleClass="inp-text">
 											 	<html:option value="0">Select Code Chapitre</html:option>
 											 	<html:optionsCollection property="identification.chapterCodes" value="wrappedInstance" label="wrappedInstance"/>
 											 </html:select>
 											 </logic:present>
-											 </field:display>
-											</td>
-											</tr>
-											</table>
+										</td>
+									</field:display>
+								</tr>
+							</table>
 											<!-- Budget classification -->
 											<field:display name="Budget Classification" feature="Budget">		
 											<tr bgcolor="#ffffff">
@@ -921,11 +884,14 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-													<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center">
+													<table class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
                                                   		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
+                                                  			<td width="75">
+                                                  				<digi:trn>Sector</digi:trn>
+                                                  			</td>
 		                                                    <td>
-		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" >
+		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" style="max-width:250; min-width:250;">
 		                                                    		<html:option value="0"><digi:trn>Select</digi:trn></html:option>
 		                                                    		<html:optionsCollection name="aimEditActivityForm" property="identification.budgetsectors" value="idsector" label="sectorname"/>
 		                                                    	</html:select>
@@ -934,8 +900,11 @@ target.style.cursor = "default"
 		                                                 </field:display>
 		                                                 <field:display name="Budget Organization" feature="Budget">
 		                                                 <tr>
-		                                                 	<td>
-		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedorg" styleId="budgetorg" onchange="getBudgetOptions(this.value,'depselect')">
+		                                                 	<td width="75" id="budgetorg1">
+                                                  				<digi:trn>Organization</digi:trn>
+                                                  			</td>
+		                                                    <td>
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedorg" styleId="budgetorg" onchange="getBudgetOptions(this.value,'depselect')" style="max-width:250; min-width:250;">
       																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetorgs" value="ampOrgId" label="name"/>
     															</html:select>
@@ -944,8 +913,11 @@ target.style.cursor = "default"
 		                                                 </field:display>
 		                                                 <field:display name="Budget Department" feature="Budget">
 		                                                <tr>
+		                                                    <td width="75" id="budgetdepart1">
+                                                  				<digi:trn>Department</digi:trn>
+                                                  			</td>
 		                                                    <td>
-		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selecteddepartment" styleId="budgetdepart">
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selecteddepartment" styleId="budgetdepart" style="max-width:250; min-width:250;">
       																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetdepartments" value="id" label="name"/>
     															</html:select>
@@ -954,8 +926,11 @@ target.style.cursor = "default"
     													</field:display>
     													<field:display name="Budget Program" feature="Budget">
     													<tr>
-    														<td>
-		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedprogram" styleId="budgetprog">
+    														<td width="75" id="budgetprog1">
+                                                  				<digi:trn>Program</digi:trn>
+                                                  			</td>
+		                                                    <td>
+		                                                    	<html:select  name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedprogram" styleId="budgetprog" style="max-width:250; min-width:250;">
       																<html:option value="0"><digi:trn>Select</digi:trn></html:option>
       																<html:optionsCollection name="aimEditActivityForm" property="identification.budgetprograms" value="ampThemeId" label="name"/>
     															</html:select>

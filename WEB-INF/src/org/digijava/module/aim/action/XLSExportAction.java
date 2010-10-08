@@ -199,7 +199,7 @@ public class XLSExportAction extends Action {
 			    
 			    translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
 				translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-			}catch (WorkerException e){;}
+			}catch (WorkerException e){e.printStackTrace();}
 			
 			String translatedCurrency = "";
 			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
@@ -268,57 +268,60 @@ public class XLSExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		cell=row.createCell(colId.shortValue());
-		if (reportForm.getLogoOptions().equals("0")) {//disabled
-			// do nothing 
-		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
-			if (reportForm.getLogoPositionOptions().equals("0")) {//header
-				// see startPage
-			} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
-				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
-				String urlPrefix = request.getRequestURL().substring(0, end);
-				//								
-				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
-			    byte[] bytes = IOUtils.toByteArray(is);
-			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
-			    is.close();
-			    // ajout de l'image sur l'ancre ( lig, col )  
-			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
-			    ancreImg.setCol1(colId.shortValue());
-			    ancreImg.setRow1(rowId.shortValue());
-			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
-			    // redim de l'image
-			    Img.resize();
-			}				
-		}
-		if (reportForm.getStatementOptions().equals("0")) {//disabled
-			// do nothing 
-		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
-			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("1"))) { 
-				// creation d'une nouvelle cellule pour le statement	
-				grdx.makeColSpan(rd.getTotalDepth(),false);	
-				rowId.inc();
-				colId.reset();
-				row=sheet.createRow(rowId.shortValue());
-				cell=row.createCell(colId.shortValue());						
+		if(reportForm!=null && reportForm.getLogoOptions() !=null)
+			if (reportForm.getLogoOptions().equals("0")) {//disabled
+				// do nothing 
+			} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
+				if (reportForm.getLogoPositionOptions().equals("0")) {//header
+					// see startPage
+				} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
+					int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
+					String urlPrefix = request.getRequestURL().substring(0, end);
+					//								
+					InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
+				    byte[] bytes = IOUtils.toByteArray(is);
+				    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+				    is.close();
+				    // ajout de l'image sur l'ancre ( lig, col )  
+				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+				    ancreImg.setCol1(colId.shortValue());
+				    ancreImg.setRow1(rowId.shortValue());
+				    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+				    // redim de l'image
+				    Img.resize();
+				}				
 			}
-			String stmt = "";
-			try {
-				//TODO TRN: key is all right but if possible replace with default text. or delete this todo tag
-				stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
-			} catch (WorkerException e) {
-			    e.printStackTrace();}
-			stmt += " " + FeaturesUtil.getCurrentCountryName();
-			if (reportForm.getDateOptions().equals("0")) {//disabled
-				// no date
-			} else if (reportForm.getDateOptions().equals("1")) {//enable		
-				stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
-			}				 	                	                
-			if (reportForm.getStatementPositionOptions().equals("0")) {//header		
-				//
-			} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
-				cell.setCellValue(stmt);  
-			}				
-		}
+		if(reportForm!=null && reportForm.getStatementOptions() != null)
+			if (reportForm.getStatementOptions().equals("0")) {//disabled
+				// do nothing 
+			} else 
+				if (reportForm.getStatementOptions().equals("1")) {//enabled										
+					if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("1"))) { 
+						// creation d'une nouvelle cellule pour le statement	
+						grdx.makeColSpan(rd.getTotalDepth(),false);	
+						rowId.inc();
+						colId.reset();
+						row=sheet.createRow(rowId.shortValue());
+						cell=row.createCell(colId.shortValue());						
+					}
+					String stmt = "";
+					try {
+						//TODO TRN: key is all right but if possible replace with default text. or delete this todo tag
+						stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
+					} catch (WorkerException e) {
+					    e.printStackTrace();}
+					stmt += " " + FeaturesUtil.getCurrentCountryName();
+					if (reportForm.getDateOptions().equals("0")) {//disabled
+						// no date
+					} else if (reportForm.getDateOptions().equals("1")) {//enable		
+						stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+					}				 	                	                
+					if (reportForm.getStatementPositionOptions().equals("0")) {//header		
+						//
+					} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
+						cell.setCellValue(stmt);  
+					}				
+				}
 	    wb.write(response.getOutputStream());
 	    
 		}else{

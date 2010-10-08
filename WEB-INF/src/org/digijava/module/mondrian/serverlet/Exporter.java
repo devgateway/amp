@@ -176,7 +176,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							for (int i = 0; i < rowslist.getLength(); i++) {
 								HSSFRow row = wb.getSheet("data").createRow((short) (i));
 								NodeList rownode = rowslist.item(i).getChildNodes();
-								
+								int coloffset = 0;
 								for (int j = 0; j < rownode.getLength(); j++) {
 									Node currentnode = rownode.item(j);
 									int rowspan=0;
@@ -184,37 +184,62 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 									if (currentnode.getNodeName().equalsIgnoreCase("corner")){
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										if (colspan >1){
+										if (rowspan >1 && colspan<=1){
+											helper.addMerge(i, j, rowspan-1, j);
+											for (int k = i; k < rowspan; k++) {
+												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
+													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
+													Attr offset = document.createAttribute("offset");
+													offset.setNodeValue("1");
+													if (element.getParentNode()!=currentnode.getParentNode()){
+														element.setAttributeNode(offset);
+													}
+												}
+											}
+										}else if (colspan >1 && rowspan<=1){
+											helper.addMerge(i, j, i, colspan-1);
+											coloffset = colspan;
+										}else if (colspan >1 && rowspan>1){
 											helper.addMerge(i, j, rowspan-1, colspan-1);
 											for (int k = i; k < rowspan; k++) {
 												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
 													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
 													Attr offset = document.createAttribute("offset");
 													offset.setNodeValue(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-													element.setAttributeNode(offset);
+													if (element.getParentNode()!=currentnode.getParentNode()){
+														element.setAttributeNode(offset);
+													}
 												}
 											}
 										}
-									}else if (currentnode.getNodeName().equalsIgnoreCase("column-heading")){
-										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
-										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										if (colspan >1){
-											//Temporal Fix for AMP-6656 TODO :Review the exportation process.
-											if (i>rowspan)rowspan = i;
-											if (j>colspan)rowspan = j;
-											helper.addMerge(i, j, rowspan, colspan);
-										}
+										
+										
+									}else if (currentnode.getNodeName().equalsIgnoreCase("column-heading")|| 
+													currentnode.getNodeName().equalsIgnoreCase("heading-heading")){
 										int colid =j;
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
 										}
+										if (coloffset>0){
+											colid = colid + coloffset; 
+										}
+										
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										String style = "column-heading-"+ currentnode.getAttributes().getNamedItem("style").getNodeValue();
+										if (colspan >1){
+											helper.addMerge(i, colid, i, colspan+colid-1);
+											coloffset =coloffset + colspan-1;
+										}
+										
 										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
-										helper.addCaption(text, colid, row);
+										helper.addCaption(text, colid, row,style);
 										
 									}else if (currentnode.getNodeName().equalsIgnoreCase("row-heading")){
 										int colid =j;
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										String style = "row-heading-"+ currentnode.getAttributes().getNamedItem("style").getNodeValue();
 										if (rowspan >1){
 											helper.addMerge(i, j, (rowspan+i)-1, j);
 											for (int k = i+1; k < rowspan+i; k++) {
@@ -237,32 +262,20 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
 										}
 										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
-										helper.addCaption(text, colid, row);
-										
-									}else if (currentnode.getNodeName().equalsIgnoreCase("heading-heading")){
-										int colid =j;
-										if(currentnode.getAttributes().getNamedItem("offset")!=null){
-											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
-										}
-										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
-										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										
-										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
-										helper.addCaption(text, colid, row);
-										
+										helper.addCaption(text, colid, row,style);
+									
 									}else if (currentnode.getNodeName().equalsIgnoreCase("cell")){
 										int colid =j;
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
 										}
+										String style = currentnode.getAttributes().getNamedItem("style").getNodeValue();
 										if(currentnode.getAttributes().getNamedItem("rawvalue")!=null){
-											helper.addCell(currentnode.getAttributes().getNamedItem("rawvalue").getNodeValue(), colid, row);
+											helper.addCell(currentnode.getAttributes().getNamedItem("rawvalue").getNodeValue(), colid, row,style);
 										}else{
-											helper.addCell("0", colid, row);
+											helper.addCell("0", colid, row,style);
 										}
 									}
-									
-									
 										sheet.autoSizeColumn((short)j);
 									}
 								}

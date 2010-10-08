@@ -5,10 +5,8 @@ package org.digijava.module.mondrian.serverlet;
  * 
  */
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 
-import org.apache.commons.lang.exception.NestableException;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -16,8 +14,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.contrib.HSSFRegionUtil;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
-import org.digijava.module.aim.helper.FormatHelper;
 
 public class ExporterHelper {
 
@@ -29,7 +27,7 @@ public class ExporterHelper {
 		this.wb = wb;
 	}
 
-	public void addCell(String str, int colid, HSSFRow row) {
+	public void addCell(String str, int colid, HSSFRow row,String style) {
 		HSSFCell cell;
 		cell = row.createCell((short) colid);
 		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
@@ -41,15 +39,29 @@ public class ExporterHelper {
 			e.printStackTrace();
 		}
 		cell.setCellValue(val);
-		cell.setCellStyle(getCellSt()); 
+		if (style.equalsIgnoreCase("even")){
+			cell.setCellStyle(getCellSteven());
+		}else if (style.equalsIgnoreCase("odd")){
+			cell.setCellStyle(getCellStOdd());
+		}else{
+			cell.setCellStyle(getCellSt());
+		}
 	}
 
-	public void addCaption(String str, int colid,HSSFRow row) {
+	public void addCaption(String str, int colid,HSSFRow row,String style) {
 		HSSFCell cell;
 		cell = row.createCell((short) colid);
 		cell.setCellType(HSSFCell.CELL_TYPE_STRING);
 		cell.setCellValue(str);
-		cell.setCellStyle(getRowHeadingSt());
+		
+		if (style.equalsIgnoreCase("row-heading-even")){
+			cell.setCellStyle(getCellSteven());
+		}else if (style.equalsIgnoreCase("row-heading-odd")){
+			cell.setCellStyle(getCellStOdd());
+		}else{
+			cell.setCellStyle(getCellSt());
+		}
+		
 	}
 
 	public void addMerge(int rowfrom, int colfrom, int rowto, int colto) {
@@ -97,4 +109,39 @@ public class ExporterHelper {
 		dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);
 		return dataitem;
 	}
+	
+	protected HSSFCellStyle getCellStOdd() {
+		HSSFFont fdataitem = wb.createFont();
+		fdataitem.setFontName("Arial Unicode MS");
+		fdataitem.setFontHeightInPoints((short) 8);
+		fdataitem.setBoldweight(fdataitem.BOLDWEIGHT_NORMAL);
+		HSSFCellStyle dataitem = wb.createCellStyle();
+		dataitem.setFont(fdataitem);
+		dataitem.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		dataitem.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);;
+		dataitem.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		return dataitem;
+	}
+	
+	protected HSSFCellStyle getCellSteven() {
+		HSSFFont fdataitem = wb.createFont();
+		fdataitem.setFontName("Arial Unicode MS");
+		fdataitem.setFontHeightInPoints((short) 8);
+		fdataitem.setBoldweight(fdataitem.BOLDWEIGHT_NORMAL);
+		HSSFCellStyle dataitem = wb.createCellStyle();
+		dataitem.setFont(fdataitem);
+		dataitem.setFillForegroundColor(HSSFColor.WHITE.index);
+		dataitem.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+		dataitem.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		dataitem.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);	
+		return dataitem;
+	}
+	
 }

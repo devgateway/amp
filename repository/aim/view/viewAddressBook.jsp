@@ -198,11 +198,8 @@
 	border-top: 2px solid #222E5D;
 	border-left: 1px solid #222E5D;
 	border-right: 1px solid #222E5D;
+    border-bottom: 1px solid #222E5D;
 	padding: 2px 4px 2px 4px;
-}
-html>body #main {
-	width:970px;
-	border: 2px solid #222E5D;
 }
 </style>
 
@@ -212,17 +209,17 @@ html>body #main {
 
 <!-- Individual YUI JS files --> 
 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script>
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datatable-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/json-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/event-min.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datatable-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/json-min.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/event-min.js"></script>
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/paginator-min.js"></script>
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/container-min.js"></script>
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datasource-min.js"></script>
- 
+  
 
 	<style>
 		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
@@ -284,7 +281,7 @@ html>body #main {
 		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true, width: 100},
 		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false, width: 100},
 		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false, width: 100},
-		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 50, formatter:this.formatActions,className:"ignore"}
+		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
 		  
 		        var div = document.getElementById('errors');
@@ -361,14 +358,26 @@ html>body #main {
 					if (column.key == 'name' || column.key == 'email' || column.key == 'organizations' || column.key == 'phones' || column.key == 'faxes') {
 						var record = this.getRecord(target);
 						var tooltipText = record.getData(column.key);
-						
-						if(tooltipText!=null && tooltipText.length > 0){
 
-							var xy = [parseInt(oArgs.event.clientX,10) + 10 ,parseInt(oArgs.event.clientY,10) + 10 ];
+                        if(tooltipText!=null && tooltipText.length > 0){
+                            var event=oArgs.event;
+                            var x = 0;
+                            var y = 0;
+
+                            if (document.all) { //IE
+                                x = event.clientX + document.body.scrollLeft;
+                                y = event.clientY + document.body.scrollTop;
+                            }
+                            else {
+                                x = event.pageX;
+                                y = event.pageY;
+                            }
+							var xy = [x,y];
 
 							showTimer = window.setTimeout(function() {
 								tt.setBody(tooltipText);
-								tt.cfg.setProperty('xy',xy);
+                                tt.cfg.setProperty('xyoffset',[10,10]);
+                                tt.cfg.setProperty('xy',xy);
 								tt.show();
 								hideTimer = window.setTimeout(function() {
 									tt.hide();
@@ -518,7 +527,7 @@ html>body #main {
 					<tr>
 						<td noWrap width=100% vAlign="top" height="100%">
 						<digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">
-							<div id="main">
+							<div id="main" style="width:100%;">
 								<table bgColor="#ffffff" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 											<tr bgColor="#ffffff">
 												<td vAlign="top" width="100%">
@@ -526,7 +535,7 @@ html>body #main {
 														<tr><td>&nbsp;</td></tr>
 														<tr><td class="box-title" >
 															<!-- Table title -->
-															<div style="width:867px;">
+															<div style="width:100%;">
 																<table width="100%">
 																	<tr>
 																		<td width="5%">
@@ -569,10 +578,11 @@ html>body #main {
 														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>
-																<div class='yui-skin-sam'>
+                                                                <div class='yui-skin-sam'>
 									                            	<div id="dynamicdata" class="report"></div>                            	
 																	<div id="dt-pag-nav"></div>
 																	<div id="errors"></div>
+                                                                    <div id="tooltipsCtx"></div>
 																</div>
 															</td>
 														</tr>														

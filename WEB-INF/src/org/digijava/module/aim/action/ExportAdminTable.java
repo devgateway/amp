@@ -28,7 +28,7 @@ public class ExportAdminTable extends Action {
         response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=Export.xls");
         ExportTableForm exportForm=(ExportTableForm)form;
-        XLSExporter.resetStyles();
+ 
 		HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
 

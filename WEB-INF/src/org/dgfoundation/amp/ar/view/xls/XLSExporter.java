@@ -54,9 +54,9 @@ public abstract class XLSExporter extends Exporter {
 	 * due to the number of styles limitation in an 
 	 * excell sheet.
 	 */
-	protected static HSSFCellStyle regularStyle = null;
-	protected static HSSFCellStyle amountStyle = null;
-	protected static HSSFCellStyle highlightedStyle = null;
+	protected HSSFCellStyle regularStyle = null;
+	protected HSSFCellStyle amountStyle = null;
+	protected HSSFCellStyle highlightedStyle = null;
 	protected HSSFCellStyle hierarchyLevel1Style = null;
 	protected HSSFCellStyle hierarchyOtherStyle = null;
 	protected HSSFCellStyle amountHierarchyLevel1Style = null;
@@ -75,17 +75,17 @@ public abstract class XLSExporter extends Exporter {
 
 	protected HSSFWorkbook wb;
 	
-	public static void resetStyles() {
+	public void resetStyles() {
         regularStyle = null;
         amountStyle = null;
         highlightedStyle = null;
 	}
 
 	protected HSSFCell getRegularCell(HSSFRow row) {
-		HSSFCell cell = row.createCell(colId.shortValue());
-		HSSFCellStyle cellstyle = wb.createCellStyle();
-		cellstyle.cloneStyleFrom(this.getAmountStyle());
-		cell.setCellStyle(cellstyle);
+		HSSFCell cell = row.createCell((int)colId.shortValue());
+//		HSSFCellStyle cellstyle = wb.createCellStyle();
+//		cellstyle.cloneStyleFrom(this.getAmountStyle());
+		cell.setCellStyle(this.getAmountStyle());
 		return cell;
 	}
 
@@ -99,9 +99,9 @@ public abstract class XLSExporter extends Exporter {
 
 	protected HSSFCell getCell(HSSFRow row, HSSFCellStyle style) {
 		HSSFCell cell = row.createCell(colId.intValue());
-		HSSFCellStyle cellstyle = wb.createCellStyle();
-		cellstyle.cloneStyleFrom(style);
-		cell.setCellStyle(cellstyle);
+//		HSSFCellStyle cellstyle = wb.createCellStyle();
+//		cellstyle.cloneStyleFrom(style);
+		cell.setCellStyle(style);
 		return cell;
 	}
 

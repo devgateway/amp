@@ -57,7 +57,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationStaffExport.xls");
 
-        XLSExporter.resetStyles();
+        //XLSExporter.resetStyles();
 
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();
@@ -167,7 +167,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationBudgetExport.xls");
 
-        XLSExporter.resetStyles();
+       // XLSExporter.resetStyles();
 
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();
@@ -306,7 +306,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationContactExport.xls");
 
-        XLSExporter.resetStyles();
+ //       XLSExporter.resetStyles();
 
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();
@@ -496,7 +496,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationGeneraInformationExport.xls");
 
-        XLSExporter.resetStyles();
+        //XLSExporter.resetStyles();
 
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();

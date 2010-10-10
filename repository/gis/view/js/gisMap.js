@@ -66,8 +66,7 @@
 		jQuery.fn.getImageMap = function() {
 			var mapLevel = jQuery.fn.getRadioValue();
       if (mapLevel == null) mapLevel = 2;
-      
-			var indYear = $("#indicatorYearCombo").val();
+      		var indYear = $("#indicatorYearCombo").val();
 			var requestURL = "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&width=" + canvasWidth + "&height=" + canvasHeight;
 			if (!imageMapLoaded) {
 				actionGetImageMap = true;
@@ -717,7 +716,7 @@
 			jQuery.fn.initNavCursorSize();
 			imageMapLoaded = false;
 			$("#testMap").attr({'src': newUrl});
-			jQuery.fn.getImageMap();
+			//jQuery.fn.getImageMap();
 			$("#mapZoom15").removeClass("navVisible");
 			$("#mapZoom15").addClass("navHiden");
 			$("#mapZoom10").removeClass("navHiden");
@@ -740,7 +739,7 @@
 			jQuery.fn.initNavCursorSize();
 			imageMapLoaded = false;
 			$("#testMap").attr({'src': newUrl});
-			jQuery.fn.getImageMap();
+			//jQuery.fn.getImageMap();
 			$("#mapZoom10").removeClass("navVisible");
 			$("#mapZoom10").addClass("navHiden");
 			$("#mapZoom15").removeClass("navHiden");
@@ -764,7 +763,7 @@
 			jQuery.fn.initNavCursorSize();
 			imageMapLoaded = false;
 			$("#testMap").attr({'src': newUrl});
-			jQuery.fn.getImageMap();
+			//jQuery.fn.getImageMap();
 			$("#mapZoom10").removeClass("navVisible");
 			$("#mapZoom10").addClass("navHiden");
 			$("#mapZoom20").removeClass("navHiden");
@@ -787,7 +786,7 @@
 			jQuery.fn.initNavCursorSize();
 			imageMapLoaded = false;
 			$("#testMap").attr({'src': newUrl});
-			jQuery.fn.getImageMap();
+			//jQuery.fn.getImageMap();
 			$("#mapZoom10").removeClass("navVisible");
 			$("#mapZoom10").addClass("navHiden");
 			$("#mapZoom30").removeClass("navHiden");

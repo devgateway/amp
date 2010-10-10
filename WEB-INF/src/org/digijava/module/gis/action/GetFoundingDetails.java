@@ -378,8 +378,6 @@ public class GetFoundingDetails extends Action {
                             root.addElement(regionData);
                         }
                         segmendDataInfo.output(sos);
-                        sos.flush();
-                        sos.close();
                 } else if (action.equalsIgnoreCase("getSectorDonorsXML")) {
                     response.setCharacterEncoding("UTF-8");
                     response.setContentType("text/xml");

@@ -228,7 +228,6 @@ function deleteFlag(id) {
         <tr>
 
           <digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
-
             <td noWrap width=100% vAlign="top">
 
               <table width=730 cellpadding=1 cellSpacing=1 border=0>

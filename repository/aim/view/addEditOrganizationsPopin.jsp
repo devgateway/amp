@@ -186,7 +186,7 @@ function generateFields(type){
             "tempNumResults="   +document.getElementsByName("tempNumResults")[0].value+"&"+
             "sectorReset="      +document.getElementsByName("sectorReset")[0].value;
         if(document.getElementsByName("sectorScheme")[0]!=null){
-            "&sectorScheme="+document.getElementsByName("sectorScheme")[0].value;
+           ret+="&sectorScheme="+document.getElementsByName("sectorScheme")[0].value;
         }
 
     }
@@ -222,9 +222,14 @@ function generateFields(type){
 //}
 
 function selectSector() {
+    var scheme=document.getElementsByName("sectorScheme")[0];
+    var parms="edit=true";
+    if(scheme!=null&&scheme.value!='-1'){
+        parms+='&sectorScheme='+scheme.value
+    }
     <digi:context name="selectSec" property="context/aim/selectSectors.do" />
     var url = "<%= selectSec%>";
-    YAHOO.util.Connect.asyncRequest("POST", url, callback, "edit=true");
+    YAHOO.util.Connect.asyncRequest("POST", url, callback, parms);
 }
 
 function searchSector() {

@@ -7,49 +7,68 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"%>
 
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/css/newamp.css"/>" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
+	
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
+	<%-- <script type="text/javascript" src=".<digi:file src='module/aim/scripts/logger/logger-min.js'/>">.</script> --%>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
+	
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" >.</script>
+	
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
+	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
+	
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility: hidden; position: absolute; z-index: 1000; top: -100;"></DIV>
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <!-- script for tree-like view (drilldown reports) -->
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- dynamic drive ajax tabs -->
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
 
-<script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
-<script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
 <!-- dynamic tooltip -->
-<script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript"
-	src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet"
-	href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css" />
-<link rel="stylesheet" type="text/css"
-	href="<digi:file src='module/aim/css/filters.css'/>">
+<link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css" />
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
+
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+ <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
+ <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/treeview-min.js"></script>
+    
 
 <script type="text/javascript">
 	messageObj = new DHTMLSuite.modalMessage(); // We only create one object of this class
@@ -147,16 +166,11 @@
 }
 </style>
 
-<script type="text/javascript"
-	src="<digi:file src="script/yui/tabview-min.js"/>"></script>
-<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src='module/aim/scripts/filters/filters.js'/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src='module/aim/scripts/saveReports.js'/>"></script>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>"></script>
 
 <!-- END - For DHTML Tab View of Filters -->
 
@@ -178,9 +192,10 @@
 		//var wrapper = document.getElementById('myFilterWrapper');
 		var wrapper = document;
 		var filter = document.getElementById('myFilter');
-		if (filter.parent != null)
+		if (filter.parent != null) {
 			filter.parent.removeChild(filter);
-		wrapper.appendChild(filter);
+		}
+		//wrapper.appendChild(filter);
 	};
 
 	var myPanel1 = new YAHOO.widget.Panel("new", {
@@ -252,15 +267,15 @@
 	function submitFilters() {
 		//alert('submitfilters');
         var filterForm = document.getElementsByName("parisIndicatorForm")[0];
-        filterForm.selectedStartYear.value = document.getElementsByName("selectedStartYear")[0].value;
-        filterForm.selectedEndYear.value = document.getElementsByName("selectedEndYear")[0].value;
-        filterForm.selectedCalendar.value = document.getElementsByName("selectedCalendar")[0].value;
-        filterForm.selectedCurrency.value = document.getElementsByName("selectedCurrency")[0].value;
+        filterForm.selectedStartYear.value = document.getElementById("selectedStartYear").options[document.getElementById("selectedStartYear").selectedIndex].value;
+        filterForm.selectedEndYear.value = document.getElementById("selectedEndYear").options[document.getElementById("selectedEndYear").selectedIndex].value;
+        filterForm.selectedCalendar.value = document.getElementById("selectedCalendar").options[document.getElementById("selectedCalendar").selectedIndex].value;
+        filterForm.selectedCurrency.value = document.getElementById("selectedCurrency").options[document.getElementById("selectedCurrency").selectedIndex].value;
         
         //Donors
         var txtSelectedValuesObj = filterForm.selectedDonors;
         var selectedArray = new Array();
-        var selObj = document.getElementsByName("selectedDonors")[0];
+        var selObj = document.getElementById("selectedDonors");
         var i;
         var count = 0;
         for (i=0; i<selObj.options.length; i++) {
@@ -274,7 +289,7 @@
         //groups
         var txtSelectedValuesObj = filterForm.selectedDonorGroups;
         var selectedArray = new Array();
-        var selObj = document.getElementsByName("selectedDonorGroups")[0];
+        var selObj = document.getElementById("selectedDonorGroups");
         var i;
         var count = 0;
         for (i=0; i<selObj.options.length; i++) {
@@ -288,7 +303,7 @@
         //status
         var txtSelectedValuesObj = filterForm.selectedStatuses;
         var selectedArray = new Array();
-        var selObj = document.getElementsByName("selectedStatuses")[0];
+        var selObj = document.getElementById("selectedStatuses");
         var i;
         var count = 0;
         for (i=0; i<selObj.options.length; i++) {
@@ -302,7 +317,7 @@
         //instruments
         var txtSelectedValuesObj = filterForm.selectedFinancingIstruments;
         var selectedArray = new Array();
-        var selObj = document.getElementsByName("selectedFinancingIstruments")[0];
+        var selObj = document.getElementById("selectedFinancingIstruments");
         var i;
         var count = 0;
         for (i=0; i<selObj.options.length; i++) {
@@ -316,7 +331,7 @@
         //sectors
         var txtSelectedValuesObj = filterForm.selectedSectors;
         var selectedArray = new Array();
-        var selObj = document.getElementsByName("selectedSectors")[0];
+        var selObj = document.getElementById("selectedSectors");
         var i;
         var count = 0;
         for (i=0; i<selObj.options.length; i++) {
@@ -332,7 +347,7 @@
 	}
 
 	function change_donor() {
-        var selObj = document.getElementsByName("selectedDonorGroups")[0];
+        var selObj = document.getElementById("selectedDonorGroups");
         if(selObj.options[0].selected) {
             for (i = 1; i < selObj.options.length; i++) {
                 selObj.options[i].selected = false;

@@ -44,6 +44,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	String categoryName	= null;
 	
 	String firstLine	= null;
+	String styleId = null;
 	
 	private Long tag			= null;
 	
@@ -193,9 +194,9 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				
 				/* Deciding which type of html input to use for rendering the html page */
 				if ( this.getListView() )
-						this.printListView(ampCategoryValues, isMultiselect, valueId, valueIdsColl);
+						this.printListView(ampCategoryValues, isMultiselect, valueId, valueIdsColl, styleId);
 				else 
-						this.printBoxView( ampCategoryValues, isMultiselect, valueId, valueIdsColl);
+						this.printBoxView( ampCategoryValues, isMultiselect, valueId, valueIdsColl, styleId);
 				
 			}
 			else {
@@ -212,13 +213,14 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		this.reset();
 		return EVAL_PAGE;
 	}
-	private void printListView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl) throws Exception {
+	private void printListView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl, String styleId) throws Exception {
 		HttpServletRequest request		= (HttpServletRequest)pageContext.getRequest();
 		String classProperty			= "";
 		String fLine					= firstLine;
 		
 		JspWriter out					= pageContext.getOut();
 		String multiselectProperty		= "";
+		String styleIdProperty = "";
 		
 		String firstLineSelectedProperty	= "";
 		
@@ -227,10 +229,14 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		if (isMultiselect) 
 			multiselectProperty	= " multiple='multiple' size='"+size+"'";
 		
+		if (styleId != null) {
+			styleIdProperty = " id='" + styleId + "'";
+		}
+		
 		
 		Iterator iterator			= ampCategoryValues.iterator();
 		String nameField			= (property!=null)?property:name;
-		out.println("<select name='"+nameField+"' "+classProperty+multiselectProperty+outerDynamicAttributes+">");
+		out.println("<select name='"+nameField+"' "+classProperty+multiselectProperty+outerDynamicAttributes+styleIdProperty+">");
 		
 		if ( (valueId != null && valueId.longValue() == 0) || 
 				( valueIdsColl != null && valueIdsColl.contains(new Long(0)) ) )
@@ -280,11 +286,12 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		out.println("</select>");
 	}
 	
-	private void printBoxView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl) throws Exception {
+	private void printBoxView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl, String styleId) throws Exception {
 		HttpServletRequest request		= (HttpServletRequest)pageContext.getRequest();
 		String classProperty			= "";
 		String typeProperty				= " type='radio'";
 		String nameProperty				= " name='"+property+"'";
+		String styleIdProperty			= "";
 
 		JspWriter out					= pageContext.getOut();
 
@@ -294,6 +301,10 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			classProperty	= " class='"+ styleClass + "'";
 		if (isMultiselect) {
 			typeProperty			= " type='checkbox'";
+		}
+		
+		if (styleId != null) {
+			styleIdProperty = " id='" + styleId + "'";
 		}
 		
 		out.println("<table " + outerDynamicAttributes + ">");
@@ -387,6 +398,12 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	}
 	public Long getTag() {
 		return tag;
+	}
+	public String getStyleId() {
+		return styleId;
+	}
+	public void setStyleId(String styleId) {
+		this.styleId = styleId;
 	}
 	
 	

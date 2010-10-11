@@ -39,7 +39,7 @@
                                             <b><digi:trn key="rep:filter:CalendarTitle">Calendar</digi:trn></b>
                                         </td>
                                         <td colspan="4">
-                                            <html:select property="selectedCalendar" styleClass="dr-menu">
+                                            <html:select property="selectedCalendar" styleClass="dr-menu" styleId="selectedCalendar">
                                                 <logic:notEmpty name="parisIndicatorForm" property="calendars">
                                                     <html:optionsCollection property="calendars" value="ampFiscalCalId" label="name"/>
                                                 </logic:notEmpty>
@@ -53,7 +53,7 @@
                                         </td>
                                         <td colspan="4">
                                             <%String selected = "";%>
-                                            <html:select property="selectedStartYear" styleClass="dr-menu">
+                                            <html:select property="selectedStartYear" styleClass="dr-menu" styleId="selectedStartYear">
                                                 <%for(int i = 0; i < sy.length; i++) {%>
                                                     <%selected = (sy[i] == form.getSelectedStartYear()) ? "selected='selected'" : "";%>
                                                     <option value='<%=sy[i]%>' <%=selected%>><%=sy[i]%></option>
@@ -67,7 +67,7 @@
                                             <b><digi:trn key="rep:filter:EndYear">End Year</digi:trn></b>&nbsp;
                                         </td>
                                         <td colspan="4">
-                                            <html:select property="selectedEndYear" styleClass="dr-menu">
+                                            <html:select property="selectedEndYear" styleClass="dr-menu" styleId="selectedEndYear">
                                                 <%for(int i = 0; i < sy.length; i++) {%>
                                                     <%selected = (sy[i] == form.getSelectedEndYear()) ? "selected='selected'" : "";%>
                                                     <option value='<%=sy[i]%>' <%=selected%>><%=sy[i]%></option>
@@ -86,7 +86,7 @@
                                     </tr>
                                     <tr bgcolor="#EEEEEE">
                                         <td colspan="4">
-                                            <html:select property="selectedCurrency" name="parisIndicatorForm" styleClass="dr-menu" >
+                                            <html:select property="selectedCurrency" name="parisIndicatorForm" styleClass="dr-menu" styleId="selectedCurrency">
                                                 <logic:notEmpty name="parisIndicatorForm" property="currencyTypes">
                                                     <html:optionsCollection name="parisIndicatorForm" property="currencyTypes" value="currencyCode" label="currencyName"/>
                                                 </logic:notEmpty>
@@ -99,7 +99,7 @@
                                     </tr>
                                     <tr bgcolor="#EEEEEE">
                                         <td colspan="5">
-                                            <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedFinancingIstruments" name="parisIndicatorForm"
+                                            <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedFinancingIstruments" name="parisIndicatorForm" styleId="selectedFinancingIstruments"
                                                 keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" multiselect="true" size="6"/>
                                         </td>
                                     </tr>        
@@ -124,7 +124,7 @@
                                     </tr>
                                     <tr bgcolor="#EEEEEE">
                                         <td colspan="5" styleClass="inp-text">
-                                            <html:select property="selectedDonorGroups" name="parisIndicatorForm" styleClass="dr-menu" size="8" multiple="true">
+                                            <html:select property="selectedDonorGroups" name="parisIndicatorForm" styleClass="dr-menu" size="8" multiple="true" styleId="selectedDonorGroups">
                                                 <html:option value="0"><digi:trn key="aim:allGroups">All Groups</digi:trn></html:option>
                                                 <logic:notEmpty name="parisIndicatorForm" property="donorGroups">
                                                     <html:optionsCollection name="parisIndicatorForm" property="donorGroups" value="ampOrgGrpId" label="orgGrpName"/>
@@ -133,7 +133,7 @@
                                         </td>
                                         <td>&nbsp;</td>                                 
                                         <td colspan="5" styleClass="inp-text">
-                                            <html:select property="selectedDonors" size="6" style="width: 300px" styleClass="inp-text" multiple="true">
+                                            <html:select property="selectedDonors" size="6" style="width: 300px" styleClass="inp-text" multiple="true" styleId="selectedDonors">
                                                 <html:option value="0"><digi:trn key="aim:allDonors">All Donors</digi:trn></html:option>
                                                 <html:optionsCollection property="donors" value="ampOrgId" label="acronym" />
                                             </html:select>
@@ -157,14 +157,14 @@
                                     </tr>
                                     <tr bgcolor="#EEEEEE">
                                         <td colspan="5" styleClass="inp-text">
-                                            <html:select  property="selectedSectors" size="8" style="width: 300px" styleClass="inp-text" multiple="true">
+                                            <html:select styleId="selectedSectors" property="selectedSectors" size="8" style="width: 300px" styleClass="inp-text" multiple="true">
                                                 <html:option value="0"><digi:trn key="aim:allSectors">All Sectors</digi:trn></html:option>
                                                 <html:optionsCollection property="sectors" value="ampSectorId" label="name" />
                                             </html:select>
                                         </td>
                                         <td>&nbsp;</td>                                 
                                         <td colspan="5" styleClass="inp-text">
-                                            <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedStatuses" name="parisIndicatorForm"
+                                            <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedStatuses" name="parisIndicatorForm" styleId="selectedStatuses"
                                                 keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>" multiselect="true" size="6"/>
                                         </td>
                                     </tr>

@@ -50,7 +50,7 @@ public class ShowCalendarView extends Action {
         
         Integer showPublicEvents = 0; 
         
-        if (calendarViewForm.getShowPublicEvents()!=null) {
+        if (calendarViewForm.getShowPublicEvents()!=null && calendarViewForm.getShowPublicEvents().length()>0) {
 			showPublicEvents = Integer.valueOf(calendarViewForm.getShowPublicEvents());
 		}
         

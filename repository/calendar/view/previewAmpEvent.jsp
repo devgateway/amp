@@ -298,6 +298,7 @@ function valid(value){
 									</td>
 								</tr>
 								<tr height="3px"><td colspan="2"></td></tr>
+                                <c:if test="${not empty calendarEventForm.ampCalendarId&&calendarEventForm.ampCalendarId!=0}" >
 								<tr>
 					              	<td>
 					              	</td>
@@ -307,8 +308,9 @@ function valid(value){
 										<input type="button" value="<digi:trn>Print</digi:trn>" style="width: 110px;" onclick="openPrinter();" />
 									</td>
 								</tr>
+                                </c:if>
 				            </c:if>
-							<c:if test="${sessionScope.currentMember.teamHead==true && (calendarEventForm.approve==0||calendarEventForm.approve==2)}">
+							<c:if test="${sessionScope.currentMember.teamHead==true && (calendarEventForm.approve==0||calendarEventForm.approve==2)&&(not empty calendarEventForm.ampCalendarId&&calendarEventForm.ampCalendarId!=0)}">
  	 	 	 					<tr>
 					              	<td>
 					              	</td>

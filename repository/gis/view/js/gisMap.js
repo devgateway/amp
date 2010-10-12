@@ -1120,6 +1120,7 @@
 
 	var isKeyPressed = false;
 	var initialOffsetX, initialOffsetY;
+	var initialClientOffsetX, initialClientOffsetY;
 
 	function navCursorKeyDown (evt) {
 		if (evt == null) {
@@ -1129,12 +1130,16 @@
 			evt.preventDefault();
 		}
 		isKeyPressed = true;
+		
 		if (evt.offsetX != null) {
 			initialOffsetX = evt.offsetX;
 			initialOffsetY = evt.offsetY;
+			
 		} else {
 			initialOffsetX = evt.layerX + 10;
 			initialOffsetY = evt.layerY + 10;
+			
+
 		}
 	}
 	
@@ -1145,58 +1150,47 @@
 	
 	
 	function navCursorOnMove (evt) {
-		center=false;
+		var containerPos = getDocumentOffsetX(document.getElementById("navMapContainer"));				
+		var containerXPos = containerPos.left;
+		var containerYPos = containerPos.top;
+		
+
 		if (evt == null) {
 			evt = window.event;
 		} else {
 			evt.stopPropagation();
 			evt.preventDefault();
 		}
+
 		
 		if (isKeyPressed) {
 			var pLeft = 0;
 			var pTop = 0;
-			
-			//Hot fix for the public center map, it has to be checked.
-			if (evt.pageX>=397){
-				center = true;
-			}
+
 			if (evt.x != null) {
-				if (center){
-					pLeft = evt.x - initialOffsetX+397; 
-					pTop = evt.y - initialOffsetY+57;
-				}else{
-					pLeft = evt.x - initialOffsetX; 
-					pTop = evt.y - initialOffsetY;
-				}
+					pLeft = evt.clientX + document.body.scrollLeft - initialOffsetX - 20;// + document.getElementById("navMapContainer").style.left; 
+					pTop = evt.clientY + document.body.scrollTop - initialOffsetY - 120;
 			} else {
-				if (center){
-					pLeft = evt.pageX - initialOffsetX - 397;
-					pTop = evt.pageY - initialOffsetY - 100 - 57;
-				}else{
-					pLeft = evt.pageX - initialOffsetX;
+					pLeft = evt.pageX - initialOffsetX;// + document.getElementById("navMapContainer").style.left;
 					pTop = evt.pageY - initialOffsetY - 100;
-				}
 				evt.stopPropagation();
 			}
 
-			if (pLeft >= 23 && pLeft -23 + navCursorWidth <= navigationWidth - 14) {
-				navAreaLeft = pLeft - 23;
-			} else if (pLeft < 23) {
+			if (pLeft >= containerXPos - 7 && pLeft - containerXPos + 7 + navCursorWidth <= navigationWidth - 14) {
+				navAreaLeft = pLeft - containerXPos + 7;
+			} else if (pLeft < containerXPos - 7) {
 				navAreaLeft = 0;
 			} else {
 				navAreaLeft = navigationWidth - navCursorWidth - 14;
 			}
 			
-			if (pTop >= 43 && pTop - 43 + navCursorHeight <= navigationHeight - 14) {
-				navAreaTop = pTop - 43;
-			} else if (pTop < 43) {
+			if (pTop >= containerYPos - 109 && pTop - containerYPos + 109 + navCursorHeight <= navigationHeight - 14) {
+				navAreaTop = pTop - containerYPos + 109;
+			} else if (pTop < containerYPos - 109) {
 				navAreaTop = 0;
 			} else {
 				navAreaTop = navigationHeight - navCursorHeight - 14;
 			}
-			
-			
 
 			document.getElementById("navCursor").style.left = navAreaLeft + 23 + "px";
 			document.getElementById("navCursor").style.top = navAreaTop + 43 + "px";
@@ -1279,4 +1273,22 @@
 		popup.focus();
 	}
 	
-	
+	var logged = false
+
+	function getDocumentOffsetX (domObject) {
+		var pos = {top: 0, left: 0}
+
+		var retX = 0;
+		var retY = 0;
+		
+		while (domObject.offsetParent != null) {
+			retX += domObject.offsetLeft;
+			retY += domObject.offsetTop;
+			
+			domObject = domObject.offsetParent;
+		}
+		logged = true;
+    pos.left = retX;
+    pos.top = retY;
+		return pos;
+	}

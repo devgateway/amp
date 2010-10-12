@@ -38,7 +38,10 @@ public class SelectCreateIndicators extends Action {
 		
 		IndicatorForm indForm = (IndicatorForm) form;
 		
-		if(request.getParameter("clear")!=null) indForm.setSearchkey(null);
+		if(request.getParameter("clear")!=null){
+            indForm.setSearchkey(null);
+            indForm.setSelectedIndicators(null);
+        }
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
 		AmpActivity activity=null;

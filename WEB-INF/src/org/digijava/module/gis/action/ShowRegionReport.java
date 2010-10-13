@@ -1,5 +1,16 @@
 package org.digijava.module.gis.action;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,34 +18,20 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.gis.util.DbUtil;
-import java.util.Calendar;
-import org.digijava.module.gis.form.GisRegReportForm;
-import org.apache.ecs.xml.XML;
-import java.util.Map;
-import org.digijava.module.aim.util.FeaturesUtil;
-import java.text.DecimalFormat;
-import org.apache.ecs.xml.XMLDocument;
-import java.text.NumberFormat;
-import org.digijava.module.gis.util.FundingData;
-import java.util.List;
-import java.util.Iterator;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import java.math.BigDecimal;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import java.util.HashMap;
-import java.util.Date;
-import org.digijava.module.gis.dbentity.GisMap;
-import java.util.Set;
-import java.util.ArrayList;
-import org.digijava.module.gis.util.ActivityLocationFunding;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import java.util.HashSet;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.gis.form.GisRegReportForm;
+import org.digijava.module.gis.util.ActivityLocationFunding;
+import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.gis.util.FundingData;
 
 
 /**
@@ -44,9 +41,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
  */
 public class ShowRegionReport extends Action {
 
-    private NumberFormat formatter = null;
-
-    @Override
+	@Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
@@ -85,10 +80,6 @@ public class ShowRegionReport extends Action {
                     getSectorId());
         }
 
-        String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                            "Default Number Format");
-            this.formatter = new DecimalFormat(numberFormat);
-
         Object[] fundingList = getFundingsForLocation(
                 gisRegReportForm.getRegCode(),
                 secFundings,
@@ -113,15 +104,9 @@ public class ShowRegionReport extends Action {
         }
 
         if (ammount != null) {
-
-
-
-                gisRegReportForm.setActualCommitmentsStr(formatter.format(ammount.
-                        getCommitment().intValue()));
-                gisRegReportForm.setActualDisbursementsStr(formatter.format(ammount.
-                        getDisbursement().intValue()));
-                gisRegReportForm.setActualExpendituresStr(formatter.format(ammount.
-                        getExpenditure().intValue()));
+        		gisRegReportForm.setActualCommitmentsStr(FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
+                gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
+                gisRegReportForm.setActualExpendituresStr(FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
 
             gisRegReportForm.setActivityLocationFundingList(ammount.
                     getActivityLocationFundingList());
@@ -255,10 +240,10 @@ public class ShowRegionReport extends Action {
                                                        getLocationPercentage() / 100f))));
 
                                     ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding(
-            fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-            fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-            fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                            activity);
+                                   		fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                   		fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                   		fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                        activity);
 
                                     activityLocationFunding.setDonorOrgs(donorOrg);
                                     activityLocationFunding.setTopSectors(topLevelSectorNames);
@@ -270,30 +255,24 @@ public class ShowRegionReport extends Action {
 
                                     if (activityLocationFunding.
                                             getCommitment().intValue()!= 0) {
-                                        activityLocationFunding.setFmtCommitment(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getCommitment().intValue()));
+                                        activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(
+                                        		(activityLocationFunding.getCommitment().doubleValue())));
                                     } else {
                                            activityLocationFunding.setFmtCommitment(null);
                                     }
 
                                     if (activityLocationFunding.
                                             getDisbursement().intValue() != 0) {
-                                        activityLocationFunding.setFmtDisbursement(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getDisbursement().intValue()));
+                                        activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
+                                                        activityLocationFunding.getDisbursement().doubleValue()));
                                     } else {
                                         activityLocationFunding.setFmtDisbursement(null);
                                     }
 
                                     if (activityLocationFunding.
                                             getExpenditure().intValue() != 0) {
-                                        activityLocationFunding.setFmtExpenditure(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getExpenditure().intValue()));
+                                        activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(activityLocationFunding.
+                                                        getExpenditure().doubleValue()));
                                     } else {
                                         activityLocationFunding.setFmtExpenditure(null);
                                     }
@@ -323,49 +302,37 @@ public class ShowRegionReport extends Action {
                                                 BigDecimal(loc.
                                                 getLocationPercentage() / 100f)));
 
-                                        ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding(
-            fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-            fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-            fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
-                                            activity);
+                                       ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding(
+                                    		   fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                    		   fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                    		   fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
+                                    		   activity);
                                         activityLocationFunding.setDonorOrgs(donorOrg);
                                         activityLocationFunding.setTopSectors(topLevelSectorNames);
                                         newVal.getActivityLocationFundingList().
-                                                add(activityLocationFunding);
-
-                                        if (activityLocationFunding.
-                                                getCommitment().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtCommitment(formatter.
-                                                                     format(activityLocationFunding.
-                                                                            getCommitment().intValue()));
+                                        add(activityLocationFunding);
+                                        
+                                        if (activityLocationFunding.getCommitment().intValue() != 0) {
+                                        	activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(activityLocationFunding.
+                                        			getCommitment().doubleValue()));
                                         } else {
                                             activityLocationFunding.
                                                     setFmtCommitment(null);
                                         }
-
-                                        if (activityLocationFunding.
-                                                getDisbursement().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtDisbursement(formatter.
-                                                                       format(activityLocationFunding.
-                                                                              getDisbursement().intValue()));
+                                        if (activityLocationFunding.getDisbursement().intValue() != 0) {
+                                            activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
+                                            		activityLocationFunding.getDisbursement().doubleValue()));
                                         } else {
                                             activityLocationFunding.
                                                     setFmtDisbursement(null);
                                         }
-
-                                        if (activityLocationFunding.
-                                                getExpenditure().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtExpenditure(formatter.
-                                                                      format(activityLocationFunding.
-                                                                             getExpenditure().intValue()));
+                                        if (activityLocationFunding.getExpenditure().intValue() != 0) {
+                                        	activityLocationFunding.setFmtExpenditure(FormatHelper.
+                                        			formatNumber(activityLocationFunding.getExpenditure().doubleValue()));
                                         } else {
                                             activityLocationFunding.
                                                     setFmtExpenditure(null);
                                         }
-
                                         locationFundingMap.put(regCode, newVal);
                                     }
                                 }
@@ -426,32 +393,22 @@ public class ShowRegionReport extends Action {
 
                                     if (activityLocationFunding.
                                             getCommitment().intValue() != 0) {
-                                        activityLocationFunding.setFmtCommitment(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getCommitment().intValue()));
+                                        activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(
+                                        		activityLocationFunding.getCommitment().intValue()));
                                     } else {
-                                        activityLocationFunding.
-                                                setFmtCommitment(null);
+                                        activityLocationFunding.setFmtCommitment(null);
                                     }
 
-                                    if (activityLocationFunding.
-                                            getDisbursement().intValue() != 0) {
-                                        activityLocationFunding.setFmtDisbursement(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getDisbursement().intValue()));
+                                    if (activityLocationFunding.getDisbursement().intValue() != 0) {
+                                        activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
+                                        		activityLocationFunding.getDisbursement().doubleValue()));
                                     } else {
-                                        activityLocationFunding.
-                                                setFmtDisbursement(null);
+                                        activityLocationFunding.setFmtDisbursement(null);
                                     }
 
-                                    if (activityLocationFunding.
-                                            getExpenditure().intValue() != 0) {
-                                        activityLocationFunding.setFmtExpenditure(
-                                                formatter.format(
-                                                        activityLocationFunding.
-                                                        getExpenditure().intValue()));
+                                    if (activityLocationFunding.getExpenditure().intValue() != 0) {
+                                        activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(
+                                        		activityLocationFunding.getExpenditure().doubleValue()));
                                     } else {
                                         activityLocationFunding.
                                                 setFmtExpenditure(null);
@@ -501,34 +458,23 @@ public class ShowRegionReport extends Action {
                                         activityLocationFunding.setDonorOrgs(donorOrg);
                                         activityLocationFunding.setTopSectors(topLevelSectorNames);
 
-                                        if (activityLocationFunding.
-                                                getCommitment().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtCommitment(formatter.
-                                                                     format(activityLocationFunding.
-                                                                            getCommitment().intValue()));
+                                        if (activityLocationFunding.getCommitment().intValue() != 0) {
+                                            activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(
+                                            		activityLocationFunding.getCommitment().doubleValue()));
                                         } else {
-                                            activityLocationFunding.
-                                                    setFmtCommitment(null);
+                                            activityLocationFunding.setFmtCommitment(null);
                                         }
 
-                                        if (activityLocationFunding.
-                                                getDisbursement().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtDisbursement(formatter.
-                                                                       format(activityLocationFunding.
-                                                                              getDisbursement().intValue()));
+                                        if (activityLocationFunding.getDisbursement().intValue() != 0) {
+                                            activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
+                                            		activityLocationFunding.getDisbursement().doubleValue()));
                                         } else {
-                                            activityLocationFunding.
-                                                    setFmtDisbursement(null);
+                                            activityLocationFunding.setFmtDisbursement(null);
                                         }
-
-                                        if (activityLocationFunding.
-                                                getExpenditure().intValue() != 0) {
-                                            activityLocationFunding.
-                                                    setFmtExpenditure(formatter.
-                                                                      format(activityLocationFunding.
-                                                                             getExpenditure().intValue()));
+                                        
+                                        if (activityLocationFunding.getExpenditure().intValue() != 0) {
+                                            activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(
+                                            		activityLocationFunding.getExpenditure().doubleValue()));
                                         } else {
                                             activityLocationFunding.
                                                     setFmtExpenditure(null);

@@ -809,10 +809,11 @@ public class ChartWidgetUtil {
 		if (lt != null) {
 			plot.setLabelFont(plainFont);
 			plot.setLegendItemShape(new Rectangle(10, 10));
-			DecimalFormat format = FormatHelper.getDecimalFormat();
+			DecimalFormat format = FormatHelper.getDecimalFormatNotRounded();
 			format.setMaximumFractionDigits(0);
 			PieSectionLabelGenerator genLegend = new PieChartLegendGenerator(150);
 			plot.setLegendLabelGenerator(genLegend);
+			plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.00%")));
 			plot.setLegendLabelToolTipGenerator(new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%")));
 			lt.setItemFont(plainFont);
 			lt.setFrame(BlockBorder.NONE);

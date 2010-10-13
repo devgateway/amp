@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,31 +30,25 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorSource;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.util.ColorRGB;
 import org.digijava.module.gis.util.CoordinateRect;
+import org.digijava.module.gis.util.DateInterval;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.gis.util.GisUtil;
 import org.digijava.module.gis.util.HilightData;
 import org.digijava.module.gis.util.SegmentData;
-import java.util.Date;
-import org.digijava.module.gis.util.DateInterval;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import java.util.Calendar;
-import org.digijava.module.aim.util.FeaturesUtil;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import org.digijava.module.aim.dbentity.AmpIndicatorSource;
-import java.sql.Timestamp;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 /**
  * <p>Title: </p>
@@ -348,13 +346,13 @@ public class GetFoundingDetails extends Action {
 
                         String numberFormat = FeaturesUtil.getGlobalSettingValue(
                                 "Default Number Format");
-                        NumberFormat formatter = new DecimalFormat(numberFormat);
+                        //NumberFormat formatter = new DecimalFormat(numberFormat);
 
                         XML root = new XML("funding");
 
-                        root.addAttribute("totalCommitment",formatter.format(totalFunding.getCommitment()));
-                        root.addAttribute("totalDisbursement",formatter.format(totalFunding.getDisbursement()));
-                        root.addAttribute("totalExpenditure",formatter.format(totalFunding.getExpenditure()));
+                        root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
+                        root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
+                        root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
 
                         segmendDataInfo.addElement(root);
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -364,17 +362,9 @@ public class GetFoundingDetails extends Action {
                                                   get(key);
                             XML regionData = new XML("region");
                             regionData.addAttribute("reg-code", key);
-                            regionData.addAttribute("fundingCommitment",
-                                                    formatter.
-                                                    format(ammount.getCommitment().
-                                    intValue()));
-                            regionData.addAttribute("fundingDisbursement",
-                                                    formatter.format(ammount.
-                                    getDisbursement().intValue()));
-                            regionData.addAttribute("fundingExpenditure",
-                                                    formatter.
-                                                    format(ammount.getExpenditure().
-                                    intValue()));
+                            regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().intValue()));
+                            regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
+                            regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
                             root.addElement(regionData);
                         }
                         segmendDataInfo.output(sos);
@@ -746,13 +736,13 @@ public class GetFoundingDetails extends Action {
 
                     String numberFormat = FeaturesUtil.getGlobalSettingValue(
                             "Default Number Format");
-                    NumberFormat formatter = new DecimalFormat(numberFormat);
+                    //NumberFormat formatter = new DecimalFormat(numberFormat);
 
                     XML root = new XML("funding");
 
-                    root.addAttribute("totalCommitment",formatter.format(totalFunding.getCommitment()));
-                    root.addAttribute("totalDisbursement",formatter.format(totalFunding.getDisbursement()));
-                    root.addAttribute("totalExpenditure",formatter.format(totalFunding.getExpenditure()));
+                    root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
+                    root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
+                    root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
 
                     segmendDataInfo.addElement(root);
                     Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -761,9 +751,9 @@ public class GetFoundingDetails extends Action {
                         FundingData ammount = (FundingData) fundingLocationMap.get(key);
                         XML regionData = new XML("region");
                         regionData.addAttribute("reg-code", key);
-                        regionData.addAttribute("fundingCommitment",formatter.format(ammount.getCommitment().intValue()));
-                        regionData.addAttribute("fundingDisbursement",formatter.format(ammount.getDisbursement().intValue()));
-                        regionData.addAttribute("fundingExpenditure",formatter.format(ammount.getExpenditure().intValue()));
+                        regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
+                        regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
+                        regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
                         root.addElement(regionData);
                     }
                     segmendDataInfo.output(sos);

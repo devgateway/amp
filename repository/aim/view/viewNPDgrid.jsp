@@ -56,6 +56,14 @@
 
 </style>
 
+<style type="text/css" media="print">
+
+    .noPrint{
+        display: none;
+    }
+
+</style>
+
 
 
 <table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
@@ -70,15 +78,17 @@
 								<tr>
 									<td valign="top">
 										<table cellPadding="5" cellSpacing="5" width="100%">
-										<td align="left">
-											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">
-											<digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>
-											 &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
-														&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										 	<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-											<digi:trn key="aim:print">Print</digi:trn>
-											&nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
-										   </td>
+                                            <tr class="noPrint">
+                                                <td align="left"
+                                                    <digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">
+                                                        <digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>
+                                                        &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                                                        <digi:trn key="aim:print">Print</digi:trn>
+                                                        &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+                                            </td>
+                                        </tr>
 									            <tr>
 												<td align="left" vAlign="top">
 													<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
@@ -102,11 +112,13 @@
 						</c:if>
 					
 					<c:if test="${aimNPDForm.mode != 1}">
+                     <tr  class="noPrint">
 					<td align="left">
 									<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}"><digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
 								</td>
+                     </tr>
 					</c:if>
 						<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
 							<tr bgcolor="#006699">
@@ -181,7 +193,7 @@
 		</td>
 	</tr>
 </table>
-<table width="100%">
+<table width="100%" class="noPrint">
 	<tr>
 		<td align="center">
 		<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="window.close();">

@@ -138,7 +138,7 @@ function isInvalid(field){
 					            The password has been changed successfully
 					            </digi:trn>
 					          </b>
-					        </logic:equal>
+					        </logic:equal></span>
 					</td>
 				</tr>
 				<tr>
@@ -404,7 +404,16 @@ function isInvalid(field){
 										</table>
 									</td>
 								</tr>
-        </table>
+                            </table>
+                        </td>
+                    </tr>
+                    </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+  </table>
         <br />
 </digi:form>
 

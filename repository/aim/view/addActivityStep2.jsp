@@ -455,6 +455,9 @@ function validateLocationPercentage(){
     if(val=="") {
     	val=0;
     }
+    if ( val.indexOf(",") > 0 ) {
+    	val = val.replace(",",".");
+    }
     sum = sum + parseFloat(val);
     i = i + 1;
   }
@@ -486,13 +489,18 @@ function fnChk(frmContrl, f){
   </digi:trn>
   </c:set>
   
-  if (isNaN(frmContrl.value)) {
+  var myValue	= frmContrl.value + "";
+  if ( frmContrl && frmContrl.value && frmContrl.value.indexOf(",")>0 ) {
+	  myValue		= myValue.value.replace(",", ".");
+  }
+  
+  if (isNaN(myValue)) {
     alert("${errMsgAddSectorNumericValue}");
     frmContrl.value = "";
     //frmContrl.focus();
     return false;
   }  
-  if (frmContrl.value > 100) {    
+  if (myValue > 100) {    
       if (f == "sector") {
 	     <c:set var="errMsgAddSumExceed">
 		  <digi:trn key="aim:addSecorSumExceedErrorMessage">

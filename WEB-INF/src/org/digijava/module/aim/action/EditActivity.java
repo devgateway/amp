@@ -1043,8 +1043,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 //                                       .getAmpWoredaId());
 //                }
 
-                if(actLoc.getLocationPercentage()!=null)
-                location.setPercent(actLoc.getLocationPercentage().toString());
+                if(actLoc.getLocationPercentage()!=null){
+                	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
+                	location.setPercent( strPercentage );
+                }
                 
                 if ( setFullPercForDefaultCountry && actLoc.getLocationPercentage() == 0.0 &&
                 		CategoryManagerUtil.equalsCategoryValue(loc.getLocation().getParentCategoryValue(),

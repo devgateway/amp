@@ -714,11 +714,13 @@ public class ExportToPDF extends Action {
 
                                     PdfPCell largestProjectsCommitmentTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
                                     largestProjectsCommitmentTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    largestProjectsCommitmentTitle.setNoWrap(true);
                                     largetsProjectsTbl.addCell(largestProjectsCommitmentTitle);
 
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
                                         PdfPCell largestProjectsDisbTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
                                         largestProjectsDisbTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        largestProjectsDisbTitle.setNoWrap(true);
                                         largetsProjectsTbl.addCell(largestProjectsDisbTitle);
                                     }
                                     PdfPCell largestProjectsSectorTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Sector", langCode, siteId), OrgProfileUtil.HEADERFONT));

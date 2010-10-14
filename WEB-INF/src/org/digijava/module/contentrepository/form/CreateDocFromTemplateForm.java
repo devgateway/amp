@@ -17,6 +17,8 @@ public class CreateDocFromTemplateForm extends ActionForm {
 	private String documentName;
 	private String docType;
 	
+	private Long documentTypeCateg;
+	
 	private String docOwnerType;
 	
 	public Long getTemplateId() {
@@ -61,4 +63,11 @@ public class CreateDocFromTemplateForm extends ActionForm {
 	public void setDocOwnerType(String docOwnerType) {
 		this.docOwnerType = docOwnerType;
 	}
+	public Long getDocumentTypeCateg() {
+		return documentTypeCateg;
+	}
+	public void setDocumentTypeCateg(Long documentTypeCateg) {
+		this.documentTypeCateg = documentTypeCateg;
+	}
+	
 }

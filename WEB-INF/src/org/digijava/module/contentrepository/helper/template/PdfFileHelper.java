@@ -14,8 +14,8 @@ public class PdfFileHelper extends WordOrPdfFileHelper{
 		
 	}
 	
-	public PdfFileHelper(String docTitle,String contentType,byte[] pdfbody){
-		super(docTitle, contentType, pdfbody);
+	public PdfFileHelper(String docTitle,String contentType,Long documentType, byte[] pdfbody){
+		super(docTitle, contentType,documentType, pdfbody);
 	}
 	
 }

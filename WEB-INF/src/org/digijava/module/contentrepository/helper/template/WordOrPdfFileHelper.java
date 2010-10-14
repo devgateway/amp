@@ -14,16 +14,18 @@ public abstract class WordOrPdfFileHelper {
 	private InputStream content;
 	private String contentType;
 	private int fileSize;
+	private Long documentType;
 	
 	public WordOrPdfFileHelper(){ 
 		
 	}
 	
-	public WordOrPdfFileHelper(String docTitle,String contentType,byte[] body){
+	public WordOrPdfFileHelper(String docTitle,String contentType, Long documentType, byte[] body){
 		this.docTitle=docTitle;
 		this.contentType=contentType;
 		this.content=new ByteArrayInputStream(body);
 		this.fileSize=body.length;
+		this.documentType=documentType;
 	}
 	
 	/**
@@ -55,6 +57,15 @@ public abstract class WordOrPdfFileHelper {
 	public void setFileSize(int fileSize) {
 		this.fileSize = fileSize;
 	}
+
+	public Long getDocumentType() {
+		return documentType;
+	}
+
+	public void setDocumentType(Long documentType) {
+		this.documentType = documentType;
+	}
+
 	
 	
 }

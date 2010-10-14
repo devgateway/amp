@@ -15,8 +15,8 @@ public class WordDocumentHelper extends WordOrPdfFileHelper{
 		
 	}
 	
-	public WordDocumentHelper(String docTitle,String contentType,byte[] docbody){
-		super(docTitle, contentType, docbody);
+	public WordDocumentHelper(String docTitle,String contentType,Long documentType, byte[] docbody){
+		super(docTitle, contentType, documentType, docbody);
 	}
 
 }

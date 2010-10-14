@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -5,6 +6,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:instance property="docFromTemplateForm"/>
 
@@ -47,6 +49,14 @@
 	  		<html:text property="documentName" size="30" styleId="docName"/>
 	  	</td>
   	</tr>
+  <tr>
+	  	<td  style="white-space: nowrap;">
+	  		<digi:trn>Document Type</digi:trn>:
+	  	</td>
+	  	<td>
+	  		<category:showoptions  firstLine="<digi:trn>Please select from below</digi:trn>" name="docFromTemplateForm" property="documentTypeCateg"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+	  	</td>
+  </tr>
     <c:forEach var="field" items="${docFromTemplateForm.fields}">
         <tr>
           <td>&nbsp;</td>

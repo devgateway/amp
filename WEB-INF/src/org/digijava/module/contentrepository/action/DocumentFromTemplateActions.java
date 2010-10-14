@@ -126,9 +126,9 @@ public class DocumentFromTemplateActions extends DispatchAction {
 			String nodeuuid=null;
 			if(myForm.getDocType()!=null){
 				if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_PDF)){
-					nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(),myForm.getDocOwnerType(), request);
+					nodeuuid = createPdf(submittedValsHolder, myForm.getDocumentName(), myForm.getDocumentTypeCateg(), myForm.getDocOwnerType(), request);
 				}else if(myForm.getDocType().equals(TemplateConstants.DOC_TYPE_WORD)){
-					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),myForm.getDocOwnerType(),request);
+					nodeuuid = createWord(submittedValsHolder, myForm.getDocumentName(),myForm.getDocumentTypeCateg(), myForm.getDocOwnerType(),request);
 				}
 				//last approved version only for Team Document,not Private !
 				if(myForm.getDocOwnerType().equals("team")){
@@ -136,7 +136,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 					 NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
 					 DbUtil.saveOrUpdateObject(lastAppVersion);
 				}				 				 
-			} 
+			}			
 			
 			clearForm(myForm);
 			request.getSession().setAttribute("resourcesTab", myForm.getDocOwnerType());
@@ -153,7 +153,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	 * @param request 
 	 * @return
 	 */
-	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,String documentOwnerType,HttpServletRequest request){
+	private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,Long documentType, String documentOwnerType,HttpServletRequest request){
 		com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    try {
@@ -175,7 +175,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	         doc.close();
 	         byte[] pdfbody= baos.toByteArray();
 	         String contentType="application/pdf";
-	         PdfFileHelper pdfHelper=new PdfFileHelper(pdfName, contentType, pdfbody);
+	         PdfFileHelper pdfHelper=new PdfFileHelper(pdfName, contentType,documentType, pdfbody);
 	         //create jcr node
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
 	         Node userOrTeamHomeNode = null;
@@ -197,7 +197,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	}
 	
 	
-	private String createWord(List<SubmittedValueHolder> docContent, String docName,String documentOwnerType,HttpServletRequest request){
+	private String createWord(List<SubmittedValueHolder> docContent, String docName, Long documentType, String documentOwnerType,HttpServletRequest request){
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -219,7 +219,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 	        doc.close();
 	        byte[] docbody= baos.toByteArray();
 	        String contentType="application/msword";
-	        WordDocumentHelper wordDocHelper=new WordDocumentHelper(docName, contentType, docbody);
+	        WordDocumentHelper wordDocHelper=new WordDocumentHelper(docName, contentType, documentType,  docbody);
 	        //create jcr node
 	         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request); 
 	         Node userOrTeamHomeNode = null;
@@ -253,5 +253,6 @@ public class DocumentFromTemplateActions extends DispatchAction {
 		form.setFields(null);
 		form.setDocumentName(null);
 		form.setDocType(null);		
+		form.setDocumentTypeCateg( null );
 	}
 }

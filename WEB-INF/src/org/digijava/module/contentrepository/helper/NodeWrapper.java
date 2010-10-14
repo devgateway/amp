@@ -140,11 +140,9 @@ public class NodeWrapper {
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
-			long docType = 0;
-				String encTitle	= URLEncoder.encode(pdfOrWordFile.getDocTitle(), "UTF-8"); //URLEncoder.encode("Simple Test", "UTF-8");
-				docType = new Long(0);
-				newNode	= parentNode.addNode( encTitle );
-				newNode.addMixin("mix:versionable");
+			String encTitle	= URLEncoder.encode(pdfOrWordFile.getDocTitle(), "UTF-8"); //URLEncoder.encode("Simple Test", "UTF-8");
+			newNode	= parentNode.addNode( encTitle );
+			newNode.addMixin("mix:versionable");
 			
 			if (isANewVersion){
 				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
@@ -162,7 +160,9 @@ public class NodeWrapper {
 			
 			if ( !errorAppeared ) {
 				Calendar yearOfPublicationDate=null;								
-				populateNode(isANewVersion, newNode, pdfOrWordFile.getDocTitle(), null, null,pdfOrWordFile.getContentType(), docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+				populateNode(isANewVersion, newNode, pdfOrWordFile.getDocTitle(), null, null,
+						pdfOrWordFile.getContentType(), pdfOrWordFile.getDocumentType(),  
+						teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
 			}
 			
 			this.node		= newNode;

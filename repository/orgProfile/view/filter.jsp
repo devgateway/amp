@@ -211,15 +211,15 @@
 									<digi:img hspace="0" vspace="0" height="15px" src="/TEMPLATE/ampTemplate/images/icons/doc.gif" border="0" alt='Export to Word' /> 
 									<digi:trn>Export to Word</digi:trn> 
 									</a>
-									<div id="changeFilterLink" style="display: inline" title="<digi:trn>Click on this icon to view filter</digi:trn>">
-									<a> <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter' /> 
-									<digi:trn>Filter</digi:trn> 
-									</a>
-									</div>
 									<div id="changeExportSettingsLink" style="display: inline" title="<digi:trn>Click on this icon to view additional export options</digi:trn>">
 									<a> 
 									<digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" border="0" alt='' /> 
 									<digi:trn>Export Options</digi:trn> 
+									</a>
+									</div>
+									<div id="changeFilterLink" style="display: inline" title="<digi:trn>Click on this icon to view filter</digi:trn>">
+									<a> <digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/add_filters.png" border="0" alt='Apply Filter' /> 
+									<digi:trn>Filter</digi:trn> 
 									</a>
 									</div>
 								</div>

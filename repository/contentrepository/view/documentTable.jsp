@@ -87,11 +87,18 @@
 									<c:set var="translation">
 										<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to</digi:trn>
 									</c:set>
-									<c:if test="${documentData.webLink != null}" >
-										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
-												 onclick="window.open('${documentData.webLink}')"
-											style="cursor:pointer; color: blue; font-size: 11px">  
-									</c:if>
+									<c:choose>
+										<c:when test="${documentData.webLink != null}" >
+											<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
+													 onclick="window.open('${documentData.webLink}')"
+												style="cursor:pointer; color: blue; font-size: 11px">  
+										</c:when>
+										<c:otherwise>
+											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
+												onClick="downloadFile('${documentData.nodeVersionUUID}');"
+												style="cursor:pointer; color: blue; font-size: 11px">
+										</c:otherwise>
+									</c:choose>
 										 <bean:write name="documentData" property="name" />
 									<c:if test="${documentData.webLink != null}" >
 										<c:set var="isUrl" scope="page" value="true" />
@@ -153,7 +160,7 @@
 												<digi:trn>Click here to download document</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-											onClick="downloadFile('<bean:write name='documentData' property='nodeVersionUUID' />');"title="${translation}">
+											onClick="downloadFile('<bean:write name='documentData' property='nodeVersionUUID' />');" title="${translation}">
 												<digi:trn>Download</digi:trn>
 											</a>
 										</c:when>

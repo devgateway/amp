@@ -153,8 +153,8 @@ YAHOO.util.Event.on(window, "load", afterPageLoad);
 			<c:set var="translation">
 					<digi:trn>Click here to go to public site home page</digi:trn>
 			</c:set>
-			<digi:link href="/../aim/reportsPublicView.do" styleClass="comment" title="${translation}" >
-               	<digi:trn>Public Site</digi:trn>
+			<digi:link href="/.." styleClass="comment" title="${translation}" >
+               	<digi:trn>Home</digi:trn>
                </digi:link> &gt; <digi:trn>Public Documents</digi:trn>
 			<br />
 		</td>

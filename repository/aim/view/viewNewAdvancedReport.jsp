@@ -201,9 +201,11 @@ session.setAttribute("progressValue", counter);
 	        
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
-                <a class="settingsLink" onClick="showSorter();">
-                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-                </a> | 
+            	<c:if test="${ReportsFilter.publicView}">
+	                <a class="settingsLink" onClick="showSorter();">
+	                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+	                </a> | 
+	            </c:if>
             </logic:notEmpty> 
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>

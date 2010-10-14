@@ -86,14 +86,14 @@ cursor:pointer;
             </li>
             
             <module:display name="Public Site" parentModule="PUBLIC VIEW">
-            <li class="yuiampmenuitem" style="float:left;">
+                   <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
                 <digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
                 <a class="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
                 <digi:trn>PUBLIC SITE</digi:trn>
                 </a>
-            </li>
+            </li> 
             </module:display>
              
             <module:display name="Public Documents" parentModule="PUBLIC VIEW">
@@ -135,7 +135,7 @@ cursor:pointer;
                        <digi:trn>Calendar</digi:trn>
                     </a>
                 </li>
-                </module:display>
+            </module:display>
             </module:display>
             
            	<%--
@@ -182,7 +182,7 @@ cursor:pointer;
            	</module:display>
           --%> 	
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
-           		<feature:display name="Language Option" module="Tools">
+           	<feature:display name="Language Option" module="Tools">
 		            <li style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn>Language</digi:trn>
@@ -198,7 +198,7 @@ cursor:pointer;
 		                    </div>
 		                </div>                              
 		            </li>
-		  	</feature:display>
+		  </feature:display>
 		  </module:display>
           </ul>            
       </div>
@@ -226,13 +226,17 @@ border-right:1px solid white;
                 </digi:trn>
 	            </digi:link>
             </li>
-            <li class="yuiampmenuitem">
-                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
-                <digi:trn key="aim:newUserRegistration">
-                New user registration
-                </digi:trn>
-	            </digi:link>
-            </li>
+            <module:display name="Login - User Management" parentModule="PUBLIC VIEW">
+        		<feature:display name="Enable New User Registration" module="Login - User Management">
+	            <li class="yuiampmenuitem">
+	                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
+	                <digi:trn key="aim:newUserRegistration">
+	                New user registration
+	                </digi:trn>
+		            </digi:link>
+	            </li>
+            	</feature:display>
+            </module:display>
             <feature:display name="Language Option" module="Tools">
 		            <li>
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">

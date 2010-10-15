@@ -1,5 +1,7 @@
 package org.dgfoundation.ecs;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletContext;
@@ -10,7 +12,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerRepository;
 import org.dgfoundation.ecs.keeper.ErrorKeeperRAM;
-import org.dgfoundation.ecs.logger.ECSRepositorySelector;
 
 public class ContextLoaderListener implements ServletContextListener {
 	private static Logger logger = Logger.getLogger(ErrorKeeperRAM.class);
@@ -26,9 +27,14 @@ public class ContextLoaderListener implements ServletContextListener {
 			String warPath = servletContext.getRealPath(".");
 			
 			
-			String ecsDisable = servletContext.getInitParameter(DISABLE_ECS);
-			String ecsServerName = servletContext.getInitParameter(SERVER_NAME);
-			String propertiesFile = servletContext.getInitParameter(PROPERTIES_FILE);
+			String ecsDisable = (String) servletContext.getAttribute(DISABLE_ECS);
+			String ecsServerName = (String) servletContext.getAttribute(SERVER_NAME);
+			String propertiesFile = (String) servletContext.getAttribute(PROPERTIES_FILE);
+			servletContext.removeAttribute(DISABLE_ECS);
+			servletContext.removeAttribute(SERVER_NAME);
+			servletContext.removeAttribute(PROPERTIES_FILE);
+			System.setProperty("amp.ecs.serverName", ecsServerName);
+			System.setProperty("amp.ecs.defaultDisabled", ecsDisable);
 			
 			
 			if ((propertiesFile != null) && (propertiesFile.trim().length() == 0))
@@ -39,6 +45,8 @@ public class ContextLoaderListener implements ServletContextListener {
 			else
 				ecsDisableBool = true;
 			
+			TomcatLoggerPlugin ilp = new TomcatLoggerPlugin();
+			ilp.init("changethis", warPath);
 			init(ecsDisableBool, ecsServerName, propertiesFile, warPath);
 			
 		} catch (Exception ex) {
@@ -91,10 +99,23 @@ public class ContextLoaderListener implements ServletContextListener {
 	}
 	
 	public static synchronized void destroy() {
-		//removeFromRepository();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		// TODO: disable threads etc
-		// WARN: implement destroy in ECSRepositorySelector as init(boolean);
 		
+		logger.info("Stopping threads");
+		
+		LoggerRepository current = LogManager.getLoggerRepository();
+		if (current.getClass().getCanonicalName().startsWith("org.dgfoundation.ecs.logger")){
+			ClassLoader bsLoader = current.getClass().getClassLoader();
+			try {
+				Class bsRepo = bsLoader.loadClass("org.dgfoundation.ecs.logger.ECSRepositorySelector");
+				Object repoInstance = bsRepo.newInstance();
+
+				String methName = "destroy";
+				Method method = repoInstance.getClass().getMethod(methName);
+				method.invoke(method);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 }

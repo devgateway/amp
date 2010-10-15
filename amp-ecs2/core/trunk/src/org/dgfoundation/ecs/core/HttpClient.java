@@ -16,6 +16,7 @@ public class HttpClient {
 	public HttpClient() throws ECSException {
 		try {
 			url = new URL("http://ecs.ampdev.net/ecs.php");
+			
 			//TODO: prox support
 			//url.openConnection(proxy);
 		} catch (Exception e) {

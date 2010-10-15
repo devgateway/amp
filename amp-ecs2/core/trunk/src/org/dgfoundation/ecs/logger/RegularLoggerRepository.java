@@ -3,8 +3,6 @@ package org.dgfoundation.ecs.logger;
 import org.apache.log4j.Hierarchy;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
-import org.dgfoundation.ecs.core.ECS;
-
 
 
 public class RegularLoggerRepository extends Hierarchy{

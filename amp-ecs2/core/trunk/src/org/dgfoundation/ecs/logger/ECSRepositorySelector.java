@@ -4,15 +4,13 @@ import org.apache.log4j.spi.RepositorySelector;
 import org.apache.log4j.spi.LoggerRepository;
 import org.apache.log4j.spi.RootCategory;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.apache.log4j.xml.XMLLayout;
 import org.apache.log4j.Hierarchy;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.PropertyConfigurator;
 import org.dgfoundation.ecs.core.ECS;
 
 import java.io.File;
-import java.lang.reflect.Method;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,24 +25,29 @@ public class ECSRepositorySelector implements RepositorySelector {
 	private static RegularLoggerRepository regularRepository;
 	public static String serverName = "root";
 	//public static String jbossPropertiesFile = "log4j.properties";
-	public static String jbossXMLFile = "log4j.xml";
+	public static String log4jXMLConfigFile = "log4j.xml";
 	public static boolean defaultDisable = false;
 	
 	public ECSRepositorySelector() {
 	}
 
-	public static synchronized void init() {
+	public static synchronized void init(){
+		init(false);
+	}
+	
+	public static synchronized void init(boolean tomcatFriendly) {
 		if (!initialized) // set the global RepositorySelector
 		{
 			oldRepository = LogManager.getLoggerRepository();
 			defaultRepository = new ECSLoggerRepository(new ECSLogger("root"));
 			
+			
 			try {
 				DOMConfigurator conf = new DOMConfigurator();
-				conf.doConfigure(jbossXMLFile, defaultRepository);
+				conf.doConfigure(log4jXMLConfigFile, defaultRepository);
 				
 				DOMConfigurator conf2 = new DOMConfigurator();
-				conf2.doConfigure(jbossXMLFile, oldRepository);
+				conf2.doConfigure(log4jXMLConfigFile, oldRepository);
 				
 				//PropertyConfigurator pconf = new PropertyConfigurator();
 				//pconf.doConfigure(jbossPropertiesFile, defaultRepository);
@@ -54,7 +57,8 @@ public class ECSRepositorySelector implements RepositorySelector {
 
 			ECSLoggerRepository edefaultRepo = (ECSLoggerRepository) defaultRepository;
 			edefaultRepo.setEcs(new ECS(serverName));
-			edefaultRepo.getEcs().start();
+			if (!tomcatFriendly)
+				edefaultRepo.getEcs().start();
 			
 			
 			regularRepository = new RegularLoggerRepository(oldRepository
@@ -62,7 +66,7 @@ public class ECSRepositorySelector implements RepositorySelector {
 
 			try {
 				DOMConfigurator conf = new DOMConfigurator();
-				conf.doConfigure(jbossXMLFile, regularRepository);
+				conf.doConfigure(log4jXMLConfigFile, regularRepository);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -89,7 +93,7 @@ public class ECSRepositorySelector implements RepositorySelector {
 		 * 
 		 */ 
 		if (propertiesFile == null)
-			propertiesFile = jbossXMLFile;
+			propertiesFile = log4jXMLConfigFile;
 		
 		if (propertiesFile != null){ //jbossXMLFile can be null
 			File f = new File(propertiesFile);
@@ -116,6 +120,9 @@ public class ECSRepositorySelector implements RepositorySelector {
 	}
 	
 	public static synchronized void destroy(){
+		/**
+		 * Traditional destroy in multi-app server
+		 */
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		LoggerRepository repo = repositories.get(loader);
 		if (repo instanceof ECSLoggerRepository){
@@ -125,6 +132,13 @@ public class ECSRepositorySelector implements RepositorySelector {
 		
 		repositories.remove(loader);
 		repositories2.remove(loader);
+		
+		
+		/**
+		 * Tomcat ECS embeded in AMP destroy
+		 * (destroying default repo) 
+		 */
+		((ECSLoggerRepository)defaultRepository).getEcs().stop();
 	}
 
 	public static synchronized void initWithoutECS(String serverName, String propertiesFile){

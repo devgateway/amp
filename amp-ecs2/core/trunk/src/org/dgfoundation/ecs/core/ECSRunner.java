@@ -38,7 +38,6 @@ public class ECSRunner extends Thread {
 
 	public void stopEcs() {
 		try {
-			
 			String[] res = ECSClientManager.getClient().getParameters(serverName, ECSConstants.SERVER_SHUTDOWN);
 			stopped = true;
 			interrupt();

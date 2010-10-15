@@ -86,8 +86,8 @@
 
 
 
-<div id="content" class="yui-skin-sam" style="width:600px;height:100%;max-width: 600x;">
-  <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 600;">
+<div id="content" class="yui-skin-sam" style="width:527px;height:100%;max-width: 527x;">
+  <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 527px;">
       <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
       <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
       <div class="longTab">
@@ -119,7 +119,7 @@
 	
 <table cellpadding="5" cellspacing="1" border="0">
 	<tr>
-		<td colspan="3">
+		<td colspan="3" align="left">
 		  <!--
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		 -->
@@ -136,7 +136,7 @@
 	</tr>
 	
 	<tr>
-		<td colspan="3" align="center">
+		<td colspan="3" align="left">
 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
@@ -210,8 +210,8 @@
              <digi:trn>Select Sector</digi:trn>:
         </td>
 		<td colspan="2">
-		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->
-			<select id="sectorsMapCombo" onChange="" style="width:350px">
+		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:250px"> -->
+			<select id="sectorsMapCombo" onChange="" style="width:250px">
 			<option value="-1"><digi:trn>Select sector</digi:trn></option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
@@ -223,8 +223,8 @@
        <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Indicator</digi:trn>:
 		<td colspan="2">
-		<!-- <select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px"> -->
-		<select id="indicatorsCombo" onchange="" style="width:350px">	
+		<!-- <select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:250px"> -->
+		<select id="indicatorsCombo" onchange="" style="width:250px">	
 			<option value=-1><digi:trn>Select Indicator</digi:trn></option>
 		</select>
 		</td>
@@ -234,8 +234,8 @@
             <digi:trn>Select Subgroup</digi:trn>:
         </td>
 		<td colspan="2">
-			<!-- <select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">  -->
-			<select id="indicatorSubgroupCombo" onChange="" style="width:350px">
+			<!-- <select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:250px">  -->
+			<select id="indicatorSubgroupCombo" onChange="" style="width:250px">
 				<option value="-1"><digi:trn>Select subgroup</digi:trn></option>
 			</select>
 		</td>
@@ -245,7 +245,7 @@
             <digi:trn>Select Time Interval</digi:trn>:
         </td>
 		<td colspan="2">
-			<select id="indicatorYearCombo" style="width:350px">
+			<select id="indicatorYearCombo" style="width:250px">
 				<option value="-1"><digi:trn>Select Time Interval</digi:trn></option>
 			</select>
 		</td>
@@ -301,7 +301,7 @@
             <td width="200" nowrap style="font-size:12px">
                     <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
             </td>
-            <td width="90%">
+            <td width="90%" colspan="2">
              <!-- 
                 <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
                 <input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
@@ -320,7 +320,7 @@
              <br>
         </td>
         <td>
-            <select id="fundingType" onChange="" style="width:350px" value="commitment">
+            <select id="fundingType" onChange="" style="width:250px" value="commitment">
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
             </field:display>
@@ -341,7 +341,7 @@
              <digi:trn>Select Sector</digi:trn>:
         </td>
         <td>
-            <select id="sectorsMapComboFin" onChange="" style="width:350px">
+            <select id="sectorsMapComboFin" onChange="" style="width:250px">
             	<%--
             <option value="-2"><digi:trn>Select Sector</digi:trn></option>
             --%>
@@ -361,7 +361,7 @@
        <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Donor</digi:trn>:
         <td>
-        <select id="donorsCombo" onchange="" style="width:350px">    
+        <select id="donorsCombo" onchange="" style="width:250px">    
             <option value=-1><digi:trn>All donors</digi:trn></option>
         </select>
         </td>
@@ -375,8 +375,8 @@
              <digi:trn>Select Donor</digi:trn>:
         </td>
 		<td>
-		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px"> -->
-			<select id="donorsCombo" onChange="" style="width:350px">
+		<!-- <select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:250px"> -->
+			<select id="donorsCombo" onChange="" style="width:250px">
 			<option value="-1"><digi:trn>All Donors</digi:trn></option>
 			<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
 				<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>

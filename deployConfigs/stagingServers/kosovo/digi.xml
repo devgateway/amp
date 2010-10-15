@@ -10,8 +10,8 @@
 	</smtp>
 
 	
-     <logon-site id="dglogin" host="">http://laos.staging.ampdev.net/login</logon-site>
-     <site-domain id="dgDomain" host="">http://laos.staging.ampdev.net/</site-domain> 
+     <logon-site id="dglogin" host="">http://kosovo.staging.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://kosovo.staging.ampdev.net/</site-domain> 
 
      
     <server-type caseSensitiveTranslatioKeys="false"/>
@@ -30,8 +30,8 @@
 	<enable-autologin>true</enable-autologin>
 	
 	<!-- ECS Service -->
-	<ecsDisable>false</ecsDisable>
-	<ecsServerName>ampdev.115.stg.laos</ecsServerName>
+	<ecsDisable>true</ecsDisable>
+	<ecsServerName>ampdev.115.stg.kosovo</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 	

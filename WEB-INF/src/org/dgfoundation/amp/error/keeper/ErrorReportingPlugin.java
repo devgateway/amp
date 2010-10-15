@@ -13,7 +13,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 
 public class ErrorReportingPlugin {
-	private static Logger logger = Logger.getLogger(ErrorReportingPlugin.class);
+	private static Logger logger = null;
 
 
 	public static void handle(Exception e, Logger logger) {
@@ -22,6 +22,8 @@ public class ErrorReportingPlugin {
 
 	public static void handle(Throwable e, Logger log,
 			HttpServletRequest request) {
+		if (logger == null)
+			 logger = Logger.getLogger(ErrorReportingPlugin.class);
  		if (log == null) {
 			log = logger;
 		}
@@ -31,7 +33,7 @@ public class ErrorReportingPlugin {
 			//ClassLoader bsLoader = current.getClass().getClassLoader();
 			try {
 
-				String login = "unknown@amp.org";
+				String login = "unknown";
 				String fullName = "Unknown";
 				String password = null;
 				
@@ -76,6 +78,6 @@ public class ErrorReportingPlugin {
 		}
 
 		log.error(e.getMessage(), e);
-
+		log.fatal("TESTTTTTTTTTTT");
 	}
 }

@@ -792,22 +792,25 @@ public class EditOrganisation extends DispatchAction {
       }
       AddOrgForm editForm = (AddOrgForm) form;
       Long[] selLocations = editForm.getSelLocs();
-      Collection<Location> oldLocs = editForm.getSelectedLocs();
-      List<Location> removedLocs = new ArrayList<Location>();
-      Iterator<Location> locIter = oldLocs.iterator();
-      while (locIter.hasNext()) {
-          Location location = locIter.next();
-          for (int i = 0; i < selLocations.length; i++) {
-              if (location.getLocId().equals(selLocations[i])) {
-                  removedLocs.add(location);
-                  break;
-              }
+      if (selLocations != null) {
+          Collection<Location> oldLocs = editForm.getSelectedLocs();
+          List<Location> removedLocs = new ArrayList<Location>();
+          Iterator<Location> locIter = oldLocs.iterator();
+          while (locIter.hasNext()) {
+              Location location = locIter.next();
+              for (int i = 0; i < selLocations.length; i++) {
+                  if (location.getLocId().equals(selLocations[i])) {
+                      removedLocs.add(location);
+                      break;
+                  }
 
+              }
           }
+          oldLocs.removeAll(removedLocs);
+          editForm.setSelectedLocs(oldLocs);
+          editForm.setSelLocs(null);
       }
-      oldLocs.removeAll(removedLocs);
-      editForm.setSelectedLocs(oldLocs);
-      editForm.setSelLocs(null);
+     
       return mapping.findForward("forward");
   }
   

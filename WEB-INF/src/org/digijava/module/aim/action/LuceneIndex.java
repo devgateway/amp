@@ -123,9 +123,16 @@ public class LuceneIndex extends Action {
 							  }
 							  //throw new RuntimeException("manual test of unchecked exception");
 						  }
-						  else
-							  if ("confluence".compareTo(action) == 0){
+						  else{
+							  if ("random".compareTo(action) == 0){
+								  AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, new Exception("simulated random activity error " + System.currentTimeMillis()));
+								  throw ae;
 							  }
+							  else
+								  if ("confluence".compareTo(action) == 0){
+								  }
+						  }
+							  
 					  }
 				  }
 		  }

@@ -29,8 +29,8 @@
 	<enable-autologin>true</enable-autologin>
 
 	<!-- ECS Service -->
-	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.local</ecsServerName>
+	<ecsDisable>false</ecsDisable>
+	<ecsServerName>arty.115.local</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

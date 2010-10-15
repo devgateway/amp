@@ -2683,22 +2683,32 @@ public class DbUtil {
         return organizations;
     }
 
-    public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId) {
+    public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {
         Session session = null;
         Query q = null;
         List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        String queryString = null;
+        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        queryString.append(" where  role.roleCode='DN' ");
+         if (orgGroupId != null&&orgGroupId !=-1) {
+            queryString.append(" and org.orgGrpId=:orgGroupId ");
+        }
+        if (publicView) {
+            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+        }
 
-
+        queryString.append("order by org.name asc");
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct f.ampDonorOrgId from " + AmpFunding.class.getName()
-                + " f where f.ampDonorOrgId.orgGrpId=:orgGroupId order by f.ampDonorOrgId.name asc";
-            q = session.createQuery(queryString);
-            q.setLong("orgGroupId", orgGroupId);
+            q = session.createQuery(queryString.toString());
+            if (orgGroupId != null&&orgGroupId !=-1) {
+                q.setLong("orgGroupId", orgGroupId);
+            }
             organizations = q.list();
         } catch (Exception ex) {
-            logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
+            logger.error("Unable to get Amp organisation names  from database ", ex);
         }
         return organizations;
     }

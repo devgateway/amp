@@ -19,8 +19,9 @@
 
         $("#org_group_dropdown_id").change(function () {
             var orgGroupId=$('#org_group_dropdown_id option:selected').val();
+            var fromPublicView=$('#fromPublicView').val()
             var partialUrl=addActionToURL('getOrganizations.do');
-            var url=partialUrl+'?orgGroupId='+orgGroupId+"&reset=false";
+            var url=partialUrl+'?orgGroupId='+orgGroupId+'&fromPublicView='+fromPublicView+"&reset=false";
             var async=new Asynchronous();
             async.complete=buildOrgDropDown;
             async.call(url);
@@ -194,15 +195,16 @@
 <digi:instance property="orgProfOrgProfileFilterForm"/>
 
 <digi:form action="/showOrgProfile.do">
+    <html:hidden property="fromPublicView" styleId="fromPublicView"/>
 
     <table border="0" align="left" width="100%">
         <tr>
             <td>
 				<div id="orgProfToolbarId" style="width: 99%; background-color: #ccdbff; padding: 1px 2px 2px 2px; min-height: 20px; Font-size: 8pt; font-family: Arial, Helvetica, sans-serif;">
-					<DIV id="subtabs" style="cursor: pointer; min-height: 15px; background-color: ;">
+					<DIV id="subtabs" style="cursor: pointer; min-height: 15px;">
 			  			<UL>
 							<LI>
-								<div style="background-color: ">
+								<div>
 									<a target="_blank" onclick="exportPDF(); return false;">
 									<digi:img width="15px" height="15px" hspace="0" vspace="0" src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" alt='Export to PDF' />
 									<digi:trn>Export to PDF</digi:trn> 
@@ -228,9 +230,9 @@
 					<div style="cursor: pointer; font-family: Arial; min-height: 15px; font-size: 11px; font-style: italic; float: right; vertical-align: middle;" id="displaySettingsButton">
 						<digi:trn>Show Current Settings</digi:trn> &gt;&gt;
 					</div>
-				</div>
+				</DIV>
 				<DIV id="subtabs" style="cursor: pointer; min-height: 2px; background-color: ;">
-				</div>
+				</DIV>
 			<div style="display:none; background-color: #FFFFCC; padding: 1px 1px 5px 5px;" id="currentDisplaySettings">
 			<table cellpadding="0" cellspacing="0" border="0" width="80%">
 				<tbody id="filterSettingsTable">

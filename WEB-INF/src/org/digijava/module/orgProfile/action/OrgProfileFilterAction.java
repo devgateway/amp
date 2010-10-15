@@ -94,10 +94,9 @@ public class OrgProfileFilterAction extends Action {
         if (orgForm.getOrgGroupId() == null || orgForm.getOrgGroupId() == -1) {
             // all groups
             orgForm.setOrgGroupId(-1l);
-            orgs = new ArrayList<AmpOrganisation>(DbUtil.getAllDonorOrgs());
-        } else {
-            orgs = DbUtil.getDonorOrganisationByGroupId(orgForm.getOrgGroupId());
         }
+        orgs = DbUtil.getDonorOrganisationByGroupId(orgForm.getOrgGroupId(),orgForm.getFromPublicView());
+        
         orgForm.setOrganizations(orgs);
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
         Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));

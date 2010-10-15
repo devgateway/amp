@@ -30,8 +30,8 @@
 	<enable-autologin>true</enable-autologin>
     
 	<!-- ECS Service -->
-	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.drc</ecsServerName>
+	<ecsDisable>false</ecsDisable>
+	<ecsServerName>ampdev.115.drc</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
     

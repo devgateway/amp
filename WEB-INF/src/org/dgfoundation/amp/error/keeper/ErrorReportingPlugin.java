@@ -78,6 +78,5 @@ public class ErrorReportingPlugin {
 		}
 
 		log.error(e.getMessage(), e);
-		log.fatal("TESTTTTTTTTTTT");
 	}
 }

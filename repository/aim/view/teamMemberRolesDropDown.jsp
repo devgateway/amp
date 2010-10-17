@@ -1,6 +1,6 @@
 				<html:option value="">
 						------ 
-					<digi:trn key="aim:addTeamMemberSelectRole">Select role</digi:trn>
+					<digi:trn>Select role</digi:trn>
 						------
 				</html:option>
 				<logic:iterate name="aimTeamMemberForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">

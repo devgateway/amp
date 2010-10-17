@@ -19,9 +19,15 @@
     var idWMMmemeber = aimTeamMemberForm.headId.value;
     var idCurrentMember = aimTeamMemberForm.teamMemberId.value;
     var idUpdaterMember = aimTeamMemberForm.memberId.value;
+    var selectedRole=document.getElementById("selRole");
+    if(isEmpty(selectedRole.value) == true){
+        var msg='<digi:trn>Please Select Role</digi:trn>';
+    	alert(msg);
+    	return false;
+    }
     if(idWMMmemeber!= idUpdaterMember){
         <c:set var="translation">
-        <digi:trn key="aim:WSMemberCannotChangeRoles">The Workspace Member does not have rights to change the role.</digi:trn>
+        <digi:trn>The Workspace Member does not have rights to change the role.</digi:trn>
         </c:set>   			 
         alert("${translation}");
         return false;
@@ -33,7 +39,7 @@
         return false;
     } else {
         var indice = aimTeamMemberForm.role.selectedIndex;
-        var valor = aimTeamMemberForm.role.options[indice].text
+        var valor = aimTeamMemberForm.role.options[indice].text;
         <c:set var="translation">
         <digi:trn key="aim:AreYouSureToChangerole">Are you sure you want to change this role to</digi:trn>
         </c:set>				 
@@ -72,45 +78,42 @@
 		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=750>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
-					<td height=33><span class=crumb>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</c:set>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:portfolio">
-						Portfolio
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
-						</c:set>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:teamWorkspaceSetup">
-						Team Workspace Setup
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>
-						</c:set>
-						<digi:link href="/teamMemberList.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:members">
-						Members
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:memberDetails">
-						Member Details
-						</digi:trn>
+					<td height="33">
+						<span class="crumb">
+							<c:set var="translation">
+								<digi:trn>Click here to view MyDesktop</digi:trn>
+							</c:set>
+							<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
+								<digi:trn>Portfolio</digi:trn>
+							</digi:link>&nbsp;&gt;&nbsp;
+							<c:set var="translation">
+								<digi:trn>Click here to view Team Workspace Setup</digi:trn>
+							</c:set>
+							<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
+							<digi:trn>Team Workspace Setup</digi:trn>
+							</digi:link>&nbsp;&gt;&nbsp;
+							<c:set var="translation">
+								<digi:trn>Click here to view Members</digi:trn>
+							</c:set>
+							<digi:link href="/teamMemberList.do" styleClass="comment" title="${translation}" >
+							<digi:trn>Members</digi:trn>
+							</digi:link>&nbsp;&gt;&nbsp;
+							<digi:trn>Member Details</digi:trn>
+						</span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 vAlign="middle" width="571">
+						<span class="subtitle-blue">
+							<digi:trn>Team Workspace Setup</digi:trn>
+						</span>
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+					<td noWrap width="571" vAlign="top">
+						<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="100%">
 							<tr >
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="1" scope="request"/>
@@ -127,13 +130,13 @@
 										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
 										<tr>
 											<td valign="top" align="left">
-												<table border=0 cellPadding=3 cellSpacing=0 width="35%">
+												<table border="0" cellPadding="3" cellSpacing="0" width="35%">
 													<tr>
 														<td bgcolor="#f4f4f2">
 															<table width="100%" border="0" cellspacing="0" cellPadding="3" >
 																<tr>
 																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<digi:trn key="aim:memberName">Name</digi:trn>
+																		<digi:trn>Name</digi:trn>
 																	</td>
 																	<td align="left" width="50%" bgcolor="#f4f4f2">
 																		<bean:write name="aimTeamMemberForm" property="name" />
@@ -141,10 +144,10 @@
 																</tr>
 																<tr>
 																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<digi:trn key="aim:memberRole">Role</digi:trn>
+																		<digi:trn>Role</digi:trn>
 																	</td>
 																	<td align="left" width="50%" bgcolor="#f4f4f2">
-																		<html:select property="role">
+																		<html:select property="role" styleId="selRole">
 																			<%@include file="teamMemberRolesDropDown.jsp" %>
 																			<%-- <html:optionsCollection name="aimTeamMemberForm" 
 																			property="ampRoles" value="ampTeamMemRoleId" label="role" /> --%>
@@ -160,11 +163,11 @@
 																		<table width="100%" cellspacing="5">
 																			<tr>
 																				<td width="50%" align="right">
-																					<c:set var="translation"><digi:trn key="btn:save">Save</digi:trn> </c:set>
+																					<c:set var="translation"><digi:trn>Save</digi:trn> </c:set>
 																					<html:submit value="${translation}" styleClass="dr-menu" onclick="return checkRole()"/>
 																				</td>	
 																				<td width="50%" align="left">	
-																					<c:set var="translation"><digi:trn key="btn:cancel">Cancel</digi:trn> </c:set>
+																					<c:set var="translation"><digi:trn>Cancel</digi:trn> </c:set>
 																					<html:reset value="${translation}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																				</td>
 																			</tr>

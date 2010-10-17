@@ -3,6 +3,7 @@ package org.digijava.module.gis.action;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -171,7 +172,7 @@ public class ShowRegionReport extends Action {
                                                 multiply(new BigDecimal(
                         percentsForSectorSelected / 100f)));
 
-                Set locations = activity.getLocations();
+                Collection locations = activity.getLocations();
                 Iterator<AmpActivityLocation> locIt = locations.iterator();
 
                 while (locIt.hasNext()) {

@@ -7,6 +7,7 @@ import java.awt.image.RenderedImage;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -1052,7 +1053,7 @@ public class GetFoundingDetails extends Action {
                 fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
                 fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 
-                Set locations = activity.getLocations();
+                Collection locations = activity.getLocations();
                 Iterator<AmpActivityLocation> locIt = locations.iterator();
 
                 while (locIt.hasNext()) {

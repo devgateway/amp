@@ -591,6 +591,7 @@
 <field:display name="Projection Name" feature="MTEF Projections"></field:display> 
 <field:display name="Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Proposed Completion Date" feature="Planning"></field:display> 
+<field:display name="Closing Dates" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 

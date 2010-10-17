@@ -3,7 +3,7 @@ package org.dgfoundation.amp.ar.view.pdf;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
-import com.itextpdf.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPTable;
 
 public class TrnTextCellPDF extends TextCellPDF {
 

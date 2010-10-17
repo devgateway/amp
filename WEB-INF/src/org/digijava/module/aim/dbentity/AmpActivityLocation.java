@@ -1,12 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.helper.ActivityItem;
+import org.digijava.module.translation.entity.AdvancedTrnItem;
+
 /**
  * Connection between Activity and Sector.
  * This class initially was added to add percentage for Bolivia. AMP-2250
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation {
+public class AmpActivityLocation implements Comparable{
 	private Long id;
 	private AmpActivity activity;
 	private AmpLocation location;
@@ -37,4 +40,14 @@ public class AmpActivityLocation {
 		this.locationPercentage = locationPercentage;
 	}
 
+	@Override
+	public int compareTo(Object o) {
+		if (!(o instanceof AmpActivityLocation)) {
+            throw new IllegalArgumentException("AmpActivityLocation class object can be only compared against the same class instance");
+        }
+		AmpActivityLocation other = (AmpActivityLocation)o;
+        String myName=(getLocation().getName()==null)?"":getLocation().getName();
+		String hisName=(other.getLocation().getName()==null)?"":other.getLocation().getName();
+		return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
+    }
 }

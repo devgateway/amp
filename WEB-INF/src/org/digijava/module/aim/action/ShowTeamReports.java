@@ -56,6 +56,9 @@ public class ShowTeamReports extends Action {
 			if (  "true".equals( request.getParameter("tabs") )  ) {
 				rf.setShowTabs(true);
 				forwardName	= "forwardTabs";
+				if (!RequestUtils.isLoggued(response, request.getSession(), request)) {
+					return null;
+				}
 			}
 			if (  "false".equals( request.getParameter("tabs") )  )
 				rf.setShowTabs(false);

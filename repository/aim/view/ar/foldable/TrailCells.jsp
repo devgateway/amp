@@ -14,29 +14,31 @@
 	<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>
 </c:set>
 <c:set var="reportDataNameVar">
-<bean:write name="reportData" property="name"/>
+    <bean:write name="reportData" property="name"/>
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
 <% if (reportData.getLevelDepth() < 3) { %>		
-		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD" nowrap>
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD">
 	<% } else { %>	
-		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white"  class="reportsBorderTD" nowrap>
-	<% } %>	
-	<c:if test="${!(reportData.name == reportMeta.name)}">		
-		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
-	</c:if>		
-	<b> 
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white"  class="reportsBorderTD">
+	<% } %>			
+
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
 	<!-- *************************************************** 
 			WARNING:
 				Do not add Translations here!
-		 ***************************************************--> 
-		<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+		 ***************************************************-->
+	   <div align="left" style="max-width: 95%; text-align: justify">
+            <c:if test="${!(reportData.name == reportMeta.name)}">      
+                <img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
+            </c:if>
+            <b><%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+            (<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>    
+       </div>
 	<% } else { %>
-		<bean:write name="reportData" property="name"/>
-	<% } %>
-		&nbsp; (<bean:write name="reportData" property="totalUniqueRows"/>) 
-	</b>
+        <b><bean:write name="reportData" property="name"/>
+        (<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
+    <% } %> 
 </td>
 	
 	<c:set var="firstCell" value="${true}"></c:set>

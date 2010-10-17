@@ -173,8 +173,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
 						if(col.getWidth()>1) {
 							for(int k=0;k<col.getWidth();k++) {
-								HSSFCell cell = row.getCell(colId.intValue()+k);
-								if(cell==null) cell=row.createCell(colId.intValue()+k);
+								HSSFCell cell = row.getCell((short) (colId.intValue()+k));
+								if(cell==null) cell=row.createCell((short) (colId.intValue()+k));
 								HSSFCellStyle cellstyle = wb.createCellStyle();
 								cellstyle.cloneStyleFrom(this.getHighlightedStyle());
 								cell.setCellStyle(cellstyle);

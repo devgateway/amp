@@ -76,7 +76,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Set sectors ;
 	private Set contracts;
 	private Set componentes; //for bolivia;
-	private Set locations ;
+	private Collection locations ;
 	private Set<AmpOrgRole> orgrole;
 //	private AmpLevel level ; //TO BE DELETED
 	private Set internalIds ;
@@ -368,7 +368,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @return
 	 */
-	public Set getLocations() {
+	public Collection getLocations() {
 		return locations;
 	}
 
@@ -480,8 +480,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @param set
 	 */
-	public void setLocations(Set set) {
-		locations = set;
+	public void setLocations(Collection col) {
+		locations = col;
 	}
 
 	/**

@@ -11,10 +11,10 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class CellColumnPDF extends PDFExporter {
 		 Cell c=col.getByOwner(ownerId);
 		 if(c!=null)
 		 c.invokeExporter(this);
-		 else table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.FontFamily.COURIER, 10))));
+		 else table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.COURIER, 10))));
 	}
 
 }

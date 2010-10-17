@@ -1209,7 +1209,7 @@ public class DEImportBuilder {
 					logger.getItems().add(new DESectorMissingLog(sectorAux));
 			}
 			if(percentage != 100){
-				;//logger.getItems().add(new DESectorPercentageLog());
+				//logger.getItems().add(new DESectorPercentageLog());
 			}
 		}
 		

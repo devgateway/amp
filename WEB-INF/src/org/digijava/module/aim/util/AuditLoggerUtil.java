@@ -36,6 +36,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.lowagie.text.Row;
 /**
  * ActivityUtil is the persister class for all activity related
  * entities

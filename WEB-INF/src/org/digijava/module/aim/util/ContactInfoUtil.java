@@ -599,30 +599,30 @@ public class ContactInfoUtil {
             contactInfo.setPrimaryImplExecutingContId(getCategoryPrimaryContactId (contactInfo.getImplExecutingAgencyContacts()));
         }
     }
-
-    private static String getCategoryPrimaryContactId (List <AmpActivityContact> contacts) {
-            boolean hasPrimary = false;
-            String primaryContactTmpId = null;
-            String primaryId = null;
-
-            for (AmpActivityContact contact : contacts) {
-                if (!hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
-                    hasPrimary = true;
-                    primaryContactTmpId = contact.getContact().getTemporaryId();
-                } else if (hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
-                    //If somehow we have 2 contacts set as primary
-                    contact.setPrimaryContact(new Boolean(false));
-                }
-            }
-
-            if (hasPrimary) {
-                primaryId = primaryContactTmpId;
-            } else {
-                //Set first as a primary if no primary exists
-                primaryId = contacts.get(0).getContact().getTemporaryId();
-                contacts.get(0).setPrimaryContact(new Boolean(true));
-            }
-        return primaryId;
-    }
-		
+   
+	 
+	 private static String getCategoryPrimaryContactId (List <AmpActivityContact> contacts) {
+	 	boolean hasPrimary = false;
+	 	String primaryContactTmpId = null;
+	 	String primaryId = null;
+	 	
+	 	for (AmpActivityContact contact : contacts) {
+	 		if (!hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
+	 			hasPrimary = true;
+	 			primaryContactTmpId = contact.getContact().getTemporaryId();
+	 		} else if (hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
+	 			//If somehow we have 2 contacts set as primary
+	 			contact.setPrimaryContact(new Boolean(false));
+	 		}
+	 	}
+	 	
+	 	if (hasPrimary) {
+	 		primaryId = primaryContactTmpId;
+	 	} else {
+	 		//Set first as a primary if no primary exists
+	 		primaryId = contacts.get(0).getContact().getTemporaryId();
+	 		contacts.get(0).setPrimaryContact(new Boolean(true));
+	 	}
+	 	return primaryId;
+	 }
 }

@@ -39,6 +39,7 @@ import org.digijava.kernel.entity.Locale;
 import org.hibernate.Session;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.helper.TeamMember;
 import javax.security.auth.Subject;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -566,6 +567,21 @@ public class RequestUtils {
 		boolean ret = true;
 		String str = (String) session.getAttribute("ampAdmin");
 		if (str == null || str.equalsIgnoreCase("no")) {
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+					.getContextPath());
+			url += "/aim/index.do";
+			response.sendRedirect(url);
+			ret = false;
+		}
+		return ret;
+	}
+    
+    public static boolean isLoggued(HttpServletResponse response, HttpSession session, HttpServletRequest request)
+			throws IOException {
+		boolean ret = true;
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm == null) {
 			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
 			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
 					.getContextPath());

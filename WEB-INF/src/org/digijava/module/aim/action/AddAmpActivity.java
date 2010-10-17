@@ -68,7 +68,20 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ChapterUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -204,6 +217,8 @@ public class AddAmpActivity extends Action {
 				  	}
 				  	request.getSession().removeAttribute("contactToBeReplaced");
 
+				  //Normalize primary contacts
+	 	 	 	 	ContactInfoUtil.normalizeActivityContacts(contactInfo);
 
       //Normalize primary contacts
       ContactInfoUtil.normalizeActivityContacts(contactInfo);

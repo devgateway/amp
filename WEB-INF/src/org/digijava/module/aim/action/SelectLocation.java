@@ -126,6 +126,7 @@ public class SelectLocation extends Action {
         	}
         }
         
+        int lastLayer=0;
         while ( parentLocId != null ) {
         	AmpCategoryValueLocations parentLoc					= DynLocationManagerUtil.getLocation(parentLocId, true);
         	eaForm.getLocation().getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
@@ -142,7 +143,6 @@ public class SelectLocation extends Action {
         	
         	parentLocId											= null;
         	Collection<AmpCategoryValueLocations> childrenLocs 	= parentLoc.getChildLocations();
-        	int lastLayer=0;
         	if ( childrenLocs != null && childrenLocs.size() > 0 ) {
         		Integer currentLayer = (parentLoc.getParentCategoryValue().getIndex()) + 1;
         			//((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();

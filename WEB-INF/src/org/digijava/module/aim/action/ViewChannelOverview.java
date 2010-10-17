@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,11 +35,13 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -306,6 +311,17 @@ public class ViewChannelOverview extends TilesAction {
 			else
 				formBean.setWrite(false);
 
+			
+			List<AmpActivityLocation> locsList = new ArrayList<AmpActivityLocation>(activity.getLocations());
+			Collections.sort(locsList, new Comparator<AmpActivityLocation>(){
+				public int compare(AmpActivityLocation a1, AmpActivityLocation a2) {
+					String myName=(a1.getLocation().toString()==null)?"":a1.getLocation().toString();
+					String hisName=(a2.getLocation().toString()==null)?"":a2.getLocation().toString();
+					return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
+				}
+			});
+			activity.setLocations(locsList);
+						
 			formBean.setActivity(activity);
 			formBean.setCanView(true);
 

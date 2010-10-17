@@ -1684,7 +1684,7 @@ public class SaveActivity extends Action {
 		if(contactInfo.getResetImplExecutingIds()!=null && contactInfo.getResetImplExecutingIds()){
 			contactInfo.setPrimaryImplExecutingContIds(null);
 		}
-
+		/*
         /*
 		String[] donorContsIds=null;
 		String[] mofedContsIds=null;
@@ -1741,7 +1741,6 @@ public class SaveActivity extends Action {
 			}
 		}
 		*/
-		
 		//Do the initializations and all the information transfer between beans here
 		List<AmpActivityContact> allContacts=new ArrayList<AmpActivityContact>(); //eaForm.getContactInformation().getActivityContacts();
 		if(contactInfo.getDonorContacts()!=null && contactInfo.getDonorContacts().size()>0){
@@ -1790,7 +1789,7 @@ public class SaveActivity extends Action {
 		contactInfo.setActivityContacts(allContacts);
 		activity.setActivityContacts(new HashSet(allContacts));
 	}
-
+	/*
     /*
 	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {
 		String actContId=ampActContact.getContact().getTemporaryId()==null ? ampActContact.getContact().getId().toString() :  ampActContact.getContact().getTemporaryId();

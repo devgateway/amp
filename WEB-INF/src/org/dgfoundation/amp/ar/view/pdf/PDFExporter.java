@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 
@@ -34,7 +33,7 @@ public abstract class PDFExporter extends Exporter {
 	protected PdfPTable table;
 	protected Long ownerId; 
 	
-	protected static BaseColor currentBackColor=null;
+	protected static Color currentBackColor=null;
 	
 	public PDFExporter(Exporter parent,Viewable item) {
 		super(parent,item);

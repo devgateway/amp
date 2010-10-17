@@ -2078,34 +2078,32 @@ function commentWin(val, commentId) {
 																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Proposed Completion Date"
-																		feature="Planning">
+																	<field:display name="Proposed Completion Date" feature="Planning">
 																		<tr>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:proposedCompletionDate">
 																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /></TD>
 																		</tr>
+																		</field:display>
+																		<field:display name="Closing Dates" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff">
-																			<TABLE width="100%" cellspacing=0 cellpadding=0
-																				valign=top align=left>
-																				<TR>
-																					<TD width="170" valign=top><digi:trn
-																						key="aim:proposedClosingDates">Closing Dates
-																					</digi:trn> :</TD>
-																					<TD>
-																					<TABLE cellPadding=0 cellSpacing=0>
-																						<c:forEach var="closeDate"
-																							items="${aimChannelOverviewForm.closingDates}">
-																							<TR>
-																								<TD><aim:formatDate value="${closeDate}" /></TD>
-																							</TR>
-																						</c:forEach>
-																					</TABLE>
+																				<TABLE width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+																					<TR>
+																						<TD width="170" valign=top><digi:trn
+																							key="aim:proposedClosingDates">Closing Dates </digi:trn> :</TD>
+																						<TD>
+																				<TABLE cellPadding=0 cellSpacing=0>
+																					<c:forEach var="closeDate" items="${aimChannelOverviewForm.closingDates}">
+																					<TR>
+																						<TD><aim:formatDate value="${closeDate}" /></TD>
+																					</TR>
+																					</c:forEach>
+																				</TABLE>
 																					</TD>
-																				</TR>
+																				 </TR>
 																			</TABLE>
-																			</TD>
+																		</TD>
 																		</TR>
 																	</field:display>
 																</TABLE>

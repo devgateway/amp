@@ -53,6 +53,10 @@ public class AddUsersToGroup
 
         Site currentSite = RequestUtils.getSite(request);
         GroupMembersForm membersForm = (GroupMembersForm) form;
+        
+        if (!RequestUtils.isAdmin(response, request.getSession(), request)) {
+			return null;
+		}
 
         Group group = null;
         try {

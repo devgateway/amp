@@ -42,20 +42,20 @@ import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.ExceptionConverter;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEvent;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.ExceptionConverter;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPageEvent;
+import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -206,8 +206,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	}
 
 	public void onStartPage(PdfWriter writer, Document arg1) {
-		if(PDFExporter.headingCells==null) 
-			return;
+	  	if(PDFExporter.headingCells==null) return;
 		PdfContentByte cb = writer.getDirectContent();
 		cb.saveState();
 		PdfPTable table = new PdfPTable(PDFExporter.widths);
@@ -264,7 +263,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			}				 	                	                
 			if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header		
 				PdfPCell pdfc;
-				Font font = new Font(Font.FontFamily.COURIER, 8, Font.NORMAL);		
+					Font font = new Font(Font.COURIER, 8, Font.COURIER);		
 				pdfc = new PdfPCell(new Paragraph(stmt, font));
 				pdfc.setPaddingBottom(10);
 				pdfc.setPaddingTop(10);
@@ -302,7 +301,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			logger.error("Error translating ", e);}
 
 		PdfPCell pdfc;
-		Font titleFont = new Font(Font.FontFamily.COURIER, 16, Font.BOLD);				
+			Font titleFont = new Font(Font.COURIER, 8, Font.COURIER);		
+			//Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);				
 		pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
 		pdfc.setPaddingBottom(10);
 		pdfc.setPaddingTop(10);
@@ -321,7 +321,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		//translatedNotes
 		//ArConstants.SELECTED_CURRENCY
 		//Currency
-		Font currencyFont = new Font(Font.FontFamily.COURIER, 10, Font.ITALIC);
+			Font currencyFont = new Font(Font.COURIER, 10, Font.ITALIC);
 		pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
 		pdfc.setPaddingBottom(2);
 		pdfc.setPaddingTop(2);
@@ -371,14 +371,15 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		} catch (Exception e) {
 			logger.error("Error onStartPage",e);
 		}
-		cb.restoreState();
+		
 	}
 
 	public void onEndPage(PdfWriter writer, Document document) {
 	try {
 	  
 	    PdfContentByte cb = writer.getDirectContent();
-	    cb.saveState();  
+	    //cb.saveState();
+	    
 	    String siteId = site.getSiteId();
     	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
     	    r.setSiteId(siteId);

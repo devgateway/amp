@@ -85,6 +85,10 @@ public class ShowCalendarEvent extends Action {
         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String langCode = RequestUtils.getNavigationLanguage(request).getCode();
  		
+        if (!RequestUtils.isLoggued(response, request.getSession(), request)) {
+			return null;
+		}
+ 		
         CalendarEventForm ceform = (CalendarEventForm) form;
         Object teamObj = request.getSession().getAttribute("teamHead");
         boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));

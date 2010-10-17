@@ -10,11 +10,11 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class AmountCellPDF extends PDFExporter {
 		
 		
 		AmountCell ac=(AmountCell) item;
-		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(Font.FontFamily.COURIER, 9, Font.NORMAL)));
+		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(Font.COURIER, 9, Font.NORMAL)));
 		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		if (currentBackColor!=null){

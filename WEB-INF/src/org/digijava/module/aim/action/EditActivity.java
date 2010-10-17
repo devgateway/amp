@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -593,6 +594,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	request.getParameterMap().put("viewAllRights", "true");
 		} catch (Exception e) {
 			logger.error(e);
+			e.printStackTrace();
 		}
 		
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
@@ -1059,7 +1061,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 locs.add(location);
               }
             }
-            eaForm.getLocation().setSelectedLocs(locs);
+            List<Location> locsList = new ArrayList<Location>(locs);
+			Collections.sort(locsList, new Comparator<Location>(){
+				public int compare(Location a1, Location a2) {
+					String myName=(a1.getLocationName()==null)?"":a1.getLocationName();
+					String hisName=(a2.getLocationName()==null)?"":a2.getLocationName();
+					return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
+				}
+			});
+            eaForm.getLocation().setSelectedLocs(locsList);
           }
 
        
@@ -1704,11 +1714,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
                         /*
-						if(contactInfo.getPrimaryDonorContIds()==null){
+						contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryDonorContIds()==null){
 							contactInfo.setPrimaryDonorContIds(new String[1]);
 						}
-						contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();
-						*/
+						contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+						
 					}					
 					contactInfo.getDonorContacts().add(ampActContact);
 				}
@@ -1720,11 +1731,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
                         /*
-						if(contactInfo.getPrimaryMofedContIds()==null){
+						contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryMofedContIds()==null){
 							contactInfo.setPrimaryMofedContIds(new String[1]);
 						}
-						contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();
-						*/
+						contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+						
 					}
 					contactInfo.getMofedContacts().add(ampActContact);
 				}
@@ -1737,11 +1749,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
                         /*
-						if(contactInfo.getPrimaryProjCoordContIds()==null){
+						contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryProjCoordContIds()==null){
 							contactInfo.setPrimaryProjCoordContIds(new String[1]);
 						}
-						contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();
-						*/
+						contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+						
 
 					}
 					contactInfo.getProjCoordinatorContacts().add(ampActContact);
@@ -1754,11 +1767,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
                         /*
-						if(contactInfo.getPrimarySecMinContIds()==null){
+						contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimarySecMinContIds()==null){
 							contactInfo.setPrimarySecMinContIds(new String[1]);
 						}
-						contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();
-						*/
+						contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+						
 					}
 					contactInfo.getSectorMinistryContacts().add(ampActContact);
 				}
@@ -1770,11 +1784,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
                         /*
-						if(contactInfo.getPrimaryImplExecutingContIds()==null){
+						contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryImplExecutingContIds()==null){
 							contactInfo.setPrimaryImplExecutingContIds(new String[1]);
 						}
-						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();
-						*/
+						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+						
 					}
 					contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
 				}

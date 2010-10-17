@@ -249,11 +249,7 @@ public class UpdateAppSettings extends Action {
 			if(uForm.getDefRecsPerPage() == null || uForm.getDefRecsPerPage() < 2)
 				{
 					ActionMessages errors = new ActionMessages();
-					Site site = RequestUtils.getSite(request);
-	        		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-	        		String siteId = site.getId()+"";
-	        		String locale = navigationLanguage.getCode();
-	        		errors.add("title", new ActionMessage("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
+	        		errors.add("title", new ActionMessage("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",request)));
 	        		if (errors.size() > 0)
 	        			saveErrors(request, errors);
 	        		

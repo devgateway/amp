@@ -27,6 +27,16 @@ function validade(){
 	  alert(helpBodyAct);
 	  return false;
   	}
+  	var  reportsperPage = document.getElementById("repsPerPage").value;
+  	var validChars= "0123456789";
+ 	for (var i = 0;  i < reportsperPage.length;  i++) {
+ 		var ch = reportsperPage.charAt(i);
+  		if (validChars.indexOf(ch)==-1){
+  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
+   			return false;
+  		}
+ 	}
+  	
   	var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
   	var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
 
@@ -215,7 +225,7 @@ function loadShareRules(){
 															Number of reports per page</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
-															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
+															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text" styleId="repsPerPage"/>
 
                                                             <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
 														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>

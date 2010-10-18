@@ -958,7 +958,7 @@ public class ExportToPDF extends Action {
                         
                         if (chartSecondaryScheme != null) {
                             PdfPTable chartTable=new  PdfPTable(1);
-                            Plot plot = chart.getPlot();
+                            Plot plot = chartSecondaryScheme.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
                             PdfContentByte cb = pdfWriter.getDirectContent();
@@ -975,7 +975,7 @@ public class ExportToPDF extends Action {
 
                         if (chartDisbSecondaryScheme != null) {
                             PdfPTable chartTable=new  PdfPTable(1);
-                            Plot plot = chart.getPlot();
+                            Plot plot = chartDisbSecondaryScheme.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
                             PdfContentByte cb = pdfWriter.getDirectContent();
@@ -992,7 +992,7 @@ public class ExportToPDF extends Action {
 
                          if (chartTertiaryScheme != null) {
                             PdfPTable chartTable=new  PdfPTable(1);
-                            Plot plot = chart.getPlot();
+                            Plot plot = chartTertiaryScheme.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
                             PdfContentByte cb = pdfWriter.getDirectContent();
@@ -1009,7 +1009,7 @@ public class ExportToPDF extends Action {
 
                         if (chartDisbTertiaryScheme != null) {
                             PdfPTable chartTable=new  PdfPTable(1);
-                            Plot plot = chart.getPlot();
+                            Plot plot = chartDisbTertiaryScheme.getPlot();
                             plot.setNoDataMessage("No Data Available");
                             plot.setNoDataMessageFont(font);
                             PdfContentByte cb = pdfWriter.getDirectContent();

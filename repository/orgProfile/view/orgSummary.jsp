@@ -342,7 +342,7 @@
             <tr>
                 <td width="30%"><digi:trn>Contact Email</digi:trn>:</td>
                 <td>
-                    <c:if test="${empty organization.phone}"><digi:trn>Not Available</digi:trn></c:if>
+                    <c:if test="${empty organization.email}"><digi:trn>Not Available</digi:trn></c:if>
                     ${organization.email}&nbsp;
                 </td>
             </tr>

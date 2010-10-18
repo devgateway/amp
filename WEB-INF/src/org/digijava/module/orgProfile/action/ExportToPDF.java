@@ -130,23 +130,23 @@ public class ExportToPDF extends Action {
                 if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
                     orgUrl = organization.getOrgUrl();
                 }
-                if (organization.getContactPersonName() != null) {
+                if (organization.getContactPersonName() != null&&!organization.getContactPersonName().trim().equals("")) {
                     contactName = organization.getContactPersonName();
                 }
-                if (organization.getEmail() != null) {
+                if (organization.getEmail() != null&&!organization.getEmail().trim().equals("")) {
                     email = organization.getEmail();
                 }
-                if (organization.getPhone() != null) {
+                if (organization.getPhone() != null&&!organization.getPhone().trim().equals("")) {
                     contactPhone = organization.getPhone();
                 }
 
-                if (organization.getFax() != null) {
+                if (organization.getFax() != null&&!organization.getFax().trim().equals("")) {
                     contactFax = organization.getFax();
                 }
-                if (organization.getOrgBackground() != null) {
+                if (organization.getOrgBackground() != null&&!organization.getOrgBackground().trim().equals("")) {
                     orgBackground = organization.getOrgBackground();
                 }
-                if (organization.getOrgDescription() != null) {
+                if (organization.getOrgDescription() != null&&!organization.getOrgDescription().trim().equals("")) {
                     orgDesc = organization.getOrgDescription();
                 }
 

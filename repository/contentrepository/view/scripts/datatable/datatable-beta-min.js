@@ -1604,6 +1604,7 @@ YAHOO.widget.Column.prototype.getRowSpan = function() {
 };
 YAHOO.widget.Column.prototype.format = function(elCell, oRecord) {
 	var oData = (this.key) ? oRecord[this.key] : null;
+	elCell.style.color = '#222222';
 	if (this.formatter) {
 		this.formatter(elCell, oRecord, this, oData);
 	} else {
@@ -1641,6 +1642,7 @@ YAHOO.widget.Column.prototype.format = function(elCell, oRecord) {
 			break;
 		default:
 			elCell.innerHTML = (oData) ? oData.toString() : "";
+			elCell.style.color = '#222222';
 			classname = YAHOO.widget.DataTable.CLASS_STRING;
 			break;
 		}
@@ -1676,6 +1678,7 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
 		markup = "";
 	}
 	elCell.innerHTML = markup;
+	elCell.style.color = '#222222';
 };
 YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
 	var oDate = oData;
@@ -1683,6 +1686,7 @@ YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
 		try {
 			var formatter		= new FormatDateHelper(oData);
 			elCell.innerHTML	= formatter.formatDate();
+			elCell.style.color = '#222222';
 		}
 		catch(err) {
 			elCell.innerHTML = (oDate.getMonth() + 1) + "/" + oDate.getDate() + "/"
@@ -1713,6 +1717,7 @@ YAHOO.widget.Column.formatNumber = function(elCell, oRecord, oColumn, oData) {
 	var nNumber = oData;
 	if (nNumber) {
 		elCell.innerHTML = nNumber.toString();
+		elCell.style.color = '#222222';
 	} else {
 		elCell.innerHTML = "";
 	}

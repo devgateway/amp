@@ -69,7 +69,9 @@
 											</span>
 										</c:when>
 										<c:otherwise>
-											<bean:write name='documentData' property='title'/>
+											<span style="color:#222222;">
+												<bean:write name='documentData' property='title'/>
+											</span>
 										</c:otherwise>
 									</c:choose>															
 									
@@ -96,7 +98,7 @@
 										<c:otherwise>
 											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" 
 												onClick="downloadFile('${documentData.nodeVersionUUID}');"
-												style="cursor:pointer; color: blue; font-size: 11px">
+												style="cursor:pointer; color: #222222; font-size: 11px">
 										</c:otherwise>
 									</c:choose>
 										 <bean:write name="documentData" property="name" />

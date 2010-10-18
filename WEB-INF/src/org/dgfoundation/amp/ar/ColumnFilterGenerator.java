@@ -76,7 +76,7 @@ public class ColumnFilterGenerator {
 		}
 		if (ArConstants.VIEW_REGIONAL_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
-			AmpColumnsFilters acf = new AmpColumnsFilters(c,"regionSelected","region_id");
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"relatedLocations","region_id");
 			c.getFilters().add(acf);
 		}
 	}

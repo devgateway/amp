@@ -165,7 +165,8 @@ function changeEventTypesState(){
 		  </div>
 		</div>
 	</field:display>
-	<div style="padding:5px;width:210px;height:28px;">
+	<c:if test="${not empty sessionScope.currentMember}">
+		<div style="padding:5px;width:210px;height:28px;">
 	 	<select id="publicFilter" class="inp-text" style="width: 200px; max-width: 200px;" onchange="changeState()" name="filter.showPublicEvents" >
 			<c:if test="${calendarViewForm.showPublicEvents == 0}">
 				<option selected="true" value="0">	
@@ -195,6 +196,8 @@ function changeEventTypesState(){
 			</option>
 		</select>
 	</div>
+	</c:if>
+	
 	<div style="padding:5px;width:200px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
 			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>

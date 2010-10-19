@@ -736,13 +736,13 @@ public class ExportToWord extends Action {
                                     largestProjectsProjecttitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsProjecttitle);
 
-                                    RtfCell largestProjectsCommitmentTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
+                                    RtfCell largestProjectsCommitmentTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId)+"\n(" + filter.getCurrName()+")", OrgProfileUtil.HEADERFONTWHITE));
                                     largestProjectsCommitmentTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                     largestProjectsCommitmentTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsCommitmentTitle);
 
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
-                                        RtfCell largestProjectsDisbursemenTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId), OrgProfileUtil.HEADERFONTWHITE));
+                                        RtfCell largestProjectsDisbursemenTitle = new RtfCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId)+"\n(" + filter.getCurrName()+")", OrgProfileUtil.HEADERFONTWHITE));
                                         largestProjectsDisbursemenTitle.setBackgroundColor(OrgProfileUtil.TITLECOLOR);
                                         largestProjectsDisbursemenTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                         largetsProjectsTbl.addCell(largestProjectsDisbursemenTitle);

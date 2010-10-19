@@ -90,7 +90,7 @@
         <div  class="tab_organization_profile_selected">
             <LI>
                 <a name="node">
-                    <div style="font-size:9pt;font-weight:bold;">
+                    <div>
                         <digi:trn>Organization Profile</digi:trn>
                     </div>
                 </a>
@@ -100,7 +100,7 @@
             <LI>
                 <span>
                <a href="javascript:hideLargestProjects()">
-                   <div style="font-size:9pt" title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
+                   <div title='<digi:trn>Hide  largest projects table and show summary</digi:trn>'>
                        <digi:trn>Organization Profile</digi:trn>
                    </div>
                </a>
@@ -112,7 +112,7 @@
             <LI>
                 <span>
                     <a  href="javascript:loadLargestProjects()">
-                        <div style="font-size:9pt;" title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
+                        <div title='<digi:trn>Hide summary and show largest projects table</digi:trn>'>
                             ${largestPrjTblName}
                         </div>
                     </a>
@@ -123,7 +123,7 @@
         <div  class="tab_organization_profile_unselected" style="display: none">
             <LI>
                 <a name="node">
-                    <div style="font-size:9pt;font-weight:bold;">
+                    <div>
                         ${largestPrjTblName}
                     </div>
                 </a>

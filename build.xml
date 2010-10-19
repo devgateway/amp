@@ -48,6 +48,11 @@
 	 	</not>
 	 </condition>
 	
+	<condition property="mysql.port" value="3306">
+	 	<not>
+	 		<isset property="mysql.port"/>                              
+	 	</not>
+	 </condition>
 	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
 
 	<property name="mysql.url" value="jdbc:mysql://localhost"/>
@@ -516,6 +521,7 @@
 				  <param name="mysql.password" expression="${mysql.password}"/>
 		      	  <param name="mysql.db" expression="${mysql.db}"/>
 		  	  	  <param name="serverName" expression="${serverName}"/>
+		  	  	  <param name="mysql.port" expression="${mysql.port}"/>
 		</xslt>
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>

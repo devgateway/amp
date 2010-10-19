@@ -154,7 +154,7 @@ public class DbUtil {
     public static Collection getPrimaryToplevelSectors(){
         Collection retVal = null;
         try {
-            retVal = SectorUtil.getSectorLevel1(new Integer(SectorUtil.getPrimaryConfigClassificationId().intValue()));
+            retVal = SectorUtil.getFundingLocationSectorLevel1(new Integer(SectorUtil.getPrimaryConfigClassificationId().intValue()));
         } catch (DgException ex) {
             ex.printStackTrace();
         }
@@ -231,7 +231,9 @@ public class DbUtil {
             	+ AmpOrganisation.class.getName()+ " o "
             	+" where o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
             	+" f where f.ampActivityId in (select al.activity from "
-            	+ AmpActivityLocation.class.getName()+ " al)) order by o.name";
+            	+ AmpActivityLocation.class.getName()+ " al)" 
+            	+" and f.ampFundingId in (select afd.ampFundingId from "
+            	+ AmpFundingDetail.class.getName()+ " afd)) order by o.name";
                 q = session.createQuery(queryString);
             
             retVal = q.list();
@@ -240,6 +242,7 @@ public class DbUtil {
         }
         return retVal;
     }
+    
     public static List getSectorFoundings(Long sectorId) {
 
         List subSectorIds = null;

@@ -11,8 +11,11 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -1127,6 +1130,67 @@ public class SectorUtil {
 		}
 		return col;
 	}
+	
+	/*
+	 * this is to get the level one sectors that has some funding
+	 */
+		public static Collection getFundingLocationSectorLevel1(Integer schemeId)
+		{
+			String queryString = null;
+			Session session = null;
+			Collection col = null;
+			Query qry = null;
+
+			try
+			{
+				session = PersistenceManager.getSession();
+				queryString ="select pi from "+AmpSector.class.getName()+" pi " +
+						" where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null " +
+						" and " +
+						"(pi.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
+								" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
+								" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
+										"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd)))" +
+						" or " +
+						" pi.ampSectorId in (select asec.parentSectorId from " + AmpSector.class.getName() + " asec " +
+								" where asec.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
+									" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
+									" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
+											"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd))))" +
+						" or " +
+						" pi.ampSectorId in (select asector.parentSectorId from " + AmpSector.class.getName() + " asector " +
+								" where asector.ampSectorId in  (select asec.parentSectorId from " + AmpSector.class.getName() + " asec " +
+									" where asec.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
+										" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
+										" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
+												"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd)))))" +
+											
+						") order by pi.name ";
+				
+				qry = session.createQuery(queryString);
+				qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+				col = qry.list();
+				session.flush();
+			}
+			catch(Exception ex)
+			{
+				logger.error("Unable to get sectors with funding and location from database " + ex.getMessage());
+				ex.printStackTrace(System.out);
+			}
+			finally
+			{
+				try
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception ex2)
+				{
+					logger.error("releaseSession() failed ");
+				}
+			}
+			return col;
+		}
+	
 /*
  * get scheme to be edited
  */

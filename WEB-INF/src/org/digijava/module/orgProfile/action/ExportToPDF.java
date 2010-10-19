@@ -712,13 +712,13 @@ public class ExportToPDF extends Action {
                                     largestProjectsProjecttitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largetsProjectsTbl.addCell(largestProjectsProjecttitle);
 
-                                    PdfPCell largestProjectsCommitmentTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
+                                    PdfPCell largestProjectsCommitmentTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Commitment", langCode, siteId) + "\n(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
                                     largestProjectsCommitmentTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     largestProjectsCommitmentTitle.setNoWrap(true);
                                     largetsProjectsTbl.addCell(largestProjectsCommitmentTitle);
 
                                     if (filter.getTransactionType() == 2) { // // we are showing disb only when  comm&disb is selected
-                                        PdfPCell largestProjectsDisbTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId) + "(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
+                                        PdfPCell largestProjectsDisbTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Disbursement", langCode, siteId) + "\n(" + filter.getCurrName() + ")", OrgProfileUtil.HEADERFONT));
                                         largestProjectsDisbTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
                                         largestProjectsDisbTitle.setNoWrap(true);
                                         largetsProjectsTbl.addCell(largestProjectsDisbTitle);

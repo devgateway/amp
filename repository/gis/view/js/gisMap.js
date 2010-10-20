@@ -848,6 +848,7 @@
 					}
 				}
 				retVal += "\"";
+				retVal += " href=\"javascript:return null\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
 				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
 				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";

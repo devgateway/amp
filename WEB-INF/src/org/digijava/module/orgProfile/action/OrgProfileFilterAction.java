@@ -98,14 +98,8 @@ public class OrgProfileFilterAction extends Action {
         orgs = DbUtil.getDonorOrganisationByGroupId(orgForm.getOrgGroupId(),orgForm.getFromPublicView());
         
         orgForm.setOrganizations(orgs);
-        orgForm.setYears(new ArrayList<BeanWrapperImpl>());
-        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-        for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-            orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
-        }
-        if (orgForm.getYear() == null) {
-            Long year = null;
+        Long year = null;
+        if (orgForm.getYear() == null) {        
             try {
                 year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
             } catch (NumberFormatException ex) {
@@ -113,6 +107,19 @@ public class OrgProfileFilterAction extends Action {
             }
             orgForm.setYear(year);
         }
+        if (orgForm.getYears() == null) {
+            orgForm.setYears(new ArrayList<BeanWrapperImpl>());
+            long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+            long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+            long maxYear = yearFrom + countYear;
+            if (maxYear < year) {
+                maxYear = year;
+            }
+            for (long i = yearFrom; i <= maxYear; i++) {
+                orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
+            }
+        }
+      
         Collection calendars = DbUtil.getAllFisCalenders();
         if (calendars != null) {
             orgForm.setFiscalCalendars(new ArrayList(calendars));

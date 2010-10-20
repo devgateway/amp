@@ -12,6 +12,6 @@ protected
   # Year from params or default
   helper_method :year
   def year
-    (params[:year] || Time.now.year-1).to_i
+    (params[:year] || Time.now.year).to_i
   end
 end

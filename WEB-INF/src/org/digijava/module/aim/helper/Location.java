@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-public class Location implements Serializable, Comparable
+public class Location implements Serializable
 {
 	
 	private Long locId;
@@ -300,12 +300,6 @@ public class Location implements Serializable, Comparable
 	 */
 	public void setPercentageBlocked(boolean percentageBlocked) {
 		this.percentageBlocked = percentageBlocked;
-	}
-	
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 }

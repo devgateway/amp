@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -1061,15 +1060,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 locs.add(location);
               }
             }
-            List<Location> locsList = new ArrayList<Location>(locs);
-			Collections.sort(locsList, new Comparator<Location>(){
-				public int compare(Location a1, Location a2) {
-					String myName=(a1.getLocationName()==null)?"":a1.getLocationName();
-					String hisName=(a2.getLocationName()==null)?"":a2.getLocationName();
-					return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
-				}
-			});
-            eaForm.getLocation().setSelectedLocs(locsList);
+            eaForm.getLocation().setSelectedLocs(locs);
           }
 
        

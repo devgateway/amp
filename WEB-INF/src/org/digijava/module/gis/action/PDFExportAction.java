@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -1817,7 +1816,7 @@ private int matchesId(Long ptableId) {
 			fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 			fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 
-            Collection locations = activity.getLocations();
+            Set locations = activity.getLocations();
 			Iterator<AmpActivityLocation> locIt = locations.iterator();
 
 			BigDecimal a100percent=new BigDecimal(100);

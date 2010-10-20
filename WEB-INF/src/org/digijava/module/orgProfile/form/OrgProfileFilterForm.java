@@ -229,7 +229,6 @@ public class OrgProfileFilterForm extends ActionForm {
             setYearsInRange(3);
             setFromPublicView(false);
             setShowOnlyApprovedActivities(false);
-            setYears(null);
         }
         if(reset!=null&&reset.equals("true")){
             setExpendituresVisible(FeaturesUtil.isVisibleFeature("Expenditures", ampContext));

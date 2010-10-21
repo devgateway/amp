@@ -27,7 +27,17 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	private String version ;
 	private Set aidlist ;
     private Set indicators;
-    private String sectorCodeOfficial;
+    private Set<AmpSector> sectors;
+    
+    public Set<AmpSector> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(Set<AmpSector> sectors) {
+		this.sectors = sectors;
+	}
+
+	private String sectorCodeOfficial;
 	
 	private String segmentCode;
 	private transient Collection<AmpSector> transientChildren;

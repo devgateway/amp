@@ -1199,11 +1199,8 @@ public class FeaturesUtil {
 		}    
 		return col;
 	}
-
-	/**
-	 * @author dan
-	 */
-	public static boolean existTemplateVisibility(String templateName) {
+	
+	public static boolean existTemplateVisibility(String templateName,Long templateId) {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
@@ -1211,9 +1208,12 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() + " f" +
-			" where f.name = '" + templateName + "'";
+			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() + " f where f.name =:tempName ";
+			if(templateId!=null){
+				qryStr+=" and f.id!="+templateId;
+			}
 			qry = session.createQuery(qryStr);
+			qry.setParameter("tempName", templateName);
 			col = qry.list();
 			if (col == null)
 				return false;

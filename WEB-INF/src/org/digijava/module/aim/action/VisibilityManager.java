@@ -274,7 +274,7 @@ public class VisibilityManager extends MultiAction {
 
 	public ActionForward modeSaveTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Session hbsession = PersistenceManager.getRequestDBSession();
-		if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"))) {
+		if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"),null)) {
 			((VisibilityManagerForm) form).addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
 			//errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.templateExistent"));
 			//saveErrors(request, errors);
@@ -388,65 +388,47 @@ public class VisibilityManager extends MultiAction {
 		Session hbsession = PersistenceManager.getRequestDBSession();
 		HttpSession session=request.getSession();
 		Long templateId=(Long)session.getAttribute("templateId");
-		AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateVisibility(templateId, hbsession);
-		ampTreeVisibility.buildAmpTreeVisibility(templateVisibility);
-		TreeSet modules=new TreeSet();
-		TreeSet features=new TreeSet();
-		TreeSet fields=new TreeSet();
+		
+		
+		
+		if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"),templateId)) {
+			((VisibilityManagerForm) form).addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
+			request.setAttribute("templateId", templateId);
+		} else {
+			AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateVisibility(templateId, hbsession);
+			ampTreeVisibility.buildAmpTreeVisibility(templateVisibility);
+			TreeSet modules=new TreeSet();
+			TreeSet features=new TreeSet();
+			TreeSet fields=new TreeSet();
 
-		AmpTreeVisibility x=ampTreeVisibility;
-		/*for(Iterator i=x.getItems().values().iterator();i.hasNext();)
-		{
-			AmpTreeVisibility m=(AmpTreeVisibility) i.next();
-			if(request.getParameter("moduleVis:"+m.getRoot().getId())!=null)
+			AmpTreeVisibility x=ampTreeVisibility;
+			for(Iterator it=x.getItems().values().iterator();it.hasNext();)
 			{
-				modules.add(m.getRoot());
-				for(Iterator j=m.getItems().values().iterator();j.hasNext();)
-				{
-					AmpTreeVisibility n=(AmpTreeVisibility) j.next();
-					if(request.getParameter("featureVis:"+n.getRoot().getId())!=null)
+				Object obj=it.next();
+				AmpTreeVisibility treeNode=(AmpTreeVisibility)obj;
+				if(treeNode.getRoot() instanceof AmpModulesVisibility)
+					if(request.getParameter("moduleVis:"+treeNode.getRoot().getId())!=null)
 					{
-						features.add(n.getRoot());
-						for(Iterator k=n.getItems().values().iterator();k.hasNext();)
-						{
-							AmpTreeVisibility p=(AmpTreeVisibility) k.next();
-							if(request.getParameter("fieldVis:"+p.getRoot().getId())!=null)
-							{
-								fields.add(p.getRoot()); 
-							}
-						}
+						modules.add(treeNode.getRoot());
 					}
-				}
+				displayRecTreeForDebug(treeNode,modules,features,fields,request);
 			}
-		}*/
-		for(Iterator it=x.getItems().values().iterator();it.hasNext();)
-		{
-			Object obj=it.next();
-			AmpTreeVisibility treeNode=(AmpTreeVisibility)obj;
-			if(treeNode.getRoot() instanceof AmpModulesVisibility)
-				if(request.getParameter("moduleVis:"+treeNode.getRoot().getId())!=null)
-				{
-					modules.add(treeNode.getRoot());
-				}
-			displayRecTreeForDebug(treeNode,modules,features,fields,request);
+
+
+			FeaturesUtil.updateAmpTemplateNameTreeVisibility(request.getParameter("templateName"), templateId, hbsession);
+			FeaturesUtil.updateAmpModulesTreeVisibility(modules, templateId, hbsession);
+			FeaturesUtil.updateAmpFeaturesTreeVisibility(features, templateId, hbsession);
+			FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
+			request.setAttribute("templateId", templateId);
+			
+			((VisibilityManagerForm) form).addMessage("aim:ampfeaturemanager:visibilityTreeUpdated",  Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
+
+			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+
+			ampContext=this.getServlet().getServletContext();
+			ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
 		}
-
-
-		FeaturesUtil.updateAmpTemplateNameTreeVisibility(request.getParameter("templateName"), templateId, hbsession);
-		FeaturesUtil.updateAmpModulesTreeVisibility(modules, templateId, hbsession);
-		FeaturesUtil.updateAmpFeaturesTreeVisibility(features, templateId, hbsession);
-		FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
-		request.setAttribute("templateId", templateId);
-
-
-		((VisibilityManagerForm) form).addMessage("aim:ampfeaturemanager:visibilityTreeUpdated",  Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
-
-		AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
-		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-
-		ampContext=this.getServlet().getServletContext();
-		ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
-
 
 		return modeEditTemplate(mapping,form,request,response);
 	}

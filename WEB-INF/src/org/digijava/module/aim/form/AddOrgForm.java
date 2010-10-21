@@ -29,6 +29,7 @@ public class AddOrgForm extends ActionForm {
 	private String orgCode = null;
 	private String orgIsoCode = null;		
 	private String budgetOrgCode = null;
+	private String fundingorgid;
 	
 	//contact information
 	private String contactPersonName = null;
@@ -954,5 +955,13 @@ public class AddOrgForm extends ActionForm {
 
 	public void setResetBudgetSectors(Boolean resetBudgetSectors) {
 		this.resetBudgetSectors = resetBudgetSectors;
+	}
+
+	public String getFundingorgid() {
+		return fundingorgid;
+	}
+
+	public void setFundingorgid(String fundingorgid) {
+		this.fundingorgid = fundingorgid;
 	}	
 }

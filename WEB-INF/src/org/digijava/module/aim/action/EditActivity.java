@@ -1094,7 +1094,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                         FundingOrganization fundOrg = new FundingOrganization();
                         fundOrg.setAmpOrgId(org.getAmpOrgId());
                         fundOrg.setOrgName(org.getName());
-
+                        fundOrg.setFundingorgid(org.getFundingorgid());
                         fundOrg.setFundingActive(ampFunding.getActive());
                         fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
                         fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());

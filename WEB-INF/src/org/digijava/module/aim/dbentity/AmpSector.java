@@ -278,12 +278,12 @@ public void setAmpOrgId(AmpOrganisation org) {
 	}
 
 	@Override
-	public Collection<? extends AmpComboboxDisplayable> getSiblings() {
+	public Collection getSiblings() {
 		return sectors;
 	}
 
 	@Override
-	public Collection<? extends AmpComboboxDisplayable> getVisibleSiblings() {
+	public Collection getVisibleSiblings() {
 		return getChildren();
 	}
 

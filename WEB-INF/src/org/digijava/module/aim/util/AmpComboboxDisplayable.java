@@ -13,6 +13,6 @@ import java.util.Collection;
  */
 public interface AmpComboboxDisplayable {
 	public AmpComboboxDisplayable getParent();
-	public Collection<? extends AmpComboboxDisplayable> getSiblings();
-	public Collection<? extends AmpComboboxDisplayable> getVisibleSiblings();
+	public Collection getSiblings();
+	public Collection getVisibleSiblings();
 }

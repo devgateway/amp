@@ -54,22 +54,26 @@
 									<digi:trn>Pub</digi:trn>
 								</c:set>
 							</logic:equal>
+							<bean:define id="escapedDescription">(<digi:trn>none</digi:trn>)</bean:define>
+							<logic:notEmpty name="documentData" property="escapedAmpDescription">
+								<bean:define id="escapedDescription"> ${documentData.escapedAmpDescription} </bean:define>
+							</logic:notEmpty>
 							<tr>
 								<td>
 									<c:choose>
 										<c:when test="${documentData.hasAnyVersionPendingApproval==true &&  documentData.hasApproveVersionRights==true}">
-											<span style="color:#00CC00;font-weigth:bold;">
+											<span style="color:#00CC00;font-weigth:bold;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:when>
 										<c:when test="${not empty documentData.shareWith && documentData.hasShareRights==true &&  
 											documentData.needsApproval==true && documentData.hasApproveVersionRights}">
-											<span style="color:red;font-weigth:bold;">
+											<span style="color:red;font-weigth:bold;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:when>
 										<c:otherwise>
-											<span style="color:#222222;">
+											<span style="color:#222222;" onmouseover="Tip('<digi:trn>DESCRIPTION</digi:trn>: ${escapedDescription}');" onmouseout="UnTip();">
 												<bean:write name='documentData' property='title'/>
 											</span>
 										</c:otherwise>

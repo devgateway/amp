@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
@@ -720,7 +721,13 @@ public class NodeWrapper {
 	}
 	public void addLabel(Node label) {
 		try {
-			Node labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			Node labelContainerNode			= null;
+			try {
+				labelContainerNode		= node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+			}
+			catch (PathNotFoundException e) {
+				labelContainerNode		= this.addLabelContainerNode(node);
+			}
 			PropertyIterator pIter		= labelContainerNode.getProperties();
 			Long maxNumber				= 0L;
 			while ( pIter.hasNext() ) {
@@ -764,6 +771,25 @@ public class NodeWrapper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This should be used only for old documents which don't have a container node 
+	 * built at creation time (check populateNode() ).
+	 * This function will create another version for the node Node
+	 * @param node the node which will get a label container node
+	 * @throws RepositoryException 
+	 */
+	private Node addLabelContainerNode( Node node ) throws RepositoryException {
+		Session jcrSession	= node.getSession();
+		node.checkout();
+		
+		Node labelContainerNode	= node.addNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
+		labelContainerNode.addMixin("mix:versionable");
+		
+		this.saveNode(jcrSession);
+		
+		return labelContainerNode;
 	}
 	
 	public Boolean isTeamDocument() {

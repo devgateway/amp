@@ -110,11 +110,11 @@ public class DocumentData implements Comparable<DocumentData>{
 	}
 	public String getEscapedAmpDescription() {
 		if (description != null) {
-			String ret = description.replace("'", "\\'").replace("\r", "").replace("\n", "\\n");
+			String ret = description.replace("'", "\\'").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n");
 			return ret; 
 		}
 		else
-			return "xxx";
+			return "";
 	}
 	public String getDescription() {
 		return description;

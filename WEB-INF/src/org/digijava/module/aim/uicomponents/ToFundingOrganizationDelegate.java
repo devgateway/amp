@@ -35,7 +35,6 @@ public class ToFundingOrganizationDelegate implements IPostProcessDelegate {
 					FundingOrganization fOrg = new FundingOrganization();
 					fOrg.setAmpOrgId(org.getAmpOrgId());
 					fOrg.setOrgName(org.getName());
-					fOrg.setFundingorgid(org.getFundingorgid());
 					if (!col.contains(fOrg)) {
 						col.add(fOrg);
 					}

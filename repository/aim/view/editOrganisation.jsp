@@ -442,14 +442,6 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 document.aimAddOrgForm.acronym.focus();
                 return false;
             }
-            
-            var fundingorgid = document.aimAddOrgForm.fundingorgid.value;
-            if (fundingorgid == null||fundingorgid.length == 0) {
-                alert('<digi:trn  jsFriendly="true">Please enter a funding id for this Organization.</digi:trn>');
-                document.aimAddOrgForm.fundingorgid.focus();
-                return false;
-            }
-            
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
                 alert('<digi:trn  jsFriendly="true">Please Select Organization Type.</digi:trn>');
@@ -644,11 +636,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         	}
         	if(document.getElementById('description')!=null){
         		params+="&description="+document.getElementById('description').value;
-        	} 
-        	if(document.getElementById('fundingorgid')!=null){
-        		params+="&fundingorgid="+document.getElementById('fundingorgid').value;
-        	}
-        	return params;
+        	}                            
+            return params;
             
         }
 
@@ -1029,13 +1018,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                     </html:select></td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left; " class="tdBoldClass" nowrap>
-                                                    <digi:trn>Funding Org Id</digi:trn>
-                                                    <font size="2" color="#FF0000">*</font>
-                                                </td>
-                                                <td>    
-                                                    <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>
-                                                </td>
+                                                <td align="right" height="2" colspan="2">&nbsp;</td>
                                                 <td height="1" align="center" colspan="2"><digi:img
                                                         src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>

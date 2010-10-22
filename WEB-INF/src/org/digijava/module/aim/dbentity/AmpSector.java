@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
+import org.digijava.module.aim.util.AmpComboboxDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
@@ -13,7 +14,7 @@ import org.digijava.module.aim.util.Identifiable;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
 
-public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable
+public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable, AmpComboboxDisplayable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -270,5 +271,23 @@ public void setAmpOrgId(AmpOrganisation org) {
 			transientChildren	= new TreeSet( new HierarchyListableComparator() );
 		return transientChildren;
 	}
+
+	@Override
+	public AmpComboboxDisplayable getParent() {
+		return parentSectorId;
+	}
+
+	@Override
+	public Collection<? extends AmpComboboxDisplayable> getSiblings() {
+		return sectors;
+	}
+
+	@Override
+	public Collection<? extends AmpComboboxDisplayable> getVisibleSiblings() {
+		return getChildren();
+	}
+
+	
+
 	
 }

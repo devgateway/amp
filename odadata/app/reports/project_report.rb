@@ -1,6 +1,6 @@
 module Reports  
   class ProjectReport < Ruport::Controller::Table
-    AGGREGATEABLE_COLS = %w(total_commitments total_disbursements undisbursed historic_commitments historic_disbursements commitments_forecast disbursements_forecast total_cofunding)
+    AGGREGATEABLE_COLS = %w(total_commitments total_disbursements undisbursed historic_commitments historic_disbursements commitments_forecast disbursements_forecast total_cofunding disbursements_q1 disbursements_q2 disbursements_q3 disbursements_q4)
     
     prepare :columns
     stage :format_columns, :table_structure, :table_header, :table_body, :table_footer, :output
@@ -62,7 +62,7 @@ module Reports
       
       def build_totals
         fields = AGGREGATEABLE_COLS.select { |f| data.column_names.include?(f) }
-        fields += data.column_names.select { |f| f =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/ }
+        fields += data.column_names.select { |f| f =~ /(disbursements_q1|disbursements_q2|disbursements_q3|disbursements_q4|total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/ }
 
         totals_rec = Ruport::Data::Record.new([], :attributes => data.column_names)
         # TODO: Translation

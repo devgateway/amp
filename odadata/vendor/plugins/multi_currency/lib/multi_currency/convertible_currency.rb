@@ -64,6 +64,11 @@ module MultiCurrency
       @base_value.round
     end
   
+    def to_i_output_currency
+      output_currency = MultiCurrency.output_currency || @currency
+      self.in(output_currency).to_i
+    end
+
     def to_f
       @base_value
     end

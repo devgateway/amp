@@ -81,6 +81,33 @@ public class BudgetDbUtil {
 		return sector;
 	}
 	
+	public static boolean existsBudgetSector(String name ,String code , Long id){
+		Session session = null;
+        Query q = null;
+        boolean retVal=true;
+        try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select s from " + AmpBudgetSector.class.getName() +" s where (s.sectorname=:name or s.code=:code) " ;
+			if(id!=null){
+				queryString+=" and s.idsector!=:id" ;
+			}
+			q = session.createQuery(queryString);
+			if(id!=null){
+				q.setLong("id", id);
+			}			
+			q.setParameter("name", name);
+			q.setParameter("code", code);
+			Collection col = q.list();
+			if (col ==null || col.size()==0) {
+				retVal = false;
+	    	}
+        } catch (DgException e) {
+        	logger.error("Unable to get Amp budget sectors from database " + e.getMessage());
+		}
+        
+		return retVal;
+	}
+	
 	public static AmpDepartments getBudgetDepartmentById(Long id){
 		AmpDepartments dep = new AmpDepartments();
 		Session session = null;

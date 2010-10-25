@@ -1,7 +1,5 @@
 package org.digijava.module.budget.action;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,9 +8,10 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.form.BudgetManagerForm;
 import org.digijava.module.budget.helper.BudgetDbUtil;
@@ -25,9 +24,7 @@ public class BudgetManager extends MultiAction{
 	}
 	
 	@Override
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		
 		HttpSession session = request.getSession();
 	     if (session.getAttribute("ampAdmin") == null) {
@@ -45,8 +42,7 @@ public class BudgetManager extends MultiAction{
 		return modeSelect(mapping, form, request, response);
 	}
 	@Override
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
 		if (request.getParameter("new")!=null && request.getParameter("new").equalsIgnoreCase("true")){
@@ -55,14 +51,32 @@ public class BudgetManager extends MultiAction{
 		if (request.getParameter("delete")!=null && request.getParameter("delete").equalsIgnoreCase("true")){
 			return modeDelete(mapping, form, request, response);
 		}
+		if (request.getParameter("resetFields")!=null && request.getParameter("resetFields").equalsIgnoreCase("true")){
+			((BudgetManagerForm)form).setBudgetsectorcode(null);
+			((BudgetManagerForm)form).setBudgetsectorname(null);
+		}
 		
-		 return mapping.findForward("forward");
+		
+		if(request.getSession().getAttribute("duplicateBudgetSect")!=null){
+			ActionMessages errors= new ActionMessages();
+			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists", request)));
+			saveErrors(request, errors);
+			
+			request.getSession().removeAttribute("duplicateBudgetSect");
+		}
+		
+		return mapping.findForward("forward");
 	}
 	
-	public ActionForward modeNew(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeNew(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BudgetManagerForm bfrom = (BudgetManagerForm) form;
+		if(BudgetDbUtil.existsBudgetSector(bfrom.getBudgetsectorname(), bfrom.getBudgetsectorcode(), null)){
+			ActionMessages errors= new ActionMessages();
+			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists", request)));
+			saveErrors(request, errors);			
+			bfrom.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
+			return mapping.findForward("forward");
+		}
 		
 		AmpBudgetSector sector = new AmpBudgetSector();
 		sector.setSectorname(bfrom.getBudgetsectorname());
@@ -72,9 +86,7 @@ public class BudgetManager extends MultiAction{
 		return modeFinalize(mapping, form, request, response);
 	}
 	
-	public ActionForward modeFinalize(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+	public ActionForward modeFinalize(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BudgetManagerForm bfrom = (BudgetManagerForm) form;
 		bfrom.setBudgetsectorcode(null);
 		bfrom.setBudgetsectorname(null);
@@ -82,9 +94,7 @@ public class BudgetManager extends MultiAction{
 		return mapping.findForward("forward");
 	}
 	
-	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		Long id = new Long(request.getParameter("sectorid"));
 		BudgetDbUtil.DeleteSector(id);
 		

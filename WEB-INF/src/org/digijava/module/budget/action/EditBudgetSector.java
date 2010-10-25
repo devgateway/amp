@@ -8,6 +8,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.form.EditBudgetSectorForm;
 import org.digijava.module.budget.helper.BudgetDbUtil;
@@ -38,18 +41,24 @@ public class EditBudgetSector extends Action {
 	    	 return mapping.findForward("forward");
 	     }
 	     if (request.getParameter("edit")!=null){
-	    	 modeEdit(eform);
+	    	 modeEdit(eform,request);
 	    	 return mapping.findForward("forward");
 	     }
 	     return mapping.findForward("forward");
 	 }
 	 
-	 public void modeEdit (EditBudgetSectorForm eform) {
+	 public void modeEdit (EditBudgetSectorForm eform,HttpServletRequest request) throws Exception {
 			if (eform.getId()!=null){
-				AmpBudgetSector sector = BudgetDbUtil.getBudgetSectorById(eform.getId());
-				sector.setSectorname(eform.getBudgetsectorname());
-				sector.setCode(eform.getBudgetsectorcode());
-				BudgetDbUtil.UpdateBudgetSector(sector);
+				if(BudgetDbUtil.existsBudgetSector(eform.getBudgetsectorname(), eform.getBudgetsectorcode(), eform.getId())){
+					request.getSession().setAttribute("duplicateBudgetSect", "exists") ;					
+				}else{
+					AmpBudgetSector sector = BudgetDbUtil.getBudgetSectorById(eform.getId());
+					sector.setSectorname(eform.getBudgetsectorname());
+					sector.setCode(eform.getBudgetsectorcode());
+					BudgetDbUtil.UpdateBudgetSector(sector);
+				}
+				eform.setBudgetsectorcode(null);
+				eform.setBudgetsectorname(null);
 			}
 		}
 	 }

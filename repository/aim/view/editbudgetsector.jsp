@@ -15,18 +15,33 @@
 <script language="JavaScript">
 
 function saveSector() {
-  	<digi:context name="back" property="context/module/moduleinstance/editbudgetsector.do" />
-    document.EditBudgetSectorForm.action = "<%= back %>~edit=true";
-    document.EditBudgetSectorForm.submit();
-    closePopup()
+	if(validatesector()){
+		<digi:context name="back" property="context/module/moduleinstance/editbudgetsector.do" />
+	    document.EditBudgetSectorForm.action = "<%= back %>~edit=true";
+	    document.EditBudgetSectorForm.submit();
+	    closePopup()
+	}
+  	
 }
 
 function closePopup() {
   <digi:context name="back" property="context/module/moduleinstance/BudgetManager.do" />
-  document.EditBudgetSectorForm.action = "<%= back %>";
+  document.EditBudgetSectorForm.action = "<%= back %>~resetFields=true";
   document.EditBudgetSectorForm.target = window.opener.name;
   document.EditBudgetSectorForm.submit();
   window.close();
+}
+
+function validatesector(){
+	if (document.getElementById('sectName').value==''){
+		alert('Please enter the sector name');
+		return false;	
+	}
+	if (document.getElementById('sectCode').value==''){
+		alert('Please enter the sector code');
+		return false;	
+	}
+	return true;
 }
 
 </script>
@@ -52,7 +67,7 @@ function closePopup() {
                         <digi:trn>Budget Sector Code</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
-                        <html:text property="budgetsectorcode" styleClass="inp-text" size="7"/>
+                        <html:text property="budgetsectorcode" styleClass="inp-text" size="7" styleId="sectCode"/>
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2">
@@ -61,7 +76,7 @@ function closePopup() {
                         <digi:trn>Budget Sector Name</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
-                        <html:text property="budgetsectorname" styleClass="inp-text" size="40"/>
+                        <html:text property="budgetsectorname" styleClass="inp-text" size="40" styleId="sectName"/>
                       </td>
                     </tr>
                   	<tr bgcolor="#ffffff">

@@ -11,8 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-
-<%@page import="java.math.BigDecimal"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -53,7 +52,7 @@
 		*/
 		    
 	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
-			width:"730px",
+			width:"100%",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -126,7 +125,7 @@
 	
 	#myContract .content { 
 	    overflow:auto; 
-	    height:600px; 
+	    height:455px; 
 	    background-color:fff; 
 	    padding:10px; 
 	} 
@@ -153,7 +152,7 @@
     
     
     function addIPAContract() {
-        openNewWindow(900, 600);
+        openNewWindow(900, 700);
         <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?new" />
         document.aimEditActivityForm.action = "<%= editIPAContract %>";
         document.aimEditActivityForm.target = popupPointer.name;
@@ -784,13 +783,12 @@
 		                                               
 			                                     
 		                                          <field:display name="Contracting Amendments" feature="Contracting">
-		                                          		<bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
 		                                          		<tr>
 			                                              <td align="left">
 			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
 			                                              </td>
-			                                              <td>			                                              																	
-			              										&nbsp; <%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString() %>  &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			                                              <td>
+			              										&nbsp; ${contract.donorContractFundinAmount} &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -798,7 +796,7 @@
 			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			              										&nbsp; ${contract.totAmountDonorContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -806,7 +804,7 @@
 			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			              										&nbsp; ${contract.totAmountCountryContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
 			                                              </td>
 			                                          </tr>
 			                                          <tr>
@@ -819,7 +817,6 @@
 			                                              </td>
 			                                              <td>
 		                                                      <logic:notEmpty name="contract" property="amendments">
-		                                                      
 		                                                           <table width="100%">
 																    <tr>
 																		<th><digi:trn>Amount</digi:trn></th>
@@ -828,10 +825,9 @@
 																		<th><digi:trn>Reference</digi:trn></th>																		
 																	</tr>
 			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >
-			                                                           <bean:define id="am" name="amendment" type="org.digijava.module.aim.dbentity.IPAContractAmendment"/>
 			                                                               <tr>
 			                                                                   <td align="center" valign="top">
-			                                                                   <%=BigDecimal.valueOf(am.getAmount()).toPlainString() %>
+			                                                                       ${amendment.amount}
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                       ${amendment.currency.currencyName}

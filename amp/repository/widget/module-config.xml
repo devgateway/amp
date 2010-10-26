@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>gis</name>
+	<security login-required="false" default="READ">
+		<action login-required="true" pattern="/adminTableWidgets" /> 
+		<action login-required="false" pattern="/tableWidgetTeaser" />
+		<action login-required="true" pattern="/gisService" /> 
+        <action login-required="true" pattern="/indSectRegManager" />
+	</security>
+	
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.widget.dbentity.AmpWidget</hibernate-class>
+		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaColumn</hibernate-class>
+		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaValue</hibernate-class>
+		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaWidgetPlace</hibernate-class>
+	</hibernate-classes>
+	
+</module-config>

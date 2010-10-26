@@ -1,0 +1,1 @@
+delete from amp_contact_properties where TRIM(value)='' or value is null

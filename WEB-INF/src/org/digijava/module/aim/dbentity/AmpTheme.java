@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
+import org.digijava.module.aim.util.AmpComboboxDisplayable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
@@ -14,7 +15,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
-public class AmpTheme implements Serializable, Identifiable, ARDimensionable, HierarchyListable
+public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,  AmpComboboxDisplayable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -31,6 +32,8 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Hi
 	private String description ;
 	private String language ;
 	private String version ;
+	private Set<AmpTheme> siblings;
+	private boolean transientBoolean;
 
 	/**
 	 * Connections to Indicators.
@@ -375,7 +378,7 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Hi
 		@Override
 		public Collection<AmpTheme> getChildren() {
 			if (transientChildren == null)
- 	 	 	 	transientChildren       = new TreeSet( new HierarchyListableComparator() );
+ 	 	 	 	transientChildren = new TreeSet( new HierarchyListableComparator() );
  	 	 	return transientChildren;
 		}
 
@@ -399,4 +402,35 @@ public class AmpTheme implements Serializable, Identifiable, ARDimensionable, Hi
 			return this.ampThemeId + "";
 		}
 
+		@Override
+		public AmpComboboxDisplayable getParent() {
+			return getParentThemeId();
+		}
+
+		@Override
+		public Collection<AmpTheme> getSiblings() {
+			return siblings;
+		}
+		
+		public void setSiblings(Set<AmpTheme> siblings) {
+			this.siblings = siblings;
+		}
+
+		@Override
+		public Collection<AmpTheme> getVisibleSiblings() {
+			return getChildren();
+		}
+
+		@Override
+		public int compareTo(Object arg0) {
+			return ampThemeId.compareTo(((AmpTheme)arg0).getAmpThemeId()); 
+		}
+
+		public boolean isTransientBoolean() {
+			return transientBoolean;
+		}
+
+		public void setTransientBoolean(boolean transientBoolean) {
+			this.transientBoolean = transientBoolean;
+		}
 }

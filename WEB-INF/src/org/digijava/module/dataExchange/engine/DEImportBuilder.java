@@ -1665,7 +1665,7 @@ public class DEImportBuilder {
 	        URL rootUrl   = this.getClass().getResource("/");
 	        String path="";
 	        try {
-				path     = rootUrl.toURI().getPath();
+				path     = rootUrl.toURI().resolve("../../").getPath();
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}

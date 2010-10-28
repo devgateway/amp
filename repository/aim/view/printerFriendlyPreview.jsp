@@ -335,13 +335,16 @@
 										</b>										
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="On/Off Budget" feature="Budget">	
+										<field:display name="On/Off/Treasure Budget" feature="Budget">
 
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
 										<digi:trn>Activity is On Budget</digi:trn>
 										</logic:equal>
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
 										<digi:trn>Activity is Off Budget</digi:trn>
+										</logic:equal>
+                                                                                <logic:equal name="aimEditActivityForm" property="identification.budget" value="2">
+										<digi:trn>Activity is On Treasure</digi:trn>
 										</logic:equal>
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
 										<digi:trn>Budget Unallocated</digi:trn>

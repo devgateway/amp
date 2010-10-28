@@ -736,11 +736,12 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-												<field:display name="On/Off Budget" feature="Budget">	
+												<field:display name="On/Off/Treasure Budget" feature="Budget">
 													<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
 											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
 											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
 											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
+                                                                                                                <html:option value="2"><digi:trn>Treasure</digi:trn></html:option>
 											 		</html:select>
 													</field:display>
 												</td>

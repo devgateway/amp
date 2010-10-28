@@ -18,7 +18,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Status', 'Region', 'Country', 'District','Zone'
 				,'Type Of Assistance'
 				,'Financing Instrument'
-				,'On/Off Budget'
+				,'On/Off/Treasure Budget'
 				,'National Planning Objectives'
 				,'National Planning Objectives Level 1'
 				,'National Planning Objectives Level 2'

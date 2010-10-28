@@ -742,13 +742,16 @@ function collapseAll() {
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 										<div id="budget_dots">...</div>
 										<div id="act_budget" style="display: none;">
-										<field:display name="On/Off Budget" feature="Budget">	
+										<field:display name="On/Off/Treasure Budget" feature="Budget">
 
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
 										<digi:trn>Activity is On Budget</digi:trn>
 										</logic:equal>
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
 										<digi:trn>Activity is Off Budget</digi:trn>
+										</logic:equal>
+                                                                                <logic:equal name="aimEditActivityForm" property="identification.budget" value="2">
+										<digi:trn>Activity is On Treasure</digi:trn>
 										</logic:equal>
 										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
 										<digi:trn>Budget Unallocated</digi:trn>

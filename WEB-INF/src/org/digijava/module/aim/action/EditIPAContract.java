@@ -1,5 +1,6 @@
     package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -356,22 +357,22 @@ public class EditIPAContract extends MultiAction {
         }
         
         if (contract.getDonorContractFundinAmount() != null) {
-            euaf.setDonorContractFundinAmount(String.valueOf(contract.getDonorContractFundinAmount()));
-        } else euaf.setDonorContractFundinAmount("");
+            euaf.setDonorContractFundinAmount(String.valueOf(BigDecimal.valueOf(contract.getDonorContractFundinAmount()).toPlainString()));
+        } else euaf.setDonorContractFundinAmount("0");
         if (contract.getDonorContractFundingCurrency() != null) {
             euaf.setDonorContractFundingCurrency(contract.getDonorContractFundingCurrency().getCurrencyCode());
         } else  euaf.setDonorContractFundingCurrency(eaf.getCurrCode());
         //
         if (contract.getTotAmountDonorContractFunding() != null) {
-            euaf.setTotAmountDonorContractFunding(String.valueOf(contract.getTotAmountDonorContractFunding()));
-        } else euaf.setTotAmountDonorContractFunding("");
+            euaf.setTotAmountDonorContractFunding(String.valueOf(BigDecimal.valueOf(contract.getTotAmountDonorContractFunding()).toPlainString()));
+        } else euaf.setTotAmountDonorContractFunding("0");
         if (contract.getTotalAmountCurrencyDonor() != null) {
             euaf.setTotalAmountCurrencyDonor(contract.getTotalAmountCurrencyDonor().getCurrencyCode());
         } else  euaf.setTotalAmountCurrencyDonor(eaf.getCurrCode());
         //
         if (contract.getTotAmountCountryContractFunding() != null) {
-            euaf.setTotAmountCountryContractFunding(String.valueOf(contract.getTotAmountCountryContractFunding()));
-        } else euaf.setTotAmountCountryContractFunding("");
+            euaf.setTotAmountCountryContractFunding(String.valueOf(BigDecimal.valueOf(contract.getTotAmountCountryContractFunding()).toPlainString()));
+        } else euaf.setTotAmountCountryContractFunding("0");
         if (contract.getTotalAmountCurrencyCountry() != null) {
             euaf.setTotalAmountCurrencyCountry(contract.getTotalAmountCurrencyCountry().getCurrencyCode());
         } else  euaf.setTotalAmountCurrencyCountry(eaf.getCurrCode());
@@ -806,21 +807,27 @@ public class EditIPAContract extends MultiAction {
           */
          if (euaf.getDonorContractFundinAmount() != null && !euaf.getDonorContractFundinAmount().equals("")) {
              eua.setDonorContractFundinAmount(Double.valueOf(euaf.getDonorContractFundinAmount()));
-         }         
+         } else {
+        	 eua.setDonorContractFundinAmount(Double.valueOf(0));
+         }
          if (euaf.getDonorContractFundingCurrency() != null && !euaf.getDonorContractFundingCurrency().equals("") && !euaf.getDonorContractFundingCurrency().equals(new Long(-1))) {
          	eua.setDonorContractFundingCurrency(CurrencyUtil.getAmpcurrency(euaf.getDonorContractFundingCurrency()));
          }
          //
          if (euaf.getTotAmountDonorContractFunding() != null && !euaf.getTotAmountDonorContractFunding().equals("")) {
              eua.setTotAmountDonorContractFunding(Double.valueOf(euaf.getTotAmountDonorContractFunding()));
-         }         
+         } else {
+        	 eua.setTotAmountDonorContractFunding(Double.valueOf(0));
+         } 
          if (euaf.getTotalAmountCurrencyDonor() != null && !euaf.getTotalAmountCurrencyDonor().equals("") && !euaf.getTotalAmountCurrencyDonor().equals(new Long(-1))) {
          	eua.setTotalAmountCurrencyDonor(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrencyDonor()));
          }
          //
          if (euaf.getTotAmountCountryContractFunding() != null && !euaf.getTotAmountCountryContractFunding().equals("")) {
              eua.setTotAmountCountryContractFunding(Double.valueOf(euaf.getTotAmountCountryContractFunding()));
-         }         
+         } else {
+        	 eua.setTotAmountCountryContractFunding(Double.valueOf(0));
+         }          
          if (euaf.getTotalAmountCurrencyCountry() != null && !euaf.getTotalAmountCurrencyCountry().equals("") && !euaf.getTotalAmountCurrencyDonor().equals(new Long(-1))) {
          	eua.setTotalAmountCurrencyCountry(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrencyCountry()));
          }

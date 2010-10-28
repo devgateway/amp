@@ -19,15 +19,41 @@
 <script type="text/javascript">
   $(document).ready(function(){
 	 
-	  $(".inp-username").attr({disabled: ""});
-	  $(".inp-upastext").attr({disabled: ""});
-	  $(".inp-upassword").attr({disabled: ""});
+//	  $(".inp-username").attr({disabled: ""});
+//	  $(".inp-upastext").attr({disabled: ""});
+//	  $(".inp-upassword").attr({disabled: ""});
+
+//Init
+		var uname = $(".inp-username").attr("value");
+		var pass = $(".inp-upassword").attr("value");
+
+		
+		if (uname=="") {
+			$(".inp-username").attr({value: "Username"});
+			$(".inp-username").css({color: "grey"});
+		} else if (uname!="Username") {
+			$(".inp-username").css({color: "black"});
+		}
+		
+		if (pass=="") {
+			$(".inp-upassword").attr({value: "Password"});
+			$(".inp-upassword").css({color: "grey"});
+		
+		} else if (pass!="Password") {
+			$(".inp-upassword").css({color: "black"});
+		}
+
 
 	  $(".inp-username").bind("blur", function(){
 		var uname = $(".inp-username").attr("value");
+		
+		
+		
 		if (uname=="") {
-		$(".inp-username").attr({value: "Username"});
-		$(".inp-username").css({color: "grey"});
+			$(".inp-username").attr({value: "Username"});
+			$(".inp-username").css({color: "grey"});
+		} else if (uname!="Username") {
+			$(".inp-username").css({color: "black"});
 		}
 	});
 
@@ -37,24 +63,36 @@
 		if (uname == "Username") {
 		  $(".inp-username").attr({value: ""});
 		  $(".inp-username").css({color: "black"});
-			  
 		}
 	});
 
-	$(".inp-upastext").bind("click", function(){
-		$(".inp-upastext").css({display: "none"});
-		$(".inp-upassword").css({display: ""});
-		$(".inp-upassword").focus();
+	$(".inp-upassword").click(function(){
+		pass = $(".inp-upassword").attr("value");
+		if (pass=="Password") {
+			$(".inp-upassword").attr({value: ""});
+		}
+		$(".inp-upassword").css({color: "black"});
 	});
-
-	$(".inp-upastext").focus(function(){
-		$(".inp-upastext").css({display: "none"});
-		$(".inp-upassword").css({display: ""});
-		$(".inp-upassword").focus();
-	});
-
-
 	
+	$(".inp-upassword").blur(function(){
+		pass = $(".inp-upassword").attr("value");
+		if (pass=="" || pass=="Password") {
+			$(".inp-upassword").attr({value: "Password"});
+			$(".inp-upassword").css({color: "grey"});
+		
+		} else {
+			$(".inp-upassword").css({color: "black"});
+		}		
+		
+	});
+
+	$(".inp-upassword").focus(function(){
+		pass = $(".inp-upassword").attr("value");
+		if (pass=="Password") {
+			$(".inp-upassword").attr({value: ""});
+		}
+		$(".inp-upassword").css({color: "black"});
+	});
 	
 });
 </script>
@@ -101,10 +139,12 @@
               --%>
 				<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 8px;">
 					<tr>
-					  <td align="center" valign="middle"><input type="text" name="j_username" style="width: 150px;;-moz-box-sizing:border-box" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>" disabled="disabled"/></td>
+					  <td align="center" valign="middle"><input type="text" name="j_username" style="width: 150px;" class="inp-text inp-username" value="<digi:trn>Username</digi:trn>"/></td>
 					  <td align="center" valign="middle">
-					  	<input type="password" name="j_password" class="inp-text inp-upassword" style="width: 150px;display: none;-moz-box-sizing:border-box" disabled="disabled"/>
+					  	<input type="password" name="j_password" class="inp-text inp-upassword" style="width: 150px;"/>
+					  	<!--
 					  	<input type="text" name="j_username" class="inp-text inp-upastext" style="width: 150px; -moz-box-sizing:border-box" value="<digi:trn>Password</digi:trn>" disabled="disabled"/>
+					  	-->
 					  </td>
 					  <td><html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Login</digi:trn></html:submit></td>
 					</tr>

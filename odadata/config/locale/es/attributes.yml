@@ -126,6 +126,15 @@ es:
         aid_modality:
           label: 'Modalidade de Ajuda'
           description: As modalidades de ajuda são as formas em que a ajuda é disponibilizada pelos doadores aos governos parceiros.
+        aid_modality_id:
+          label: 'Modalidade de Ajuda'
+          description: |
+            As modalidades de ajuda são as formas em que a ajuda é disponibilizada pelos doadores aos governos parceiros.<br/>
+            <strong>Cooperação Técnica</strong> é definido como o financiamento de atividades cujo objetivo principal é aumentar o nível de conhecimentos, habilidades, conhecimentos técnicos ou aptidões produtivas da população dos países em desenvolvimento, ou seja, aumentar seu estoque de capital intelectual humano, ou a sua capacidade para uma utilização mais eficaz da sua dotação de fatores existentes. Ele inclui as despesas de pessoal, formação e investigação, bem como equipamentos e custos administrativos. <br/><br/>
+            <strong> Os projectos de investimento </strong> incluem:
+            a) Os regimes de aumento e / ou melhorar as ações da recipientÂ de capital físico e,
+            b) O financiamento da oferta de bens e serviços de apoio a esses regimes.<br>
+            Investimentos relacionados com a cooperação técnica é definida como o financiamento dos serviços de um país doador, com o objectivo principal de contribuir para a concepção e / ou implementação de um projeto ou programa com o objetivo de aumentar o estoque de capital físico do país destinatário. Estes serviços incluem serviços de consultoria, suporte técnico, o fornecimento de know-how estão associadas à execução de um projecto de investimento eo contributo do pessoal dos doadores para a implementação efectiva do projecto (gestores, técnicos, especializados de trabalho, etc)
         on_off_treasury:
           label: 'No/Fora da CUT'
           description: |
@@ -146,8 +155,19 @@ es:
             off_budget: 'Fora Orçamento do Estado'
         government_project_code:
           label: 'Fonte de Recursos'
+          description: |
+            O Fonte de Recursos será automaticamente criado a partir das informações introduzidas na ODAmoz. Os Códigos serão criados apenas para projectos INSCRITOS no OE.
         private_support:
           label: Apoio ao sector privado
+          description: |
+            <strong>Apoio directo ao sector privado:</strong> contribuição para MPE, as grandes empresas e também para grandes projetos.<br/><br/>
+            <strong>Apoio indireto ao setor privado por meio do sector privado:</strong><br/>
+            - Reforçar o quadro institucional, o financiamento das associações do sector privado (indústria específica e associações comerciais, câmaras de comércio, etc) <br/>
+            <strong>Apoio indireto ao setor privado por meio do sector público</strong> (capacitação), reforçando: <br>
+              - Enquadramento jurídico geral, <br/>
+              - Facilitação do comércio, <br/>
+              - Quadro fiscal, <br/>
+              - A legislação trabalhista, etc <br/>
           options:
             does_not_apply: 'Não se aplica'
             do_not_know: 'Não sei se aplica'

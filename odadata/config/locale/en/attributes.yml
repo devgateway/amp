@@ -117,9 +117,15 @@ en:
             bilateral: Bilateral
             multilateral: Multilateral
             ngo_implementation: NGO Implementation
-        aid_modality: 
+        aid_modality:
           label: Aid Modality
           description: Aid modalities are the ways in which aid is provided by donors to partner governments.
+        aid_modality_id:
+          label: Aid Modality
+          description: |
+            Aid modalities are the ways in which aid is provided by donors to partner governments.<br/>
+            <strong>Free-standing technical cooperation</strong> is defined as financing of activities whose primary purpose is to augment the level of knowledge, skills, technical know-how or productive aptitudes of the population of developing countries, i.e. increasing their stock of human intellectual capital, or their capacity for more effective use of their existing factor endowment. It includes the cost of personnel, training and research, as well as associated equipment and administrative costs. <br/>
+            <strong>Investment projects</strong> comprise a) schemes to increase and/or improve the recipients stock of physical capital and b) financing the supply of goods and services in support of such schemes. Investment-related technical co-operation is defined as the financing of services by a donor country with the primary purpose of contributing to the design and/or implementation of a project or programme aiming to increase the physical capital stock of the recipient country. These services include consulting services, technical support, the provision of know-how linked to the execution of an investment project, and the contribution of the donors own personnel to the actual implementation of the project (managers, technicians, skilled labour etc.)
         on_off_treasury:
           label: On/Off Treasury
           description: |
@@ -140,8 +146,19 @@ en:
             off_budget: Off Budget
         government_project_code:
           label: Fonte de Recurso
+          description: |
+            The Fonte de Recurso field will be created automatically from the information entered in ODAmoz. This code will be only created for projects ON Budget.
         private_support:
           label: Private Sector Support
+          description: |
+            <strong>Direct support to private sector:</strong> contribution to SMME, big companies and also to big projects.<br/><br/>
+            <strong>Indirect support to PS by means of PS:</strong><br/>
+            - Institutional framework strengthening, financing private sector associations (specific industry and commercial associations, chamber of commerce, etc)<br/><br/>
+            <strong>Indirect support to PS by means of public sector</strong> (capacity building), reinforcing:<br>
+              - general legal framework,<br/>
+              - trade facilitation,<br/>
+              - taxation framework,<br/>
+              - labour legislation, etc.<br/>
           options:
             does_not_apply: Does not apply
             do_not_know: Do not know if applies

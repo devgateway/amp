@@ -30,13 +30,10 @@
 	</style>
 
 	<body class="public">
-	  <% if @currency_selector %>
-		  <div style="position: absolute; right: 30px; top: 13px">
+		<div style="float:left;position:absolute;top:30px;left:10px;">
     		<%= render :partial => '/layouts/currency_selector' %>
   		</div>
-    <% end %>
-    	
-		<div id="content">
+		<div id="content" style="border:1px solid black;">
 			<%= yield %>
 		</div>
 		

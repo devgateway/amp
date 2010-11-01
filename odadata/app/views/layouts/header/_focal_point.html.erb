@@ -20,7 +20,7 @@
 			<% if current_donor.flag.url(:avatar).include?('missing.png') %>
 				<img src="/flags/missing/regular/missing.png" hspace="8" alt="missing.png" width="30" height="20" align="absmiddle" style="border:1px solid white"/>
 			<% else %>
-				<%= image_tag current_donor.flag.url(:avatar), :align => "absmiddle", :hspace => 8, :style => "border:1px solid white" %>
+				<%= image_tag current_donor.flag.url(:avatar), :align => "absmiddle", :hspace => 8, :style => "border:1px solid white", :width => 30 %>
 			<% end %>
 			<%= current_donor.name %>
 		</p>

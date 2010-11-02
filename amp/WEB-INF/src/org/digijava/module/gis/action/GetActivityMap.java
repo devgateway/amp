@@ -177,6 +177,10 @@ public class GetActivityMap extends Action {
                         if (segment.getSegmentCode().equals(loc.getLocation().getName())) {
                             System.out.println("-----------------------" + segment.getSegmentCode());
                             HilightData hDataItem = new HilightData ((int) segment.getId(), new ColorRGB(163, 184, 188));
+
+                            System.out.println("-----------------------" + segment.getId());
+                            System.out.println("-----------------------" + hDataItem.getSegmentId());
+
                             retVal.add(hDataItem);
                             break;
                         }

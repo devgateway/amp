@@ -175,6 +175,7 @@ public class GetActivityMap extends Action {
                 if (loc != null) {
                     for (GisMapSegment segment :  map.getSegments()) {
                         if (segment.getSegmentCode().equals(loc.getLocation().getName())) {
+                            System.out.println("-----------------------" + segment.getSegmentCode());
                             HilightData hDataItem = new HilightData ((int) segment.getId(), new ColorRGB(163, 184, 188));
                             retVal.add(hDataItem);
                             break;

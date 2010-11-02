@@ -170,6 +170,8 @@ public class GetActivityMap extends Action {
             for (Long locId: locationCodes) {
                 AmpLocation loc = LocationUtil.getAmpLocationByCVLocation(locId);
 
+                System.out.println("-----------------------" + loc.getLocation().getName());
+
                 if (loc != null) {
                     for (GisMapSegment segment :  map.getSegments()) {
                         if (segment.getSegmentCode().equals(loc.getLocation().getName())) {

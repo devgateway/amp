@@ -84,6 +84,9 @@ public class GetActivityMap extends Action {
                     for (int idx = 0; selRegSplitter.hasMoreTokens(); idx ++) {
                        regIdStr = selRegSplitter.nextToken();
                        selRegIds[idx] = Long.valueOf(regIdStr);
+
+                        //temp
+                        System.out.println("-----------------------" + regIdStr);
                     }
 
                 }

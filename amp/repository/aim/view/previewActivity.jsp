@@ -120,6 +120,33 @@ function collapseAll() {
 	$("div[id$='_dots']").show();
 	$("div[id^='act_']").hide();
 }
+
+	showZoomedMap = function(show) {
+		
+		var containerObj = $("#zoomMapContainer");
+		
+		if (show) {
+			
+			document.body.appendChild(containerObj[0]);
+			containerObj.show();
+			var containerWidth = containerObj.outerWidth();
+			var containerHeight = containerObj.outerHeight();
+			
+			var wndWidth = window.innerWidth;
+			var wndHeight = window.innerHeight;
+			var wndScrollX = window.pageXOffset;
+			var wndScrollY = window.pageYOffset;
+			
+			var moveToX = (wndWidth - wndScrollX)/2 - containerWidth/2;
+			var moveToY = wndHeight/2 + wndScrollY - containerHeight/2;
+			
+			containerObj.css("left", moveToX + "px");
+			containerObj.css("top", moveToY + "px");
+		} else {
+			containerObj.hide();
+		}	
+	}
+
 -->
 
 </script>
@@ -1067,9 +1094,23 @@ function collapseAll() {
 											                                  	</bean:define>
 										                                  	</logic:notEmpty>
 										                                  	
+										                                  	<%--
 										                                  	<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 												                              		<img src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 												                              	</logic:notEmpty>
+												                              	--%>
+												                              	
+												                              	<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
+												                              		<a href="javascript:showZoomedMap(true)">
+												                              			<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+												                              		</a>
+												                              		<div id="zoomMapContainer" style="display:none; border:1px solid black; position:absolute; left:0px; top:0px;" z-index="9999">
+												                              			<a href="javascript:showZoomedMap(false)">
+												                              				<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">	
+												                              			</a>
+												                              		</div>
+												                              	</logic:notEmpty>
+												                              	
 												                              </td></tr>
                                                  <!-- 
 												<c:forEach var="locations" items="${aimEditActivityForm.location.selectedLocs}">

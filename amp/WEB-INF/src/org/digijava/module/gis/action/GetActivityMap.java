@@ -84,11 +84,7 @@ public class GetActivityMap extends Action {
                     for (int idx = 0; selRegSplitter.hasMoreTokens(); idx ++) {
                        regIdStr = selRegSplitter.nextToken();
                        selRegIds[idx] = Long.valueOf(regIdStr);
-
-                        //temp
-                        System.out.println("-----------------------" + regIdStr);
                     }
-
                 }
             }
 
@@ -169,18 +165,10 @@ public class GetActivityMap extends Action {
         if (map != null && map.getSegments() != null) {
             for (Long locId: locationCodes) {
                 AmpLocation loc = LocationUtil.getAmpLocationByCVLocation(locId);
-
-                System.out.println("-----------------------" + loc.getLocation().getName());
-
                 if (loc != null) {
                     for (GisMapSegment segment :  map.getSegments()) {
                         if (segment.getSegmentCode().equals(loc.getLocation().getName())) {
-                            System.out.println("-----------------------" + segment.getSegmentCode());
-                            HilightData hDataItem = new HilightData ((int) segment.getId(), new ColorRGB(163, 184, 188));
-
-                            System.out.println("-----------------------" + segment.getId());
-                            System.out.println("-----------------------" + hDataItem.getSegmentId());
-
+                            HilightData hDataItem = new HilightData ((int) segment.getSegmentId(), new ColorRGB(163, 184, 188));
                             retVal.add(hDataItem);
                             break;
                         }

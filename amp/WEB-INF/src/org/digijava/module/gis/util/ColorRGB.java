@@ -1,5 +1,7 @@
 package org.digijava.module.gis.util;
 
+import java.awt.Color;
+
 /**
  * <p>Title: </p>
  *
@@ -21,11 +23,28 @@ public class ColorRGB {
         this.red = red;
         this.green = green;
         this.blue = blue;
+        this.alpha = 255;
+    }
+
+    public ColorRGB(int red, int green, int blue, int alpha) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
     }
 
     private int red;
     private int green;
     private int blue;
+    private int alpha;
+
+    public int getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
+    }
 
     public int getRed() {
         return this.red;
@@ -49,6 +68,10 @@ public class ColorRGB {
 
     public void setBlue(int blue) {
         this.blue = blue;
+    }
+
+    public Color getAsAWTColor() {
+        return new Color(red, green, blue, alpha);
     }
 
 

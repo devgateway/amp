@@ -6,13 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.gis.util.GisUtil;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.gis.util.*;
 import org.digijava.module.gis.dbentity.GisMap;
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import org.apache.ecs.xml.XMLDocument;
 import java.util.List;
-import org.digijava.module.gis.util.SegmentData;
 import java.util.Iterator;
 import java.awt.image.RenderedImage;
 import java.awt.Graphics2D;
@@ -21,9 +22,6 @@ import java.util.StringTokenizer;
 import java.awt.image.BufferedImage;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import javax.servlet.ServletOutputStream;
-import org.digijava.module.gis.util.CoordinateRect;
-import org.digijava.module.gis.util.HilightData;
-import org.digijava.module.gis.util.ColorRGB;
 
 /**
  * <p>Title: </p>
@@ -42,170 +40,144 @@ public class GetActivityMap extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        GisUtil gisUtil = new GisUtil();
-        ServletOutputStream sos = response.getOutputStream();
+    ServletOutputStream sos = null;
 
-        String action = request.getParameter("action");
+        try {
 
+            GisUtil gisUtil = new GisUtil();
+            sos = response.getOutputStream();
 
-        String mapCode = request.getParameter("mapCode");
-        GisMap map = null;
+            String action = request.getParameter("action");
 
-        if (mapCode != null && mapCode.trim().length() > 0) {
-            map = GisUtil.getMap(mapCode);
-        }
+            String mapCode = request.getParameter("mapCode");
+            GisMap map = null;
 
-        GisMap districtMap = null;
-        if (mapCode != null && mapCode.trim().length() > 0) {
-            String districtMapCode = mapCode + "_DISTRICT";
-            districtMap = GisUtil.getMap(districtMapCode);
-        }
-
-
-        //Process segment data
-        String segmentDataStr = request.getParameter("segmentData");
-        List segDataList = null;
-
-        String parentCode = null;
-
-        if (segmentDataStr != null) {
-            segDataList = new ArrayList();
-            StringTokenizer segmentTokenizer = new StringTokenizer(
-                    segmentDataStr, "|");
-            while (segmentTokenizer.hasMoreTokens()) {
-                String segmentToken = segmentTokenizer.nextToken();
-                StringTokenizer segmentDataTokenizer = new StringTokenizer(
-                        segmentToken, "/");
-                SegmentData segmentData = new SegmentData();
-                segmentData.setParentCode(segmentDataTokenizer.nextToken());
-
-                String segCode = segmentDataTokenizer.nextToken();
-                if (segCode.endsWith("DC")) {
-                    segCode = segCode.substring(0, segCode.length()-3);
-                }
-                segmentData.setSegmentCode(segCode);
-                segmentData.setSegmentValue(segmentDataTokenizer.nextToken());
-                segDataList.add(segmentData);
-
-                parentCode = segmentData.getParentCode();
+            String mapLevel = request.getParameter("mapLevel");
+            if (mapLevel == null) {
+                mapLevel = "2";
             }
-        }
 
-        List hilightData = prepareHilightSegments(segDataList, districtMap);
-        List detailedMapSegments = getSegmentsForParent(parentCode, districtMap);
+            if (mapCode != null && mapCode.trim().length() > 0) {
+                map = GisUtil.getMap(mapCode, Integer.parseInt(mapLevel));
+            }
 
-        int canvasWidth = 500;
-        int canvasHeight = 500;
+            int canvasWidth = 700;
+            int canvasHeight = 700;
 
-        //CoordinateRect rect = gisUtil.getMapRect(map);
-        CoordinateRect rect = gisUtil.getMapRect(detailedMapSegments);
+            if (request.getParameter("width") != null) {
+                canvasWidth = Integer.parseInt(request.getParameter("width"));
+            }
 
-        if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
+            if (request.getParameter("height") != null) {
+                canvasHeight = Integer.parseInt(request.getParameter("height"));
+            }
+
+            Long[] selRegIds = null;
+            if (request.getParameter("selRegIDs") != null){
+                String selRegIDsStr = request.getParameter("selRegIDs");
+                if (selRegIDsStr.endsWith("|")) {
+//                    selRegIDsStr = selRegIDsStr.substring(0, selRegIDsStr.length() - 1);
+                    StringTokenizer selRegSplitter = new  StringTokenizer(selRegIDsStr, "|", false);
+                    selRegIds = new Long[selRegSplitter.countTokens()];
+
+                    String regIdStr = null;
+                    for (int idx = 0; selRegSplitter.hasMoreTokens(); idx ++) {
+                       regIdStr = selRegSplitter.nextToken();
+                       selRegIds[idx] = Long.valueOf(regIdStr);
+                    }
+
+                }
+            }
+
+
+            List hilightData = getSelectedRegionHilight(selRegIds, map);
+
+            CoordinateRect rect = gisUtil.getMapRect(map);
+
+            if (rect != null) {
+                if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
                     response.setContentType("image/png");
 
-
-                    BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
-                                                            BufferedImage.TYPE_INT_ARGB);
-
+                    BufferedImage graph = new BufferedImage(canvasWidth,
+                            canvasHeight,
+                            BufferedImage.TYPE_INT_ARGB);
 
                     Graphics2D g2d = graph.createGraphics();
 
-                    g2d.setBackground(new Color(0, 0, 100, 255));
+//                    g2d.setBackground(new Color(0, 0, 100, 255));
 
-                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+//                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
-                    gisUtil.addDataToImage(g2d,
-                                            map.getSegments(),
-                                           -1,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                    boolean fill = true;
+                    if (request.getParameter("noFill") != null) {
+                        fill = false;
+                    }
 
-                    gisUtil.addDataToImage(g2d,
-                                            detailedMapSegments,
-                                           hilightData,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true);
+                    if (map != null) {
+                        MapColorScheme colorScheme = MapColorScheme.getDefaultScheme();
+                        colorScheme.setBackgroundColor(new ColorRGB(221, 221, 221));
+                        colorScheme.setTerrainColor(new ColorRGB(120, 120, 120));
+                        colorScheme.setBorderColor(new ColorRGB(139, 139, 139));
+                        colorScheme.setRegionBorderColor(new ColorRGB(50, 50, 50));
 
+	                    gisUtil.addDataToImage(g2d,
+	                                           map.getSegments(),
+                                                hilightData,
+	                                           null,
+	                                           canvasWidth, canvasHeight,
+	                                           rect.getLeft(), rect.getRight(),
+	                                           rect.getTop(), rect.getBottom(),
+	                                           fill, false, colorScheme);
 
+	                    if (request.getParameter("noCapt") == null) {
 
-
+	                        gisUtil.addCaptionsToImage(g2d,
+	                                map.getSegments(),
+	                                canvasWidth, canvasHeight,
+	                                rect.getLeft(), rect.getRight(),
+	                                rect.getTop(), rect.getBottom(), new ColorRGB (255, 255, 255), new ColorRGB (0, 0, 0, 100));
+	                    }
+                    } else {
+                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    }
                     g2d.dispose();
 
                     RenderedImage ri = graph;
-
 
                     ImageIO.write(ri, "png", sos);
 
                     graph.flush();
 
-
-
-
-                } else if (action.equalsIgnoreCase(GisService.ACTION_GET_IMAGE_MAP)) {
-                    response.setContentType("text/xml");
-
-
-                    List mapDataSegments = map.getSegments();
-
-        /*
-                    String imageMapCode = gisUtil.getImageMap(mapDataSegments, 10, canvasWidth,
-                                           canvasHeight, mapLeft, mapRight, mapTop,
-                                           mapBottom).toString();
-
-
-
-                    sos.print(imageMapCode);
-         */
-                } else if (action.equalsIgnoreCase(GisService.ACTION_GET_SEGMENT_INFO)) {
-                    response.setContentType("text/xml");
-                    List mapDataSegments = map.getSegments();
-                    String segmentInfoCode = gisUtil.getSegmentData(mapDataSegments).toString();
-                    sos.print(segmentInfoCode);
                 }
+            }
 
-                sos.close();
-                return null;
+        } catch (Exception e) {
+                e.printStackTrace();
+        } finally {
+            sos.flush();
+            sos.close();
+        }
+        return null;
 
     }
 
-    private List prepareHilightSegments (List segmentData, GisMap map) {
+    private List getSelectedRegionHilight (Long[] locationCodes, GisMap map) {
         List retVal = new ArrayList();
         if (map != null && map.getSegments() != null) {
-            Iterator it = map.getSegments().iterator();
+            for (Long locId: locationCodes) {
+                AmpLocation loc = LocationUtil.getAmpLocationByCVLocation(locId);
 
-            while (it.hasNext()) {
-                GisMapSegment segment = (GisMapSegment) it.next();
-                for (int idx = (int) 0; idx < segmentData.size(); idx++) {
-                    SegmentData sd = (SegmentData) segmentData.get(idx);
-                    if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
-                        HilightData hData = new HilightData();
-                        hData.setSegmentId((int) segment.getSegmentId());
-                        float redColor = Float.parseFloat(sd.getSegmentValue()) * 2.55f;
-                        hData.setColor(new ColorRGB((int) redColor, (int) (255f - redColor), 0));
-                        retVal.add(hData);
+                if (loc != null) {
+                    for (GisMapSegment segment :  map.getSegments()) {
+                        if (segment.getSegmentCode().equals(loc.getLocation().getName())) {
+                            HilightData hDataItem = new HilightData ((int) segment.getId(), new ColorRGB(163, 184, 188));
+                            retVal.add(hDataItem);
+                            break;
+                        }
                     }
                 }
             }
         }
         return retVal;
     }
-
-    private List getSegmentsForParent (String parentCode, GisMap map) {
-        List retVal = new ArrayList();
-        if (map != null && map.getSegments() != null) {
-        Iterator it = map.getSegments().iterator();
-
-        while (it.hasNext()) {
-            GisMapSegment segment = (GisMapSegment) it.next();
-            if (segment.getParentSegmentCode().equalsIgnoreCase(parentCode)) {
-                retVal.add(segment);
-            }
-        }
-        }
-        return retVal;
-       
-    }
-
 }

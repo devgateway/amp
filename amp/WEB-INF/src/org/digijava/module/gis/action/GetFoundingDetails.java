@@ -41,14 +41,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
-import org.digijava.module.gis.util.ColorRGB;
-import org.digijava.module.gis.util.CoordinateRect;
-import org.digijava.module.gis.util.DateInterval;
-import org.digijava.module.gis.util.DbUtil;
-import org.digijava.module.gis.util.FundingData;
-import org.digijava.module.gis.util.GisUtil;
-import org.digijava.module.gis.util.HilightData;
-import org.digijava.module.gis.util.SegmentData;
+import org.digijava.module.gis.util.*;
 
 /**
  * <p>Title: </p>
@@ -294,7 +287,7 @@ public class GetFoundingDetails extends Action {
                                            null,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),
@@ -506,7 +499,7 @@ public class GetFoundingDetails extends Action {
                                            hilightData, null,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),
@@ -697,7 +690,7 @@ public class GetFoundingDetails extends Action {
                                            hilightDashData,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),

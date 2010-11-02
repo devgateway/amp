@@ -57,13 +57,7 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
-import org.digijava.module.gis.util.ColorRGB;
-import org.digijava.module.gis.util.CoordinateRect;
-import org.digijava.module.gis.util.DateInterval;
-import org.digijava.module.gis.util.FundingData;
-import org.digijava.module.gis.util.GisUtil;
-import org.digijava.module.gis.util.HilightData;
-import org.digijava.module.gis.util.SegmentData;
+import org.digijava.module.gis.util.*;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -1432,7 +1426,7 @@ private int matchesId(Long ptableId) {
 
                     gisUtil.addDataToImage(g2d, map.getSegments(), hilightData, hilightDashData,
                                            canvasWidth, canvasHeight, rect.getLeft(),
-                                           rect.getRight(), rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getRight(), rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
                                                canvasHeight, rect.getLeft(), rect.getRight(),
@@ -1556,7 +1550,7 @@ private int matchesId(Long ptableId) {
                                            null,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getTop(), rect.getBottom(), true, false, MapColorScheme.getDefaultScheme());
 
                     gisUtil.addCaptionsToImage(g2d,
                                                map.getSegments(),

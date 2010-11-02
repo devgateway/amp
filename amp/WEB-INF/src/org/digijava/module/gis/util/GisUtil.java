@@ -79,6 +79,19 @@ public class GisUtil {
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
                                boolean fill, boolean showGrid) {
+
+        MapColorScheme mapColorScheme = MapColorScheme.getDefaultScheme();
+        addDataToImage(g2d,mapData, segmentNo,
+                        canvasWidth, canvasHeight, mapLeftX,
+                        mapRightX, mapTopY, mapLowY, fill,
+                        showGrid, mapColorScheme);
+    }
+
+    public void addDataToImage(Graphics2D g2d, List mapData, int segmentNo,
+                               int canvasWidth, int canvasHeight,
+                               float mapLeftX,
+                               float mapRightX, float mapTopY, float mapLowY,
+                               boolean fill, boolean showGrid, MapColorScheme mapColorScheme) {
         List hilightList = null;
         if (segmentNo > 0) {
             hilightList = new ArrayList();
@@ -93,7 +106,7 @@ public class GisUtil {
                                mapLeftX,
                                mapRightX, mapTopY,
                                mapLowY,
-                               fill, showGrid);
+                               fill, showGrid, mapColorScheme);
 
     }
 
@@ -102,6 +115,16 @@ public class GisUtil {
                                    float mapLeftX,
                                    float mapRightX, float mapTopY,
                                    float mapLowY) {
+
+        addCaptionsToImage(g2d, mapData, canvasWidth, canvasHeight, mapLeftX, mapRightX, mapTopY, mapLowY, new ColorRGB (255, 255, 255), new ColorRGB (0, 0, 0));
+
+    }
+
+    public void addCaptionsToImage(Graphics2D g2d, List mapData,
+                                   int canvasWidth, int canvasHeight,
+                                   float mapLeftX,
+                                   float mapRightX, float mapTopY,
+                                   float mapLowY, ColorRGB mainColor, ColorRGB shadowColor) {
         float scale = 1f; //Pixels per degree
 
         int border = 10;
@@ -138,7 +161,7 @@ public class GisUtil {
 
             CoordinateRect ccRect = gms.getSegmentRect();
 
-            g2d.setColor(new Color(0, 0, 0));
+            g2d.setColor(shadowColor.getAsAWTColor());
 
             float xPos = xOffset + (ccRect.getLeft() +
                                     (ccRect.getRight() - ccRect.getLeft()) / 2)
@@ -179,7 +202,7 @@ public class GisUtil {
 
             g2d.drawString(gms.getSegmentName(),captionRect.getLeft() + 1, captionRect.getTop() + 1);
 
-            g2d.setColor(new Color(255, 255, 255));
+            g2d.setColor(mainColor.getAsAWTColor());
             g2d.drawString(gms.getSegmentName(), captionRect.getLeft(), captionRect.getTop());
 
         }
@@ -191,7 +214,7 @@ public class GisUtil {
                                int canvasWidth, int canvasHeight,
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill) {
+                               boolean fill, MapColorScheme mapColorScheme) {
 
         addDataToImage(g2d, mapData, hDataList,
                                null, canvasWidth,
@@ -199,7 +222,7 @@ public class GisUtil {
                                mapLeftX,
                                mapRightX, mapTopY,
                                mapLowY,
-                               fill);
+                               fill, mapColorScheme);
     }
 
     public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
@@ -207,7 +230,7 @@ public class GisUtil {
                                    int canvasWidth, int canvasHeight,
                                    float mapLeftX,
                                    float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill) {
+                               boolean fill, MapColorScheme mapColorScheme) {
         addDataToImage(g2d,
                        mapData,
                        hDataList,
@@ -219,7 +242,7 @@ public class GisUtil {
                        mapTopY,
                        mapLowY,
                        fill,
-                       true);
+                       true, mapColorScheme);
 
     }
 
@@ -228,15 +251,24 @@ public class GisUtil {
                                int canvasWidth, int canvasHeight,
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill, boolean makeGrid) {
+                               boolean fill, boolean makeGrid, MapColorScheme mapColorScheme) {
+
+
+        g2d.setBackground(mapColorScheme.getBackgroundColor().getAsAWTColor());
+        g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
         BufferedImage txtImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
         Graphics txtGraph = txtImage.getGraphics();
-        txtGraph.setColor(new Color(0,0,0,80));
-        txtGraph.drawLine(0,0,3,3);
+//        txtGraph.setColor(new Color(0,0,0,80));
+//        txtGraph.drawLine(0,0,3,3);
+        txtGraph.setColor(mapColorScheme.getRegionBorderColor().getAsAWTColor());
+        txtGraph.drawLine(mapColorScheme.getRegionBorderColor().getRed(),
+                            mapColorScheme.getRegionBorderColor().getGreen(),
+                            mapColorScheme.getRegionBorderColor().getBlue(),
+                            mapColorScheme.getRegionBorderColor().getAlpha());
+
 
         TexturePaint tp = new TexturePaint(txtImage, new Rectangle(0,0,3,3));
-
 
         float scale = 1f; //Pixels per degree
 
@@ -269,7 +301,7 @@ public class GisUtil {
         try {
 
             //Color paintColor = new Color(39, 39, 119);
-            Color paintColor = new Color(201, 153, 113);
+            Color paintColor = mapColorScheme.getTerrainColor().getAsAWTColor();
             Color fillColor = null;
 
             boolean addDashPaint = false;
@@ -284,8 +316,7 @@ public class GisUtil {
                     ColorRGB cRGB = getColorForSegment((int) gms.getSegmentId(),
                             hDataList);
                     if (cRGB != null) {
-                        fillColor = new Color(cRGB.getRed(), cRGB.getGreen(),
-                                              cRGB.getBlue());
+                        fillColor = cRGB.getAsAWTColor();
                     } else {
                         fillColor = paintColor;
                     }
@@ -340,7 +371,7 @@ public class GisUtil {
                         Color gg = fillColor;
                         //TODO: Improve this it's a last minute solution
                         if (shape.getSegment().getSegmentName().indexOf("Lake")>=0){
-                                g2d.setColor( new Color(51,153,255));
+                                g2d.setColor(mapColorScheme.getWaterColor().getAsAWTColor());
 
                                 }else{
                                         g2d.setColor(gg);
@@ -358,7 +389,9 @@ public class GisUtil {
 
 
 
-                        g2d.setColor(new Color(0, 0, 0, 70));
+//                        g2d.setColor(new Color(0, 0, 0, 70));
+                        g2d.setColor(mapColorScheme.getRegionBorderColor().getAsAWTColor());
+
                         g2d.drawPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
 
@@ -371,7 +404,8 @@ public class GisUtil {
                                         shape.getShapePoints().size());
                          */
 
-                        g2d.setColor(new Color(0, 0, 0, 50));
+//                        g2d.setColor(new Color(0, 0, 0, 50));
+                        g2d.setColor(mapColorScheme.getRegionBorderColor().getAsAWTColor());
                         g2d.drawPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
 
@@ -413,18 +447,22 @@ public class GisUtil {
 
             //make border
 
-            g2d.setColor(new Color(0, 0, 100));
+//            g2d.setColor(mapColorScheme.getBorderColor().getAsAWTColor());
 
+            /*
             g2d.fillRect(0, 0, canvasWidth, border - 1);
             g2d.fillRect(0, 0, border - 1, canvasHeight);
             g2d.fillRect(canvasWidth - border + 1, 0, canvasWidth, canvasHeight);
             g2d.fillRect(0, canvasHeight - border + 1, canvasWidth, canvasHeight);
+            */
 
-            g2d.setColor(new Color(200, 200, 200, 255));
+//            g2d.setColor(new Color(200, 200, 200, 255));
+            g2d.setColor(mapColorScheme.getBorderColor().getAsAWTColor());
+
             g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5,
                          canvasHeight - border * 2 + 5);
         } catch (Exception ex) {
-            String ggg = "ggg";
+            
         }
 
 

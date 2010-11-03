@@ -789,8 +789,10 @@
 			                                              <td align="left">
 			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
 			                                              </td>
-			                                              <td>			                                              																	
+			                                              <td>
+			                                              	<c:if test="${ct.donorContractFundinAmount != null}">			                                              																	
 			              										&nbsp; <%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString() %>  &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -798,7 +800,9 @@
 			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
+			                                              	<c:if test="${ct.totAmountDonorContractFunding != null}">
 			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -806,7 +810,9 @@
 			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
+			                                              	<c:if test="${ct.totAmountCountryContractFunding != null}">
 			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 			                                          <tr>

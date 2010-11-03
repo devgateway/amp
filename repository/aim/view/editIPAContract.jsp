@@ -1029,8 +1029,8 @@ window.onload=autosum;
 								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 							</html:select>
 							&nbsp;
-							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
-							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
+							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date_a${idx.count}"/>
+							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date_a${idx.count}",-250,-230)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 							&nbsp;

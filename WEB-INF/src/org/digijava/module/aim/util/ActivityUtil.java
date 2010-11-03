@@ -3142,7 +3142,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
  		      c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
 			  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
 	    	  
-	    	  
+			  c.getAmendments().size();
+	    	  c.getDonorContractFundinAmount();
+	    	  c.getTotAmountDonorContractFunding();
+	    	  c.getTotAmountCountryContractFunding();
+	    	  c.getDonorContractFundingCurrency();
+	    	  c.getTotalAmountCurrencyDonor();
+	    	  c.getTotalAmountCurrencyCountry();
 	      }
 	    }
 	     

@@ -40,6 +40,9 @@ public class WidgetTeaserForm extends ActionForm {
 
     // used for Org Profile to determine which chart/text render
     private Long type;
+    private String selectedFromYear;
+	private String selectedToYear;
+	private String baseCurr;
         
     public Long getType() {
         return type;
@@ -111,4 +114,28 @@ public class WidgetTeaserForm extends ActionForm {
         return time;
 
    }
+
+	public void setSelectedFromYear(String selectedFromYear) {
+		this.selectedFromYear = selectedFromYear;
+	}
+
+	public String getSelectedFromYear() {
+		return selectedFromYear;
+	}
+
+	public void setSelectedToYear(String selectedToYear) {
+		this.selectedToYear = selectedToYear;
+	}
+
+	public String getSelectedToYear() {
+		return selectedToYear;
+	}
+
+	public void setBaseCurr(String baseCurr) {
+		this.baseCurr = baseCurr;
+	}
+
+	public String getBaseCurr() {
+		return baseCurr;
+	}
 }

@@ -2,7 +2,7 @@ package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,13 +13,17 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.helper.WidgetVisitor;
 import org.digijava.module.widget.helper.WidgetVisitorAdapter;
@@ -41,6 +45,11 @@ public class WidgetTeaser extends TilesAction {
             HttpServletResponse response) throws Exception {
 		WidgetTeaserForm wform = (WidgetTeaserForm)form;
         AmpDaWidgetPlace place = WidgetUtil.saveOrUpdatePlace(context);
+        String baseCurr= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if(baseCurr==null){
+        	baseCurr="USD";
+        }
+        wform.setBaseCurr(baseCurr);
 
         //we have null if there is no place parameter in context - layout should define it when inserting teaser
 		if (place==null){
@@ -86,9 +95,22 @@ public class WidgetTeaser extends TilesAction {
 
             }
 
+        
             @Override
-            public void visit(AmpDaTable table) {
-                rendertype.add(WidgetUtil.TABLE);
+            public void visit(AmpDaTable table){
+                 rendertype.add(WidgetUtil.TABLE);
+            }
+            @Override
+            public void visit(AmpSectorTableWidget sectorTable){
+                 rendertype.add(WidgetUtil.SECTOR_TABLE);
+            }
+            @Override
+            public void visit(AmpParisIndicatorTableWidget table){
+                 rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
+            }
+            @Override
+            public void visit(AmpWidgetTopTenDonorGroups table) {
+                rendertype.add(WidgetUtil.TOP_TEN_DONORS);
             }
         };
         widget.accept(adapter);

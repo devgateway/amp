@@ -6,9 +6,12 @@ import java.util.Date;
 
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.util.WidgetUtil;
 
 /**
@@ -88,6 +91,21 @@ public class WidgetPlaceHelper implements Serializable{
             public void visit(AmpDaTable table) {
                 rendertype.add(WidgetUtil.TABLE);
                 rendertypeName.add("Table");
+            }
+            @Override
+            public void visit(AmpSectorTableWidget table) {
+                rendertype.add(WidgetUtil.SECTOR_TABLE);
+                rendertypeName.add("Sector Table Widget");
+            }
+            @Override
+            public void visit(AmpParisIndicatorTableWidget table) {
+                rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
+                rendertypeName.add("Paris Indicator Table Widget");
+            }
+            @Override
+            public void visit(AmpWidgetTopTenDonorGroups table) {
+                rendertype.add(WidgetUtil.TOP_TEN_DONORS);
+                rendertypeName.add("Top Ten Donors Table Widget");
             }
         };
         widget.accept(adapter);

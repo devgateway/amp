@@ -1115,7 +1115,7 @@ public class ChartWidgetUtil {
             }
         }
 
-        List result = getFunding(donorIDs, fromDate, toDate, sectIds, showOnlyApprovedActivities);
+        List<Double> result = getFunding(donorIDs, fromDate, toDate, sectIds, showOnlyApprovedActivities);
         //Process grouped data
         if (result != null) {
             amount = ((Double) result.get(0));
@@ -1128,7 +1128,7 @@ public class ChartWidgetUtil {
 
     }
 
-    public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, boolean showOnlyApprovedActivities) throws DgException {
+    public static List<Double> getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, boolean showOnlyApprovedActivities) throws DgException {
         String oql = "select   sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -1152,7 +1152,7 @@ public class ChartWidgetUtil {
         Session session = PersistenceManager.getRequestDBSession();
         //search for grouped data
         @SuppressWarnings(value = "unchecked")
-        List result = null;
+        List<Double> result = null;
         try {
             Query query = session.createQuery(oql);
             if (fromDate != null && toDate != null) {
@@ -1837,6 +1837,9 @@ public class ChartWidgetUtil {
         return amount;
 
     }
+  
+
+    
 
     /**
      * Returns funding amount

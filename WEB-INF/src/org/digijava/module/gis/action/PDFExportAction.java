@@ -95,6 +95,7 @@ import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.pdf.PdfWriter;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 
 public class PDFExportAction extends Action implements PdfPageEvent {
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
@@ -836,8 +837,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             String selectedEndYearTranslation = "End year";
             if (selectedEndYearTranslation == null || selectedEndYearTranslation.equals(""))
                 selectedEndYearTranslation = "End year";
+            String baseCurr = FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+			if (baseCurr == null) {
+				baseCurr = "USD";
+			}
 
-		textCell.addElement(new Paragraph("All amounts in 000s of USD" + "\n" + TranslatorWorker.translateText(selectedDonorTranslation, locale, siteId) + ": " + selectedDonorName + "\n"
+		textCell.addElement(new Paragraph("All amounts in 000s of "+baseCurr + "\n" + TranslatorWorker.translateText(selectedDonorTranslation, locale, siteId) + ": " + selectedDonorName + "\n"
 				+ TranslatorWorker.translateText(selectedStartYearTranslation, locale, siteId) + ": " + selectedStartYear + "\n" + TranslatorWorker.translateText(selectedEndYearTranslation, locale, siteId) + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
             textCell.setBorder(Rectangle.NO_BORDER);
@@ -1806,7 +1812,7 @@ private int matchesId(Long ptableId) {
 			Object[] actData = actIt.next();
 			AmpActivity activity = (AmpActivity) actData[0];
 			Float percentsForSectorSelected = (Float) actData[1];
-			FundingData totalFunding = getActivityTotalFundingInUSD(activity);
+			FundingData totalFunding = getActivityTotalFundingInBaseCurrency(activity);
 
 			totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
 			totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
@@ -1910,7 +1916,7 @@ private int matchesId(Long ptableId) {
 		return retVal;
 	}
 
-	private FundingData getActivityTotalFundingInUSD(AmpActivity activity) {
+	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity) {
 				FundingData retVal = null;
         Set fundSet = activity.getFunding();
         Iterator<AmpFunding> fundIt = fundSet.iterator();
@@ -1939,8 +1945,13 @@ private int matchesId(Long ptableId) {
                 }
 
         }
+            String baseCurr = FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+			if (baseCurr == null) {
+				baseCurr = "USD";
+			}
 
-            fch.doCalculations(fundDetSet, "usd");
+            fch.doCalculations(fundDetSet, baseCurr);
 
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();

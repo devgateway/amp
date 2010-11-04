@@ -25,6 +25,12 @@
         <page page="orgProfileWidgetManager" name="widget_orgProfileManager" title=" Org Profile Manager"/>
         <page page="createOrgProfile" name="widget_orgProfileCreate" title=" Create/Update Org Profile"/>
         <page page="sectorDonorWidgetReport" name="showSectorDonorReport" title="Show Sector Donor Report"/>
+        <page page="sectorTableWidgetAdmin" name="widget_sectorTableManager" title="Sector Table Manager"/>
+        <page page="createSectorTableWidget" name="widget_createSectorTable" title="Create Sector Table"/>
+        <page page="reorderSectorTableCols" name="widget_reorderSectorTableCols" title="Reorder Sector Table Columns"/>
+        <page page="parisIndicatorTableWidgetAdmin" name="widget_parisIndicatorTableManager" title="Paris Indicator Table Manager"/>
+        <page page="createParisIndicatorTableWidget" name="widget_createParisIndicatorTableWidget" title="Paris Indicator Table"/>
+        <page page="showParisIndicatorTableWidget" name="widget_showParisIndicatorTableWidget" title="Paris Indicator Table"/>
 
 
 	</secondary-pages>

@@ -425,7 +425,7 @@
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="widgets:clickToViewOrgProfileWidgetAdmin">Click To View Org Profile Widget Admin</digi:trn>
+                                <digi:trn key="widgets:clickToViewOrgProfileWidgeRtAdmin">Click To View Org Profile Widget Admin</digi:trn>
                               </c:set>
                               <a href="/widget/orgProfileManager.do" title="${translation}">
                                 <digi:trn key="widgets:orgProfileWidgetManager">Org Profile Widget Manager</digi:trn>
@@ -443,6 +443,32 @@
                               <a href="/widget/indicatorchartwidgets.do" title="${translation}">
                                 <digi:trn key="widget:indicatorChartWidgetManager">Indicator Chart Widget Manager</digi:trn>
                               </a>
+                            </td>
+                          </tr>
+                          </feature:display>
+                             <feature:display  name="Sector Table Widgets" module="WIDGETS">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                             <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn>Click here to view Sector Table Widgets Manager</digi:trn>
+                              </c:set>
+                            <digi:link module="widget" href="/sectorTableManager.do" title="${translation}">
+                                  <digi:trn>Sector Table Widget</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          </feature:display>
+                           <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                            <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn>Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
+                              </c:set>
+                            <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
+                                  <digi:trn> Paris Indicator Table Widget</digi:trn>
+                              </digi:link>
                             </td>
                           </tr>
                           </feature:display>

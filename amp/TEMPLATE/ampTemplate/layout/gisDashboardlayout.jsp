@@ -7,15 +7,20 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
+
 <script type="text/javascript">
 <!--
+	var donorWidget=false;
 	var lastTimeStamp;
 	
 	function donorChanged(){
 		rechart();
 	}
 	function yearChanged(){
-		rechart()
+		rechart();
+		 if(donorWidget){
+             getTopTenDonorTable();
+        }
 	}
 	function rechart(){
             lastTimeStamp = new Date().getTime();

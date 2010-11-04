@@ -563,6 +563,7 @@
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>
                 <page>showSectorDonorReport</page>
+                <page>widget_showParisIndicatorTableWidget</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

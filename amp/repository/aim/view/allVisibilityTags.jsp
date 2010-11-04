@@ -243,6 +243,8 @@
 <feature:display name="Save and Send button" module="Calendar"></feature:display>
 <feature:display name="Preview Event button" module="Calendar"></feature:display>
 <feature:display name="Event Approve" module="Calendar"></feature:display>
+<feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
+<feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>
@@ -255,6 +257,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 </logic:iterate>
  
 <feature:display name="Enable New User Registration" module="Login - User Management"></feature:display> 
+<feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
+<feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
  
 <field:display name="Add Observations Button" feature="Regional Observations"></field:display>
 <field:display name="Measures Taken" feature="Regional Observations"></field:display>

@@ -1281,8 +1281,18 @@ function showFilter(){
 	/* Function that is executed when mouse over an element */
 	function eventFunction(e) {
 		//alert('S-a apelat eventFunction	' + this.href + '||' + getIdFromHref(this.href) );
-		showPanel(this.innerHTML, getIdFromHref(this.href), e.clientX, e.clientY);
+        var x = 0;
+        var y = 0;
+        if (e.pageX && e.pageY) 	{
+            x = e.pageX;
+            y = e.pageY;
+        }
+        else if (e.clientX &&e.clientY) 	{
+            x = e.clientX + document.body.scrollLeft;
+            y = e.clientY + document.body.scrollTop;
+        }
 
+		showPanel(this.innerHTML, getIdFromHref(this.href), x,y);
 	}
 	/* Extracts the id (database id of AmpTheme) from the href property */
 	function getIdFromHref( href ) {

@@ -85,8 +85,7 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 	 */
 	@Override
 	public MetaInfo[] parameterInfo() {
-		// TODO Auto-generated method stub
-		return null;//PARAM_INFO;
+		return PARAM_INFO;
 	}
 	
 	

@@ -204,7 +204,7 @@ es:
       all: Todos
       query_database: Consulta
       toa: Modalidade de Ajuda
-      status: Status do Projecto
+      status: 'Situação do Projecto'
 
   projects:
     form:
@@ -351,7 +351,7 @@ es:
           on_off_treasury: 'No/Fora da CUT'
           aid_modality: Modalidade de Ajuda
           type_of_implementation: 'Tipo de Implementação'
-          prj_status: Status do Projecto
+          prj_status: 'Situação do Projecto'
 
         output_options:
           heading: 'Opções de saída'

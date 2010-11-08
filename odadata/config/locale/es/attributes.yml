@@ -45,7 +45,7 @@ es:
         country_strategy:
           label: Related Country Strategy
         prj_status:
-          label: 'Status do Projecto'
+          label: 'Situação do projecto'
           description: |
             Por favor, introduza aqui a Situação do Projecto/Programa. 
 
@@ -57,31 +57,31 @@ es:
 
             No caso de um erro, por favor contactar o Ponto Focal Administrador ou o Coodenador do Doador.
           options:
-            planned: 'Planejado, mas ainda não assinou'
-            signed: 'Assinado, mas ainda não desembolsadas'
+            planned: 'Planificado'
+            signed: 'Assinado, mas sem nenhum desembolso'
             ongoing: Em curso
             pipeline: Pipeline
             completed: 'Concluído'
         planned_start:
-          label: 'Data do Início Planificado'
+          label: 'Data prevista para o início'
           description: |
             A data prevista na fase de planificação de um projecto quando este mesmo projecto irá iniciar. 
             Quando a situação do projecto for ainda "planificado"  ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") esta data deve ser inserida. 
             Nas fases posteriores em curso de um projecto, essas datas serão fixadas e não podem ser alteradas.
         planned_end:
-          label: 'Data da Conclusão Planificada'
+          label: 'Data prevista para a conclusão'
           description: |
             A data prevista na fase de planificação de um projecto sobre quando este projecto será concluído. 
             Quando a situação do projecto de um projecto ainda for "planificado" ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") esta data deve ser inserida. 
             Nas fases em curso posteriores de um projecto, estas datas serão fixadas e não podem ser alteradas. 
         actual_start:
-          label: 'Data do Início Real'
+          label: 'Data do início'
           description: |
             A data em que um dado projecto inicia. Quando a situação do projecto de um projecto é alterada de "planificado" 
             ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") para "em curso" a " data real do início" 
             se torna obrigatória.
         actual_end:
-          label: 'Data da Conclusão Real'
+          label: 'Data do fim'
           description: |
             A data em que se conclui um dado projecto. Quando a situação do projecto de um projecto é alterada de "planificado" 
             ("planificado mas ainda não assinado" & "assinado mas ainda não desembolsado") para "em curso" a " data real do fim" 
@@ -142,7 +142,7 @@ es:
             Se um projecto for INSCRITO no OE e passa pela CUT, então é NO Tesouro. 
             Um projecto INSCRITO no OE pode ser NO ou FORA do Tesouro, mas um projecto FORA do OE não pode ser NO Tesouro.
           options:
-            on_treasury: 'No da CUT'
+            on_treasury: 'Na CUT'
             off_treasury: 'Fora da CUT'
         on_off_budget:
           label: 'No/Fora Orçamento de Estado'
@@ -208,7 +208,7 @@ es:
         delegated_by:
           label: Delegada pelo
         website:
-          label: 'Sítio'
+          label: 'Ligação do projecto a Internet'
           description: 'Um link online para informações existentes do projecto mais detalhadas na internet.'
         comments:
           label: 'Comentários'
@@ -219,7 +219,7 @@ es:
             Tanto a pessoa que responde directamente às perguntas, solicitações como feedback ou um assitente administrativo que os coordena. 
             Por favor digite aqui o nome, número de telefone e endereço electrónico da Pessoa de Contacto do Projecto.
         officer_responsible_name:
-          label: Nome
+          label: 'Nome do responsável pelo projecto'
         officer_responsible_phone:
           label: Telefone
         officer_responsible_email:
@@ -271,19 +271,19 @@ es:
         sectors:
           label: Sectores
         updated_at:
-          label: 'Última Actualização'
+          label: 'Data da última actualização'
         total_commitments:
           label: Total compromisso
         total_disbursements:
-          label: Total desembolso
+          label: Total desembolsado
         undisbursed:
-          label: 'Fundos não desembolsos'
-          report_heading: 'Não desembolsos'
+          label: 'Fundos não desembolsados'
+          report_heading: 'Não desembolsados'
           description: 'O montante real dos desembolsos previstos (em moeda original) ainda disponível na data/momento actual para uma dada doação ou empréstimo.'
         total_commitments_in:
           label: Total compromisso {{year}}
         total_disbursements_in:
-          label: Total desembolso {{year}}
+          label: Total desembolsado {{year}}
         disbursements_q1_in:
           label: Desembolsos Q1 {{year}}
         disbursements_q2_in:

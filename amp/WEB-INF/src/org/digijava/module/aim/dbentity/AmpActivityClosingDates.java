@@ -3,7 +3,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AmpActivityClosingDates implements Serializable {
+import org.digijava.module.aim.util.Output;
+
+public class AmpActivityClosingDates implements Serializable, Versionable {
 		
 	private Long ampActivityClosingDateId;
 	private AmpActivity ampActivityId;
@@ -69,5 +71,31 @@ public class AmpActivityClosingDates implements Serializable {
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpActivityClosingDates aux = (AmpActivityClosingDates) obj;
+		String original = this.closingDate != null ? this.closingDate.toString()
+				: "" + "-" + this.comments != null ? this.comments : "" + "-" + this.type != null ? this.type
+						.toString() : "";
+		String other = aux.closingDate != null ? aux.closingDate.toString()
+				: "" + "-" + aux.comments != null ? aux.comments : "" + "-" + aux.type != null ? aux.type.toString()
+						: "";
+		if (original.equals(other)) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public Output getOutput() {
+		return new Output(null, new String[] { "" }, new Object[] { this.closingDate != null ? this.closingDate
+				.toString() : "Empty Date" });
+	}
+	
+	@Override
+	public Object getValue() {
+		return this.type.toString()+this.closingDate;
 	}
 }

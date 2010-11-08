@@ -1,10 +1,13 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
-public class AmpIssues  implements Serializable
+import org.digijava.module.aim.util.Output;
+
+public class AmpIssues  implements Serializable, Versionable
 {
 
 	private Long ampIssueId ;
@@ -56,5 +59,34 @@ public class AmpIssues  implements Serializable
 		this.issueDate = issueDate;
 	}
 	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpIssues aux = (AmpIssues) obj;
+		String original = this.name != null ? this.name : "";
+		String copy = aux.name != null ? aux.name : "";
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
 
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+						: "Empty Name" }));
+		if (this.issueDate != null) {
+			out.getOutputs().add(new Output(null, new String[] { " Date:&nbsp;" }, new Object[] { this.issueDate }));
+		}
+		// TODO add measures.
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		// TODO add measures.
+		return this.issueDate != null ? this.issueDate : "";
+	}
 }

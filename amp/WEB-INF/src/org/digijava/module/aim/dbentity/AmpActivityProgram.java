@@ -1,8 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import java.util.ArrayList;
+
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram {
+public class AmpActivityProgram implements Versionable {
 
         private Long ampActivityProgramId;
         private Long programPercentage;
@@ -55,4 +58,30 @@ public class AmpActivityProgram {
                 names += "[" + this.program.getName() + "]";
                 return names;
         }
+        
+    @Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpActivityProgram aux = (AmpActivityProgram) obj;
+		if (this.program.getAmpThemeId().equals(aux.program.getAmpThemeId())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(new Output(null, new String[] { "Name:&nbsp;" }, new Object[] { this.program.getName() }));
+		out.getOutputs()
+				.add(new Output(null, new String[] { "Percentage:&nbsp;" }, new Object[] { this.programPercentage }));
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		String ret = "";
+		ret = "" + this.programPercentage;
+		return ret;
+	}
 }

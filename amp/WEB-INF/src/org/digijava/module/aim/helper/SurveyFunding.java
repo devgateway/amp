@@ -11,6 +11,7 @@ public class SurveyFunding {
     private String fundingOrgName;
     private String deliveryDonorName;
     private String acronim;
+    private Long orgID;
 
     public String getAcronim() {
 		return acronim;
@@ -51,5 +52,12 @@ public class SurveyFunding {
     public void setDeliveryDonorName(String deliveryDonorName) {
         this.deliveryDonorName = deliveryDonorName;
     }
-
+    
+	public Long getOrgID() {
+		return orgID;
+	}
+	
+	public void setOrgID(Long orgID) {
+		this.orgID = orgID;
+	}
 }

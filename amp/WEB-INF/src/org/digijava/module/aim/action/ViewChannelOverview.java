@@ -305,7 +305,9 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setWrite(true);
 			else
 				formBean.setWrite(false);
+		
 
+						
 			formBean.setActivity(activity);
 			formBean.setCanView(true);
 

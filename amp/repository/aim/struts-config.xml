@@ -104,6 +104,8 @@
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
     <form-bean name="aimTeamPagesForm" type="org.digijava.module.aim.form.TeamPagesForm" />
     <form-bean name="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm" />
+    <form-bean name="aimViewActivityHistoryForm" type="org.digijava.module.aim.form.ViewActivityHistoryForm" />
+    <form-bean name="aimCompareActivityVersionsForm" type="org.digijava.module.aim.form.CompareActivityVersionsForm" />
     <form-bean name="aimSelectSectorForm" type="org.digijava.module.aim.action.SelectSectorForm" />
     <form-bean name="aimCurrencyRateForm" type="org.digijava.module.aim.form.CurrencyRateForm" />
     <form-bean name="aimDonorDataImportForm" type="org.digijava.module.aim.form.DonorDataImportForm" />
@@ -1117,7 +1119,15 @@
       <forward name="forwardToPreview" path="/aim/previewActivity.do" redirect="true" />
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>
-
+    
+    <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory">
+    	<forward name="forward" path="/showLayout.do?layout=viewActivityHistory" />
+    </action>
+    <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions">
+    	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />
+    	<forward name="reload"  path="/aim/viewChannelOverview.do?tabIndex=0" />
+    </action>
+    
     <action name="aimEUActivityForm" path="/aim/editEUActivity" scope="session" type="org.digijava.module.aim.action.EditEUActivity">
       <forward name="forward" path="/showLayout.do?layout=aim_editEUActivity" />
     </action>

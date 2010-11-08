@@ -71,6 +71,7 @@ public class EditSurvey extends Action {
         }
 
         AmpAhsurvey auxAmpAhsurvey = null;
+        svForm.setEditAct(false);
         Survey auxSurvey = null;
         if (svForm.isEditAct() == true) {
 	        	if (firstLoad) {

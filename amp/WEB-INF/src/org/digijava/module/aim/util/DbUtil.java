@@ -5791,9 +5791,11 @@ public class DbUtil {
                             if (svy.getPointOfDeliveryDonor() != null) {
                                 svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
                                 svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
+                                svfund.setOrgID(svy.getPointOfDeliveryDonor().getAmpOrgId());
                             } else {
                                 svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
                                 svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
+                                svfund.setOrgID(svy.getAmpDonorOrgId().getAmpOrgId());
                             }
 
                             survey.add(svfund);
@@ -6103,37 +6105,66 @@ public class DbUtil {
         }
     }
     
-    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity, List<Indicator> indicators) throws DgException {
-    		Session session = null;
-        	if (survey == null /*|| survey.getAmpAHSurveyId()==null*/)
-        	{
-        		logger.warn("The survey or AHSurvey is null ... no update for Survey");
-        		return;
-        	}
-        	//setup the survey.
-            survey.setAmpActivityId(activity);
-            if(activity.getSurvey() == null) {
-            	activity.setSurvey(new HashSet<AmpAhsurvey>());
-            }
-            activity.getSurvey().add(survey);
-            survey.setAmpAHSurveyId(null);
-            
-            //setup responses.
-            Iterator itr1 = indicators.iterator();
-            while (itr1.hasNext()) {
-                Iterator itr2 = ( (Indicator) itr1.next()).getQuestion().iterator();
-                while (itr2.hasNext()) {
-                    Question q = (Question) itr2.next();
-                    AmpAhsurveyResponse res = new AmpAhsurveyResponse();
-                    res.setAmpAHSurveyId(survey);
-                    session = PersistenceManager.getRequestDBSession();
-                    AmpAhsurveyQuestion ques = (AmpAhsurveyQuestion) session.load(AmpAhsurveyQuestion.class, q.getQuestionId());
-                    res.setAmpQuestionId(ques);
-                    res.setResponse(q.getResponse());
-                    survey.getResponses().add(res);
-                }
-            }
-    }
+    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+
+		AmpAhsurvey newSurvey = new AmpAhsurvey();
+		newSurvey.setAmpActivityId(activity);
+		newSurvey.setAmpAHSurveyId(null);
+		newSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
+		newSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
+		newSurvey.setResponses(new HashSet<AmpAhsurveyResponse>());
+		Iterator iterResponses = survey.getResponses().iterator();
+		while (iterResponses.hasNext()) {
+			AmpAhsurveyResponse res = (AmpAhsurveyResponse) iterResponses.next();
+			AmpAhsurveyResponse newResponse = new AmpAhsurveyResponse();
+			newResponse.setAmpAHSurveyId(newSurvey);
+			newResponse.setAmpQuestionId(res.getAmpQuestionId());
+			newResponse.setAmpReponseId(null);
+			newResponse.setResponse(res.getResponse());
+			// res.setAmpAHSurveyId(newSurvey);
+			newSurvey.getResponses().add(newResponse);
+			// session.saveOrUpdate(newResponse);
+		}
+		if (activity.getSurvey() == null) {
+			activity.setSurvey(new HashSet<AmpAhsurvey>());
+		}
+		activity.getSurvey().add(newSurvey);
+		// session.saveOrUpdate(newSurvey);
+	}
+
+	public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity, List<Indicator> indicators)
+			throws DgException {
+		Session session = null;
+		if (survey == null /* || survey.getAmpAHSurveyId()==null */) {
+			logger.warn("The survey or AHSurvey is null ... no update for Survey");
+			return;
+		}
+		// setup the survey.
+		survey.setAmpActivityId(activity);
+		if (activity.getSurvey() == null) {
+			activity.setSurvey(new HashSet<AmpAhsurvey>());
+		}
+		activity.getSurvey().add(survey);
+		survey.setAmpAHSurveyId(null);
+
+		// setup responses.
+		Iterator itr1 = indicators.iterator();
+		while (itr1.hasNext()) {
+			Iterator itr2 = ((Indicator) itr1.next()).getQuestion().iterator();
+			while (itr2.hasNext()) {
+				Question q = (Question) itr2.next();
+				AmpAhsurveyResponse res = new AmpAhsurveyResponse();
+				res.setAmpAHSurveyId(survey);
+				session = PersistenceManager.getRequestDBSession();
+				AmpAhsurveyQuestion ques = (AmpAhsurveyQuestion) session.load(AmpAhsurveyQuestion.class, q
+						.getQuestionId());
+				res.setAmpQuestionId(ques);
+				res.setResponse(q.getResponse());
+				survey.getResponses().add(res);
+			}
+		}
+	}
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {
         Session session = null;

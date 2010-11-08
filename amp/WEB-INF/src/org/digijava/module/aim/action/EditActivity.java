@@ -1129,6 +1129,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            
 			            fund.setFundingId(ampFunding.getAmpFundingId().
 			                              longValue());
+			            fund.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
 			            fund.setConditions(ampFunding.getConditions());
 			            fund.setDonorObjective(ampFunding.getDonorObjective());

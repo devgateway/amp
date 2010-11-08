@@ -1333,6 +1333,7 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
             }
         };
         List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
+        svForm.setEditAct(false);
         if (svForm.isEditAct() == true) {
         	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);
         	Collections.sort(surveyColl, sfComp);
@@ -1349,16 +1350,21 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
         		int tempID = 0;
         		while (iterOrgFundings.hasNext()) {
         			FundingOrganization fundingOrganization = iterOrgFundings.next();
-        			SurveyFunding auxSurveyFunding = new SurveyFunding();
-        			AmpOrganisation auxOrganization = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
-        			auxSurveyFunding.setAcronim(auxOrganization.getOrgCode());
-        			//TODO: Check if the user entered a second time and changed the Point of Delivery Donor.
-        			auxSurveyFunding.setDeliveryDonorName(auxOrganization.getName());
-        			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());
-        			//I have to assign an ID, for new surveys I use negative numbers and the donor id.
-        			tempID = fundingOrganization.getAmpOrgId().intValue() * -1;
-        			auxSurveyFunding.setSurveyId(new Long(tempID));
-        			surveyColl.add(auxSurveyFunding);
+        			AmpOrganisation auxOrg = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
+        			if(auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("BIL") || 
+        					auxOrg.getOrgGrpId().getOrgType().getOrgTypeCode().equalsIgnoreCase("MUL")) {
+	        			SurveyFunding auxSurveyFunding = new SurveyFunding();
+	        			AmpOrganisation auxOrganization = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
+	        			auxSurveyFunding.setAcronim(auxOrganization.getOrgCode());
+	        			auxSurveyFunding.setOrgID(fundingOrganization.getAmpOrgId());
+	        			//TODO: Check if the user entered a second time and changed the Point of Delivery Donor.
+	        			auxSurveyFunding.setDeliveryDonorName(auxOrganization.getName());
+	        			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());
+	        			//I have to assign an ID, for new surveys I use negative numbers and the donor id.
+	        			tempID = fundingOrganization.getAmpOrgId().intValue() * -1;
+	        			auxSurveyFunding.setSurveyId(new Long(tempID));
+	        			surveyColl.add(auxSurveyFunding);
+        			}
         		}
         		svForm.setSurveyFundings(surveyColl);
         	}

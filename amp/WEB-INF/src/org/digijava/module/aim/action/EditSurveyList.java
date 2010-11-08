@@ -53,7 +53,7 @@ public class EditSurveyList extends Action {
         svForm.setStep("17"); // for indicators tab in donor-view
         logger.debug("step[after] : " + svForm.getStep());
         
-        //this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        //this is needed to acknowledge that we are still under EDIT ACTIVITY mode:
         request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 
         Comparator sfComp = new Comparator() {
@@ -63,6 +63,7 @@ public class EditSurveyList extends Action {
                 return sf1.getFundingOrgName().trim().toLowerCase().compareTo(sf2.getFundingOrgName().trim().toLowerCase());
             }
         };
+        svForm.setEditAct(false);
         List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
         if (svForm.isEditAct() == true) {
         	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);

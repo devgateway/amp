@@ -1,9 +1,12 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import org.digijava.module.aim.util.Output;
 
 
-public class AmpOrgRole implements Serializable
+public class AmpOrgRole implements Serializable, Versionable
 {
     private Long ampOrgRoleId;
     private AmpActivity activity;
@@ -94,4 +97,33 @@ public class AmpOrgRole implements Serializable
 		return (orgRole.getActivity().getAmpActivityId().equals(activity.getAmpActivityId()) &&orgRole.getOrganisation().getAmpOrgId().equals(organisation.getAmpOrgId()) && orgRole.getRole().getAmpRoleId().equals(role.getAmpRoleId()));
 		}
 		}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpOrgRole aux = (AmpOrgRole) obj;
+		String original = "" + this.organisation.getAmpOrgId() + "-" + this.role.getAmpRoleId();
+		String copy = "" + aux.organisation.getAmpOrgId() + "-" + aux.role.getAmpRoleId();
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Organization: " }, new Object[] { this.organisation.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { " Role: " }, new Object[] { this.role.getName() }));
+		if (this.percentage != null) {
+			out.getOutputs().add(new Output(null, new String[] { " Percentage: " }, new Object[] { this.percentage }));
+		}
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return "" + this.percentage;
+	}
 }	

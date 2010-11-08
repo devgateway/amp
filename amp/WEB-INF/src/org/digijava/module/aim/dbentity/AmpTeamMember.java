@@ -10,9 +10,10 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
-public class AmpTeamMember implements Serializable {
+public class AmpTeamMember implements Serializable, Versionable {
 
 	private Long ampTeamMemId;
 	private User user;
@@ -200,8 +201,16 @@ public class AmpTeamMember implements Serializable {
 		this.publishDocPermission = publishDocPermission;
 	}	
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	
+	public boolean equalsForVersioning(Object obj) {
+		return this.equals(obj);
 	}
+
+	public Object getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Output getOutput() {
+		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
+	}
+}

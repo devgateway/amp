@@ -2,12 +2,17 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.util.Output;
 
-public class AmpFunding implements Serializable {
+public class AmpFunding implements Serializable, Versionable {
 	private Long ampFundingId;
 	private AmpOrganisation ampDonorOrgId;
 	private AmpActivity ampActivityId;
@@ -47,6 +52,8 @@ public class AmpFunding implements Serializable {
 	private AmpCategoryValue financingInstrument;
 	private AmpCategoryValue fundingStatus;
 	private AmpCategoryValue modeOfPayment;
+	
+	private Long groupVersionedFunding;
 
 	// private Set survey;
 
@@ -430,4 +437,160 @@ public class AmpFunding implements Serializable {
 		this.modeOfPayment = modeOfPayment;
 	}
 
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpFunding auxFunding = (AmpFunding) obj;
+		if (this.groupVersionedFunding != null
+				&& this.groupVersionedFunding.equals(auxFunding.getGroupVersionedFunding())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Object getValue() {
+		// Compare fields from AmpFunding.
+		String ret = "";
+		ret = ret + "-Type of Assistance:" + (this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : "");
+		ret = ret + "-Financing Instrument:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : "");
+		ret = ret + "-Conditions:" + (this.conditions == null ? "" : this.conditions.trim());
+		ret = ret + "-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim());
+		ret = ret + "-Active:" + this.active;
+		// Compare fields from AmpFundingDetail.
+		List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
+		Collections.sort(auxDetails, fundingDetailsComparator);
+		Iterator<AmpFundingDetail> iter = auxDetails.iterator();
+		while (iter.hasNext()) {
+			AmpFundingDetail auxDetail = iter.next();
+			ret = ret + auxDetail.getTransactionType() + "-" + auxDetail.getTransactionAmount() + "-"
+					+ auxDetail.getAmpCurrencyId() + "-" + auxDetail.getTransactionDate();
+		}
+		return ret;
+	}
+
+	// Compare by transaction type, then amount, then date.
+	private Comparator fundingDetailsComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			AmpFundingDetail aux1 = (AmpFundingDetail) o1;
+			AmpFundingDetail aux2 = (AmpFundingDetail) o2;
+			if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
+				if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
+					return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
+				} else {
+					return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
+				}
+			} else {
+				return aux1.getTransactionType().compareTo(aux2.getTransactionType());
+			}
+		}
+	};
+
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Organization:&nbsp;" }, new Object[] { this.ampDonorOrgId.getName() }));
+		if (this.typeOfAssistance != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Type of Assistance:&nbsp;" },
+							new Object[] { this.typeOfAssistance.getEncodedValue() }));
+		}
+		if (this.financingInstrument != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br />", "Financing Instrument:&nbsp;" },
+							new Object[] { this.financingInstrument.getEncodedValue() }));
+		}
+		if (this.conditions != null && !this.conditions.trim().equals("")) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br/>", " Conditions:&nbsp;" }, new Object[] { this.conditions }));
+		}
+		if (this.donorObjective != null && !this.donorObjective.trim().equals("")) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br/>", "Donor Objective:&nbsp;" },
+							new Object[] { this.donorObjective }));
+		}
+		if (this.active != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "<br/>", "Active:&nbsp;" }, new Object[] { this.active.toString() }));
+		}
+
+		boolean trnComm = false;
+		boolean trnDisb = false;
+		boolean trnExp = false;
+		boolean trnDisbOrder = false;
+		boolean trnMTEF = false;
+		List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
+		Collections.sort(auxDetails, fundingDetailsComparator);
+		Iterator<AmpFundingDetail> iter = auxDetails.iterator();
+		while (iter.hasNext()) {
+			boolean error = false;
+			AmpFundingDetail auxDetail = iter.next();
+			String transactionType = "";
+			Output auxOutDetail = null;
+			switch (auxDetail.getTransactionType().intValue()) {
+			case 0:
+				transactionType = "Commitments:&nbsp;";
+				if (!trnComm) {
+					out.getOutputs().add(
+							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+					trnComm = true;
+				}
+				break;
+			case 1:
+				transactionType = " Disbursements:&nbsp;";
+				if (!trnDisb) {
+					out.getOutputs().add(
+							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+					trnDisb = true;
+				}
+				break;
+			case 2:
+				transactionType = " Expenditures:&nbsp;";
+				if (!trnExp) {
+					out.getOutputs().add(
+							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+					trnExp = true;
+				}
+				break;
+			case 3:
+				transactionType = " Disbursement Orders:&nbsp;";
+				if (!trnDisbOrder) {
+					out.getOutputs().add(
+							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+					trnDisbOrder = true;
+				}
+				break;
+			case 4:
+				transactionType = " MTEF Projection:&nbsp;";
+				if (!trnMTEF) {
+					out.getOutputs().add(
+							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+					trnMTEF = true;
+				}
+				break;
+			default:
+				error = true;
+				break;
+			}
+			if (!error) {
+				String adjustment = (auxDetail.getAdjustmentType().intValue() == 0) ? "Planned" : "Actual";
+				auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
+				auxOutDetail.getOutputs().add(
+						new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",
+								auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ",
+								auxDetail.getTransactionDate() }));
+			}
+		}
+		return out;
+	}
+
+	public Long getGroupVersionedFunding() {
+		return groupVersionedFunding;
+	}
+
+	public void setGroupVersionedFunding(Long previousVersionedFunding) {
+		this.groupVersionedFunding = previousVersionedFunding;
+	}
 }

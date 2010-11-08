@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -17,92 +20,151 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
+	@VersionableFieldSimple(fieldTitle = "Created By")
 	private AmpTeamMember createdBy;
 
+	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	private String projectImpact;
+	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	private String activitySummary;
+	@VersionableFieldTextEditor(fieldTitle = "Contracting Arrangements")
 	private String contractingArrangements;
+	@VersionableFieldTextEditor(fieldTitle = "condSeq")
 	private String condSeq;
+	@VersionableFieldTextEditor(fieldTitle = "Linked Activities")
 	private String linkedActivities;
+	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
 	private String conditionality;
+	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	private String projectManagement;
+	@VersionableFieldTextEditor(fieldTitle = "Contract Details")
 	private String contractDetails;
 	
+	//@VersionableFieldTextEditor(fieldTitle = "Code Chapitre")
 	private AmpChapter chapter;
 	
-	
+	@VersionableFieldSimple(fieldTitle = "Activity Budget")
     private Integer budget;
+	@VersionableFieldSimple(fieldTitle = "Government Agreement Number")
+    private String govAgreementNumber;
+	@VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
     private String budgetCodeProjectID;
     private Long budgetsector;
     private Long budgetorganization;
     private Long budgetdepartment;
     private Long budgetprogram;
     
-    private String govAgreementNumber;
+    //private String govAgreementNumber;
     
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
+    @VersionableFieldSimple(fieldTitle = "Internal ID")
     private Long ampActivityId ;
 
+    @VersionableFieldSimple(fieldTitle = "AMP Id")
 	private String ampId ;
 
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
+	@VersionableFieldSimple(fieldTitle = "Name")
 	private String name ;
+	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	private String description ;
+	
+	@VersionableFieldTextEditor(fieldTitle = "Project Comments")
 	private String projectComments ;
+	@VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
 	private String lessonsLearned;
+	@VersionableFieldTextEditor(fieldTitle = "Objective")
 	private String objective ;
+	@VersionableFieldTextEditor(fieldTitle = "Purpose")
 	private String purpose;
+	@VersionableFieldTextEditor(fieldTitle = "Results")
 	private String results;
+	@VersionableFieldSimple(fieldTitle = "Document Space")
     private String documentSpace;
 
+    @VersionableFieldSimple(fieldTitle = "Is Draft?")
     private Boolean draft;
     
+    @VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
     private String equalOpportunity;
+    @VersionableFieldTextEditor(fieldTitle = "Environment")
     private String environment;
+    @VersionableFieldTextEditor(fieldTitle = "Minorities")
     private String minorities;
 
-    	private Long activityLevel;
+    @VersionableFieldSimple(fieldTitle = "Activity Level")
+    private Long activityLevel;
+    @VersionableFieldSimple(fieldTitle = "Language")
 	private String language ;
+    @VersionableFieldSimple(fieldTitle = "Version")
 	private String version ;
 	private String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
+	@VersionableFieldSimple(fieldTitle = "Condition")
 	private String condition ;
+	@VersionableFieldSimple(fieldTitle = "Approval Date")
 	private Date activityApprovalDate;  // defunct
+	@VersionableFieldSimple(fieldTitle = "Activity Start Date")
 	private Date activityStartDate ;    // defunct
+	@VersionableFieldSimple(fieldTitle = "Activity Close Date")
 	private Date activityCloseDate ;    // defunct
+	@VersionableFieldSimple(fieldTitle = "Original Date")
 	private Date originalCompDate;      // defunct
+	@VersionableFieldSimple(fieldTitle = "Contracting Date")
 	private Date contractingDate;
+	@VersionableFieldSimple(fieldTitle = "Disbursement Date")
 	private Date disbursmentsDate;
+	@VersionableCollection(fieldTitle = "Sectors")
 	private Set sectors ;
+	@VersionableCollection(fieldTitle = "Contracts")
 	private Set contracts;
 	private Set componentes; //for bolivia;
+	@VersionableCollection(fieldTitle = "Locations")
 	private Set locations ;
+	@VersionableCollection(fieldTitle = "Org. Role")
 	private Set<AmpOrgRole> orgrole;
 //	private AmpLevel level ; //TO BE DELETED
+	@VersionableCollection(fieldTitle = "Internal IDs")
 	private Set internalIds ;
+	@VersionableCollection(fieldTitle = "Fundings")
 	private Set funding ;
+	@VersionableCollection(fieldTitle = "Progress")
 	private Set progress;
+	@VersionableCollection(fieldTitle = "Documents")
 	private Set documents ;
+	@VersionableCollection(fieldTitle = "Notes")
 	private Set notes;
+	@VersionableCollection(fieldTitle = "Issues")
 	private Set issues;
+	
+	@VersionableCollection(fieldTitle = "Regional Observations")
 	private Set<AmpRegionalObservation> regionalObservations;
+	
+	@VersionableCollection(fieldTitle = "Costs")
 	private Set costs;
 	//private AmpModality modality ;
 	private AmpCategoryValue modality;
+	@VersionableFieldSimple(fieldTitle = "Theme")
 	private AmpTheme themeId;
 	private String programDescription;
+	@VersionableFieldSimple(fieldTitle = "Team")
 	private AmpTeam team;
+	//@VersionableCollection(fieldTitle = "Members")
 	private Set member;
 	
 	private String contactName;
 	private AmpTeamMember updatedBy;
 
+	@VersionableFieldSimple(fieldTitle = "Fun Amount")
     private Double funAmount;
+	@VersionableFieldSimple(fieldTitle = "Currency Code")
     private String currencyCode;
+	@VersionableFieldSimple(fieldTitle = "Fun Date")
     private Date funDate;
-
+	@VersionableCollection(fieldTitle = "Reference Docs")
     private Set referenceDocs;
 
+    @VersionableCollection(fieldTitle = "Activity Programs")
     private Set activityPrograms;
     // use contFirstName and contLastName instead.
 								 // The field is defunct
@@ -142,28 +204,44 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String secMiCntOrganization;
 	private String secMiCntPhoneNumber;
 	private String secMiCntFaxNumber;
+	
+    @VersionableCollection(fieldTitle = "Activity Contacts")
+    private Set<AmpActivityContact> activityContacts;
 
+    @VersionableFieldSimple(fieldTitle = "Comments")
 	private String comments;
 
+	@VersionableFieldSimple(fieldTitle = "Status")
 	private String statusReason;
+	@VersionableCollection(fieldTitle = "Components")
 	private Set<AmpComponent> components;
+	@VersionableCollection(fieldTitle = "Component Fundings")
 	private Set<AmpComponentFunding> componentFundings;
+	@VersionableCollection(fieldTitle = "Physical Progress")
 	private Set<AmpPhysicalPerformance> componentProgress;
 
-	
+	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
 	private Date proposedStartDate;
+	@VersionableFieldSimple(fieldTitle = "Actual Start Date")
 	private Date actualStartDate;
+	@VersionableFieldSimple(fieldTitle = "Proposed Approval Date")
 	private Date proposedApprovalDate;
+	@VersionableFieldSimple(fieldTitle = "Actual Approval Date")
 	private Date actualApprovalDate;
+	@VersionableFieldSimple(fieldTitle = "Actual Completion Date")
 	private Date actualCompletionDate;
+	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
     private Date proposedCompletionDate;
+    @VersionableCollection(fieldTitle = "Closing Dates")
 	private Set closingDates;
 
 	private User author; // use activityCreator instead
 
     										  // This field is defunct
 
+	@VersionableFieldSimple(fieldTitle = "Created By")
 	private AmpTeamMember activityCreator;
+	@VersionableFieldSimple(fieldTitle = "Creation Date")
 	private Date createdDate;
 	private Date updatedDate;
 	
@@ -173,17 +251,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	//private Set teamList;
 	private String contractors;
 
+	@VersionableCollection(fieldTitle = "Regional Fundings")
 	private Set regionalFundings;
 
 	private String approvalStatus;
 
 	// Aid Harmonization Survey Set
+	@VersionableCollection(fieldTitle = "Surveys")
 	private Set survey;
 
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private Collection actRankColl;
 	
+	private Boolean archived;
 	
 	
 	/**
@@ -192,6 +273,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	 * and contain set of values for this connection.
 	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
 	 */
+	@VersionableCollection(fieldTitle = "Indicators")
     private Set<IndicatorActivity> indicators;
     
     // Start Bolivia Adds
@@ -200,9 +282,10 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private String clasiNPD;
     // End Bolivia Adds
 
-
+    @VersionableCollection(fieldTitle = "Activity Documents")
 	private Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
+	@VersionableCollection(fieldTitle = "Categories")
 	private Set categories;
 
 	/*
@@ -222,16 +305,19 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	private Long gbsSbs;
 
+	@VersionableFieldSimple(fieldTitle = "Government Approval Procedures")
 	private Boolean governmentApprovalProcedures;
 
+	@VersionableFieldSimple(fieldTitle = "Joint Criteria")
 	private Boolean jointCriteria;
-	
+	@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
 	private Boolean humanitarianAid;
 	
-        private Set actPrograms;
+	@VersionableCollection(fieldTitle = "Act. Programs")
+    private Set actPrograms;
         
         private boolean createdAsDraft;
-        
+        @VersionableFieldSimple(fieldTitle = "Donors")
        	private String donors;
 
    private String customField1;
@@ -241,7 +327,15 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
    private String customField5;
    private Boolean customField6;
    
-   private Set <AmpActivityContact> activityContacts;
+   /**
+    * Fields for activity versioning.
+    */
+   private AmpActivityGroup ampActivityGroup;
+   private AmpActivity ampActivityPreviousVersion;
+   private Date modifiedDate;
+   private AmpTeamMember modifiedBy;
+   
+   //private Set <AmpActivityContact> activityContacts;
         
         public AmpActivity() {
 			// TODO Auto-generated constructor stub
@@ -672,9 +766,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @return
 	 */
-	public String getContactName() {
+	/*public String getContactName() {
 		return contactName;
-	}
+	}*/
 
 	/**
 	 * @param string
@@ -686,23 +780,18 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @param string
 	 */
-	public void setContactName(String string) {
+	/*public void setContactName(String string) {
 		contactName = string;
+	}*/
+	
+	public Set<AmpActivityContact> getActivityContacts() {
+		return activityContacts;
 	}
 
-	/**
-	 * @return Returns the email.
-	 */
-	public String getEmail() {
-		return email;
+	public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
+		this.activityContacts = activityContacts;
 	}
-	/**
-	 * @param email
-	 *            The email to set.
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 	/**
 	 * @return Returns the statusReason.
 	 */
@@ -1454,8 +1543,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setContractDetails(String contractDetails) {
 		this.contractDetails = contractDetails;
-	}
-
+	}	
+	
 	public String getPrjCoFirstName() {
 		return prjCoFirstName;
 	}
@@ -1552,20 +1641,6 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.secMiCntOrganization = secMiCntOrganization;
 	}
 
-	/**
-	 * @return the chapter
-	 */
-	public AmpChapter getChapter() {
-		return chapter;
-	}
-
-	/**
-	 * @param chapter the chapter to set
-	 */
-	public void setChapter(AmpChapter chapter) {
-		this.chapter = chapter;
-	}
-
 	public String getSecMiCntPhoneNumber() {
 		return secMiCntPhoneNumber;
 	}
@@ -1581,7 +1656,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
 		this.secMiCntFaxNumber = secMiCntFaxNumber;
 	}
-
+	
 	public void setConvenioNumcont(String convenioNumcont) {
 		this.convenioNumcont = convenioNumcont;
 	}
@@ -1737,6 +1812,74 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.componentProgress = componentProgress;
 	}
 
+	public AmpActivityGroup getAmpActivityGroup() {
+		return ampActivityGroup;
+	}
+
+	public void setAmpActivityGroup(AmpActivityGroup ampActivityGroup) {
+		this.ampActivityGroup = ampActivityGroup;
+	}
+
+	public AmpActivity getAmpActivityPreviousVersion() {
+		return ampActivityPreviousVersion;
+	}
+
+	public void setAmpActivityPreviousVersion(AmpActivity ampActivityPreviousVersion) {
+		this.ampActivityPreviousVersion = ampActivityPreviousVersion;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public AmpTeamMember getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(AmpTeamMember modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	/**
+	 * @return the chapter
+	 */
+	public AmpChapter getChapter() {
+		return chapter;
+	}
+
+	/**
+	 * @param chapter the chapter to set
+	 */
+	public void setChapter(AmpChapter chapter) {
+		this.chapter = chapter;
+	}
+
+	/**
+	 * @return the archived
+	 */
+	public Boolean getArchived() {
+		return archived;
+	}
+
+	/**
+	 * @param archived the archived to set
+	 */
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
+
+	public static String[] getIMPLEMENTED_ACTIONS() {
+		return IMPLEMENTED_ACTIONS;
+	}
+
+	public static void setIMPLEMENTED_ACTIONS(String[] implemented_actions) {
+		IMPLEMENTED_ACTIONS = implemented_actions;
+	}
+
 	public Long getBudgetsector() {
 		return budgetsector;
 	}
@@ -1769,14 +1912,6 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.budgetprogram = budgetprogram;
 	}
 
-	public void setActivityContacts(Set <AmpActivityContact> activityContacts) {
-		this.activityContacts = activityContacts;
-	}
-
-	public Set <AmpActivityContact> getActivityContacts() {
-		return activityContacts;
-	}
-
 	public Set<AmpRegionalObservation> getRegionalObservations() {
 		return regionalObservations;
 	}
@@ -1785,4 +1920,22 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.regionalObservations = regionalObservations;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+
+	
 }

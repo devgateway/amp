@@ -1,20 +1,23 @@
 package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
@@ -128,5 +131,29 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	@Override
 	public String getUniqueId() {
 		return id+"";
+	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpCategoryValue aux = (AmpCategoryValue) obj;
+		if (aux != null) {
+			if (aux.getAmpCategoryClass().getName().equals(this.getAmpCategoryClass().getName())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+		// return this.equals(obj);
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Class:&nbsp;" }, new Object[] { this.ampCategoryClass.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { " Value:&nbsp;" }, new Object[] { this.value }));
+		return out;
 	}
 }

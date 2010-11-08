@@ -260,6 +260,7 @@ class Project < ActiveRecord::Base
   # This is for #ODAMOZ-30, it will lock some features and freeze commitments
   # if this project has had a state of signed when the data input was closed for the last time
   def signature_locked?
+    return false #Requested to allow editing of fields 2010-11-07
     return false if self.date_of_signature.blank?
     return false unless latest_data_input_close = DataInputAction.most_recent(:conditions => { :action => 'closed' } ).first
     
@@ -267,6 +268,7 @@ class Project < ActiveRecord::Base
   end
   
   def publication_locked?
+    return false #Requested to allow editing of fields 2010-11-07
     return false if self.date_of_publication.blank?
     return false unless latest_data_input_close = DataInputAction.most_recent(:conditions => { :action => 'closed' } ).first
     

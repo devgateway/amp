@@ -231,7 +231,7 @@ class Project < ActiveRecord::Base
   # Funding Aggregates
   def total_commitments(year = nil)
     if year
-      fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency)
+      fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency, year)
     else
       (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
         fundings.total_commitments
@@ -240,7 +240,7 @@ class Project < ActiveRecord::Base
   
   def total_payments(year = nil)
     if year
-      fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency)
+      fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency, year)
     else
       (historic_funding.payments rescue 0.to_currency(donor.currency)) +
         fundings.total_payments

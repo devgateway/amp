@@ -1529,6 +1529,16 @@
     <action name="aimEditActivityForm" path="/aim/addFunding" scope="session" type="org.digijava.module.aim.action.AddFunding">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>
+    <action name="aimEditActivityForm" path="/aim/importFunding" scope="session" type="org.digijava.module.aim.action.ImportFunding">
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingImportPopupLayout" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/importFundingDetail" scope="session" type="org.digijava.module.aim.action.ImportFundingDetail">
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingImportPopupLayout" />
+      <forward name="confirmed" path="/aim/addActivity.do?edit=true" redirect="true" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/fundingImported" scope="session" type="org.digijava.module.aim.action.FundingImported">
+      <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+    </action>
     <action name="aimEditActivityForm" path="/aim/addRegionalFunding" scope="session" type="org.digijava.module.aim.action.AddRegionalFunding">
       <forward name="forward" path="/showLayout.do?layout=aim_addRegionalFunding" />
       <forward name="updated" path="/aim/addActivity.do?edit=true" redirect="true" />

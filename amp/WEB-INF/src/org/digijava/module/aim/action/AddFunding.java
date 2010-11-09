@@ -50,7 +50,8 @@ public class AddFunding extends Action {
 		Long orgId = formBean.getFunding().getOrgId();
 		 if ( logger.isDebugEnabled() )
 		        logger.debug("< orgId=" + orgId);
-
+		 
+		formBean.setFileImport(null);
 		formBean.getFunding().setAssistanceType(null);
 		formBean.getFunding().setOrgFundingId("");
 		formBean.getFunding().setSignatureDate("");

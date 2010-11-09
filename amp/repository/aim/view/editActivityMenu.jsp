@@ -75,7 +75,10 @@
         if(document.aimEditActivityForm.step.value=="2"){
         	initSectorScript();
         }
-         if(document.aimEditActivityForm.step.value=="8"){
+        if(document.aimEditActivityForm.step.value=="3"){
+            initImportFundingScript();
+        }
+        if(document.aimEditActivityForm.step.value=="8"){
         	initContactScript();
 			initContactInfoScript();
         }

@@ -20,6 +20,13 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script type="text/javascript" src='<digi:file src="module/aim/scripts/panel/connection-min.js"/>' ></script>
+<jsp:include page="addActivityStep3PopinImport.jsp" flush="true" />
 <script language="JavaScript">
 	function  doNothing()
 	{
@@ -188,6 +195,11 @@
 		{	inputHidden[0].value="checked";}
 		if(checkbox.checked==false)
 		{	inputHidden[0].value="unchecked";}
+	}
+
+
+	function importFunding(orgId) {
+		myImportFunding(orgId);
 	}
 
 	-->
@@ -997,7 +1009,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																<tr>
 																	<td style="padding:10px 0px 10px 4px;">
 																		<field:display name="Add Donor Funding Button" feature="Funding Information">
-																			<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
+																			<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn>Add Funding</digi:trn>' />
+																		</field:display>
+																		<field:display name="Import Donor Funding Button" feature="Funding Information">
+																			<input type="button" class="dr-menu" onclick="importFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn>Import Funding</digi:trn>' />																			
 																		</field:display>
 																	</td>
 																</tr>

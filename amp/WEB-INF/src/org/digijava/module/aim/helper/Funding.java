@@ -1,7 +1,9 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -309,13 +311,57 @@ public class Funding implements Serializable
 	public void setModeOfPayment(AmpCategoryValue modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
 	}
-
+	
 	public Long getGroupVersionedFunding() {
 		return groupVersionedFunding;
 	}
 
 	public void setGroupVersionedFunding(Long groupVersionedFunding) {
 		this.groupVersionedFunding = groupVersionedFunding;
+	}
+	
+	public Collection<FundingDetail> getCommitmentsDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> commitments = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
+			}
+			return commitments;
+		}
+		return fundingDetails;
+	}
+	public Collection<FundingDetail> getDisbursementsDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
+			}
+			return disbursements;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getDisbursementOrdersDetails() {
+		
+		if(fundingDetails != null){
+			List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
+			}
+			return disbursementOrder;
+		}
+		return fundingDetails;
+	}
+
+	public Collection<FundingDetail> getExpendituresDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>) fundingDetails){
+				if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
+			}
+			return expenditures;
+		}
+		return fundingDetails;
 	}
 	
 }

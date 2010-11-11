@@ -300,7 +300,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Reporting System" feature="Identification"></field:display> 
 <field:display name="Audit System" feature="Identification"></field:display> 
 <field:display name="Institutions" feature="Identification"></field:display> 
-<field:display name="Accession Instrument" feature="Identification"></field:display> 
+<field:display name="Accession Instrument" feature="Identification"></field:display>
+<field:display name="Project Implementing Unit" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Activity Approved By" feature="Identification"></field:display> 
 <field:display name="Activity Approved On" feature="Identification"></field:display> 

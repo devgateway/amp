@@ -353,6 +353,11 @@ public class ShowActivityPrintPreview
                 if (ampCategoryValueForStatus != null)
             		eaForm.getIdentification().setStatusId( ampCategoryValueForStatus.getId() );
                 
+                AmpCategoryValue ampCatValForProjectImplUnit	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories());
+                if (ampCatValForProjectImplUnit != null)
+            		eaForm.getIdentification().setProjectImplUnitId(ampCatValForProjectImplUnit.getId() );
+                
                 AmpCategoryValue ampCategoryValueForLevel	= 
                 	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
                 if(ampCategoryValueForLevel != null)

@@ -22,6 +22,9 @@ public class CategoryConstants {
 	public static final String ACTIVITY_STATUS_NAME		= "Activity Status";
 	public static final String ACTIVITY_STATUS_KEY			= "activity_status";
 	
+	public static final String PROJECT_IMPLEMENTING_UNIT_NAME = "Project Implementing Unit";
+    public static final String PROJECT_IMPLEMENTING_UNIT_KEY = "project_impl_unit";
+	
 	public static final String IMPLEMENTATION_LEVEL_NAME			= "Implementation Level";
 	public static final String IMPLEMENTATION_LEVEL_KEY			= "implementation_level";
 	

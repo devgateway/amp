@@ -417,6 +417,13 @@ public class ViewChannelOverview extends TilesAction {
 			            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories())
 			            )
 			            );
+				        
+				        formBean.setProjectImplUnit(
+					            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+					                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+					            CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories())
+					            )
+					    );
 
 				        formBean.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
 		                CategoryManagerUtil.getAmpCategoryValueFromListByKey(

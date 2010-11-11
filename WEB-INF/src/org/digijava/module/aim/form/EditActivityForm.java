@@ -446,6 +446,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long statusId = null;
 		private String statusReason = null;
 		
+		private Long projectImplUnitId;
+		
 	
 		public ArrayList<AmpOrganisation> getBudgetorgs() {
 			return budgetorgs;
@@ -1091,6 +1093,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setStatusReason(String statusReason) {
 			this.statusReason = statusReason;
+		}
+
+		public Long getProjectImplUnitId() {
+			return projectImplUnitId;
+		}
+
+		public void setProjectImplUnitId(Long projectImplUnitId) {
+			this.projectImplUnitId = projectImplUnitId;
 		}
 
 	}

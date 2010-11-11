@@ -296,7 +296,7 @@
 									</logic:present>
 									</field:display>
 									
-<field:display name="Accession Instrument" feature="Identification">
+									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>		</b>								</td>
@@ -307,6 +307,20 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									
+									<field:display name="Project Implementing Unit" feature="Identification">
+										<tr>
+											<td width="30%" align="right" valign="top" nowrap="nowrap">
+												<b><digi:trn>Project Implementing Unit</digi:trn></b>
+											</td>
+											<td bgcolor="#ffffff">
+												<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
+												</c:if>&nbsp;
+											</td>
+										</tr>
+									</field:display>
+									
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>

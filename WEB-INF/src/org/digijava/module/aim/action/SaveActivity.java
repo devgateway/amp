@@ -541,6 +541,7 @@ public class SaveActivity extends Action {
         CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getImplemLocationLevel(), activity.getCategories() );
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getActivityLevel(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
+        CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectImplUnitId(), activity.getCategories());
 		/* END - Saving categories to AmpActivity */
 			
         

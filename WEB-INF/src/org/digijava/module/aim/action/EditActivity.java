@@ -554,6 +554,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
+        
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories());
+        if (ampCategoryValue != null){
+        	eaForm.getIdentification().setProjectImplUnitId(new Long(ampCategoryValue.getId()));
+        }
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());

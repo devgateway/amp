@@ -643,6 +643,22 @@ target.style.cursor = "default"
 											
 											
 																		
+											<field:display name="Project Implementing Unit" feature="Identification">
+												<tr bgcolor="#ffffff">
+													<td valign="top" align="left">
+														<a title="<digi:trn>Information about project implementation unit</digi:trn>">
+															<digi:trn>Project Implementing Unit</digi:trn>
+														</a>
+													</td>
+													<td valign="top" align="left">
+															<c:set var="translation">
+																<digi:trn>Please select from below</digi:trn>
+															</c:set>															
+															<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.projectImplUnitId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY %>" styleClass="inp-text" />
+													</td>
+												</tr>
+											</field:display>
+											
 											
 											<field:display name="Accession Instrument" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">

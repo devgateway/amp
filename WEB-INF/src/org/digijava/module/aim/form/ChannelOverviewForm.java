@@ -18,6 +18,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	//private String ampId ;
 	private String objective ;
 	private String status ;
+	private String projectImplUnit ;
 	private String language ;
 	private String version ;
 	private Collection sectors ;
@@ -888,7 +889,12 @@ public String getAccessionInstrument() {
 		public void setMinorities(String minorities) {
 			this.minorities = minorities;
 		}
-	  
 
-		  
+		public String getProjectImplUnit() {
+			return projectImplUnit;
+		}
+
+		public void setProjectImplUnit(String projectImplUnit) {
+			this.projectImplUnit = projectImplUnit;
+		}		  
 }

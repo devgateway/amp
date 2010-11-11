@@ -105,7 +105,7 @@ public class ResetAll extends Action
 //				eaForm.setActivityCloseDates(null);
 				eaForm.getIdentification().setStatusId(new Long(0));
 				eaForm.getIdentification().setStatusReason(null);
-				
+				eaForm.getIdentification().setProjectImplUnitId(new Long(0));
 				/*
 				 * tanzania adds
 				 */

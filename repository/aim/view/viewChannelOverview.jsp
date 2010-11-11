@@ -1476,18 +1476,7 @@ function commentWin(val, commentId) {
 																</TD>
 															</TR>
 														</feature:display>
-													</module:display>													
-													
-													
-													
-													
-													
-													
-													
-													
-													
-													
-													
+													</module:display>
 													
 													
 													<field:display name="Accession Instrument" feature="Identification">
@@ -1515,6 +1504,32 @@ function commentWin(val, commentId) {
 														</TR>
 													</c:if>
 													</field:display>
+													
+													<field:display name="Project Implementing Unit" feature="Identification">
+	                                                    <c:set var="projectImplUnit">
+															${aimChannelOverviewForm.projectImplUnit}
+	                                                    </c:set>
+														<c:if test="${!empty projectImplUnit}">
+															<TR>
+																<TD>
+																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp;
+																				<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																				<b><digi:trn>Project Implementing Unit</digi:trn></b>
+																			</TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				${projectImplUnit}
+																			</TD>
+																		</TR>
+																	</TABLE>
+																</TD>
+															</TR>
+														</c:if>
+													</field:display>
+													
 													<field:display name="A.C. Chapter" feature="Identification">
                                                     <c:set var="acChapter">
 	                                                    ${aimChannelOverviewForm.acChapter}
@@ -1537,7 +1552,8 @@ function commentWin(val, commentId) {
 															</TD>
 														</TR>
 													</c:if>
-													</field:display>
+													</field:display>												
+													
 													
 													<field:display name="Cris Number" feature="Identification">
 														<TR>

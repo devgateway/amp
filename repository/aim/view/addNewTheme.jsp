@@ -121,7 +121,7 @@
 			if (temp == true) 
 			{
 			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-			document.aimThemeForm.action = "<%=addThm%>~event=save";				
+			document.aimThemeForm.action = "<%=addThm%>";
 			document.aimThemeForm.submit();
 			window.opener.location.reload();
 			//window.close();

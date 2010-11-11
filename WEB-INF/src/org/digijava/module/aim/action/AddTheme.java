@@ -62,7 +62,7 @@ public class AddTheme extends Action {
 		}
 		// Save the new sub program
 		if (event.equals("saveSubProgram")) {
-			return saveSubProgram(mapping, form, request, response);
+			return save(mapping, form, request, response);
 		}
 
 		return null;

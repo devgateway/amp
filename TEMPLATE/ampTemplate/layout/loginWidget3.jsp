@@ -119,7 +119,7 @@
          </digi:secure> 
          <digi:secure authenticated="false">
           <logic:notPresent name="currentMember" scope="session">
-          <div style="background-color:#376091; border: #9d9da7 1px solid; width: 400px;height:40px;">
+          <div style="background-color:#376091; border: #9d9da7 1px solid; width: 400px;height:45px;">
            <form action="/j_acegi_security_check" method="post" style="margin:0;">
             <%-- 
               <table width="100%"  cellspacing="0" cellpadding="0" border="0" style=" margin-top: 10px">

@@ -40,6 +40,10 @@ if (request.getParameter("currentlyEditing")!= null){%>
 
 <!--
 
+function exportToPdf (actId) {
+	openURLinResizableWindow("/aim/exportActToPDF.do?activityid="+actId, 780, 500);
+}
+
 function gotoStep(value) {
 	document.aimEditActivityForm.step.value = value;
 	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
@@ -340,6 +344,10 @@ function collapseAll() {
 										</td>
 										<td height=16 vAlign=bottom align="right">
 												<input type="button" class="dr-menu" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
+										</td>
+										<td>
+											<c:set var="trn"><digi:trn>Export To PDF</digi:trn> </c:set>
+											<input type="button" class="dr-menu" onclick="javascript:exportToPdf(${actId})" value="${trn}"/>
 										</td>
 									</tr>
 								</table>

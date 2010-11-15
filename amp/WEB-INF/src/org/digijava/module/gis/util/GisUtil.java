@@ -261,11 +261,8 @@ public class GisUtil {
         Graphics txtGraph = txtImage.getGraphics();
 //        txtGraph.setColor(new Color(0,0,0,80));
 //        txtGraph.drawLine(0,0,3,3);
-        txtGraph.setColor(mapColorScheme.getRegionBorderColor().getAsAWTColor());
-        txtGraph.drawLine(mapColorScheme.getRegionBorderColor().getRed(),
-                            mapColorScheme.getRegionBorderColor().getGreen(),
-                            mapColorScheme.getRegionBorderColor().getBlue(),
-                            mapColorScheme.getRegionBorderColor().getAlpha());
+        txtGraph.setColor(mapColorScheme.getDashColor().getAsAWTColor());
+        txtGraph.drawLine(0 ,0 ,3, 3);
 
 
         TexturePaint tp = new TexturePaint(txtImage, new Rectangle(0,0,3,3));
@@ -331,10 +328,12 @@ public class GisUtil {
                    if (cRGB != null) {
                        addDashPaint = true;
                        //txtGraph.clearRect(0,0,3,3);
+                       /*
                        txtGraph.setColor(new Color(cRGB.getRed(),
                                cRGB.getGreen(),
                                cRGB.getBlue(), 80));
                        txtGraph.drawLine(0,0,3,3);
+                       */
                    } else {
                       addDashPaint = false;
                    }
@@ -744,13 +743,36 @@ public class GisUtil {
         }
         return retVal;
     }
-    
-    public void getNoDataImage(Graphics2D g2d, String s) {
-			g2d.setBackground(new Color(255, 255, 255, 255));
+
+    public void getNoDataImage(Graphics2D g2d, int width, int height, String noDataText) {
+            g2d.setBackground(new Color(255, 255, 255, 255));
+            BufferedImage txtImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
+            Graphics txtGraph = txtImage.getGraphics();
+            txtGraph.setColor(new Color (0,0,0,50));
+            txtGraph.drawLine(0 ,0 ,3, 3);
+            TexturePaint tp = new TexturePaint(txtImage, new Rectangle(0,0,3,3));
+            g2d.setPaint(tp);
+            g2d.clearRect(0, 0, width, height);
+            g2d.fillRect(0, 0, width, height);
+            g2d.setPaint(null);
+
+
 			java.awt.Font f = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 24);
-			g2d.setColor(Color.black);
-			g2d.setFont(f);
-			g2d.drawString(s, 70, 250);   	
+            g2d.setFont(f);
+            GlyphVector glv = g2d.getFont().createGlyphVector(g2d.
+                    getFontRenderContext(), noDataText);
+
+            int captionWidth = (int)glv.getVisualBounds().getWidth();
+            int captionHeight = (int)glv.getVisualBounds().getHeight();
+
+
+
+			g2d.setColor(new Color(0,0,0,100));
+			g2d.drawString(noDataText, (width - captionWidth)/2 , (height - captionHeight)/2);
+
+            g2d.setColor(Color.red);
+			g2d.drawString(noDataText, (width - captionWidth)/2 - 1 , (height - captionHeight)/2 - 1);
     }
+    
 
 }

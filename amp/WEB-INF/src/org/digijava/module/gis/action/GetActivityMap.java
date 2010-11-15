@@ -41,6 +41,7 @@ public class GetActivityMap extends Action {
                                  HttpServletResponse response) throws Exception {
 
     ServletOutputStream sos = null;
+    response.setContentType("image/png");
 
         try {
 
@@ -93,16 +94,14 @@ public class GetActivityMap extends Action {
 
             CoordinateRect rect = gisUtil.getMapRect(map);
 
-            if (rect != null) {
-                if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
-                    response.setContentType("image/png");
-
-                    BufferedImage graph = new BufferedImage(canvasWidth,
+            BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
                             BufferedImage.TYPE_INT_ARGB);
 
-                    Graphics2D g2d = graph.createGraphics();
+            Graphics2D g2d = graph.createGraphics();
 
+            if (map != null && rect != null) {
+                if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
 //                    g2d.setBackground(new Color(0, 0, 100, 255));
 
 //                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -112,43 +111,38 @@ public class GetActivityMap extends Action {
                         fill = false;
                     }
 
-                    if (map != null) {
-                        MapColorScheme colorScheme = MapColorScheme.getDefaultScheme();
-                        colorScheme.setBackgroundColor(new ColorRGB(221, 221, 221));
-                        colorScheme.setTerrainColor(new ColorRGB(120, 120, 120));
-                        colorScheme.setBorderColor(new ColorRGB(139, 139, 139));
-                        colorScheme.setRegionBorderColor(new ColorRGB(50, 50, 50));
+                    MapColorScheme colorScheme = MapColorScheme.getDefaultScheme();
+                    colorScheme.setBackgroundColor(new ColorRGB(221, 221, 221));
+                    colorScheme.setTerrainColor(new ColorRGB(120, 120, 120));
+                    colorScheme.setBorderColor(new ColorRGB(139, 139, 139, 50));
+                    colorScheme.setRegionBorderColor(new ColorRGB(50, 50, 50));
 
-	                    gisUtil.addDataToImage(g2d,
-	                                           map.getSegments(),
-                                                hilightData,
-	                                           null,
-	                                           canvasWidth, canvasHeight,
-	                                           rect.getLeft(), rect.getRight(),
-	                                           rect.getTop(), rect.getBottom(),
-	                                           fill, false, colorScheme);
+                    gisUtil.addDataToImage(g2d,
+                                           map.getSegments(),
+                                            hilightData,
+                                           null,
+                                           canvasWidth, canvasHeight,
+                                           rect.getLeft(), rect.getRight(),
+                                           rect.getTop(), rect.getBottom(),
+                                           fill, false, colorScheme);
 
-	                    if (request.getParameter("noCapt") == null) {
+                    if (request.getParameter("noCapt") == null) {
 
-	                        gisUtil.addCaptionsToImage(g2d,
-	                                map.getSegments(),
-	                                canvasWidth, canvasHeight,
-	                                rect.getLeft(), rect.getRight(),
-	                                rect.getTop(), rect.getBottom(), new ColorRGB (255, 255, 255), new ColorRGB (0, 0, 0, 100));
-	                    }
-                    } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                        gisUtil.addCaptionsToImage(g2d,
+                                map.getSegments(),
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom(), new ColorRGB (255, 255, 255), new ColorRGB (0, 0, 0, 100));
                     }
-                    g2d.dispose();
-
-                    RenderedImage ri = graph;
-
-                    ImageIO.write(ri, "png", sos);
-
-                    graph.flush();
-
                 }
+            } else {
+                gisUtil.getNoDataImage(g2d, canvasWidth, canvasHeight, "No map data");
             }
+
+            g2d.dispose();
+            RenderedImage ri = graph;
+            ImageIO.write(ri, "png", sos);
+            graph.flush();
 
         } catch (Exception e) {
                 e.printStackTrace();

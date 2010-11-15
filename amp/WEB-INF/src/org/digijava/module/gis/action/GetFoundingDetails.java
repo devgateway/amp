@@ -157,7 +157,7 @@ public class GetFoundingDetails extends Action {
 	                                rect.getTop(), rect.getBottom());
 	                    }
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    	gisUtil.getNoDataImage(g2d, canvasWidth, canvasHeight, "No map data in the database");
                     }
                     g2d.dispose();
 
@@ -507,7 +507,7 @@ public class GetFoundingDetails extends Action {
                                                rect.getLeft(), rect.getRight(),
                                                rect.getTop(), rect.getBottom());
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    	gisUtil.getNoDataImage(g2d, canvasWidth, canvasHeight, "No map data in the database");
                     }
 
                     g2d.dispose();
@@ -698,7 +698,7 @@ public class GetFoundingDetails extends Action {
                                                rect.getLeft(), rect.getRight(),
                                                rect.getTop(), rect.getBottom());
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                    	gisUtil.getNoDataImage(g2d, canvasWidth, canvasHeight, "No map data in the database");
                     }
 
                     g2d.dispose();
@@ -902,7 +902,7 @@ public class GetFoundingDetails extends Action {
                         BufferedImage.TYPE_INT_ARGB);
 
                 Graphics2D g2d = graph.createGraphics();
-                gisUtil.getNoDataImage(g2d, "No map data in the database");
+                gisUtil.getNoDataImage(g2d, canvasWidth, canvasHeight, "No map data in the database");
                 
                 g2d.dispose();
 

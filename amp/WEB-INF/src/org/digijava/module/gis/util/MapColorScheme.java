@@ -25,7 +25,7 @@ public class MapColorScheme {
                                   new ColorRGB(51,153,255),
                                   new ColorRGB(255,255,255,170),
                                   new ColorRGB(0,0,0,70),
-                                  new ColorRGB(0,0,3,3),
+                                  new ColorRGB(0,0,0,150),
                                   new ColorRGB(0,0,3,3));
 
     }

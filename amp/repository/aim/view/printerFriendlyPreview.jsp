@@ -663,6 +663,18 @@
 													</td>
 													</tr>
 												</c:forEach>
+												<tr>
+													<td colspan="2">
+														<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
+                            	<bean:define id="selLocIds">
+                              	<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}"><bean:write name="selectedLocs" property="locId" />|</c:forEach>
+                            	</bean:define>
+                          	</logic:notEmpty>
+														<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
+															<img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+														</logic:notEmpty>
+													</td>
+												</tr>
 												</table>
 											</c:if>
 										</td>

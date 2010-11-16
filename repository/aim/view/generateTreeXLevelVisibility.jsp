@@ -18,7 +18,7 @@
                     </c:if>
 	
 	                    <c:if test="${currentLevel == 1}">
-    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
+    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key='<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>'><bean:write name="moduleAux" property="root.name"/></digi:trn>">
 <div style="float:right;">
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, false);return false;"><digi:trn key="fm:ascendingorder">Ascending order</digi:trn></a>
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, true);return false;"><digi:trn key="fm:descendingorder">Descending order</digi:trn></a>
@@ -27,7 +27,7 @@
                         </c:if>
     
                         <c:if test="${currentLevel != 1}">
-                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
+                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key='<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>'><bean:write name="moduleAux" property="root.name"/></digi:trn>">
                         </c:if>
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
@@ -80,7 +80,7 @@
 									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
 
 									<c:set var="featureDescription">
-										<digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.description"/></digi:trn>
+										<digi:trn key='<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>'><bean:write name="featureAux" property="root.description"/></digi:trn>
 									</c:set>
 									<c:set var="featureName">
 										<digi:trn key='<%="fm:"+featureAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="featureAux" property="root.name"/></digi:trn>
@@ -118,10 +118,10 @@
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
 											
 											<c:set var="fieldDescription">
-												<digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.description"/></digi:trn>
+												<digi:trn key='<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>'><bean:write name="fieldAux" property="root.description"/></digi:trn>
 											</c:set>
 											<c:set var="fieldName">
-												<digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
+												<digi:trn key='<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="fieldAux" property="root.name"/></digi:trn>
 											</c:set>
 									
 											<logic:notEqual name="fieldDescription" value="${fieldName}" >
@@ -145,7 +145,7 @@
 												/>
 												</logic:equal>
 												<a id="field:<bean:write name="fieldAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
-													<digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
+													<digi:trn key='<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="fieldAux" property="root.name"/></digi:trn>
 												</a>
 												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;[<a style="font-size: 12px; cursor:pointer;color:#006699;text-decoration:none" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'><digi:trn key="aim:editPermissions">edit permissions</digi:trn></a>]
 												

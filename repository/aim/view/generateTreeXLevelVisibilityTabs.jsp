@@ -15,7 +15,7 @@
 	<li>	
     <a href="#divmodule<bean:write name="moduleAux" property="root.id"/>" id="treeId<bean:write name="moduleAux" property="root.id"/>" indexTab="${counter}">
     <c:set var="nodeName">
-	    <digi:trn key="<%="fm:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>
+	    <digi:trn key='<%="fm:"+moduleAux.getRoot().getNameTrimmed() %>'><bean:write name="moduleAux" property="root.properName"/></digi:trn>
     </c:set>
     <div style="text-transform:capitalize;">
     ${fn:toLowerCase(nodeName)}

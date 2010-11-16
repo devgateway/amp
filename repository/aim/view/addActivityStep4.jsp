@@ -333,8 +333,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																					<field:display name="Total Donor Commitments" feature="Regional Funding">
 																					<tr>
                                                                                         <td>
-                                                                                            &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>
-                                                                                                
+                                                                                            &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>                                                                                                
                                                                                             <html:select property="regFundingPageCurrCode" styleClass="inp-text" onchange="totalsPage()">
                                                                                                 <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
                                                                                                     <c:if test="${currency.currencyCode!=aimEditActivityForm.regFundingPageCurrCode}">

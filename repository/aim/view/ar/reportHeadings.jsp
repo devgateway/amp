@@ -23,7 +23,7 @@
   .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
   <%boolean first=true; %>
-    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
+    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
      <%
       column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
@@ -116,7 +116,9 @@
 	                    		
           	</logic:equal>            
           </logic:notEqual>
-          
+          	<logic:notEmpty name="reportMeta" property="hierarchies">
+           		<c:if test="${colIndexId==0}"> <br/> ( ${reportMeta.hierarchiesPath} )</c:if>
+           </logic:notEmpty> 
         </td>
 
       </logic:iterate>

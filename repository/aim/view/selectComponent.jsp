@@ -117,28 +117,28 @@
 </gs:test>
 							</td>
                         </tr>
-                            <tr>
-                            <td>
-
-                               <digi:trn>Select currency </digi:trn>
-
-                               <html:select property="components.fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()" styleId="compFundCurr">
-                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
-                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.components.fundingCurrCode}">
-                                        <option value="<c:out value="${currency.currencyCode}"/>">
-                                    </c:if>
-                                    <c:if test="${currency.currencyCode==aimEditActivityForm.components.fundingCurrCode}">
-                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
-                                        </c:if>
-                                        <c:out value="${currency.currencyName}" />
-                                    </option>
-                                </c:forEach>
-
-                                </html:select>
-
-							</td>
-
-						</tr>
+<!--                            <tr>-->
+<!--                            <td>-->
+<!---->
+<!--                               <digi:trn>Select currency </digi:trn>-->
+<!---->
+<!--                               <html:select property="components.fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()" styleId="compFundCurr">-->
+<!--                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">-->
+<!--                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.components.fundingCurrCode}">-->
+<!--                                        <option value="<c:out value="${currency.currencyCode}"/>">-->
+<!--                                    </c:if>-->
+<!--                                    <c:if test="${currency.currencyCode==aimEditActivityForm.components.fundingCurrCode}">-->
+<!--                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">-->
+<!--                                        </c:if>-->
+<!--                                        <c:out value="${currency.currencyName}" />-->
+<!--                                    </option>-->
+<!--                                </c:forEach>-->
+<!---->
+<!--                                </html:select>-->
+<!---->
+<!--							</td>-->
+<!---->
+<!--						</tr>-->
 						<tr bgcolor="#f4f4f2">
 							<td colspan="2" class="box-border-alt1">
                              <span class="f-names" id="total_comm">

@@ -646,18 +646,19 @@ public class AmpReportGenerator extends ReportGenerator {
 				String siteId = rd.getParent().getReportMetadata().getSiteId();
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
+				String text2 = c.getColumnName();
 				String translatedText = null;
+				String translatedText2 = null;
 				//String prefix = "aim:reportGenerator:"; not used cos hash keys
 				try {
 					translatedText = TranslatorWorker.translateText(text, locale, siteId);
+					translatedText2 = TranslatorWorker.translateText(text2, locale, siteId);
 				} catch (WorkerException e) {
 					e.printStackTrace();
 				}
-				if (translatedText.compareTo("") == 0)
-					translatedText = text;
-				//
-				fakeC.setValue(translatedText);
-				//
+				
+				fakeC.setValue(translatedText2 + " " + translatedText);
+				
 				hc.addCell(fakeC);
 			}
 
@@ -767,7 +768,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		attachFundingMeta();
 	}
 	
-	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId) {
+	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId, Column column) {
 		TextCell fakeC = new TextCell();
 		fakeC.setValue(ArConstants.UNALLOCATED);
 		fakeC.setOwnerId( activityId );
@@ -777,16 +778,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		String locale = rd.getParent().getReportMetadata().getLocale();
 		String text = fakeC.getValue().toString();
 		String translatedText = null;
+		String translatedText2 = null;
 		//String prefix = "aim:reportGenerator:"; not used cos hash keys
 		try {
 			translatedText = TranslatorWorker.translateText(text, locale, siteId);
-		} catch (WorkerException e) {
+			translatedText2 = TranslatorWorker.translateText(column.getName(), locale, siteId);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (translatedText.compareTo("") == 0)
-			translatedText = text;
-		//
-		fakeC.setValue(translatedText);
+
+		fakeC.setValue(translatedText2 + " " + translatedText);
 		return fakeC;
 	}
 	

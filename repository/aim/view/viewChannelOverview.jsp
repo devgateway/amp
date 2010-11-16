@@ -2039,10 +2039,27 @@ function commentWin(val, commentId) {
 																		<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
 																		</TD>
 																	</TR>
+																	
+																	<field:display name="Proposed Start Date"
+																		feature="Planning">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<digi:trn>Proposed Start Date</digi:trn> : <aim:formatDate value="${activity.proposedStartDate}" /></TD>
+																		</TR>
+																	</field:display>
+																	<field:display name="Actual Start Date" feature="Planning">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<digi:trn>Actual Start Date</digi:trn> : 
+																				<aim:formatDate value="${activity.actualStartDate}" />
+																			</TD>
+																		</TR>
+																	</field:display>
+																																		
 																	<field:display name="Proposed Approval Date" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff">
-																			<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn> : 
+																			<digi:trn>Proposed Approval Date</digi:trn> : 
                                                                               <aim:formatDate value="${activity.proposedApprovalDate}" />
 																			</TD>
 																		</TR>
@@ -2053,22 +2070,8 @@ function commentWin(val, commentId) {
 																				key="aim:actualapprovaldate">Actual Approval Date</digi:trn> : <aim:formatDate value="${activity.actualApprovalDate}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Proposed Start Date"
-																		feature="Planning">
-																		<TR>
-																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:originalStartDate">
-																			Original Start Date</digi:trn> : <aim:formatDate value="${activity.proposedStartDate}" /></TD>
-																		</TR>
-																	</field:display>
-																	<field:display name="Actual Start Date" feature="Planning">
-																		<TR>
-																			<TD bgcolor="#ffffff">
-																				<digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn> : 
-																				<aim:formatDate value="${activity.actualStartDate}" />
-																			</TD>
-																		</TR>
-																	</field:display>
+																	
+																	
 																	<field:display name="Final Date for Contracting"
 																		feature="Planning">
 																		<TR>
@@ -2087,6 +2090,14 @@ function commentWin(val, commentId) {
 																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>
+																	<field:display name="Proposed Completion Date" feature="Planning">
+																		<tr>
+																			<TD bgcolor="#ffffff"><digi:trn
+																				key="aim:proposedCompletionDate">
+																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /></TD>
+																		</tr>
+																	</field:display>
+																		
 																	<field:display name="Current Completion Date"
 																		feature="Planning">
 																		<TR>
@@ -2097,13 +2108,7 @@ function commentWin(val, commentId) {
 																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Proposed Completion Date" feature="Planning">
-																		<tr>
-																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:proposedCompletionDate">
-																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /></TD>
-																		</tr>
-																		</field:display>
+																	
 																		<field:display name="Closing Dates" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff">

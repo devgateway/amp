@@ -918,33 +918,51 @@ function collapseAll() {
 													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
+												
+												<field:display name="Proposed Start Date" feature="Planning">
+													<tr>
+														<td width="32%"><digi:trn>Proposed Start Date</digi:trn></td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.originalStartDate}
+														</td>
+													</tr>
+												</field:display>
+												<field:display name="Actual Start Date" feature="Planning">
+													<tr>
+														<td width="32%">
+															<digi:trn>Actual Start Date </digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.revisedStartDate}
+														</td>
+													</tr>
+												</field:display>												
 
 												<field:display name="Proposed Approval Date" feature="Planning">
-												<tr>
-													<td width="32%">
-														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
-													</td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalAppDate}													</td>
-												</tr>
+													<tr>
+														<td width="32%">
+															<digi:trn>Proposed Approval Date</digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.originalAppDate}
+														</td>
+													</tr>
 												</field:display>
 												<field:display name="Actual Approval Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedAppDate}													</td>
-												</tr>
+													<tr>
+														<td width="32%">
+															<digi:trn>Actual Approval Date </digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.revisedAppDate}
+														</td>
+													</tr>
 												</field:display>
-												<field:display name="Proposed Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%">													
@@ -959,35 +977,32 @@ function collapseAll() {
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>
+													</td>
 												</tr>
 												</field:display>
-												<field:display name="Actual Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Proposed Completion Date" feature="Planning">
-												<c:if test="${!aimEditActivityForm.editAct}">
-												<tr>
-													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
-													Proposed Completion Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.proposedCompDate}													</td>
-												</tr>
-												</c:if>
+												<%--<c:if test="${!aimEditActivityForm.editAct}">--%>
+													<tr>
+														<td width="32%">
+															<digi:trn>Proposed Completion Date</digi:trn></td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.proposedCompDate}
+														</td>
+													</tr>
+												<%--</c:if>--%>
 												</field:display>
 												<field:display name="Current Completion Date" feature="Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:currentCompletionDate">
-													Current Completion Date</digi:trn></td>
+													<td width="32%">
+														<digi:trn>Current Completion Date</digi:trn>
+													</td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>
+													</td>
 												</tr>
 												</field:display>
 												<field:display name="Proposed Completion Date" feature="Planning">

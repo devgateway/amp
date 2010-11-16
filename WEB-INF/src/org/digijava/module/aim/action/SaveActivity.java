@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
@@ -690,7 +691,9 @@ public class SaveActivity extends Action {
 						Double totalPercentage = 0d;
 						while (itr.hasNext()) {
 							Location loc = itr.next();
-							Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							// Not yet implemented.
+							//Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							Double percentage = new Double(loc.getPercent());							
 							if(percentage != null)
 								totalPercentage += percentage;
 						}
@@ -894,7 +897,8 @@ public class SaveActivity extends Action {
 				actLoc.setLocation(ampLoc);
 				Double percent=null;
 				if(loc.getPercent()!=null && loc.getPercent().length()>0) {
-					percent=FormatHelper.parseDouble(loc.getPercent());
+					//percent=FormatHelper.parseDouble(loc.getPercent());
+					percent = new Double(loc.getPercent());
 					actLoc.setLocationPercentage(percent.floatValue());
 				}
 				locations.add(actLoc);
@@ -943,6 +947,19 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
+			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+			if(activityActualStartDate!=null){
+				Collection<FundingDetail> fundDets = eaForm.getFunding().getFundingDetails();
+				if(fundDets!=null && fundDets.size()>0){
+					for (FundingDetail fundingDetail : fundDets) {
+						Date transDate = DateConversion.getDate(fundingDetail.getTransactionDate());
+						if(transDate.before(activityActualStartDate)){
+							errors.add("",new ActionMessage("error.aim.invalidFundingDate", TranslatorWorker.translateText("Funding contains transaction, which precedes activity actual start date. Please change date", request)));
+						}
+					}
+				}
+			}
+			
 			
 			end:
 			if (errors.size() > 0){
@@ -1045,8 +1062,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 								// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
 								ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
-								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
-														.getTransactionDate()));
+								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet.getTransactionDate()));
 								boolean useFixedRate = false;
 								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {
 									double fixedExchangeRate		=  FormatHelper.parseDouble( fundDet.getFixedExchangeRate() );
@@ -1165,6 +1181,38 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
+			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+			if(activityActualStartDate!=null){
+				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
+				if(regFundDets!=null && regFundDets.size()>0){
+					for (RegionalFunding fundingDetail : regFundDets) {
+						Date transDate = null;
+						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
+						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
+						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
+						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
+						if(commitments!=null && commitments.size()>0){
+							allFundDets.addAll(commitments);
+						}
+						if(disbursements!=null && disbursements.size() >0){
+							allFundDets.addAll(disbursements);
+						}
+						if(expenditures!=null && expenditures.size() >0){
+							allFundDets.addAll(expenditures);
+						}
+						
+						if(allFundDets!=null && allFundDets.size() > 0){
+							for (FundingDetail commitmentsFundDet : allFundDets) {
+								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
+								if(transDate.before(activityActualStartDate)){
+									errors.add("",new ActionMessage("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
 			
 			end:
 			if (errors.size() > 0){

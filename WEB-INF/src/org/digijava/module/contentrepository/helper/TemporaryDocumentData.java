@@ -173,5 +173,9 @@ public class TemporaryDocumentData extends DocumentData {
 			iter.next().setUuid( CrConstants.TEMPORARY_UUID + (i++));
 		}
 	}
-	
+
+	@Override
+	public String getNodeVersionUUID () {
+		return this.uuid;
+	}
 }

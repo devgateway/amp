@@ -1765,6 +1765,7 @@
       <forward name="forward" path="/showLayout.do?layout=invalidSectorPercentages" />
     </action>
     <action name="aimEditActivityForm" path="/aim/getFundingTotals" scope="session" type="org.digijava.module.aim.action.GetFundingTotals" validate="false" />
+    <action name="aimEditActivityForm" path="/aim/validateAmounts" scope="session" type="org.digijava.module.aim.action.ValidateFundingAmounts" validate="false" />
      
     <action path="/aim/export" scope="session" type="org.digijava.module.dataExchange.action.SimpleExportAction" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=export" />    	

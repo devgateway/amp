@@ -458,7 +458,8 @@ function validateLocationPercentage(){
     if ( val.indexOf(",") > 0 ) {
     	val = val.replace(",",".");
     }
-    sum = sum + parseFloat(val);
+    sum = sum + parseFloat(val.replace(/,/gi,"."));
+    //alert(sum);
     i = i + 1;
   }
 
@@ -489,6 +490,7 @@ function fnChk(frmContrl, f){
   </digi:trn>
   </c:set>
   
+  frmContrl.value = frmContrl.value.replace(/,/gi,".");
   var myValue	= frmContrl.value + "";
   if ( frmContrl && frmContrl.value && frmContrl.value.indexOf(",")>0 ) {
 	  myValue		= myValue.value.replace(",", ".");

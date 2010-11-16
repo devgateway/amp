@@ -17,6 +17,10 @@
 </style>
 <script type="text/javascript" src="script/jquery.js"></script>
 <script type="text/javascript">
+
+	var usrFlag = false;
+	var passFlag = false;
+	
   $(document).ready(function(){
 	 
 //	  $(".inp-username").attr({disabled: ""});
@@ -46,23 +50,52 @@
 
 	  $(".inp-username").bind("blur", function(){
 		var uname = $(".inp-username").attr("value");
-		
-		
-		
+		var username = "<digi:trn jsFriendly='true'>Username</digi:trn>"
 		if (uname=="") {
-			$(".inp-username").attr({value: "Username"});
+			$(".inp-username").attr({value: username});
 			$(".inp-username").css({color: "grey"});
 		} else if (uname!="Username") {
 			$(".inp-username").css({color: "black"});
 		}
 	});
 
+	  $(".inp-username").keyup(function(){
+		  	var uname = $(".inp-username").attr("value");
+			//alert(uname.length);
+			if (uname.length > 0) {
+				usrFlag = true;
+			} else {
+				usrFlag = false;
+			}
+		});
+			
 	
 	$(".inp-username").click(function(){
 		var uname = $(".inp-username").attr("value");
-		if (uname == "Username") {
+		if (usrFlag == false) {
 		  $(".inp-username").attr({value: ""});
 		  $(".inp-username").css({color: "black"});
+		}
+	});
+
+	$(".inp-upassword").keyup(function(){
+	  	var upass = $(".inp-upassword").attr("value");
+		//alert(uname.length);
+		if (upass.length > 0) {
+			passFlag = true;
+		} else {
+			passFlag = false;
+		}
+	});
+	$(".inp-upassword").bind("blur", function(){
+		var upass = $(".inp-upassword").attr("value");
+		var password = "<digi:trn jsFriendly='true'>Password</digi:trn>"
+		if (upass=="") {
+			$(".inp-upastext").attr({value: password});
+			$(".inp-upastext").css({color: "grey"});
+			$(".inp-upastext").css({display: ""});
+			$(".inp-upassword").css({display: "none"});
+			$(".inp-upassword").attr({value: ""});
 		}
 	});
 

@@ -503,6 +503,24 @@
 													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
+												
+												<field:display name="Proposed Start Date" feature="Planning">
+												<tr>
+													<td width="32%">
+														<digi:trn>Proposed Start Date</digi:trn>
+													</td>
+													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.originalStartDate}													</td>
+												</tr>
+												</field:display>
+												<field:display name="Actual Start Date" feature="Planning">
+												<tr>
+													<td width="32%"><digi:trn>Actual Start Date</digi:trn></td>													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.revisedStartDate}													</td>
+												</tr>
+												</field:display>
 											
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
@@ -523,14 +541,7 @@
 												</tr>
 												
 												</field:display>
-												<field:display name="Proposed Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%">													
@@ -548,14 +559,7 @@
 														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
 												</tr>
 												</field:display>
-												<field:display name="Actual Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
 												<tr>

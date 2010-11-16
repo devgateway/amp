@@ -4466,6 +4466,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 				this.costing.overallContribution=null;
 				this.costing.overallCost = null;
 			}
+
+            clearMessages();
 		}
 		if (this.getLocation().isLocationReset()) {
 			this.getLocation().reset(mapping, request);

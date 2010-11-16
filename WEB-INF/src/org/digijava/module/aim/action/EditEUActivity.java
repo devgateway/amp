@@ -385,6 +385,7 @@ public class EditEUActivity extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		EUActivityForm eaf = (EUActivityForm) form;
+        if (eaf.getDeleteContrib() != null && eaf.getDeleteContrib().length > 0) {
 		for(int i=0;i<eaf.getDeleteContrib().length;i++) {
 			eaf.getContrAmountList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			/*eaf.getContrCurrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
@@ -395,6 +396,7 @@ public class EditEUActivity extends MultiAction {
 			
 			//eaf.getContrDonorNameList().set(Long.parseLong(eaf.getDeleteContrib().), element)
 		}
+        }
 
 		for(int i=0;i<eaf.getContrAmountList().size();i++) {
 			if(eaf.getContrAmountList().get(i)==null) {

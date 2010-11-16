@@ -25,6 +25,7 @@
 	</div>
 </div>
 
+
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
 		YAHOOAmp.amptab.init = function() {
@@ -101,7 +102,44 @@
 	
 </style>
 
+<script language="JavaScript">
+var responseSuccessForCommitmentsValidation = function(o){
+    /* Please see the Success Case section for more
+     * details on the response object's properties.
+     * o.tId
+     * o.status
+     * o.statusText
+     * o.getResponseHeader[ ]
+     * o.getAllResponseHeaders
+     * o.responseText
+     * o.responseXML
+     * o.argument
+     */     
+     var respXML = o.responseText ;
+     if(respXML.indexOf("No_Alert_Needed")==-1){
+         if(confirm(respXML)==false){
+             return false;
+         }
+     }
+     save();
+}
 
+var responseFailureForCommitmentsValidation = function(o){
+    alert('<digi:trn jsFriendly="true">Connection Failure!</digi:trn>');
+}
+
+var callbackForCommitmentsValidation =
+{
+success:responseSuccessForCommitmentsValidation,
+failure:responseFailureForCommitmentsValidation
+};
+
+function validateCommitments(){
+	<digi:context name="valComm" property="context/module/moduleinstance/validateAmounts.do"/>
+    var url="<%=valComm%>";
+    YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackForCommitmentsValidation);
+}
+</script>
 
 <script language="JavaScript">
 <!--
@@ -121,8 +159,10 @@ function saveClicked() {
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null){
     draftStatus.value=false;
-  }
-  save();
+    validateCommitments();
+  }else{
+	  save();  
+  }  
  
 }
 

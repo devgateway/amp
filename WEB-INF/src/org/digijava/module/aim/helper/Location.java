@@ -230,6 +230,9 @@ public class Location implements Serializable
 	}
 
 	public void setPercent(String percent) {
+		if (percent != null) {
+			//percent = percent.replace('.', ',');
+		}
 		if(FormatHelper.parseDouble(percent) >0 )
 			this.setShowPercent(true);
 		else

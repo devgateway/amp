@@ -71,7 +71,7 @@
             <td>${parisIndicatorInfo.baseValue}</td>
             <td>${parisIndicatorInfo.targetValue}</td>
            <c:choose>
-               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'||parisIndicatorInfo.parisIndicator.indicatorCode=='8'}">
+               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='8'}">
                    <td><digi:trn>N/A</digi:trn></td>
                </c:when>
                <c:otherwise>

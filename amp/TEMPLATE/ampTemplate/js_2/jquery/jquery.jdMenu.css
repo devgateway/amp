@@ -1,0 +1,81 @@
+ul.jd_menu, 
+ul.jd_menu_vertical {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+ul.jd_menu ul,
+ul.jd_menu_vertical ul {
+	display: none;
+}
+ul.jd_menu li {
+	float: left;
+	padding-left:7px; 
+	padding-right:7px; 
+	padding-top:3px; 
+	padding-bottom:3px; 
+	font-size:12px; 
+	font-weight:bold; 
+	text-transform:uppercase;
+	background-color:#F2F2F2; 
+	border:1px solid #E8E8E8; 
+	width:auto; float:left; 
+	margin-right:5px;
+	
+}
+ul.jd_menu_vertical {
+	width: 300px;
+}
+ul.jd_menu_vertical li {
+	float: none;
+}
+
+/* -- Sub-Menus -- */
+ul.jd_menu ul,
+ul.jd_menu_vertical ul {
+	position: absolute;
+	display: none;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	z-index: 10000;
+}
+ul.jd_menu ul li,
+ul.jd_menu_vertical ul li {
+	float: none;
+	margin: 0px;
+}
+
+ul.jd_menu,
+ul.jd_menu ul,
+ul.jd_menu_vertical,
+ul.jd_menu_vertical ul {
+	height: 25px;
+}
+ul.jd_menu_vertical {
+	height: auto;
+}
+ul.jd_menu ul {
+	height: auto;
+}
+* html ul.jd_menu ul {
+	width: 1%;
+}
+ul.jd_menu li {
+}
+ul.jd_menu li li {
+	width: auto;
+}
+ul.jd_menu li a {
+	text-decoration:none; color:#376091;
+	
+}
+
+ul.jd_menu li.jdm_hover,
+ul.jd_menu li.jdm_active {
+
+}
+
+ul.jd_menu ul li.jd_menu_active a.jd_menu_active, 
+ul.jd_menu ul li.jd_menu_hover a.jd_menu_hover {
+}

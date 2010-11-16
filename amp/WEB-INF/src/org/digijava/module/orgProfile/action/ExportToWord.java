@@ -4,9 +4,12 @@ import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,16 +20,20 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
@@ -59,6 +66,9 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 
 public class ExportToWord extends Action {
@@ -844,10 +854,20 @@ public class ExportToWord extends Action {
                                     int count = 0;
                                     while (iter.hasNext()) {
                                         AmpAhsurveyIndicator piIndicator = iter.next();
-                                        if (piIndicator.getIndicatorCode().equals("10b") || piIndicator.getIndicatorCode().equals("8")) {
+                                        if (piIndicator.getIndicatorCode().equals("8")) {
                                             continue;
                                         }
-                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
+                                    ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
+                                    if (piIndicator.getIndicatorCode().equals("10b")) {
+										TeamMember member = filter.getTeamMember();
+										Long teamId=null;
+										if(member!=null){
+											teamId=member.getTeamId();
+										}
+										boolean fromPublicView=filter.getFromPublicView();
+										List<NodeWrapper> nodeWrappers=OrgProfileUtil.getNodeWrappers(request, teamId, fromPublicView);
+										piHelper.setNodesWrappers(nodeWrappers);
+									}
                                         RtfCell indicatorCode = new RtfCell(new Paragraph(piIndicator.getIndicatorCode(), OrgProfileUtil.PLAINFONT));
                                         RtfCell indicatorName = new RtfCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(), langCode, siteId), OrgProfileUtil.PLAINFONT));
                                         String sufix = "";

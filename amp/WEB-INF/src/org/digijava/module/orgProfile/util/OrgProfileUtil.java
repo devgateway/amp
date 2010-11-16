@@ -1,70 +1,82 @@
 package org.digijava.module.orgProfile.util;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.rtf.table.RtfCell;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-
 import java.util.ListIterator;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.xml.rpc.holders.DoubleWrapperHolder;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
-import org.digijava.module.widget.util.ChartWidgetUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.orgProfile.helper.Project;
-import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.NameValueYearHelper;
+import org.digijava.module.orgProfile.helper.Project;
+import org.digijava.module.parisindicator.util.PIConstants;
+import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
-import fi.joensuu.joyds1.calendar.NepaliCalendar;
+
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.rtf.table.RtfCell;
+
 import fi.joensuu.joyds1.calendar.EthiopicCalendar;
+import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 /**
  *
@@ -1354,4 +1366,136 @@ public class OrgProfileUtil {
         }
 
     }
+
+	public static long getParisIndicator10bValue(Long year,
+			List<NodeWrapper> nodeWrappers, Long[] orgIds, Long groupId)
+			throws DgException {
+		long value = 0;
+		List <AmpOrganisation> filteredOrgs=new ArrayList<AmpOrganisation>();
+		int jointDonorCount = 0, donorCount = 0;
+		if (orgIds != null) {
+			for (Long orgId : orgIds) {
+				AmpOrganisation org = DbUtil.getOrganisation(orgId);
+				String orgCode = org.getOrgGrpId().getOrgType()
+						.getOrgTypeCode();
+				if (orgCode.equals(PIConstants.ORG_GRP_BILATERAL)||orgCode.equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+					filteredOrgs.add(org);
+				}
+			}
+		}
+
+		else {
+			if (groupId != null && groupId != -1) {
+				AmpOrgGroup orgGroup = DbUtil.getAmpOrgGroup(groupId);
+				String orgCode = orgGroup.getOrgType().getOrgTypeCode();
+				if (!orgCode.equals(PIConstants.ORG_GRP_BILATERAL)
+						&& orgCode.equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+					return value;
+				}
+				else{
+					filteredOrgs.addAll(DbUtil.getOrgByGroup(groupId));
+				}
+			}
+		}
+		for (NodeWrapper nextWrapper : nodeWrappers) {
+				String yearOfPublication = nextWrapper.getYearOfPublication();
+				if (yearOfPublication==null||!year.equals(Long.parseLong(yearOfPublication))) {
+					continue;
+				}
+				// Check document type.
+				AmpCategoryValue docType = CategoryManagerUtil
+						.getAmpCategoryValueFromDb(
+								nextWrapper.getCmDocTypeId(), true);
+				if (docType != null) {
+					if (docType.getValue().equalsIgnoreCase(
+									CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY)) {
+
+						Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO
+								.getOrgsObjByUuid(nextWrapper.getUuid());
+						Iterator<AmpOrganisation> iterOrgs = auxOrganizations
+								.iterator();
+						if(filteredOrgs.size()>0){
+							while (iterOrgs.hasNext()) {
+								AmpOrganisation auxOrganisation = iterOrgs.next();
+								if(filteredOrgs.contains(auxOrganisation)){
+									donorCount++;
+									if(auxOrganizations.size()>1){
+										jointDonorCount++;
+									}
+									break;
+								}
+							}	
+						}
+						else{
+							donorCount++;
+							if(auxOrganizations.size()>1){
+								jointDonorCount++;
+							}
+						}
+					}
+				}
+			}
+
+		if(donorCount!=0){
+			value=Math.round(jointDonorCount*1.0/donorCount*100);
+		}
+
+		return value;
+
+	}
+
+	public static List<NodeWrapper> getNodeWrappers(HttpServletRequest request,
+			Long teamId, boolean fromPublicView) throws DgException {
+		List<NodeWrapper> nodeWrappers = new ArrayList<NodeWrapper>();
+		if (fromPublicView) {
+			// get public documents
+			HashMap<String, CrDocumentNodeAttributes> uuidMap = CrDocumentNodeAttributes
+					.getPublicDocumentsMap(false);
+			Collection<String> uuidKeys = uuidMap.keySet();
+			for (String uuidKey : uuidKeys) {
+				NodeWrapper nextWrapper = DocumentManagerUtil
+						.getReadNodeWrapper(uuidKey, request);
+				if (nextWrapper != null) {
+					nodeWrappers.add(nextWrapper);
+				}
+			}
+		} else {
+			List<Node> teamNodes = new ArrayList<Node>();
+			javax.jcr.Session jcrReadSession = DocumentManagerUtil
+					.getReadSession(request);
+
+			if (teamId != null) {
+				// Get the main team node for this team.
+				Node teamNode = DocumentManagerUtil.getTeamNode(jcrReadSession,
+						teamId);
+				teamNodes.add(teamNode);
+			} else {
+				Collection<AmpTeam> teams = TeamUtil.getAllTeams();
+				Iterator<AmpTeam> teamIter = teams.iterator();
+				while (teamIter.hasNext()) {
+					AmpTeam team = teamIter.next();
+					// Get the main team node for each team .
+					Node teamNode = DocumentManagerUtil.getTeamNode(
+							jcrReadSession, team.getAmpTeamId());
+					teamNodes.add(teamNode);
+
+				}
+			}
+			for (Node teamNode : teamNodes) {
+				Iterator<Node> iterNode;
+				try {
+					iterNode = teamNode.getNodes();
+				} catch (RepositoryException e) {
+					logger.error("RepositoryException ", e);
+					throw new DgException(e);
+				}
+				while (iterNode.hasNext()) {
+					Node nextNode = (Node) iterNode.next();
+					NodeWrapper nextWrapper = new NodeWrapper(nextNode);
+					nodeWrappers.add(nextWrapper);
+				}
+			}
+		}
+		return nodeWrappers;
+	}
 }

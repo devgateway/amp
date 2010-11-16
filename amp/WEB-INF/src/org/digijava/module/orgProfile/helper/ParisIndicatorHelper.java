@@ -3,7 +3,10 @@ package org.digijava.module.orgProfile.helper;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import javax.jcr.Node;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
@@ -12,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 /**
@@ -29,6 +33,7 @@ public class ParisIndicatorHelper {
     private Long[] orgIds;
     private Collection<Long> locationIds;
     private boolean showOnlyApprovedActivities;
+    private List<NodeWrapper> nodesWrappers;
 
     public Collection<Long> getLocationIds() {
         return locationIds;
@@ -76,7 +81,14 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         String indicatorCode = prIndicator.getIndicatorCode();
-        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, null, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+        long allDonorBaseLineValue=0;
+		if (indicatorCode.equalsIgnoreCase("10b")) {
+			allDonorBaseLineValue = OrgProfileUtil.getParisIndicator10bValue(2005l, nodesWrappers, null, null);
+		} else {
+			allDonorBaseLineValue = OrgProfileUtil.getValue(indicatorCode,
+					currency, null, null, startDate, endDate, member,
+					locationIds, showOnlyApprovedActivities);
+		}
         return allDonorBaseLineValue;
     }
 
@@ -99,7 +111,12 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+        long previousYearValue=0;
+        if (indicatorCode.equalsIgnoreCase("10b")) {
+        	previousYearValue = OrgProfileUtil.getParisIndicator10bValue(year, nodesWrappers, null, null);
+		} else {
+         previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+		}
         return previousYearValue;
 
     }
@@ -151,7 +168,13 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         String indicatorCode = prIndicator.getIndicatorCode();
-        long orgBaseLineValue = OrgProfileUtil.getValue(indicatorCode, currency,orgIds, orgGroupId, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+        long orgBaseLineValue=0;
+        if (indicatorCode.equalsIgnoreCase("10b")) {
+        	orgBaseLineValue = OrgProfileUtil.getParisIndicator10bValue(2005l, nodesWrappers, orgIds, orgGroupId);
+        }
+        else{
+        orgBaseLineValue = OrgProfileUtil.getValue(indicatorCode, currency,orgIds, orgGroupId, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+        }
         return orgBaseLineValue;
     }
 
@@ -160,8 +183,13 @@ public class ParisIndicatorHelper {
         Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
-        long yearValue = OrgProfileUtil.getValue( indicatorCode,  currency, orgIds, orgGroupId, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
-
+        long yearValue =0;
+        if (indicatorCode.equalsIgnoreCase("10b")) {
+        	yearValue = OrgProfileUtil.getParisIndicator10bValue(year, nodesWrappers, orgIds, orgGroupId);
+        }
+        else{
+        	yearValue = OrgProfileUtil.getValue( indicatorCode,  currency, orgIds, orgGroupId, startDate, endDate, member,locationIds, showOnlyApprovedActivities);
+        }
         return yearValue;
     }
 
@@ -207,4 +235,14 @@ public class ParisIndicatorHelper {
 	public void setShowOnlyApprovedActivities(boolean showOnlyApprovedActivities) {
 		this.showOnlyApprovedActivities = showOnlyApprovedActivities;
 	}
+
+	public void setNodesWrappers(List<NodeWrapper> nodesWrappers) {
+		this.nodesWrappers = nodesWrappers;
+	}
+
+	public List<NodeWrapper> getNodesWrappers() {
+		return nodesWrappers;
+	}
+
+	
 }

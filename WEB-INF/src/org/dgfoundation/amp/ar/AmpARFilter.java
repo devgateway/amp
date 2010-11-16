@@ -274,6 +274,8 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
 	
+	private Set<AmpCategoryValue> projectImplementingUnits = null; 
+	
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
@@ -704,6 +706,9 @@ public class AmpARFilter extends PropertyListable {
 
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
+		
+		String PROJECT_IMPL_UNIT_FILTER = "SELECT amp_activity_id FROM v_project_impl_unit WHERE proj_impl_unit_id IN ("
+			+ Util.toCSString(projectImplementingUnits) + ")";
 
 //		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
 //				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
@@ -926,6 +931,9 @@ public class AmpARFilter extends PropertyListable {
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
 		
+		if(projectImplementingUnits!=null && projectImplementingUnits.size() > 0){
+			queryAppend(PROJECT_IMPL_UNIT_FILTER);
+		}
 		
 		if (donorGroups != null && donorGroups.size() > 0)
 			queryAppend(DONOR_GROUP_FILTER);
@@ -1698,6 +1706,15 @@ public class AmpARFilter extends PropertyListable {
 	public void setRelatedLocations(
 			Collection<AmpCategoryValueLocations> relatedLocations) {
 		this.relatedLocations = relatedLocations;
+	}
+
+	public Set<AmpCategoryValue> getProjectImplementingUnits() {
+		return projectImplementingUnits;
+	}
+
+	public void setProjectImplementingUnits(
+			Set<AmpCategoryValue> projectImplementingUnits) {
+		this.projectImplementingUnits = projectImplementingUnits;
 	}
 
 

@@ -629,18 +629,28 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
                                                                               
-                                                                              <field:display name="Funding Status" feature="Funding Information">
+                                                                              <field:display name="Funding start date" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
-                                                                                  <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
-                                                                                  <digi:trn>Funding Status</digi:trn>
-																				</a>
+                                                                                  <a title="<digi:trn>Funding start date</digi:trn>">
+																					<digi:trn>Funding start date</digi:trn></a>
                                                                                 </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
-                                                                                  <logic:notEmpty name="funding" property="fundingStatus">
-                                                                                  	<category:getoptionvalue categoryValueId="${funding.fundingStatus.id}"/>
-                                                                                  </logic:notEmpty>
+                                                                                  <bean:write name="funding" property="actStartDate"/>
+                                                                                </td>
+         	                                                                     </tr>
+																			</field:display>
+                                                                              
+                                                                              <field:display name="Funding end date" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn>Funding end date</digi:trn>">
+																					<digi:trn>Funding end date</digi:trn></a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <bean:write name="funding" property="actCloseDate"/>
                                                                                 </td>
          	                                                                     </tr>
 																			</field:display>

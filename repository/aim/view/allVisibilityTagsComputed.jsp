@@ -486,6 +486,8 @@
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
 <field:display name="Funding Status" feature="Funding Information"></field:display>  
+<field:display name="Funding start date" feature="Funding Information"></field:display>  
+<field:display name="Funding end date" feature="Funding Information"></field:display>  
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 

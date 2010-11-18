@@ -918,7 +918,7 @@ public class SaveActivity extends Action {
 		}else if (eaForm.getLocation().getSelectedLocs()==null || eaForm.getLocation().getSelectedLocs().size() == 0){
 			if (eaForm.getFunding().getRegionalFundings()!=null) eaForm.getFunding().getRegionalFundings().clear();
 		}
-
+ 
 
 		Set programs = new HashSet();
 		List activityNPO = eaForm.getPrograms().getNationalPlanObjectivePrograms();
@@ -1049,6 +1049,8 @@ public class SaveActivity extends Action {
 						ampFunding.setFundingStatus( fund.getFundingStatus() );
 						ampFunding.setModeOfPayment( fund.getModeOfPayment() );
 						ampFunding.setDonorObjective( fund.getDonorObjective() );
+						ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+						ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 						
 						ampFunding.setAmpActivityId(activity);
 
@@ -1148,6 +1150,8 @@ public class SaveActivity extends Action {
 					}
 					ampFunding.setComments(new String(" "));
 					ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+					ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+					ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 					ampFunding.setAmpActivityId(activity);
 					this.saveMTEFProjections(fund, ampFunding);
 					fundings.add(ampFunding);

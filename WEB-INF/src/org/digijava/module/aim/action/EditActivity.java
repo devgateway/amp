@@ -1132,6 +1132,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setFundingStatus(ampFunding.getFundingStatus());
 			            fund.setModeOfPayment(ampFunding.getModeOfPayment());
 			            
+			            fund.setActStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
+			            fund.setActCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
+			            
 			            fund.setFundingId(ampFunding.getAmpFundingId().
 			                              longValue());
 			            fund.setOrgFundingId(ampFunding.getFinancingId());

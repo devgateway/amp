@@ -512,6 +512,40 @@
 								</td>
 							</tr>
 							</field:display>
+
+							<field:display name="Funding start date" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+			                	<b>
+									<a title="<digi:trn>Funding start date</digi:trn>">
+									<digi:trn>Funding start date</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<html:text name="aimEditActivityForm" property="funding.actualStartDate" styleId="actualStartDate" readonly="true" size="10"  />
+									<a id="actualStartDate1" href='javascript:pickDateById("actualStartDate1", "actualStartDate")'>
+										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+									</a>
+								</td>
+							</tr>
+							</field:display>
+
+							<field:display name="Funding end date" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+			                	<b>
+									<a title="<digi:trn>Funding end date</digi:trn>">
+									<digi:trn>Funding end date</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<html:text name="aimEditActivityForm"  property="funding.actualCompletionDate" styleId="actualCompletionDate" readonly="true" size="10"  />
+									<a id="actualCompletionDate1" href='javascript:pickDateById("actualCompletionDate1", "actualCompletionDate")'>
+										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+									</a>
+								</td>
+							</tr>
+							</field:display>
 							<tr>
 							
 						</table>

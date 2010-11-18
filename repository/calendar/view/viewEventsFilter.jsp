@@ -119,7 +119,7 @@ function changeEventTypesState(){
 		              </div>
 		            </td>
 		            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap">
-		             <div style="white-space: nowrap;">${eventType.name}</div> 
+		             <div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
 		            </td>
 		            <td>
 		              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>

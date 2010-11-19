@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,7 +33,7 @@ import org.digijava.module.aim.helper.YearlyInfoWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
-public class YearlyInfoFilter extends TilesAction {
+public class YearlyInfoFilter extends Action {
 
 	private static Logger logger = Logger.getLogger(YearlyInfoFilter.class);
 

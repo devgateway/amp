@@ -26,11 +26,48 @@
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-min.js"></script>
 
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
 			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
 			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 325);
+}
+
+
+function enterKeyIsPressed(el, e){
+    if(typeof e == 'undefined'||e.keyCode == 13) {
+        el.style.display = 'none';
+    	var url = "/aim/saveFMDescription.do";
+    	var id=el.id;
+    	var params=id.split("_");// id consists of textarea word, id of AmpObjectVisibility object and objectvisibility type(module or feature or field)
+    	var postString="objectVisibility="+params[2]+"&description="+el.value+"&id="+params[1];
+    	var callBackFM={ 
+    		      success: function (o) { 
+    		    	  if(o.responseText=='success'){
+    		    		  var linkId=params[2]+":"+params[1];
+    	    		    	var link=document.getElementById(linkId);
+    	    		    	link.title=el.value;  
+    		    	  }
+    		    	  else{
+    		    		  alert("fail to update description!");
+    		    	  }
+    		      }, 
+    		      failure: function (o) { 
+    			        alert("Ajax request failed!"); 
+    			     }
+    	}
+    	YAHOO.util.Connect.asyncRequest("POST", url, callBackFM, postString);
+    	return false;
+    }
+    return true;
+}
+function showDescriptionToolbox(id){
+	$("textarea[id^='textarea_']").css('display', 'none');
+	 $('#'+id).css('display', 'block');
 }
 </script>
 

@@ -40,6 +40,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 
+/**
+ * @author medea
+ *
+ */
 public class FeaturesUtil {
 
 	private static Logger logger = Logger.getLogger(FeaturesUtil.class);
@@ -2888,6 +2892,38 @@ public class FeaturesUtil {
 
 		return module;
 
+	}
+	
+	/**
+	 * updates descriptions for AmpObjectVisibility descendants
+	 * @param clazz
+	 * @param id
+	 * @param description
+	 * @throws DgException
+	 */
+	public static void upadateObjectVisibility(Class<? extends AmpObjectVisibility> clazz, Long id,String description) throws DgException{
+		Session session = null;
+
+		Transaction tx=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			AmpObjectVisibility objectVisibility =(AmpObjectVisibility) session.load(clazz, id);
+			objectVisibility.setDescription(description);
+			session.update(objectVisibility);
+			tx.commit();
+		}
+		catch (Exception e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					throw new DgException("Cannot rallback Object Visibility update!",e1);
+				}
+			}
+			throw new DgException("Cannot update Object Visibility!",e);
+		}
+		
 	}
 
 	public static AmpComponentType getDefaultComponentType() {

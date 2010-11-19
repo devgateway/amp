@@ -5,7 +5,6 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
 <c:set scope="session" var="currentLevel">${currentLevel + 1}</c:set>
 
 <digi:instance property="aimVisibilityManagerForm" />
@@ -18,7 +17,7 @@
                     </c:if>
 	
 	                    <c:if test="${currentLevel == 1}">
-    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
+    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn><bean:write name="moduleAux" property="root.description"/></digi:trn>">
 <div style="float:right;">
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, false);return false;"><digi:trn key="fm:ascendingorder">Ascending order</digi:trn></a>
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, true);return false;"><digi:trn key="fm:descendingorder">Descending order</digi:trn></a>
@@ -27,7 +26,7 @@
                         </c:if>
     
                         <c:if test="${currentLevel != 1}">
-                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
+                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn><bean:write name="moduleAux" property="root.description"/></digi:trn>">
                         </c:if>
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
@@ -55,6 +54,12 @@
                             <digi:trn key='<%="fm:"+moduleAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="moduleAux" property="root.properName"/></digi:trn>
                         </a>
                         </c:if>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-[<a
+											style="font-size: 12px; cursor: pointer; color: #006699; text-decoration: none"
+											title="Click to edit module description"
+											onClick='showDescriptionToolbox("textarea_${moduleAux.root.id}_module")'"><digi:trn>edit description</digi:trn></a>]
+																				
+							<textarea rows="2" cols="20" style="display:none;z-index: 10" id="textarea_${moduleAux.root.id}_module" onblur="return enterKeyIsPressed(this)" onkeypress="return enterKeyIsPressed(this,event)"  >${moduleAux.root.description}</textarea>
 
 <c:if test="${currentLevel == 1}">
 					<div style="padding-left:15px">
@@ -63,6 +68,7 @@
 <c:if test="${currentLevel != 1}">
 						<ul>
 </c:if>
+
 							<bean:define id="size" name="moduleAux2" property="submodules"/>
 							<logic:notEmpty name="size">
 							<logic:iterate name="moduleAux" property="sorteditems" id="moduleAuxIt" type="java.util.Map.Entry" >
@@ -112,7 +118,14 @@
 									<a href="#" id="feature:<bean:write name="featureAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 										<digi:trn key='<%="fm:"+featureAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="featureAux" property="root.name"/></digi:trn>
 									</a>
-									<ul>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-[<a
+											style="font-size: 12px; cursor: pointer; color: #006699; text-decoration: none"
+											title="Click to edit feature description"
+											onClick='showDescriptionToolbox("textarea_${featureAux.root.id}_feature")'><digi:trn>edit description</digi:trn></a>]
+										<textarea rows="2" cols="20" style="display:none;z-index: 10"
+											id="textarea_${featureAux.root.id}_feature"
+											onblur="return enterKeyIsPressed(this)" onkeypress="return enterKeyIsPressed(this,event)">${featureDescription}</textarea>
+										<ul>
 										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
@@ -147,8 +160,8 @@
 												<a id="field:<bean:write name="fieldAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 													<digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 												</a>
-												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;[<a style="font-size: 12px; cursor:pointer;color:#006699;text-decoration:none" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'><digi:trn key="aim:editPermissions">edit permissions</digi:trn></a>]
-												
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-[<a style="font-size: 12px; cursor:pointer;color:#006699;text-decoration:none" title="Click to edit field description" onClick='showDescriptionToolbox("textarea_${fieldAux.root.id}_field")'><digi:trn>edit description</digi:trn></a>]
+												<textarea rows="2" cols="20" style="display:none;z-index: 10" id="textarea_${fieldAux.root.id}_field" onblur="return enterKeyIsPressed(this)" onkeypress="return enterKeyIsPressed(this,event)">${fieldDescription}</textarea>		
 											</li>	
 										</logic:iterate>
 									</ul>

@@ -28,6 +28,7 @@
 		<action login-required="false" pattern="/feedback" />
 		<action login-required="false" pattern="/confirmRegisteration" />
 		<action login-required="false" pattern="/BudgetManager" />
+		<action login-required="true" pattern="/saveFMDescription" />
 	</security>
 
 	<!-- AIM classes Begin-->

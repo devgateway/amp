@@ -169,6 +169,7 @@
     
     <form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
     <form-bean name="exportTableForm" type="org.digijava.module.aim.form.ExportTableForm"/>
+    <form-bean name="saveFmDescriptionForm" type="org.digijava.module.aim.form.SaveFmDescriptionForm"/>
     
 </form-beans>
 
@@ -1832,6 +1833,7 @@
    <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
 
    <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
+   <action name="saveFmDescriptionForm" path="/aim/saveFMDescription"  scope="request" type="org.digijava.module.aim.action.SaveFmDescription"/>
 
     
   </action-mappings>

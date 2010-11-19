@@ -18,12 +18,7 @@
 		<property name="budgetOrgCode" column="budget_org_code" type="java.lang.String" />
 		<property name="orgGroup" column="org_group" type="java.lang.String" />
 		<property name="fundingorgid" column="funding_org_id" type="java.lang.String" />
-		<property name="address" column="address" type="java.lang.String" />
-		<property name="contactPersonName" column="contact_person_name" type="java.lang.String" />
-		<property name="contactPersonTitle" column="contact_person_title" type="java.lang.String" />
-		<property name="email" column="email" type="java.lang.String" />
-		<property name="phone" column="phone" type="java.lang.String" />
-		<property name="fax" column="fax" type="java.lang.String" />
+		<property name="address" column="address" type="java.lang.String" />		
 		<property name="orgUrl" column="org_url" type="java.lang.String" />
 		<property name="acronym" column="acronym" type="java.lang.String" />
 		<property name="segmentCode" column="segment_code" type="java.lang.String" />

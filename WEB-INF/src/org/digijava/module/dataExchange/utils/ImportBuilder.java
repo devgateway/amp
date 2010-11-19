@@ -1034,7 +1034,7 @@ public class ImportBuilder {
 			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
 			//else 
-				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
+			ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
 			fundDetails.add(ampFundDet);
 		}
 		

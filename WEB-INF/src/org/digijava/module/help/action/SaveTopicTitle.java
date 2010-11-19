@@ -34,7 +34,7 @@ public class SaveTopicTitle extends Action {
 		if (topic == null) throw new Exception("Topic with id "+glossForm.getNodeId()+" not exists");
 		//do job
 		topic.setTopicKey(glossForm.getNodeName());
-		HelpUtil.saveOrUpdateHelpTopic(topic);
+		HelpUtil.saveOrUpdateHelpTopic(topic, request);
 		return null;
 	}
 

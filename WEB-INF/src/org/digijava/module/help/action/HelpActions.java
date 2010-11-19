@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,20 +33,19 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
+import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.jaxbi.AmpHelpRoot;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
-import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
 import org.xml.sax.InputSource;
-
-import bsh.classpath.BshClassPath.MappingFeedback;
 
 
 public class HelpActions extends DispatchAction {
@@ -152,7 +152,13 @@ public class HelpActions extends DispatchAction {
 					            	
 					            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
 					            	
-					                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
+									out
+									.println("<div id="
+										+ removerSpacedtitle
+										+ " onclick=\"select("
+										+ removerSpacedtitle
+										+ ")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"
+										+ encodeTitle + "</div>");
 					             }
 					          }
 						}
@@ -175,18 +181,112 @@ public class HelpActions extends DispatchAction {
 	 }
 	 return null;
 }
+
+   /**
+    * Search help topics using new Lucene code.
+    * @param mapping
+    * @param form
+    * @param request
+    * @param response
+    * @return
+    * @throws Exception
+    */
+	public ActionForward searchHelpTopicNew(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
+		//search key
+		String key = request.getParameter("key");
+		//current language is used to perform garamar analysis and search in correct index.
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		//module instances is used to separate user help from admin help.
+		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
+		//for lucene these two is called suffix of index, it does not know about module instances. 
+		String suffix = moduleInstance + "_" + locale;
+		//perform search
+		Hits hits = LuceneWorker.search(HelpTopicHelper.class, key, request.getSession().getServletContext(), suffix);
+		//converts hits to list of helper beans
+		List<HelpTopicHelper> topics = LuceneWorker.hitsToSortedList(hits,HelpTopicHelper.class, suffix);
+		if (topics!=null){
+			Collections.sort(topics, new HelpUtil.HelpTopicHelperScoreComparator());
+		}
+		//old code: print html into response. 
+		OutputStreamWriter os = new OutputStreamWriter(response.getOutputStream());
+		PrintWriter out = new PrintWriter(os, true);
+
+		out.print(getSearchResultsHTML(key,topics, request,true));
+		
+		out.flush();
+		out.close();
+		
+		return null;
+	}
+
+	/**
+	 * This method was created from searchHelpTopic() action below.
+	 * tried to make no changes, just separated HTML generation and search. This one is html gen part.  
+	 * @param topics
+	 * @return
+	 */
+	private String getSearchResultsHTML(String key,List<HelpTopicHelper> topics, HttpServletRequest request, boolean onlyCurrentLang){
+		StringBuffer buf = new StringBuffer();
+		if (topics != null && topics.size() > 0) {
+			String currentLang = RequestUtils.getNavigationLanguage(request).getCode();
+			for (HelpTopicHelper topic : topics) {
+				if (onlyCurrentLang && !currentLang.equals(topic.getLangIso())) continue;
+                buf.append("<div class=\"searchResult\">  \n");
+				buf.append("<div class=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link resultTitle\"><b>");
+				buf.append(topic.getTitle());
+				buf.append("</b></a></div> \n");
+				//short body
+//				buf.append("  <div class=\"bodyShort\"  style=\"display:block;\">");
+				buf.append("  <div class=\"bodyShort\" >");
+				String body = topic.getBody();
+				if (body != null && body.length()>100){
+					body = body.substring(0, 100)+"...";
+				}
+				buf.append(body);
+				buf.append("  </div>");
+				//full body
+//				buf.append("  <div id=\"bodyFull\"  style=\"display:none;\">");
+				buf.append("  <div class=\"bodyFull\" >");
+				buf.append(topic.getBody());
+				buf.append("  </div> \n");
+                buf.append("  </div> \n");
+				//delimiter
+				buf.append("<hr/> \n\n");
+			}
+		} else {
+			//Nothing to show.
+			buf.append("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>");
+			buf.append(key);
+			buf.append("</b></a></div>");
+			buf.append("<div>");
+			String notFoundMessage = HelpUtil.getTrn("Topic Not Found", request);
+			buf.append(notFoundMessage);
+			buf.append("...</div>");
+		}
+		return buf.toString();
+	}
 	
-	
-	
+	/**
+	 * DO NOT USE THIS! use searchHelpTopicNew() instead.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @Deprecated use searchHelpTopicNew() instead
+	 */
+	@Deprecated
  	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
 		 String key =request.getParameter("key");
 		 //String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 String siteId = RequestUtils.getSite(request).getSiteId();
         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
-        String moduleInstance = RequestUtils.getRealModuleInstance(request)
-			.getInstanceName();
+        String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		 Object artidcle = "";
 		 List<Editor> wholeBody;
 		 OutputStreamWriter os = null;	
@@ -275,10 +375,8 @@ public class HelpActions extends DispatchAction {
 	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId = RequestUtils.getSite(request).getSiteId();
-		String moduleInstance = RequestUtils.getRealModuleInstance(request)
-				.getInstanceName();
-        HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
-				siteId, moduleInstance);
+		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
+        HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),siteId, moduleInstance);
 		if(helpTopic != null){
 			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
 			helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
@@ -289,7 +387,8 @@ public class HelpActions extends DispatchAction {
             helpForm.setHelpErrors(null);
 			helpForm.setSearched(null);
 			helpForm.setFlag(true);
-			LuceneUtil.addUpdatehelp(true, request.getSession().getServletContext());
+			//commented because 1)old lucene code. 2)no need to update in lucene when topic is just viewed
+			//LuceneUtil.addUpdatehelp(true, request.getSession().getServletContext());
 	  
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());
@@ -313,7 +412,7 @@ public class HelpActions extends DispatchAction {
 //				HelpTopic helpTopic = HelpUtil.getHelpTopicByBodyEditKey("help:topic:body:"+helpForm.getTopicKey(),	siteId, moduleInstance);
 				HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getHelpTopicId());
 				if(helpTopic!=null){
-					removeLastLevelTopic(helpTopic);
+					removeLastLevelTopic(helpTopic, request);
 					helpForm.setTopicKey("");
 					helpForm.setBlankPage(false);
 			  }
@@ -329,7 +428,7 @@ public class HelpActions extends DispatchAction {
 			for (Long id : topicsIds) {
 				HelpTopic ht=HelpUtil.loadhelpTopic(id);
 				if(ht!=null){
-					removeLastLevelTopic(ht);
+					removeLastLevelTopic(ht, request);
 				}
 			}			
 		}
@@ -475,7 +574,7 @@ public class HelpActions extends DispatchAction {
 		} else {
 			topic.setParent(null);
 		}
-		HelpUtil.saveOrUpdateHelpTopic(topic);
+		HelpUtil.saveOrUpdateHelpTopic(topic, request);
 		form.setEdit(false);
 	}
 
@@ -589,7 +688,7 @@ public class HelpActions extends DispatchAction {
 			helpTopic.setParent(null);
 		}
 		helpTopic.setSiteId(siteId);
-		HelpUtil.saveOrUpdateHelpTopic(helpTopic);
+		HelpUtil.saveOrUpdateHelpTopic(helpTopic, request);
 		// cleaning form
 		form.setParentId(null);
 		form.setFirstLevelTopics(null);
@@ -666,7 +765,7 @@ public class HelpActions extends DispatchAction {
             List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
             
             for (HelpTopic helpTopic : firstLevelTopics) {
-				removeLastLevelTopic(helpTopic);
+				removeLastLevelTopic(helpTopic, request);
 			}
             
             if (help_in.getAmpHelp()!= null) {
@@ -689,30 +788,31 @@ public class HelpActions extends DispatchAction {
 	 * recurrent function. If topic is last level,then it is deleted.  If not,function calls itself until it finds last level child topic and
 	 * removes it, e.t.c. until topic(function parameter) becomes last level itself and after that its also removed
 	 * @param topic
+	 * @param request
 	 * @throws Exception
 	 */
-	private void removeLastLevelTopic(HelpTopic topic) throws Exception{
+	private void removeLastLevelTopic(HelpTopic topic, HttpServletRequest request) throws Exception{
 		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(),topic.getHelpTopicId());
 		if(childs==null || childs.size()==0){
-			HelpUtil.deleteHelpTopic(topic);
+			HelpUtil.deleteHelpTopic(topic, request);
 		}else{			
 			for (HelpTopic child : childs) {
-				removeLastLevelTopic(child);
+				removeLastLevelTopic(child, request);
 			}
-			HelpUtil.deleteHelpTopic(topic);
+			HelpUtil.deleteHelpTopic(topic, request);
 		}
 	}
 
-    private void removeLastLevelTopic(HelpTopic topic,String moduleInstance) throws Exception{
+    private void removeLastLevelTopic(HelpTopic topic,String moduleInstance, HttpServletRequest request) throws Exception{
         
         List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(), moduleInstance, topic.getHelpTopicId());
 		if(childs==null || childs.size()==0){
-			HelpUtil.deleteHelpTopic(topic);
+			HelpUtil.deleteHelpTopic(topic, request);
 		}else{
 			for (HelpTopic child : childs) {
-				removeLastLevelTopic(child);
+				removeLastLevelTopic(child, request);
 			}
-			HelpUtil.deleteHelpTopic(topic);
+			HelpUtil.deleteHelpTopic(topic, request);
 		}
 	}
 
@@ -794,7 +894,7 @@ public class HelpActions extends DispatchAction {
         	List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId,moduleInstance);
 
             for (HelpTopic helpTopic : firstLevelTopics) {
-				removeLastLevelTopic(helpTopic,moduleInstance);
+				removeLastLevelTopic(helpTopic,moduleInstance, request);
 			}
             for (HelpTopic topic : listOfTree){
                 HelpUtil.saveNewTreeState(topic,storeMap,siteId);

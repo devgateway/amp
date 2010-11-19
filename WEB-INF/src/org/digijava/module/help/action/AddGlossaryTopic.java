@@ -40,7 +40,7 @@ public class AddGlossaryTopic extends Action {
 		topic.setSiteId(siteId);
 		topic.setParent(parentTopic);
 		topic.setTopicKey(nodeName);
-		GlossaryUtil.createOrUpdateGlossaryTopic(topic);
+		GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
 		
 		return mapping.findForward("forward");
 	}

@@ -706,7 +706,7 @@ public class AmpARFilter extends PropertyListable {
 
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
-		
+
 		String PROJECT_IMPL_UNIT_FILTER = "SELECT amp_activity_id FROM v_project_impl_unit WHERE proj_impl_unit_id IN ("
 			+ Util.toCSString(projectImplementingUnits) + ")";
 
@@ -847,7 +847,7 @@ public class AmpARFilter extends PropertyListable {
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
+				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {

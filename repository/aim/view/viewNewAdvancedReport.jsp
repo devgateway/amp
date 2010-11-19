@@ -525,7 +525,7 @@ session.setAttribute("progressValue", counter);
 			</td>
 		</tr>
 	</logic:equal>
-	
+<span>Level Sorters</span>
 	<logic:notEmpty name="reportMeta" property="hierarchies">
 		<logic:notEmpty name="report" property="levelSorters">
 			<tr>
@@ -545,7 +545,7 @@ session.setAttribute("progressValue", counter);
 			</tr>
 				</logic:notEmpty>
 	</logic:notEmpty>
-	
+<span>Total Unique Rows</span>	
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 	<tr>
 		<td  style="padding-left: 5px;padding-left: 5px;">

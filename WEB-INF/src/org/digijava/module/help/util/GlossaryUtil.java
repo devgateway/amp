@@ -2,6 +2,8 @@ package org.digijava.module.help.util;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -136,13 +138,13 @@ public class GlossaryUtil {
 	}
 	
 	/**
-	 * Creates ne glossary topic.
+	 * Creates new glossary topic.
 	 * @param topic
 	 * @throws DgException
 	 */
-	public static void createOrUpdateGlossaryTopic(HelpTopic topic) throws DgException{
+	public static void createOrUpdateGlossaryTopic(HelpTopic topic,HttpServletRequest request) throws DgException{
 		topic.setTopicType(TYPE_GLOSSARY);
-		HelpUtil.saveOrUpdateHelpTopic(topic);
+		HelpUtil.saveOrUpdateHelpTopic(topic, request);
 	}
 	
 	/**

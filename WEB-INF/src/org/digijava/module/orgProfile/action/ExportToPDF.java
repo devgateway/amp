@@ -113,7 +113,11 @@ public class ExportToPDF extends Action {
             String orgAcronym = notAvailable;
             String orgUrl = notAvailable;
             String orgBackground = notAvailable;
-            String orgDesc = notAvailable;           
+            String orgDesc = notAvailable;
+            String contactName =notAvailable;
+            String email = notAvailable;
+            String contactPhone = notAvailable;
+            String contactFax = notAvailable;
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
@@ -126,6 +130,19 @@ public class ExportToPDF extends Action {
                 if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
                     orgUrl = organization.getOrgUrl();
                 }
+                if (organization.getContactPersonName() != null&&!organization.getContactPersonName().trim().equals("")) {
+                    contactName = organization.getContactPersonName();
+                }
+                if (organization.getEmail() != null&&!organization.getEmail().trim().equals("")) {
+                    email = organization.getEmail();
+                }
+                if (organization.getPhone() != null&&!organization.getPhone().trim().equals("")) {
+                    contactPhone = organization.getPhone();
+                }
+
+                if (organization.getFax() != null&&!organization.getFax().trim().equals("")) {
+                    contactFax = organization.getFax();
+                }
                 if (organization.getOrgBackground() != null&&!organization.getOrgBackground().trim().equals("")) {
                     orgBackground = organization.getOrgBackground();
                 }
@@ -135,7 +152,8 @@ public class ExportToPDF extends Action {
 
             } else {
                 if (filter.getOrgIds() != null) {
-                    orgGroupTpName =grpName =orgName =orgAcronym = orgUrl = orgBackground = orgDesc =multipleSelected;
+                    orgGroupTpName =grpName =orgName =orgAcronym = orgUrl =contactName
+                    =email = contactPhone =contactFax = orgBackground = orgDesc =multipleSelected;
                      
                 } else {
                     group = filter.getOrgGroup();
@@ -146,7 +164,8 @@ public class ExportToPDF extends Action {
                         orgGroupTpName = all;
                         grpName = all;
                     }
-                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc = notApplicable;
+                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =
+                      contactName = email = contactPhone = contactFax = notApplicable;
 
                 }
             }
@@ -554,9 +573,10 @@ public class ExportToPDF extends Action {
 
 
                                     //create contacts table
+
                                     int count = 0;
                                     // contacts for NGO organizations,  we have mixed code in 1.14 :(
-                                    //if (orgGroupType!=null&&orgGroupType.getClassification() != null && orgGroupType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
+                                    if (orgGroupType!=null&&orgGroupType.getClassification() != null && orgGroupType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
                                         boolean noContactsToShow = true;
                                         if (organization != null) {
                                             orgContactsTbl = new PdfPTable(6);
@@ -642,7 +662,34 @@ public class ExportToPDF extends Action {
                                                 orgSummaryTbl.addCell(contactCell);
                                             }
                                         }
-                                    //} 
+                                    } // contacts for non NGO organizations, we have mixed code in 1.14 :(
+                                    else {
+                                        PdfPCell contactNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Name", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactNameCell);
+
+                                        PdfPCell contactNameCellValue = new PdfPCell(new Paragraph(contactName, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactNameCellValue);
+
+
+                                        PdfPCell contactEmailCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactEmailCell);
+
+                                        PdfPCell contactEmailCellValue = new PdfPCell(new Paragraph(email, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactEmailCellValue);
+
+                                        PdfPCell contactPhoneCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactPhoneCell);
+
+                                        PdfPCell contactPhoneCellValue = new PdfPCell(new Paragraph(contactPhone, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactPhoneCellValue);
+
+                                        PdfPCell contactFaxCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactFaxCell);
+
+                                        PdfPCell contactFaxCellValue = new PdfPCell(new Paragraph(contactFax, OrgProfileUtil.PLAINFONT));
+                                        orgSummaryTbl.addCell(contactFaxCellValue);
+
+                                    }
                                    
                                     //create largest projects table
                                     largetsProjectsTbl = new PdfPTable(new float[]{25, 20, 55});

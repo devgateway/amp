@@ -3002,6 +3002,11 @@ public class DbUtil {
                 String receiptLegPersonalityAct = org.getReceiptLegPersonalityAct();
                 Set<AmpDepartments> departments =org.getDepartments();
                 Set<AmpBudgetSector> budgetsectors = org.getBudgetsectors();
+                String contactPersonName=org.getContactPersonName();
+                String contactPersonTitle= org.getContactPersonTitle();
+                String email= org.getEmail();
+                String phone=org.getPhone();
+                String fax=org.getFax();
               
                 org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());
                 org.setName(name);
@@ -3034,6 +3039,12 @@ public class DbUtil {
                 org.setReceiptLegPersonalityAct(receiptLegPersonalityAct);
                 org.setOtherInformation(otherInformation);
                 org.setLineMinRegNumber(lineMinRegNumber);
+                  //contact info
+    	        org.setContactPersonName(contactPersonName);
+                org.setContactPersonTitle(contactPersonTitle);
+                org.setEmail(email);
+                org.setPhone(phone);
+                org.setFax(fax);
 
                 if(org.getLocations()==null){
                     org.setLocations(new HashSet<AmpOrgLocation>());

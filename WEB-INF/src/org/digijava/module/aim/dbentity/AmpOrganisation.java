@@ -43,6 +43,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private AmpOrgGroup orgGrpId;
 	private String address;
 	private Country countryId;
+	private String contactPersonName;
+	private String contactPersonTitle;
+	private String email;
+	private String phone;
+	private String fax;
 	private String orgUrl;
 	private String acronym;
 	private AmpLevel levelId;
@@ -377,7 +382,31 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	 */
 	public void setAddress(String address) {
 		this.address = address;
-	}	
+	}
+	/**
+	 * @return Returns the contactPersonName.
+	 */
+	public String getContactPersonName() {
+		return contactPersonName;
+	}
+	/**
+	 * @param contactPersonName The contactPersonName to set.
+	 */
+	public void setContactPersonName(String contactPersonName) {
+		this.contactPersonName = contactPersonName;
+	}
+	/**
+	 * @return Returns the contactPersonTitle.
+	 */
+	public String getContactPersonTitle() {
+		return contactPersonTitle;
+	}
+	/**
+	 * @param contactPersonTitle The contactPersonTitle to set.
+	 */
+	public void setContactPersonTitle(String contactPersonTitle) {
+		this.contactPersonTitle = contactPersonTitle;
+	}
 	/**
 	 * @return Returns the countryId.
 	 */
@@ -389,7 +418,31 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	 */
 	public void setCountryId(Country countryId) {
 		this.countryId = countryId;
-	}	
+	}
+	/**
+	 * @return Returns the email.
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email The email to set.
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	/**
+	 * @return Returns the fax.
+	 */
+	public String getFax() {
+		return fax;
+	}
+	/**
+	 * @param fax The fax to set.
+	 */
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
 	/**
 	 * @return Returns the levelId.
 	 */
@@ -425,6 +478,18 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	 */
 	public void setOrgUrl(String orgUrl) {
 		this.orgUrl = orgUrl;
+	}
+	/**
+	 * @return Returns the phone.
+	 */
+	public String getPhone() {
+		return phone;
+	}
+	/**
+	 * @param phone The phone to set.
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	/**

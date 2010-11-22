@@ -31,7 +31,10 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
@@ -315,6 +318,13 @@ public class ViewNewAdvancedReport extends Action {
 	
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);
+		
+		// the siteid and locale are set for translation purposes
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		ar.setSiteId( site.getId().toString() );
+		ar.setLocale( navigationLanguage.getCode() );
+		
 		httpSession.setAttribute("report",rd);
 		httpSession.setAttribute("reportMeta",ar);
 

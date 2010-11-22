@@ -252,9 +252,7 @@
         </table>
     </c:if>
     <c:if test="${orgsCount==1}">
-        <c:choose>
-            <c:when test="${organization.orgGrpId.orgType.classification=='NGO'}">
-            </table>
+        </table>
              <c:if test="${!sessionScope.orgProfileFilter.fromPublicView}">
             <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
              </c:if>
@@ -321,37 +319,6 @@
                     </c:if>
                 </c:forEach>
             </table>
-        </c:when>
-        <c:otherwise>
-            <tr>
-                <td width="30%"><digi:trn>Contact Name</digi:trn>:</td>
-                <td>
-                    <c:if test="${empty organization.contactPersonName}">
-                        <digi:trn>Not Available</digi:trn>
-                    </c:if>${organization.contactPersonName}&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Contact Phone</digi:trn>:</td>
-                <td>
-                    <c:if test="${empty organization.phone}">
-                        <digi:trn>Not Available</digi:trn>
-                    </c:if>
-                    ${organization.phone}&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="30%"><digi:trn>Contact Email</digi:trn>:</td>
-                <td>
-                    <c:if test="${empty organization.email}"><digi:trn>Not Available</digi:trn></c:if>
-                    ${organization.email}&nbsp;
-                </td>
-            </tr>
-        </table>
-        <c:if test="${!sessionScope.orgProfileFilter.fromPublicView}">
-            <a href="javascript:showAdditionalInformation()"><digi:trn>Show Additional Information</digi:trn></a>
-        </c:if>
-    </c:otherwise>
-</c:choose>
 <digi:instance property="orgSummaryForm" />
 <digi:form action="/showOrgSummary.do" method="post">
     <html:hidden property="action" styleId="orgSummaryActionId"/>

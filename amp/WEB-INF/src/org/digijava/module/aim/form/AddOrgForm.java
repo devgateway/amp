@@ -29,14 +29,8 @@ public class AddOrgForm extends ActionForm {
 	private String orgCode = null;
 	private String orgIsoCode = null;		
 	private String budgetOrgCode = null;
-	
-	//contact information
-	private String contactPersonName = null;
-	private String contactPersonTitle = null;
+		
 	private String address = null;
-	private String email = null;
-	private String phone = null;
-	private String fax = null;
 	
 	private String orgUrl = null;	
 	private Long ampOrgId = null;
@@ -233,13 +227,7 @@ public class AddOrgForm extends ActionForm {
 		  orgIsoCode = null;
 		  
 		  budgetOrgCode=null;
-			
-		  contactPersonName = null;
-		  contactPersonTitle = null;
-		  address = null;
-		  email = null;
-		  phone = null;
-		  fax = null;
+		  
 		  orgUrl = null;
 		
 		  ampOrgId = null;
@@ -457,38 +445,6 @@ public class AddOrgForm extends ActionForm {
 		this.address = address;
 	}
 	
-	public String getContactPersonName() {
-		return contactPersonName;
-	}
-	
-	public void setContactPersonName(String contactPersonName) {
-		this.contactPersonName = contactPersonName;
-	}
-	
-	public String getContactPersonTitle() {
-		return contactPersonTitle;
-	}
-	
-	public void setContactPersonTitle(String contactPersonTitle) {
-		this.contactPersonTitle = contactPersonTitle;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getFax() {
-		return fax;
-	}
-	
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
-	
 	public String getOrgUrl() {
 		return orgUrl;
 	}
@@ -496,15 +452,6 @@ public class AddOrgForm extends ActionForm {
 	public void setOrgUrl(String orgUrl) {
 		this.orgUrl = orgUrl;
 	}
-	
-	public String getPhone() {
-		return phone;
-	}
-	
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	
 	public String getActionFlag() {
 		return actionFlag;
 	}

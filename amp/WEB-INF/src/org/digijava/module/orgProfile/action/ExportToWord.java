@@ -111,10 +111,6 @@ public class ExportToWord extends Action {
             String orgUrl = notAvailable;
             String orgBackground = notAvailable;
             String orgDesc = notAvailable;
-            String contactName =notAvailable;
-            String email = notAvailable;
-            String contactPhone = notAvailable;
-            String contactFax = notAvailable;
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
@@ -126,19 +122,6 @@ public class ExportToWord extends Action {
                 orgName = organization.getName();
                 if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
                     orgUrl = organization.getOrgUrl();
-                }
-                if (organization.getContactPersonName() != null&&!organization.getContactPersonName().trim().equals("")) {
-                    contactName = organization.getContactPersonName();
-                }
-                if (organization.getEmail() != null&&!organization.getEmail().trim().equals("")) {
-                    email = organization.getEmail();
-                }
-                if (organization.getPhone() != null&&!organization.getPhone().trim().equals("")) {
-                    contactPhone = organization.getPhone();
-                }
-
-                if (organization.getFax() != null&&!organization.getFax().trim().equals("")) {
-                    contactFax = organization.getFax();
                 }
                 if (organization.getOrgBackground() != null&&!organization.getOrgBackground().trim().equals("")) {
                     orgBackground = organization.getOrgBackground();
@@ -154,10 +137,6 @@ public class ExportToWord extends Action {
                     orgName = multipleSelected;
                     orgAcronym = multipleSelected;
                     orgUrl = multipleSelected;
-                    contactName = multipleSelected;
-                    email = multipleSelected;
-                    contactPhone = multipleSelected;
-                    contactFax = multipleSelected;
                     orgBackground = multipleSelected;
                     orgDesc = multipleSelected;
                 } else {
@@ -169,8 +148,7 @@ public class ExportToWord extends Action {
                         orgGroupTpName = all;
                         grpName = all;
                     }
-                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =
-                      contactName = email = contactPhone = contactFax = notApplicable;
+                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc = notApplicable;
                    
                 }
             }
@@ -578,8 +556,6 @@ public class ExportToWord extends Action {
                                     orgSummaryTbl.addCell(orgWbLinkCell);
 
                                     int count = 0;
-                                    // contacts for NGO organizations,  we have mixed code in 1.14 :(
-                                    if (orgGroupType!=null&&orgGroupType.getClassification() != null && orgGroupType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
                                         boolean noContactsToShow = true;
                                         if (organization != null) {
                                             orgContactsTbl = new Table(6);
@@ -682,42 +658,8 @@ public class ExportToWord extends Action {
                                                 orgSummaryTbl.addCell(contactCell);
                                             }
                                         }
-                                    } // contacts for non NGO organizations, we have mixed code in 1.14 :(
-                                    else {
-                                        RtfCell contactNameCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Name", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        contactNameCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        orgSummaryTbl.addCell(contactNameCell);
-
-                                        RtfCell contactNameCellValue = new RtfCell(new Paragraph(contactName, OrgProfileUtil.PLAINFONT));
-                                        contactNameCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        orgSummaryTbl.addCell(contactNameCellValue);
-
-
-                                        RtfCell contactEmailCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactEmailCell);
-
-                                        RtfCell contactEmailCellValue = new RtfCell(new Paragraph(email, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactEmailCellValue);
-
-                                        RtfCell contactPhoneCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        contactPhoneCell.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        orgSummaryTbl.addCell(contactPhoneCell);
-
-                                        RtfCell contactPhoneCellValue = new RtfCell(new Paragraph(contactPhone, OrgProfileUtil.PLAINFONT));
-                                        contactPhoneCellValue.setBackgroundColor(OrgProfileUtil.CELLCOLOR);
-                                        orgSummaryTbl.addCell(contactPhoneCellValue);
-
-                                        RtfCell contactFaxCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactFaxCell);
-
-                                        RtfCell contactFaxCellValue = new RtfCell(new Paragraph(contactFax, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactFaxCellValue);
-
-                                    }
-
-
-
-
+                                    
+                                    
 
 
                                     //create largest projects table

@@ -316,27 +316,6 @@ public class EditOrganisation extends DispatchAction {
       if (organization.getRegion() != null) {
           editForm.setRegionId(organization.getRegion().getId());
       }
-      
-      if(organization.getContactPersonName()!=null){
-    	  editForm.setContactPersonName(organization.getContactPersonName());
-      }
-      
-      if(organization.getContactPersonTitle()!=null){
-    	  editForm.setContactPersonTitle(organization.getContactPersonTitle());
-      }
-      
-      if(organization.getEmail()!=null){
-    	  editForm.setEmail(organization.getEmail());
-      }
-      
-      if(organization.getPhone()!=null){
-    	  editForm.setPhone(organization.getPhone());
-      }
-      
-      if(organization.getFax()!=null){
-    	  editForm.setFax(organization.getFax());
-      }
-      
       //Budget Sectors
       Collection<Long> selectedbudgetsectors = new Vector<Long>();
       for (Iterator iterator = organization.getBudgetsectors().iterator(); iterator.hasNext();) {
@@ -1270,35 +1249,7 @@ public class EditOrganisation extends DispatchAction {
       }
       if (editForm.getFundingDetails() != null) {
           organization.getFundingDetails().addAll(ampPledges);
-      }
-      //contact info
-      if (editForm.getContactPersonName() != null || !editForm.getContactPersonName().trim().equals("")) {
-    	  organization.setContactPersonName(editForm.getContactPersonName());
-      }else{
-    	  organization.setContactPersonName(null);
-      }
-      if (editForm.getContactPersonTitle() != null || !editForm.getContactPersonTitle().trim().equals("")){
-    	  organization.setContactPersonTitle(editForm.getContactPersonTitle());
-      }else{
-    	  organization.setContactPersonTitle(null);
-      }
-      if (editForm.getEmail() != null || !editForm.getEmail().trim().equals("")){
-    	  organization.setEmail(editForm.getEmail());
-      }else{
-    	  organization.setEmail(null);
-      }
-      if (editForm.getPhone() != null || !editForm.getPhone().trim().equals("")){
-    	  organization.setPhone(editForm.getPhone());
-      }else{
-    	  organization.setPhone(null);
-      }
-      if (editForm.getFax() != null || !editForm.getFax().trim().equals("")){
-    	  organization.setFax(editForm.getFax());
-      }else{
-    	  organization.setFax(null);
-      }
-         
-         
+      }  
       	/**
          * contacts
          */
@@ -1391,13 +1342,9 @@ public class EditOrganisation extends DispatchAction {
           form.setAmpOrgId(null);
           form.setAmpOrgTypeId(null);
           form.setBudgetOrgCode(null);
-          form.setContactPersonName(null);
-          form.setContactPersonTitle(null);
           form.setCountryId(null);
           form.setDacOrgCode(null);
           form.setDescription(null);
-          form.setEmail(null);
-          form.setFax(null);
           form.setFiscalCalId(null);
           form.setFlag(null);
           form.setFundingDetails(null);
@@ -1412,7 +1359,6 @@ public class EditOrganisation extends DispatchAction {
           form.setOrgPrimaryPurpose(null);
           form.setOrgTypeFlag(null);
           form.setOrgUrl(null);
-          form.setPhone(null);
           form.setRegionFlag(null);
           form.setSaveFlag(null);
           form.setSectors(null);
@@ -1462,11 +1408,6 @@ public class EditOrganisation extends DispatchAction {
           form.setOperFuncApprDate(null);
           form.setReceiptLegPersonalityAct(null);
           form.setBudgetOrgs(null);
-          form.setContactPersonName(null);
-          form.setContactPersonTitle(null);
-          form.setEmail(null);
-          form.setPhone(null);
-          form.setFax(null);
           form.setSelecteddepartments(null);
           form.setDepartments(BudgetDbUtil.getDepartments());
           form.setSelectedbudgetsectors(null);

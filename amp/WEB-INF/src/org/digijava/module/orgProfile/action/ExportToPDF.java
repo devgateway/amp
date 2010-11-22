@@ -1,44 +1,25 @@
 package org.digijava.module.orgProfile.action;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.HeaderFooter;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-import javax.servlet.ServletOutputStream;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.DefaultFontMapper;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTemplate;
-import com.lowagie.text.pdf.PdfWriter;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
@@ -49,10 +30,14 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.orgProfile.helper.ExportSettingHelper;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
@@ -66,17 +51,21 @@ import org.digijava.module.widget.helper.WidgetVisitorAdapter;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.Plot;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.orgProfile.helper.ExportSettingHelper;
+
+import com.lowagie.text.Element;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.DefaultFontMapper;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfTemplate;
+import com.lowagie.text.pdf.PdfWriter;
 
 
 public class ExportToPDF extends Action {
@@ -125,10 +114,6 @@ public class ExportToPDF extends Action {
             String orgUrl = notAvailable;
             String orgBackground = notAvailable;
             String orgDesc = notAvailable;
-            String contactName =notAvailable;
-            String email = notAvailable;
-            String contactPhone = notAvailable;
-            String contactFax = notAvailable;
 
             AmpOrgGroup group = null;
             AmpOrgType orgGroupType = null;
@@ -141,19 +126,6 @@ public class ExportToPDF extends Action {
                 if (organization.getOrgUrl() != null&&!organization.getOrgUrl().equals("")) {
                     orgUrl = organization.getOrgUrl();
                 }
-                if (organization.getContactPersonName() != null&&!organization.getContactPersonName().trim().equals("")) {
-                    contactName = organization.getContactPersonName();
-                }
-                if (organization.getEmail() != null&&!organization.getEmail().trim().equals("")) {
-                    email = organization.getEmail();
-                }
-                if (organization.getPhone() != null&&!organization.getPhone().trim().equals("")) {
-                    contactPhone = organization.getPhone();
-                }
-
-                if (organization.getFax() != null&&!organization.getFax().trim().equals("")) {
-                    contactFax = organization.getFax();
-                }
                 if (organization.getOrgBackground() != null&&!organization.getOrgBackground().trim().equals("")) {
                     orgBackground = organization.getOrgBackground();
                 }
@@ -163,8 +135,7 @@ public class ExportToPDF extends Action {
 
             } else {
                 if (filter.getOrgIds() != null) {
-                    orgGroupTpName =grpName =orgName =orgAcronym = orgUrl =contactName
-                    =email = contactPhone =contactFax = orgBackground = orgDesc =multipleSelected;
+                    orgGroupTpName =grpName =orgName =orgAcronym = orgUrl =multipleSelected;
                      
                 } else {
                     group = filter.getOrgGroup();
@@ -175,8 +146,7 @@ public class ExportToPDF extends Action {
                         orgGroupTpName = all;
                         grpName = all;
                     }
-                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =
-                      contactName = email = contactPhone = contactFax = notApplicable;
+                      orgName = orgAcronym = orgUrl = orgBackground = orgDesc =notApplicable;
 
                 }
             }
@@ -586,122 +556,93 @@ public class ExportToPDF extends Action {
                                     //create contacts table
 
                                     int count = 0;
-                                    // contacts for NGO organizations,  we have mixed code in 1.14 :(
-                                    if (orgGroupType!=null&&orgGroupType.getClassification() != null && orgGroupType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
-                                        boolean noContactsToShow = true;
-                                        if (organization != null) {
-                                            orgContactsTbl = new PdfPTable(6);
-                                            orgContactsTbl.setWidthPercentage(100);
+                                    boolean noContactsToShow = true;
+                                    if (organization != null) {
+                                        orgContactsTbl = new PdfPTable(6);
+                                        orgContactsTbl.setWidthPercentage(100);
 
-                                            PdfPCell contactHeaderCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Contact Information", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactHeaderCell.setColspan(6);
-                                            contactHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactHeaderCell);
+                                        PdfPCell contactHeaderCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Contact Information", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactHeaderCell.setColspan(6);
+                                        contactHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactHeaderCell);
 
-                                            PdfPCell contactLastNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Last Name", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactLastNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactLastNameCell);
+                                        PdfPCell contactLastNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Last Name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactLastNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactLastNameCell);
 
-                                            PdfPCell contactNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("First name", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactNameCell);
+                                        PdfPCell contactNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("First name", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactNameCell);
 
-                                            PdfPCell contactEmailCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactEmailCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactEmailCell);
+                                        PdfPCell contactEmailCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactEmailCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactEmailCell);
 
-                                            PdfPCell contactPhoneCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactPhoneCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactPhoneCell);
+                                        PdfPCell contactPhoneCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactPhoneCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactPhoneCell);
 
-                                            PdfPCell contactFaxCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactFaxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactFaxCell);
+                                        PdfPCell contactFaxCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactFaxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactFaxCell);
 
-                                            PdfPCell contactTitleCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Title", langCode, siteId), OrgProfileUtil.HEADERFONT));
-                                            contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                            orgContactsTbl.addCell(contactTitleCell);
-                                            //contacts
-                                            if (organization.getOrganizationContacts() != null) {
-                                                List<AmpOrganisationContact> orgContacts = new ArrayList(organization.getOrganizationContacts());
-                                                Iterator<AmpOrganisationContact> contactsIter = orgContacts.iterator();
-                                                while (contactsIter.hasNext()) {
-                                                    AmpOrganisationContact orgCont = contactsIter.next();
-                                                    if (orgCont.getPrimaryContact() != null && orgCont.getPrimaryContact()) {
-                                                        noContactsToShow = false;
-                                                        AmpContact contact = orgCont.getContact();
-                                                        PdfPCell name = new PdfPCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
-                                                        PdfPCell lastName = new PdfPCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
-                                                        String emails = "";
-                                                        String phones = "";
-                                                        String faxes = "";
-                                                        for (AmpContactProperty property : contact.getProperties()) {
-                                                            if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
-                                                                emails += property.getValue() + ";\n";
-                                                            } else if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
-                                                                phones += property.getValue() + ";\n";
-                                                            } else {
-                                                                faxes += property.getValue() + ";\n";
-                                                            }
+                                        PdfPCell contactTitleCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Title", langCode, siteId), OrgProfileUtil.HEADERFONT));
+                                        contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        orgContactsTbl.addCell(contactTitleCell);
+                                        //contacts
+                                        if (organization.getOrganizationContacts() != null) {
+                                            List<AmpOrganisationContact> orgContacts = new ArrayList(organization.getOrganizationContacts());
+                                            Iterator<AmpOrganisationContact> contactsIter = orgContacts.iterator();
+                                            while (contactsIter.hasNext()) {
+                                                AmpOrganisationContact orgCont = contactsIter.next();
+                                                if (orgCont.getPrimaryContact() != null && orgCont.getPrimaryContact()) {
+                                                    noContactsToShow = false;
+                                                    AmpContact contact = orgCont.getContact();
+                                                    PdfPCell name = new PdfPCell(new Paragraph(contact.getName(), OrgProfileUtil.PLAINFONT));
+                                                    PdfPCell lastName = new PdfPCell(new Paragraph(contact.getLastname(), OrgProfileUtil.PLAINFONT));
+                                                    String emails = "";
+                                                    String phones = "";
+                                                    String faxes = "";
+                                                    for (AmpContactProperty property : contact.getProperties()) {
+                                                        if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                                                            emails += property.getValue() + ";\n";
+                                                        } else if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                                                            phones += property.getValue() + ";\n";
+                                                        } else {
+                                                            faxes += property.getValue() + ";\n";
                                                         }
-                                                        PdfPCell emailCell = new PdfPCell(new Paragraph(emails, OrgProfileUtil.PLAINFONT));
-                                                        PdfPCell phone = new PdfPCell(new Paragraph(phones, OrgProfileUtil.PLAINFONT));
-                                                        PdfPCell fax = new PdfPCell(new Paragraph(faxes, OrgProfileUtil.PLAINFONT));
-                                                        String contacTitle = "";
-                                                        if (contact.getTitle() != null) {
-                                                            contacTitle = contact.getTitle().getValue();
-                                                        }
-                                                        PdfPCell title = new PdfPCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
-                                                        orgContactsTbl.addCell(lastName);
-                                                        orgContactsTbl.addCell(name);
-                                                        orgContactsTbl.addCell(emailCell);
-                                                        orgContactsTbl.addCell(phone);
-                                                        orgContactsTbl.addCell(fax);
-                                                        orgContactsTbl.addCell(title);
-                                                        count++;
                                                     }
+                                                    PdfPCell emailCell = new PdfPCell(new Paragraph(emails, OrgProfileUtil.PLAINFONT));
+                                                    PdfPCell phone = new PdfPCell(new Paragraph(phones, OrgProfileUtil.PLAINFONT));
+                                                    PdfPCell fax = new PdfPCell(new Paragraph(faxes, OrgProfileUtil.PLAINFONT));
+                                                    String contacTitle = "";
+                                                    if (contact.getTitle() != null) {
+                                                        contacTitle = contact.getTitle().getValue();
+                                                    }
+                                                    PdfPCell title = new PdfPCell(new Paragraph(contacTitle, OrgProfileUtil.PLAINFONT));
+                                                    orgContactsTbl.addCell(lastName);
+                                                    orgContactsTbl.addCell(name);
+                                                    orgContactsTbl.addCell(emailCell);
+                                                    orgContactsTbl.addCell(phone);
+                                                    orgContactsTbl.addCell(fax);
+                                                    orgContactsTbl.addCell(title);
+                                                    count++;
                                                 }
                                             }
-
-
-                                            if (noContactsToShow) {
-                                                PdfPCell contactTitleCl = new PdfPCell();
-                                                contactTitleCl.addElement(new Paragraph(TranslatorWorker.translateText("Contact", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
-                                                orgSummaryTbl.addCell(contactTitleCl);
-                                                PdfPCell contactCell = new PdfPCell();
-                                                contactCell.addElement(new Paragraph(notAvailable, OrgProfileUtil.PLAINFONT));
-                                                orgSummaryTbl.addCell(contactCell);
-                                            }
                                         }
-                                    } // contacts for non NGO organizations, we have mixed code in 1.14 :(
-                                    else {
-                                        PdfPCell contactNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Name", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactNameCell);
-
-                                        PdfPCell contactNameCellValue = new PdfPCell(new Paragraph(contactName, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactNameCellValue);
 
 
-                                        PdfPCell contactEmailCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Email", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactEmailCell);
-
-                                        PdfPCell contactEmailCellValue = new PdfPCell(new Paragraph(email, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactEmailCellValue);
-
-                                        PdfPCell contactPhoneCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Telephone", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactPhoneCell);
-
-                                        PdfPCell contactPhoneCellValue = new PdfPCell(new Paragraph(contactPhone, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactPhoneCellValue);
-
-                                        PdfPCell contactFaxCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Fax", langCode, siteId), OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactFaxCell);
-
-                                        PdfPCell contactFaxCellValue = new PdfPCell(new Paragraph(contactFax, OrgProfileUtil.PLAINFONT));
-                                        orgSummaryTbl.addCell(contactFaxCellValue);
-
+                                        if (noContactsToShow) {
+                                            PdfPCell contactTitleCl = new PdfPCell();
+                                            contactTitleCl.addElement(new Paragraph(TranslatorWorker.translateText("Contact", langCode, siteId) + ":", OrgProfileUtil.PLAINFONT));
+                                            orgSummaryTbl.addCell(contactTitleCl);
+                                            PdfPCell contactCell = new PdfPCell();
+                                            contactCell.addElement(new Paragraph(notAvailable, OrgProfileUtil.PLAINFONT));
+                                            orgSummaryTbl.addCell(contactCell);
+                                        }
                                     }
-                                   
+                                    
+                                    
                                     //create largest projects table
                                     largetsProjectsTbl = new PdfPTable(new float[]{25, 20, 55});
                                     int projectNumber = filter.getLargestProjectNumb();

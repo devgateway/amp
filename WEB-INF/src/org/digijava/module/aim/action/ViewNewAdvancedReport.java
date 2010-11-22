@@ -319,11 +319,13 @@ public class ViewNewAdvancedReport extends Action {
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);
 		
-		// the siteid and locale are set for translation purposes
+		// CHANGES FOR AMP-9649 => the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		ar.setSiteId( site.getId().toString() );
 		ar.setLocale( navigationLanguage.getCode() );
+		
+		
 		
 		httpSession.setAttribute("report",rd);
 		httpSession.setAttribute("reportMeta",ar);

@@ -554,11 +554,13 @@ public class DEImportBuilder {
 				String sectorValue = "";
 				
 				sectorAux.setValue(idmlSector.getValue());
-				sectorValue= idmlSector.getValue();
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
+				//sectorValue= idmlSector.getValue();
 				//SENEGAL changes
 //			    sectorValue= idmlSector.getCode()+". "+idmlSector.getValue();
 //			    sectorAux.setValue(sectorValue);
-			    
+				
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
 			    //get sector by name and code 
 				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
 				
@@ -652,7 +654,7 @@ public class DEImportBuilder {
 		}
 	}
 	
-	
+	//locations
 	private void processLocation(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
 	if(actType.getLocation() !=null && actType.getLocation().size() >0)	{
@@ -1202,7 +1204,8 @@ public class DEImportBuilder {
 				percentage+=idmlSector.getPercentage();
 				CodeValueType sectorAux = new CodeValueType();
 				sectorAux.setCode(idmlSector.getCode());
-				sectorAux.setValue(idmlSector.getValue());
+				//senegal_change
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
 				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
 				if(ampSector == null) 
 					//errors.add(toStringCVT(sectorAux));
@@ -1791,6 +1794,7 @@ public class DEImportBuilder {
 	}
 	
 	private void processFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
+		logger.info("SYSOUT: processing "+this.getAmpImportItem().getActivities().getActivity().size()+" projects");
 		for (Iterator it = this.getAmpImportItem().getActivities().getActivity().iterator(); it.hasNext();) {
 			ActivityType actType 	= (ActivityType) it.next();
 			AmpActivity activity 	= getAmpActivity(actType);
@@ -1806,7 +1810,7 @@ public class DEImportBuilder {
 
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
-				item.setDescription(contentLogger.display());
+				item.setDescription("Activity: "+actType.getDbKey()+" "+contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				//iLog.saveObject(item);
 				log.getLogItems().add(item);
@@ -1814,7 +1818,7 @@ public class DEImportBuilder {
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-			item.setDescription("OK");
+			item.setDescription("Activity: "+actType.getDbKey()+" OK");
 			try {
 				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
@@ -1831,14 +1835,14 @@ public class DEImportBuilder {
 					else {
 						//write in log that this activity was skipped
 						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-						item.setDescription("Activity was skipped");
+						item.setDescription("Activity: "+actType.getDbKey()+" was skipped");
 					}
 			
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				item.setDescription(e.getMessage());
+				item.setDescription("Activity: "+actType.getDbKey()+" "+e.getMessage());
 			}
 
 			log.getLogItems().add(item);
@@ -1887,13 +1891,20 @@ public class DEImportBuilder {
 					}
 					acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 			}
+			if(ampCVLoc == null)
+				{
+					CodeValueType cvtLocation = new CodeValueType();
+					cvtLocation.setCode(location.getLocationName().getCode());
+					cvtLocation.setValue(location.getLocationName().getValue());
+					logger.getItems().add(new DEImplLevelMissingLog(cvtLocation));
+				}
 			if(acv==null)
 			{
 				logger.getItems().add(new DEImplLevelMissingLog(cvt));
 			}
 			//implementation levels
 			//added here for Senegal
-			AmpCategoryValue acv1= new AmpCategoryValue();
+			AmpCategoryValue acv1= null;// new AmpCategoryValue();
 			if( actType.getImplementationLevels()!=null ){
 						
 				if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
@@ -1912,7 +1923,7 @@ public class DEImportBuilder {
 				
 			}
 			//regional funding
-			checkRegionalFundingCurrency(location, ampCVLoc,logger);
+			checkRegionalFundingCurrency(location, logger);
 		}
 
 	}
@@ -1935,7 +1946,7 @@ public class DEImportBuilder {
 		}
 	}
 	
-	private void checkRegionalFundingCurrency(Location location, AmpCategoryValueLocations ampCVLoc, DEActivityLog logger) {
+	private void checkRegionalFundingCurrency(Location location, DEActivityLog logger) {
 		// TODO Auto-generated method stub
 		Set regFundings = new HashSet();
 		for (Iterator<LocationFundingType> it = location.getLocationFunding().iterator(); it.hasNext();) {

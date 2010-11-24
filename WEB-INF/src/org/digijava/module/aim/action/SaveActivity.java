@@ -1049,8 +1049,10 @@ public class SaveActivity extends Action {
 						ampFunding.setFundingStatus( fund.getFundingStatus() );
 						ampFunding.setModeOfPayment( fund.getModeOfPayment() );
 						ampFunding.setDonorObjective( fund.getDonorObjective() );
-						ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
-						ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
+						if ( fund.getActStartDate() != null && fund.getActStartDate().length() > 0 )
+							ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+						if ( fund.getActCloseDate() != null && fund.getActCloseDate().length() > 0 )
+							ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 						
 						ampFunding.setAmpActivityId(activity);
 

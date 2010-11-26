@@ -1,5 +1,5 @@
-var minus_sign='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
-var plus_sign='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
+var minus_sign='img_2/ico_minus.gif';
+var plus_sign='img_2/ico_plus.gif';
 
 function writeError(str, append)
 {

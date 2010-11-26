@@ -136,16 +136,20 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       
 
       newCount=msgsAmount+alertsAmount+approvalsAmount+calEventsAmount;
-
+		
+      $('#msgLinks li').each(function(index) {
+    	  var n = jQuery(this)// <- This works
+    	  n.remove();
+  	  });
+      
+      $('#msgLinks a').each(function(index) {
+    	  var n = jQuery(this)// <- This works
+    	  n.remove();
+  	  });
       //creating table
       var div=$('#msgLinks');
-      if(div.childNodes!=null && div.childNodes.length>0){
-        while (div.childNodes.length>0){
-          div.removeChild(div.childNodes[0]);
-        }
-      }
-      
-      var li= $('<li></li>');
+    
+        var li= $('<li></li>');
       li.title=clickToViewMsg;
       li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>');
       li.addClass('tri');

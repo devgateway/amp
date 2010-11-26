@@ -17,7 +17,7 @@
 		<script type="text/javascript" src="js_2/jquery/jquery.positionBy.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.bgiframe.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.jdMenu.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.activeMenu.js"></script>
+		
 		
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>

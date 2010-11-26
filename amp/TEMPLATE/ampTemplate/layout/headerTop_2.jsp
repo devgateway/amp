@@ -29,12 +29,12 @@
 		<script type="text/javascript" src="js_2/jquery/jquery.ui.core.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.ui.tabs.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.activeMenu.js"></script>
+				
 
 	<!-- Stylesheet of AMP -->
         <digi:ref href="css_2/amp.css" type="text/css" rel="stylesheet" />
-        
-        
+        <digi:ref href="css_2/tabs.css" type="text/css" rel="stylesheet" />
+         
 <%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>

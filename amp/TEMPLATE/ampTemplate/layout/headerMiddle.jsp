@@ -21,7 +21,6 @@
 		<link rel="stylesheet" href="css_2/jquery.jdMenu.css" type="text/css" />
 
 
-
 <script language="JavaScript">
 	function addActivity() {
 		selectedLevelId=0; 

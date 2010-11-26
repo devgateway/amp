@@ -30,6 +30,14 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0; background-color:
 .wht_blck_cont {padding:10px;}
 .clearing {clear:both;}
 
+/* WELCOME */
+.welcome_menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; margin-bottom:10px;}
+.welcome_menu_item_cont {padding-left:7px; padding-right:7px; padding-top:7px; padding-bottom:7px; font-size:12px; font-weight:bold; text-transform:uppercase;}
+.welcome_info {font-size:12px; line-height:17px;}
+.welcome_title {font-size:18px; font-weight:bold; margin-bottom:10px;}
+.welcome_note {font-size:11px; font-weight:bold; color:#666666;}
+.workspace_info {float:left; margin-left:15px; padding-left:15px; border-left:1px solid #688193; padding-top:20px; color:#E8F0F5; font-size:11px;}
+.workspace_choose {line-height:35px; font-size:17px; margin-top:25px;}
 
 /* HEADER */
 .header {background-image:url(/TEMPLATE/ampTemplate/img_2/top_bg.gif); height:51px;}

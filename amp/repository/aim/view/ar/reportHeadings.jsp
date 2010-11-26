@@ -15,7 +15,7 @@
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
-<thead class="fixedHeader"> 
+<thead> 
   <%int maxDepth = columnReport.getMaxColumnDepth();
   columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
@@ -39,9 +39,9 @@
       	
       	
       	<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
-      	  <td style="background-color:#999999;color:black;">&nbsp;</td>	
+      	  <td class="inside">&nbsp;</td>	
         <%}
-        first=false;
+        	first=false;
         %>
 
 
@@ -49,7 +49,8 @@
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
-        <td align="center" style="background-color:#999999;color:black;" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        
+        <td background="img_2/ins_bg.gif" class="inside" style="background-repeat:repeat-x; padding-left:33px; font-size:12px;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
             	<c:choose>
             		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">
@@ -60,7 +61,7 @@
             		</c:otherwise>
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a class="ins_title" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -69,7 +70,7 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <a style="color:black;cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.name}~${sortAscString}">
+	              <a class="ins_title" style="cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.name}~${sortAscString}">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </a>
 	            </logic:notEqual>
@@ -87,20 +88,20 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+				<digi:trn key="aim:reportBuilder:${reportHeading}"><b class="ins_title"><c:out value="${reportHeading}"/></b></digi:trn>
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
+	              <a class="ins_title_reg" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
-		              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+		              <digi:trn key="aim:reportBuilder:${reportHeading}"><b><c:out value="${reportHeading}"/></b></digi:trn>
 				  </a>
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="color:black;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	              <html:link styleClass="ins_title" style="cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>  

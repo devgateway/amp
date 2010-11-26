@@ -26,8 +26,8 @@ else
 return false
 var ullist=targetobj.parentNode.parentNode.getElementsByTagName("li")
 for (var i=0; i<ullist.length; i++)
-ullist[i].className=""  //deselect all tabs
-targetobj.parentNode.className="selected"  //highlight currently clicked on tab
+ullist[i].className="desktop_tab"  //deselect all tabs
+targetobj.parentNode.className="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active"  //highlight currently clicked on tab
 if (url.indexOf("#default")!=-1){ //if simply show default content within container (verus fetch it via ajax)
 document.getElementById(containerid).innerHTML=defaultcontentarray[containerid]
 return
@@ -46,7 +46,7 @@ function loadpage(page_request, containerid){
 if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
 document.getElementById(containerid).innerHTML=page_request.responseText;
 	try
-	{	var reporTable=new scrollableTable("reportTable",300);
+	{	var reporTable=new scrollableTable("reportTable",400);
 			reporTable.debug=false;
 			reporTable.usePercentage=false;
 			reporTable.maxRowDepth=4;
@@ -141,7 +141,7 @@ ajaxpage(this.getAttribute("href"), this.getAttribute("rel"), this)
 loadobjs(this.getAttribute("rev"))
 return false
 }
-if (ulist[x].className=="selected"){
+if (ulist[x].className=="ui-tabs-selected"){
 startProgressCheck();
 ajaxpage(ulistlink.getAttribute("href"), ulistlink.getAttribute("rel"), ulistlink) //auto load currenly selected tab content
 loadobjs(ulistlink.getAttribute("rev")) //auto load any accompanying .js and .css files

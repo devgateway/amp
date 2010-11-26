@@ -6,6 +6,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
+
+
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+
 <logic:notEmpty name="filterCurrentReport" scope="session">
     <logic:equal name="filterCurrentReport" property="drilldownTab" value="false">
     	<c:remove var="filterCurrentReport" scope="session" />
@@ -13,23 +18,25 @@
 </logic:notEmpty>
 
 <script language="JavaScript">
+	$(function() {
+		$("#demo").tabs();
+		//$('#reportTable').tableScroll({height:400});
+	});
+</script>
+
+<script language="JavaScript">
     var continueExecution = true;
     function checkstatus(){
-
-    	var statusDiv = document.getElementById("statusValue");
+		var statusDiv = document.getElementById("statusValue");
     	if (!statusDiv) return;
-    	 
     	var offsetByServerSide = 44;
     	var xmlhttp; 
-
-    	if(window.ActiveXObject)
+		if(window.ActiveXObject)
     		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
     	else
     		xmlhttp = new XMLHttpRequest();
-
-		xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true&"+new Date().getTime(),true);
-
-		xmlhttp.onreadystatechange=function()
+			xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true&"+new Date().getTime(),true);
+			xmlhttp.onreadystatechange=function()
 		{
 		   if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
 		   {
@@ -71,8 +78,6 @@
 <c:set var="hideCurrSettings">
 	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
 </c:set>
-
-
 <script language="javascript">
 var allTabsPanel = null;
 var replaceableTabObject = null;
@@ -113,7 +118,7 @@ var myTabsObject;
 		//Initialize all tabs
 		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
 		//Create "More..." tab
-		var objeto = document.createElement("DIV");
+		var objeto = document.createElement("LI");
 		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
 		objeto.title = "<digi:trn key="aim:clickforalltabs">Click to see all tabs</digi:trn>";;
 		objeto.onclick = changeTab;
@@ -228,27 +233,19 @@ var myTabsObject;
 		return false;
 	}
 
-
-	
-
 </script>
 <script language="JavaScript">
-/*	function addActivity() {
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
-	}
-	*/
-
-function toggleSettings(){
+ function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+		displaySettingsButton.innerHTML = "${showCurrSettings}";
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+		displaySettingsButton.innerHTML = "${hideCurrSettings}";
 	}
 }
 
@@ -261,7 +258,7 @@ function toggleSettings(){
 		<logic:notEmpty name="defaultTeamReport" scope="session">
 				tabName	= 'Tab-${defaultTeamReport.name}';
 		</logic:notEmpty>
-
+		
 		<logic:empty name="defaultTeamReport" scope="session">
 			<logic:notEmpty name="myTabs" scope="session">
 					tabName	= 'Tab-${myTabs[0].name}';
@@ -272,76 +269,91 @@ function toggleSettings(){
 		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
 	</logic:notEmpty>	
 </script>
-	
+
 <digi:context name="digiContext" property="context" />
 
-
-
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-<br />
-<div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
-<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
-
-<ul id="MyTabs" class="yui-nav"">
-<c:set var="counter" value="0"/> 
-<logic:present name="myTabs" scope="session">
-		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
-					<logic:equal name="report" property="drilldownTab" value="true">
-	                    <c:set var="counter" value="${counter+1}" />
-	                    <%-- <c:set var="reportNameTrn">
-		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
-	                    </c:set> --%>
-	                   
-	                    <c:if test="${counter <= 6}">
-	                    <li>
-	                    <c:if test="${fn:length(report.name) > 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
-	                    </c:if>
-	                    <c:if test="${fn:length(report.name) <= 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
-	                    </c:if>
-	                                                                
+<div id="content"> 
+<div id="demo" >
+	<ul id="MyTabs" class="desktop_tab_base">
+	<c:set var="counter" value="0"/> 
+		<logic:present name="myTabs" scope="session">
+			<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+				<logic:equal name="report" property="drilldownTab" value="true">
+	            	<c:set var="counter" value="${counter+1}" />
+	            	<c:if test="${counter <= 6}">
+	                	<li class="desktop_tab">
+	                    	<c:if test="${fn:length(report.name) > 25}" >
+	                    		<a class="tab_link" id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="Tab_Name" title= "Tab Name"><c:out value="${fn:substring(report.name, 0, 25)}"/></a>
+			                </c:if>
+			                <c:if test="${fn:length(report.name) <= 25}" >
+								<a class="tab_link" id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="Tab_Name" title= "Tab Name"><c:out value="${report.name}"/></a>
+			                </c:if>
 	                    </li>
-	                    </c:if>
-					</logic:equal>
-		</logic:iterate>
-</logic:present>
-	
-</ul>									
-<div class="yui-content" style="display:none">
+					</c:if>
+				</logic:equal>
+			</logic:iterate>
+		</logic:present>
+	</ul>
+	<div  style="display:none">
+	</div>
+	<div id="Tab_Name">
+		<digi:trn key="aim:addATab">
+			Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
+		</digi:trn>
+	</div>
 </div>
 </div>
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
-<digi:trn key="aim:addATab">
-<p/>
-Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
-</digi:trn>
-</div>
-</div> 
-
+ 
+<!-- 
+ <div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
+		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
+			<ul id="MyTabs" class="yui-nav"">
+				<c:set var="counter" value="0"/> 
+				<logic:present name="myTabs" scope="session">
+					<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+						<logic:equal name="report" property="drilldownTab" value="true">
+			            	<c:set var="counter" value="${counter+1}" />
+			            	<c:if test="${counter <= 6}">
+			                	<li>
+			                    	<c:if test="${fn:length(report.name) > 25}" >
+										<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
+			                    	</c:if>
+			                    	<c:if test="${fn:length(report.name) <= 25}" >
+										<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
+			                    	</c:if>
+			                    </li>
+							</c:if>
+						</logic:equal>
+					</logic:iterate>
+				</logic:present>
+			</ul>									
+			<div class="yui-content" style="display:none">
+			</div>
+		</div>
+		<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
+			<digi:trn key="aim:addATab">
+				Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
+			</digi:trn>
+		</div>
+	</div> 
+  -->
 <c:set var="loadstatustext">
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
+
 <script type="text/javascript">
-	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+	//loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
-	startajaxtabs("MyTabs");
-	if(document.getElementById(tabName)){
-		checkstatus(true);
-		reloadTab("MyTabs",tabName);
-	}
+	//startajaxtabs("MyTabs");
+	//if(document.getElementById(tabName)){
+		//checkstatus(true);
+		//reloadTab("MyTabs",tabName);
+	//}
 </script>
 
-<style>
-DIV.panelList {
-	cursor:pointer;
-	padding:2px 2px 2px 2px;
-	color:black;
-	background-color:white;
-}
 
-</style>
 <div id="debug"></div>
+<!-- 
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
 	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
@@ -356,9 +368,6 @@ DIV.panelList {
 			<c:if test="${showTab}">
 			        <c:set var="showMoreTab" value="true"/>
 					<logic:equal name="report" property="drilldownTab" value="true">
-	                   <%--  <c:set var="reportNameTrn"> 
-		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
-	                    </c:set> --%>
 	                    <c:if test="${fn:length(report.name) > 25}" >
 							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
 	                    </c:if>
@@ -371,8 +380,41 @@ DIV.panelList {
         </div>
 	</logic:present>
 </div>
+ -->
+<div class="main_menu" id="allTabs" style="display: none;">
+	<ul class="jd_menu" id="jd_menu">
+		<c:set var="showMoreTab" value="false"/>
+			<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
+         			<c:set var="showTab" value="true"/>
+					<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+           				<c:if test="${tab.id == report.id}">
+               				<c:set var="showTab" value="false"/>
+               			</c:if>
+           			</logic:iterate>
+					<c:if test="${showTab}">
+		        		<c:set var="showMoreTab" value="true"/>
+						<logic:equal name="report" property="drilldownTab" value="true">
+                    	<c:if test="${fn:length(report.name) > 25}" >
+							<li> <a  onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</a></li>
+                    	</c:if>
+                    	<c:if test="${fn:length(report.name) <= 25}" >
+							<li> <a onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${report.name}" />", "Tab-<c:out value="${report.name}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></a></li>
+                    	</c:if>
+						</logic:equal>
+           			</c:if>
+			</logic:iterate>
+		</ul>
+</div>
+	
+	        
 <c:if test="${showMoreTab}">
 <script language="javascript">
-	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
+	//YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
+	$("#MyTabs").append("<li class='desktop_tab'><a id='MoreTabs' class='tab_link'><digi:trn key="aim:moretabs">More Tabs</digi:trn></></li>");
+
+	$('#MoreTabs').click(function() {
+		$('#allTabs').toggle('slow', function() {
+		});
+	});
 </script>
 </c:if>

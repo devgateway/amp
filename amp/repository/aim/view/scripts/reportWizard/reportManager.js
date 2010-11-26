@@ -55,22 +55,22 @@ NormalReportManager.prototype.disableSave	= function () {
 NormalReportManager.prototype.enableToolbarButton	= function (btn) {
 	if ( btn.disabled ) {
 		var imgEl		= btn.getElementsByTagName("img")[0];
-		var imgSrc		= imgEl.src.replace("_dis.png", ".png");
+		//var imgSrc		= imgEl.src.replace("_dis.png", ".png");
 		
-		imgEl.src		= imgSrc;
+		//imgEl.src		= imgSrc;
 		btn.disabled	= false;
-		( new YAHOO.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
+		( new YAHOO.util.Element(btn) ).replaceClass('buttonx_dis', 'buttonx');
 	}
 }
 
 NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 	if ( !btn.disabled ) {
 		var imgEl		= btn.getElementsByTagName("img")[0];
-		var imgSrc		= imgEl.src.replace(".png", "_dis.png");
-		imgEl.src		= imgSrc;
+		//var imgSrc		= imgEl.src.replace(".png", "_dis.png");
+		//imgEl.src		= imgSrc;
 		
 		btn.disabled	= true;
-		( new YAHOO.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
+		( new YAHOO.util.Element(btn) ).replaceClass('buttonx', 'buttonx_dis');
 	}
 }
 
@@ -163,20 +163,24 @@ NormalReportManager.prototype.isAnyChecked		= function ( inputs ) {
 	return false;
 }
 
-NormalReportManager.prototype.nextStep		= function ( ) {
+NormalReportManager.prototype.nextStep		= function (step) {
 	var curStep		= YAHOO.amp.reportwizard.tabView.get("activeIndex");
 	if ( curStep < YAHOO.amp.reportwizard.numOfSteps-1 )
 			YAHOO.amp.reportwizard.tabView.set("activeIndex", curStep+1);
 	else 
 		if ( curStep == YAHOO.amp.reportwizard.numOfSteps-1 )
 			saveReportEngine.saveReport();
+	
+	//document.getElementById("rgTitle").innerHTML = "Step " + step + " of 4";
 }
-NormalReportManager.prototype.previousStep		= function ( ) {
+NormalReportManager.prototype.previousStep		= function (step) {
 	var curStep		= YAHOO.amp.reportwizard.tabView.get("activeIndex");
 	if ( curStep > 0 )
 			YAHOO.amp.reportwizard.tabView.set("activeIndex", curStep-1);
 	else
 		window.location.replace("/aim/showDesktop.do");
+	
+	//document.getElementById("rgTitle").innerHTML = "Step " + step + " of 4";
 }
 NormalReportManager.prototype.addStyleToButton	= function ( id ) { 
 	function addClass(e) {

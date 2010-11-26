@@ -8,7 +8,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	
 	this.resetString				= "&doreset=true";
 	
-	this.filterPanel = new YAHOOAmp.widget.Panel("new", {
+	this.filterPanel = new YAHOO.widget.Panel("new", {
 			width:"750px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -29,9 +29,9 @@ Filters.prototype.success	= function (o) {
 	if ( o.responseText.length > 2 ) {
 		this.filterPanel.hide();
 		this.filterPanel.setBody( o.responseText );
-		this.filterTabs	= new YAHOOAmp.widget.TabView('tabview_container');
+		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
-		YAHOOAmp.amptab.afterFiltersLoad();
+		YAHOO.amptab.afterFiltersLoad();
 		this.filterPanel.cfg.setProperty("height", "400px" );
 		
 		this.filterPanel.show();
@@ -39,7 +39,7 @@ Filters.prototype.success	= function (o) {
 		this.saveFilters	= new SaveFilters(this);
 		
 		initCalendar();
-		YAHOOAmp.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters ) ;
+		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters ) ;
 		
 	}
 	else {
@@ -55,7 +55,7 @@ Filters.prototype.showFilters	= function() {
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 	this.filterPanel.show();
-	YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
+	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
 	this.resetString		= "";
 }
 
@@ -64,8 +64,8 @@ function SaveFilters (filterObj) {
 }
 
 SaveFilters.prototype.saveFilters	= function (e, obj) {
-	YAHOOAmp.util.Connect.setForm( document.getElementsByName("aimReportsFilterPickerForm")[0] );
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true", obj);
+	YAHOO.util.Connect.setForm( document.getElementsByName("aimReportsFilterPickerForm")[0] );
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true", obj);
 	obj.filterObj.filterPanel.setBody( "<div style='text-align: center'>" + obj.filterObj.savingDataMessage + 
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 }

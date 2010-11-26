@@ -91,16 +91,16 @@ function resetElement( elem ) {
 function resetRootCheckboxes() {
 	var allCheckboxes	= document.getElementsByTagName("input");
 	for (var i=0; i<allCheckboxes.length; i++) {
-		var inputYuiEl	= new YAHOOAmp.util.Element(allCheckboxes[i]);
+		var inputYuiEl	= new YAHOO.util.Element(allCheckboxes[i]);
 		if ( inputYuiEl.hasClass("root_checkbox") ) {
 			allCheckboxes[i].checked = false;
 		}
 	}
 }
 
-YAHOOAmp.namespace("YAHOOAmp.amptab");
+YAHOO.namespace("YAHOO.amptab");
 
-YAHOOAmp.amptab.afterFiltersLoad   = function (){
+YAHOO.amptab.afterFiltersLoad   = function (){
 	var selColor    = "#BFD2DF";
 	 	donorsPropertyObj               = new RowManagerProperty(null, "filter_rows_donors", selColor);
 	 	relAgenciesPropertyObj  = new RowManagerProperty(null, "filter_rows_rel_agencies", selColor);
@@ -109,22 +109,22 @@ YAHOOAmp.amptab.afterFiltersLoad   = function (){
 	 	financingLocPropertyObj         = new RowManagerProperty(null, "filter_rows_finanacing_loc", selColor);
 	 	otherCriteriaPropertyObj        = new RowManagerProperty(null, "filter_rows_other_criteria", selColor);
 	 	
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("donorsTab");
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("sectorsTab");
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("programsTab");
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("financingLocTab");
-	 	YAHOOAmp.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("donorsTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("relAgenciesTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("sectorsTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("programsTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("financingLocTab");
+	 	YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
 	 }
 	 	
-YAHOOAmp.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
+YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 	var bigDivEl            = document.getElementById(bigDivId);
 	 	//alert("aici" + bigDivEl);
 	 	if (bigDivEl != null) {
 		 	var listOfDivs  = bigDivEl.getElementsByTagName("div");
 		 	if (listOfDivs != null && listOfDivs.length > 0) {
 		 		for (var i=0; i<listOfDivs.length; i++) {
-		 			var divYuiEl    = new YAHOOAmp.util.Element(listOfDivs[i]);
+		 			var divYuiEl    = new YAHOO.util.Element(listOfDivs[i]);
 		 			if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
 		 				var buttonEl    = listOfDivs[i].getElementsByTagName("button")[0];
 		 					buttonEl.click();

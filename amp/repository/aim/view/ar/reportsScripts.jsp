@@ -188,19 +188,19 @@ saveReportEngine	= null;
 			currentReportId	= ${reportObject.ampReportId};
 		</logic:present>	
 		
-		YAHOOAmp.namespace("YAHOOAmp.amptab");
-		YAHOOAmp.amptab.init = function() {
-		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		YAHOO.namespace("YAHOO.amptab");
+		YAHOO.amptab.init = function() {
+		    		var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
 
-		YAHOOAmp.amptab.handleCloseAbout = function() {
+		YAHOO.amptab.handleCloseAbout = function() {
 			if(navigator.appName == 'Microsoft Internet Explorer'){
 				//window.location.reload();
 				//history.go(-1);
 			}
 		}
 		
-		YAHOOAmp.amptab.handleClose = function() {
+		YAHOO.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -208,7 +208,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 
-		YAHOOAmp.amptab.handleCloseShowFormat = function() {
+		YAHOO.amptab.handleCloseShowFormat = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('customFormat');
 			if (filter.parent != null)
@@ -216,7 +216,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 	
-		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"750px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -226,7 +226,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 		    
-		var myPanel2 = new YAHOOAmp.widget.Panel("new2", {
+		var myPanel2 = new YAHOO.widget.Panel("new2", {
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"shadow",
@@ -235,7 +235,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 
-		var myPanel3 = new YAHOOAmp.widget.Panel("new3", {
+		var myPanel3 = new YAHOO.widget.Panel("new3", {
 			width:"300px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -245,7 +245,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 		    
-		    var myPanel4 = new YAHOOAmp.widget.Panel("new4", {
+		    var myPanel4 = new YAHOO.widget.Panel("new4", {
 			width:"450px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -255,7 +255,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    draggable:true} );
 
-		    var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
+		    var myPanel5 = new YAHOO.widget.Panel("new5", {
 				width:"480px",
 			    fixedcenter: true,
 			    constraintoviewport: true,
@@ -265,9 +265,9 @@ saveReportEngine	= null;
 			    modal:true,
 			    draggable:true} );
 	
-	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
-	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
-	myPanel4.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseShowFormat);
+	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
+	myPanel4.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseShowFormat);
 		    
 	function initScripts() {
 	
@@ -300,15 +300,15 @@ saveReportEngine	= null;
 	}
 	
 	function submitFilters() {
-		//alert("SUBMITTING FILTERS");
+		alert("SUBMITTING FILTERS");
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true" 
 		filterForm.submit();
 	}
 	
 	function showFilter() {
-		YAHOOAmp.amptab.init();
-		YAHOOAmp.amptab.afterFiltersLoad();
+		YAHOO.amptab.init();
+		YAHOO.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
  	 	element.style.height    = "380px";
@@ -344,7 +344,7 @@ saveReportEngine	= null;
 	}
 
 	function showAbout() {
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("customAbout");
 		element.style.display = "inline";
 		myPanel5.setBody(element);
@@ -364,7 +364,7 @@ saveReportEngine	= null;
 	}
 	
 	function showFormat(){
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
@@ -421,7 +421,7 @@ saveReportEngine	= null;
 		myPanel2.hide();
 	}
 	function showRange(){
-		YAHOOAmp.amptab.init();
+		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");
 		element.style.display = "inline";
 		
@@ -645,7 +645,7 @@ function validateFormat(){
 	
 	
 	function makeScroll (){
-		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
 		showScroll();
 		//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
@@ -663,7 +663,7 @@ function validateFormat(){
 	
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
-		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
+		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
 		if (scrolling){
 			//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
@@ -695,7 +695,7 @@ function validateFormat(){
 		
 	//-----------------------
 	function showScroll(){
-		var wait = new YAHOOAmp.widget.Panel("wait",   
+		var wait = new YAHOO.widget.Panel("wait",   
 	        { width:"240px",  
 	          fixedcenter:true,  
 	          close:false,  

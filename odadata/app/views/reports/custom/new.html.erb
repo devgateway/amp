@@ -414,10 +414,11 @@
       <h3><%= t('.output_options.format') %></h3>
       <ul>
         <li><%= t('.currency') %>: <%= select_tag "currency", options_for_select(ExchangeRate.available_currencies_for_select, DEFAULT_CURRENCY) %></li>           
-        <input type="submit" name="report[format][xls]" value="<%= t('.xls_output') %>" 
+        <li><input type="submit" name="report[format][xls]" value="<%= t('.xls_output') %>"
           class="bt" style="margin: 5px; width: 100px" />
         <input type="submit" name="report[format][html]" value="<%= t('.web_output') %>" 
           class="bt" style="margin: 5px; width: 100px" id="htmlButton" />
+        </li>
       </ul>
     </td>
   </tr>

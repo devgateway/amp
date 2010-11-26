@@ -50,28 +50,23 @@
 }
 </style>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/panel/assets/container.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/tab/assets/tabview.css'/>">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/element-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/container-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dragdrop-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/event-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tab/tabview-min.js'/>" > </script>
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/skin.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-mouseenter/event-mouseenter-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-delegate/event-delegate-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/calendar/calendar-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 
-
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ajaxconnection/connection-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
@@ -120,7 +115,7 @@
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
 
-	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn>No records found</digi:trn>";
+	//YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn>No records found</digi:trn>";
 
 	/* Check FormatDateHelper.js for more information */
 	FormatDateHelper.prototype.formatString		= '<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)%>';
@@ -278,7 +273,7 @@
 </c:set>
 
 <c:set var="trans_headerYearofPubl">
-	<digi:trn>Year Of Publication</digi:trn>
+	<digi:trn>Publ. Year</digi:trn>
 </c:set>
 
 <c:set var="trans_wait">
@@ -298,53 +293,83 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	%>
 	var dt = "<%= dt %>";
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
+		//alert (1);
 	    this.columnHeaders = [
-			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
-		    {key:"type",text:"${trans_headerType}",sortable:true},
-	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
-	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
-	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	        {key:"labels",text:"${trans_headerLabels}",sortable:false,width:200},
-	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:400}
+			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+		    {key:"type",label:"${trans_headerType}",sortable:true},
+	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
+	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
+	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+	        {key:"labels",label:"${trans_headerLabels}",sortable:false,width:200},
+	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:400}
 	    ];
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+		//alert (2);
 		this.columnHeaders = [
-    			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
-    		    {key:"type",text:"${trans_headerType}",sortable:true},
-    	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
-    	        {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
-    	        {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
-    	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-    	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-    	        {key:"labels",text:"${trans_headerLabels}",sortable:false,width:100},
-    	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+    			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+    		    {key:"type",label:"${trans_headerType}",sortable:true},
+    	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
+    	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
+    	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+    	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+    	        {key:"labels",label:"${trans_headerLabels}",sortable:false,width:100},
+    	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
     	    ];
 	}else {
+		//alert(3);
 	    this.columnHeaders = [
-      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:400},
-       		    {key:"type",text:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:200},
-        	    {key:"date",type:"date",text:"${trans_headerDate}",sortable:true},
-        	    {key:"yearOfPublication",type:"text",text:"${trans_headerYearofPubl}",sortable:true},
-	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-            	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-	            {key:"labels",text:"${trans_headerLabels}",sortable:false,width:300},
-	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:100}
+      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+       		    {key:"type",label:"${trans_headerType}",sortable:true},
+       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+        	    {key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate },
+        	    {key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true},
+	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+            	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
+	            {key:"labels",label:"${trans_headerLabels}",sortable:false,width:150},
+	            {key:"actions",label:"${trans_headerActions}",sortable:false,width:60}
 	    ];
 	}
-    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
-    var markup	 				= YAHOO.util.Dom.get(markupName);
+//    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
+//    var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
-    var options					= {
-    	    						pageCurrent:1,
-									rowsPerPage:10,
-							        pageLinksLength:2
-};
-	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
-	dataTable.width='2000px';
+//    var options					= {
+//    	    						pageCurrent:1,
+//									rowsPerPage:10,
+//							        pageLinksLength:2
+//   };
+
+    var markup	 				= YAHOO.util.Dom.get(markupName);
+    var oConfigs = { 
+	                paginator:new YAHOO.widget.Paginator({ 
+	                	rowsPerPage:10,
+	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
+	                }),
+	                MSG_EMPTY: "${trans_no_resources}" 
+	        		}; 
+
+    var tableEl						= markup.getElementsByTagName("table")[0];
+	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
+	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
+	myDataSource.responseSchema		= {fields: [{key: "resource_title"},
+	                           		         {key: "type"},
+			                           		 {key: "file_name"},
+			                           		 {key: "date", parser: "date"},
+			                           		 {key: "yearOfPublication"},
+			                           		 {key: "size"},
+			                           		 {key: "cm_doc_type"},
+			                           		 {key: "labels"},
+			                           		{key: "actions"}
+		                           		     	] 
+	                           		     	};
+    
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
+	
+	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
+	//dataTable.width='2000px';
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);

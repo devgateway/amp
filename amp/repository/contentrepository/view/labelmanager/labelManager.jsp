@@ -16,13 +16,18 @@
 <%@page import="org.digijava.module.contentrepository.helper.CrConstants"%><digi:instance property="crLabelManagerForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/slider-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/colorpicker-min.js"></script>
+
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/slider/assets/skins/sam/slider.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/assets/skins/sam/colorpicker.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/slider/slider-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/colorpicker/colorpicker-min.js"></script> 
 
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/colorpicker.css" />
 
 <style type="text/css">
 	a.atree {
@@ -115,43 +120,43 @@
 	}
 
 	function showAddEditPanel() {
-		var panel	= YAHOOAmp.amp.addEditPanel; 
+		var panel	= YAHOO.amp.addEditPanel; 
 		if (panel == null) {
 			var divEl			= document.getElementById('addEditLabelDiv');
 			divEl.style.display	= "";
 			
-			panel 		= new YAHOOAmp.widget.Panel("panelForLabels", { width:"400px", visible:true, draggable:true, close:true, modal:false } );
+			panel 		= new YAHOO.widget.Panel("panelForLabels", { width:"400px", visible:true, draggable:true, close:true, modal:false } );
 			panel.setHeader('<digi:trn>Label Manager</digi:trn>');
 			panel.setBody( divEl );
 			panel.render(document.body);
-			YAHOOAmp.amp.addEditPanel	= panel;
+			YAHOO.amp.addEditPanel	= panel;
 			panel.center();
 		}
 		panel.show();
 
 	}
 	function showColorPickerPanel(inputEl) {
-		var panel	= YAHOOAmp.amp.colorPickerPanel;
+		var panel	= YAHOO.amp.colorPickerPanel;
 		if (panel == null) {
 			var divEl			= document.getElementById('colorPickerDiv');
 			divEl.style.display	= "block";
-			panel 		= new YAHOOAmp.widget.Panel("panelForColors", { width:"450px", visible:true, draggable:true, close:true, modal:false } );
+			panel 		= new YAHOO.widget.Panel("panelForColors", { width:"450px", visible:true, draggable:true, close:true, modal:false } );
 			panel.setHeader('<digi:trn>Pick Color</digi:trn>');
 			panel.setBody( divEl );
 			panel.setFooter('<button id="okColorButton"><digi:trn>OK</digi:trn></button>');
 			panel.render(document.body);
 			
-			YAHOOAmp.util.Event.addListener("okColorButton", "click", 
+			YAHOO.util.Event.addListener("okColorButton", "click", 
 					function(o){
-						YAHOOAmp.amp.picker.destinationEl.value = "#" +  YAHOOAmp.amp.picker.get("hex");
-						YAHOOAmp.amp.colorPickerPanel.hide();
+						YAHOO.amp.picker.destinationEl.value = "#" +  YAHOO.amp.picker.get("hex");
+						YAHOO.amp.colorPickerPanel.hide();
 					} ) ;
 
-			panel.beforeHideEvent.subscribe(function() {YAHOOAmp.amp.addEditPanel.show();} );
+			panel.beforeHideEvent.subscribe(function() {YAHOO.amp.addEditPanel.show();} );
 			
-			YAHOOAmp.amp.colorPickerPanel	= panel;
+			YAHOO.amp.colorPickerPanel	= panel;
 
-			YAHOOAmp.amp.picker = new YAHOOAmp.widget.ColorPicker("colorPickerDiv", {
+			YAHOO.amp.picker = new YAHOO.widget.ColorPicker("colorPickerDiv", {
 				images: {
 					PICKER_THUMB: "/TEMPLATE/ampTemplate/images/yui/colorpicker/picker_thumb.png",
 					HUE_THUMB: "/TEMPLATE/ampTemplate/images/yui/colorpicker/hue_thumb.png"
@@ -166,13 +171,13 @@
 
 			panel.center();
 		}
-		YAHOOAmp.amp.addEditPanel.hide();
-		YAHOOAmp.amp.picker.destinationEl	= inputEl;
+		YAHOO.amp.addEditPanel.hide();
+		YAHOO.amp.picker.destinationEl	= inputEl;
 		panel.show();
 
 	}
-	YAHOOAmp.namespace("YAHOOAmp.amp");
-	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
+	YAHOO.namespace("YAHOO.amp");
+	YAHOO.util.Event.addListener(window, "load", initTree) ;
 </script>
 <bean:define id="myForm" toScope="request" name="crLabelManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">

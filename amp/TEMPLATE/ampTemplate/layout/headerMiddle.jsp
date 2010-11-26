@@ -11,11 +11,6 @@
         <!-- Dependencies --> 
 	<%@page import="org.digijava.module.aim.helper.Constants"%>
 	<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
      	<!-- Menu's Stylesheet-->
 		<link rel="stylesheet" href="css_2/jquery.jdMenu.css" type="text/css" />

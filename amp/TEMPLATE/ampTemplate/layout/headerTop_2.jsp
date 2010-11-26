@@ -34,7 +34,24 @@
 	<!-- Stylesheet of AMP -->
         <digi:ref href="css_2/amp.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css_2/tabs.css" type="text/css" rel="stylesheet" />
-         
+        
+        <!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"></script>
+
+<script type="text/javascript">
+	var YAHOOAmp 	= YAHOO;
+</script>  
+        
+        
+        
 <%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>

@@ -17,18 +17,12 @@
 <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 <link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
 
-<!-- SCRIPTS -->
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" ></script>
-<%-- <script type="text/javascript" src=".<digi:file src='module/aim/scripts/logger/logger-min.js'/>"></script> --%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" ></script>
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" ></script>
@@ -43,8 +37,6 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 
 <!-- MORE CSS -->
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
@@ -428,7 +420,7 @@ body {
 							</table>
 							<br />
 						</div>
-						<div id="columns_step_div" class="main_side_cont yui-tab-content">
+						<div id="columns_step_div" class="main_side_cont yui-hidden">
 							<c:set var="stepNum" value="1"  scope="request" />
 							<jsp:include page="toolbar.jsp" />
 							<br />
@@ -483,7 +475,7 @@ body {
 								</tr>
 							</table>							
 						</div>
-						<div id="hierarchies_step_div" class="main_side_cont yui-tab-content">
+						<div id="hierarchies_step_div" class="main_side_cont yui-hidden">
 							<c:set var="stepNum" value="2" scope="request" />
 							<jsp:include page="toolbar.jsp" />
 							<br />
@@ -526,7 +518,7 @@ body {
 								</tr>
 							</table>
 						</div>
-						<div id="measures_step_div" class="main_side_cont yui-tab-content">
+						<div id="measures_step_div" class="main_side_cont yui-hidden">
 							<c:set var="stepNum" value="3" scope="request" />
 							<jsp:include page="toolbar.jsp" />			
 							<br />			

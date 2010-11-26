@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
+
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/amp/common.js"/>"></script>
 
 	<!-- Styles -->	
@@ -17,8 +18,24 @@
 		<script type="text/javascript" src="js_2/jquery/jquery.positionBy.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.bgiframe.js"></script>
 		<script type="text/javascript" src="js_2/jquery/jquery.jdMenu.js"></script>
-		
-		
+		<script type="text/javascript" src="js_2/jquery/jquery.activeMenu.js"></script>	
+
+
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"></script>
+
+<script type="text/javascript">
+	var YAHOOAmp 	= YAHOO;
+</script>  
+
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>
 	function showUserProfile(id){
@@ -49,11 +66,11 @@ ${fn:replace(message,quote,escapedQuote)}
 			<digi:insert attribute="logWidget"/>
 		</div>
 		<div class="logo">
-			<logic:notEmpty name="defFlagExist" scope="application">
-        		<logic:equal name="defFlagExist" scope="application" value="true">
+            <logic:notEmpty name="defFlagExist" scope="application">
+                <logic:equal name="defFlagExist" scope="application" value="true">
         			<img src="<%=displayFlag%>" align=left>
-	       		</logic:equal>
-    	    </logic:notEmpty>
+                </logic:equal>
+            </logic:notEmpty>
 			<div class="amp_label"> 
 				 &nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
         	</div>

@@ -6,8 +6,9 @@ NormalReportManager.prototype.enableTab		= function (tabIndex) {
 		var tab			= YAHOO.amp.reportwizard.tabView.getTab(tabIndex);
 		if ( tab.get("disabled") ) {
 			tab.set("disabled", false);
-			var labelEl		= document.getElementById( YAHOO.amp.reportwizard.tabLabels[tabIndex] );
-			(new YAHOO.util.Element(labelEl)).replaceClass('disabled', 'unsel');
+			var labelId		= YAHOO.amp.reportwizard.tabLabels[tabIndex];
+			var labelEl		= new YAHOO.util.Element(labelId);
+			labelEl.replaceClass('disabled', 'unsel');
 		}
 	}
 	

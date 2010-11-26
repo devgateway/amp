@@ -43,11 +43,6 @@
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
@@ -148,13 +143,13 @@ background: none;
 
 .paginationstyle .flatview a:hover, .paginationstyle .flatview a.selected{ /*Pagination div "flatview" links style*/
 color: #000;
-background-color: yellow;
+background-color: yellow;css
 }
 
 </style>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
-<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
@@ -225,7 +220,7 @@ saveReportEngine	= null;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
-		    
+		
 		var myPanel2 = new YAHOO.widget.Panel("new2", {
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -300,9 +295,9 @@ saveReportEngine	= null;
 	}
 	
 	function submitFilters() {
-		alert("SUBMITTING FILTERS");
+		//alert("SUBMITTING FILTERS");
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true" 
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true"; 
 		filterForm.submit();
 	}
 	

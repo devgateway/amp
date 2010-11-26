@@ -1,16 +1,16 @@
 <script type="text/javascript">
 	var contentLocal;
 
-	YAHOOAmp.namespace("YAHOOAmp.amptab");
-	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+	YAHOO.namespace("YAHOO.amptab");
+	YAHOO.amptab.init = function() {
+	    		var tabView = new YAHOO.widget.TabView('tabview_container');
 	};
 
-	YAHOOAmp.amptab.handleClose = function() {
+	YAHOO.amptab.handleClose = function() {
 		
 	}
 		
-    var myPanelWorkspaceframe = new YAHOOAmp.widget.Panel("newmyPWorkspaceframe", {
+    var myPanelWorkspaceframe = new YAHOO.widget.Panel("newmyPWorkspaceframe", {
 		width:"600px",
 		height:"700px",
 	    fixedcenter: true,
@@ -24,7 +24,7 @@
 	    }
 	     );
 
-    myPanelWorkspaceframe.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+    myPanelWorkspaceframe.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 	
 	function initScriptsWorkspaceframe() {
 		//alert('initScriptsWorkspaceframe');
@@ -89,7 +89,7 @@
 	function previewWorkspaceframe(action,params)
 	{
         showPWorkspaceframe();
-		YAHOOAmp.util.Connect.asyncRequest("POST", action+params, WorkspaceframeCallback, '');
+		YAHOO.util.Connect.asyncRequest("POST", action+params, WorkspaceframeCallback, '');
 	}
 
 	/*var currentWorkspaceframe = window.onload;

@@ -5,18 +5,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+
+
 
 <c:set var="reportStatement">
 	<digi:trn>This Report was created by AMP</digi:trn>

@@ -51,7 +51,8 @@
 	    
 	    <dt><%= Project.human_attribute_name('planned_start_end') %></dt>
 	    <dd><%= @project.planned_start || 'n/a' %> / <%= @project.planned_end || 'n/a' %></dd>
-	    
+	    <dt><%= Project.human_attribute_name('date_of_signing') %></dt>
+	    <dd><%= @project.date_of_signing || 'n/a' %></dd>
 	    <%# recipient/region/income code here?! %>
 	    
 
@@ -75,6 +76,8 @@
 	<dl>
 	    <dt class="first"><%= Project.human_attribute_name('aid_modality') %></dt>
 	    <dd class="first"><%= @project.aid_modality.andand.name %></dd>
+	    <dt><%= Project.human_attribute_name('project_currency') %></dt>
+	    <dd><%= @project.project_currency %></dd>
 	    
 	    <dt><%= Project.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project, :grant_loan, Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
@@ -160,6 +163,16 @@
 	        	</dl>
 			</dd>
 	    <% end %>
+                        <% unless @project.cofundings.empty? %>
+                          <dt><%=t('.cofunding')  %></dt>
+
+                          <dd>
+                          <% @project.cofundings.each do |cofunding| %>
+                                  <strong><%= cofunding.donor.name %></strong>:
+                                  <%= cofunding.amount %><br/>
+                          <% end %>
+                        <% end %>
+                      </dd>
 	</dl>
 		
 	<h3><%= t('.classification') %></h3>
@@ -215,34 +228,6 @@
 					
 			<dt><%= t('.focal_regions') %></dt>
 			<dd>
-                          				<% if @project.geo_relevances.blank? %>
-					<%= t('.national') %>
-				<% else %>
-					<dl>
-
-						<% first = true # lame hack %>
-						<% list = @project.geo_relevances.group_by(&:province).sort_by { |a| a[0].name } %>
-						<% list.each do |(province, relevances)| %>
-							<dt<%= ' class="first"' if first %>>
-								<%= province.name %><br />
-								<%= number_to_percentage(relevances.sum(&:amount), :precision => 1) %>
-							</dt>
-							<dd<%= ' class="first"' if first %>>
-								<ul>
-								  <% if relevances.any? { |r| !r.district_id.blank? } %>
-								    <% relevances.sort_by { |a| a.district.name }.each do |r| %>
-  									  <li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
-  									<% end %>
-								  <% else %>
-								    <li><%= t('.all_district') %> </li>
-								  <% end %>
-
-								</ul>
-							</dd>
-							<% first = false %>
-						<% end %>
-					</dl>
-				<% end %>
 			</dd>
 		</dl>
 </div>

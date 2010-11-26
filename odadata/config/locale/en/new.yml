@@ -304,6 +304,7 @@ en:
       funding_information: Funding Information
       totals: Funding Totals
       historic: Historic Funding
+      cofunding: Co-Funding
       funding: Funding {{year}}
       funding_forecast: Funding Forecast {{year}}
       classification: Classification

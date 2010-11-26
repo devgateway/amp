@@ -274,7 +274,10 @@
         <% data_in_columns(2, DacSector.ordered.all) do |sectors, column| %>
           <ul class="checkbox_container">
             <% if column == 1 %>
-              <li class="all"><%= check_box_tag "sectors[]", "all", true %>all</a>
+              <li class="all"><%= check_box_tag "sectors[]", "all", true %>all</li>
+            <% end %>
+            <% if column == 2 %>
+              <li class="all">&nbsp;</li>
             <% end %>
 
             <% for sector in sectors %>
@@ -291,7 +294,7 @@
         <% data_in_columns(3, Province.ordered.all) do |provinces, column| %>
           <ul class="checkbox_container">
             <% if column == 1 %>
-              <li class="all"><%= check_box_tag "provinces[]", "all", true %>all</a>
+              <li class="all"><%= check_box_tag "provinces[]", "all", true %>all</li>
             <% end %>
             
             <% for province in provinces %>
@@ -312,7 +315,7 @@
            <% data_in_columns(2, Mdg.ordered.all) do |mdgs, column| %>
              <ul class="checkbox_container">
                <% if column == 1 %>
-                 <li class="all"><%= check_box_tag "mdgs[]", "all", true %>all</a>
+                 <li class="all"><%= check_box_tag "mdgs[]", "all", true %>all</li>
                <% else %>
                   <li></li>
                 <% end %>
@@ -334,7 +337,7 @@
       <h4><a href="#"><%= t('.criteria.on_off_budget') %></a></h4>
        <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= t('.all') %></a>	
+          	<li class="all"><%= check_box_tag "on_off_budget[]", "all", true %><%= t('.all') %></li>
           	<%= render :partial => "reports/query_options/on_off_budget", :collection => Project::ON_OFF_BUDGET_OPTIONS %>
           </ul>
        </div>
@@ -342,7 +345,7 @@
        <h4><a href="#"><%= t('.criteria.on_off_treasury') %></a></h4>
        <div>
          <ul class="checkbox_container">
-         	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= t('.all') %></a>	
+         	<li class="all"><%= check_box_tag "on_off_treasury[]", "all", true %><%= t('.all') %></li>
          	<%= render :partial => "reports/query_options/on_off_treasury", :collection => Project::ON_OFF_TREASURY_OPTIONS %>
          </ul>
        </div>
@@ -350,7 +353,7 @@
        <h4><a href="#"><%= t('.criteria.aid_modality') %></a></h4>
        <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= t('.all') %></a>
+          	<li class="all"><%= check_box_tag "aid_modality_ids[]", "all", true %><%= t('.all') %></li>
             		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
           </ul>
        </div>
@@ -358,7 +361,7 @@
         <h4><a href="#"><%= t('.criteria.type_of_implementation') %></a></h4>
         <div>
           <ul class="checkbox_container">
-          	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= t('.all') %></a>
+          	<li class="all"><%= check_box_tag "type_of_implementation[]", "all", true %><%= t('.all') %></li>
           	<%= render :partial => "reports/query_options/type_of_implementation", :collection => Project::IMPLEMENTATION_TYPES %>
           </ul>
         </div>
@@ -367,7 +370,7 @@
         <h4><a href="#"><%= t('.criteria.prj_status') %></a></h4>
          <div>
             <ul class="checkbox_container">
-              <li class="all"><%= check_box_tag "prj_status[]", "all", true %><%= t('.all') %></a>
+              <li class="all"><%= check_box_tag "prj_status[]", "all", true %><%= t('.all') %></li>
             	<%= render :partial => "reports/query_options/status", :collection => Project::STATUS_OPTIONS %>
             </ul>
          </div>

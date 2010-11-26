@@ -173,14 +173,20 @@
 			    </ul>
 			</dd>
 
+                        <%
+                          unless @project.contracted_agencies.empty?
+                        %>
 			<dt><%= Project.human_attribute_name('contracted_agencies') %></dt>
 			<dd>
 				<ul>
 			        <% @project.contracted_agencies.each do |agency| %>
 			            <li><%= agency.name %></li>
 			        <% end %>
-			    </ul>
+                                </ul>
 			</dd>
+                        <%
+                          end
+                        %>
 			
 			<dt><%= Project.human_attribute_name('sectors') %></dt>
 		    <dd>
@@ -209,7 +215,7 @@
 					
 			<dt><%= t('.focal_regions') %></dt>
 			<dd>
-				<% if @project.geo_relevances.blank? %>
+                          				<% if @project.geo_relevances.blank? %>
 					<%= t('.national') %>
 				<% else %>
 					<dl>
@@ -230,7 +236,7 @@
 								  <% else %>
 								    <li><%= t('.all_district') %> </li>
 								  <% end %>
-									
+
 								</ul>
 							</dd>
 							<% first = false %>

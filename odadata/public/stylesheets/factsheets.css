@@ -44,7 +44,8 @@
 
 .factsheet DD {
     border-top:1px solid #999;
-	float:left;
+    float:left;
+    *float:none;
     width:638px;
     margin:0;
     padding:4px 0 4px 0;

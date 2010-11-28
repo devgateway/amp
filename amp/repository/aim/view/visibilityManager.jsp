@@ -6,6 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
  
+<!-- Individual YUI CSS files --> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+ 
 <script language="JavaScript">
 
 	function toggleFeature(id) {
@@ -75,7 +81,7 @@
 				
 				
 				<tr>
-					<td noWrap width=80% vAlign="top">
+					<td noWrap width=80% vAlign="top"  class="yui-skin-sam">
 						<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 							<jsp:include page="manageTreeVisibility.jsp" />
 						</logic:equal>

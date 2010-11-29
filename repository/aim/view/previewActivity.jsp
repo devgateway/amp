@@ -2743,7 +2743,7 @@ function collapseAll() {
 			                                                           <bean:define id="am" name="amendment" type="org.digijava.module.aim.dbentity.IPAContractAmendment"/>
 			                                                               <tr>
 			                                                                   <td align="center" valign="top">
-			                                                                   <%=BigDecimal.valueOf(am.getAmount()).toPlainString() %>
+			                                                                    ${amendment.amoutStr}
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                       ${amendment.currency.currencyName}

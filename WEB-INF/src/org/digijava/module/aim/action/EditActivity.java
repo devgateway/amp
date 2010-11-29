@@ -1168,6 +1168,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            /* END - Get MTEF Projections */
 
 			            Collection fundDetails = ampFunding.getFundingDetails();
+			            
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			            //  Iterator fundDetItr = fundDetails.iterator();
 			             // long indexId = System.currentTimeMillis();
@@ -1180,6 +1181,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                          while(fundingIterator.hasNext())
                          {
                          	FundingDetail currentFundingDetail = (FundingDetail)fundingIterator.next();
+                         	
+                         	currentFundingDetail.getContract();
                          	
                          	if(currentFundingDetail.getFixedExchangeRate() == null)
                          	{

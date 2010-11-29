@@ -153,7 +153,7 @@ public class ImportBuilder {
 		ArrayList<FreeTextType> titlesList=(ArrayList<FreeTextType>) actType.getTitle();
 		for (Iterator iterator = titlesList.iterator(); iterator.hasNext();) {
 			FreeTextType title = (FreeTextType) iterator.next();
-			AmpActivity act = ActivityUtil.getActivityByName(title.getValue());
+			AmpActivity act = ActivityUtil.getActivityByName(title.getValue(),null);
 			if (act != null) {
 				logger.debug("Activity with the name " + actType + " already exist.");
 				return true;

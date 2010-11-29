@@ -2517,28 +2517,38 @@ public class SaveActivity extends Action {
 		processPreStep(eaForm, activity, tm, createdAsDraft);
 
 		String toDelete = request.getParameter("delete");
+		Long idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity");
 		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
+			AmpActivity act = null;
 			if (eaForm.isEditAct() == false) {
-				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
-				if (act != null) {
-					request.setAttribute("existingActivity", act);
-					eaForm.setActivityId(act.getAmpActivityId());
-					logger.debug("Activity with the name "
-							+ eaForm.getIdentification().getTitle() + " already exist.");
-					return mapping.findForward("activityExist");
+				act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle(),null);				
+			}else{
+				act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle(),eaForm.getActivityId());
+			}
+			if (act != null) {
+				//storing original id is needed if user decides not to overwrite activity,but cancel.
+				//otherwise incorrect actId is set in form and editing/create will work incorrect
+				if(eaForm.isEditAct()==true && idForOriginalActivity==null){ //need to keep edited activity id
+					request.getSession().setAttribute("idForOriginalActivity",eaForm.getActivityId());
 				}
+				if(eaForm.isEditAct()==false && idForOriginalActivity==null){
+					request.getSession().setAttribute("idForOriginalActivity",new Long(-1));
+				}
+				request.setAttribute("existingActivity", act);
+				eaForm.setActivityId(act.getAmpActivityId());
+				logger.debug("Activity with the name "	+ eaForm.getIdentification().getTitle() + " already exist.");
+				return mapping.findForward("activityExist");
 			}
 		} else if (toDelete.trim().equals("true")) {
 			eaForm.setEditAct(true);
+			request.getSession().removeAttribute("idForOriginalActivity");
 		} else {
 			logger.debug("No duplicate found");
 		}
 
 		
 		boolean titleFlag = false;
-		boolean statusFlag = false;
-
-		
+		boolean statusFlag = false;		
 		
 		//The number of processStep methods we have
 		final int noOfSteps = 12;
@@ -2651,6 +2661,11 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
+			
+			// in case it was "overwrite" existing activity,need to remove previous act(that was opened for editing)...
+			if(toDelete!=null && toDelete.trim().equals("true") && idForOriginalActivity!=null && ! idForOriginalActivity.equals(new Long(-1))){
+				ActivityUtil.deleteActivity(idForOriginalActivity);
+			}
               
                         AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
                         if (aAct.getDraft() != null && !aAct.getDraft() &&

@@ -2803,13 +2803,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return col;
   }
 
-  public static AmpActivity getActivityByName(String name) {
+  public static AmpActivity getActivityByName(String name , Long actId) {
     AmpActivity activity = null;
     Session session = null;
     try {
       session = PersistenceManager.getSession();
       String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
           "where lower(a.name) = :lowerName";
+      if(actId!=null){
+    	  qryStr+=" and a.ampActivityId!="+actId;
+      }
       Query qry = session.createQuery(qryStr);
       qry.setString("lowerName", name.toLowerCase());
       Iterator itr = qry.list().iterator();

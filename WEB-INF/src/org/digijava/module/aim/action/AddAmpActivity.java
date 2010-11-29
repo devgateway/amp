@@ -183,14 +183,22 @@ public class AddAmpActivity extends Action {
     	eaForm.setStep(reqStep);
     //END
     
+    Long idForOriginalActivity = null; //AMP-9633
+    if(request.getSession().getAttribute("idForOriginalActivity")!=null){
+    	idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity") ;
+    	request.getSession().removeAttribute("idForOriginalActivity");
+    	if(idForOriginalActivity.equals(new Long(-1))){ //create case
+    		eaForm.setActivityId(null);
+    	}else{ //edit case
+    		eaForm.setActivityId(idForOriginalActivity);
+    	}    	
+    }
     
-    //Contacts
-
-	//if several contact types(donor and mofed for example) contained same contact,then
-	//after editing contact,edited one should be replaced in all contact types.
-	  
-		
-			ActivityContactInfo contactInfo=eaForm.getContactInformation();
+    
+    /**
+     * Contacts
+     */
+  	ActivityContactInfo contactInfo=eaForm.getContactInformation();
 			//if several contact types(donor and mofed for example) contained same contact,then
 			//after editing contact,edited one should be replaced in all contact types.
 				

@@ -757,16 +757,6 @@
       <forward name="forward" path="/showLayout.do?layout=rolesManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action input="/showLayout.do?layout=updateRoles" name="aimUpdateRoleForm" path="/aim/updateRole" scope="request" type="org.digijava.module.aim.action.UpdateRoles" validate="true">
-      <forward name="showAdd" path="/showLayout.do?layout=updateRoles" />
-      <forward name="roles" path="/aim/roles.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimUpdateRoleForm" path="/aim/getRole" scope="request" type="org.digijava.module.aim.action.GetRoles" validate="false">
-      <forward name="showRoles" path="/showLayout.do?layout=updateRoles" />
-      <forward name="rolesManager" path="/aim/roles.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
     <action name="aimTeamMemberForm" path="/aim/teamMembers" scope="request" type="org.digijava.module.aim.action.GetTeamMembers" validate="false">
       <forward name="forward" path="/showLayout.do?layout=showTeamMembers" />
       <forward name="workspaceManager" path="/aim/workspaceManager.do" />

@@ -20,6 +20,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
@@ -68,17 +69,15 @@ public class GetTeamMemberDetails extends Action {
 					.getAmpMemberRole().getAmpTeamMemRoleId());
 
 			upForm.setRole(ampRole.getAmpTeamMemRoleId());
-			upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			Collection<AmpTeamMemberRoles> roles=null;
+			if(ampMember.getAmpTeam().getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upForm.setAmpRoles(roles);
 			upForm.setUserId(user.getId());
-			if (ampMember.getReadPermission().booleanValue() == true) {
-				upForm.setReadPerms("on");
-			}
-			if (ampMember.getWritePermission().booleanValue() == true) {
-				upForm.setWritePerms("on");
-			}
-			if (ampMember.getDeletePermission().booleanValue() == true) {
-				upForm.setDeletePerms("on");
-			}
 
 			String action = request.getParameter("action");
 			if (action.trim().equals("edit")) {

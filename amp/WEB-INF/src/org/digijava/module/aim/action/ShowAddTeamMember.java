@@ -4,6 +4,8 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +15,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.util.AmpUserUtil;
@@ -38,7 +42,14 @@ public class ShowAddTeamMember extends Action {
 				AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 				upMemForm.setTeamId(id);
 				upMemForm.setTeamName(ampTeam.getName());
-				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+				Collection<AmpTeamMemberRoles> roles=null;
+				if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+					roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+				}
+				else{
+					roles=TeamMemberUtil.getAllTeamMemberRoles();
+				}
+				upMemForm.setAmpRoles(roles);
 				upMemForm.setPermissions("default");
 				upMemForm.setFromPage(frmPage);
 				upMemForm.setallUser(AmpUserUtil.getAllUsers(false));

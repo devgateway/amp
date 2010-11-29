@@ -19,9 +19,6 @@ public class AmpTeamMember implements Serializable, Versionable {
 	private User user;
 	private AmpTeam ampTeam;
 	private AmpTeamMemberRoles ampMemberRole;
-	private Boolean readPermission;     /* whether the team member has read permission on the team pages */
-	private Boolean writePermission;    /* whether the team member has write permission on the team pages */
-	private Boolean deletePermission;   /* whether the team member has delete permission on the team pages */
 	private Set<AmpActivity> activities;
 	private Set reports;
 	private Set links;
@@ -98,29 +95,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.user = user;
 	}
 
-	public Boolean getReadPermission() {
-		return readPermission;
-	}
-
-	public void setReadPermission(Boolean readPermission) {
-		this.readPermission = readPermission;
-	}
-
-	public Boolean getWritePermission() {
-		return writePermission;
-	}
-
-	public void setWritePermission(Boolean writePermission) {
-		this.writePermission = writePermission;
-	}
-
-	public Boolean getDeletePermission() {
-		return deletePermission;
-	}
-
-	public void setDeletePermission(Boolean deletePermission) {
-		this.deletePermission = deletePermission;
-	}
+	
 
 	public Set<AmpActivity> getActivities() {
 		return activities;

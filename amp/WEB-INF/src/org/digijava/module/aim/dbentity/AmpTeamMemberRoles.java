@@ -15,10 +15,8 @@ public class AmpTeamMemberRoles implements Serializable {
 	private Long ampTeamMemRoleId;
 	private String role;
 	private String description;
-	private Boolean readPermission;
-	private Boolean writePermission;
-	private Boolean deletePermission;
 	private Boolean teamHead;     /* whether this role is the team lead role */
+	private boolean approver;
 	
 	
 	/**
@@ -63,29 +61,6 @@ public class AmpTeamMemberRoles implements Serializable {
 		this.role = role;
 	}
 
-	public Boolean getReadPermission() {
-		return readPermission;
-	}
-
-	public void setReadPermission(Boolean readPermission) {
-		this.readPermission = readPermission;
-	}
-
-	public Boolean getWritePermission() {
-		return writePermission;
-	}
-
-	public void setWritePermission(Boolean writePermission) {
-		this.writePermission = writePermission;
-	}
-	
-	public Boolean getDeletePermission() {
-		return deletePermission;
-	}
-
-	public void setDeletePermission(Boolean deletePermission) {
-		this.deletePermission = deletePermission;
-	}	
 
 	public Boolean getTeamHead() {
 		return teamHead;
@@ -107,6 +82,14 @@ public class AmpTeamMemberRoles implements Serializable {
 		String asciiName	= CategoryManagerUtil.asciiStringFilter(roleName);
 		return 
 			"aim:AmpTeamMemeberRoleTrnKey:" + asciiName;
+	}
+
+	public void setApprover(boolean approver) {
+		this.approver = approver;
+	}
+
+	public boolean isApprover() {
+		return approver;
 	}
 
 }

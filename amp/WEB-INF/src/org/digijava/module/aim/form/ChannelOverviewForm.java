@@ -39,8 +39,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String activityCloseDate;
 	private String condition;
 	private String grandTotal;
-	private boolean write ;
-	private boolean delete ;
 	private boolean validLogin;
 	private Collection assistance ;
 	private Integer pageNo;
@@ -267,15 +265,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		return level;
 	}
 
-	public boolean getWrite()
-	{
-		return write;
-	}
-
-	public boolean getDelete()
-	{
-		return delete;
-	}
 
 	public boolean getValidLogin()
 	{
@@ -362,15 +351,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		this.grandTotal = string ;
 	}
 
-	public void setWrite(boolean bool)
-	{
-		this.write = bool ;
-	}
-
-	public void setDelete(boolean bool)
-	{
-		this.delete = bool ;
-	}
 
 	public void setValidLogin(boolean bool)
 	{

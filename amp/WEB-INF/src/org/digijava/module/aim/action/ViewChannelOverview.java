@@ -255,8 +255,6 @@ public class ViewChannelOverview extends TilesAction {
 				} else {
 					currCode = Constants.DEFAULT_CURRENCY;
 				}
-				formBean.setWrite(teamMember.getWrite());
-				formBean.setDelete(teamMember.getDelete());
 				formBean.setCurrCode(currCode);
 
     			// call the logic instance to perform the caculations, so it will depend of each implementancion how we will calculate the total inlcuding or not planned 
@@ -300,11 +298,7 @@ public class ViewChannelOverview extends TilesAction {
 			formBean.setFinancingBreakdown(fb);
 			//New Donors code (end)
 
-			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-			if(team.getAccessType().equals("Team"))
-				formBean.setWrite(true);
-			else
-				formBean.setWrite(false);
+			
 		
 
 						

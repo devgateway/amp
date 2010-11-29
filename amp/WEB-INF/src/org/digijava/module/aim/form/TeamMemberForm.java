@@ -19,9 +19,6 @@ public class TeamMemberForm extends ActionForm {
 	private String name;
 	private Long role;
 	private Collection ampRoles;
-	private String readPerms;
-	private String writePerms;
-	private String deletePerms;
 	private String permissions;
 	private Long userId;
 	private int fromPage;
@@ -65,18 +62,7 @@ public class TeamMemberForm extends ActionForm {
 	public void setAmpRoles(Collection ampRoles) {
 		this.ampRoles = ampRoles;
 	}
-	/**
-	 * @return Returns the deletePerms.
-	 */
-	public String getDeletePerms() {
-		return deletePerms;
-	}
-	/**
-	 * @param deletePerms The deletePerms to set.
-	 */
-	public void setDeletePerms(String deletePerms) {
-		this.deletePerms = deletePerms;
-	}
+	
 	/**
 	 * @return Returns the email.
 	 */
@@ -125,18 +111,7 @@ public class TeamMemberForm extends ActionForm {
 	public void setPermissions(String permissions) {
 		this.permissions = permissions;
 	}
-	/**
-	 * @return Returns the readPerms.
-	 */
-	public String getReadPerms() {
-		return readPerms;
-	}
-	/**
-	 * @param readPerms The readPerms to set.
-	 */
-	public void setReadPerms(String readPerms) {
-		this.readPerms = readPerms;
-	}
+	
 	/**
 	 * @return Returns the removeMember.
 	 */
@@ -233,18 +208,7 @@ public class TeamMemberForm extends ActionForm {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	/**
-	 * @return Returns the writePerms.
-	 */
-	public String getWritePerms() {
-		return writePerms;
-	}
-	/**
-	 * @param writePerms The writePerms to set.
-	 */
-	public void setWritePerms(String writePerms) {
-		this.writePerms = writePerms;
-	}
+	
 	public Collection getallUser() {
 		return allUser;
 	}

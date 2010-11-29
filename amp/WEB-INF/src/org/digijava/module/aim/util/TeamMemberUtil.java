@@ -908,30 +908,29 @@ public class TeamMemberUtil {
 		return ampRole;
 	}
 
-	public static Collection getAllTeamMemberRoles() {
+	public static Collection<AmpTeamMemberRoles> getAllTeamMemberRoles() {
+		return getAllTeamMemberRoles(true);
+	}
+	public static Collection<AmpTeamMemberRoles> getAllTeamMemberRoles(boolean includeApprover) {
 		Session session = null;
 		Query qry = null;
-		Collection roles = new ArrayList();
+		Collection<AmpTeamMemberRoles> roles = new ArrayList<AmpTeamMemberRoles>();
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select r from "
-					+ AmpTeamMemberRoles.class.getName() + " r";
+					+ AmpTeamMemberRoles.class.getName() + " r ";
+			if(!includeApprover){
+				queryString+="where r.approver=false";
+			}
 			qry = session.createQuery(queryString);
 			roles = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get all roles", e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return roles;
 	}
+	
 
 	public static AmpTeamMemberRoles getAmpTeamMemberRole(Long id) {
 		Session session = null;

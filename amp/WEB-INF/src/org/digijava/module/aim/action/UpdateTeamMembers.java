@@ -104,9 +104,6 @@ public class UpdateTeamMembers extends Action {
             }
             logger.info(" this is the role.... " + role.getRole());
             ampMember.setAmpMemberRole(role);
-            ampMember.setReadPermission(new Boolean(true));
-            ampMember.setWritePermission(new Boolean(true));
-            ampMember.setDeletePermission(new Boolean(true));
             //publishing permissions
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
             Integer docPublishingPermissions=ampAppSettings.getAllowPublishingResources();

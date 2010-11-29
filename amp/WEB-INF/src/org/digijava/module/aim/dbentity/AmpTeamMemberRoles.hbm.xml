@@ -12,10 +12,8 @@
 
 		<property name="role" column="role" type="java.lang.String" />
 		<property name="description" column="description" type="text" />
-		<property name="readPermission" column="read_permission" type="java.lang.Boolean" />
-		<property name="writePermission" column="write_permission" type="java.lang.Boolean" />
-		<property name="deletePermission" column="delete_permission" type="java.lang.Boolean" />
 		<property name="teamHead" column="team_head" type="java.lang.Boolean" />
+		<property name="approver" column="approver" type="boolean" />
 
 	</class>
 </hibernate-mapping>

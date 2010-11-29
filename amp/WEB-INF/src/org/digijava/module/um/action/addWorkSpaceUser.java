@@ -108,10 +108,6 @@ public class addWorkSpaceUser extends Action{
 				newMember.setUser(user);
 				newMember.setAmpTeam(ampTeam);
 				newMember.setAmpMemberRole(role);
-				// add the default permissions
-				newMember.setReadPermission(role.getReadPermission());
-				newMember.setWritePermission(role.getWritePermission());
-				newMember.setDeletePermission(role.getDeletePermission());
 				// add the default application settings for the user  
 				AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil
 						.getTeamAppSettings(ampTeam.getAmpTeamId());

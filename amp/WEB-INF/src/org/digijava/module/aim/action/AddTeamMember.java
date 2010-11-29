@@ -4,16 +4,18 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -22,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -43,13 +46,20 @@ public class AddTeamMember extends Action {
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
 		ActionMessages errors = new ActionMessages();
 		logger.debug("In add members");
+		Collection<AmpTeamMemberRoles> roles=null;
 		
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
 		User user = DbUtil.getUser(upMemForm.getEmail());
 
 		/* check if the user have entered an invalid user id */
 		if (user == null) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"error.aim.addTeamMember.invalidUser"));
 			saveErrors(request, errors);
@@ -62,7 +72,13 @@ public class AddTeamMember extends Action {
 
 		/* if user havent specified the role for the new member */
 		if (upMemForm.getRole() == null) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"error.aim.addTeamMember.roleNotSelected"));
 			saveErrors(request, errors);
@@ -77,7 +93,13 @@ public class AddTeamMember extends Action {
 		 * already exist for the team */
 		if (ampTeam.getTeamLead() != null &&
 				ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
 					"error.aim.addTeamMember.teamLeadAlreadyExist"));
 			saveErrors(request, errors);
@@ -90,7 +112,13 @@ public class AddTeamMember extends Action {
 		
 		/* check if user is already part of the selected team */
 		if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
 					"error.aim.addTeamMember.teamMemberAlreadyExist"));
 			saveErrors(request, errors);
@@ -105,7 +133,13 @@ public class AddTeamMember extends Action {
 		}
 		/*check if user is not admin; as admin he can't be part of a workspace*/
 		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
-			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
+			}
+			else{
+				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			}
+			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberIsAdmin"));
 			saveErrors(request, errors);
 			logger.debug("Member is already existing");
@@ -124,30 +158,7 @@ public class AddTeamMember extends Action {
 			newMember.setUser(user);
 			newMember.setAmpTeam(ampTeam);
 			newMember.setAmpMemberRole(role);
-			if (upMemForm.getPermissions().equals("default")) {
-				newMember.setReadPermission(role.getReadPermission());
-				newMember.setWritePermission(role.getWritePermission());
-				newMember.setDeletePermission(role.getDeletePermission());
-			} else if (upMemForm.getPermissions().equals("userSpecific")) {
-				if (upMemForm.getReadPerms() != null
-						&& upMemForm.getReadPerms().equals("on")) {
-					newMember.setReadPermission(new Boolean(true));
-				} else {
-					newMember.setReadPermission(new Boolean(false));
-				}
-				if (upMemForm.getWritePerms() != null
-						&& upMemForm.getWritePerms().equals("on")) {
-					newMember.setWritePermission(new Boolean(true));
-				} else {
-					newMember.setWritePermission(new Boolean(false));
-				}
-				if (upMemForm.getDeletePerms() != null
-						&& upMemForm.getDeletePerms().equals("on")) {
-					newMember.setDeletePermission(new Boolean(true));
-				} else {
-					newMember.setDeletePermission(new Boolean(false));
-				}
-			}		
+					
 			
 			
 			// add the default application settings for the user  

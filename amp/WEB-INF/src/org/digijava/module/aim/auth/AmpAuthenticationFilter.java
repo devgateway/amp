@@ -356,9 +356,6 @@ public class AmpAuthenticationFilter
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
             tm.setComputation(member.getAmpTeam().getComputation());
             tm.setAddActivity(member.getAmpTeam().getAddActivity());
-            tm.setRead(member.getReadPermission().booleanValue());
-            tm.setWrite(member.getWritePermission().booleanValue());
-            tm.setDelete(member.getDeletePermission().booleanValue());
             tm.setAppSettings(appSettings);
             if(usr != null) {
                 tm.setEmail(usr.getEmail());

@@ -2051,25 +2051,28 @@ public class SaveActivity extends Action {
 	}
 	
 	private void processPostStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm){
+		Long teamId=null;
 		
-		if (eaForm.isEditAct()) {
+		if (eaForm.isEditAct() || eaForm.getActivityId()!=null && eaForm.getActivityId()!=0) {
 		
 			//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 			// Setting approval status of activity
 			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
 			activity.setApprovalDate(eaForm.getIdentification().getApprovalDate());
 			activity.setApprovedBy(eaForm.getIdentification().getApprovedBy());
+			
 
 			//AMP-3464
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
 			AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+			teamId=aAct.getTeam().getAmpTeamId();
 			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
 			if(tm.getTeamId().equals(aAct.getTeam().getAmpTeamId())){
 				if(eaForm.getIdentification().getDraft()==true){
-					if(tm.getTeamHead()){
+					if(tm.getTeamHead()||tm.isApprover()){
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 					}else{
 						activity.setApprovalStatus(aAct.getApprovalStatus());
@@ -2087,7 +2090,7 @@ public class SaveActivity extends Action {
 						else activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
-				if(tm.getTeamHead()) activity.setApprovalStatus(Constants.APPROVED_STATUS);
+				if(tm.getTeamHead()||tm.isApprover()) activity.setApprovalStatus(Constants.APPROVED_STATUS);
 			}
 			else{
 				if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
@@ -2105,16 +2108,20 @@ public class SaveActivity extends Action {
 		}
 		else{
 			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+			teamId=tm.getTeamId();
 			activity.setActivityCreator(teamMember);
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
-			if (activity.getDraft() && tm.getTeamHead()){
+			if (activity.getDraft() && (tm.getTeamHead()||tm.isApprover())){
 				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}else{
 				activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
 			}
 
+		}
+		if("allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(teamId).getValidation())){
+				activity.setApprovalStatus(Constants.APPROVED_STATUS);
 		}
 
 	}

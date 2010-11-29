@@ -86,6 +86,23 @@
 		document.umAddUserForm.submit();
 		return false;
 	}
+	var removedApproverRole;
+	function hideUnhideApproverRole(teamSelect){
+		var index=teamSelect.selectedIndex;
+		var type=teamSelect.options[index].className;
+		var approverRole=document.getElementById('role_approver_true');
+		var rolesDropDown=document.getElementById('team_member_roles_drop_down');
+		if(type=='Team'){
+			if(approverRole==null&&removedApproverRole!=null){
+				rolesDropDown.appendChild(removedApproverRole);
+			}
+		}
+		else{
+			if(approverRole!=null){
+				removedApproverRole=rolesDropDown.removeChild(approverRole);
+			}
+		}
+	}
 	function validate()
 	{
 		if(document.umAddUserForm.teamId.value=="-1"){
@@ -271,10 +288,10 @@
 														<digi:trn key="aim:workspaceId">Workspace Name</digi:trn>&nbsp;
 													</td>
 												<td align="left" width="70%">
-													<html:select property="teamId" >
+													<html:select property="teamId"  onchange="hideUnhideApproverRole(this)">
 													<html:option value="-1">-- <digi:trn key="um:selectWorkspace">Select a workspace</digi:trn> --</html:option>
 													<c:forEach items="${umAddUserForm.workspaces}" var="workspaces">
-														<html:option value="${workspaces.ampTeamId}">
+														<html:option value="${workspaces.ampTeamId}"  styleClass='${workspaces.accessType}'>
 															<c:out value="${workspaces.name}"/>
 														</html:option>
 													</c:forEach>
@@ -287,11 +304,11 @@
 													<digi:trn key="aim:RoleId">User Role</digi:trn>&nbsp;
 												</td>
 												<td align="left" width="70%">
-													<html:select property="role" >
+													<html:select property="role" styleId="team_member_roles_drop_down">
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
 													
 													<logic:iterate name="umAddUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
-														<html:option value="${ampRole.ampTeamMemRoleId}">
+														<html:option value="${ampRole.ampTeamMemRoleId}" styleId="role_approver_${ampRole.approver}">
 															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
 																<bean:write name="ampRole" property="role" />
 															</digi:trn>

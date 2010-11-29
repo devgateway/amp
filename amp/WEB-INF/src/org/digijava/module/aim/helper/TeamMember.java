@@ -31,11 +31,6 @@ public class TeamMember {
 
 	private Boolean pledger;
 
-	private boolean read; /* read permission */
-
-	private boolean write; /* write permission */
-
-	private boolean delete; /* delete permission */
 
 	private ApplicationSettings appSettings; /*
 											  * Application settings of the
@@ -47,6 +42,7 @@ public class TeamMember {
 	private Set activities;
 	
 	private Boolean publishDocuments; /*permissions to make docs public*/
+	private boolean approver;
 
 	public TeamMember() {}
 
@@ -61,18 +57,6 @@ public class TeamMember {
 	 */
 	public void setAppSettings(ApplicationSettings appSettings) {
 		this.appSettings = appSettings;
-	}
-	/**
-	 * @return Returns the delete.
-	 */
-	public boolean getDelete() {
-		return delete;
-	}
-	/**
-	 * @param delete The delete to set.
-	 */
-	public void setDelete(boolean delete) {
-		this.delete = delete;
 	}
 	/**
 	 * @return Returns the email.
@@ -109,18 +93,6 @@ public class TeamMember {
 	 */
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
-	}
-	/**
-	 * @return Returns the read.
-	 */
-	public boolean getRead() {
-		return read;
-	}
-	/**
-	 * @param read The read to set.
-	 */
-	public void setRead(boolean read) {
-		this.read = read;
 	}
 	/**
 	 * @return Returns the roleId.
@@ -193,18 +165,6 @@ public class TeamMember {
 	 */
 	public void setTranslator(boolean translator) {
 		this.translator = translator;
-	}
-	/**
-	 * @return Returns the write.
-	 */
-	public boolean getWrite() {
-		return write;
-	}
-	/**
-	 * @param write The write to set.
-	 */
-	public void setWrite(boolean write) {
-		this.write = write;
 	}
 	/**
 	 * @return Returns the activities.
@@ -289,6 +249,14 @@ public class TeamMember {
 
 	public void setPublishDocuments(Boolean publishDocuments) {
 		this.publishDocuments = publishDocuments;
+	}
+
+	public void setApprover(boolean approver) {
+		this.approver = approver;
+	}
+
+	public boolean isApprover() {
+		return approver;
 	}	
 	
 }

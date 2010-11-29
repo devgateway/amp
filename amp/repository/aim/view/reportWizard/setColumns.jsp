@@ -41,21 +41,21 @@
 			<li noDrag="true">
 				<!--<input type=checkbox id="root" name="root" value="root" onclick="checkUncheckAll3();"/>-->
 				<a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none"><digi:trn key="aim:report:AMP" >AMP</digi:trn></a>
-				<ul class="nodragul">
+				<ul class="nodragul" style="margin-left: 0px;">
 					<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 						<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
 						<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
 						<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 							<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
-								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;text-decoration:none">
 									<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 								</a>
 								<ul>
 									<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
-										<li class="" noDrag="true" style="white-space:nowrap;">
+										<li class="" noDrag="true" style="white-space:nowrap; background-color: #E1E1E1; border:1px solid #CECECE; margin-bottom: 5px; margin-top: 5px; padding: 1px; text-align: left; font-size: 11px; vertical-align: middle;">
 											<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
-											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none"></a>
-											<span style="font-size: 12px;color:#0e69b3;text-decoration:none">
+											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
+											<span style="font-size: 11px; text-decoration:none">
 												<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 												<logic:notEmpty name="ampColumnFromTree" property="description">
 													<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}">${ampColumnFromTree.description}</digi:trn>">

@@ -119,8 +119,18 @@
 			<put-item name="body"  module="message" page="addMessages"/>			
 		</layout>
 		
-		<layout name="allMessagesLayout" extends="ampMessageLayout">
+
+		<layout name="allMessagesLayoutMainFrame" file="ampMessagesLayoutMainFrame.jsp">
+			<put-item name="body" layout="allMessagesLayoutContent"/>
+		</layout>
+
+		<layout name="allMessagesLayoutContent" file="ampMessagesLayoutContent.jsp">
 			<put-item name="body" module="message" page="allMessages"/>
+		</layout>
+
+
+		<layout name="allMessagesLayout" extends="ampMessageLayout">
+			<put-item name="body" layout="allMessagesLayoutMainFrame"/>
 		</layout>
 		
 		<layout name="forwardMessagesLayout" extends="ampMessageLayout">

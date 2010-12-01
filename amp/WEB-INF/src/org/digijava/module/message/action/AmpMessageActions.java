@@ -165,7 +165,13 @@ public class AmpMessageActions extends DispatchAction {
             messageForm.setAllmsg(count);
             messageForm.setHiddenMsgCount(hiddenCount);
         }
-    	return mapping.findForward("showAllMessages");
+
+        String forwardPath = null;
+
+        forwardPath = (request.getParameter("listOnly") != null && request.getParameter("listOnly").equals("true")) ? "showAllMessagesClean" : "showAllMessages";
+
+
+    	return mapping.findForward(forwardPath);
     }
 
     /**

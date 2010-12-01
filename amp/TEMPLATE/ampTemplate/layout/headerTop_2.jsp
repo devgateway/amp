@@ -21,30 +21,30 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 	<!-- Menu Source -->
-		<script type="text/javascript" src="js_2/jquery/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.dimensions.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.positionBy.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.bgiframe.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.jdMenu.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.ui.core.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.ui.widget.js"></script>
-		<script type="text/javascript" src="js_2/jquery/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.dimensions.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.positionBy.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.bgiframe.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.jdMenu.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.core.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.widget.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.tabs.js"/>"></script>
 				
 
 	<!-- Stylesheet of AMP -->
-        <digi:ref href="css_2/amp.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css_2/tabs.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
         
         <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"/>"> 
 <!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
 
 <script type="text/javascript">
 	var YAHOOAmp 	= YAHOO;

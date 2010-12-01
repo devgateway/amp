@@ -131,6 +131,11 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .selector_content {margin:10px; height:250px; overflow-y:auto; overflow-x:hidden; padding-right:20px;}
 .selector_tree_1 {padding-left:15px; padding-top:5px;}
 .error_login {position:absolute; top:40px; margin-left:10px; background-color:#DD0000; color:#FFFFFF; padding:3px; border:1px solid #990000;}
+.message {background-color:#F6F6F6; margin-top:10px; margin-left:21px; margin-bottom:10px; margin-right:10px; font-size:12px; line-height:18px; border:1px solid #E5E5E5;} 
+.message_cont {padding:10px; font-size:11px; line-height:18px;}
+.message_body {font-size:12px; padding:10px;}
+.create_message {margin-top:10px; font-size:12px;}
+
 
 /* PREVIEW */
 .prv_left {font-size:11px; color:#6A6A6A; padding-right:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8; }

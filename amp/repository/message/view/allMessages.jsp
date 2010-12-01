@@ -10,9 +10,61 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
+
+<%--
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+--%>
+
+<script langauage="JavaScript">
+
+    var  selectedMessagePanel;
+    var noMsgs="<digi:trn>No Messages Present</digi:trn>";
+    var noAlerts="<digi:trn>No Alerts Present</digi:trn>";
+    var noApprovals="<digi:trn>No Pending Approvals</digi:trn>";
+    var noEvents="<digi:trn>No Upcoming Events</digi:trn>";
+   	var from='<digi:trn>From</digi:trn>';
+    var to='<digi:trn>To</digi:trn>';
+	var date='<digi:trn>Date</digi:trn>';
+	var prLevel='<digi:trn>Priority</digi:trn>';
+	var desc='<digi:trn>Message Details</digi:trn>';
+	var editBtn='<digi:trn>Edit</digi:trn>';
+	var fwdBtn='<digi:trn>Forward</digi:trn>';
+	var deleteBtn='<digi:trn>Delete</digi:trn>';
+	var pagesTrn='<digi:trn>Pages</digi:trn>';
+	var ofTrn='<digi:trn>of</digi:trn>';
+	var firstPage='<digi:trn>click here to go to first page</digi:trn>';
+	var prevPage='<digi:trn>click here to go to previous page</digi:trn>';
+	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
+	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
+	var referenceURL='<digi:trn>Reference URL</digi:trn>';
+    var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
+    var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
+    var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
+    var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
+    var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
+    var viewDetails='<digi:trn>Click here to view details</digi:trn>';
+	//used to define whether we just entered page from desktop
+	//var firstEntry=0;
+	var firstEntry=1;
+	var currentPage=1;
+    var messages;
+	var slMsgId;
+	var lastTimeStamp;
+	//used to hold already rendered messages
+	var myArray=new Array();
+	
+	window.onload=getMessages;
+		
+	//setting timer to check for new messages after specified time	
+	/*
+	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
+		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+	}
+	*/
+	</script>
 
 
+<%--
 <style>
 <!--
 .settings{
@@ -80,6 +132,8 @@ background-color:yellow;
 -->
 </style>
 
+--%>
+
 <digi:instance property="messageForm"/>
 <digi:form action="/messageActions.do">
 <html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
@@ -87,10 +141,31 @@ background-color:yellow;
 <html:hidden name="messageForm" property="childTab"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+	<%--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+--%>
+
+
+<%--
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.bgiframe.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.dimensions.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.jdMenu.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.positionBy.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.tablescroll.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.core.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.tabs.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.widget.js"/>"></script>
+
+
+<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/amp.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>"/>
+
+
 <script langauage="JavaScript">
 
     var  selectedMessagePanel;
@@ -528,6 +603,8 @@ background-color:yellow;
                        
 			//messages start
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
+			console.log (root);
+			
 			if(root!=null){
 				if(!root.hasChildNodes()&& firstEntry==0){
 					var newTR=document.createElement('TR');
@@ -718,8 +795,8 @@ background-color:yellow;
                
 		imgTD.vAlign='top';	
                
-		imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
+		imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view//TEMPLATE/ampTemplate/img_2/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view//TEMPLATE/ampTemplate/img_2/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
 		msgTr.appendChild(imgTD);
                 
                
@@ -923,7 +1000,7 @@ background-color:yellow;
             	replyTD.width='10%';
             	replyTD.align='center';
             	replyTD.vAlign="top";
-            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/reply.gif" border=0 hspace="2" /></digi:link>';
+            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/reply.gif" border=0 hspace="2" /></digi:link>';
             	msgTr.appendChild(replyTD);
         	}    
         	        
@@ -934,9 +1011,9 @@ background-color:yellow;
 			fwdOrEditTD.vAlign="top";
 			
 			if(isDraft=='true'){
-	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/edit.gif" border=0 hspace="2" /></digi:link>';									
 			}else{
-				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/finalForward.gif" border=0  hspace="2" /></digi:link>';
 			}
 			msgTr.appendChild(fwdOrEditTD);	
 						
@@ -946,7 +1023,7 @@ background-color:yellow;
 			deleteTD.align='center';
 	        deleteTD.vAlign="top";
 			//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/trash_12.gif" border=0 hspace="2"/></a>';
 			msgTr.appendChild(deleteTD);
 			
 	        //delete link
@@ -1001,8 +1078,17 @@ $(document).ready(function(){
 	     	$("#show").show('fast');
 	   	});
 });
+    
+function addActionToURL(actionName){
+	var fullURL=document.URL;
+    var lastSlash=fullURL.lastIndexOf("/");
+    var partialURL=fullURL.substring(0,lastSlash);
+    return partialURL+"/"+actionName;
+}    
         
 </script>
+
+
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr>
 <td width="100%">
@@ -1398,36 +1484,36 @@ $(document).ready(function(){
                                                             </TD>
                                                             </TR>
                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/unread.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickExpandMessage"> Click on this icon to expand message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                              <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/read.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickCollapseMessage">Click on this icon to collapse message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
 						                                     <TR>
-							                                     <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/reply.gif" vspace="2" border="0" align="absmiddle" />
+							                                     <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/reply.gif" vspace="2" border="0" align="absmiddle" />
 								                                     <digi:trn>Click on this icon to reply to a message</digi:trn>
 							                                     </TD>
 						                                     </TR>                                                            
                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/finalForward.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/finalForward.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickForwardMessage">Click on this icon to forward message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/edit.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickEditMessage">Click on this icon to edit message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                              <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view//TEMPLATE/ampTemplate/img_2/trash_12.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickDeleteMessage">Click on this icon to delete message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
@@ -1449,4 +1535,145 @@ $(document).ready(function(){
              </tr>
          </table>
 
+<br>
+
+--%>
+<!-- MAIN CONTENT PART START -->
+
+
+	<div id="tabs-1">
+		
+		<div class="tab_opt_box">
+				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;"><a href=#><b>Create new message</b></a></div>
+
+		<div class="tab_opt"><div class="tab_opt_cont"><b class="sm_sel">Inbox</b> &nbsp;|&nbsp; <a href=#dialog2 class="l_sm">Sent</a> &nbsp;|&nbsp; <a href=#dialog3 class="l_sm">Draft</a></div>
+			</div>
+		</div>
+		<div class="paging"><b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">»</a></div>
+		<table class="inside" width=740 cellpadding="0" cellspacing="0" id="msgsList">
+			
+			<%--
+<tr>
+    <td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>
+    <td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>
+    <td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
+</tr>
+<tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;"><a href=# class=l_sm><b>Lorem ipsuma dolor sit amet</b></a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr>
+<tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;"><a href=# class=l_sm><b>Lorem ipsuma dolor sit amet</b></a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr>
+<tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr>
+<tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside valign=top><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a>
+	<div class="message"><div class="message_cont">
+	<div style="float:right;">Priority: <b>Medium</b><br />
+Date: <b>13/05/2010</b></div>
+	From: <b>ATL ATL | atl@amp.org</b><br />
+To: <b>Carl Sherson Clermont | csclermont@yahoo.com</b> (<a href=#>view all</a>)<br /><a href=#>Click here to view Object</a></div>
+<div class="message_body">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</div>
+</div>
+
+	</td>
+    <td class=inside align=center valign=top><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr><tr>
+    <td class=inside><input name="" type="checkbox" value="" /></td>
+    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
+    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
+</tr>
+
+
+--%>
+
+</table>
+<br />
+<input type="button" value="Delete selected messages" class="buttonx_sm" /> <input type="button" value="Mark as read" class="buttonx_sm" />
+
+
+
+
+
+<!-- MAIN CONTENT PART END -->
+<script language="javascript">
+$(document).ready(function(){
+	$("#tabs").tabs();
+	$("#filter_tabs").tabs();
+	$("a.slider").click(function(){
+		$(this).siblings("div:first").slideToggle();
+		return false;
+		});
+
+	$(".tab_opt_cont a").click(function(){
+		//$(this).siblings("div:first").slideToggle();
+		var selector = $(this).attr("href");
+		
+		alert(selector);
+		
+		var dlgopts = {
+			height: 200,
+			width: 400,
+			modal: true
+			};
+		switch (selector)
+        {
+			case '#dialog1':
+				dlgopts.width = 400;
+				dlgopts.height = 180;
+
+			break;
+			case '#dialog2':
+				dlgopts.width = 900;
+				dlgopts.height = 500;
+			break;
+			case '#dialog3':
+				dlgopts.width = 400;
+				dlgopts.height = 110;
+				
+			break;
+			case '#dialog4':
+				dlgopts.width = 500;
+				dlgopts.height = 420;
+			break;
+
+
+		};	
+     	$(selector).dialog(dlgopts);
+
+		return false;
+		});
+	
+})
+</script>
 </digi:form>

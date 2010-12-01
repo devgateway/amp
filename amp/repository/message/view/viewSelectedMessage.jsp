@@ -11,36 +11,49 @@
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<style type="text/css">
-<!--
-.blue {
-background: #a5bcf2;
-}
-.whiteThing {
-background: #FFF;
-}
--->
-</style>
 
 
-<script langauage="JavaScript">
-//	function edit(id) {	
-//		window.opener.location.href='${contextPath}/message/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+id;
-//		window.close();	
-//	}
-	
-//	function deleteAlert (id) {
-//		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId="+id;
-// 		messageForm.target = "_self";
-//  		messageForm.submit();
-//  		window.opener.location.reload();
-//  		window.close();  					
-//	}
-	
-	
-</script>
 
-<digi:form action="/messageActions.do">
+
+
+<div class="message"><div class="message_cont">
+	<div style="float:right;">Priority: <b>
+		<logic:equal name="messageForm" property="priorityLevel" value="0">None</logic:equal>
+		<logic:equal name="messageForm" property="priorityLevel" value="1">low</logic:equal>
+		<logic:equal name="messageForm" property="priorityLevel" value="2">medium</logic:equal>
+		<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>	
+		</b><br />
+		Date: <b>${messageForm.creationDate}</b></div>
+	From: <b>
+		<c:set var="senderInfo" value="${fn:split(messageForm.sender,';')}"/>
+																					<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;">
+																						<c:out value="${senderInfo[0]}"/>
+																					</a>
+		
+		
+		</b><br />
+To: <b>Carl Sherson Clermont | csclermont@yahoo.com</b> (<a href=#>view all</a>)<br />
+
+
+
+
+
+<c:if test="${not empty messageForm.objectURL}">
+
+<b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
+<a href="${messageForm.objectURL}" target="_blank"><digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn></a>
+																				</c:if>
+
+
+</div>
+<div class="message_body">
+${messageForm.description}
+</div>
+</div>
+
+<%--
+
+
 			<table cellspacing="0"  width="100%" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
 					<td class="r-dotted-lg" width="10"/>
@@ -93,8 +106,11 @@ background: #FFF;
 																				<tr>
 																					<td align="left"><b><digi:trn key="message:from">From</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff" >
+																					
 																					<c:set var="senderInfo" value="${fn:split(messageForm.sender,';')}"/>
-																								<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;"><c:out value="${senderInfo[0]}"/></a>
+																					<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;">
+																						<c:out value="${senderInfo[0]}"/>
+																					</a>
 																					</td>
 																					<td colspan="2"></td>
 																				</tr>
@@ -169,5 +185,5 @@ background: #FFF;
 					</td>
 					<td width="10"/>
 				</tr>
-			</table>
-</digi:form>
+			</table>--%>
+

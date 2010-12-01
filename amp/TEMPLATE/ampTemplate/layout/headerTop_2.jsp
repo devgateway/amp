@@ -29,6 +29,8 @@
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.core.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.widget.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.tabs.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.cookie.js"/>"></script>
+		
 				
 
 	<!-- Stylesheet of AMP -->
@@ -45,6 +47,7 @@
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
+
 
 <script type="text/javascript">
 	var YAHOOAmp 	= YAHOO;

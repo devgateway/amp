@@ -11,9 +11,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
   <!-- Dependencies --> 
-
-        <!-- Stylesheet of AMP -->
-        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
   
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">

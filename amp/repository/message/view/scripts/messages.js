@@ -376,9 +376,6 @@
 	
 	
 	function buildMessagesList (status, statusText, responseText, responseXML){			
-		
-		console.log (responseText);
-		
 		var tbl = document.getElementById('msgsList');
 
 		var browser=navigator.appName;

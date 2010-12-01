@@ -159,6 +159,7 @@
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
 				/repository/content/struts-config.xml
+				/repository/visualization/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

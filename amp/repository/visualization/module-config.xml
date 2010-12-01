@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>visualization</name>
+	<security login-required="true" default="READ">
+		
+	</security>
+</module-config>

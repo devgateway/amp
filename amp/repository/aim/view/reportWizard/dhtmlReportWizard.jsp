@@ -298,8 +298,8 @@ body {
 								<tr>
 									<td width="365" valign="top">
 										<fieldset class="main_side_cont">
-											<legend><span class="legend_label">Funding Grouping</span></legend>
-											<div id="reportGroupDiv">
+											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
+											<div id="reportGroupDiv" class="inputx">
 												<c:if test='${param.type == null}'>
 													<feature:display name="Donor Report" module="Report Types">                                      	
 				                                    	<html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
@@ -348,8 +348,8 @@ body {
 									<c:if test="${!myForm.desktopTab}">
 										<td valign="top">
 									    	<fieldset class="main_side_cont">
-												<legend><span class="legend_label">Totals Grouping</span></legend>
-												<div id="totalsGroupingDiv">
+												<legend><span class="legend_label"><digi:trn>Totals Grouping</digi:trn></span></legend>
+												<div id="totalsGroupingDiv" class="inputx">
 													<html:checkbox property="hideActivities" value="true">
 														${summary}
 													</html:checkbox>
@@ -377,7 +377,7 @@ body {
 									<td valign="top">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-											<div id="listFiltersDiv" style="height:113px; overflow-y:auto; overflow-x:hidden;">
+											<div id="listFiltersDiv" style="height:90px; overflow-y:auto; overflow-x:hidden;" class="inputx">
 												<c:choose>
 													<c:when test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
 														<jsp:include page="showSelectedFilters.jsp" />
@@ -399,8 +399,8 @@ body {
 									<tr>
 										<td valign="top" colspan="3">
 									    	<fieldset class="main_side_cont">
-												<legend><span class="legend_label">Options</span></legend>
-												<div id="optionsDiv">
+												<legend><span class="legend_label"><digi:trn>Options</digi:trn></span></legend>
+												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">
 														<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
 															<html:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn>

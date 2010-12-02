@@ -372,8 +372,8 @@ body {
 												</div>											
 											</fieldset>									
 										</td>
+										<td valign="top">&nbsp;</td>
 									</c:if>
-									<td valign="top">&nbsp;</td>
 									<td valign="top">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>

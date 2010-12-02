@@ -275,12 +275,13 @@ button.toolbar {
 	padding: 1px;
 	
 }
-button.ieover, button:active {
-	background-color: #DCEBFF; 
-	border-width: 0px;
-	border-style: solid;
-	border-color: #BCCBFF;
-	
+button.ieover {
+	background-color:#4A687A; 
+	/*border-top: 1px solid #99BAF1; 
+	border-left:1px solid #99BAF1; 
+	border-right:1px solid #225099; 
+	border-bottom:1px solid #225099; 
+	color:#FFFFFF;*/ 
 }
 
 button.toolbar-dis { 

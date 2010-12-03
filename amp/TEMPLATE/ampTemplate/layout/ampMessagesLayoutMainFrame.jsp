@@ -22,7 +22,12 @@
 				<div id="tabs">
 					<ul class="desktop_tab_base">
 						<li class="desktop_tab"><a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a></li>
+						
 						<li class="desktop_tab"><a href="/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&listOnly=true" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
+						
+						<%--
+						<li class="desktop_tab"><a href="#tabs-2" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
+						--%>
 						<li class="desktop_tab"><a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a></li>
 						<li class="desktop_tab"><a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a></li>
 					</ul>

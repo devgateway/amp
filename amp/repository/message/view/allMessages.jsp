@@ -1545,80 +1545,48 @@ function addActionToURL(actionName){
 	<div id="tabs-1">
 		
 		<div class="tab_opt_box">
-				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;"><a href=#><b>Create new message</b></a></div>
+				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
+					<digi:link href="/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"><b>Create new message</b></digi:link>
+				</div>
 
-		<div class="tab_opt"><div class="tab_opt_cont"><b class="sm_sel">Inbox</b> &nbsp;|&nbsp; <a href=#dialog2 class="l_sm">Sent</a> &nbsp;|&nbsp; <a href=#dialog3 class="l_sm">Draft</a></div>
+			<div class="tab_opt">
+				<div class="tab_opt_cont">
+					<c:if test="${messageForm.childTab=='inbox'}">
+						<b class="sm_sel">Inbox</b> &nbsp;|&nbsp; 
+					</c:if>
+					<c:if test="${messageForm.childTab!='inbox'}">
+						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" class="l_sm">Inbox</a> &nbsp;|&nbsp; 
+					</c:if>
+						
+					
+					<c:if test="${messageForm.childTab=='sent'}">
+						<b class="sm_sel">Sent</b> &nbsp;|&nbsp; 
+					</c:if>
+					<c:if test="${messageForm.childTab!='sent'}">
+						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" class="l_sm">Sent</a> &nbsp;|&nbsp; 
+					</c:if>
+					
+					<c:if test="${messageForm.childTab=='draft'}">
+						<b class="sm_sel">Draft</b>
+					</c:if>
+					<c:if test="${messageForm.childTab!='draft'}">
+						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" class="l_sm">Draft</a>
+					</c:if>
+				</div>
 			</div>
 		</div>
-		<div class="paging"><b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">ï¿½</a></div>
-		<table class="inside" width=740 cellpadding="0" cellspacing="0" id="msgsList">
+
+		<div class="paging">
 			
+
 			<%--
-<tr>
-    <td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>
-    <td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>
-    <td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
-</tr>
-<tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;"><a href=# class=l_sm><b>Lorem ipsuma dolor sit amet</b></a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr>
-<tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;"><a href=# class=l_sm><b>Lorem ipsuma dolor sit amet</b></a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr>
-<tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr>
-<tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside valign=top><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a>
-	<div class="message"><div class="message_cont">
-	<div style="float:right;">Priority: <b>Medium</b><br />
-Date: <b>13/05/2010</b></div>
-	From: <b>ATL ATL | atl@amp.org</b><br />
-To: <b>Carl Sherson Clermont | csclermont@yahoo.com</b> (<a href=#>view all</a>)<br /><a href=#>Click here to view Object</a></div>
-<div class="message_body">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</div>
-</div>
-
-	</td>
-    <td class=inside align=center valign=top><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr><tr>
-    <td class=inside><input name="" type="checkbox" value="" /></td>
-    <td class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;"><a href=# class=l_sm>Lorem ipsuma dolor sit amet</a></td>
-    <td class=inside align=center><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>
-</tr>
-
-
---%>
-
-</table>
+			<b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">»</a>
+			--%>
+		<table><tr id="paginationPlace"><td>&nbsp;</td></tr></table>
+		</div>
+		<table class="inside" width=740 cellpadding="0" cellspacing="0" id="msgsList">
+			<tr><td></td></tr>
+		</table>
 <br />
 <input type="button" value="Delete selected messages" class="buttonx_sm" /> <input type="button" value="Mark as read" class="buttonx_sm" />
 
@@ -1631,16 +1599,38 @@ Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie co
 $(document).ready(function(){
 	$("#tabs").tabs();
 	$("#filter_tabs").tabs();
-	$("a.slider").click(function(){
-		$(this).siblings("div:first").slideToggle();
+
+
+/*
+	$("#tabs a").click(function(){
+		
+		var selTab = $(this).attr("href");
+		
+		
+		if (selTab == "#tabs-1") {
+				tabIndex = 1;
+		} else if (selTab == "#tabs-2") {
+				tabIndex = 2;
+		} else if (selTab == "#tabs-3") {
+				tabIndex = 3;
+		} else if (selTab == "#tabs-4") {
+				tabIndex = 5;
+		}
+		
+		getMessages();
+		
 		return false;
-		});
+	});
+*/
+
 
 	$(".tab_opt_cont a").click(function(){
 		//$(this).siblings("div:first").slideToggle();
 		var selector = $(this).attr("href");
 		
+		/*
 		alert(selector);
+		
 		
 		var dlgopts = {
 			height: 200,
@@ -1671,8 +1661,8 @@ $(document).ready(function(){
 
 		};	
      	$(selector).dialog(dlgopts);
-
-		return false;
+*/
+//		return false;
 		});
 	
 })

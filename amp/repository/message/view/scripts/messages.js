@@ -366,9 +366,15 @@
 		}
 	}
 	
+	var tabIndex = 1;
+	
 	function getMessages(){
 		lastTimeStamp = new Date().getTime();
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage+'&timeStamp='+lastTimeStamp);			
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage + '&tabIndex=' + tabIndex +'&timeStamp='+lastTimeStamp);			
+		$("#msgsList").html("<tr><td><div align='center'><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif'/></div></td></tr>");
+		
+		
+		
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
@@ -376,6 +382,11 @@
 	
 	
 	function buildMessagesList (status, statusText, responseText, responseXML){			
+		
+		openedMessageId = -1;
+		loadedMessageIds = new Array();
+		
+		
 		var tbl = document.getElementById('msgsList');
 
 		var browser=navigator.appName;
@@ -510,6 +521,7 @@
             		messageListMarkup.push(msgId);
             		messageListMarkup.push(')');
             		messageListMarkup.push(' class=l_sm>');
+            		messageListMarkup.push('<b>');
 	            	messageListMarkup.push(messages[i].getAttribute('name'));
 	            	messageListMarkup.push('</b>');
             	} else {
@@ -523,27 +535,7 @@
 	            	messageListMarkup.push(messages[i].getAttribute('name'));
             	}
             	messageListMarkup.push('</a>');
-            	
-            	
-            	/*
-            	messageListMarkup.push('<div class="message"><div class="message_cont">');
-							messageListMarkup.push('<div style="float:right;">Priority: <b>');
-							messageListMarkup.push('Medium');
-							messageListMarkup.push('</b><br/>');
-							messageListMarkup.push('Date: <b>');
-							messageListMarkup.push('13/05/2010');
-							messageListMarkup.push('</b></div>');
-							messageListMarkup.push('From:'); 
-							messageListMarkup.push('<b>ATL ATL | atl@amp.org');
-							messageListMarkup.push('</b><br/>');
-							messageListMarkup.push('To: <b>');
-							messageListMarkup.push('Carl Sherson Clermont | csclermont@yahoo.com');
-							messageListMarkup.push('</b> (<a href=#>view all</a>)<br /><a href=#>Click here to view Object</a></div>');
-							messageListMarkup.push('<div class="message_body">');
-							messageListMarkup.push('Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.');
-							messageListMarkup.push('Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</div>');
-							messageListMarkup.push('</div>');
-            	*/
+
             	
             	messageListMarkup.push('</td>');
             	
@@ -590,11 +582,13 @@
 		var paginationParams=paginationTag.childNodes[0];
 		if(paginationParams!=null){
 			var paginationTD=document.createElement('TD');
+			paginationTD.className="paging"
 			var paginationTDContent=pagesTrn+':';
 				if(currentPage>1){
 					var prPage=currentPage-1;
-					paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
-					paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
+					paginationTDContent+=':<a class="l_sm" href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
+					paginationTDContent+='&nbsp;|&nbsp;';
+					paginationTDContent+='<a class="l_sm" href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > Prev </a>';								
 				}
 				paginationTDContent+='&nbsp';
 				if(allPages!=null){
@@ -611,14 +605,16 @@
 						toIndex=currentPage+2;
 					}
 					for(var i=fromIndex;i<=toIndex;i++){
-						if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
-						if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
+						if(i<=allPages && i==page) {paginationTDContent+='<b class="paging_sel">'+i+'</b>';}
+						if(i<=allPages && i!=page) {paginationTDContent+='<a class="l_sm" href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>'; }
+						paginationTDContent+='&nbsp;|&nbsp;';
 					}
 				}
 				if(page<allPages){
 					var nextPg=page+1;									
-					paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-					paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
+					paginationTDContent+='<a class="l_sm" href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">Next</a>';
+					paginationTDContent+='&nbsp;|&nbsp;';
+					paginationTDContent+='<a class="l_sm" href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
 				}	
 				paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 			paginationTD.innerHTML=	paginationTDContent;						

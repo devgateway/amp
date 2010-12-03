@@ -340,7 +340,7 @@ body {
 										<fieldset class="main_side_cont">
 											<html:hidden property="reportDescription" />
 											<legend><span class="legend_label">${descriptionName}</span></legend>
-											<textarea name="reportDescriptionClone"  rows="5" class="inputx" style="width:330px; height:85px;"></textarea>
+											<textarea name="reportDescriptionClone"  rows="5" class="inputx" style="width:340px; height:90px;"></textarea>
 										</fieldset>
 									</td>
 								</tr>
@@ -446,7 +446,7 @@ body {
 									<td width="48%" align="center">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:selectedColumns">Selected Columns</digi:trn></span></legend>
-											<ul id="dest_col_ul" class="draglist">
+											<ul id="dest_col_ul" class="draglist" style="line-height: 20px;">
 												
 											</ul>
 										</fieldset>

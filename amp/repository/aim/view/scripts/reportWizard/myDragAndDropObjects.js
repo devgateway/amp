@@ -253,9 +253,10 @@
 				generateHierarchies();
 			}
 			ColumnsDragAndDropObject.generateLi			=  function (liId, liClass, inputId, inputValue, inputName, html) {
-				var startHtml				= "<input type='checkbox' name='"+inputName+"' id='"+inputId+"' value='"+inputValue+"' />  ";
+				var startHtml				= "<input type='checkbox' name='"+inputName+"' id='"+inputId+"' value='"+inputValue+"' style='line-height:15px; margin-top:6px;'/>  ";
 				var newObj					= document.createElement("li");
 				
+				//newObj.innerHTML			= startHtml + "<label style='vertical-align: baseline;'>" + html + "</label>";
 				newObj.innerHTML			= startHtml + html;
 				//newObj.setAttribute('class',liClass);
 				newObj.setAttribute('id', liId);

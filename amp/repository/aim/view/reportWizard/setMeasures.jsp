@@ -14,7 +14,7 @@
 				<logic:iterate name="myForm" id="ampMeasures"property="ampMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
 					<feature:display name="${ampMeasures.aliasName}" module="Measures">
 							<li class="list1" id="measure_${ampMeasures.measureId}">
-								<input type="checkbox" value="${ampMeasures.measureId}" />
+								<input type="checkbox" value="${ampMeasures.measureId}" style='line-height:15px; margin-top:6px;'/>
 								<digi:trn key="aim:reportBuilder:${ampMeasures.measureName}">
 									<c:out value="${ampMeasures.measureName}"/>
 								</digi:trn>

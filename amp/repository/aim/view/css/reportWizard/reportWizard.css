@@ -52,8 +52,8 @@
 	}
 	
 	.draglist li {
-		margin: 2px;
-		cursor: move; 
+		/*margin: 2px;*/
+		cursor: move;
 	}
 	
 	

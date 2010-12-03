@@ -22,11 +22,8 @@
 
 package org.digijava.module.sdm.dbentity;
 
-import java.util.Date;
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
-import java.util.*;
-import org.digijava.module.common.dbentity.ItemStatus;
 
 /**
  * <p>Title: DiGiJava</p>

@@ -22,18 +22,16 @@
 
 package org.digijava.module.sdm.action;
 
-import javax.servlet.ServletOutputStream;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.module.sdm.dbentity.SdmItem;
-import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
+import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
 
 /**
@@ -62,14 +60,23 @@ public class ShowFile
     Sdm sdmDoc = null;
     SdmItem sdmItem = null;
 
-    Long paramDocId = new Long(Long.parseLong(request.getParameter("documentId")));
+    Long paramDocId = null;
+    if(request.getParameter("documentId")!=null){
+    	paramDocId=new Long(request.getParameter("documentId"));
+    }
 
     if (paramDocId != null) {
-      sdmDoc = DbUtil.getDocument(paramDocId);
-    }
-    else {
-      sdmDoc = formBean.getSdmDocument();
-    }
+        sdmDoc = DbUtil.getDocument(paramDocId);
+      }
+      else {
+      	if(request.getSession().getAttribute("document")!=null){ //view file from messaging module
+      		sdmDoc=(Sdm)request.getSession().getAttribute("document");
+      	}else{ //from sdm module
+      		sdmDoc = formBean.getSdmDocument();
+      	}      
+      }
+    
+    
     if (sdmDoc != null) {
       Long paramParagId = new Long(Long.parseLong(request.getParameter("activeParagraphOrder")));
 
@@ -81,8 +88,7 @@ public class ShowFile
           byte[] file = sdmItem.getContent();
 
           if (file != null) {
-            ResponseUtil.writeFile(response, sdmItem.getContentType(),
-                                   sdmItem.getContentText(), file);
+            ResponseUtil.writeFile(response, sdmItem.getContentType(),sdmItem.getContentText(), file);
 
           }
         }

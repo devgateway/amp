@@ -46,19 +46,107 @@
 
 -->
 </style>
+<!-- for browse button -->
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+input.file {
+	width: 300px;
+	margin: 0;
+}
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 100px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+<script langauage="JavaScript">	
+	
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn>Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}	
+	}
+    function showMessagesHelpTooltip() {
+           var div=document.getElementById("createMessagesHelpTooltip");
+           div.style.display = "block";
+    }
+    function hideMessagesHelpTooltip(){
+      document.getElementById("createMessagesHelpTooltip").style.display = "none";
+    }
+
+</script>
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<script langauage="JavaScript">
+<script langauage="JavaScript">	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	var MyArray=new Array();
+var MyArray=new Array();
 
 function initMyArray(){
   var reslist = document.getElementById('whoIsReceiver');
@@ -382,7 +470,19 @@ function addActionToURL(actionName){
   			messageForm.submit();		
 		}	 		
 	}
-	
+
+	function removeAttachment(attachmentOrder){
+		//check submit selected receivers
+		var list = document.getElementById('selreceivers');
+		if(list!=null){
+    		for(var i = 0; i < list.length; i++) {
+        		list.options[i].selected = true;
+    		}
+    	}
+		messageForm.action="${contextPath}/message/messageActions.do?actionType=removeAttachment&attachmentOrder="+attachmentOrder;
+  		messageForm.target = "_self";
+  		messageForm.submit();
+	}
 	
 	function cancel() {
 		messageForm.action="${contextPath}/message/messageActions.do?actionType=cancelMessage";
@@ -578,7 +678,7 @@ function addActionToURL(actionName){
     </c:choose>
 </c:set>
 
-<digi:form action="/messageActions.do">
+<digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">
     <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 		<tr>
 			<td width="100%">
@@ -672,7 +772,34 @@ function addActionToURL(actionName){
                                                                             </div>
 																		</td>
 																	  </field:display>
-																	</tr>	
+																	</tr>
+																	<c:if test="${not empty messageForm.sdmDocument}">
+																		<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
+																			<tr>
+																				<td/>
+																				<td >
+																					<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:if test="${not empty messageForm.sdmDocument.id}">
+																						<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
+																					</c:if>																					
+																					<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
+																						<img src="/repository/message/view/images/attachment.png" border="0" />
+																						${attachedDoc.contentTitle}
+																					</digi:link>
+																					<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0"/></a>
+																				</td>
+																			</tr>
+																		</c:forEach>
+																	</c:if>
+																	<tr>
+																		<td/>
+																		<td>
+																			<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+																				<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+																			</div>
+																			<input type="submit" value="upload" class="dr-menu" align="right" onclick="return validateFile()"/>
+																		</td>
+																	</tr>
                                                                     <tr>
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
                                                                         <td align="left"> 
@@ -909,5 +1036,8 @@ function addActionToURL(actionName){
 	});
 
 	
+</script>
+<script type="text/javascript">
+	initFileUploads();
 </script>
 </digi:form>

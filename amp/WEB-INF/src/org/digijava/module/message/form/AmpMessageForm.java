@@ -12,6 +12,7 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.helper.ReciverName;
+import org.digijava.module.sdm.dbentity.Sdm;
 
 public class AmpMessageForm extends ActionForm {
 	/**
@@ -37,10 +38,14 @@ public class AmpMessageForm extends ActionForm {
 	private int tabIndex=0;		//which tab we are viewing(messages tab, alerts, approvals ...)
 	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
 	private MessageHelper forwardedMsg;
+	private MessageHelper repliedMsg;
 	private String objectURL;
 	private int allmsg;
 	private List<ReciverName> receivesrsNameMail;
 	private List<ReciverName> receivesrsTheamName;
+	//holds attached files	
+	private Sdm sdmDocument;
+	private int attachmentsSize;
 	
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
@@ -539,39 +544,61 @@ public class AmpMessageForm extends ActionForm {
 		public void setReceivesrsTheamName(List<ReciverName> receivesrsTheamName) {
 			this.receivesrsTheamName = receivesrsTheamName;
 		}
-                
-                public int getHiddenMsgCount() {
-                    return hiddenMsgCount;
-                }
 
-                public void setHiddenMsgCount(int hiddenMsgCount) {
-                    this.hiddenMsgCount = hiddenMsgCount;
-                }
-                
-               public String getRemoveStateIds() {
-                    return removeStateIds;
-                }
+		public Sdm getSdmDocument() {
+			return sdmDocument;
+		}
 
-                public void setRemoveStateIds(String removeStateIds) {
-                    this.removeStateIds = removeStateIds;
-                }
+		public void setSdmDocument(Sdm sdmDocument) {
+			this.sdmDocument = sdmDocument;
+		}
 
-				public FormFile getFileUploaded() {
-					return fileUploaded;
-				}
+		public int getAttachmentsSize() {
+			return attachmentsSize;
+		}
 
-				public void setFileUploaded(FormFile fileUploaded) {
-					this.fileUploaded = fileUploaded;
-				}
+		public void setAttachmentsSize(int attachmentsSize) {
+			this.attachmentsSize = attachmentsSize;
+		}
 
-				public String[] getContacts() {
-					return contacts;
-				}
+		public String getRemoveStateIds() {
+			return removeStateIds;
+		}
 
-				public void setContacts(String[] contacts) {
-					this.contacts = contacts;
-				}
+		public void setRemoveStateIds(String removeStateIds) {
+			this.removeStateIds = removeStateIds;
+		}
 
+		public int getHiddenMsgCount() {
+			return hiddenMsgCount;
+		}
 
-	
+		public void setHiddenMsgCount(int hiddenMsgCount) {
+			this.hiddenMsgCount = hiddenMsgCount;
+		}
+
+		public String[] getContacts() {
+			return contacts;
+		}
+
+		public void setContacts(String[] contacts) {
+			this.contacts = contacts;
+		}
+
+		public FormFile getFileUploaded() {
+			return fileUploaded;
+		}
+
+		public void setFileUploaded(FormFile fileUploaded) {
+			this.fileUploaded = fileUploaded;
+		}
+
+		public MessageHelper getRepliedMsg() {
+			return repliedMsg;
+		}
+
+		public void setRepliedMsg(MessageHelper repliedMsg) {
+			this.repliedMsg = repliedMsg;
+		}
+     
 	}

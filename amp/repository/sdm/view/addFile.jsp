@@ -1,4 +1,3 @@
-
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -7,20 +6,39 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %> 
 
-<p align="center"><b><font size="4" color="#00008B">
-	<digi:errors/>
-	<digi:form action="/saveFile.do" method="post" enctype="multipart/form-data">
+<script langauage="JavaScript">
+	function checkEmpty(){
+		var title=document.getElementById('title').value;
+		if(title==0){
+			var msg='<digi:trn jsFriendly="true">Please enter name </digi:trn>';
+			alert(msg);
+			return false;
+		}
+		return true;
+	}
+</script>
+
+<digi:form action="/saveFile.do" method="post" enctype="multipart/form-data">
+	<p align="center"><b><font size="4" color="#00008B">
+			<digi:errors/>
+	</font></b></p>	
 	<div align="center">
 		<table width="60%">
 			<tr>
-				<td align="center"><strong><font size="4" color="#00008B">
-					<c:out value="${sdmForm.documentTitle}"/></font></strong>
+				<td align="center">
+					<strong>
+						<font size="4" color="#00008B">
+							<c:out value="${sdmForm.documentTitle}"/>
+						</font>
+					</strong>
 				</td>
 			</tr>
 		</table>
-	</div><b><font size="4" color="#00008B">
-<p>
-	<digi:trn key="sdm:submitFiletoDoc">Submit a File to a Document!</digi:trn></p></font></b></p>
+	</div>
+		
+	
+	<b><font size="4" color="#00008B"><p><digi:trn>Submit a File to a Document!</digi:trn></p></font></b>
+	
 	<table border="1" cellspacing="1" width="100%">
 		<tr>
 			<td noWrap width="50%"><font size="2">
@@ -99,7 +117,7 @@
 		</tr>
 		<tr>
 			<td>
-				<html:submit value="Submit"/>
+				<html:submit value="Submit" onclick="return checkEmpty()"/>
 			</td>
 		</tr>
 	</table></digi:form>

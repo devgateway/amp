@@ -2,6 +2,8 @@ package org.digijava.module.message.dbentity;
 
 import java.util.Date;
 
+import org.digijava.module.sdm.dbentity.Sdm;
+
 /**
  * General AMP Message.
  * @author Dare Roinishvili
@@ -40,14 +42,21 @@ public abstract class AmpMessage {
 	 * this field holds Id of the forwarded message, if it exists 
 	 */
 	private AmpMessage forwardedMessage;
+	
+	/**
+	 * holds replied message , if it exists
+	 */
+	private AmpMessage repliedMessage;
         
         
 	/**
 	 * this field holds list of receivers
 	 */
-        private String receivers; // name and surnames of receivers separeted by comma
+    private String receivers; // name and surnames of receivers separeted by comma
 
-        private String externalReceivers; //contacts + people outside AMP
+    private String externalReceivers; //contacts + people outside AMP
+        
+    private Sdm attachedDocs; //for attaching files
         
         public String getReceivers() {
             return receivers;
@@ -171,7 +180,21 @@ public abstract class AmpMessage {
 	public void setExternalReceivers(String externalReceivers) {
 		this.externalReceivers = externalReceivers;
 	}
-        
 
-	
+	public Sdm getAttachedDocs() {
+		return attachedDocs;
+	}
+
+	public void setAttachedDocs(Sdm attachedDocs) {
+		this.attachedDocs = attachedDocs;
+	}
+
+	public AmpMessage getRepliedMessage() {
+		return repliedMessage;
+	}
+
+	public void setRepliedMessage(AmpMessage repliedMessage) {
+		this.repliedMessage = repliedMessage;
+	}	
+      	
 }

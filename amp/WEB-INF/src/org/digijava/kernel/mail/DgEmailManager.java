@@ -26,12 +26,21 @@ package org.digijava.kernel.mail;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap; // Application Specific Packages
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.Address;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -42,16 +51,15 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.ForwardEmails;
 import org.digijava.kernel.config.Smtp;
-// Application Specific Packages
 import org.digijava.kernel.dbentity.Mail;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.mail.util.DbUtil;
-import javax.mail.MessagingException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.*;
-import javax.mail.*;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
+
+import com.sun.istack.ByteArrayDataSource;
 
 public class DgEmailManager {
 
@@ -219,7 +227,6 @@ public class DgEmailManager {
      * 	 */
 
     String convertHtmlToText(String strHtmlText) {
-
         return "";
     }
 
@@ -230,15 +237,13 @@ public class DgEmailManager {
      * @param text
      * @throws java.lang.Exception
      */
-    public static void sendMail(String to, String subject, String text) throws
-        java.lang.Exception {
+    public static void sendMail(String to, String subject, String text) throws java.lang.Exception {
         // Get SMTP object from configuration file,
         // see digi.xml for more details
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
         InternetAddress address = new InternetAddress(to);
 
-        sendMail(new Address[] {address}
-                 , smtp.getFrom(), subject, text, DEFAULT_ENCODING, false);
+        sendMail(new Address[] {address}, smtp.getFrom(), subject, text, DEFAULT_ENCODING, false);
     }
 
     /**
@@ -248,9 +253,7 @@ public class DgEmailManager {
      * @param text
      * @throws java.lang.Exception
      */
-    public static void sendMail(String to, String subject, String text,
-                                Locale locale) throws
-        java.lang.Exception {
+    public static void sendMail(String to, String subject, String text,Locale locale) throws java.lang.Exception {
 
         String encoding = (String) locale2encoding.get(locale.getCode());
         if (encoding == null) {
@@ -263,8 +266,7 @@ public class DgEmailManager {
 
         InternetAddress address = new InternetAddress(to);
 
-        sendMail(new Address[] {address}
-                 , smtp.getFrom(), subject, text, encoding, false);
+        sendMail(new Address[] {address}, smtp.getFrom(), subject, text, encoding, false);
     }
 
     /**
@@ -274,9 +276,7 @@ public class DgEmailManager {
      * @param text
      * @throws java.lang.Exception
      */
-    public static void sendMail(String to, String subject, String text,
-                                Locale locale, boolean asHtml) throws
-        java.lang.Exception {
+    public static void sendMail(String to, String subject, String text,Locale locale, boolean asHtml) throws java.lang.Exception {
 
         String encoding = (String) locale2encoding.get(locale.getCode());
         if (encoding == null) {
@@ -288,21 +288,16 @@ public class DgEmailManager {
 
         InternetAddress address = new InternetAddress(to);
 
-        sendMail(new Address[] {address}
-                 , smtp.getFrom(), subject, text, encoding, asHtml);
+        sendMail(new Address[] {address} , smtp.getFrom(), subject, text, encoding, asHtml);
     }
 
     /**
      * send mail directly
-     *
      * @param to
      * @param text
      * @throws java.lang.Exception
      */
-    public static void sendMail(String to, String from, String subject,
-                                String text,
-                                Locale locale, boolean asHtml) throws
-        java.lang.Exception {
+    public static void sendMail(String to, String from, String subject,String text,Locale locale, boolean asHtml) throws java.lang.Exception {
 
         String encoding = (String) locale2encoding.get(locale.getCode());
         if (encoding == null) {
@@ -310,15 +305,10 @@ public class DgEmailManager {
         }
 
         InternetAddress address = new InternetAddress(to);
-
-        sendMail(new Address[] {address}
-                 , from, subject, text, encoding, asHtml);
+        sendMail(new Address[] {address}, from, subject, text, encoding, asHtml);
     }
 
-    public static void sendMail(String to, String from, String cc, String bcc,
-                                String subject,
-                                String text,
-                                Locale locale, boolean asHtml) throws
+    public static void sendMail(String to, String from, String cc, String bcc, String subject, String text, Locale locale, boolean asHtml) throws
         java.lang.Exception {
         Address[] address = null;
         Address[] addressCC = null;
@@ -330,21 +320,15 @@ public class DgEmailManager {
         }
 
         if (to != null)
-            address = new Address[] {
-                new InternetAddress(to)};
+            address = new Address[] {new InternetAddress(to)};
 
         if (cc != null)
-            addressCC = new Address[] {
-                new InternetAddress(cc)};
+            addressCC = new Address[] {new InternetAddress(cc)};
 
         if (bcc != null)
-            addressBCC = new Address[] {
-                new InternetAddress(bcc)};
+            addressBCC = new Address[] {new InternetAddress(bcc)};
 
-        sendMail(address
-                 , from, addressCC
-                 , addressBCC
-                 , subject, text, encoding, asHtml);
+        sendMail(address , from, addressCC, addressBCC, subject, text, encoding, asHtml);
     }
 
     /**
@@ -355,9 +339,7 @@ public class DgEmailManager {
      * @param text
      * @throws java.lang.Exception
      */
-    public static void sendMail(Address[] to, String from, String subject,
-                                String text) throws
-        java.lang.Exception {
+    public static void sendMail(Address[] to, String from, String subject, String text) throws java.lang.Exception {
         sendMail(to, from, subject, text, DEFAULT_ENCODING, false);
     }
 
@@ -371,9 +353,7 @@ public class DgEmailManager {
      * @param asHtml
      * @throws java.lang.Exception
      */
-    public static void sendMail(Address[] to, String from, String subject,
-                                String text, Locale locale, boolean asHtml) throws
-        java.lang.Exception {
+    public static void sendMail(Address[] to, String from, String subject, String text, Locale locale, boolean asHtml) throws java.lang.Exception {
         String encoding = (String) locale2encoding.get(locale.getCode());
         if (encoding == null) {
             encoding = DEFAULT_ENCODING;
@@ -390,9 +370,7 @@ public class DgEmailManager {
      * @param locale
      * @throws java.lang.Exception
      */
-    public static void sendMail(Address[] to, String from, String subject,
-                                String text, Locale locale) throws
-        java.lang.Exception {
+    public static void sendMail(Address[] to, String from, String subject, String text, Locale locale) throws java.lang.Exception {
         String encoding = (String) locale2encoding.get(locale.getCode());
         if (encoding == null) {
             encoding = DEFAULT_ENCODING;
@@ -412,9 +390,7 @@ public class DgEmailManager {
      * @param asHtml
      * @throws java.lang.Exception
      */
-    public static void sendMail(Address[] to, String from, Address[] cc,
-                                Address[] bcc, String subject,
-                                String text, Locale locale, boolean asHtml) throws
+    public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, Locale locale, boolean asHtml) throws
         java.lang.Exception {
 
         String encoding = (String) locale2encoding.get(locale.getCode());
@@ -437,13 +413,10 @@ public class DgEmailManager {
      * @param asHtml boolean
      * @throws Exception
      */
-    public static void sendMail(Address[] to, String from, Address[] cc,
-                                Address[] bcc, String subject,
-                                String text, String charset, boolean asHtml) throws
+    public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml) throws
         java.lang.Exception {
 
-        sendMail(to, from, cc, bcc, subject, text, charset, asHtml,
-                 DigiConfigManager.getConfig().getSmtp().isLogEmail());
+        sendMail(to, from, cc, bcc, subject, text, charset, asHtml, DigiConfigManager.getConfig().getSmtp().isLogEmail());
     }
 
 
@@ -461,39 +434,28 @@ public class DgEmailManager {
      * @param log boolean
      * @throws Exception
      */
-
-
-    public static void sendMail(Address[] to, String from, Address[] cc,
-                                Address[] bcc, String subject,
-                                String text, String charset, boolean asHtml,
+    public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
                                 boolean log) throws java.lang.Exception {
 
         sendMail(to, from, cc, bcc, subject, text, charset, asHtml, log, false);
-
     }
 
 
 
-    public static void sendMail(Address[] to, String from, Address[] cc,
-                                Address[] bcc, String subject,
-                                String text, String charset, boolean asHtml,
-                                boolean log, boolean rtl) throws
-        java.lang.Exception {
-        logger.debug("Sending mail from " + from + " to " +
-                     (to != null ? to.length : 0) + " recipient(s). Subject: " +
+    public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
+                                boolean log, boolean rtl) throws java.lang.Exception {
+        logger.debug("Sending mail from " + from + " to " + (to != null ? to.length : 0) + " recipient(s). Subject: " +
                      subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
         logger.debug("Mail text:\n" + text);
 
-        PlainTextEmailMessage emailMessage = createEmailMessage(to,
-            new InternetAddress(from), cc, bcc, subject, text, charset, asHtml, rtl);
+        PlainTextEmailMessage emailMessage = createEmailMessage(to,new InternetAddress(from), cc, bcc, subject, text, charset, asHtml, rtl);
 
         // Get SMTP object from configuration file,
         // see digi.xml for more details
         logger.info("Start Getting Config");
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
         logger.info("End Getting Config");
-        logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " +
-                     smtp.getUserPassword());
+        logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " + smtp.getUserPassword());
         logger.info("Start Getting Forward Emails");
         ForwardEmails forwardEmails = DigiConfigManager.getConfig().getForwardEmails();
         logger.info("End Getting Forward Emails");
@@ -507,8 +469,7 @@ public class DgEmailManager {
             props.put("mail.smtp.auth", "true");
         }
         logger.info("Getting session default instance");
-        javax.mail.Session session = javax.mail.Session.getDefaultInstance(
-            props, null);
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance( props, null);
         logger.info("Finished getting session default instance");
 
 
@@ -526,15 +487,13 @@ public class DgEmailManager {
         // We create mime message, recipient,
         // to, subject and message content
         MimeMessage message = createMimeMessage(session, emailMessage, addresses);
-
         logger.info("end creating Mime Message");
         
         try {
             // send mail directly
         	logger.info("before connect: "+ System.currentTimeMillis());
             Transport transport = session.getTransport("smtp");
-            transport.connect(smtp.getHost(), smtp.getUserName(),
-                              smtp.getUserPassword());
+            transport.connect(smtp.getHost(), smtp.getUserName(),smtp.getUserPassword());
         	logger.info("after connect: "+ System.currentTimeMillis());
 
             message.saveChanges(); // implicit with send()
@@ -544,18 +503,83 @@ public class DgEmailManager {
 
             // log mail
             if (log) {
-                DbUtil.saveMail(to, from, cc, bcc, subject, emailMessage.getText(), charset,
-                                asHtml);
+                DbUtil.saveMail(to, from, cc, bcc, subject, emailMessage.getText(), charset, asHtml);
             }
         }
         catch (MessagingException ex) {
 
             // log mail
             if (log) {
-                DbUtil.saveMail(to, from, cc, bcc, subject, emailMessage.getText(), charset,
-                                asHtml,
-                                ex.getMessage());
+                DbUtil.saveMail(to, from, cc, bcc, subject, emailMessage.getText(), charset,asHtml,ex.getMessage());
             }
+            throw ex;
+        }
+    }
+    
+    
+    public static void sendMail(Address[] to,String from,AmpMessage ampMessage,Sdm attachmentsHolder) throws Exception{    	
+    	// Get SMTP object from configuration file, see digi.xml for more details
+        Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+        ForwardEmails forwardEmails = DigiConfigManager.getConfig().getForwardEmails();
+
+        // Mail session needs property,
+        // we create default property key and fill it
+        Properties props = new Properties();
+        props.put("mail.smtp.host", smtp.getHost());        
+        if (smtp.getUserName() != null && smtp.getUserPassword() != null) {
+            props.put("mail.smtp.auth", "true");
+        }
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
+
+        Address addresses[] = null;
+        if (forwardEmails.isEnabled() && forwardEmails.getEmails() != null) {
+            addresses = new Address[forwardEmails.getEmails().size()];
+            for (int i = 0; i < forwardEmails.getEmails().size(); i++) {
+                addresses[i] = new InternetAddress( (String) forwardEmails.getEmails().get(i));
+            }
+        }    	
+    	
+    	MimeMessage message = new MimeMessage(session);   
+    	 if (addresses != null) {
+             message.addRecipients(Message.RecipientType.TO, addresses);
+         }
+        message.setFrom(new InternetAddress(from));
+        message.addRecipients(Message.RecipientType.TO, to);
+        message.setSubject(ampMessage.getName(),DEFAULT_ENCODING);
+        message.setSentDate(new Date());        
+        // Set the email message text.
+        MimeBodyPart messagePart = new MimeBodyPart();
+        messagePart.setText(ampMessage.getDescription());
+        
+        
+        Multipart multipart = new MimeMultipart();
+        //add message text
+        multipart.addBodyPart(messagePart);
+        if(attachmentsHolder != null){
+        	Set<SdmItem> attachments=attachmentsHolder.getItems();
+        	if(attachments!=null && attachments.size()>0){
+        		for (SdmItem attachment : attachments) {
+        			MimeBodyPart attachmentPart = new MimeBodyPart();
+           		 	DataSource fileDataSource = new ByteArrayDataSource(attachment.getContent(),"application/octet-stream");
+           		 	attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+           		 	attachmentPart.setFileName(attachment.getContentTitle());
+           		 	//add message attachments
+           	        multipart.addBodyPart(attachmentPart);
+				}        		 
+        	}
+        }
+        
+        message.setContent(multipart);
+        
+        try {
+            // send mail directly
+            Transport transport = session.getTransport("smtp");
+            transport.connect(smtp.getHost(), smtp.getUserName(),smtp.getUserPassword());
+            message.saveChanges(); // implicit with send()
+            transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+            transport.close();
+        }
+        catch (MessagingException ex) {
             throw ex;
         }
     }
@@ -570,20 +594,15 @@ public class DgEmailManager {
      * @param asHtml
      * @throws java.lang.Exception
      */
-    public static void sendMail(Address[] to, String from, String subject,
-                                String text, String charset, boolean asHtml) throws
-        java.lang.Exception {
+    public static void sendMail(Address[] to, String from, String subject, String text, String charset, boolean asHtml) throws java.lang.Exception {
 
-        sendMail(to, from, null, null, subject,
-                 text, charset, asHtml);
+        sendMail(to, from, null, null, subject,text, charset, asHtml);
     }
 
-    public static void sendMail(Address[] to, String from, String subject,
-                                String text, String charset, boolean asHtml, boolean rtl) throws
+    public static void sendMail(Address[] to, String from, String subject, String text, String charset, boolean asHtml, boolean rtl) throws
         java.lang.Exception {
 
-        sendMail(to, from, null, null, subject, text, charset, asHtml,
-                 DigiConfigManager.getConfig().getSmtp().isLogEmail(), rtl);
+        sendMail(to, from, null, null, subject, text, charset, asHtml, DigiConfigManager.getConfig().getSmtp().isLogEmail(), rtl);
     }
 
 
@@ -660,17 +679,13 @@ public class DgEmailManager {
         return true;
     }
 
-    public static int sendEmailMessages(Collection emailMessages,
-                                 EmailProcessingCallback callback) throws
-        Exception {
+    public static int sendEmailMessages(Collection emailMessages, EmailProcessingCallback callback) throws Exception {
 
         // Get SMTP object from configuration file,
         // see digi.xml for more details
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
-        logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " +
-                     smtp.getUserPassword());
-        ForwardEmails forwardEmails = DigiConfigManager.getConfig().
-            getForwardEmails();
+        logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " + smtp.getUserPassword());
+        ForwardEmails forwardEmails = DigiConfigManager.getConfig(). getForwardEmails();
 
         // Mail session needs property,
         // we create default property key and fill it
@@ -684,25 +699,20 @@ public class DgEmailManager {
         if (forwardEmails.isEnabled() && forwardEmails.getEmails() != null) {
             addresses = new Address[forwardEmails.getEmails().size()];
             for (int i = 0; i < forwardEmails.getEmails().size(); i++) {
-                addresses[i] = new InternetAddress( (String) forwardEmails.
-                    getEmails().get(i));
+                addresses[i] = new InternetAddress( (String) forwardEmails.getEmails().get(i));
             }
         }
 
-        javax.mail.Session session = javax.mail.Session.getDefaultInstance(
-            props, null);
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance( props, null);
 
         // send mail directly
         Transport transport = session.getTransport("smtp");
-        transport.connect(smtp.getHost(), smtp.getUserName(),
-                          smtp.getUserPassword());
+        transport.connect(smtp.getHost(), smtp.getUserName(), smtp.getUserPassword());
 
         int numOfSuccesses = 0;
         Iterator iter = emailMessages.iterator();
         while (iter.hasNext()) {
-            PlainTextEmailMessage emailMessage = (PlainTextEmailMessage)
-                iter.
-                next();
+            PlainTextEmailMessage emailMessage = (PlainTextEmailMessage) iter. next();
 
             // We create mime message, recipient,
             // to, subject and message content
@@ -728,9 +738,7 @@ public class DgEmailManager {
         return numOfSuccesses;
     }
 
-    private static MimeMessage createMimeMessage(javax.mail.Session session,
-                                          PlainTextEmailMessage emailMessage, Address[] addresses) throws
-        MessagingException {
+    private static MimeMessage createMimeMessage(javax.mail.Session session, PlainTextEmailMessage emailMessage, Address[] addresses) throws MessagingException {
         MimeMessage initialMessage = createMimeMessage(session, (EmailMessage)emailMessage, addresses);
 
         String bodyHeader = null;
@@ -779,33 +787,22 @@ public class DgEmailManager {
             if (emailMessage.isRTL()) {
               htmlText = "<HTML dir=rtl><HEAD></HEAD><BODY>" + htmlText + "</BODY></HTML>";
             }
-
-
             mbpHtml.setContent(htmlText, mimeType);
-
-
-
+            
             content.addBodyPart(mbpText);
             content.addBodyPart(mbpHtml);
 
             initialMessage.setContent(content);
-
-        }
-        else {
+        }else {
             initialMessage.setText(text, realCharset);
         }
-
         return initialMessage;
     }
 
-    private static MimeMessage createMimeMessage(javax.mail.Session session,
-                                          EmailMessage emailMessage, Address[] addresses) throws
-        MessagingException {
+    private static MimeMessage createMimeMessage(javax.mail.Session session,EmailMessage emailMessage, Address[] addresses) throws MessagingException {
 
-        if (emailMessage.getTORecipients() == null & emailMessage.getCCRecipients() == null &&
-            emailMessage.getBCCRecipients() == null) {
-            throw new IllegalArgumentException(
-                "one of the parameter to,cc,bcc must be not-null");
+        if (emailMessage.getTORecipients() == null & emailMessage.getCCRecipients() == null && emailMessage.getBCCRecipients() == null) {
+            throw new IllegalArgumentException("one of the parameter to,cc,bcc must be not-null");
         }
 
         MimeMessage message = new MimeMessage(session);
@@ -815,7 +812,6 @@ public class DgEmailManager {
         String subject = emailMessage.getSubject();
         //Remove return and newline characters from subject string
         if (subject != null && subject.length() > 0) {
-
             Matcher matcher = CarReturnPattern.matcher(subject);
             if (matcher.find()) {
                 subject = matcher.replaceAll("");
@@ -824,8 +820,7 @@ public class DgEmailManager {
 
         if (addresses != null) {
             message.addRecipients(Message.RecipientType.TO, addresses);
-        }
-        else {
+        } else {
             if (emailMessage.getTORecipients() != null)
                 message.addRecipients(Message.RecipientType.TO, emailMessage.getTORecipients());
 
@@ -839,7 +834,7 @@ public class DgEmailManager {
         message.setSubject(subject, getRealCharset(emailMessage));
 
         return message;
-        }
+    }
 
     private static String getRealCharset(EmailMessage emailMessage) {
         String realCharset = emailMessage.getCharset();
@@ -849,13 +844,9 @@ public class DgEmailManager {
         return realCharset;
     }
 
-    public static PlainTextEmailMessage createEmailMessage(final Address[] to,
-            final Address from, final Address[] cc,
-            final Address[] bcc, final String subject,
+    public static PlainTextEmailMessage createEmailMessage(final Address[] to, final Address from, final Address[] cc, final Address[] bcc, final String subject,
         final String text, final String charset, final boolean asHtml) {
       return createEmailMessage(to, from, cc, bcc,  subject,  text,  charset,  asHtml, false);
-
-
     }
 
 

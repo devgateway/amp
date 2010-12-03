@@ -26,8 +26,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
@@ -44,12 +42,8 @@ public class ShowEditDocument
         SdmForm formBean = (SdmForm) form;
 
         if ((formBean.getActiveDocumentId() != null) || (formBean.getSdmDocument() != null)) {
-
-            // get documents List from data base
-            ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(
-                request);
-
-            Sdm sdmDocument = null;
+        	
+        	Sdm sdmDocument = null;
 
             if (formBean.getActiveDocumentId() != null) {
                 sdmDocument = DbUtil.getDocument(formBean.getActiveDocumentId());

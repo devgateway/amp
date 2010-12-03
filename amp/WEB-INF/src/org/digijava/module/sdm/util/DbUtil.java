@@ -447,6 +447,96 @@ public class DbUtil {
         }
 
     }
+    
+    public static Sdm saveOrUpdateDocument(Sdm document) throws SDMException {
+        Transaction tx = null;
+        Session session = null;
+        Sdm doc=null;
+        boolean newDoc=false;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            session.clear();
+            if(document.getId()==null){
+            	newDoc=true;
+            	doc=new Sdm();
+            }else{
+            	doc=getDocument(document.getId());
+            }
+            if(doc==null){
+            	newDoc=true;
+            	doc=new Sdm();
+            }
+            doc.setInstanceId(document.getInstanceId());
+            doc.setSiteId(document.getSiteId());
+            doc.setName(document.getName());
+            session.saveOrUpdate(doc);
+            
+            if(newDoc){
+            	if(document.getItems()!=null){
+            		Iterator<SdmItem> iter=document.getItems().iterator();
+            		while(iter.hasNext()){
+            			SdmItem oldItem = (SdmItem) iter.next();
+            			SdmItem newItem=new SdmItem();
+            			newItem.setAlignment(oldItem.getAlignment());
+            			newItem.setBold(oldItem.getBold());
+            			newItem.setContent(oldItem.getContent());
+            			newItem.setContentText(oldItem.getContentText());
+            			newItem.setContentTitle(oldItem.getContentTitle());
+            			newItem.setContentType(oldItem.getContentType());
+            			newItem.setFont(oldItem.getFont());
+            			newItem.setFontSize(oldItem.getFontSize());
+            			newItem.setItalic(oldItem.getItalic());
+            			newItem.setParagraphOrder(oldItem.getParagraphOrder());
+            			newItem.setRealType(oldItem.getRealType());
+            			newItem.setUnderline(oldItem.getUnderline());
+            			newItem.setDocument(doc);
+            			//save item
+            			 session.save(newItem);
+            			//add this item to doc
+                         if(doc.getItems()==null){
+                         	doc.setItems(new HashSet<SdmItem>());
+                         }
+                         doc.getItems().add(newItem);
+            		}
+            	}
+            }else{
+            	if (document.getItems() != null) {
+                    Iterator iter = document.getItems().iterator();
+                    while (iter.hasNext()) {
+                        SdmItem item = (SdmItem) iter.next();
+                        if (item.getDocument() == null) {
+                            item.setDocument(doc);
+                            session.save(item);
+                            //add this item to doc
+                            if(doc.getItems()==null){
+                            	doc.setItems(new HashSet<SdmItem>());
+                            }
+                            doc.getItems().add(item);
+                        }
+                        else {
+                            session.update(item);
+                        }
+                    }
+                }
+            }            
+            
+            tx.commit();
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to update document information into database",ex);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                }
+                catch (HibernateException ex1) {
+                    logger.warn("rollback() failed", ex1);
+                }
+            }
+            throw new SDMException("Unable to update document information into database", ex);
+        }
+        return doc;
+    }
 
     public static List getDocuments(HttpServletRequest request) throws
         SDMException {

@@ -30,31 +30,28 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ShowDocumentsList
     extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         SdmForm formBean = (SdmForm) form;
         List documentsList = null;
 
         // get documents List from data base
         ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(request);
+        String siteId = RequestUtils.getSite(request).getId().toString();
 
-        documentsList = DbUtil.getDocuments(moduleInstance.getSite().
-                                            getSiteId(),
-                                            moduleInstance.getInstanceName());
+        documentsList = DbUtil.getDocuments(siteId,moduleInstance.getInstanceName());
 
         if (documentsList != null) {
             formBean.setDocumentsList(documentsList);
-        }
-        else {
+        } else {
             formBean.setDocumentsList(null);
         }
 

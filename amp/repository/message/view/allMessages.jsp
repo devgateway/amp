@@ -37,6 +37,7 @@
 	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
 	var referenceURL='<digi:trn>Reference URL</digi:trn>';
+	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
     var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
     var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
     var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
@@ -1549,7 +1550,7 @@ function addActionToURL(actionName){
 		<div class="tab_opt"><div class="tab_opt_cont"><b class="sm_sel">Inbox</b> &nbsp;|&nbsp; <a href=#dialog2 class="l_sm">Sent</a> &nbsp;|&nbsp; <a href=#dialog3 class="l_sm">Draft</a></div>
 			</div>
 		</div>
-		<div class="paging"><b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">»</a></div>
+		<div class="paging"><b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">ï¿½</a></div>
 		<table class="inside" width=740 cellpadding="0" cellspacing="0" id="msgsList">
 			
 			<%--

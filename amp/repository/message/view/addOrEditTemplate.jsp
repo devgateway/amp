@@ -9,7 +9,7 @@
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
 <script langauage="JavaScript">
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
@@ -307,6 +307,11 @@
 																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
 																						<digi:trn> {Created By} - Stands for the name of the creator of the activity &nbsp;</digi:trn>
 																						<br />
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9"><digi:trn> {approved by} - Stands for activity approver &nbsp; &nbsp;</digi:trn>
+																					<br />
 																					</TD>
 																				</TR>
 																				<TR>

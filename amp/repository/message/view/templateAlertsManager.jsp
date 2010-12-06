@@ -279,6 +279,12 @@ div.fakefile2 input{
 					</TR>
 					<TR>
 						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+							<digi:trn> {approved by} - Stands for activity approver &nbsp; &nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>
+					<TR>
+						<TD nowrap="nowrap" bgcolor="#E9E9E9">
 							<digi:trn key="message:patternUrl"> {url} - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
 						<br />
 						</TD>
@@ -294,7 +300,7 @@ div.fakefile2 input{
 							<digi:trn key="message:patternEndDate"> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
 						<br />
 						</TD>
-					</TR>
+					</TR>				
 				</TABLE>
 
 				</td></tr>

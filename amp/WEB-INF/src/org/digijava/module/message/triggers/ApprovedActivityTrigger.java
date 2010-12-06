@@ -13,10 +13,11 @@ public class ApprovedActivityTrigger extends Trigger {
     public static final String PARAM_SAVE_DATE="saveDate";
     public static final String PARAM_URL="url";
     public static final String PARAM_ACTIVIY_CREATOR_TEAM="creator_team";
+    public static final String PARAM_APPROVED_BY="approvedBy";
     
     private AmpTeamMember previouslyUpdatedBy=null;
 
-    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_SAVED_BY,PARAM_SAVE_DATE,PARAM_URL};
+    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_SAVED_BY,PARAM_SAVE_DATE,PARAM_URL,PARAM_APPROVED_BY};
 
     public ApprovedActivityTrigger(Object source,AmpTeamMember previouslyUpdatedBy) {
         if(!(source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
@@ -34,12 +35,20 @@ public class ApprovedActivityTrigger extends Trigger {
         e.getParameters().put(PARAM_NAME,act.getName());
         if(this.previouslyUpdatedBy!=null){
             e.getParameters().put(PARAM_SAVED_BY,this.previouslyUpdatedBy);
+           
         }else{
             e.getParameters().put(PARAM_SAVED_BY,act.getActivityCreator());
-        }        
+        } 
+        if(act.getModifiedBy()==null){
+        	e.getParameters().put(PARAM_APPROVED_BY,act.getActivityCreator());
+        }
+        else{
+        	e.getParameters().put(PARAM_APPROVED_BY,act.getModifiedBy());
+        }
         e.getParameters().put(PARAM_ACTIVIY_CREATOR_TEAM, act.getTeam().getAmpTeamId());
-        e.getParameters().put(PARAM_SAVE_DATE, new Date());
+        e.getParameters().put(PARAM_SAVE_DATE, new Date());   
         e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
+        
         return e;
     }
 

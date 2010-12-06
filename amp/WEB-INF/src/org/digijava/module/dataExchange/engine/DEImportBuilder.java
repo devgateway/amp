@@ -114,6 +114,8 @@ import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.hibernate.HibernateException;
 import org.hibernate.type.NullableType;
 import org.xml.sax.SAXException;
@@ -209,10 +211,17 @@ public class DEImportBuilder {
 	private void saveActivity(AmpActivity activity, Boolean update) throws Exception{
 		// TODO Auto-generated method stub
 		
-		if(update == false) 
+		if(update == false) {
 			DataExchangeUtils.saveActivityNoLogger(activity);
-		else 
+			new ActivitySaveTrigger(activity);
+		}
+		else {
 			DataExchangeUtils.updateActivityNoLogger(activity);
+		}
+		
+		if(!("allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(activity.getTeam().getAmpTeamId()).getValidation()))&&!activity.getApprovalStatus().equals(org.digijava.module.aim.helper.Constants.APPROVED_STATUS)){
+			new NotApprovedActivityTrigger(activity);
+		}
 	}
 
 	private void processPreStep(AmpActivity activity, Boolean update) {

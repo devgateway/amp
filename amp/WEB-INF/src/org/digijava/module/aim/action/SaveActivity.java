@@ -77,6 +77,7 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -2690,21 +2691,24 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
-              
-                        AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
-                        if (aAct.getDraft() != null && !aAct.getDraft() &&
-                        		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
-                            if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
-                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
-                                    if(!eaForm.getIdentification().getPreviousApprovalStatus().equals(Constants.APPROVED_STATUS)){ //if previous status was approved,no need to create new Approved Activity Alert
-                                    	new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
-                                    }                                	
-                                }
-                            } else {
-                                new NotApprovedActivityTrigger(aAct);
-
-                            }
+			//if validation is off in team setup no messages should be generated
+			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
+				AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
+                if (aAct.getDraft() != null && !aAct.getDraft() &&
+                		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
+                    if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
+                        if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
+                            if(!eaForm.getIdentification().getPreviousApprovalStatus().equals(Constants.APPROVED_STATUS)){ //if previous status was approved,no need to create new Approved Activity Alert
+                            	new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
+                            }                                	
                         }
+                    } else {
+                        new NotApprovedActivityTrigger(aAct);
+
+                    }
+                }
+			}
+                        
 			
 			/*actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 					true, eaForm.getCommentsCol(), eaForm
@@ -2781,10 +2785,20 @@ public class SaveActivity extends Action {
 			activity = rsp.getActivity();
                         
 			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
-            if(activity.getDraft()!=null && !activity.getDraft()){
+			//if validation is off in team setup no messages should be generated
+				if (activity.getDraft() != null
+						&& !activity.getDraft()
+						&& !("allOff"
+								.equals(DbUtil.getTeamAppSettingsMemberNotNull(
+										tm.getTeamId()).getValidation()))) {
             	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)||activity.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS)){
-            		if(aAct.getActivityCreator().getAmpTeam().getTeamLead()!=null && ! aAct.getActivityCreator().getAmpTeam().getTeamLead().getAmpTeamMemId().equals(aAct.getActivityCreator().getAmpTeamMemId())){
-            			new ApprovedActivityTrigger(aAct,null); //if TL created activity, then no Trigger is needed
+            		AmpTeamMemberRoles role=aAct.getActivityCreator().getAmpMemberRole();
+            		boolean isTeamHead=false;
+            		if(role.getTeamHead()!=null&&role.getTeamHead()){
+            			isTeamHead=true;
+            		}
+					if(!isTeamHead&&!role.isApprover() ){
+            			new ApprovedActivityTrigger(aAct,null); //if TL or approver created activity, then no Trigger is needed
             		}
             	}else{
             		new NotApprovedActivityTrigger(aAct);

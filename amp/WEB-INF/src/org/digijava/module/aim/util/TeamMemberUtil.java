@@ -309,6 +309,31 @@ public class TeamMemberUtil {
 		}
 		return member;
 	}
+	public static List<AmpTeamMember> getTeamHeadAndApprovers(Long teamId) {
+
+		Session session = null;
+		Query qry = null;
+		List<AmpTeamMember> members = new ArrayList<AmpTeamMember>();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select teamMember from "
+					+ AmpTeamMember.class.getName()
+					+ " teamMember inner join teamMember.ampTeam  tm" +
+					" inner join teamMember.ampMemberRole role "+
+							" where tm.ampTeamId=:teamId and (role.teamHead=true or role.approver=true)";
+			qry = session.createQuery(queryString);
+			qry.setLong("teamId", teamId);
+			@SuppressWarnings("unchecked")
+			List<AmpTeamMember> list =(List<AmpTeamMember>) qry.list();
+			if(list!=null){
+				members.addAll(list);
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get team member", e);
+		} 
+		return members;
+	}
+	
 
 	public static Collection getMembersUsingRole(Long roleId) {
 		Session session = null;

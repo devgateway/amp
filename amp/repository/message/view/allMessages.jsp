@@ -211,16 +211,6 @@ background-color:yellow;
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
 
-    function hoverTr(id, obj){
-    	
-    	if(slMsgId!=id){
-         obj.className='Hovered';
-        }   
-    }
-    
-    function closeWindow() {	
-       selectedMessagePanel.destroy();
-    }
     
     /*code below doesn't look good... but still
      *  it attachs events to rows: mouse over(makes row color darker) 
@@ -580,6 +570,7 @@ background-color:yellow;
 		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage+'&timeStamp='+lastTimeStamp);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
+		
 		async.call(url);
 	}
 	
@@ -1551,30 +1542,40 @@ function addActionToURL(actionName){
 
 			<div class="tab_opt">
 				<div class="tab_opt_cont">
-					<c:if test="${messageForm.childTab=='inbox'}">
-						<b class="sm_sel">Inbox</b> &nbsp;|&nbsp; 
-					</c:if>
-					<c:if test="${messageForm.childTab!='inbox'}">
-						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" class="l_sm">Inbox</a> &nbsp;|&nbsp; 
-					</c:if>
+					<span id="tab_inbox">
+						<c:if test="${messageForm.childTab=='inbox'}">
+							<b class="sm_sel">Inbox</b> 
+						</c:if>
+						<c:if test="${messageForm.childTab!='inbox'}">
+							<a href="#tab_inbox" class="l_sm">Inbox</a> 
+						</c:if>
+					</span>
+					&nbsp;|&nbsp;
 						
+					<span id="tab_sent">
+						<c:if test="${messageForm.childTab=='sent'}">
+							<b class="sm_sel">Sent</b> 
+						</c:if>
+						<c:if test="${messageForm.childTab!='sent'}">
+							<a href="#tab_sent" class="l_sm">Sent</a>
+						</c:if>
+					</span>
+					&nbsp;|&nbsp; 
 					
-					<c:if test="${messageForm.childTab=='sent'}">
-						<b class="sm_sel">Sent</b> &nbsp;|&nbsp; 
-					</c:if>
-					<c:if test="${messageForm.childTab!='sent'}">
-						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" class="l_sm">Sent</a> &nbsp;|&nbsp; 
-					</c:if>
+					<span id="tab_draft">
+						<c:if test="${messageForm.childTab=='draft'}">
+							<b class="sm_sel">Draft</b>
+						</c:if>
+						<c:if test="${messageForm.childTab!='draft'}">
+							<a href="#tab_draft" class="l_sm">Draft</a>
+						</c:if>
+					</span>
 					
-					<c:if test="${messageForm.childTab=='draft'}">
-						<b class="sm_sel">Draft</b>
-					</c:if>
-					<c:if test="${messageForm.childTab!='draft'}">
-						<a href="/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" class="l_sm">Draft</a>
-					</c:if>
+					
 				</div>
 			</div>
 		</div>
+		
 
 		<div class="paging">
 			
@@ -1601,12 +1602,26 @@ $(document).ready(function(){
 	$("#filter_tabs").tabs();
 
 
-/*
-	$("#tabs a").click(function(){
-		
+	$("#tabs>ul>li>a").unbind("click");
+	$("#tabs>ul>li>a").bind("click", tabsClick);
+	
+
+	
+
+	function tabsClick (event){
 		var selTab = $(this).attr("href");
+		$("#tabs ul li").removeClass("ui-tabs-selected").removeClass("ui-state-active");
+		$(this).parent().addClass("ui-tabs-selected").addClass("ui-state-active");
+		
+		//alert (selTab.substring(6));
+		
+		tabIndex = parseInt(selTab.substring(6));
+		currentPage = 1;
+		switchBoxTab('#tab_inbox');
 		
 		
+		
+		/*
 		if (selTab == "#tabs-1") {
 				tabIndex = 1;
 		} else if (selTab == "#tabs-2") {
@@ -1615,55 +1630,29 @@ $(document).ready(function(){
 				tabIndex = 3;
 		} else if (selTab == "#tabs-4") {
 				tabIndex = 5;
-		}
-		
+		}*/
 		getMessages();
-		
 		return false;
-	});
-*/
+	};
 
+	function switchBoxTab(switchToTabID) {
+		childTab = switchToTabID.substring(5);
+		var selectedTab = $(".tab_opt>.tab_opt_cont b");
+		selectedTab.parent().html("<a class='l_sm' href='#" + selectedTab.parent().attr("id") + "'>" + selectedTab.text() + "</a>");
+		$(switchToTabID).html('<b class="sm_sel">' + $(switchToTabID + '>a').text() + '</b>');
+		$(".tab_opt_cont a").unbind("click");
+		$(".tab_opt_cont a").bind("click", boxTabClick);
+	}
 
-	$(".tab_opt_cont a").click(function(){
-		//$(this).siblings("div:first").slideToggle();
+	$(".tab_opt_cont a").bind("click", boxTabClick);
+		
+	function boxTabClick (obj){
 		var selector = $(this).attr("href");
-		
-		/*
-		alert(selector);
-		
-		
-		var dlgopts = {
-			height: 200,
-			width: 400,
-			modal: true
-			};
-		switch (selector)
-        {
-			case '#dialog1':
-				dlgopts.width = 400;
-				dlgopts.height = 180;
-
-			break;
-			case '#dialog2':
-				dlgopts.width = 900;
-				dlgopts.height = 500;
-			break;
-			case '#dialog3':
-				dlgopts.width = 400;
-				dlgopts.height = 110;
-				
-			break;
-			case '#dialog4':
-				dlgopts.width = 500;
-				dlgopts.height = 420;
-			break;
-
-
-		};	
-     	$(selector).dialog(dlgopts);
-*/
-//		return false;
-		});
+		switchBoxTab(selector);
+		currentPage = 1;
+		getMessages();
+		return false;
+		}		
 	
 })
 </script>

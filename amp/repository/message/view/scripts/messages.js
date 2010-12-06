@@ -367,14 +367,12 @@
 	}
 	
 	var tabIndex = 1;
+	var childTab = "inbox";
 	
 	function getMessages(){
 		lastTimeStamp = new Date().getTime();
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage + '&tabIndex=' + tabIndex +'&timeStamp='+lastTimeStamp);			
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+ currentPage + '&childTab=' + childTab + '&tabIndex=' + tabIndex +'&timeStamp='+lastTimeStamp);			
 		$("#msgsList").html("<tr><td><div align='center'><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif'/></div></td></tr>");
-		
-		
-		
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
@@ -388,7 +386,7 @@
 		
 		
 		var tbl = document.getElementById('msgsList');
-
+		
 		var browser=navigator.appName;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
@@ -441,56 +439,6 @@
 					
 					
 					
-					if(myArray!=null && myArray.length>0){
-						var whereToInsertRow=1;						
-						for(var i=0;i<messages.length;i++){
-							var msgId=messages[i].getAttribute('msgid');
-							
-							
-                                                       
-							for(var j=0;j<myArray.length;j++){
-								if(msgId==myArray[j]){
-									break;
-								}else{
-									if(j==myArray.length-1){
-										if(paginationTag!=null){
-											var pagParams=paginationTag.childNodes[0];
-											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
-											if(wasDelteActionCalled=='true'){
-                                                var msgTR;
-												
-												if(browser=="Microsoft Internet Explorer"){
-										   			msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-										   			
-												}else{
-                                                    msgTR=document.createElement('TR');      	
-                                                    msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                               	}                                                 
-                                               	var color=++j;                                    
-                                                msgTR=paintTr(msgTR,color);                                                                                                
-												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
-												myArray[myArray.length]=msgId;										
-											}else{
-												tbl.tBodies[0].insertRow(whereToInsertRow);
-												var msgTr=tbl.tBodies[0].rows[whereToInsertRow];
-												if(browser=="Microsoft Internet Explorer"){
-									   				msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');	
-												}else{
-                                                                                                        
-                                                    msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-												}
-												msgTr=paintTr(msgTr,i);
-												createTableRow(tbl,msgTR,messages[i],true);
-												myArray[myArray.length]=msgId;
-												whereToInsertRow++;										
-												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
-											}
-										}												
-									}							
-								}
-							}
-						}		
-					} else {
 						var messageListMarkup = new Array();
 						//create header
 						messageListMarkup.push('<tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
@@ -554,7 +502,7 @@
 						tbl.innerHTML = messageListMarkup.join("");
 						
 					}			
-				}//messages end
+				//messages end
 				
 				//pagination start			
 				if(paginationTag!=null){

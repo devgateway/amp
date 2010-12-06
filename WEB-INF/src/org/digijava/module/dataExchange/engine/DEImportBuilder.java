@@ -818,8 +818,8 @@ public class DEImportBuilder {
 		if(activity.getOrgrole() !=null )
 			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
 				AmpOrgRole aor = (AmpOrgRole) it.next();
-				if( !Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
-					it.remove();
+				if(  (org.digijava.module.aim.helper.Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode())) ) ;
+				else it.remove();
 			}
 		if(relatedOrgs!=null)
 			for (Iterator it = relatedOrgs.iterator(); it.hasNext();) {
@@ -874,12 +874,16 @@ public class DEImportBuilder {
 				//activity.setOrgrole(new HashSet());
 				//}
 				//activity.getOrgrole().addAll(orgRole);
-				
-				if (activity.getOrgrole() == null){
-					activity.setOrgrole(new HashSet());
+				if (activity.getOrgrole()==null){
+					activity.setOrgrole(orgRole);
+				}else{
+					activity.getOrgrole().addAll(orgRole);
 				}
-				else activity.getOrgrole().clear();
-				activity.getOrgrole().addAll(orgRole);
+//				if (activity.getOrgrole() == null){
+//					activity.setOrgrole(new HashSet());
+//				}
+//				else ;;//activity.getOrgrole().clear();
+//				activity.getOrgrole().addAll(orgRole);
 				
 			}
 	}
@@ -1490,8 +1494,9 @@ public class DEImportBuilder {
 		if(activity.getOrgrole() !=null && actType.getFunding() != null)
 			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
 				AmpOrgRole aor = (AmpOrgRole) it.next();
-				if( Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
+				if( org.digijava.module.aim.helper.Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
 					it.remove();
+				//else orgRole.add(aor);
 			}
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
 			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -1530,7 +1535,6 @@ public class DEImportBuilder {
 			//TODO: the language - lang attribute
 			if(funding.getConditions() != null) ampFunding.setConditions(funding.getConditions().getValue());
 			fundings.add(ampFunding);
-
 			AmpOrgRole ampOrgRole = new AmpOrgRole();
 			ampOrgRole.setActivity(activity);
 			ampOrgRole.setRole(role);
@@ -1538,12 +1542,16 @@ public class DEImportBuilder {
 			orgRole.add(ampOrgRole);
 		}
 		
-		if (activity.getOrgrole() == null){
-			activity.setOrgrole(new HashSet<AmpOrgRole>());
+//		if (activity.getOrgrole() == null){
+//			activity.setOrgrole(new HashSet<AmpOrgRole>());
+//		}
+//		else ; // already cleared at the beginning of the method!
+		//activity.getOrgrole().addAll(orgRole);
+		if (activity.getOrgrole()==null){
+			activity.setOrgrole(orgRole);
+		}else{
+			activity.getOrgrole().addAll(orgRole);
 		}
-		else ; // already cleared at the beginning of the method!
-		activity.getOrgrole().addAll(orgRole);
-		
 		return fundings;
 	}
 

@@ -107,14 +107,6 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 		this.submodules = submodules;
 	}
 
-	/**
-	 * @see org.digijava.module.gateperm.core.Permissible#getImplementedActions()
-	 */
-	@Override
-	public String[] getImplementedActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/**
 	 * @see org.digijava.module.gateperm.core.Permissible#getPermissibleCategory()

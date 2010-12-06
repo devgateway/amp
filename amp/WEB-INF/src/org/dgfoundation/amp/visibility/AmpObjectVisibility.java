@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
+import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
 /**
@@ -20,6 +21,7 @@ import org.digijava.module.gateperm.core.Permissible;
  *
  */
 public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable,ClusterIdentifiable {
+     private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	protected Long id;
@@ -138,6 +140,9 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	
 	public String getClusterIdentifier() { 
 		return name;
+	}
+        public String[] getImplementedActions() {
+	   return  IMPLEMENTED_ACTIONS.clone();
 	}
 	
 		

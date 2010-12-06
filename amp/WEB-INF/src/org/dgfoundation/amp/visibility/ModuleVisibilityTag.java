@@ -6,8 +6,10 @@
 package org.dgfoundation.amp.visibility;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -16,7 +18,10 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 /**
@@ -155,10 +160,24 @@ public class ModuleVisibilityTag extends BodyTagSupport {
     	    * 
     	    * if field is active then display the content
     	    */
-   		   
-    	   if(ampTreeVisibility!=null)
+            if(ampTreeVisibility!=null)
    		   if(isModuleActive(ampTreeVisibility)){
-   			   
+                               Map scope=PermissionUtil.getScope(pageContext.getSession());
+                               AmpModulesVisibility ampModulesFromTree=ampTreeVisibility.getModuleByNameFromRoot(getName());
+                               TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+
+   				if (teamMember!=null && !teamMember.getTeamHead()){
+   	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+   	   			    ServletRequest request = pageContext.getRequest();
+   	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
+   	   			    if(ampModulesFromTree.getPermission(false)!=null &&
+   	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
+   	   			    	!ampModulesFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
+   	   			    			actionMode:GatePermConst.Actions.VIEW,scope)){
+   	   			    	return SKIP_BODY;
+   	   			    }
+   				}
+
    			pageContext.getOut().print(bodyText);
    		   }
    		   else{;

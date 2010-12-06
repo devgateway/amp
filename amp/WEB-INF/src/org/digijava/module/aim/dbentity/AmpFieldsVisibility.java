@@ -15,7 +15,6 @@ import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable{
     
-    	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
     	
 	private static final long serialVersionUID = 1255296454545642749L;
 
@@ -59,12 +58,7 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 		return false;
 	}
 
-	@Override
-	public String[] getImplementedActions() {
-	   return IMPLEMENTED_ACTIONS;
-	}
-
-
+	
 	@Override
 	public Class getPermissibleCategory() {
 	    return AmpFieldsVisibility.class;

@@ -9,6 +9,8 @@ import java.util.Hashtable;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 
 /**
  * GateConstants.java 
@@ -27,7 +29,7 @@ public final class GatePermConst {
 	 * All Permissibles must extend the Permissible class
 	 */
 	public static final Class[] availablePermissibles = new Class[] {
-			AmpActivity.class, AmpFieldsVisibility.class };
+			AmpActivity.class,AmpModulesVisibility.class,AmpFeaturesVisibility.class, AmpFieldsVisibility.class };
 
 	public static Hashtable<String,Class> availablePermissiblesBySimpleNames = null;
 	

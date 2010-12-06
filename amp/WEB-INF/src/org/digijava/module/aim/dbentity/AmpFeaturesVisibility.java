@@ -49,11 +49,6 @@ public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serial
 		return false;
 	}
 	@Override
-	public String[] getImplementedActions() {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
-	@Override
 	public Class getPermissibleCategory() {
 	    return AmpFeaturesVisibility.class;
 	    

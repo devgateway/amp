@@ -1,40 +1,4 @@
 
-    function hoverTr(id, obj){
-    	
-    	if(slMsgId!=id){
-         obj.className='Hovered';
-        }   
-    }
-    
-    function closeWindow() {	
-       selectedMessagePanel.destroy();
-    }
-    
-    /*code below doesn't look good... but still
-     *  it attachs events to rows: mouse over(makes row color darker) 
-     *  and mouse out(returns to row it basic color)
-     */
-
-    function paintTr(msgTR,i){
-        var className='';
-        if(i!=1&&i%2==0){
-            msgTR.className = 'trEven';
-            className="this.className='trEven'";                                                            
-        }
-        else{
-            msgTR.className = 'trOdd';
-            className="this.className='trOdd'";
-        }        
-        
-        var setBGColor = new Function(className);
-       
-        /*msgTR.onmouseover=hoverTr;*/
-        msgTR.onmouseout=setBGColor;
-      
-        return msgTR;
-    }   
-    
-
 
 	 function checkForNewMessages(){
 		lastTimeStamp = new Date().getTime(); 
@@ -47,6 +11,7 @@
 	
 		 var openedMessageId = -1;
 		 var loadedMessageIds = new Array();
+		 var messageIdStateMap = new Array();
 		 
      function loadSelectedMessage(id){
      		
@@ -158,58 +123,22 @@
 			var idsArray=msgId.split(',');
 			var tbl=document.getElementById('msgsList');
 			for(var i=0;i<idsArray.length;i++){
-				var index=getIndexOfElement(idsArray[i]);
-				if(index!=-1){
-					myArray.splice(index,1);	
-					//removing TR from rendered messages list
-							
-					var img=document.getElementById(idsArray[i]+'_plus');
-					var imgTD=img.parentNode;
-					var msgTR=imgTD.parentNode;
-					tbl.tBodies[0].removeChild(msgTR);
+				
+				//Get msg id from state id				
+				var idStateIdx;
+				var messageId;
+				for (idStateIdx = 0; idStateIdx < messageIdStateMap.length; idStateIdx ++) {
+					if (messageIdStateMap[idStateIdx][0] == idsArray[i]) {
+						messageId = messageIdStateMap[idStateIdx][1];
+						break;
+					}
 				}
+				
+				$("#msg_body_" + messageId).parent().remove();
 			}
-                
-                                
-			 /* 
-			  * after we delete row we need to repaint remain rows
-			  *  its also reattachs mouse out event to rows: 
-			  * (returns to row it basic (new) color)
-			  */
-			var trs;
-			if(tbl.tBodies.length>0){
-			    trs=tbl.tBodies[0].rows;
-			}
-                                
-			if(trs!=null&&trs.length>0){
 			
-				var startIndex=0;
-				if(trs[0].id=='blankRow'){
-			   		startIndex=1;
-				}
-				for(var i=startIndex;i<trs.length;i++){
-				    if(startIndex==1){
-				        var className='';
-				        if(i!=1&&i%2==0){
-				            trs[i].className = 'trOdd';
-				            className="this.className='trOdd'";
-				
-				        }
-				        else{
-				            trs[i].className='trEven';
-				            className="this.className='trEven'";
-				        }
-				        var setBGColor = new Function(className);
-				        trs[i].onmouseout=setBGColor;
-				    }
-				    else{
-				        trs[i]=paintTr(trs[i],i);
-				    }
-				    
-				
-				}
-			}
 			//removing record from db
+			
 			var url=addActionToURL('messageActions.do');	
 			url+='~actionType=removeSelectedMessage';
 			url+='~editingMessage=false';
@@ -327,6 +256,8 @@
                 return false;  
             }
 		}
+		
+		
 		var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,selMsgsIds);
 		var async=new Asynchronous();
@@ -355,11 +286,14 @@
 		var messages=responseXML.getElementsByTagName('Messaging')[0].childNodes;
 		if(messages!=null){
 			for (var i=0;i<messages.length;i++){
-				var stateId=messages[i].getAttribute('id');
+				
+				var msgId=messages[i].getAttribute('msgId');
 				var isRead=messages[i].getAttribute('read');
 				if(isRead){
-					var myid='#'+stateId+'_unreadLink';
-					$(myid).css("color","");		
+					var msgTd = $("#msg_body_" + msgId);
+					msgTd.find("IMG").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
+					msgTd.find("A").text(msgTd.find("B").text());
+					msgTd.find("B").remove();
 				}
 			}
 			deselectAllCheckboxes();
@@ -383,6 +317,7 @@
 		
 		openedMessageId = -1;
 		loadedMessageIds = new Array();
+		messageIdStateMap = new Array();
 		
 		
 		var tbl = document.getElementById('msgsList');
@@ -430,74 +365,112 @@
 				} else {
                        
 					messages=root.childNodes;
-                                
-                  
-					//var tblBody=tbl.getElementsByTagName('tbody')[0];
-					//while (tblBody.childNodes.length>0){
-					//	tblBody.removeChild(tblBody.childNodes[0]);
-					//}
-					
-					
+
 					
 						var messageListMarkup = new Array();
 						//create header
-						messageListMarkup.push('<tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
-						messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>');
-						messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td></tr>');
+						
 						
     
-    
-    
-						
-						for(var i=0;i<messages.length;i++){
+    				if (messages.length != 0) {
+		    
+		    			messageListMarkup.push('<tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
+							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>');
+							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td></tr>');
+					
+							for(var i=0;i<messages.length;i++){
+								
+								var msgId=messages[i].getAttribute('msgId');
+								myArray[i]=msgId;				
+								
+								messageIdStateMap.push (new Array (messages[i].getAttribute('id'), msgId));
+											
+	            	
+	            	messageListMarkup.push('<tr><td class=inside valign="top"><input ');
+	            	messageListMarkup.push('id="delChkbox_');
+	            	messageListMarkup.push(messages[i].getAttribute('id'));
+	            	messageListMarkup.push('" type="checkbox" value="');
+	            	messageListMarkup.push(messages[i].getAttribute('id'));
+	            	messageListMarkup.push('"/></td>');
+								messageListMarkup.push('<td id="msg_body_');
+	          		messageListMarkup.push(msgId);
+	          		messageListMarkup.push('"');
+	
+	            	if (messages[i].getAttribute('read') == "false") {
+		            	messageListMarkup.push(' class=inside valign="top"><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;">');
+		            	messageListMarkup.push('<a href=');
+	            		messageListMarkup.push('javascript:loadSelectedMessage(');
+	            		messageListMarkup.push(msgId);
+	            		messageListMarkup.push(')');
+	            		messageListMarkup.push(' class=l_sm>');
+	            		messageListMarkup.push('<b>');
+		            	messageListMarkup.push(messages[i].getAttribute('name'));
+		            	messageListMarkup.push('</b>');
+	            	} else {
+	            		messageListMarkup.push('" class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;">');
+	            		messageListMarkup.push('<a href=');
+	            		messageListMarkup.push('javascript:loadSelectedMessage(');
+	            		messageListMarkup.push(msgId);
+	            		messageListMarkup.push(')');
+	            		messageListMarkup.push(' class=l_sm>');
+	            		 
+		            	messageListMarkup.push(messages[i].getAttribute('name'));
+	            	}
+	            	messageListMarkup.push('</a>');
+	
+	            	
+	            	messageListMarkup.push('</td>');
+	            	
+	            	
+	
+								messageListMarkup.push('<td class=inside align=center valign="top">');
+								
+								
+								
+								messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~reply=fillForm~editingMessage=true~msgStateId=');
+								messageListMarkup.push(messages[i].getAttribute('id'));
+								messageListMarkup.push('">');
+								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+								messageListMarkup.push('</a>');
+								
+								messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~fwd=fillForm~msgStateId=');
+								messageListMarkup.push(messages[i].getAttribute('id'));
+								messageListMarkup.push('">');
+								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+								messageListMarkup.push('</a>');
+								
+								messageListMarkup.push('<a href="javascript:deleteMessage(\'');
+								messageListMarkup.push(messages[i].getAttribute('id'));
+								messageListMarkup.push('\')">');
+								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" border="0" width="14" height="14"></td>');
+								messageListMarkup.push('</a>');
+								
+								messageListMarkup.push('</tr>');
+								
+								
+							           																				
+							}//end of for loop
+						} else {
 							
-							var msgId=messages[i].getAttribute('msgId');
-							myArray[i]=msgId;							
-							//creating tr
-            	
-            	messageListMarkup.push('<tr><td class=inside valign="top"><input name="" type="checkbox" value="" /></td>');
-            	
-            	
-							messageListMarkup.push('<td id="msg_body_');
-          		messageListMarkup.push(msgId);            	
-          		messageListMarkup.push('"');
-
-            	if (messages[i].getAttribute('read') == "false") {
-	            	messageListMarkup.push(' class=inside valign="top"><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;">');
-	            	messageListMarkup.push('<a href=');
-            		messageListMarkup.push('javascript:loadSelectedMessage(');
-            		messageListMarkup.push(msgId);
-            		messageListMarkup.push(')');
-            		messageListMarkup.push(' class=l_sm>');
-            		messageListMarkup.push('<b>');
-	            	messageListMarkup.push(messages[i].getAttribute('name'));
-	            	messageListMarkup.push('</b>');
-            	} else {
-            		messageListMarkup.push('" class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;">');
-            		messageListMarkup.push('<a href=');
-            		messageListMarkup.push('javascript:loadSelectedMessage(');
-            		messageListMarkup.push(msgId);
-            		messageListMarkup.push(')');
-            		messageListMarkup.push(' class=l_sm>');
-            		 
-	            	messageListMarkup.push(messages[i].getAttribute('name'));
-            	}
-            	messageListMarkup.push('</a>');
-
-            	
-            	messageListMarkup.push('</td>');
-            	
-            	
-
-							messageListMarkup.push('<td class=inside align=center valign="top"><img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" width="16" height="14" style="margin-right:10px;"><img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" width="14" height="14"></td>');
-							messageListMarkup.push('</tr>');
-							
-							
-							            	                           
-							var isMsgRead=messages[i].getAttribute('read');	
-							
-						           																				
-						}//end of for loop
+							var noItemMsg = null;
+							switch (tabIndex){
+		          case 2:
+		              noItemMsg = noAlerts;
+		              break;
+		          case 3:
+		              noItemMsg = noApprovals;
+		              break;
+		          case 4:
+		              noItemMsg = noEvents;
+		              break;
+		  
+		          default : noItemMsg = noMsgs;
+		          }
+		          
+							messageListMarkup.push('<tr><td class=inside colspan="3" align="center">');
+							messageListMarkup.push(noItemMsg);
+							messageListMarkup.push('</td></tr>');
+						}
 						
 						tbl.innerHTML = messageListMarkup.join("");
 						
@@ -570,277 +543,7 @@
 		}
 	}				
 	
-	
-	//creates table rows with message information
-	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
-	    
-		var msgId=message.getAttribute('id');	//message state id
-        var messageId=message.getAttribute('msgId');
-        var isDraft=message.getAttribute('isDraft');
-        var sateId;
-        if(msgId==null){
-            msgId=messageId;
-        }
-        else{
-            sateId=msgId;
-        }
-        var newMsgId=message.getAttribute('parentStateId');// id of the hierarchy end for forwarding messages
-		//create image's td
-		var imgTD=document.createElement('TD');
-               
-        if(newMsgId!=null){
-            msgId+='_fId'+newMsgId; // create id for forwarded message
 
-        }
-               
-		imgTD.vAlign='top';	
-               
-		imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view//TEMPLATE/ampTemplate/img_2/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-			'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view//TEMPLATE/ampTemplate/img_2/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
-		msgTr.appendChild(imgTD);
-                
-               
-					
-		//message name and description
-		var nameTD=document.createElement('TD');				
-		var msgName; 
-        if(message.childNodes!=null&&message.childNodes.length>0){
-            msgName="FW: "+message.getAttribute('name');
-        }
-        else{
-             msgName=message.getAttribute('name');
-        }
-        if(fwdOrEditDel){
-            nameTD.width='70%';}
-        else{
-            nameTD.width='95%';
-        }
-                   
-		//creating visible div for message name
-		var nameDiv=document.createElement('DIV');
-        var visId;
-        if(!fwdOrEditDel){
-            visId=newMsgId+'_'+msgId+'_dots'
-        }
-        else{
-           visId=+msgId+'_dots' 
-        }
-                
-		nameDiv.setAttribute("id",visId);	
-		var sp=document.createElement('SPAN');
-		var isMsgRead=message.getAttribute('read');
-		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
-		}else {
-            if(isDraft==null||isDraft=='false'){
-                sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
-            }
-            else{
-                sp.innerHTML=msgName;
-            }
-			
-		}
-		nameDiv.appendChild(sp);
-		nameTD.appendChild(nameDiv);
-					
-		//creating hidden div for message description.It'll become visible after user clicks on twistie
-		var descDiv=document.createElement('DIV');
-		var invId='msg_'+msgId;
-		descDiv.setAttribute("id",invId);	
-		descDiv.style.display='none';
-		//creating table inside hidden div
-		var divTable=document.createElement('TABLE');
-		var divTblBody=document.createElement('TBODY');
-		divTable.appendChild(divTblBody);
-		divTable.width='100%';
-		var fromTR=document.createElement('TR');
-		var fromTD1=document.createElement('TD');
-		fromTD1.innerHTML='<strong>'+from+'</strong>';
-		fromTR.appendChild(fromTD1);
-		//getting sender
-		var fromTD2=document.createElement('TD');
-		var msgSender=message.getAttribute('from');
-		if(fromTD2.textContent==undefined){
-			var mytool=msgSender;
-			var temp_array=mytool.split(";");
-			fromTD2.innerText = temp_array[0];
-		} else{
-			var mytool=msgSender;
-			var temp_array=mytool.split(";");
-			fromTD2.textContent = temp_array[0];
-		}
-		fromTR.appendChild(fromTD2);
-		divTblBody.appendChild(fromTR);
-                        
-		var toTR=document.createElement('TR');
-		var toTD1=document.createElement('TD');
-		toTD1.innerHTML='<strong>'+to+'</strong>';
-		toTR.appendChild(toTD1);
-		//getting receives
-		var toTD2=document.createElement('TD');
-		var msgReceiver=message.getAttribute('to');
-		var receiver_array=msgReceiver.split(";");
-		if(receiver_array.length>5){
- 			msgReceiver="";
- 			for(var j=0;j<5;j++){
-   				if(receiver_array[j].indexOf("@") != -1){
-    				msgReceiver+=receiver_array[j];
-    			}
-    			if(j!=4){
-        			msgReceiver+="";
-    			}else{
-         			msgReceiver+="......";
-    			}
- 			}
-		}
-
-		if(toTD2.textContent==undefined){
-			var mytool=msgReceiver;
-			var temp_array=mytool.split(";");
-			toTD2.innerText = temp_array[0];
-			//toTD2.innerText=msgReceiver;
-		} else{
-			var mytool=msgReceiver;
-			var temp_array=mytool.split(";");
-			toTD2.textContent = temp_array[0];
-			//toTD2.textContent=msgReceiver;
-		}
-                       
-                    
-		toTR.appendChild(toTD2);
-		divTblBody.appendChild(toTR);
-                       
-		var receivedTR=document.createElement('TR');
-		var receivedTD1=document.createElement('TD');
-		receivedTD1.innerHTML='<strong>'+date+'</strong>';							
-		receivedTR.appendChild(receivedTD1);
-							
-		//getting received date
-		var receivedTD2=document.createElement('TD');
-		var received=message.getAttribute('received');
-		receivedTD2.innerHTML=received;
-		receivedTR.appendChild(receivedTD2);
-		divTblBody.appendChild(receivedTR);						
-		var priorityTR=document.createElement('TR');
-		var priorityTD1=document.createElement('TD');
-		priorityTD1.innerHTML='<strong>'+prLevel+'</strong>';
-		priorityTR.appendChild(priorityTD1);
-								
-		var priorityTD2=document.createElement('TD');
-		//getting priority level
-		var priority=message.getAttribute('priority');
-			if(priority==1){priorityTD2.innerHTML='low';}
-			else if(priority==2){priorityTD2.innerHTML='Medium';}
-			else if(priority==3){priorityTD2.innerHTML='Critical';}
-			else if(priority==0){priorityTD2.innerHTML='None';}
-		
-		priorityTR.appendChild(priorityTD2);
-		divTblBody.appendChild(priorityTR);	
-				
-		//getting URL
-		var objectURL=message.getAttribute('objURL');
-       	if(objectURL!='null'){
-			var objURLTR=document.createElement('TR');
-			var objURLTD1=document.createElement('TD');
-			objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
-			objURLTR.appendChild(objURLTD1);
-			var objURLTD2=document.createElement('TD');
-			objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
-
-			objURLTR.appendChild(objURLTD2);
-			divTblBody.appendChild(objURLTR);
-		}	
-				
-		var detailsTR=document.createElement('TR');
-		var detailsTD1=document.createElement('TD');
-              detailsTD1.width='30%';
-		detailsTD1.innerHTML='<strong>'+desc+'</strong>';
-		detailsTR.appendChild(detailsTD1);
-			
-		var detailsTD2=document.createElement('TD');
-		//getting description
-		var description=message.getAttribute('msgDetails');
-              if(description!='null'){
-              	description=description.substring(0,34);
-                  detailsTD2.innerHTML=description+" .........";
-              }else{
-               	detailsTD2.innerHTML="&nbsp";
-              }					
-		detailsTR.appendChild(detailsTD2);
-		divTblBody.appendChild(detailsTR);
-                      
-      		// create forwarded messages
-        if(message.childNodes!=null&&message.childNodes.length>0){
-            var forwardedTb=document.createElement('TABLE');
-            forwardedTb.width="100%";
-            forwardedTb.className="my-border-style";
-            var forwardedTbody=document.createElement('TBODY');
-            for(var i=0;i<message.childNodes.length;i++){
-                var forwardedTR=document.createElement('TR');
-                createTableRow(tbl,forwardedTR,message.childNodes[i],false);
-                forwardedTbody.appendChild(forwardedTR);
-            }
-            forwardedTb.appendChild(forwardedTbody);
-            var forwardTR=document.createElement('TR');
-            var forwardTD=document.createElement('TD');
-            forwardTD.setAttribute("colSpan","3");
-            
-            forwardTD.appendChild(forwardedTb);
-            forwardTR.appendChild(forwardTD);
-            divTblBody.appendChild(forwardTR);
-        }
-        descDiv.appendChild(divTable);	
-        nameTD.appendChild(descDiv);
-        msgTr.appendChild(nameTD);
-      
-        if(fwdOrEditDel){
-        
-        	if(isDraft!='true'){
-        		replyTD=document.createElement('TD');
-            	replyTD.width='10%';
-            	replyTD.align='center';
-            	replyTD.vAlign="top";
-            	replyTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&reply=fillForm&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+replyClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/reply.gif" border=0 hspace="2" /></digi:link>';
-            	msgTr.appendChild(replyTD);
-        	}    
-        	        
-			// forward or edit link
-			fwdOrEditTD=document.createElement('TD');
-			fwdOrEditTD.width='10%';
-			fwdOrEditTD.align='center';
-			fwdOrEditTD.vAlign="top";
-			
-			if(isDraft=='true'){
-	            fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/edit.gif" border=0 hspace="2" /></digi:link>';									
-			}else{
-				fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=replyOrForwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/finalForward.gif" border=0  hspace="2" /></digi:link>';
-			}
-			msgTr.appendChild(fwdOrEditTD);	
-						
-			//delete link
-			var deleteTD=document.createElement('TD');
-			deleteTD.width='10%';
-			deleteTD.align='center';
-	        deleteTD.vAlign="top";
-			//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-			deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view//TEMPLATE/ampTemplate/img_2/trash_12.gif" border=0 hspace="2"/></a>';
-			msgTr.appendChild(deleteTD);
-			
-	        //delete link
-			var deleteTDCheckbox=document.createElement('TD');
-			deleteTDCheckbox.width='10%';
-			deleteTDCheckbox.align='center';
-	        deleteTDCheckbox.vAlign="top";
-	        var deleteCheckbox=document.createElement('input');
-	        deleteCheckbox.type='checkbox';
-	        deleteCheckbox.id='delChkbox_'+msgId;
-			deleteCheckbox.value=msgId;
-	        deleteTDCheckbox.appendChild(deleteCheckbox);
-			msgTr.appendChild(deleteTDCheckbox);
-        }
-					
-		return msgTr;			
-	}
        
 	function selectAllCheckboxes(){
 		var allChkboxes=$("input[id^='delChkbox_']");

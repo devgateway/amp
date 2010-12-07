@@ -1589,7 +1589,8 @@ function addActionToURL(actionName){
 			<tr><td></td></tr>
 		</table>
 <br />
-<input type="button" value="Delete selected messages" class="buttonx_sm" /> <input type="button" value="Mark as read" class="buttonx_sm" />
+<input type="button" onclick="deleteMessage()" value="Delete selected messages" class="buttonx_sm" />
+<input type="button" onclick="markMessageAsRead()" value="Mark as read" class="buttonx_sm" />
 
 
 

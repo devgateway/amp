@@ -44,7 +44,7 @@
 						<div class="right_menu_header">
 							<div class="right_menu_header_cont">Information</div>
 						</div>
-						<div class="right_menu_box"><div class="right_menu_cont">
+						<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
 							Total Number: <b>2</b><br />
 							Total Number Of Hidden:	<b>0</b>
 							<hr />
@@ -60,7 +60,7 @@
 					
 					<div class="right_menu">
 					<div class="right_menu_header"><div class="right_menu_header_cont">Icons Reference</div></div>
-					<div class="right_menu_box"><div class="right_menu_cont">
+					<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - Unread message<br />
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - Unread message<br />
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" style="margin-right:5px;"> - Reply to message<br />

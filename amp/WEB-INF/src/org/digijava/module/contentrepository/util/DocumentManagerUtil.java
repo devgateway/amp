@@ -82,7 +82,6 @@ public class DocumentManagerUtil {
 				repository 					= new TransientRepository(repPath + "/repository.xml", repPath);
 				context.setAttribute("JackrabbitRepository", repository);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null; 
 			}

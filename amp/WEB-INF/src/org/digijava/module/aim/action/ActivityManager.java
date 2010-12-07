@@ -15,6 +15,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -211,8 +212,9 @@ public class ActivityManager extends Action {
 	 * @param actForm
 	 * @param request
 	 * @param session
+	 * @throws DgException 
 	 */
-	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) {
+	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws DgException {
 		HttpSession session = request.getSession();
 		String tIds=request.getParameter("tIds");
 		List<Long> topicsIds=getActsIds(tIds.trim());

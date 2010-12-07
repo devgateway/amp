@@ -2691,6 +2691,7 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
+			String additionalDetails="approved";
 			//if validation is off in team setup no messages should be generated
 			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
 				AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
@@ -2704,8 +2705,13 @@ public class SaveActivity extends Action {
                         }
                     } else {
                         new NotApprovedActivityTrigger(aAct);
-
+                        additionalDetails="pending approval";
                     }
+                }
+                else{
+                	if(aAct.getDraft() != null && aAct.getDraft()){
+                		additionalDetails="draft";
+                	}
                 }
 			}
                         
@@ -2719,7 +2725,7 @@ public class SaveActivity extends Action {
 			//update lucene index
 			LuceneUtil.addUpdateActivity(request, true, actId);
 			//for logging the activity
-			AuditLoggerUtil.logActivityUpdate(session, request,
+			AuditLoggerUtil.logActivityUpdate(request,
 					activity, auditTrail);
 
 			// remove the activity details from the edit activity list
@@ -2783,8 +2789,11 @@ public class SaveActivity extends Action {
 
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
+			String additionalDetails="approved";
                         
 			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+			//get member, who previously edited activity. Needed for approved activity trigger
+        	AmpTeamMember previouslyUpdatedBy=ActivityUtil.getActivityUpdator(eaForm.getActivityId());
 			//if validation is off in team setup no messages should be generated
 				if (activity.getDraft() != null
 						&& !activity.getDraft()
@@ -2798,19 +2807,32 @@ public class SaveActivity extends Action {
             			isTeamHead=true;
             		}
 					if(!isTeamHead&&!role.isApprover() ){
-            			new ApprovedActivityTrigger(aAct,null); //if TL or approver created activity, then no Trigger is needed
+            			new ApprovedActivityTrigger(aAct,previouslyUpdatedBy); //if TL or approver created activity, then no Trigger is needed
             		}
             	}else{
             		new NotApprovedActivityTrigger(aAct);
+            		additionalDetails="pending approval";
             	}
             }
+			else{
+				if (activity.getDraft() != null&& activity.getDraft()){
+					additionalDetails="draft";
+				}
+			}
 			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 					field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
 			*/
 			//update lucene index
 			LuceneUtil.addUpdateActivity(request, false, actId);
 			//for logging the activity
-			AuditLoggerUtil.logObject(session, request, activity, "add");
+				if (eaForm.getActivityId() != null&& eaForm.getActivityId() != 0) {
+					List<String> details=new ArrayList<String>();
+					details.add(additionalDetails);
+					AuditLoggerUtil.logActivityUpdate(request, activity,details);
+				} else {
+					AuditLoggerUtil.logObject(request, activity, "add",additionalDetails);
+				}
+			//AuditLoggerUtil.logObject(request, activity, "add",additionalDetails);
 		}
 
 		//If we're adding an activity, create system/admin message

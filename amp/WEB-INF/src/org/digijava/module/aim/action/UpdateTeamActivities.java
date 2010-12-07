@@ -18,15 +18,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 
 public class UpdateTeamActivities extends Action {
 
@@ -78,6 +82,13 @@ public class UpdateTeamActivities extends Action {
 	        }
 	 		    
 			Long selActivities[] = taForm.getSelActivities();
+			for(Long selActivityId:selActivities){
+				AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(selActivityId);
+				String detail="unassigned from team";
+				List<String> details=new ArrayList<String>();
+				details.add(detail);
+				AuditLoggerUtil.logActivityUpdate(request, activity, details);
+			}
 			taForm.setSelActivities(null);
 
 			if (session.getAttribute("unassignedActivityList") != null) {
@@ -103,10 +114,13 @@ public class UpdateTeamActivities extends Action {
 			Long memberId = taForm.getMemberId();
 
 			if (selActivities != null) {
+				String detail="assigned to team";
+				List<String> details=new ArrayList<String>();
+				details.add(detail);
 				for (int i = 0; i < selActivities.length; i++) {
 					if (selActivities[i] != null) {
 						Long actId = selActivities[i];
-						AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
+						AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(actId);
 						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
@@ -130,6 +144,12 @@ public class UpdateTeamActivities extends Action {
 
 						logger.info("updating " + activity.getName());
 						DbUtil.update(activity);
+						new ActivitySaveTrigger(activity);
+						if(!activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+							new NotApprovedActivityTrigger(activity);
+						}
+						
+						AuditLoggerUtil.logActivityUpdate(request, activity, details);
 						//UpdateDB.updateReportCache(actId);
 					}
 				}

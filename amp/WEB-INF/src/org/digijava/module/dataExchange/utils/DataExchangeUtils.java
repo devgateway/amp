@@ -58,14 +58,14 @@ public class DataExchangeUtils {
 	 */
 	
 	static String entityNames[]={
-			"&",	"'",	"\"",	"¢",	"£",	"¤",	"¥",	"¦",	"§",
-			"¨",	"©",	"ª",	"«",	"¬",	"­",	"®",	"¯",	"°",	"±",	"²",	"³",	"´",
-			"µ",	"¶",	"·",	"¸",	"¹",	"º",	"»",	"¼",	"½",	"¾",	"¿",	"×",	"÷",
-			"À",	"Á",	"Â",	"Ã",	"Ä",	"Å",	"Æ",	"Ç",	"È",	"É",	"Ê",	"Ë",	"Ì",
-			"Í",	"Î",	"Ï",	"Ð",	"Ñ",	"Ò",	"Ó",	"Ô",	"Õ",	"Ö",	"Ø",	"Ù",	"Ú",
-			"Û",	"Ü",	"Ý",	"Þ",	"ß",	"à",	"á",	"â",	"ã",	"ä",	"å",	"æ",	"ç",
-			"è",	"é",	"ê",	"ë",	"ì",	"í",	"î",	"ï",	"ð",	"ñ",	"ò",	"ó",	"ô",
-			"õ",	"ö",	"ø",	"ù",	"ú",	"û",	"ü",	"ý",	"þ",	"ÿ", "","","","",""};
+			"&",	"'",	"\"",	"Â¢",	"Â£",	"Â¤",	"Â¥",	"Â¦",	"Â§",
+			"Â¨",	"Â©",	"Âª",	"Â«",	"Â¬",	"Â­",	"Â®",	"Â¯",	"Â°",	"Â±",	"Â²",	"Â³",	"Â´",
+			"Âµ",	"Â¶",	"Â·",	"Â¸",	"Â¹",	"Âº",	"Â»",	"Â¼",	"Â½",	"Â¾",	"Â¿",	"Ã—",	"Ã·",
+			"Ã€",	"Ã�",	"Ã‚",	"Ãƒ",	"Ã„",	"Ã…",	"Ã†",	"Ã‡",	"Ãˆ",	"Ã‰",	"ÃŠ",	"Ã‹",	"ÃŒ",
+			"Ã�",	"ÃŽ",	"Ã�",	"Ã�",	"Ã‘",	"Ã’",	"Ã“",	"Ã”",	"Ã•",	"Ã–",	"Ã˜",	"Ã™",	"Ãš",
+			"Ã›",	"Ãœ",	"Ã�",	"Ãž",	"ÃŸ",	"Ã ",	"Ã¡",	"Ã¢",	"Ã£",	"Ã¤",	"Ã¥",	"Ã¦",	"Ã§",
+			"Ã¨",	"Ã©",	"Ãª",	"Ã«",	"Ã¬",	"Ã­",	"Ã®",	"Ã¯",	"Ã°",	"Ã±",	"Ã²",	"Ã³",	"Ã´",
+			"Ãµ",	"Ã¶",	"Ã¸",	"Ã¹",	"Ãº",	"Ã»",	"Ã¼",	"Ã½",	"Ã¾",	"Ã¿", "","","","",""};
 		//entity names to replace entity charactersentityCharacters
 	static String entityCharacters[]={
 			"&amp;",	"&apos;",	"\"",	
@@ -265,8 +265,9 @@ public class DataExchangeUtils {
 	
 	/**
 	 * @author dan
+	 * @throws DgException 
 	 */
-	public static void saveActivity(AmpActivity activity, HttpServletRequest request){
+	public static void saveActivity(AmpActivity activity, HttpServletRequest request) throws DgException{
 		Session session = null;
 		HttpSession httpSession=request.getSession();
 	    Transaction tx = null;
@@ -303,7 +304,7 @@ public class DataExchangeUtils {
 		//TODO: update the lucene index
 		//LuceneUtil.addUpdateActivity(request, false, activityId);
 		//for logging the activity
-		AuditLoggerUtil.logObject(httpSession, request, activity, "add");
+		AuditLoggerUtil.logObject(request, activity, "add",null);
 	}
 
 	/**

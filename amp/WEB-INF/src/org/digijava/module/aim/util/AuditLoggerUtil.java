@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
@@ -46,19 +47,20 @@ import com.lowagie.text.Row;
 public class AuditLoggerUtil {
 
 	private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-
-	public static void logObject(HttpSession hsession,HttpServletRequest request,
-			LoggerIdentifiable o, String action) {
+	//can't we get session from request? why passing it as parameter?
+	public static void logObject(HttpServletRequest request,
+			LoggerIdentifiable o, String action,String additionalDetails) throws DgException { 
 
 		Session session = null;
 		Transaction tx = null;
+		HttpSession hsession=request.getSession();
 		TeamMember tm = (TeamMember) hsession.getAttribute(Constants.CURRENT_MEMBER);
 		String objId;
 		objId = o.getIdentifier().toString();
 		String objType = (String) o.getObjectType();
 		String browser=request.getHeader("user-agent");
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			tx = session.beginTransaction();
 			AmpAuditLogger aal = new AmpAuditLogger();
@@ -89,23 +91,31 @@ public class AuditLoggerUtil {
 			aal.setObjectType((String) o.getObjectType());
 			aal.setTeamName(tm.getTeamName());
 			aal.setObjectName(o.getObjectName());
+			aal.setDetail(additionalDetails);
 			
 			session.save(aal);
 			tx.commit();
 		} catch (Exception ex) {
-			logger.error("Exception : ", ex);
-		} finally {
-			if (session != null) {
+			logger.error("Cannot save audit logger :", ex);
+			if (tx!=null){
 				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :", rsf);
+					tx.rollback();
+				} catch (Exception e1) {
+					logger.error("Release session failed :", e1);
+					throw new DgException("Cannot rallback",e1);
 				}
 			}
-		}
-
+			throw new DgException("Cannot save audit logger",ex);
+		} 
 		return;
 	}
+	
+	
+	public static void logObject(HttpSession hsession,HttpServletRequest request,
+			LoggerIdentifiable o, String action) throws DgException {
+		logObject(request,o, action,null);
+	}
+
 
 	private static Collection<AmpAuditLogger> getAudits(Session session,
 			String objId, String objType) {
@@ -130,9 +140,10 @@ public class AuditLoggerUtil {
 		return null;
 	}
 
-	public static void logActivityUpdate(HttpSession hsession,HttpServletRequest request, AmpActivity activity, List<String> details){
+	public static void logActivityUpdate(HttpServletRequest request, AmpActivity activity, List<String> details){
 		Session session = null;
 		Transaction tx = null;
+		HttpSession hsession = request.getSession();
 		TeamMember tm = (TeamMember) hsession.getAttribute(Constants.CURRENT_MEMBER);
 		String objId;
 		objId = activity.getIdentifier().toString();
@@ -151,9 +162,10 @@ public class AuditLoggerUtil {
 				existentLoggerObj = (AmpAuditLogger) col
 						.iterator().next();
 			}
-
-			Iterator<String> it = details.iterator();
-			while(it.hasNext()){
+			StringBuilder message=new StringBuilder();
+			for(String detail:details){
+				message.append(detail+" ");
+			}
 				AmpAuditLogger aal = new AmpAuditLogger();
 				if(existentLoggerObj!=null){
 					aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
@@ -164,7 +176,6 @@ public class AuditLoggerUtil {
 					aal.setAuthorEmail(tm.getEmail());
 					aal.setLoggedDate(ts);
 				}
-				String message = it.next();
 				aal.setEditorEmail(tm.getEmail());
 				aal.setEditorName(tm.getMemberName());
 				aal.setAction("update");
@@ -175,9 +186,9 @@ public class AuditLoggerUtil {
 				aal.setObjectType((String) activity.getObjectType());
 				aal.setTeamName(tm.getTeamName());
 				aal.setObjectName(activity.getObjectName());
-				aal.setDetail(message);
+				aal.setDetail(message.toString());
 				session.save(aal);				
-			}
+			
 
 			tx.commit();
 		} catch (Exception ex) {

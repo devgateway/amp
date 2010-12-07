@@ -331,6 +331,9 @@ function toggleSettings(){
 										<b><digi:trn key="aim:action">Action</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
+								<td  align="center" valign="center" bgcolor="#999999"style="color: black">
+										<b><digi:trn key="aim:action">Additional Details</digi:trn></b>
+								</td>
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
@@ -377,6 +380,11 @@ function toggleSettings(){
 										</logic:equal> <logic:equal value="update" property="action" name="log">
 											<digi:trn key="admin:update">Update</digi:trn>
 										</logic:equal>								  
+									</td>
+									<td align="center">
+									<c:if test="${not empty log.detail}">
+									<digi:trn>${log.detail}</digi:trn>
+									</c:if>
 									</td>
 								</tr>
 							</logic:iterate>

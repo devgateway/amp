@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +28,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -48,7 +48,6 @@ import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
-import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1591,17 +1590,18 @@ public class TeamUtil {
             String queryString = "";
             Query qry = null;
             if(teamId == null) {
-            	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
-                if(!includedraft){
-                  queryString+="  and   (act.draft is null or act.draft=false) ";
-                }
+            	//queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
+            	queryString ="select act from "+ AmpActivityGroup.class.getName()+" g " +
+    			" inner join g.ampActivityLastVersion act where  act.team is null";
             	qry=session.createQuery(queryString);
             }
             else{
-            	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
-                if(!includedraft){
-                  queryString+="  and   (act.draft is null or act.draft=false) ";
-                }
+            	//queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+            	queryString ="select act from "+ AmpActivityGroup.class.getName()+" g " +
+            			" inner join g.ampActivityLastVersion act where (act.team=:teamId)";
+            	 if(!includedraft){
+                     queryString+="  and   (act.draft is null or act.draft=false) ";
+            	}
             	qry=session.createQuery(queryString);
             	qry.setParameter("teamId", teamId, Hibernate.LONG);
             }

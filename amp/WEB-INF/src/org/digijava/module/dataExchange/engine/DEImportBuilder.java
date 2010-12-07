@@ -59,6 +59,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -165,7 +166,7 @@ public class DEImportBuilder {
 		processAdditionalFields(activity, actType, update);
 		//DataExchangeUtils.saveComponents(activity, request, tempComps);
 		//TODO logger
-		saveActivity(activity, update);
+		saveActivity(activity, update,request);
 		
 	}
 	
@@ -188,7 +189,7 @@ public class DEImportBuilder {
 		processAdditionalFields(activity, actType, update);
 		//DataExchangeUtils.saveComponents(activity, request, tempComps);
 		//TODO logger
-		saveActivity(activity, update);
+		saveActivity(activity, update,request);
 		
 	}
 	
@@ -208,20 +209,36 @@ public class DEImportBuilder {
 
 
 	
-	private void saveActivity(AmpActivity activity, Boolean update) throws Exception{
+	private void saveActivity(AmpActivity activity, Boolean update,HttpServletRequest request) throws Exception{
 		// TODO Auto-generated method stub
-		
+		String action=null;
+		String additionalDetails=null;
+		List<String> details=null;
 		if(update == false) {
 			DataExchangeUtils.saveActivityNoLogger(activity);
 			new ActivitySaveTrigger(activity);
+			action="added";
 		}
 		else {
 			DataExchangeUtils.updateActivityNoLogger(activity);
+			details=new ArrayList<String>();
+			action="update";
 		}
-		
 		if(!("allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(activity.getTeam().getAmpTeamId()).getValidation()))&&!activity.getApprovalStatus().equals(org.digijava.module.aim.helper.Constants.APPROVED_STATUS)){
 			new NotApprovedActivityTrigger(activity);
+			additionalDetails="imported & pending approval";
 		}
+		else{
+			additionalDetails="imported & approved,";
+		}
+		if(details!=null){
+			details.add(additionalDetails);
+			AuditLoggerUtil.logActivityUpdate(request, activity,  details);
+		}
+		else{
+			AuditLoggerUtil.logObject(request, activity, action, additionalDetails);
+		}
+		
 	}
 
 	private void processPreStep(AmpActivity activity, Boolean update) {

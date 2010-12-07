@@ -128,9 +128,9 @@ public class SelectTeam extends Action {
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
             tm.setTeamName(member.getAmpTeam().getName());
             tm.setTeamType(member.getAmpTeam().getTeamCategory());
-            tm.setRead(member.getReadPermission().booleanValue());
-            tm.setWrite(member.getWritePermission().booleanValue());
-            tm.setDelete(member.getDeletePermission().booleanValue());
+            if(member.getReadPermission()!=null) tm.setRead(member.getReadPermission().booleanValue());
+            if(member.getWritePermission()!=null) tm.setWrite(member.getWritePermission().booleanValue());
+            if(member.getDeletePermission()!=null) tm.setDelete(member.getDeletePermission().booleanValue());
             tm.setAppSettings(appSettings);
             tm.setEmail(member.getUser().getEmail());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
@@ -36,6 +37,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 import com.lowagie.text.Row;
 /**
@@ -599,6 +601,41 @@ public class AuditLoggerUtil {
             collator.setStrength(Collator.TERTIARY);
             
             int result = (o1.getAction()==null || o2.getAction()==null)?0:collator.compare(o1.getAction(), o2.getAction());
+            return result;
+        }
+    }
+    public static class HelperAuditloggerDetailComparator implements Comparator<AmpAuditLogger> {
+    	private Locale locale;
+        private Collator collator;
+        private String siteId;
+
+        public HelperAuditloggerDetailComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerDetailComparator(String iso,String siteId) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+            this.siteId=siteId;
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            int result=0;
+            try {
+                collator = Collator.getInstance(locale);
+                collator.setStrength(Collator.TERTIARY);
+                String iso = locale.getLanguage();
+                String o1detail=o1.getDetail();
+                String o2detail=o2.getDetail();
+                if(o1detail==null){
+                    o1detail="";
+                }
+                if(o2detail==null){
+                    o2detail="";
+                }
+                result =collator.compare(TranslatorWorker.translateText(o1detail, iso, siteId), TranslatorWorker.translateText(o2detail, iso, siteId));
+            } catch (WorkerException ex) {
+               logger.error("unable to translate log's detail",ex);
+            }
             return result;
         }
     }

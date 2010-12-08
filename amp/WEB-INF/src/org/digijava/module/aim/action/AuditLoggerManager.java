@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -63,6 +64,8 @@ public class AuditLoggerManager extends MultiAction {
 			vForm.setSortBy(request.getParameter("sortBy"));
 		}
 		if(vForm.getSortBy()!=null){
+                    String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+                    String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 			  if(vForm.getSortBy().equalsIgnoreCase("nameasc")){
 	    		  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerNameComparator()) ;
 			  }
@@ -119,6 +122,18 @@ public class AuditLoggerManager extends MultiAction {
 				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
 				  Collections.reverse((List<AmpAuditLogger>)logs);
 			  }
+                          else {
+                              if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
+                                  Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode,siteId));
+                                  Collections.reverse((List<AmpAuditLogger>) logs);
+                              } else {
+                                  if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
+                                      Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode,siteId));
+                                  }
+
+                              }
+
+                          }
 		}
 		vForm.setPagesToShow(10);
 		int totalrecords=20;

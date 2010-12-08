@@ -331,9 +331,20 @@ function toggleSettings(){
 										<b><digi:trn key="aim:action">Action</digi:trn></b>									
 									</digi:link>
 								</c:if></td>
-								<td  align="center" valign="center" bgcolor="#999999"style="color: black">
-										<b><digi:trn key="aim:action">Additional Details</digi:trn></b>
-								</td>
+                                                                <td  align="center" valign="center" bgcolor="#999999"style="color: black;" nowrap>
+                                                                <c:choose>
+                                                                    <c:when test="${aimAuditLoggerManagerForm.sortBy!='detailasc'}">
+                                                                        <digi:link style="color:black" href="/auditLoggerManager.do?sortBy=detailasc">
+                                                                            <b><digi:trn>Additional Details</digi:trn></b>
+                                                                        </digi:link>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <digi:link style="color:black" href="/auditLoggerManager.do?sortBy=detaildesc">
+                                                                            <b><digi:trn>Additional Details</digi:trn></b>
+                                                                        </digi:link>
+                                                                    </c:otherwise>
+                                                                </c:choose>				
+                                        </td>
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">

@@ -90,14 +90,28 @@ public class EditIPAContract extends MultiAction {
 
     public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    	 ActionMessages errors = new ActionMessages();
         HttpSession session = request.getSession();
         EditActivityForm eaf = (EditActivityForm) session.getAttribute("eaf");
         Integer indexId = new Integer(request.getParameter("indexId"));
-        eaf.getContracts().getContracts().remove(indexId - 1);
-        //request.setAttribute("close", "close");
+        //
+        //
+        IPAContractForm euaf = (IPAContractForm) form;
+        for (Iterator it = eaf.getFunding().getFundingDetails().iterator(); it.hasNext();) {
+			FundingDetail fd = (FundingDetail) it.next();
+			if (fd.getContract() != null) 
+				errors.add("title", new ActionMessage("error.aim.ipacontract.cannotDeleteContract"));
+				break;
+		}
+        //
+        saveErrors(session, errors);
+        //
+        if (errors.isEmpty()) {
+        	 eaf.getContracts().getContracts().remove(indexId - 1);
+        }
+        
         request.setAttribute("close", "close");
-        return modeFinalize(mapping, form, request, response);
+        return null;//mapping.findForward("newforward");
        
     }
 
@@ -117,8 +131,7 @@ public class EditIPAContract extends MultiAction {
 			if(afd.getContract()!=null)
 				if(afd.getContract().getContractName().equals(contract.getContractName()))
 					euaf.getFundingDetailsLinked().add(afd);
-		}
-        
+		}        
         euaf.setIndexId(indexId);
         euaf.setContractName(contract.getContractName());
         euaf.setDescription(contract.getDescription());

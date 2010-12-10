@@ -18,14 +18,17 @@ function toggleRows(caller,hideId){
 	var closing=false;
 	if(caller.alt=='shown') 
 		closing=true;
-
- 	//hideAllRows();
+	//hideAllRows();
 	if(caller.alt=='hidden') {
 		caller.alt='shown';
 		caller.src=minus_sign;
+		$(caller).parent().removeClass('desktop_project_name');
+	    $(caller).parent().addClass('desktop_project_name_op');
 	} else {
 		caller.alt='hidden'; 
 		caller.src=plus_sign;
+		$(caller).parent().removeClass('desktop_project_name_op');
+	    $(caller).parent().addClass('desktop_project_name');
 	}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
@@ -46,7 +49,7 @@ function toggleRows(caller,hideId){
 		
 		var rowDepth=getRowLevel(tb.rows[i].title);
 		var rowRelat=getRowRelativeNo(tb.rows[i].title);
- 		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
+		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
 			found=true;
 			continue;
 		}
@@ -68,9 +71,9 @@ function toggleRows(caller,hideId){
 		//alert("Found=" + found + " RowDepth=" + rowDepth + " HideDepth=" + hideDepth + " Arty=" + notLevelTooGreat);
 		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) )
 			tb.rows[i].style.display = display;
-	}
+		}
 
-	//put sub-images to -
+	//put sub-images to -	
 	imgs = tb.getElementsByTagName('img');
 	found = false;
 	if (closing){
@@ -84,6 +87,7 @@ function toggleRows(caller,hideId){
 			if((imgs[i].id=='toggleImage') && (found))  {
 				imgs[i].alt='hidden';
 				imgs[i].src=plus_sign;
+				
 			}
 			//alert(imgDepth + "@" + imgRelat + "  " + found);
 			if ((found) && (imgDepth == hideDepth))

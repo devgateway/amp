@@ -11,23 +11,24 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
   <!-- Dependencies --> 
-  
-<!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+  		  
+		<!-- Individual YUI CSS files --> 
+		<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+		<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+	<!-- Individual YUI JS files --> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
+<script type="text/javascript">
 
+</script>	
 
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
@@ -49,22 +50,19 @@ function toggleSettings(){
 		displaySettingsButton.innerHTML = "${hideCurrSettings}";
 	}
 }
-	
+
+	$('#show_legend_pop').click(function () {
+		$("#show_legend_pop_box").toggle();
+	});
+
+
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
-
-<div id="mySorter" style="display: none">
+<div id="mySorter" class="dialog" title= " <digi:trn>Please select hierarchy sorter criteria:</digi:trn>">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
-        <!--
-		<a href='#' onclick='hideSorter();return false'>
-			<b>
-				<digi:trn key="rep:pop:Close">Close</digi:trn>
-			</b>
-		</a>
-		 -->
-	</div>
+</div>
 <%
 Integer counter = (Integer)session.getAttribute("progressValue");
 counter++;
@@ -72,15 +70,15 @@ session.setAttribute("progressValue", counter);
 %>
 
 <logic:notEqual name="viewFormat" scope="request" value="print">
-<div id="myFilterWrapper" style="display: none;" >
-	<div id="myFilter" style="display: none; height: 100%; overflow: hidden;" >
-			<jsp:include page="/aim/reportsFilterPicker.do" />
+<div id="myFilterWrapper" class="dialog" title="<digi:trn>Please select filter criteria:</digi:trn>" >
+	<div id="myFilter" class="dialog" title="Please select hierarchy sorter criteria:">
+		<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
 	<div id="myRange" style="display: none">
-	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
+	    <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
 	</div>
-	<div id="customFormat" style="display: none">
-	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
+	<div id="customFormat" class="dialog" title="<digi:trn>Please select report settings</digi:trn>">
+		 <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 	</div>
 </div>
 </logic:notEqual>
@@ -336,12 +334,12 @@ session.setAttribute("progressValue", counter);
 	        	<div class="tab_opt">
 		        	<div class="tab_opt_cont">
 		        		<logic:notEmpty name="reportMeta" property="hierarchies">
-	                		<a class="l_sm" onClick="showSorter();" style="cursor: pointer;text-decoration: underline;">
+	                		<a class="l_sm" href="#mySorter">
 	                			<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
 	                		</a> 
 	                		&nbsp;|&nbsp; 
 	            		</logic:notEmpty> 
-	                	<a class="l_sm" onClick="showFilter();" style="cursor: pointer;text-decoration: underline;" >
+	                	<a class="l_sm" href="#myFilter" style="cursor: pointer;text-decoration: underline;" >
 	                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 	                	</a>
 		                <%
@@ -363,7 +361,7 @@ session.setAttribute("progressValue", counter);
 		                </a>
 		           	  </logic:notEqual>
 	                	&nbsp;|&nbsp;
-	                	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="showFormat(); " >
+	                	<a href="#customFormat" style="cursor: pointer;text-decoration: underline;" class="l_sm">
 	                		<digi:trn>Tab Settings</digi:trn>
 	                	</a>
 	           		</div>
@@ -401,32 +399,41 @@ session.setAttribute("progressValue", counter);
 	</tr>
 	<tr>
 		<td>
-			<div class="show_legend">
+			<div style="font-family: Arial,sans-serif;font-size: 11px">
 				<logic:notEmpty name="reportMeta" property="filterDataSet">
-				<span style="cursor:pointer;float:left;cursor:pointer;font-style: italic;">
+				<span style="cursor:pointer;cursor:pointer;font-style: italic;">
 		        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
 				</span>
 				</logic:notEmpty>
-				<span style="color: red;">
-					<%
-		            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-		            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
-		            <digi:trn key="rep:pop:AllAmount">
-						Amounts are in thousands (000)
-					</digi:trn>
-		           	<%}%>
-					
-					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-						<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-						<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-					</logic:present>
-				</span>
-				&nbsp;|&nbsp;
-				<logic:notEqual name="viewFormat" value="print">
-					<logic:present name="isUserLogged" scope="session">
-	          			<jsp:include page="legendPopup.jsp"/>
-	         		</logic:present>
-	          </logic:notEqual>
+			</div>
+			<div class="show_legend">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+						<%
+				            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+				            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
+				            <digi:trn key="rep:pop:AllAmount">
+								Amounts are in thousands (000)
+							</digi:trn>&nbsp;
+		           		<%}%>
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+							<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+								<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+								<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
+							</logic:present>
+							&nbsp;|&nbsp;
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+							<logic:notEqual name="viewFormat" value="print">
+								<logic:present name="isUserLogged" scope="session">
+	          						<jsp:include page="legendPopup.jsp"/>
+	         					</logic:present>
+	          				</logic:notEqual>
+	          			</td>
+	          		</tr>
+	          	</table>
 			</div>	
 			
 			<div class="paging">
@@ -561,33 +568,6 @@ session.setAttribute("progressValue", counter);
 		</logic:equal>
 		<tr>
 			<td style="padding-left: 5px;padding-right: 5px">
-				<div class="show_legend">
-					<logic:notEmpty name="reportMeta" property="filterDataSet">
-					<span style="cursor:pointer;float:left;cursor:pointer;font-style: italic;">
-			        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
-					</span>
-					</logic:notEmpty>
-					<span style="color: red;">
-						<%
-			            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-			            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
-			            <digi:trn key="rep:pop:AllAmount">
-							Amounts are in thousands (000)
-						</digi:trn>
-			           	<%}%>
-						
-						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-						</logic:present>
-					</span>
-					&nbsp;|&nbsp;
-					<logic:notEqual name="viewFormat" value="print">
-						<logic:present name="isUserLogged" scope="session">
-		          			<jsp:include page="legendPopup.jsp"/>
-		         		</logic:present>
-		          </logic:notEqual>
-				</div>	
 			<!-- PAGINATION -->	 
 				<div class="paging">
 		   			<c:if test="${report.visibleRows/recordsPerPage>1}">

@@ -27,6 +27,7 @@
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.bgiframe.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.jdMenu.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.core.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-ui.min.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.widget.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.tabs.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.cookie.js"/>"></script>
@@ -34,8 +35,14 @@
 				
 
 	<!-- Stylesheet of AMP -->
-        <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
+		<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
+		<digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
+		<digi:ref href="/TEMPLATE/ampTemplate/css_2/jquery-ui.css" type="text/css" rel="stylesheet" />
+        
+        
+        <!--[if IE 6]><link href='css/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->
+		<!--[if IE 7]><link href='css/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
+		<!--[if IE 8]><link href='css/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]--> 
         
         <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"/>"> 

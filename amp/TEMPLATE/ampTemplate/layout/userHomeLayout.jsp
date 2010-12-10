@@ -126,10 +126,16 @@
     </body>
 </html>
 <script language=javascript>
-		$(document).ready(function(){
-	   		$("#closepanel").click(function(event){
-	     	$("#rightpanel").toggle('slow');
-		});
-	 });
+	$("#closepanel").click(function(event){
+    	$("#rightpanel").toggle('slow');
+    	if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
+    		$("#closepanel").attr('src','img_2/open_panel.gif');
+ 	        return false;    
+ 	    }
+		if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
+			$("#closepanel").attr('src','img_2/close_panel.gif');
+ 	        return false;    
+ 	    }
+	});
 </script>
 

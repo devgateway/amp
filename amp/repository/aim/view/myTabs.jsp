@@ -7,9 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<!--[if IE]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
@@ -101,47 +98,11 @@ var myTabsObject;
 		}
 		
 	}
-	function setHover()
-	{
-		this.style.backgroundColor = this.previousColor;
-	}
-	function unsetHover()
-	{
-		this.style.backgroundColor = this.hoverColor;
-	}
-
-	function initAllTabs() {
-		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
-		//Initialize all tabs
-		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
-		//Create "More..." tab
-		var objeto = document.createElement("LI");
-		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
-		objeto.title = "<digi:trn key="aim:clickforalltabs">Click to see all tabs</digi:trn>";;
-		objeto.onclick = changeTab;
-		objeto.id = "moreTabs";
-
-		//Add it to the Tab bar
-		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
-			labelEl: objeto
-			
-		}), myTabsObject.get('tabs').length+1); 
-
-		//Get the position and create the panel
-		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
-		var xPos = region.left;
-		var yPos = region.bottom;
-		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
-		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
-		allTabsPanel.setBody("");
-		allTabsPanel.render(document.body);
-		var divAllTabs = document.getElementById("allTabs");
-		divAllTabs.style.display 	= "block";
-		allTabsPanel.setBody(divAllTabs);
-		
-	}
+	
 	function tabExists(tabCheckName){
-		if (document.getElementById(tabCheckName)) return true;
+		if (document.getElementById(tabCheckName)) {
+			return true;
+		}
 		return false;
 	}
 
@@ -155,33 +116,10 @@ var myTabsObject;
 
 		$("#replaceableTab").remove();
 		$("#demo").tabs("add",url,label,index);
+		$("#replaceableTab > a").attr('id', 'Tab-'+label);
 		
-		$("#MyTabs").append("<li class='desktop_tab'><a id='MoreTabs' class='tab_link'><digi:trn key="aim:moretabs">More Tabs</digi:trn></></li>");
+		$("#MyTabs").append("<li class='desktop_tab ui-state-default ui-corner-top'><a id='MoreTabs' class='tab_link'><digi:trn key="aim:moretabs">More Tabs</digi:trn></></li>");
 		MoreTabClickEvent();
-		
-		
-		
-		
-		///objeto.id = "replaceableTab";
-		//var tabObject = $("#replaceableTab");
-
-		//if(tabObject.parentNode.tagName == "A")
-		//{
-		//	tabObject.parentNode.title = labelComplete;
-		//	tabObject.parentNode.rel= "ajaxcontentarea" 
-		//	tabObject.parentNode.href = url;
-		//	tabObject.parentNode.id = id;
-		//}
-		//var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
-		//for (i = 0; i < len; i++) 
-			//{	
-			//document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
-			//}
-		//document.getElementById(label).style.display = 'none';
-		//replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
-		//startajaxtabs("MyTabs");
-		//reloadTab("MyTabs",id);
-		//hideMoreTabs();
 	}
 	
 	
@@ -300,21 +238,6 @@ var myTabsObject;
 </div>
 </div>
  
-<c:set var="loadstatustext">
-	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
-</c:set>
-
-<script type="text/javascript">
-	//loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
-	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
-	//startajaxtabs("MyTabs");
-	//if(document.getElementById(tabName)){
-	//checkstatus(true);
-	//reloadTab("MyTabs",tabName);
-//}
-</script>
-
-
 <div id="debug"></div>
 <div id="allTabs" style="display: none;width: auto;position: absolute;">
 	<div id="scrollableDiv" style="width:250px;height:100px;overflow:auto;">
@@ -350,12 +273,19 @@ var myTabsObject;
 
 	$(document).ready(function() {
 		$("#demo").tabs();
-		$("#demo").tabs( "option", "tabTemplate", '<li id="replaceableTab" class="desktop_tab"><a class="tab_link" href="\#{href}" rel="Tab_Name" title= "Tab Name">\#{label}</a></li>' );
+		$("#demo").tabs("option", "tabTemplate", '<li id="replaceableTab" class="desktop_tab"><a class="tab_link" href="\#{href}" rel="Tab_Name" title= "Tab Name">\#{label}</a></li>' );
 		
 		<c:if test="${showMoreTab}">
-			$("#MyTabs").append("<li class='desktop_tab'><a id='MoreTabs' class='tab_link'><digi:trn key="aim:moretabs">More Tabs</digi:trn></></a></li>");
+			$("#MyTabs").append("<li class='desktop_tab ui-state-default ui-corner-top'><a id='MoreTabs' class='tab_link'><digi:trn key="aim:moretabs">More Tabs</digi:trn></></a></li>");
 			MoreTabClickEvent();
 		</c:if>
+		
+		<logic:notEmpty name="filterCurrentReport" scope="session">
+		
+		if(!tabExists('Tab-<c:out value="${filterCurrentReport.name}"/>'))
+			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.name}" />");
+		</logic:notEmpty>	
+		
 	});
 	
 	$("#demo").tabs({
@@ -372,10 +302,15 @@ var myTabsObject;
 				{
 					//alert(e);
 				}
-		   }
+			}
 		});
 		
-		
+	$("#demo").tabs({
+		   select: function(event, ui) {
+			 $('#Tab_Name').html(loadstatustext);
+		   }
+		});
+	
 	var $tabs = $("#demo").tabs({
 	    add: function(event, ui) {
 	        $tabs.tabs('select',$("#demo").tabs("length")-1);
@@ -401,7 +336,7 @@ var myTabsObject;
 	  $('#allTabs').toggle('slow', function() {
 		  });
 	}
-	
+	 
 	
 	</script>
 

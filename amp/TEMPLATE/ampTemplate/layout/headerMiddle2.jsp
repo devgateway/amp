@@ -24,12 +24,7 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
 
-        <!-- Core + Skin CSS -->
-        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
-
-        <!-- Stylesheet of AMP -->
-        <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
+         <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
  		<div id="customAbout" style="display: none" class="content">
  			<jsp:include page="/repository/aim/view/helpAbout.jsp" />
  		</div>

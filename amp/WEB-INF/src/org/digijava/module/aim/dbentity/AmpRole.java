@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity ;
 
-public class AmpRole
+import java.io.Serializable;
+
+public class AmpRole implements Serializable
 {
 	private Long ampRoleId ;
 	private String roleCode ;

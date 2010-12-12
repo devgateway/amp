@@ -37,6 +37,23 @@
 			/WEB-INF/spring/application-context.xml
 		</param-value>
 	</context-param>
+
+
+	 	<!-- Apache Wicket -->
+    <filter>
+        <filter-name>OnePagerApplication</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+          <param-name>applicationClassName</param-name>
+          <param-value>org.dgfoundation.amp.onepager.OnePagerApp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>OnePagerApplication</filter-name>
+        <url-pattern>/onepager/*</url-pattern>
+    </filter-mapping>
+
+	<!-- Acegi -->
 	<filter>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
 		<filter-class>
@@ -362,6 +379,7 @@
 			com.tonbeller.tbutils.res.ResourcesFactoryContextListener
 		</listener-class>
 	</listener>
+	
 	<servlet>
 		<servlet-name>MDXQueryServlet</servlet-name>
 		<servlet-class>
@@ -413,16 +431,6 @@
 		<servlet-name>MondrianXmlaServlet</servlet-name>
 		<url-pattern>/xmla</url-pattern>
 	</servlet-mapping>
-	<!-- 
-	<filter>
-		<filter-name>LogDigger Servlet Filter</filter-name>
-		<filter-class>
-			org.logdigger.servlet.filter.LogDiggerServletFilter
-		</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>LogDigger Servlet Filter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	 -->
+	
+
 </web-app>

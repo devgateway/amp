@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -8,7 +10,7 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable {
+public class AmpActivityLocation implements Versionable,Serializable {
 	private Long id;
 	private AmpActivity activity;
 	private AmpLocation location;

@@ -91,6 +91,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	}
 
 	public boolean equals (Object o) {
+		if(!(o instanceof AmpCategoryValue)) return false;
 		AmpCategoryValue a = (AmpCategoryValue) o;
 		if ( a == null )
 			return false;

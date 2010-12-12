@@ -147,13 +147,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		this.accessType = accessType;
 	}
 	
-	public boolean equals(Object obj) {
-		if (obj == null) throw new NullPointerException();
-		if (!(obj instanceof AmpTeam)) throw new ClassCastException();
-		
-		AmpTeam temp = (AmpTeam) obj;
-		return (this.ampTeamId.equals(temp.getAmpTeamId()));
-	}
 	/**
 	 * @return Returns the activityList.
 	 */

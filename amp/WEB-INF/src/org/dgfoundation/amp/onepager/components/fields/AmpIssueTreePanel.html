@@ -1,0 +1,32 @@
+<wicket:extend>
+
+	<div class="opt_item">
+		<div class="opt_item_cont">
+			<div class="issue_act">
+				<table cellpadding="0px" cellspacing="0px">
+					<tr>
+						<td>
+							<span wicket:id="add"/>
+						</td>
+						<td>
+							<span wicket:id="delete"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<span wicket:id="label">[]</span>
+			<input class="inputx" size="35" wicket:id="name" />
+			<input class="inputx" size="10" wicket:id="date" /> 
+		</div>
+	</div>
+	<table width="100%" cellpadding="0px" cellspacing="0px">
+		<tr wicket:id="list">
+			<td valign="top" width="35px" >
+				&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/tree_dot.gif" />
+			</td>
+			<td>
+				<span wicket:id="item" />
+			</td>
+		</tr>
+	</table>
+</wicket:extend>

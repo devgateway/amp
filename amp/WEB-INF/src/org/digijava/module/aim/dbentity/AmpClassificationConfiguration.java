@@ -1,7 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 
-public class AmpClassificationConfiguration {
+
+public class AmpClassificationConfiguration implements Serializable {
 	
 	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
 	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";

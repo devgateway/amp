@@ -1,0 +1,19 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="images/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:program">Program</wicket:trn></b></td>
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:percent">Percent</wicket:trn></b></td>	
+		<td background="images/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="listProgs">
+		<td class="inside" align="right"><span wicket:id="name" /></td>
+		<td class="inside"><input class="inputx" wicket:id="percent"/></td>
+		<td class="inside" align="center">
+			<span wicket:id="delProgram"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="inside" align="center">		
+			<span wicket:id="search"/>			
+		</td>
+	</tr>
+</wicket:extend>

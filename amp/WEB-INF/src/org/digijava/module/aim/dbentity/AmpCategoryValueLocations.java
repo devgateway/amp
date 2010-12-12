@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable, HierarchyListable, ARDimensionable {
+public class AmpCategoryValueLocations implements Identifiable, HierarchyListable, ARDimensionable,Serializable {
 
     private Long id;
     private String name;

@@ -1,9 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgramSettings {
+public class AmpActivityProgramSettings implements Serializable {
 
         private AmpTheme defaultHierarchy;
         private boolean allowMultiple;

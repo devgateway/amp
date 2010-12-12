@@ -1,0 +1,65 @@
+/**
+ * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
+ *
+ */
+package org.dgfoundation.amp.onepager.components.features.subsections;
+
+import java.util.Date;
+import java.util.Set;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpRegionalTransactionsFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.helper.Constants;
+
+/**
+ * @author mpostelnicu@dgateway.org since Nov 8, 2010
+ */
+public class AmpRegionalTransactionsSubsectionFeature extends
+		AmpSubsectionFeaturePanel<Set<AmpRegionalFunding>> {
+
+	protected AmpRegionalTransactionsFormTableFeature transactionsTableFeature;
+
+	/**
+	 * @param id
+	 * @param am 
+	 * @param fmName
+	 * @param model
+	 * @param cvLocationModel 
+	 * @param cvlocationModel 
+	 * @throws Exception
+	 */
+	public AmpRegionalTransactionsSubsectionFeature(String id,
+			final IModel<AmpActivity> am, final IModel<Set<AmpRegionalFunding>> model, String fmName,
+			final int transactionType, final IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
+		super(id, fmName, model);
+		transactionsTableFeature = new AmpRegionalTransactionsFormTableFeature(
+				"transactionsTableFeature", model, fmName + " Table",
+				transactionType,cvLocationModel);
+		add(transactionsTableFeature);
+
+		AmpButtonField addCommit = new AmpButtonField("addTransaction",
+				"Add Transaction") {
+			@Override
+			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				AmpRegionalFunding fd = new AmpRegionalFunding();
+				fd.setTransactionAmount(0d);
+				fd.setAdjustmentType(Constants.ACTUAL);
+				fd.setTransactionDate(new Date(System.currentTimeMillis()));
+				fd.setTransactionType(transactionType);
+				fd.setRegionLocation(cvLocationModel.getObject());
+				fd.setActivity(am.getObject());
+				model.getObject().add(fd);
+				transactionsTableFeature.getList().removeAll();
+				target.addComponent(transactionsTableFeature);
+			}
+		};
+		add(addCommit);
+	}
+
+}

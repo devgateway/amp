@@ -105,17 +105,6 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.activities = activities;
 	}
 
-
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-
-		if (!(obj instanceof AmpTeamMember)) {
-			throw new ClassCastException();
-		}
-
-		AmpTeamMember temp = (AmpTeamMember) obj;
-		return temp.getAmpTeamMemId().equals(ampTeamMemId);
-	}
   
 
     /**

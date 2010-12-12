@@ -1,11 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram implements Versionable {
+public class AmpActivityProgram implements Versionable, Serializable {
 
         private Long ampActivityProgramId;
         private Long programPercentage;

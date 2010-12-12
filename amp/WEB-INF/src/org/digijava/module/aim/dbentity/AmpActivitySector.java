@@ -1,10 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivitySector implements Versionable {
+public class AmpActivitySector implements Versionable, Serializable {
 
 	private Long ampActivitySectorId;
 	

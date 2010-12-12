@@ -204,6 +204,7 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
     }
 
     public boolean equals(Object obj) {
+    	if(!(obj instanceof AmpTheme)) return false;
         if (obj == null)
             throw new NullPointerException();
 

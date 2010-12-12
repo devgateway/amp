@@ -151,6 +151,8 @@
             	    <include name="**/*.xsd"/>
 					<include name="**/*.jrxml"/>
 					<include name="initSQL/*.sql"/>
+            		<include name="**/*.js"/>
+            		<include name="**/*.html"/>
     	        </patternset>
             </fileset>
         </copy>

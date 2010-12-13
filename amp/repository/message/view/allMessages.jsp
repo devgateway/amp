@@ -11,10 +11,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 
-<%--
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
---%>
-
 <script langauage="JavaScript">
 
     var  selectedMessagePanel;
@@ -1656,5 +1652,6 @@ $(document).ready(function(){
 		}		
 	
 })
+
 </script>
 </digi:form>

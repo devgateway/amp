@@ -11,7 +11,9 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <!-- Individual YUI CSS files --> 
+
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
@@ -22,10 +24,14 @@
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
+<%--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+--%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
+
 <style>
 <!--
 
@@ -135,6 +141,7 @@ div.fakefile2 input{
 		}	
 	}
     function showMessagesHelpTooltip() {
+			
            var div=document.getElementById("createMessagesHelpTooltip");
            div.style.display = "block";
     }
@@ -373,8 +380,30 @@ function addActionToURL(actionName){
 	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
 	var tmHelp='<digi:trn>A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
 
-    function showMessagesHelpTooltip() {
-        var div=document.getElementById("createMessagesHelpTooltip");
+	function getElementOffset (domObject) {
+		var pos = {top: 0, left: 0}
+
+		var retX = 0;
+		var retY = 0;
+		
+		while (domObject.offsetParent != null) {
+			retX += domObject.offsetLeft;
+			retY += domObject.offsetTop;
+			
+			domObject = domObject.offsetParent;
+		}
+		logged = true;
+    pos.left = retX;
+    pos.top = retY;
+		return pos;
+	}
+
+
+    function showMessagesHelpTooltip(obj) {
+    	var callerPos = getElementOffset(obj);
+      var div=document.getElementById("createMessagesHelpTooltip");
+      div.style.left = callerPos.left;
+      div.style.top = callerPos.top + 15;
     	div.style.display = "block";
     }
 	function hideMessagesHelpTooltip(){
@@ -491,9 +520,20 @@ function addActionToURL(actionName){
 	}
 	
 	function selectUsers(event) {
-    	var list = document.getElementById('selreceivers');
+    	//var list = document.getElementsByName('selreceivers');
+    	
+    	var mainList = $("input[name='selreceivers'][type='checkbox']:checked");
+    	var guestList = $("input[name='selreceivers'][type='hidden']");
+			
+			var list = mainList.push(guestList);
+			
+			console.log(mainList);
+    	
+    	
+    	
+    	
     	if (event=='send') {
-    		if (list == null || list.length==0) {
+    		if ((mainList == null || mainList.length==0) && (guestList == null || guestList.length==0)) {
     			<c:set var="message">
             	<digi:trn>Please add receivers </digi:trn>						
                 </c:set>
@@ -509,65 +549,85 @@ function addActionToURL(actionName){
         		return false ;
     		}
     	}    	
-    	if(list!=null){
-        	//check emails
-			for(var i = 0; i < list.length; i++) {
-				if(list[i].value.match('^'+'c:')){ //starts with c:
-					var receiver=list[i].value.substr(2);
-					var email=receiver;
-					if(receiver.indexOf("<")!=-1){
-						email=receiver.substr(receiver.indexOf("<")+1, receiver.indexOf(">")-receiver.indexOf("<")-1); //cut email from "some text <email>"
-					}
-					
-					var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-					var expression = new RegExp(pattern)
-				    if(expression.test(email)!=true){
-					    var trn='<digi:trn>Please provide correct email</digi:trn>';
-						alert(trn);
-					    return false; 
-				    }
-					
+    	
+        //check guest emails
+				for(var i = 0; i < guestList.length; i++) {
+						var receiver=guestList[i].value.substring(2);
+						var email=receiver;
+						if(receiver.indexOf("<")!=-1){
+							email=receiver.substr(receiver.indexOf("<")+1, receiver.indexOf(">")-receiver.indexOf("<")-1); //cut email from "some text <email>"
+						}
+						
+						var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+						var expression = new RegExp(pattern)
+					    if(expression.test(email)!=true){
+						    var trn='<digi:trn>Please provide correct email</digi:trn>';
+								alert(trn);
+						    return false; 
+					    }
 				}
-			}
 
-        	
+       /* 	
     		for(var i = 0; i < list.length; i++) {
         		list.options[i].selected = true;
-    		}
-    	}
+    		}*/
     	
     	return true;
 	}
 	
+	var addedGuests = new Array();
+	
 	function addContact(contact){
-		var list = document.getElementById('selreceivers');
-	    if (list == null || contact == null || contact.value == null || contact.value == "") {
-	      return;
-	    }
-
 		var guestVal=contact.value;
-			
-		if(guestVal.length>0){
-            if($("#selreceivers > option[value^='c:']").length==0){
-                addOption(list,guestText,"guest");
+		if(guestVal.length>0 && $.inArray("c:" + guestVal, addedGuests) < 0){
+			addedGuests.push("c:" + guestVal);
+			var filteredGusetId = guestVal.replace("<", "&lt;").replace(">", "&gt;");
 
-            }
-			addOption(list,guestVal,'c:'+guestVal);
+			var guestListItemMarkup = new Array();
+			guestListItemMarkup.push('<div class="msg_added_cont">');
+			guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+			guestListItemMarkup.push(filteredGusetId);
+			guestListItemMarkup.push('<input name="receiversIds" class="guest_contact_hidden" type="hidden" value="c:');
+			guestListItemMarkup.push(filteredGusetId);
+			guestListItemMarkup.push('">');
+			guestListItemMarkup.push('</div></div>');
+			$('#guest_user_container').append(guestListItemMarkup.join(''));
 		}	
 
 		contact.value = "";
 	}
 	
-	function addOption(list, text, value){
-	    if (list == null) {
-	      return;
-	    }
-	    var option = document.createElement("OPTION");
-	    option.value = value;
-	    option.text = text;
-	    list.options.add(option);
-	    return false;
+	function removeGuest(obj) {
+		var delControl = $(obj);
+		delControl.parent().parent().remove();
+		
+		var addedGuestIdx;
+		for (addedGuestIdx = 0; addedGuestIdx < addedGuests.length; addedGuestIdx ++) {
+			if (addedGuests[addedGuestIdx] == delControl.parent().parent().find("input").attr("value")) {
+				addedGuests.splice(addedGuestIdx, 1);
+				break;
+			}
+		}
+		return null;
+	}
+
+	function validateFile(){
+		var fileToBeAttached=document.getElementById('fileUploaded');
+		if(fileToBeAttached.value==null || fileToBeAttached.value==''){
+			var msg='<digi:trn>Please select file to attach</digi:trn>';
+			alert(msg);
+			return false;
+		}
+		//check submit selected receivers
+		var list = document.getElementById('selreceivers');
+		if(list!=null){
+    		for(var i = 0; i < list.length; i++) {
+        		list.options[i].selected = true;
+    		}
+    	}
+		return true;
 	}	
+
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
@@ -612,6 +672,7 @@ function addActionToURL(actionName){
 }
 #statesAutoComplete,contactsAutocomplete {
     z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+    font-size: 12px;
 }
 #statesInput,
 #contactInput {
@@ -619,6 +680,7 @@ function addActionToURL(actionName){
 }
 .charcounter {
     display: block;
+    font-size: 11px;
 }
 
 #statesAutoComplete {
@@ -679,6 +741,8 @@ function addActionToURL(actionName){
 </c:set>
 
 <digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">
+	
+	<%--
     <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 		<tr>
 			<td width="100%">
@@ -887,7 +951,9 @@ function addActionToURL(actionName){
 																                        </table>
 																                    </td>
 																                  </field:display>
-																				</tr>																																												
+																				</tr>
+																				
+																																																																	
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
@@ -946,7 +1012,202 @@ function addActionToURL(actionName){
    						</td>
 					</tr>
 </table>
-																						
+	--%>																					
+
+
+
+
+<br><br>
+
+
+<div class="ins_box_left" style="border: 1px solid silver;">
+	<div class="create_message">
+		<table width="100%" border="0" cellspacing="3" cellpadding="3">
+		  <tr>
+  		  <td valign="top"><b style="font-size:12px;">Receivers</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif"/></td>
+    		<td style="font-size:11px;"><input type="checkbox" name="checkbox" value="checkbox"/> Send to All<br/>
+						
+						<%--
+						<select multiple="multiple" size="12" id="whoIsReceiver"  class="inp-text" style="width:200px" >
+							<logic:empty name="messageForm" property="teamMapValues">
+								<option value="-1">No receivers</option>
+							</logic:empty>
+							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+								<option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
+									<c:forEach var="team" items="${messageForm.teamMapValues}">
+										<logic:notEmpty name="team" property="members">
+											<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
+												<c:forEach var="tm" items="${team.members}">
+													<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" id="t:${team.id}">${tm.memberName}</option>
+												</c:forEach>
+										</logic:notEmpty>											                                                		
+									</c:forEach>
+							</logic:notEmpty>
+						</select>	
+						--%>
+					
+
+
+					<div class="msg_receivers">
+						
+						
+						
+							<logic:empty name="messageForm" property="teamMapValues">
+								<div class="msg_lbl">No receivers</div>
+							</logic:empty>
+							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+									<c:forEach var="team" items="${messageForm.teamMapValues}">
+										<logic:notEmpty name="team" property="members">
+											<div class="msg_grp_name">
+												<input type="checkbox" value="t:${team.id}" style="float:left;">
+												<div class="msg_lbl">---${team.name}---</div>
+											</div>
+											<div class="msg_grp_mem_name">
+												<c:forEach var="tm" items="${team.members}">
+													<input type="checkbox" name="receiversIds" id="t:${team.id} type="checkbox" value="m:${tm.memberId}"/>${tm.memberName}<br/>
+												</c:forEach>
+											</div>
+										</logic:notEmpty>											                                                		
+									</c:forEach>
+							</logic:notEmpty>						
+				</div>
+			<br/>
+	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
+			<div class="msg_add">
+				
+				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
+				<input type="button" value="Add" class="buttonx_sm" style="position:absolute; left:480px;" onClick="addContact(document.getElementById('contactInput'))">
+				<br><br>
+				
+				<div id="contactsContainer" style="width:470px;"></div>
+			
+				<div id="guest_user_container">
+				</div>
+	</td>
+  </tr>
+<tr>
+<td colspan=2><hr class="hr_3"></td>
+</tr>
+	<field:display name="Title Text Box" feature="Create Message Form">
+	  <tr>
+	    <td width=200 valign="top"><b style="font-size:12px;">Title</b> <b class="mand">*</b></td>
+	    <td valign="top"><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/>
+	  </tr>
+	</field:display>
+  <tr>
+    <td valign="top"><b style="font-size:12px;">Description</b> <b class="mand">*</b></td>
+    <td valign="top">
+    	<html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+    	<b style="font-size:12px;">Related Activity</b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="showMessagesHelpTooltip(this)" onmouseout="hideMessagesHelpTooltip()" id="myImage"/>
+  		<div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; border: 1px solid silver;">
+          <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
+              <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
+              <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
+          </TABLE>
+      </div>
+    </td>
+    <td>
+      <div>
+        <div id="statesautocomplete" style="width:100%;">
+            <html:text property="selectedAct" name="messageForm" style="width:100%;font-size:100%"  styleId="statesinput" ></html:text>
+            <div id="statescontainer" style="width:100%;z-index: 100"></div>
+        </div>     
+      </div>
+        
+    </td>
+  </tr>
+  <tr>
+    <td><b style="font-size:12px;">Priority Level</b></td>
+    <td>
+    	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
+    		<html:option value="0"><digi:trn>none</digi:trn> </html:option>
+        <html:option value="1"><digi:trn>low</digi:trn> </html:option>
+        <html:option value="2"><digi:trn>Medium</digi:trn> </html:option>
+        <html:option value="3"><digi:trn>Critical</digi:trn> </html:option>
+      </html:select>
+		</td>
+  </tr>
+  <tr>
+    <td><b style="font-size:12px;">Set as alert</b></td>
+    <td>
+    	<html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">																							
+				<html:option value="0"><digi:trn>No</digi:trn> </html:option>
+				<html:option value="1"><digi:trn>Yes</digi:trn> </html:option>																																														
+	  	</html:select>
+    </td>
+  </tr>
+  
+  <tr>
+  	<td valign="top"><b style="font-size:12px;">Attachment</b></td>
+		<td>
+			<table width="100%" border="0">
+			<c:if test="${not empty messageForm.sdmDocument}">
+				<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
+					<tr>
+						<td colspan="2">
+							<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+							<c:if test="${not empty messageForm.sdmDocument.id}">
+								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
+							</c:if>																					
+							<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
+								<img src="/repository/message/view/images/attachment.png" border="0" />
+								${attachedDoc.contentTitle}
+							</digi:link>
+							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0"/></a>
+						</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<tr>
+				<td>
+					<%--
+					<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+					--%>
+						<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+					<%--
+					</div>
+					--%>
+				</td><td align="right">
+					<input type="submit" value="upload" class="buttonx" align="right" onclick="return validateFile()"/>
+				</td>
+			</tr>
+		</table>
+		
+		
+		</td>
+	</tr>
+  
+  
+  <tr>
+    <td colspan="2" align=center>
+			<hr class="hr_3">
+			
+			<input type="button" value="Save" onclick="save('draft');" class="buttonx">
+			
+			<c:if test="${empty messageForm.forwardedMsg}">
+				<c:set var="trnSendtBtn">
+					<digi:trn>Send</digi:trn>
+				</c:set> 
+				<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="buttonx">
+			</c:if>
+			<c:if test="${not empty messageForm.forwardedMsg}">
+				<c:set var="trnFwdtBtn">
+					<digi:trn>Forward</digi:trn>
+				</c:set> 
+				<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="buttonx">
+			</c:if>
+			
+			<input type="button" value="Cancel" onclick="cancel();" class="buttonx">
+		</td>
+	</tr>
+</table>
+</div></div>
+
+
 
 <script type="text/javascript">
     	var myArray = [
@@ -1037,7 +1298,12 @@ function addActionToURL(actionName){
 
 	
 </script>
+
+
+
 <script type="text/javascript">
 	initFileUploads();
 </script>
+
+
 </digi:form>

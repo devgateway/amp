@@ -157,6 +157,12 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .resource_label_or {background-color:#FF7800; font-size:11px; color:#FFFFFF; padding:2px; margin-right:3px;}
 .resource_label_red {background-color:#FF0000; font-size:11px; color:#FFFFFF; padding:2px; margin-right:3px;}
 #add_resource {display:none; margin-top:3px;}
+.msg_receivers {border:1px solid #D0D0D0; background-color:#FFFFFF; padding:10px; height:180px; overflow:scroll; margin-top:10px;}
+.msg_grp_name {background-color:#EDEDED; font-weight:bold; padding-top:2px; height:20px;}
+.msg_lbl {float:left; padding-top:2px; margin-left:3px;}
+.msg_grp_mem_name {margin-left:15px; margin-top:5px; margin-bottom:5px;}
+.msg_add {margin-top:5px;}
+.msg_added_cont {background-color:#EDEDED; margin-top:5px; border:1px solid #D0D0D0; padding:5px; font-weight:bold;}
 
 #show_legend_pop_box {display:none; margin-top:15px; position:absolute; width:300px; padding:8px; border:1px solid #CCCCCC; background-color:#FDFFE3;}
 

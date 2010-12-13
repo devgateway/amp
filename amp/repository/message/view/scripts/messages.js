@@ -320,7 +320,7 @@
 		messageIdStateMap = new Array();
 		
 		
-		var tbl = document.getElementById('msgsList');
+		var tbl = $('#msgsList');
 		
 		var browser=navigator.appName;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
@@ -374,7 +374,7 @@
     
     				if (messages.length != 0) {
 		    
-		    			messageListMarkup.push('<tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
+		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
 							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>');
 							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td></tr>');
 					
@@ -469,10 +469,10 @@
 		          
 							messageListMarkup.push('<tr><td class=inside colspan="3" align="center">');
 							messageListMarkup.push(noItemMsg);
-							messageListMarkup.push('</td></tr>');
+							messageListMarkup.push('</td></tr></tbody>');
 						}
 						
-						tbl.innerHTML = messageListMarkup.join("");
+						tbl.html(messageListMarkup.join(""));
 						
 					}			
 				//messages end

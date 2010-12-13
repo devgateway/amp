@@ -526,8 +526,6 @@ function addActionToURL(actionName){
     	var guestList = $("input[name='selreceivers'][type='hidden']");
 			
 			var list = mainList.push(guestList);
-			
-			console.log(mainList);
     	
     	
     	

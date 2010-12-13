@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import org.apache.wicket.Component;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.helper.Constants;
 
@@ -20,4 +21,9 @@ public final class OnePagerConst {
 	
 	//TODO: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
 	public final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";
+	public final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	public static String getToggleJS(Component c)
+	{
+		return String.format(toggleJS, c.getMarkupId());
+	}
 }

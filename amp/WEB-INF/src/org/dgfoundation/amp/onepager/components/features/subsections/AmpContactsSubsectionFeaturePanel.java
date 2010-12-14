@@ -2,7 +2,7 @@
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  *
 */
-package org.dgfoundation.amp.onepager.components.features.tables;
+package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,25 +10,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 
 /**
  * @author dmihaila@dginternational.org
@@ -76,7 +68,6 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<AmpActivityContact> item) {
-				final MarkupContainer listParent=this.getParent().getParent();
 				item.add(new Label("contactName", item.getModelObject().getContact().getName() + item.getModelObject().getContact().getLastname()));
 				item.add(new AmpDeleteLinkField("removeContact", "Remove Contact Link") {
 				private static final long serialVersionUID = 3350682075371304996L;
@@ -88,24 +79,20 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 						list.removeAll();
 					}
 				});
+				AmpContactDetailsSubsectionFeaturePanel contactDetails = null;
+				try {
+					contactDetails = new AmpContactDetailsSubsectionFeaturePanel("contactDetails", "Contact Details", item.getModel());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				item.add(contactDetails);
 			}
 		};
 		list.setReuseItems(true);
-		add(list);	
+		add(list);
+		
+		
 	}
 
 }
-
-//item.add(new TextField<String>("firstName", new PropertyModel<String>(item.getModel(), "additionalInfo")));
-//item.add(new Label("firstName", item.getModelObject().getContact().getName()));		
-//item.add(new Label("lastName", item.getModelObject().getContact().getLastname()));
-////item.add(new Label("email", item.getModelObject().getContact().getProperties()));
-//item.add(new Label("email", "email1"));
-//item.add(new Label("organization", item.getModelObject().getContact().getOrganisationName()));
-//item.add(new Label("phone", "phone1"));
-//item.add(new Label("primary", item.getModelObject().getPrimaryContact()==true?"yes":"no"));
-//item.add(new Label("actions", "edit/delete"));
-
-//label("name", item.getModelObject().getOrganisation().getAcronymAndName()));			
-
-//item.add(getDeleteLinkField(id, fmName,item,listModel));

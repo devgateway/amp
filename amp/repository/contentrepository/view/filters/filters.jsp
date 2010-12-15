@@ -61,11 +61,11 @@
 			</tr>
 			<tr>
 				<td colspan="2" style="text-align: center;">
-					<button class="buton" type="button">
+					<button class="buttonx" type="button">
 						<digi:trn>Apply</digi:trn>
 					</button>
 					&nbsp;&nbsp;&nbsp;
-					<button class="buton" type="button">
+					<button class="buttonx" type="button">
 						<digi:trn>Close</digi:trn>
 					</button>
 				</td>

@@ -71,9 +71,9 @@
 	      <c:set var="trncancel"><digi:trn>Cancel</digi:trn></c:set>
 	      <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>      
 	      
-	      <input class="dr-menu" type="submit" value="${trn}" onclick="return validateDocFromTemp()">    
-	      <input class="dr-menu" type="reset" value="${trncancel}">
-	      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="templatesPanel.hide()">
+	      <input class="buttonx" type="submit" value="${trn}" onclick="return validateDocFromTemp()">    
+	      <input class="buttonx" type="reset" value="${trncancel}">
+	      <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="templatesPanel.hide()">
 	    </td>
   	</tr>
   </c:if>

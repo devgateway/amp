@@ -129,12 +129,15 @@ function setHoveredTable(tableId, hasHeaders) {
 		rows = null;
 	}
 }
+
 </script>
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.table");
 	var privateListObj	= null;
 	var teamListObj	= null;
-	
+	var breadcrumbName='Resources';
+	var breadCrumbObj = null;
+		
 	function loadTab() {
 		for (var i=0; i<4; i++) {
 			var tab		= repositoryTabView.getTab(i);
@@ -146,6 +149,9 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 	
 	function afterPageLoad(e) {
+		//set breadcrumb text
+		var breadCrumbObj=$('div.breadcrump_cont').text(breadcrumbName);
+		
 		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId", ${meTeamMember.teamId}, '${meTeamMember.email}');
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
 		//privateListObj.sendRequest();
@@ -300,26 +306,10 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
-<table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">
-	<tr>
-		<td valign="bottom" class="crumb" >
-			&nbsp;&nbsp;&nbsp;
-			<c:set var="translation">
-					<digi:trn>Click here to view MyDesktop</digi:trn>
-			</c:set>
-			<digi:link href="/../aim/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-               	<digi:trn>My Desktop</digi:trn>
-               </digi:link> &gt; <digi:trn>Content Repository</digi:trn>
-			<br />
-		</td>
-	</tr>
+<table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">	
 	<tr>
 		<td align=left vAlign=top>
-			<div id="menuContainerDiv"></div>	
-			<span class="subtitle-blue"> &nbsp;&nbsp; 
-				<digi:trn>Content Repository</digi:trn> 
-			</span> 
-			<br />
+			<div id="menuContainerDiv"></div>
 			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px;">
 			<tr><td  class="yui-skin-sam">
 			<div id="demo" class="yui-navset">			
@@ -360,13 +350,13 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 						        	<td>
 						        		<br />
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif"> 
 							        	</button>
-								    	<button id="filterButtonId" class="buton" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
+								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
-								    	<button id="labelButtonId" class="buton" type="button" onclick="fPanel.toggleView();">
+								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
 								    	</button>
 								    </td>								    
@@ -375,8 +365,14 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 											<div style="width: 80%; float: left" id="privateFilterInfo"></div>
-											<div align="right" style="width: 15%; float: left" >
-												<jsp:include page="legendForResources.jsp"/>
+											<div class="show_legend" align="right" style="width: 15%; float: left">
+												<table border="0" cellspacing="0" cellpadding="0">
+													<tr>
+														<td style="font-size: 11px;font-family: Arial,sans-serif">
+									          				<jsp:include page="legendForResources.jsp"/>
+									          			</td>
+									          		</tr>
+									          	</table>
 											</div>
 											<br />
 											<div id="my_markup" align="left" style="clear: both;">
@@ -397,7 +393,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						        	<td>
 						        	<br />
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
-										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="dr-menu buton"><digi:trn>Add Resource</digi:trn>
+										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 										</button>
 										<!-- 
@@ -407,10 +403,10 @@ function setHoveredTable(tableId, hasHeaders) {
 										 -->
 										
 									<%}%>
-										<button id="teamFilterButtonId" class="buton" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId').show();">
+										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
-								    	<button id="teamLabelButtonId" class="buton" type="button" onclick="teamFPanel.toggleView();">
+								    	<button id="teamLabelButtonId" class="buttonx" type="button" onclick="teamFPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
 								    	</button>
 									</td>
@@ -420,8 +416,14 @@ function setHoveredTable(tableId, hasHeaders) {
 									<td>
 										<br/>
 											<div style="width: 80%; float: left" id="teamFilterInfo"></div>
-											<div align="right" style="width: 15%; float: left" >
-												<jsp:include page="legendForResources.jsp"/>
+											<div class="show_legend" align="right" style="width: 15%; float: left">
+												<table border="0" cellspacing="0" cellpadding="0">
+													<tr>
+														<td style="font-size: 11px;font-family: Arial,sans-serif">
+									          				<jsp:include page="legendForResources.jsp"/>
+									          			</td>
+									          		</tr>
+									          	</table>
 											</div>
 											<br />
 											<div id="team_markup" align="left"  class="all_markup">
@@ -440,10 +442,10 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 									<td>
-										<button id="sharedFilterButtonId" class="buton" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
+										<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
-								    	<button id="sharedLabelButtonId" class="buton" type="button" onclick="sharedFPanel.toggleView();">
+								    	<button id="sharedLabelButtonId" class="buttonx" type="button" onclick="sharedFPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
 								    	</button>
 									</td>
@@ -558,11 +560,11 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>
 						<tr>
 							<td align="right">
-								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
+								<html:submit styleClass="buttonx" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
 							</td>
 							<td align="left">
 								&nbsp;
-								<button class="dr-menu buton" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
+								<button class="buttonx" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
 									<digi:trn>Cancel</digi:trn>
 								</button>
 							</td>

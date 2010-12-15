@@ -4,6 +4,7 @@
 */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import java.util.Date;
 import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
@@ -51,7 +52,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 			throw new Exception("Unknown Transaction Type");
 		}
 
-		tableFeature = new AmpComponentsFundingFormTableFeature("tableFeature", compFundsModel, activityModel, transactionTypeName + " Table", transactionType);
+		tableFeature = new AmpComponentsFundingFormTableFeature("tableFeature", componentModel, compFundsModel, activityModel, transactionTypeName + " Table", transactionType);
 		add(tableFeature);
 		
 		AmpButtonField addCommit=new AmpButtonField("add","Add " + transactionTypeName) {
@@ -62,6 +63,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 				cf.setAdjustmentType(Constants.ACTUAL);
 				cf.setComponent(componentModel.getObject());
 				cf.setTransactionAmount(0d);
+				cf.setTransactionDate(new Date());
 				cf.setTransactionType(transactionType);
 				cf.setAmpComponentFundingId(null);
 

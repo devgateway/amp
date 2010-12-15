@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Comment panel to be used in AjaxTabbedPanel, wrapped by a AmpCommentTab
@@ -115,14 +116,17 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("deleteComment","Delete Comment") {
 					@Override
 					protected void onClick(AjaxRequestTarget target) {
+						Transaction tx = null;
 						try {
-							Session session = PersistenceManager
-									.getRequestDBSession();
+							Session session = PersistenceManager.getRequestDBSession();
+							tx = session.beginTransaction();
 							session.delete(comment);
+							tx.commit();
 							session.flush();
 							session.close();
 						} catch (Exception e) {
 							logger.error("Error while deleting comment", e);
+							tx.rollback();
 						}
 						comments.remove(comment);
 						target.addComponent(this.getParent().getParent()
@@ -139,7 +143,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 						MultiLineLabel label = new MultiLineLabel(componentId,
 								model) {
 							private static final long serialVersionUID = 1L;
-
+							
 							@Override
 							protected void onComponentTagBody(
 									MarkupStream markupStream,
@@ -152,10 +156,11 @@ public class AmpCommentPanel extends AmpFieldPanel {
 								} else {
 									replaceComponentTagBody(markupStream,
 											openTag,
-											getDefaultModelObjectAsString());
+											"<p style=\"white-space: normal; margin-top: 0px; margin-bottom: 0px;\">"+getDefaultModelObjectAsString()+"</p>");
 								}
 							}
 						};
+						label.setEscapeModelStrings(false);
 						label.setOutputMarkupId(true);
 						label.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
 						return label;
@@ -175,13 +180,17 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					protected void onSubmit(AjaxRequestTarget target) {
 						super.onSubmit(target);
 						Session session;
+						Transaction tx = null;
 						try {
 							session = PersistenceManager.getRequestDBSession();
+							tx = session.beginTransaction();
 							session.update(comment);
+							tx.commit();
 							session.flush();
 							session.close();
 						} catch (Exception e) {
 							logger.error("Comment edit error:", e);
+							tx.rollback();
 						}
 					}
 
@@ -225,12 +234,17 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				c.setMemberName(user.getUser().getName());
 				c.setComment(trnAddCommentModel.getObject().toString());
 				String msg = savedMsg;
+				Transaction tx = null;
 				try {
 					Session session = PersistenceManager.getRequestDBSession();
+					tx = session.beginTransaction();
 					session.save(c);
+					tx.commit();
+					session.flush();
 					session.close();
 				} catch (Exception e) {
 					error(e);
+					tx.rollback();
 					e.printStackTrace();
 					msg = notSavedMsg;
 				}

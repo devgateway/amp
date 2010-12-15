@@ -52,7 +52,15 @@ public class AmpContactDetailsSubsectionFeaturePanel extends AmpSubsectionFeatur
 		final IModel<AmpContact> ampCont = new PropertyModel<AmpContact>(ampActContact.getObject(), "contact");
 		Set<AmpCategoryValue> h  = new HashSet<AmpCategoryValue>();
 		//h.add(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_TITLE_KEY).iterator().next());
-		h.add(ampActContact.getObject().getContact().getTitle());
+		AmpCategoryValue categVal = ampActContact.getObject().getContact().getTitle();
+		if (categVal != null)
+			h.add(categVal);
+		else{
+			/**
+			 * HACK, to be fixed by Dan.
+			 */
+			h.add(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_TITLE_KEY).iterator().next());
+		}
 		AmpCategorySelectFieldPanel contactTitle = new AmpCategorySelectFieldPanel(
 				"title", CategoryConstants.CONTACT_TITLE_KEY,new AmpCategoryValueByKeyModel( new Model((Serializable)h),CategoryConstants.CONTACT_TITLE_KEY), 
 				CategoryConstants.CONTACT_TITLE_NAME, true, false, null);

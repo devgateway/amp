@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoRenderer;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -41,6 +42,7 @@ public class AmpComponentsFundingFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpComponentsFundingFormTableFeature(String id,
+			final IModel<AmpComponent> componentModel,
 			final IModel<Set<AmpComponentFunding>> compFundsModel, 
 			final IModel<AmpActivity> activityModel, String fmName,
 			final int transactionType) throws Exception {
@@ -59,7 +61,8 @@ public class AmpComponentsFundingFormTableFeature extends
 					AmpComponentFunding comp = (AmpComponentFunding) iterator
 							.next();
 					if (comp.getTransactionType() == transactionType)
-						result.add(comp);
+						if (/*comp.getComponent().equals(componentModel.getObject())*/ comp.getComponent().hashCode() == componentModel.getObject().hashCode())
+							result.add(comp);
 				}
 				
 				return result;

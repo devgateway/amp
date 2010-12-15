@@ -69,6 +69,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		super(id, model, fmName, hideLabel);
 		
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
+		
 		//final IModel<AmpContact> ampContact = new Model(model);
  		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
 		
@@ -97,10 +98,9 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		
 					@Override
 					protected void populateItem(final ListItem<AmpContactProperty> item) {
-						IModel<String> value = new PropertyModel<String>(item.getModelObject(), "value");
+						//IModel<String> value = new PropertyModel<String>(item.getModelObject(), "value");
 						//item.add(new AmpTextFieldPanel<String>("detail", value,fmName, true));
-						System.out.println(value.getObject());
-						item.add(new Label("detail", value));
+						item.add(new Label("detail", item.getModelObject().getValue()));
 					}
 				};
 		detailsList.setReuseItems(true);
@@ -118,6 +118,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 				fakeContact1.setValue("2");
 				contactProperties.add(fakeContact1);
 				target.addComponent(this.getParent());//.getParent());
+				detailsList.removeAll();
 			}
 		};
 		add(addLink);

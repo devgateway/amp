@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -80,6 +81,14 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		
 		final TextField<String> name = new TextField<String>("name", new PropertyModel<String>(componentModel, "title"));
 		name.setOutputMarkupId(true);
+		OnChangeAjaxBehavior nameOnChange = new OnChangeAjaxBehavior() {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				handleChanges(target, componentModel);
+			}
+		};
+		nameOnChange.setThrottleDelay(Duration.milliseconds(1000l));
+		name.add(nameOnChange);
 		name.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {

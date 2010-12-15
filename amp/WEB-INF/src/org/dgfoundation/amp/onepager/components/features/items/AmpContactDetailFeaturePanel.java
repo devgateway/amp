@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,15 +16,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpRegionalObservation;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 
 /**
  * @author dan
@@ -74,15 +66,15 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
 		// TODO Auto-generated constructor stub
-		this(id, model, fmName, hideLabel);
+		super(id, model, fmName, hideLabel);
 		
 		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		//final IModel<AmpContact> ampContact = new Model(model);
- 		final IModel<List<AmpContactProperty>> listModel1 = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
+ 		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
 		
 						@Override
 						public List<AmpContactProperty> getObject() {
-							Set<AmpContactProperty> specificContacts = new HashSet<AmpContactProperty>();  
+							List<AmpContactProperty> specificContacts = new ArrayList<AmpContactProperty>();  
 							Set<AmpContactProperty> contactProperties=setModel.getObject();
 							if(contactProperties!=null){
 								for (AmpContactProperty detail : contactProperties) {
@@ -101,12 +93,14 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 							return new ArrayList<AmpContactProperty>(specificContacts);
 						}
 		};
-		detailsList = new ListView<AmpContactProperty>("detailsList", listModel1) {
+		detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 		
 					@Override
 					protected void populateItem(final ListItem<AmpContactProperty> item) {
 						IModel<String> value = new PropertyModel<String>(item.getModelObject(), "value");
-						item.add(new AmpTextFieldPanel<String>("detail", value,fmName, true));
+						//item.add(new AmpTextFieldPanel<String>("detail", value,fmName, true));
+						System.out.println(value.getObject());
+						item.add(new Label("detail", value));
 					}
 				};
 		detailsList.setReuseItems(true);
@@ -123,7 +117,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 				fakeContact1.setName(contactProperty);
 				fakeContact1.setValue("2");
 				contactProperties.add(fakeContact1);
-				target.addComponent(AmpContactDetailFeaturePanel.this);//.getParent());
+				target.addComponent(this.getParent());//.getParent());
 			}
 		};
 		add(addLink);

@@ -68,6 +68,7 @@ public class AmpContactDetailsSubsectionFeaturePanel extends AmpSubsectionFeatur
 
 		final IModel<AmpContact> ampCont1 = new PropertyModel<AmpContact>(ampActContact.getObject(), "contact");
 		AmpContactDetailFeaturePanel emails = new AmpContactDetailFeaturePanel("emails",ampCont1 , "Contact Email", true, Constants.CONTACT_PROPERTY_NAME_EMAIL);
+		emails.setOutputMarkupId(true);
 		add(emails);
 		
 		IModel<String> function = new PropertyModel<String>(ampActContact.getObject().getContact(), "function");

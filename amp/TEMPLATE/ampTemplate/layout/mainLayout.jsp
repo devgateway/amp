@@ -71,7 +71,6 @@
 	</digi:secure>
 		<digi:insert attribute="headerMiddle"/>
 		
-	
 	<!-- BREADCRUMP START -->
 		<div class="breadcrump">
 			<div class="centering">
@@ -96,3 +95,8 @@
 </body>
 </html>
 
+
+<script type="text/javascript">
+$('#li_home').css('background-color','#FF6000');
+$('#li_home a').css('color','#ffffff');
+</script>

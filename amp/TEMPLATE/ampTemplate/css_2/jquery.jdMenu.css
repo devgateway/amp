@@ -73,10 +73,12 @@ ul.jd_menu li a {
 
 ul.jd_menu li.jdm_hover,
 ul.jd_menu li.jdm_active {
-	 
+	 /*
+
+*/
 }
 
 ul.jd_menu ul li.jd_menu_active a.jd_menu_active, 
 ul.jd_menu ul li.jd_menu_hover a.jd_menu_hover {
-	color:#FFFFFF;
+	
 }

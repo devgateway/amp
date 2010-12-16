@@ -87,7 +87,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	<div class="main_menu">
 		<div class="centering">
 	        <ul class="jd_menu" id="jd_menu">
-	        	<li>
+	        	<li id="li_home">
 	        		<a href="/" module="aim" title="${trn3}">
                 		<digi:trn>Home Page</digi:trn>
 	            	</a>
@@ -307,8 +307,8 @@ else  //In case the public view aren't activated
 	        <ul class="jd_menu">
 	        	<!-- DESKTOP -->
 	            <module:display name="My Desktop" parentModule="PROJECT MANAGEMENT">
-	            <li>
-	            	 <a href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
+	            <li id="li_desktop">
+	            	 <a href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" id="a_desk">
                      	<digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                      </a>
                      <img src="img_2/menu_arr_dwn.gif" class="menu_arr" border=0 />

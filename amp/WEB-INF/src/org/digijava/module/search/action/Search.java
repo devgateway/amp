@@ -28,7 +28,13 @@ public class Search extends Action {
 		ServletContext ampContext = session.getServletContext();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
-
+		if (request.getParameter("desksearch") != null){
+			String keyword = request.getParameter("keyword");
+			int querytype = Integer.parseInt(request.getParameter("type"));
+			searchForm.setKeyword(keyword);
+			searchForm.setQueryType(querytype);
+		}
+		
 		if (request.getParameter("reset") != null
 				&& ((String) request.getParameter("reset"))
 						.equalsIgnoreCase("true")) {

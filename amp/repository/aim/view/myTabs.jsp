@@ -270,7 +270,6 @@ var myTabsObject;
 	</div>
 </div>
 <script language="javascript">
-
 	$(document).ready(function() {
 		$("#demo").tabs();
 		$("#demo").tabs("option", "tabTemplate", '<li id="replaceableTab" class="desktop_tab"><a class="tab_link" href="\#{href}" rel="Tab_Name" title= "Tab Name">\#{label}</a></li>' );
@@ -286,8 +285,9 @@ var myTabsObject;
 			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.name}" />");
 		</logic:notEmpty>	
 		
+		
 	});
-	
+
 	$("#demo").tabs({
 		   load: function(event, ui) { 
 			   try

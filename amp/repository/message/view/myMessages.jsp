@@ -196,7 +196,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     }
     </script>
     
-    
+    <feature:display name="My Messages" module="Messages">
     <div class="right_menu">
 		<div class="right_menu_header">
 			<div class="right_menu_header_cont"><digi:trn key="message:myMessages">My Messages</digi:trn></div>
@@ -221,6 +221,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
         </tr>
       </table>
     </div>
+    </feature:display>
   </digi:form>
   <script type="text/javascript">
     $(document).ready(function(){

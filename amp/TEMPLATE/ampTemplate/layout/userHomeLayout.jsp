@@ -69,57 +69,19 @@
 					<a style="cursor: pointer;" ><img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel"></a>
 				</td>
 				<td valign="top">
-				<div id="rightpanel">
-					<div class="right_menu">
-						<div class="right_menu_header"><div class="right_menu_header_cont">Search</div></div>
-							<div class="right_menu_box"><div class="right_menu_cont">
-								<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	  								<tr>
-	    								<td class="tbl_spacing"><div class="search_label">Keyword:</div></td>
-	    								<td align=right class="tbl_spacing"><input name="" type="text" class="inputx" style="width:147px;"></td>
-	  								</tr>
-									<tr>
-	    								<td>
-	    									<div class="search_label">Type:</div></td>
-	    								<td align=right>
-	    									<select name="select" class=dropdwn_sm style="width:150px;">
-	  											<option value="Na">All</option>
-											</select>
-	    								</td>
-	    							</tr>
-								</table>
-							</div>
-						</div>
+					<div id="rightpanel">
+						<feature:display name="Desktop Search form" module="Tools">
+							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
+						</feature:display>
+						<logic:present name="currentMember">
+							<digi:insert attribute="myLinks" />
+							<digi:insert attribute="myReports"/>
+							<digi:insert attribute="myMessages"/>
+						</logic:present>
+						
 					</div>
-					<logic:present name="currentMember">
-						<digi:insert attribute="myLinks" />
-						<digi:insert attribute="myReports"/>
-						<digi:insert attribute="myMessages"/>
-					</logic:present>
-					<!-- 
-					<div class="right_menu">
-						<div class="right_menu_header"><div class="right_menu_header_cont">Latest created / updated projects</div></div>
-							<div class="right_menu_box">
-								<div class="right_menu_cont">
-									<li class="tri"><a href=#>Essential Services for Health</a></li>
-									<li class="tri"><a href=#>WTO Capacity Building Program</a></li>
-									<li class="tri"><a href=#>Polio Vaccination Program</a></li>
-									<li class="tri"><a href=#>Water Sector Support Project</a></li>
-									<li class="tri"><a href=#>Forest Protection andReforestation Project</a></li>
-									
-									<li class="tri"><a href=#>Tax Administration Project</a></li>
-									<li class="tri"><a href=#>Initiative to End Hunger</a></li>
-									<li class="tri"><a href=#>Rural Productivity Project</a></li>
-									<li class="tri"><a href=#>Nutritional Survey</a></li>
-									<li class="tri"><a href=#>National Voter Registration</a></li>
-								</div>
-							</div>
-						</div>
-					</div>
-					 -->
-					</td>
-					
-					</tr>
+				</td>
+			</tr>
 			</tbody>
 		</table>		
 		<digi:insert attribute="footer" />
@@ -137,5 +99,10 @@
  	        return false;    
  	    }
 	});
+	
+	$('#li_desktop').css('background-color','#FF6000');
+	$('#a_desk').css('color','#ffffff');
+	$('#li_desktop img').attr("src","img_2/menu_arr_dwn_sel.gif");
 </script>
+
 

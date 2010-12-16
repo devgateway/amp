@@ -26,9 +26,8 @@
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
-<script type="text/javascript">
 
-</script>	
+
 
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
@@ -51,9 +50,6 @@ function toggleSettings(){
 	}
 }
 
-	$('#show_legend_pop').click(function () {
-		$("#show_legend_pop_box").toggle();
-	});
 
 
 </script>

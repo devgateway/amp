@@ -30,4 +30,19 @@
 	<c:set var="translation">
 		<digi:trn key="aim:clickToViewLegend">Click here to view Legend</digi:trn>
 	</c:set>
-	&nbsp;<a id="show_legend_pop" style="cursor: pointer;text-decoration: underline;">Show Legend</a> <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_dwn.gif" />
+	&nbsp;
+	<a id="show_legend_pop" style="cursor: pointer;text-decoration: underline;">Show Legend <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_dwn.gif" />
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#show_legend_pop').click(function () {
+		$("#show_legend_pop_box").toggle();
+	});
+});
+</script>
+
+	
+
+
+	

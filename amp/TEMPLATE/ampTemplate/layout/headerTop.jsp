@@ -59,7 +59,9 @@
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 
-<!-- HEADER START -->
+
+
+<!-- HEADER START-->
 <div class="header">
 	<div class="centering">
 		<div class="login_nav">
@@ -78,4 +80,6 @@ ${fn:replace(message,quote,escapedQuote)}
 	</div>
 </div>
 
-<!-- HEADER END -->
+<!--HEADER END -->
+
+

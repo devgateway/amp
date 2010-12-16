@@ -194,6 +194,11 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     } // end 3
 	// alert(currentColor);
     // 3.3 ... Opera changes colors set via HTML to rgb(r,g,b) format so fix it
+    
+    if (currentColor == null) {
+    	currentColor = '';    	
+    }
+    
     if (currentColor.indexOf("rgb") >= 0)
     {
         var rgbStr = currentColor.slice(currentColor.indexOf('(') + 1,

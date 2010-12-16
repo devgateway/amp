@@ -546,6 +546,8 @@ public class AmpMessageActions extends DispatchAction {
             		   LabelValueBean tm=new LabelValueBean(creator.getUser().getFirstNames() + " " + creator.getUser().getLastName(),"m:" + creator.getAmpTeamMemId().toString());
             		   receivers.add(tm);
             		   messagesForm.setReceivers(receivers);
+                       String[] recId = new String[]{"m:" + creator.getAmpTeamMemId().toString()};
+                       messagesForm.setReceiversIds(recId);
             	   }
         	   }        	   
            }else if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){

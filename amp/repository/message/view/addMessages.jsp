@@ -1015,36 +1015,14 @@ function addActionToURL(actionName){
 
 
 
-<br><br>
-
-
-<div class="ins_box_left" style="border: 1px solid silver;">
+<div class="ins_box_left" style="border: 1px solid silver; background-color:#F5F5F5;">
 	<div class="create_message">
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 		  <tr>
-  		  <td valign="top"><b style="font-size:12px;">Receivers</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif"/></td>
-    		<td style="font-size:11px;"><input type="checkbox" name="checkbox" value="checkbox"/> Send to All<br/>
-						
-						<%--
-						<select multiple="multiple" size="12" id="whoIsReceiver"  class="inp-text" style="width:200px" >
-							<logic:empty name="messageForm" property="teamMapValues">
-								<option value="-1">No receivers</option>
-							</logic:empty>
-							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-								<option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
-									<c:forEach var="team" items="${messageForm.teamMapValues}">
-										<logic:notEmpty name="team" property="members">
-											<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
-												<c:forEach var="tm" items="${team.members}">
-													<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" id="t:${team.id}">${tm.memberName}</option>
-												</c:forEach>
-										</logic:notEmpty>											                                                		
-									</c:forEach>
-							</logic:notEmpty>
-						</select>	
-						--%>
-					
-
+  		  <td valign="top"><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
+  		  	<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
+  		  </td>
+    		<td style="font-size:11px;">
 
 					<div class="msg_receivers">
 						
@@ -1053,11 +1031,12 @@ function addActionToURL(actionName){
 							<logic:empty name="messageForm" property="teamMapValues">
 								<div class="msg_lbl">No receivers</div>
 							</logic:empty>
-							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-									<c:forEach var="team" items="${messageForm.teamMapValues}">
-										<logic:notEmpty name="team" property="members">
+							<logic:notEmpty name="messageForm"  property="teamMapValues" >
+								<c:forEach var="team" items="${messageForm.teamMapValues}">
+									<logic:notEmpty name="team" property="members">
+										<div class="rec_group_container">
 											<div class="msg_grp_name">
-												<input type="checkbox" value="t:${team.id}" style="float:left;">
+												<input class="group_checkbox" type="checkbox" value="t:${team.id}" style="float:left;">
 												<div class="msg_lbl">---${team.name}---</div>
 											</div>
 											<div class="msg_grp_mem_name">
@@ -1065,11 +1044,14 @@ function addActionToURL(actionName){
 													<input type="checkbox" name="receiversIds" id="t:${team.id} type="checkbox" value="m:${tm.memberId}"/>${tm.memberName}<br/>
 												</c:forEach>
 											</div>
-										</logic:notEmpty>											                                                		
-									</c:forEach>
+										</div>
+									</logic:notEmpty>											                                                		
+								</c:forEach>
+		
 							</logic:notEmpty>						
 				</div>
 			<br/>
+			<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
 	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
 			<div class="msg_add">
 				
@@ -1088,25 +1070,30 @@ function addActionToURL(actionName){
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width=200 valign="top"><b style="font-size:12px;">Title</b> <b class="mand">*</b></td>
+	    <td width=200 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b></td>
 	    <td valign="top"><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/>
 	  </tr>
 	</field:display>
   <tr>
-    <td valign="top"><b style="font-size:12px;">Description</b> <b class="mand">*</b></td>
+    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <b class="mand">*</b></td>
     <td valign="top">
     	<html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/>
     </td>
   </tr>
   <tr>
     <td valign="top">
-    	<b style="font-size:12px;">Related Activity</b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="showMessagesHelpTooltip(this)" onmouseout="hideMessagesHelpTooltip()" id="myImage"/>
+    	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b>
+    	&nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="showMessagesHelpTooltip(this)" onmouseout="hideMessagesHelpTooltip()"/>
+    	
+    	
   		<div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; border: 1px solid silver;">
           <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
               <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
               <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
           </TABLE>
       </div>
+      
+      
     </td>
     <td>
       <div>
@@ -1119,7 +1106,7 @@ function addActionToURL(actionName){
     </td>
   </tr>
   <tr>
-    <td><b style="font-size:12px;">Priority Level</b></td>
+    <td><b style="font-size:12px;"><digi:trn>Priority Level</digi:trn></b></td>
     <td>
     	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
     		<html:option value="0"><digi:trn>none</digi:trn> </html:option>
@@ -1130,7 +1117,7 @@ function addActionToURL(actionName){
 		</td>
   </tr>
   <tr>
-    <td><b style="font-size:12px;">Set as alert</b></td>
+    <td><b style="font-size:12px;"><digi:trn>Set as alert</digi:trn></b></td>
     <td>
     	<html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">																							
 				<html:option value="0"><digi:trn>No</digi:trn> </html:option>
@@ -1140,7 +1127,7 @@ function addActionToURL(actionName){
   </tr>
   
   <tr>
-  	<td valign="top"><b style="font-size:12px;">Attachment</b></td>
+  	<td valign="top"><b style="font-size:12px;"><digi:trn>Attachment</digi:trn></b></td>
 		<td>
 			<table width="100%" border="0">
 			<c:if test="${not empty messageForm.sdmDocument}">
@@ -1170,7 +1157,7 @@ function addActionToURL(actionName){
 					</div>
 					--%>
 				</td><td align="right">
-					<input type="submit" value="upload" class="buttonx" align="right" onclick="return validateFile()"/>
+					<input type="submit" value="<digi:trn>Upload</digi:trn>" class="buttonx" align="right" onclick="return validateFile()"/>
 				</td>
 			</tr>
 		</table>
@@ -1183,15 +1170,19 @@ function addActionToURL(actionName){
   <tr>
     <td colspan="2" align=center>
 			<hr class="hr_3">
+			<field:display name="Save button" feature="Create Message Form">
+				<input type="button" value="<digi:trn>Save</digi:trn>" onclick="save('draft');" class="buttonx">
+			</field:display>
 			
-			<input type="button" value="Save" onclick="save('draft');" class="buttonx">
+			<field:display name="Send button" feature="Create Message Form">
+				<c:if test="${empty messageForm.forwardedMsg}">
+					<c:set var="trnSendtBtn">
+						<digi:trn>Send</digi:trn>
+					</c:set> 
+					<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="buttonx">
+				</c:if>
+			</field:display>
 			
-			<c:if test="${empty messageForm.forwardedMsg}">
-				<c:set var="trnSendtBtn">
-					<digi:trn>Send</digi:trn>
-				</c:set> 
-				<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="buttonx">
-			</c:if>
 			<c:if test="${not empty messageForm.forwardedMsg}">
 				<c:set var="trnFwdtBtn">
 					<digi:trn>Forward</digi:trn>
@@ -1199,7 +1190,9 @@ function addActionToURL(actionName){
 				<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="buttonx">
 			</c:if>
 			
-			<input type="button" value="Cancel" onclick="cancel();" class="buttonx">
+			<field:display name="Cancel button" feature="Create Message Form">
+				<input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancel();" class="buttonx">
+			</field:display>
 		</td>
 	</tr>
 </table>
@@ -1268,17 +1261,55 @@ function addActionToURL(actionName){
 		pulse: false
 	});
 
-    $("#descMax").bind("paste", function (event) { 
-    	var browser=navigator.appName;
-    	if(browser=="Microsoft Internet Explorer"){
-    		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
-    		var desc = document.getElementById('descMax');
-    		if(textThatNeedsToBePasted.length + desc.value.length >500){
-    			var msg="<digi:trn jsFriendly='true'>You can not exceed 500 symbols</digi:trn>";
-    			alert(msg);
-    			window.clipboardData.setData("Text",'');
-    		}
-        }				
+	$(".group_checkbox").bind("change", function (event) { 
+		var selGrpCtrl = $(this);
+		var childUsers = selGrpCtrl.parent().parent().find("input[name='receiversIds']");
+		
+		childUsers.each(
+			function (idx){
+				this.checked = selGrpCtrl.attr("checked");
+			})
+		});
+
+	$("input[name='sendToAll']").bind("change", function (event) { 
+		var selAllCtrl = $(this);
+		var allUsers = selAllCtrl.parent().find(".msg_receivers").find("input");
+		allUsers.each(
+			function (idx){
+				this.checked = selAllCtrl.attr("checked");
+			})
+		});
+		
+		
+		//Preselect recipients
+		function preselectRecipients() {
+			var preselectedIds = Array();
+			<logic:notEmpty name="messageForm"  property="receiversIds" >
+				<c:forEach var="recId" items="${messageForm.receiversIds}">
+					preselectedIds.push('${recId}');
+				</c:forEach>
+			</logic:notEmpty>						
+			
+			var preselIdx;
+			for (preselIdx = 0; preselIdx < preselectedIds.length; preselIdx ++) {
+				$('input[type="checkbox"][value="' + preselectedIds[preselIdx] + '"]').attr("checked",true);
+			} 
+		
+		}
+		
+		preselectRecipients();
+
+  $("#descMax").bind("paste", function (event) { 
+  	var browser=navigator.appName;
+  	if(browser=="Microsoft Internet Explorer"){
+  		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
+  		var desc = document.getElementById('descMax');
+  		if(textThatNeedsToBePasted.length + desc.value.length >500){
+  			var msg="<digi:trn jsFriendly='true'>You can not exceed 500 symbols</digi:trn>";
+  			alert(msg);
+  			window.clipboardData.setData("Text",'');
+  		}
+      }				
 	});
 
     $("#titleMax").bind("paste", function (event) { 

@@ -5,10 +5,10 @@
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -52,7 +52,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 			@Override
 			public List<AmpActivityContact> getObject() {
 				Set<AmpActivityContact> allContacts = setModel.getObject();
-				Set<AmpActivityContact> specificContacts = new HashSet<AmpActivityContact>();  
+				Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();  
 				Iterator<AmpActivityContact> it = allContacts.iterator();
 				while (it.hasNext()) {
 					AmpActivityContact ampContact = (AmpActivityContact) it.next();

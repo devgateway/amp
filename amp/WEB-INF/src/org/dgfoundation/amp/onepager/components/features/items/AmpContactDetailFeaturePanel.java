@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -76,7 +77,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 						@Override
 						public List<AmpContactProperty> getObject() {
 							List<AmpContactProperty> specificContacts = new ArrayList<AmpContactProperty>();  
-							Set<AmpContactProperty> contactProperties=setModel.getObject();
+							Set<AmpContactProperty> contactProperties= new TreeSet<AmpContactProperty>(setModel.getObject());
 							if(contactProperties!=null){
 								for (AmpContactProperty detail : contactProperties) {
 									if(detail.getName().equals(contactProperty)){

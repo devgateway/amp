@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityContact implements Versionable {
+public class AmpActivityContact implements Versionable, Comparable {
 	
 	private Long id;
 	private AmpActivity activity;
@@ -67,5 +67,12 @@ public class AmpActivityContact implements Versionable {
 	@Override
 	public Object getValue() {
 		return "" + this.contactType + "-" + this.primaryContact;
+	}
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if (!(o instanceof AmpActivityContact)) return -1;
+		AmpActivityContact aac = (AmpActivityContact)o;
+		return this.getContact().compareTo(aac.getContact());
 	}
 }

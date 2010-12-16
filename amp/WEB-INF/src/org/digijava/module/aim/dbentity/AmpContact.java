@@ -9,7 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Dare
  *
  */
-public class AmpContact {
+public class AmpContact implements Comparable{
 	private Long id;
 	private String name;
 	private String lastname;
@@ -122,6 +122,12 @@ public class AmpContact {
 
 	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
 		this.organizationContacts = organizationContacts;
-	}	
-	
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		AmpContact a = (AmpContact)arg0;
+		return this.getId().compareTo(a.getId());
+	}
 }

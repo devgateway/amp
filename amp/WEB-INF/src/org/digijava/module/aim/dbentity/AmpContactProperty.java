@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.util.ContactInfoUtil;
 
-public class AmpContactProperty {
+public class AmpContactProperty  implements Comparable{
 	private Long id;
 	private AmpContact contact;
 	private String name;
@@ -42,6 +42,16 @@ public class AmpContactProperty {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub		
+		if (!(o instanceof AmpContactProperty)) return -1;
+		AmpContactProperty a = (AmpContactProperty)o;
+		if(a == null || a.getId() == null) return -1;
+		if(a.getId()!=null && this.getId() == null) return 1;
+		return this.getId().compareTo(a.getId());
 	}
 	
 }

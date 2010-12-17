@@ -51,13 +51,6 @@
 	var myArray=new Array();
 	
 	window.onload=getMessages;
-		
-	//setting timer to check for new messages after specified time	
-	/*
-	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
-		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
-	}
-	*/
 	</script>
 
 
@@ -140,6 +133,14 @@ background-color:yellow;
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+
+<script language="javascript" type="text/javascript">
+	//setting timer to check for new messages after specified time	
+	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
+		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+	}
+</script>	
+
 	<%--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -202,7 +203,10 @@ background-color:yellow;
 	
 	window.onload=getMessages;
 		
-	//setting timer to check for new messages after specified time	
+	//setting timer to check for new messages after specified time
+	
+	alert(document.getElementsByName('msgRefreshTimeCurr'));
+	
 	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
@@ -1533,37 +1537,37 @@ function addActionToURL(actionName){
 		
 		<div class="tab_opt_box">
 				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
-					<digi:link href="/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"><b>Create new message</b></digi:link>
+					<digi:link href="/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"><b><digi:trn>Create new message</digi:trn></b></digi:link>
 				</div>
 
 			<div class="tab_opt">
 				<div class="tab_opt_cont">
 					<span id="tab_inbox">
 						<c:if test="${messageForm.childTab=='inbox'}">
-							<b class="sm_sel">Inbox</b> 
+							<b class="sm_sel"><digi:trn>Inbox</digi:trn></b> 
 						</c:if>
 						<c:if test="${messageForm.childTab!='inbox'}">
-							<a href="#tab_inbox" class="l_sm">Inbox</a> 
+							<a href="#tab_inbox" class="l_sm"><digi:trn>Inbox</digi:trn></a> 
 						</c:if>
 					</span>
 					&nbsp;|&nbsp;
 						
 					<span id="tab_sent">
 						<c:if test="${messageForm.childTab=='sent'}">
-							<b class="sm_sel">Sent</b> 
+							<b class="sm_sel"><digi:trn>Sent</digi:trn></b> 
 						</c:if>
 						<c:if test="${messageForm.childTab!='sent'}">
-							<a href="#tab_sent" class="l_sm">Sent</a>
+							<a href="#tab_sent" class="l_sm"><digi:trn>Sent</digi:trn></a>
 						</c:if>
 					</span>
 					&nbsp;|&nbsp; 
 					
 					<span id="tab_draft">
 						<c:if test="${messageForm.childTab=='draft'}">
-							<b class="sm_sel">Draft</b>
+							<b class="sm_sel"><digi:trn>Draft</digi:trn></b>
 						</c:if>
 						<c:if test="${messageForm.childTab!='draft'}">
-							<a href="#tab_draft" class="l_sm">Draft</a>
+							<a href="#tab_draft" class="l_sm"><digi:trn>Draft</digi:trn></a>
 						</c:if>
 					</span>
 					
@@ -1574,11 +1578,7 @@ function addActionToURL(actionName){
 		
 
 		<div class="paging">
-			
-
-			<%--
-			<b class="paging_sel">1</b> &nbsp;|&nbsp; <a href=# class="l_sm">2</a> &nbsp;|&nbsp; <a href=# class="l_sm">3</a> &nbsp;|&nbsp; <a href=# class="l_sm">4</a> &nbsp;|&nbsp; <a href=# class="l_sm">5</a> &nbsp;|&nbsp; <a href=# class="l_sm">6</a> &nbsp;|&nbsp; <a href=# class="l_sm">Next</a> &nbsp;|&nbsp; <a href=# class="l_sm">»</a>
-			--%>
+	
 		<table><tr id="paginationPlace"><td>&nbsp;</td></tr></table>
 		</div>
 		<table class="inside" width=740 cellpadding="0" cellspacing="0" id="msgsList">

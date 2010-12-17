@@ -25,16 +25,18 @@
 			<td width=768  valign=top>
 				<div id="tabs">
 					<ul class="desktop_tab_base">
-						<li class="desktop_tab"><a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a></li>
-						
-						<%--
-						<li class="desktop_tab"><a href="/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&listOnly=true" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
-						--%>
-						
-						<li class="desktop_tab"><a href="#tabs-2" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
-						
-						<li class="desktop_tab"><a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a></li>
-						<li class="desktop_tab"><a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a></li>
+						<feature:display name="Message tab" module="Messages">
+							<li class="desktop_tab"><a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a></li>
+						</feature:display>
+						<feature:display name="Alert tab" module="Messages">
+							<li class="desktop_tab"><a href="#tabs-2" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
+						</feature:display>
+						<feature:display name="Approval Tab" module="Messages">
+							<li class="desktop_tab"><a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a></li>
+						</feature:display>
+						<feature:display name="Event Tab" module="Messages">
+							<li class="desktop_tab"><a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a></li>
+						</feature:display>
 					</ul>
 					
 					<digi:insert attribute="body"/>
@@ -43,7 +45,7 @@
 				<td width="222" valign=top>
 						<div class="right_menu">
 						<div class="right_menu_header">
-							<div class="right_menu_header_cont">Information</div>
+							<div class="right_menu_header_cont"><digi:trn>Information</digi:trn></div>
 						</div>
 						<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
 							<digi:trn key="message:totalNum">Total Number</digi:trn>: <b>${messageForm.allmsg}</b><br />
@@ -68,13 +70,13 @@
 
 					
 					<div class="right_menu">
-					<div class="right_menu_header"><div class="right_menu_header_cont">Icons Reference</div></div>
+					<div class="right_menu_header"><div class="right_menu_header_cont"><digi:trn>Icons Reference</digi:trn></div></div>
 					<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - Unread message<br />
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - Unread message<br />
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" style="margin-right:5px;"> - Reply to message<br />
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" style="margin-right:5px;"> - Forward message<br />
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" style="margin-right:5px;"> - Delete message<br />
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - <digi:trn>Unread message</digi:trn><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - <digi:trn>Unread message</digi:trn><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" style="margin-right:5px;"> - <digi:trn>Reply to message</digi:trn><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" style="margin-right:5px;"> - <digi:trn>Forward message</digi:trn><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" style="margin-right:5px;"> - <digi:trn>Delete message</digi:trn><br/>
 					
 					</div>
 					</div>

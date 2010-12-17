@@ -1,7 +1,7 @@
 
 
 	 function checkForNewMessages(){
-		lastTimeStamp = new Date().getTime(); 
+	 	lastTimeStamp = new Date().getTime(); 
 		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage+'&timeStamp='+lastTimeStamp);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;

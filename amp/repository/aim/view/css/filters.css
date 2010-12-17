@@ -18,7 +18,7 @@
 			font-size: 8pt; 
 			color:#376091;
 			font-weight: bold;
-			background-color: white;
+			background-color: #EBEBEB;
 			margin:0pt 0px 0pt 0pt;
 			/* background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top; */
 	}
@@ -31,6 +31,7 @@
 			font-weight: bold;
 			/* background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top; */
 			color: #FF6000;
+			background-color: #FFFFFF;
 	}
 	#tabview_container li a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top; */

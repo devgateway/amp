@@ -73,6 +73,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		idsList = new ListView<AmpOrganisationContact>("listOrgs", listModel) {
 			@Override
 			protected void populateItem(final ListItem<AmpOrganisationContact> item) {
+				
 				final MarkupContainer listParent=this.getParent();
 				
 				item.add(new Label("orgNameLabel", item.getModelObject().getOrganisation().getAcronymAndName()));			

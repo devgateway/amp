@@ -49,7 +49,7 @@ public class AmpContactProperty  implements Comparable{
 		// TODO Auto-generated method stub		
 		if (!(o instanceof AmpContactProperty)) return -1;
 		AmpContactProperty a = (AmpContactProperty)o;
-		if(a == null || a.getId() == null) return -1;
+		if(a == null || a.getId() == null) return 1;
 		if(a.getId()!=null && this.getId() == null) return 1;
 		return this.getId().compareTo(a.getId());
 	}

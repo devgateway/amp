@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -17,8 +16,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 
 /**
  * @author dan
@@ -89,7 +90,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 								AmpContactProperty fakeContact = new AmpContactProperty();
 								fakeContact.setContact(model.getObject());
 								fakeContact.setName(contactProperty);
-								fakeContact.setValue("1");
+								fakeContact.setValue("");
 								specificContacts.add(fakeContact);
 							}
 							return new ArrayList<AmpContactProperty>(specificContacts);
@@ -99,27 +100,30 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		
 					@Override
 					protected void populateItem(final ListItem<AmpContactProperty> item) {
-						//IModel<String> value = new PropertyModel<String>(item.getModelObject(), "value");
-						//item.add(new AmpTextFieldPanel<String>("detail", value,fmName, true));
-						item.add(new Label("detail", item.getModelObject().getValue()));
+						IModel<String> value = new PropertyModel<String>(item.getModelObject(), "value");
+						item.add(new AmpTextFieldPanel<String>("detail", value,fmName, true));
+						//item.add(new Label("detail", item.getModelObject().getValue()));
 					}
 				};
 		detailsList.setReuseItems(true);
 		add(detailsList);
 		
 		AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
-
-
+		
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				Set<AmpContactProperty> contactProperties=setModel.getObject();
+				if(detailsList.getModelObject().size() >= 3) 
+					return;
 				AmpContactProperty fakeContact1 = new AmpContactProperty();
 				fakeContact1.setContact(model.getObject());
 				fakeContact1.setName(contactProperty);
-				fakeContact1.setValue("2");
+				fakeContact1.setValue("");
+//				contactProperties.clear();
+//				contactProperties.addAll(detailsList.getModelObject());
+				Set<AmpContactProperty> contactProperties=setModel.getObject();
 				contactProperties.add(fakeContact1);
-				target.addComponent(this.getParent());//.getParent());
 				detailsList.removeAll();
+				target.addComponent(this.getParent());//.getParent());
 			}
 		};
 		add(addLink);

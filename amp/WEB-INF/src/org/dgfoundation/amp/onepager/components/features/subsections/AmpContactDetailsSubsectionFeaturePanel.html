@@ -1,7 +1,4 @@
 <wicket:extend>
-<table width="710" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="355" valign="top">
     	<table width="330" border="0" cellpadding="3" cellspacing="3">
 	       	<tr><td align="right">Title<b class="mand">*</b>:</td><td><div wicket:id="title"/></td></tr>
 	       	<tr><td align="right">First Name<b class="mand">*</b>:</td><td><span wicket:id="firstName"/></td></tr>
@@ -14,29 +11,12 @@
 	       	<tr><td align="right">Organizations<b class="mand">*</b>:</td><td width="300"><span wicket:id="contactOrganizations"/></td></tr>
 	       	<tr>
 	       		<td align="right" valign="top">Phone:</td>
-	       		<td><div wicket:id="phones"><div wicket:id="phone">123123</div></div></td>
+	       		<td><div wicket:id="phones"></div></td>
 	       	</tr>
 	       	<tr>
 	       		<td align="right" valign="top">Fax:</td>
-	       		<td><div wicket:id="faxes"><div wicket:id="fax">123123</div></div></td>
+	       		<td><div wicket:id="faxes"></div></td>
 	       	</tr>
 	       	<tr><td align="right">Office Address:</td><td><span wicket:id="officeAddress"/></td></tr>
     	</table>
-    </td>
-    <td width="355" valign="top">
-     	<div class="cont_search"><div class="cont_search_cont">
-			<center><b>Search Contacts</b><br />
-		
-			Enter keyword: 
-			  <input name="text" type="text" class="inputx" size="18" /> 
-			  <input type="button" class="button_green" value="Search" />
-			  <hr />
-			  <b>List of Contacts:</b><br />
-			  <input name="" type="checkbox" value="" /> test contact test contact - testcontact@amp.org; <br />
-			  <input type="button" class="buttonx" value="Add" />
-			</center>
-		</div></div> 
-	</td>
-  </tr>
-</table>
 </wicket:extend>

@@ -21,8 +21,10 @@ public class AmpContactsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 	public AmpContactsFormSectionFeature(String id, String fmName, IModel<AmpActivity> am) throws Exception {
 		super(id, fmName, am);
-
-		add(new AmpContactsSubsectionFeaturePanel("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT));
+		AmpContactsSubsectionFeaturePanel donors =new AmpContactsSubsectionFeaturePanel("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
+		donors.setOutputMarkupId(true);
+		add(donors);
+		
 		add(new AmpContactsSubsectionFeaturePanel("mofedContactInformation", "Mofed Contact Information", am, org.digijava.module.aim.helper.Constants.MOFED_CONTACT));
 		add(new AmpContactsSubsectionFeaturePanel("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
 		add(new AmpContactsSubsectionFeaturePanel("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));

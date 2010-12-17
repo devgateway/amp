@@ -19,6 +19,9 @@ public class AmpContact implements Comparable{
 	private String officeaddress;
 	private String temporaryId;
 	
+	private String nameAndLastName;
+	
+
 	/**
 	 * currently these fields are not usable, but will become when we decide 
 	 * to link contact list to calendar and messaging 
@@ -130,4 +133,14 @@ public class AmpContact implements Comparable{
 		AmpContact a = (AmpContact)arg0;
 		return this.getId().compareTo(a.getId());
 	}
+	
+	public String getNameAndLastName() {
+		nameAndLastName = (name != null) ? name + " " + lastname : name;
+		return nameAndLastName;
+	    }
+
+	public void setNameAndLastName(String nameAndLastName) {
+		this.nameAndLastName = nameAndLastName;
+	}
+
 }

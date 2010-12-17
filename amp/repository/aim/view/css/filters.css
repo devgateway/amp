@@ -9,6 +9,9 @@
 	#tabview_container .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
 	
 	#tabview_container .yui-nav li a { 
+			border-top:1px solid #D0D0D0;
+			border-left:1px solid #D0D0D0;
+			border-right:1px solid #D0D0D0;
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
@@ -27,7 +30,7 @@
 			font-size: 8pt; 
 			font-weight: bold;
 			/* background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top; */
-			color: white;
+			color: #FF6000;
 	}
 	#tabview_container li a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top; */

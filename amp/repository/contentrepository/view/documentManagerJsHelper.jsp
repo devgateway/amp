@@ -1,5 +1,7 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><style type="text/css">
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+
+<style type="text/css">
 
 .yui-tt{ background: LightYellow; border-color: black }
 
@@ -50,10 +52,15 @@
 }
 </style>
 
+<!-- this is style for labels -->
+<style>
+.resource_label {font-size:11px; color:#FFFFFF; padding:2px; margin-right:3px;}
+</style>
+
 
 <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/skin.css"> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview.css"> 
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 

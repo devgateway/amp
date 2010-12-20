@@ -45,7 +45,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 					}
 				}
 				this.onClickCallbackObj.applyClick.call(this.onClickCallbackObj, e, retArray);
-			},
+			},			
 			bigDiv: myBigDiv,
 			onClickCallbackObj: myOnClickCallbackObj,
 			labelMap: myLabelMap
@@ -75,6 +75,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				spanEl.style.padding				= "1px";
 				spanEl.style.cursor					= "pointer";
 				spanEl.style.verticalAlign			= "middle";
+				spanEl.setAttribute("class","resource_label")
 				
 				divEl.appendChild(inputEl);
 				divEl.appendChild(spanEl);
@@ -101,24 +102,74 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		hrDivEl.style.backgroundColor	= "white";
 		hrDivEl.style.padding	= "2px";
 		
-		var applyDivEl			= document.createElement("div");
-		var applySpanEl			= document.createElement("span");
+		retArray.push(hrDivEl);
 		
-		applySpanEl.innerHTML			= "Apply Labels";
-		applySpanEl.style.padding		= "1px";
+		//my adds
+		var buttonsDiv = document.createElement("div");
+		buttonsDiv.style.backgroundColor	= "white";
+		buttonsDiv.style.padding			= "2px";
+		buttonsDiv.style.textAlign			= "center";
+		
+		
+		var applySpanEl = document.createElement("span");
+		applySpanEl.innerHTML			= "&nbsp; Apply &nbsp;";
+		//applySpanEl.style.padding		= "1px";		
 		applySpanEl.style.cursor		= "pointer";
+		applySpanEl.style.fontSize		= "11px";
+		applySpanEl.style.fontWeight = "strong";
+		applySpanEl.setAttribute("class", "buttonx_sm");
+		YAHOO.util.Event.addListener(applySpanEl, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
 		
-		applyDivEl.appendChild(applySpanEl);
-		applyDivEl.style.backgroundColor	= "white";
-		applyDivEl.style.padding			= "2px";
-		applyDivEl.style.textAlign			= "center";
+		buttonsDiv.appendChild(applySpanEl);
 		
-		YAHOO.util.Event.addListener(applyDivEl, "mouseover", mouseoverCallbackObj, applyDivEl, false);
-		YAHOO.util.Event.addListener(applyDivEl, "mouseout", mouseoutCallbackObj, applyDivEl, false);
-		YAHOO.util.Event.addListener(applyDivEl, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
+		var emptySpan=document.createElement("span");
+		emptySpan.innerHTML='&nbsp;';
+		
+		buttonsDiv.appendChild(emptySpan);
+		
+
+		var cancelSpanEl = document.createElement("span");
+		cancelSpanEl.innerHTML			= "&nbsp; Close &nbsp;";
+		//cancelSpanEl.style.padding		= "1px";
+		cancelSpanEl.style.cursor		= "pointer";
+		cancelSpanEl.style.fontSize		= "11px";
+		cancelSpanEl.style.fontWeight = "strong";
+		cancelSpanEl.setAttribute("class", "buttonx_sm");
+		buttonsDiv.appendChild(cancelSpanEl);
+		
+		retArray.push(buttonsDiv);
+		
+		
+		//test with buttons
+		//var buttonsDiv= document.createElement("div");
+		//buttonsDiv.style.backgroundColor	= "white";
+		//buttonsDiv.style.padding			= "2px";
+		//buttonsDiv.style.textAlign			= "center";
+		
+		//var applyBtn= document.createElement("input");
+		//applyBtn.id="ApllyBtn";
+		//applyBtn.type="button";
+		//applyBtn.value="Apply";
+		//applyBtn.setAttribute("class", "buttonx_sm");
+		//YAHOO.util.Event.addListener(applyBtn, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
+		
+		//buttonsDiv.appendChild(applyBtn);
+		//buttonsDiv.appendChild(emptySpan);
+		
+		//var cancelBtn= document.createElement("input");
+		//cancelBtn.id="CancelBtn";
+		//cancelBtn.type="button";
+		//cancelBtn.value="Close";
+		//cancelBtn.setAttribute("class", "buttonx_sm");
+		//buttonsDiv.appendChild(cancelBtn);
+		
+		//retArray.push(buttonsDiv);
+		
+		hrDivEl			= document.createElement("div");
+		hrDivEl.style.backgroundColor	= "white";
+		hrDivEl.style.padding	= "2px";
 		
 		retArray.push(hrDivEl);
-		retArray.push(applyDivEl);
 		
 	}
 	return retArray;
@@ -142,7 +193,7 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	this.textboxEl	= textboxEl;
 	textboxEl.type			= "text";
 	textboxEl.style.border	= "1px solid lightgrey";
-	textboxEl.style.width	= "140px";
+	textboxEl.style.width	= "140px";;
 	var textboxElDiv		= document.createElement("div");
 	textboxElDiv.appendChild(textboxEl);
 	textboxElDiv.style.textAlign			= "center";
@@ -196,12 +247,16 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 		this.visible	= true;
 	}
 }
+
 FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
 	var clickedEl	= e.target;
 	if ( !clickedEl )
 		clickedEl	= e.srcElement;
 	var nodeName	= clickedEl.nodeName.toLowerCase();		
 	if (nodeName != "button" && nodeName != "a" && nodeName != "input") {
+		this.hide();
+	}
+	if (nodeName=="input" && clickedEl.id=="ApllyBtn" || clickedEl.id=="CancelBtn"){
 		this.hide();
 	}
 }

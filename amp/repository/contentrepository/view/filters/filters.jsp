@@ -13,23 +13,29 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<style>
+#docTypes {
+	width: 250px;
+}
+</style>
+
 <bean:define id="myFilterDivId" toScope="page" scope="request" name="filterDivId"/>
 
 <% pageContext.setAttribute("myFilterValues", new FilterValues() ); %>
 
 <div id="${myFilterDivId}" style="display:none;">
 	<form>
-		<table>
+		<table border="0" cellspacing="1" cellpadding="1">
 			<tr>
-				<td><digi:trn>Document Type</digi:trn></td>
+				<td><div class="t_sm"><b><digi:trn>Document Type</digi:trn>:</b></div></td>
 				<td>
-					<category:showoptions name="filterDocTypeIds" keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+					<category:showoptions name="filterDocTypeIds" keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="dropdwn_sm" styleId="docTypes"/>
 				</td>
 			</tr>
 			<tr>
-				<td><digi:trn>File Type</digi:trn></td>
+				<td><div class="t_sm"><b><digi:trn>File Type</digi:trn>:</b></div></td>
 				<td>
-					<select name="filterFileTypes" class="inp-text" style="width: 200px;" >
+					<select name="filterFileTypes" class="dropdwn_sm" style="width: 250px;" >
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="kvItem" items="${myFilterValues.possibleFileTypes}">
 							<option value="${kvItem.key}">${kvItem.value}</option>
@@ -38,9 +44,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td><digi:trn>Creator</digi:trn></td>
+				<td><div class="t_sm"><b><digi:trn>Creator</digi:trn>:</b></div></td>
 				<td>
-					<select name="filterOwners" class="inp-text" style="width: 200px;">
+					<select name="filterOwners" class="dropdwn_sm" style="width: 250px;">
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="item" items="${myFilterValues.possibleOwners}">
 							<option value="${item}">${item}</option>
@@ -49,9 +55,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td><digi:trn>Creator Team</digi:trn></td>
+				<td><div class="t_sm"><b><digi:trn>Creator Team</digi:trn>:</b></div></td>
 				<td>
-					<select name="filterTeamIds" class="inp-text" style="width: 200px;">
+					<select name="filterTeamIds" class="dropdwn_sm" style="width: 250px;">
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="kvItem" items="${myFilterValues.possibleTeams}">
 							<option value="${kvItem.key}">${kvItem.value}</option>

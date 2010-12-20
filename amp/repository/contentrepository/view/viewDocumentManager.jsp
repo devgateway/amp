@@ -166,7 +166,7 @@ function setHoveredTable(tableId, hasHeaders) {
 		
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null);
 		//publicListObj.sendRequest();
-		repositoryTabView				= new YAHOO.widget.TabView("demo");
+		repositoryTabView				= new YAHOO.widget.TabView("tabview_container");
 		repositoryTabView.addListener("activeTabChange", loadTab);
 		
 		repositoryTabView.dynLists	= new Array();
@@ -312,7 +312,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			<div id="menuContainerDiv"></div>
 			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px;">
 			<tr><td  class="yui-skin-sam">
-			<div id="demo" class="yui-navset">			
+			<div id="tabview_container" class="yui-navset">			
 				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">
 			        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
@@ -361,10 +361,10 @@ function setHoveredTable(tableId, hasHeaders) {
 								    	</button>
 								    </td>								    
 								</tr>
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>
 								<tr>
 									<td>
-											<div style="width: 80%; float: left" id="privateFilterInfo"></div>
+											<div style="width: 80%; float: left" class="t_sm" id="privateFilterInfo"></div>
 											<div class="show_legend" align="right" style="width: 15%; float: left">
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
@@ -415,7 +415,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 										<br/>
-											<div style="width: 80%; float: left" id="teamFilterInfo"></div>
+											<div style="width: 80%; float: left" id="teamFilterInfo" class="t_sm"></div>
 											<div class="show_legend" align="right" style="width: 15%; float: left">
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
@@ -454,7 +454,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 										<br />
-										<div style="width: 80%; float: left" id="sharedFilterInfo"></div>
+										<div style="width: 80%; float: left" id="sharedFilterInfo" class="t_sm"></div>
 										<br />
 										<div id="shared_markup" align="left" class="all_markup">
 												
@@ -473,8 +473,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
 				        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
-							<table border="0" cellPadding=1 cellSpacing=0 width="100%"
-								style="position: relative; left: 0px" >
+							<table border="0" cellPadding=1 cellSpacing=0 width="100%" style="position: relative; left: 0px" >
 								<tr>
 									<td>
 										<br />

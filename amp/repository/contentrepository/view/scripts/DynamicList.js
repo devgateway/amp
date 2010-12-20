@@ -31,23 +31,23 @@ function FilterWrapper() {
 }
 FilterWrapper.prototype.labelsToHTML	= function() {
 	var ret	= "";
-	ret += "<strong>Labels:</strong> ";
+	ret += "<b>Labels:</b> ";
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
 			ret += "<span style='color:" + l.color + "; background-color:" + l.backgroundColor + "; padding: 1px;'>";
-			ret += l.name + "</span> <strong>+</strong> ";
+			ret += l.name + "</span> <b>+</b> &nbsp;|&nbsp;";
 		}
 	}
 	else
 		ret += "none";
 	
 	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
-	return ret;
+	return ret;	
 }
 
 FilterWrapper.prototype.fToHTML	= function() {
-	var ret	= "<strong>Filters:</strong> ";
+	var ret	= "<b>Filters:</b> ";
 	if ( this.filterDocTypeIds.length > 0 ) {
 		var docType		= this.filterDocTypeIds[0];
 		if ( docType.key != "0" ) {

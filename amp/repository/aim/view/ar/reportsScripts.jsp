@@ -41,7 +41,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
+
 
 
 <script type="text/javascript">

@@ -87,7 +87,7 @@ ActionsMenu.prototype.render=function (){
 	
 	divEl.style.border	= "1px solid gray";
 	divEl.style.backgroundColor="white";
-	
+	//divEl.setAttribute("class", "res_opt_cont");
 	
 	
 	//bigDiv.style.border	= "1px solid gray";

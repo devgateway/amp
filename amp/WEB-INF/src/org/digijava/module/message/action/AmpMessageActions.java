@@ -379,8 +379,13 @@ public class AmpMessageActions extends DispatchAction {
         int i=0;
         while(i+1 < temp.length){
         	ReciverName recName = new ReciverName();
-            	 recName.setUserNeme(temp[i]);
-            	recName.setTeamName(temp[i+1]);
+            String tmpName = temp[i];
+            if (tmpName.startsWith(",")) {
+                tmpName = tmpName.substring(1);
+            }
+            String tmpGroup = temp[i+1];
+            recName.setUserNeme(tmpName);
+            recName.setTeamName(tmpGroup);
             if(messagesForm.getReceivesrsNameMail()==null){
             	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
             }
@@ -1130,6 +1135,11 @@ public class AmpMessageActions extends DispatchAction {
 			 if(message.getRelatedActivityId()!=null){
 				 form.setSelectedAct(getRelatedActivity(message.getRelatedActivityId()));
 			 }
+
+
+             form.setSdmDocument(message.getAttachedDocs());
+
+
 
 			 //is alert or not
 			 if(message.getClassName().equals("a")){

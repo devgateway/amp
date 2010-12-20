@@ -32,10 +32,35 @@
 		
 		
 		</b><br />
-To: <b>Carl Sherson Clermont | csclermont@yahoo.com</b> (<a href=#>view all</a>)<br />
+		To: <b>${messageForm.receivesrsNameMail[0].userNeme}</b> (<a href="#" onClick="return false" class="view_all_recipients">view all</a>)<br />
 
+		<div class="msg_all" style="background-color: white; border: 1px solid #EBEBEB; display:none;">
+			<table border="0" cellspacing="1" cellpadding="1" width="100%" style="Font-size: 8pt;">
+				<tr><td width="50%">
+					<b>Member</b>
+				</td><td width="50%">
+					<b>Workspace</b>
+				</td></tr>
+				<tr><td colspan=2><hr /></td></tr>
+				<c:forEach var="recipient" items="${messageForm.receivesrsNameMail}">
+					<tr><td>
+						${recipient.userNeme}
+					</td><td>
+						${recipient.teamName}
+					</td></tr>
+				</c:forEach>
+			</table>
+		</div>
 
-
+<%--
+		<table>
+			<c:forEach var="recipient" items="${fn:split(messageForm.receiver,';')}">
+				<tr><td>
+				${recipient}---------
+				</td></tr>
+			</c:forEach>
+		</table>
+--%>
 
 
 <c:if test="${not empty messageForm.objectURL}">
@@ -49,7 +74,34 @@ To: <b>Carl Sherson Clermont | csclermont@yahoo.com</b> (<a href=#>view all</a>)
 <div class="message_body">
 ${messageForm.description}
 </div>
+
+	<c:if test="${not empty messageForm.sdmDocument}">
+		<%--
+		<hr class=hr_3>
+		--%>
+		<img src="/TEMPLATE/ampTemplate/img_2/ico_attachment.png" width="16" height="16" align=left style="margin-right:3px;"> <b>Attachments</b>:
+		<div class="msg_attachments">
+			<c:forEach var="item" items="${messageForm.sdmDocument.items}">
+					<hr>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_other.gif" align=left style="margin-right:5px;">
+					<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+					<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>																																														
+					<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${item.paragraphOrder}" name="urlParamsSort">
+						${item.contentTitle}
+					</digi:link>
+					
+				
+			</c:forEach>
+			</div>
+	</c:if>
+
 </div>
+
+
+
+
+
+
 
 <%--
 

@@ -58,7 +58,6 @@
 		}
 	
     function viewMsg(status, statusText, responseText, responseXML) {
-    		
     		if (status =! null && statusText != null && responseText != null) {
 					var ajaxLoader = $("#msg_body_" + openedMessageId + " > #message_loader_indicator");
 					var msgContainer = $("#msg_body_" + openedMessageId);
@@ -66,6 +65,8 @@
 					msgContainer.append(responseText);
 					msgContainer.find(".message").hide();
 					msgContainer.find(".message").show("slow");
+					$(".view_all_recipients").unbind("click");
+					$(".view_all_recipients").bind("click", toggleAllRecipientVisibility);
 				} else {
 					$("#msg_body_" + openedMessageId + " > .message").show("slow")
 				}
@@ -589,3 +590,17 @@ function addActionToURL(actionName){
     return partialURL+"/"+actionName;
 }    
         
+function toggleAllRecipientVisibility() {
+	
+	var toggleLink = $(this);
+	var recipientContainerDiv = toggleLink.parent().parent().find(".msg_all");
+	if (recipientContainerDiv.css("display") == "none") {
+		recipientContainerDiv.show("slow");
+		toggleLink.text("hide all");
+	} else {
+		recipientContainerDiv.hide("slow");
+		toggleLink.text("view all");
+	}
+	
+	return false;
+}

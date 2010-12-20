@@ -42,7 +42,7 @@ public class OnePagerApp extends WebApplication {
 	 @Override
 	 public void init() {
 		 getPageSettings().addComponentResolver(new AmpComponentResolver());
-	
+		 mountBookmarkablePage("onepager", OnePager.class);
 		 
 //		 ServletContext servletContext = getServletContext();
 //		 Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));

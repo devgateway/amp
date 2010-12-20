@@ -50,7 +50,7 @@
     </filter>
     <filter-mapping>
         <filter-name>OnePagerApplication</filter-name>
-        <url-pattern>/onepager/*</url-pattern>
+        <url-pattern>/wicket/*</url-pattern>
     </filter-mapping>
 
 	<!-- Acegi -->

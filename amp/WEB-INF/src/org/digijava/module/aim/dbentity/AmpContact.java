@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -9,7 +10,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Dare
  *
  */
-public class AmpContact implements Comparable{
+public class AmpContact implements Comparable, Serializable {
 	private Long id;
 	private String name;
 	private String lastname;

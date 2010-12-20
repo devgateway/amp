@@ -45,6 +45,8 @@ import org.hibernate.Transaction;
  */
 public class AmpCommentPanel extends AmpFieldPanel {
 
+	private transient ArrayList<AmpComments> comments;
+	
 	private static final long serialVersionUID = 1L;
 	final ListView listView;
 
@@ -95,7 +97,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 
 		// load the comments, for this activity and the specified field, from
 		// the db
-		final ArrayList<AmpComments> comments = DbUtil.getAllCommentsByField(
+		comments = DbUtil.getAllCommentsByField(
 				field.getAmpFieldId(), activityModel.getObject()
 						.getAmpActivityId());
 
@@ -104,9 +106,8 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<AmpComments> item) {
-				final AmpComments comment = item.getModelObject();
-				item.add(new Label("userName", comment.getMemberName()));
+			protected void populateItem(final ListItem<AmpComments> item) {
+				item.add(new Label("userName", item.getModelObject().getMemberName()));
 				/*
 				 * if (comment.getCommentDate() != null){ SimpleDateFormat sdf =
 				 * new SimpleDateFormat("dd/MM/yy HH:mm"); item.add(new
@@ -120,7 +121,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 						try {
 							Session session = PersistenceManager.getRequestDBSession();
 							tx = session.beginTransaction();
-							session.delete(comment);
+							session.delete(item.getModelObject());
 							tx.commit();
 							session.flush();
 							session.close();
@@ -128,7 +129,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 							logger.error("Error while deleting comment", e);
 							tx.rollback();
 						}
-						comments.remove(comment);
+						comments.remove(item.getModelObject());
 						target.addComponent(this.getParent().getParent()
 								.getParent());
 					}
@@ -136,7 +137,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				item.add(delOrgId);
 
 				AjaxEditableMultiLineLabel ae2 = new AjaxEditableMultiLineLabel(
-						"body", new PropertyModel(comment, "comment")) {
+						"body", new PropertyModel(item.getModelObject(), "comment")) {
 					protected org.apache.wicket.markup.html.basic.MultiLineLabel newLabel(
 							MarkupContainer parent, String componentId,
 							IModel model) {
@@ -184,7 +185,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 						try {
 							session = PersistenceManager.getRequestDBSession();
 							tx = session.beginTransaction();
-							session.update(comment);
+							session.update(item.getModelObject());
 							tx.commit();
 							session.flush();
 							session.close();

@@ -1,10 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityContact implements Versionable, Comparable {
+public class AmpActivityContact implements Versionable, Comparable, Serializable {
 	
 	private Long id;
 	private AmpActivity activity;

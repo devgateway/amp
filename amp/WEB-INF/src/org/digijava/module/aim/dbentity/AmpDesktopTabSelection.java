@@ -1,8 +1,9 @@
 package org.digijava.module.aim.dbentity;	
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class AmpDesktopTabSelection {
+public class AmpDesktopTabSelection implements Serializable{
 	private Long id;
 	private AmpTeamMember owner;
 	private AmpReports report;

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 
 /**
@@ -7,7 +9,7 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
  * @author Alex Gartner
  *
  */
-public class AmpActivityDocument extends ObjectReferringDocument {
+public class AmpActivityDocument extends ObjectReferringDocument implements Serializable {
 	private Long id;
 	private AmpActivity ampActivity;
 	private String documentType;

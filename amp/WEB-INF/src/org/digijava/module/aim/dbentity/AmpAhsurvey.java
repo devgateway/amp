@@ -6,6 +6,7 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -17,7 +18,7 @@ import org.digijava.module.aim.util.Output;
 
 import com.rc.retroweaver.runtime.Collections;
 
-public class AmpAhsurvey implements Versionable {
+public class AmpAhsurvey implements Versionable, Serializable {
 
 	private Long ampAHSurveyId;
 

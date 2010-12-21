@@ -5,14 +5,14 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpRegionalFunding implements Versionable {
+public class AmpRegionalFunding implements Versionable, Serializable {
 	
 	private Long ampRegionalFundingId;
 	private AmpActivity activity;

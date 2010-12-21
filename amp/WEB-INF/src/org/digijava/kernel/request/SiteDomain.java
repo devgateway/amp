@@ -22,11 +22,13 @@
 
 package org.digijava.kernel.request;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.util.SiteUtils;
 
-public class SiteDomain {
+public class SiteDomain implements Serializable{
     private long siteDomainId;
     private Site site;
 

@@ -22,10 +22,12 @@
 
 package org.digijava.kernel.entity;
 
+import java.io.Serializable;
+
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.Constants;
 
-public class ModuleInstance {
+public class ModuleInstance implements Serializable {
 
     public static final int NUMBER_OF_ITEMS_IN_TEASER = 8;
 

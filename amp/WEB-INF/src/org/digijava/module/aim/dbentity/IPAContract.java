@@ -670,6 +670,7 @@ public class IPAContract implements Serializable, Versionable {
 
 	private Comparator disbComparator = new Comparator() {
 		public int compare(Object o1, Object o2) {
+			if( !(o1 instanceof IPAContractDisbursement) || !(o2 instanceof IPAContractDisbursement) ) return -1;
 			IPAContractDisbursement aux1 = (IPAContractDisbursement) o1;
 			IPAContractDisbursement aux2 = (IPAContractDisbursement) o2;
 			if (aux1.getAdjustmentType().equals(aux2.getAdjustmentType())) {

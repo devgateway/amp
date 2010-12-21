@@ -1,8 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AmpReportLog {
+public class AmpReportLog implements Serializable{
 
 	private Long ampReportMemberLogId;
 	

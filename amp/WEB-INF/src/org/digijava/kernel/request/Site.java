@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.request;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 
 public class Site
-extends Entity {
+extends Entity implements Serializable {
 
 	public static final String globalCountryIso = "global";
 	public static final String globalCountryName = "global";

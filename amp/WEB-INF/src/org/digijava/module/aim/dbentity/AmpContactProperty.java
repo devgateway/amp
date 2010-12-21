@@ -1,8 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.util.ContactInfoUtil;
 
-public class AmpContactProperty  implements Comparable{
+public class AmpContactProperty  implements Comparable, Serializable {
 	private Long id;
 	private AmpContact contact;
 	private String name;

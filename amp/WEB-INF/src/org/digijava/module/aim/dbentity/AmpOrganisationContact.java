@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-public class AmpOrganisationContact {
+import java.io.Serializable;
+
+public class AmpOrganisationContact implements Serializable {
 	
 	private Long id;
 	private AmpContact contact;

@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,7 +18,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 
 /**
  * @author dan

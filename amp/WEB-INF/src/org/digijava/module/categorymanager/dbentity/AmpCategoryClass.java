@@ -91,7 +91,9 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	
 	@Override 
 	public boolean equals(Object o) {
+		if(o instanceof AmpCategoryClass)
 		return compareTo( (AmpCategoryClass)o ) == 0;
+		else return false;
 	} 
 		
 	

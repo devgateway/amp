@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.user;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ import org.digijava.kernel.security.SitePermission;
 
 public class Group
     extends Entity
-    implements Principal {
+    implements Principal, Serializable {
 
     public static final String ADMINISTRATORS = "ADM";
     public static final String MEMBERS = "MEM";

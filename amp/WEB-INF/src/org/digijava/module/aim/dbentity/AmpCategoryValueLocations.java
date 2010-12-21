@@ -11,111 +11,113 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
- *
+ * 
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable, HierarchyListable, ARDimensionable,Serializable {
+public class AmpCategoryValueLocations implements Identifiable,
+		HierarchyListable, ARDimensionable, Serializable {
 
-    private Long id;
-    private String name;
-    private AmpCategoryValue parentCategoryValue;
-    private AmpCategoryValueLocations parentLocation;
-    private Set<AmpCategoryValueLocations> childLocations;
-    private String description;
-    private String gsLat;
-    private String gsLong;
-    private String geoCode;
-    private String code;
-    private String iso3;
+	private Long id;
+	private String name;
+	private AmpCategoryValue parentCategoryValue;
+	private AmpCategoryValueLocations parentLocation;
+	private Set<AmpCategoryValueLocations> childLocations;
+	private String description;
+	private String gsLat;
+	private String gsLong;
+	private String geoCode;
+	private String code;
+	private String iso3;
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getGeoCode() {
-        return geoCode;
-    }
+	public String getGeoCode() {
+		return geoCode;
+	}
 
-    public void setGeoCode(String geoCode) {
-        this.geoCode = geoCode;
-    }
+	public void setGeoCode(String geoCode) {
+		this.geoCode = geoCode;
+	}
 
-    public String getGsLat() {
-        return gsLat;
-    }
+	public String getGsLat() {
+		return gsLat;
+	}
 
-    public void setGsLat(String gsLat) {
-        this.gsLat = gsLat;
-    }
+	public void setGsLat(String gsLat) {
+		this.gsLat = gsLat;
+	}
 
-    public String getGsLong() {
-        return gsLong;
-    }
+	public String getGsLong() {
+		return gsLong;
+	}
 
-    public void setGsLong(String gsLong) {
-        this.gsLong = gsLong;
-    }
+	public void setGsLong(String gsLong) {
+		this.gsLong = gsLong;
+	}
 
-    public String getIso() {
-        return iso;
-    }
+	public String getIso() {
+		return iso;
+	}
 
-    public void setIso(String iso) {
-        this.iso = iso;
-    }
+	public void setIso(String iso) {
+		this.iso = iso;
+	}
 
-    public String getIso3() {
-        return iso3;
-    }
+	public String getIso3() {
+		return iso3;
+	}
 
-    public void setIso3(String iso3) {
-        this.iso3 = iso3;
-    }
-    private String iso;
+	public void setIso3(String iso3) {
+		this.iso3 = iso3;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	private String iso;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public AmpCategoryValue getParentCategoryValue() {
-        return parentCategoryValue;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setParentCategoryValue(AmpCategoryValue parentCategoryValue) {
-        this.parentCategoryValue = parentCategoryValue;
-    }
+	public AmpCategoryValue getParentCategoryValue() {
+		return parentCategoryValue;
+	}
 
-    public AmpCategoryValueLocations getParentLocation() {
-        return parentLocation;
-    }
+	public void setParentCategoryValue(AmpCategoryValue parentCategoryValue) {
+		this.parentCategoryValue = parentCategoryValue;
+	}
 
-    public void setParentLocation(AmpCategoryValueLocations parentLocation) {
-        this.parentLocation = parentLocation;
-    }
+	public AmpCategoryValueLocations getParentLocation() {
+		return parentLocation;
+	}
+
+	public void setParentLocation(AmpCategoryValueLocations parentLocation) {
+		this.parentLocation = parentLocation;
+	}
 
 	public Set<AmpCategoryValueLocations> getChildLocations() {
 		return childLocations;
@@ -124,16 +126,20 @@ public class AmpCategoryValueLocations implements Identifiable, HierarchyListabl
 	public void setChildLocations(Set<AmpCategoryValueLocations> childLocations) {
 		this.childLocations = childLocations;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
 	}
-    @Override
-	public boolean equals (Object o) {
-    	AmpCategoryValueLocations loc	= (AmpCategoryValueLocations) o;
-    	return id.equals(loc.getId());
-    }
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof AmpCategoryValueLocations) {
+			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) o;
+			return id.equals(loc.getId());
+		} else
+			return false;
+	}
 
 	@Override
 	public Object getIdentifier() {
@@ -148,8 +154,8 @@ public class AmpCategoryValueLocations implements Identifiable, HierarchyListabl
 	@Override
 	public int getCountDescendants() {
 		int ret = 1;
-		if ( this.getChildren() != null ) {
-			for ( HierarchyListable hl: this.getChildren() )
+		if (this.getChildren() != null) {
+			for (HierarchyListable hl : this.getChildren())
 				ret += hl.getCountDescendants();
 		}
 		return ret;
@@ -164,7 +170,7 @@ public class AmpCategoryValueLocations implements Identifiable, HierarchyListabl
 	public String getUniqueId() {
 		return this.id + "";
 	}
-	
+
 	@Override
 	public Class getDimensionClass() {
 		return LocationsDimension.class;

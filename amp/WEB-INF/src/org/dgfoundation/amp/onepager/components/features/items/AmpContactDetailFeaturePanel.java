@@ -75,9 +75,10 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 		//final IModel<AmpContact> ampContact = new Model(model);
  		final IModel<List<AmpContactProperty>> listModel = new AbstractReadOnlyModel<List<AmpContactProperty>>() {
 		
- 						transient List<AmpContactProperty> specificContacts = new ArrayList<AmpContactProperty>();  
+ 						transient List<AmpContactProperty> specificContacts = null;   
 						@Override
 						public List<AmpContactProperty> getObject() {
+							specificContacts = new ArrayList<AmpContactProperty>();
 							if(setModel.getObject()!=null){
 								for (AmpContactProperty detail : setModel.getObject()) {
 									if(detail.getName().equals(contactProperty)){
@@ -94,6 +95,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 							}
 							return specificContacts;
 						}
+						
 		};
 		detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 		

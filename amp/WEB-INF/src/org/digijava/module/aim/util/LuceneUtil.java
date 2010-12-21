@@ -234,17 +234,18 @@ public class LuceneUtil implements Serializable {
     		}
     	}
     	
-    	if (idxDir.exists()){
-			logger.info("Found, deleting ...");
-			if (deleteDirectory(idxDir))
-				logger.info("Done");
-			else
-				logger.info("Can't delete!");
-		}
-		else{
-			logger.info("Not found ... will be generated!");
-		}
-
+    	if (deleteIndex){
+    		if (idxDir.exists()){
+    			logger.info("Found, deleting ...");
+    			if (deleteDirectory(idxDir))
+    				logger.info("Done");
+    			else
+    				logger.info("Can't delete!");
+    		}
+    		else{
+    			logger.info("Not found ... will be generated!");
+    		}
+    	}
    	
     	if (!idxDir.exists()){ //we need to create the index from 0  
     		if (!idxDir.mkdirs()){

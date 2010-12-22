@@ -154,6 +154,13 @@ public class PersistenceManager {
 			throw new IllegalStateException(
 					"precache() must be called after initialize()");
 		}
+		
+		String disablePrecache=System.getProperty("amp.disablePrecache");
+		if(disablePrecache!=null && "true".equalsIgnoreCase(disablePrecache)) {
+			logger.info("amp.disablePrecache is true. Pracache skipped.");
+			return;
+		}
+		
 		Session session = null;
 		HibernateClasses classes = config.getHibernateClasses();
 		try {

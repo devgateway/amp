@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.translator;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -30,9 +31,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -140,7 +143,31 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         message.setLocale(locale);
         message.setSiteId(siteId);
         //search message
-        Object obj = messageCache.get(message);        
+        Object obj = messageCache.get(message);   
+        if(obj==null) {
+        	//try loading it from db
+        	Session ses;
+			try {
+				ses = PersistenceManager.getRequestDBSession();
+				Message realMsg = (Message) ses.get(Message.class, message);
+				PersistenceManager.releaseSession(ses);
+				if(realMsg!=null) {
+					obj=realMsg;
+					Serializable identifier=PersistenceManager.getSessionFactory().getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
+					messageCache.put(identifier, realMsg);
+				}
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;

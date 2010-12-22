@@ -25,21 +25,13 @@
 
 <style>
 <!--
-
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
-.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
-.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
-.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
-.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
-.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
-.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
-.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
-
-#statescontainer .yui-ac-content { 
-    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
-    _height:16em; /* ie6 */ 
-} 
+.ui-autocomplete {
+	font-size:12px;
+	border: 1px solid silver;
+	max-height: 150px;
+	overflow-y: scroll;
+	background: white;
+}
 
 -->
 </style>

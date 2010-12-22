@@ -10,30 +10,30 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
-	<table cellspacing="0" cellpadding="0" border="1" 
-	 width="100%" style="font-family: Arial, Helvetica, sans-serif; padding-right:5px; padding-left:5px; padding-top:5px;border-top-style:hidden;border-right-style:hidden;border-left-style:hidden;border-bottom-style:hidden">
-	    <tr align="center"  bgcolor="#CCCCFF">
-	        <td width="15%" height="33">
+	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
+	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
+	    <tr align="center">
+	        <td width="15%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong>
 	            </div>
 	        </td>
-	        <td width="5%" height="33">
+	        <td width="5%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn key="aim:disbursmentYear">Disbursement Year</digi:trn></strong>
 	            </div>
 	        </td>
-			<td width="27%" height="33">
+			<td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 			  <div align="center">
 			      <strong><digi:trn>Number of missions to the field that are joint</digi:trn></strong>
 			  </div>
 			</td>
-			<td width="26%" height="33">
+			<td width="26%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 			  <div align="center">
 			      <strong><digi:trn>Total number of missions to the field</digi:trn></strong>
 			  </div>
 			</td>
-			<td width="27%" height="33">
+			<td width="27%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">
 	                <strong><digi:trn>Proportion of donor missions that are joint</digi:trn></strong>
 	            </div>
@@ -41,7 +41,7 @@
 		</tr>
 		<logic:empty name="parisIndicatorForm" property="mainTableRows">
 	        <tr>
-	            <td width="100%" align="center" height="65" colspan="5" />
+	            <td width="100%" align="center" height="65" colspan="5" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	                <div align="center">
 	                    <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
 	                </div>
@@ -55,25 +55,25 @@
 	       <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
 	        type="org.digijava.module.parisindicator.helper.row.PIReport10aRow">
 	           <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
-                   <%counter++;%>
+                   <%/*counter++;*/counter=1;%>
                </logic:equal>
 	           <%if(counter%2 == 0) color = "bgcolor=#EBEBEB"; else color = "";%>
 	           <tr <%=color%> >
 	               <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
-		               <td align="center" rowspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}" height="65">
+		               <td align="center" rowspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}" height="65" class="inside" style="font-size: 11px; color: #484846;">
 		                   <strong><digi:trn><bean:write name="element" property="donorGroup.orgGrpName"/></digi:trn></strong>
 		               </td>
 	               </logic:equal>
-	               <td align="center">
+	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">
 	                   <bean:write name="element" property="year"/>
 	               </td>
-	               <td align="center">
+	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <aim:formatNumber value="${element.column1}"/>
                    </td>
-                   <td align="center">
+                   <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <aim:formatNumber value="${element.column2}"/>
                    </td>
-                   <td align="center">
+                   <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <fmt:formatNumber type="number" value="${element.column3}" pattern="###" maxFractionDigits="0" />%
                    </td>
 	           </tr>

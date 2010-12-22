@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.onepager;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
@@ -13,11 +11,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.translation.AmpComponentResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 /**
  * @author mihai
@@ -43,6 +38,7 @@ public class OnePagerApp extends WebApplication {
 	 public void init() {
 		 getPageSettings().addComponentResolver(new AmpComponentResolver());
 		 mountBookmarkablePage("onepager", OnePager.class);
+		 mountBookmarkablePage("permmanager", PermissionManager.class);
 		 
 //		 ServletContext servletContext = getServletContext();
 //		 Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));

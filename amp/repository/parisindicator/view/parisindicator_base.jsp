@@ -59,117 +59,119 @@
 				<html:hidden property="exportXLS" value="false"/>
 			    <html:hidden property="reportId" value="<%=reportId%>"/>
 			    
-				<table border="0" cellpadding="10" cellspacing="0" bgcolor="#F2F2F2" style="border-color: gray; border-width: 1px 1px 1px 1px; border-style: solid;">
+				<table width="980px" border="0" cellpadding="10" cellspacing="0" bgcolor="#F2F2F2" style="border-color: gray; border-width: 1px 1px 1px 1px; border-style: solid;">
 					<tr>
-						<td width="980px" align="left" valign="top" border="1" style="padding-left: 5px; padding-right: 5px; padding-bottom: 5px;">
+						<td align="left" valign="top" border="1" style="padding-left: 5px; padding-right: 5px; padding-bottom: 5px;">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0">
 								<tr>
-									<td>
-										<div style="margin-left: 5px; margin-right: 5px; padding: 2px 2px 2px 2px; Font-size: 8pt; font-family: Arial;">
-											<span style="cursor: pointer; font-style: italic; float: right;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> &gt;&gt;</span>
-											<span style="cursor: pointer; float: left;"> 
-											    <a class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>
-											</span>
-											<br>
-											<div style="display: none; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
-												<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#FFFFFF">
-			                                        <tr>
-			                                            <td style="font-size:11px;" valign="top">
-			                                            	<strong><digi:trn key="rep:pop:SelectedFilters">Selected Filters</digi:trn>:</strong>
-			                                                <i><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedStartYear"/>&nbsp;&nbsp;|
-			                                                <i><digi:trn key="rep:pop:SelectedRangeEndYear">End Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedEndYear"/>&nbsp;&nbsp;|
-			                                                <i><digi:trn key="rep:pop:CalendarType">Calendar Type</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedCalendar == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedCalendar != null}">
-			                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedCalendar"/></digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                <i><digi:trn key="rep:pop:CurrencyType">Currency Type</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedCurrency == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedCurrency != null}">
-			                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                <i><digi:trn key="rep:pop:Donors">Donors</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedDonors == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedDonors != null}">
-			                                                        <logic:iterate id="idDonors" property="selectedDonors" name="parisIndicatorForm">
-			                                                            <%=org.digijava.module.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>&nbsp;|
-			                                                        </logic:iterate>
-			                                                    </c:if>
-			                                                <i><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedDonorGroups == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedDonorGroups != null}">
-			                                                        <logic:iterate id="idDonorsGrp" property="selectedDonorGroups" name="parisIndicatorForm">
-			                                                            <%=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>&nbsp;|
-			                                                        </logic:iterate>
-			                                                    </c:if>
-			                                                <i><digi:trn>Status</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedStatuses == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedStatuses != null}">
-			                                                        <logic:iterate id="idStatus" property="selectedStatuses" name="parisIndicatorForm">
-			                                                            <%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>&nbsp;|
-			                                                        </logic:iterate>
-			                                                    </c:if>
-			                                                <i><digi:trn>Financing Instrument</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedFinancingIstruments == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedFinancingIstruments != null}">
-			                                                        <logic:iterate id="idFunding" property="selectedFinancingIstruments" name="parisIndicatorForm">
-			                                                            <%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>&nbsp;|
-			                                                        </logic:iterate>
-			                                                    </c:if>                                              
-			                                                <i><digi:trn>Sectors</digi:trn>:</i>
-			                                                    <c:if test="${parisIndicatorForm.selectedSectors == null}">
-			                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
-			                                                    </c:if>
-			                                                    <c:if test="${parisIndicatorForm.selectedSectors != null}">
-			                                                        <logic:iterate id="idSector" property="selectedSectors" name="parisIndicatorForm">
-			                                                            <%=org.digijava.module.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>&nbsp;|
-			                                                        </logic:iterate>
-			                                                    </c:if>                                                
-			                                            </td>
-			                                        </tr>
-			                                    </table>
-											</div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div class="toolbar" align="center">
-											<table border="0" align="center" bgcolor="#FFFFFF" class="toolbartable">
-												<tr>
-			                                        <td noWrap="nowrap" align="left" valign="center">
-												       <a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Export to PDF</digi:trn>">
-												           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" border="0" />
-			                                           </a>
-			                                        </td>
-													<td noWrap="nowrap" align="left" valign="center">
-												       <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
-												           <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" />
-												       </a>
-												    </td>
-													<td noWrap="nowrap" align="left" valign="center">
-													   <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
-													      <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" /> 
-													   </a>
-													</td>
-												</tr>
-											</table>
-										</div>
+									<td style="padding-top: 10px;">
+										<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#FFFFFF" 
+										style="border-width: 1px; border-color: #D0D0D0; border-style: solid; padding: 5px;">
+											<tr>
+												<td noWrap="nowrap" align="left">
+													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Export to PDF</digi:trn>">
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: bottom;" border="0" />
+												    	<digi:trn>Export to PDF</digi:trn>
+													</a>|&nbsp;
+												    <a onclick="javascript:exportXLSs(); resetExport(); return false;" paramName="indcId" paramId="indcId" target="_blank" style="cursor: pointer" title="<digi:trn>Export to Excel</digi:trn>">
+												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" style="vertical-align: bottom;"/>
+												    	<digi:trn>Export to Excel</digi:trn>
+												    </a>|&nbsp;
+												    <a onclick="javascript:openPrinter(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Printer Friendly</digi:trn>">
+														<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" style="vertical-align: bottom;"/>
+														<digi:trn>Print</digi:trn> 
+													</a>|&nbsp;
+												</td>
+												<td noWrap="nowrap" align="right" style="padding-right: 5px; padding-top: 5px;">
+													<a style="height: 20px; cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>
+													|&nbsp;
+													<span style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">
+														<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div style="margin-left: 5px; margin-right: 5px; padding: 2px 2px 2px 2px; Font-size: 8pt; font-family: Arial;">
+														<div style="display: none; padding: 2px 2px 2px 2px;" id="currentDisplaySettings">
+															<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#FFFFFF">
+						                                        &nbsp;
+						                                        <tr>
+						                                            <td valign="top" bgcolor="#F2F2F2" style="border-style: solid; border-width: 1px; border-color: #D0D0D0; font-size: 11px;">
+						                                            	<strong><digi:trn key="rep:pop:SelectedFilters">Selected Filters</digi:trn>:</strong>
+						                                                <i><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedStartYear"/>&nbsp;&nbsp;|
+						                                                <i><digi:trn key="rep:pop:SelectedRangeEndYear">End Year</digi:trn>:</i>&nbsp;<bean:write name="parisIndicatorForm" property="selectedEndYear"/>&nbsp;&nbsp;|
+						                                                <i><digi:trn key="rep:pop:CalendarType">Calendar Type</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedCalendar == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedCalendar != null}">
+						                                                	<digi:trn><bean:write name="parisIndicatorForm" property="selectedCalendar"/></digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <i><digi:trn key="rep:pop:CurrencyType">Currency Type</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedCurrency == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedCurrency != null}">
+						                                                	<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <i><digi:trn key="rep:pop:Donors">Donors</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedDonors == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedDonors != null}">
+						                                                	<logic:iterate id="idDonors" property="selectedDonors" name="parisIndicatorForm">
+						                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrganisation(new Long(idDonors.toString()))%>&nbsp;|
+						                                                    </logic:iterate>
+						                                                </c:if>
+						                                                <i><digi:trn key="rep:pop:DonorGroups">Donor Groups</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedDonorGroups == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedDonorGroups != null}">
+						                                                	<logic:iterate id="idDonorsGrp" property="selectedDonorGroups" name="parisIndicatorForm">
+						                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(new Long(idDonorsGrp.toString()))%>&nbsp;|
+						                                                    </logic:iterate>
+						                                                </c:if>
+						                                                <i><digi:trn>Status</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedStatuses == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedStatuses != null}">
+						                                                	<logic:iterate id="idStatus" property="selectedStatuses" name="parisIndicatorForm">
+						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idStatus.toString()))%>&nbsp;|
+						                                                    </logic:iterate>
+						                                                </c:if>
+						                                                <i><digi:trn>Financing Instrument</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedFinancingIstruments == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedFinancingIstruments != null}">
+						                                                	<logic:iterate id="idFunding" property="selectedFinancingIstruments" name="parisIndicatorForm">
+						                                                    	<%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>&nbsp;|
+						                                                    </logic:iterate>
+						                                                </c:if>                                              
+						                                                <i><digi:trn>Sectors</digi:trn>:</i>
+						                                                <c:if test="${parisIndicatorForm.selectedSectors == null}">
+						                                                	<digi:trn key="All">All</digi:trn>&nbsp;|
+						                                                </c:if>
+						                                                <c:if test="${parisIndicatorForm.selectedSectors != null}">
+						                                                	<logic:iterate id="idSector" property="selectedSectors" name="parisIndicatorForm">
+						                                                    	<%=org.digijava.module.aim.util.SectorUtil.getAmpSector(new Long(idSector.toString()))%>&nbsp;|
+						                                                    </logic:iterate>
+						                                                </c:if>                                                
+						                                            </td>
+						                                        </tr>
+						                                    </table>
+														</div>
+													</div>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
 							</table>
+							&nbsp;
 							<table border="0" cellpadding="0" cellspacing="0">
 								<tr>
 			                        <td>
@@ -206,7 +208,7 @@
 											                        <p style="font-size: 20px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><strong><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn> <digi:trn key="aim:report">Report</digi:trn>&nbsp;<bean:write name="parisIndicatorForm" property="piReport.indicatorCode"/></strong></p>
 											                    </td>
 									                    		<td width="60%" align="right" style="font-size: 11px; padding-right: 15px;">
-								                           			<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: middle;">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p>
+								                           			<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p>
 									                    		</td>
 									                    	</tr>
 									                  	</table>

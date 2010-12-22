@@ -30,7 +30,7 @@ public abstract class AmpCategoryFieldPanel extends
 		AmpFieldPanel<AmpCategoryValue> {
 
 	private static final long serialVersionUID = 8917920670614629713L;
-	protected transient List<AmpCategoryValue> choices;
+	protected List<AmpCategoryValue> choices;
 	protected Boolean selectedMultiselect;
 	protected String categoryKey;
 	protected boolean ordered;
@@ -128,7 +128,7 @@ public abstract class AmpCategoryFieldPanel extends
 			}
 			collectionByKey.retainAll(relatedReunion);
 		}
-		choices = new ArrayList<AmpCategoryValue>();
+		choices.clear();
 		choices.addAll(collectionByKey);
 		super.onBeforeRender();
 	}

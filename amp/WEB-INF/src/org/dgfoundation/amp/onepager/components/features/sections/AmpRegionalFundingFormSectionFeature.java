@@ -74,8 +74,7 @@ public class AmpRegionalFundingFormSectionFeature extends
 				try {
 					fundingItemFeature = new AmpRegionalFundingItemFeaturePanel(
 							"regionItem", "Region Item", am, setModel,
-							new Model<AmpCategoryValueLocations>(
-									item.getModelObject()));
+									item.getModel());
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}

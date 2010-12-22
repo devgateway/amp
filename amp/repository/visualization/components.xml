@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <config>
 	<secondary-pages>
-		
+		<page name="sectorDashboard" title="AMP Visualization Dashboard" />
+		<page name="donorDashboard" title="AMP Visualization Dashboard" />
+		<page name="regionDashboard" title="AMP Visualization Dashboard" />
 	</secondary-pages>
 </config>

@@ -2,6 +2,6 @@
 <module-config>
 	<name>visualization</name>
 	<security login-required="true" default="READ">
-		
+		<action login-required="true" pattern="/visualization" />
 	</security>
 </module-config>

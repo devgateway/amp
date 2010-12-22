@@ -2,10 +2,16 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
 	<form-beans>
-		
+		<form-bean name="visualizationform"
+			type="org.digijava.module.visualization.form.VisualizationForm" />
 	</form-beans>
 
 	<action-mappings>
-		
+		<action name="visualizationform" path="/visualization/showDashboard"
+			scope="session" type="org.digijava.module.visualization.action.ShowDashboard">
+			<forward name="sector" path="/showLayout.do?layout=sectorDashboard" />
+			<forward name="donor" path="/showLayout.do?layout=donorDashboard" />
+			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
+		</action>
 	</action-mappings>
 </struts-config>

@@ -497,6 +497,13 @@ else  //In case the public view aren't activated
 	                            </a> 
 	                       	</li>    
                         </module:display>
+                        <module:display name="Visualization Dashboard" >
+	                        <li>
+	                         	<a href="${pageContext.request.contextPath}/visualization/showDashboard.do?reset=true"  onclick="return canExit()">
+	                               <digi:trn>Visualization Dashboard</digi:trn>
+	                            </a> 
+	                       	</li>    
+                        </module:display>
 					</ul>
 				</li>
 				<%}%>

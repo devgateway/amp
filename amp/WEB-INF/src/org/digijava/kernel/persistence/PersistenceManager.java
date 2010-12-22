@@ -157,7 +157,7 @@ public class PersistenceManager {
 		
 		String disablePrecache=System.getProperty("amp.disablePrecache");
 		if(disablePrecache!=null && "true".equalsIgnoreCase(disablePrecache)) {
-			logger.info("amp.disablePrecache is true. Pracache skipped.");
+			logger.info("amp.disablePrecache is true. Pracache skipped. DO NOT USE THIS ON PRODUCTION!");
 			return;
 		}
 		

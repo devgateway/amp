@@ -12,7 +12,7 @@
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
-	 style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
+	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
 	        <td width="15%" height="33" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
 	            <div align="center">

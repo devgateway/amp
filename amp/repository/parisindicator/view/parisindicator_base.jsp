@@ -197,7 +197,7 @@
 													</logic:iterate>
 			                                 	</ul>
 			                            	</logic:notEmpty>		                        
-						                	<table style="border-width: 0px 1px 1px 1px; border-color: #D0D0D0; color: #484846;" border="0">
+						                	<table style="border-width: 0px 1px 1px 1px; border-color: #D0D0D0; color: #484846;" border="0" width="100%">
 						                		<tr bgcolor="#FFFFFF">
 						                			<td>
 									                	<table width="100%">

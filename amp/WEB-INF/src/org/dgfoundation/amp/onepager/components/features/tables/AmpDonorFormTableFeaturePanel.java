@@ -41,8 +41,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		parentModel = new PropertyModel<Set<AmpFundingDetail>>(model,
 				"fundingDetails");
 
-		setModel = new AmpTransactionTypeDonorFundingDetailModel(parentModel,
-				transactionType);
+		setModel = new AmpTransactionTypeDonorFundingDetailModel(parentModel, transactionType);
 	}
 
 	protected AmpGroupFieldPanel<MetaInfo<Integer>> getAdjustmentTypeComponent(

@@ -47,4 +47,23 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 		add(link);
 	}
 
+	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete, boolean newLineVisible) {
+		super(id, fmName);
+		this.autoComplete = autoComplete;
+		newLine.setVisible(newLineVisible);
+		add(autoComplete);
+		AjaxLink link=new AjaxLink("dropdownLink") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				autoComplete.setModelObject("");
+				autoComplete.getChoices("");
+				String js=String.format("$('#%s').trigger('change');",autoComplete.getMarkupId());
+				target.appendJavascript(js);
+//				target.addComponent(autoComplete);
+			}
+		};
+		link.add(new Image("dropdown",new DropDownImageResourceRef()));
+		add(link);
+	}
+	
 }

@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.xml.XML;
+import org.apache.ecs.xml.XMLDocument;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -80,6 +82,52 @@ public class AmpMessageActions extends DispatchAction {
         	fillFormFields(state.getMessage(),messageForm,id,true);
     	}
 	 return loadReceiversList(mapping,form,request,response);
+	}
+
+    public ActionForward searchRelatedAcrivities (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	AmpMessageForm messageForm=(AmpMessageForm)form;
+        HttpSession session = request.getSession();
+        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        String srchStr = request.getParameter("srchStr");
+
+        String[] srcResArray = ActivityUtil.searchActivitiesNamesAndIds(teamMember, srchStr);
+        XMLDocument relatedActivityAutocompData = new XMLDocument();
+        XML root = new XML("activities");
+        relatedActivityAutocompData.addElement(root);
+
+        for (int srcResIdx = 0; srcResIdx < srcResArray.length; srcResIdx ++){
+            XML actNode = new XML ("activity");
+            actNode.addElement(srcResArray[srcResIdx]);
+            root.addElement(actNode);
+        }
+
+        response.setContentType("text/xml");
+        relatedActivityAutocompData.output(response.getOutputStream());
+        response.getOutputStream().close();
+	    return null;
+	}
+
+    public ActionForward searchExternalContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	AmpMessageForm messageForm=(AmpMessageForm)form;
+        HttpSession session = request.getSession();
+        String srchStr = request.getParameter("srchStr");
+
+        String[] srcContactArray = AmpMessageUtil.searchExternalReceiversFromContacts(srchStr); 
+
+        XMLDocument contactsAutocompData = new XMLDocument();
+        XML root = new XML("contacts");
+        contactsAutocompData.addElement(root);
+
+        for (int contactIdx = 0; contactIdx < srcContactArray.length; contactIdx ++){
+            XML contactNode = new XML ("contact");
+            contactNode.addElement(srcContactArray[contactIdx].replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
+            root.addElement(contactNode);
+        }
+
+        response.setContentType("text/xml");
+        contactsAutocompData.output(response.getOutputStream());
+        response.getOutputStream().close();
+	    return null;
 	}
 
    /**

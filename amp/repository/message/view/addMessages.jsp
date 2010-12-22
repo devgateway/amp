@@ -10,15 +10,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<!-- Individual YUI CSS files --> 
-
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
-
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script> 
-
 
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
@@ -785,7 +776,7 @@ function addActionToURL(actionName){
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-				<input type="button" value="Add" class="buttonx_sm" style="position:absolute; left:480px;" onClick="addContact(document.getElementById('contactInput'))">
+				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 				<br><br>
 				
 				<div id="contactsContainer" style="width:470px;"></div>
@@ -827,8 +818,7 @@ function addActionToURL(actionName){
     <td>
       <div>
         <div id="statesautocomplete" style="width:100%;">
-            <html:text property="selectedAct" name="messageForm" style="width:100%;font-size:100%"  styleId="statesinput" ></html:text>
-            <div id="statescontainer" style="width:100%;z-index: 100"></div>
+            <html:text property="selectedAct" name="messageForm" style="width:100%;font-size:100%"  styleId="statesinput"></html:text>
         </div>     
       </div>
         
@@ -862,7 +852,7 @@ function addActionToURL(actionName){
 			<c:if test="${not empty messageForm.sdmDocument}">
 				<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
 					<tr>
-						<td colspan="2">
+						<td colspan="2" style="font-size:12px;>
 							<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 							<c:if test="${not empty messageForm.sdmDocument.id}">
 								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
@@ -930,11 +920,12 @@ function addActionToURL(actionName){
 
 
 <script type="text/javascript">
-    	var myArray = [
+   /* 	var myArray = [
 		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
 			 "<bean:write name="relAct" filter="true"/>",
 		</c:forEach>
 	];
+
 
 	YAHOO.example.ACJSArray = new function() {
 		// Instantiate JS Array DataSource
@@ -950,6 +941,8 @@ function addActionToURL(actionName){
 	        return (sMarkup);
 	    };
 	    };
+	    
+	    
 
 	    var contactsArray= [
 	    	<c:forEach var="cont" items="${messageForm.contacts}">
@@ -978,7 +971,7 @@ function addActionToURL(actionName){
 		        sMarkup=sMarkup.replace(">","&gt;");
 		        return (sMarkup);
 		    };
-	    };
+	    };*/
      
         // attach character counters
         $("#titleMax").charCounter(50,{
@@ -999,6 +992,51 @@ function addActionToURL(actionName){
 				this.checked = selGrpCtrl.attr("checked");
 			})
 		});
+
+
+	
+	//Related activity autocomplite
+	$("input#statesinput").autocomplete({source:populateRelActivitySuggections, delay:500});
+	  
+	function populateRelActivitySuggections (req, add) {
+		var url = "/message/messageActions.do?actionType=searchRelatedAcrivities&srchStr=" + req.term;
+		
+		$.get(url, null, function(data) {  
+			var suggestions = [];  
+			var relActs = data.getElementsByTagName("activity");
+		
+		
+		
+			if (relActs != null && relActs.length > 0) {
+				var actIdx;
+				for (actIdx = 0; actIdx < relActs.length; actIdx ++) {
+					suggestions.push(relActs[actIdx].childNodes[0].nodeValue);  
+				}
+			}
+			add(suggestions);
+		});
+	}
+	
+	
+	//External contact autocomplite
+	$("input#contactInput").autocomplete({source:populateExtContactSuggections, delay:500});
+	  
+	function populateExtContactSuggections (req, add) {
+		var url = "/message/messageActions.do?actionType=searchExternalContacts&srchStr=" + req.term;
+		
+		$.get(url, null, function(data) {  
+			var suggestions = [];  
+			var contacts = data.getElementsByTagName("contact");
+			if (contacts != null && contacts.length > 0) {
+				var contIdx;
+				for (contIdx = 0; contIdx < contacts.length; contIdx ++) {
+					suggestions.push(contacts[contIdx].childNodes[0].nodeValue);  
+				}
+			}
+			add(suggestions);
+		});
+	}
+	
 
 	$("input[name='sendToAll']").bind("change", function (event) { 
 		var selAllCtrl = $(this);

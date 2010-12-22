@@ -4368,6 +4368,61 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		}
     		return retValue;
         }
+
+    public static String[] searchActivitiesNamesAndIds(TeamMember member, String searchStr) throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;
+    		List activities=null;
+    		String [] retValue=null;
+    		try {
+                    session=PersistenceManager.getRequestDBSession();
+
+                Set<String> activityStatus = new HashSet<String>();
+                String teamType=member.getTeamType();
+		activityStatus.add(Constants.APPROVED_STATUS);
+		activityStatus.add(Constants.EDITED_STATUS);
+                Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
+                    Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
+                    // computed workspace
+                    if (teamAO != null && !teamAO.isEmpty()) {
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) and a.name like :searchStr order by a.name";
+
+                    } else {
+                        // none computed workspace
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ") and a.name like :searchStr";
+                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+                        }
+                        queryString += " order by a.name ";
+                    }
+
+    			query=session.createQuery(queryString);
+                query.setParameter("searchStr", searchStr + "%", Hibernate.STRING);
+    			activities=query.list();
+    		}catch(Exception ex) {
+    			logger.error("couldn't load Activities" + ex.getMessage());
+    			ex.printStackTrace();
+    		}
+    		if (activities != null){
+    			retValue=new String[activities.size()];
+    			int i=0;
+    			for (Object rawRow : activities) {
+					Object[] row = (Object[])rawRow; //:)
+					String nameRow=(String)row[0];
+					if(nameRow != null){
+					nameRow = nameRow.replace('\n', ' ');
+					nameRow = nameRow.replace('\r', ' ');
+					nameRow = nameRow.replace("\\", "");
+					}
+					//System.out.println(nameRow);
+					retValue[i]=nameRow+"("+row[1]+")";
+					i++;
+				}
+    		}
+    		return retValue;
+        }
         
         /** 
          * @param actId

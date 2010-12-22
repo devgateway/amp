@@ -5,9 +5,9 @@ package org.dgfoundation.amp.permissionmanager.web.pages;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
@@ -33,7 +33,7 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
 		
-		Set<User> s = new HashSet<User>();
+		Set<User> s = new TreeSet<User>();
 		List<User> users = new ArrayList<User>();
 		try {
 			users = org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");

@@ -14,9 +14,10 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserModel;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
+
+import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
+import com.visural.wicket.behavior.beautytips.TipPosition;
 
 /**
  * @author dan
@@ -48,10 +49,19 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 				item.add(new Label("userLabel", item.getModelObject().getName()));
 				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
 				item.add(new Label("editUser", "editMe"));
+				String tooltipText = "info text de test";
+				if (tooltipText != null) {
+					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
+					toolTip.setPositionPreference(TipPosition.bottom);
+					item.add(toolTip);
+				}
 			}
 		};
 		list.setReuseItems(true);
 		add(list);
+		
+		//tooltipContainer
+
 		
 	}
 

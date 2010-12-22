@@ -40,7 +40,7 @@ import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 
 public class User
-    extends Entity implements Serializable {
+    extends Entity implements Serializable, Comparable{
 
     private Subject subject;
     private String firstNames;
@@ -421,6 +421,14 @@ public class User
 	 */
 	public void setPledger(Boolean pledger) {
 		this.pledger = pledger;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if(o == null || !(o instanceof User) ) return -1;
+		User aux = (User)o;
+		return this.getName().compareTo(aux.getName());
 	}
 
 }

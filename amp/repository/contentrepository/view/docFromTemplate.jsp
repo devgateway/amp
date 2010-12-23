@@ -15,7 +15,7 @@
 <table width="98%" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">	
   <tr>
   	<td width="100%" colspan="2">
-  		<html:select property="templateId" styleClass="inp-text" onchange="templateNameSelected()" styleId="selTempName" style="width:90%">
+  		<html:select property="templateId" styleClass="dropdwn_sm" onchange="templateNameSelected()" styleId="selTempName" style="width:90%">
 			<html:option value="-1"><digi:trn>Choose Template From The List</digi:trn></html:option>
 			<logic:iterate id="template" name="docFromTemplateForm" property="templates">																																															
 				<html:option value="${template.id}"><digi:trn>${template.name}</digi:trn></html:option>																		
@@ -32,10 +32,10 @@
   <c:if test="${!empty docFromTemplateForm.fields}">
   	<tr>
 		<td>
-			<digi:trn>Document Format:</digi:trn>
+			<div class="t_sm"><b><digi:trn>Document Format</digi:trn>:</b></div>
 		</td>
 	  	<td>
-	  		<html:select property="docType" styleClass="inp-text">
+	  		<html:select property="docType" styleClass="dropdwn_sm">
 				<html:option value="pdf"><digi:trn>Pdf</digi:trn></html:option>
 				<html:option value="doc"><digi:trn>Word Document</digi:trn></html:option>
 			</html:select>
@@ -43,18 +43,18 @@
   	</tr>
   	<tr>
 		<td nowrap="nowrap">
-			<digi:trn>Name:</digi:trn> <font color="red">*</font>
+			<div class="t_sm"><b><digi:trn>Name</digi:trn>:</b><font color="red">*</font></div>
 		</td>
 	  	<td>
-	  		<html:text property="documentName" size="30" styleId="docName"/>
+	  		<html:text property="documentName" size="30" styleId="docName" styleClass="inputx"/>
 	  	</td>
   	</tr>
   <tr>
 	  	<td  style="white-space: nowrap;">
-	  		<digi:trn>Document Type</digi:trn>:
+	  		<div class="t_sm"><b><digi:trn>Document Type</digi:trn>:</b><font color="red">*</font></div>
 	  	</td>
 	  	<td>
-	  		<category:showoptions  firstLine="<digi:trn>Please select from below</digi:trn>" name="docFromTemplateForm" property="documentTypeCateg"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+	  		<category:showoptions  firstLine="<digi:trn>Please select from below</digi:trn>" name="docFromTemplateForm" property="documentTypeCateg"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="dropdwn_sm" />
 	  	</td>
   </tr>
     <c:forEach var="field" items="${docFromTemplateForm.fields}">

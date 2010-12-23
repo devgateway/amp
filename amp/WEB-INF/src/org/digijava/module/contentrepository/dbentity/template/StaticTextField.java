@@ -12,7 +12,7 @@ public class StaticTextField extends TemplateField {
 
 	@Override
 	public String getRendered() {
-		String retVal="<span>";
+		String retVal="<span class=\"t_sm\">";
 		for (PossibleValue posVal : getPossibleValues()) {
 			retVal+=posVal.getValue();
 		}		

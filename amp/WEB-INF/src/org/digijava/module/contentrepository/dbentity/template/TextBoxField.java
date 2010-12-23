@@ -19,7 +19,7 @@ public class TextBoxField extends TemplateField {
 	@Override
 	public String getRendered() {
 		String retVal="<input type=\"text\" name=\"doc_textBox_"+getOrdinalNumber().intValue()+"\"" +
-				"size=\"30\" />";		
+				"size=\"5\" class=\"inputx\" style=\"width:300px;\"/>";		
 		return retVal;
 	}
 

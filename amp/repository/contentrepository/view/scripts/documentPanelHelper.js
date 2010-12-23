@@ -33,7 +33,8 @@
 		YAHOO.amp.panels[panelNum].setHeader(title);
 	}
 	function setPanelFooter(panelNum, title) {
-		YAHOO.amp.panels[panelNum].setFooter(title);
+		var footerTxt='<div class="t_sm"><b>'+title+'</b></div>';
+		YAHOO.amp.panels[panelNum].setFooter(footerTxt);
 	}
 
 	function showMyPanel(panelNum, elementId) {

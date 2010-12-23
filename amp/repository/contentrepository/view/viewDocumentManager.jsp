@@ -306,12 +306,95 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
-<table border="0" bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="95%" class="box-border-nopadding">	
+<!-- POPUPS START-->
+<div id="menuContainerDiv"></div>
+<div id="addDocumentDiv" class="dialog">
+				<div align="center">
+				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
+				<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
+					<input type="hidden" name="type" id="typeId"/>
+					<input type="hidden" name="uuid" id="nodeUUID"/>					
+					<table cellpadding="3" cellspacing="3" border="0">						
+						<tr>
+							<td>
+								<div class="t_sm"><b><digi:trn>Title</digi:trn>:</b><font color="red">*</font></div>
+							</td>
+							<td><html:text property="docTitle" size="5" styleClass="inputx" style="width:300px;" /></td>
+						</tr>
+						<tr>							
+							<td>
+								<div class="t_sm"><b><digi:trn>Description</digi:trn>:</b></div>
+							</td>
+							<td><html:textarea property="docDescription" cols="" rows="" style="width:300px; height:100px;" styleClass="inputx"/></td>
+						</tr>
+						<tr>
+							<td>
+								<div class="t_sm"><b><digi:trn>Notes</digi:trn>:</b></div>
+							</td>
+							<td><html:textarea property="docNotes" cols="" rows="" style="width:300px; height:100px;" styleClass="inputx"/></td>
+						</tr>
+						<tr>
+		                    <td>
+		                    	<div class="t_sm"><b><digi:trn>Year Of Publication</digi:trn>:</b></div>
+		                    </td>
+		                    <td>		
+		                        <html:select property="yearOfPublication" styleClass="dropdwn_sm">
+		                        	<html:option value="-1"><digi:trn>select...</digi:trn></html:option>
+		                        	<c:forEach var="year" items="${crDocumentManagerForm.years}">
+		                        		<html:option value="${year}">${year}</html:option>
+		                        	</c:forEach>
+		                        </html:select>
+		                    </td>
+		                </tr>
+						
+						<tr>
+							<td>
+								<div class="t_sm"><b><digi:trn>Type</digi:trn>:</b></div>
+							</td>
+							<td>
+								<c:set var="translation">
+									<digi:trn>Please select a type from below</digi:trn>
+								</c:set>
+								<category:showoptions  firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="dropdwn_sm" />
+							</td>
+						</tr>						
+						<tr id="tr_path">
+							<td>
+								<div class="t_sm"><b><digi:trn>Path</digi:trn>:</b><font color="red">*</font></div>
+							</td>
+							<td>
+				                <div class="fileinputs"> 
+									<input id="fileData" name="fileData" type="file" class="file buton">
+			                	</div>
+			               </td>
+						</tr>
+						<tr style="display: none" id="tr_url">
+							<td>
+								<div class="t_sm"><b><digi:trn>URL</digi:trn>:</b><font color="red">*</font></div>
+							</td>
+							<td><html:text property="webLink" size="32"></html:text></td>
+						</tr>
+						<tr><td colspan="2"><hr/></td> </tr>						
+						<tr>
+							<td align="right">
+								<html:submit styleClass="buttonx" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
+							</td>
+							<td align="left">&nbsp;
+								<button class="buttonx" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
+									<digi:trn>Cancel</digi:trn>
+								</button>
+							</td>
+						</tr>
+					</table>
+				</digi:form>
+				</div>
+		    </div>
+<!-- POPUPS END-->
+
+<!-- MAIN CONTENT PART START -->
+<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center"">	
 	<tr>
 		<td align=left vAlign=top>
-			<div id="menuContainerDiv"></div>
-			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px;">
-			<tr><td  class="yui-skin-sam">
 			<div id="tabview_container" class="yui-navset">			
 				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">
@@ -343,9 +426,9 @@ function setHoveredTable(tableId, hasHeaders) {
 			        	<li id="tab4"><a href="#public_res"><div><digi:trn>Public Resources</digi:trn></div></a></li>
 			       </feature:display>
 			    </ul>            
-			    <div class="yui-content" style="background-color: #EEEEEE;">
+			    <div class="yui-content" style="border-color: #d0d0d0">
 			    	<feature:display name="My Resources" module="Resources">
-			      		<div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+			      		<div id="my_res" style="border-color: #d0d0d0;border-left: thin solid #d0d0d0; border-right: thin solid #d0d0d0; border-bottom: thin solid #d0d0d0;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
@@ -387,7 +470,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					
 					<feature:display name="Team Resources" module="Resources">
-						<div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+						<div id="team_res"  style="border-color: #d0d0d0;border-left: thin solid #d0d0d0; border-right: thin solid #d0d0d0; border-bottom: thin solid #d0d0d0;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
@@ -438,7 +521,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					<!-- Shared Resources Start  -->
 					<feature:display name="Shared Resources" module="Resources">
-						<div id="shared_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+						<div id="shared_res"  style="border-color: #d0d0d0;border-left: thin solid #d0d0d0; border-right: thin solid #d0d0d0; border-bottom: thin solid #d0d0d0;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 									<td>
@@ -472,7 +555,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
-				        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+				        <div id="public_res"  style="border-color: #d0d0d0;border-left: thin solid #d0d0d0; border-right: thin solid #d0d0d0; border-bottom: thin solid #d0d0d0;">				        	       
 							<table border="0" cellPadding=1 cellSpacing=0 width="100%" style="position: relative; left: 0px" >
 								<tr>
 									<td>
@@ -488,96 +571,13 @@ function setHoveredTable(tableId, hasHeaders) {
 			        </feature:display>
 					<!--End public Resources-->
 				</div>
-			</div>
-			<div id="addDocumentDiv" style="display: none">
-				<div align="center">
-				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
-				<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
-					<input type="hidden" name="type" id="typeId"/>
-					<input type="hidden" name="uuid" id="nodeUUID"/>					
-					<table cellpadding="3" cellspacing="3" border="0">
-						<%--
-							<tr>
-							<td> 
-								<digi:trn>Document</digi:trn>
-								<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
-							</td>
-							<td> 
-								<digi:trn>URL</digi:trn>
-								<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
-							</td>
-						</tr>
-						 --%>
-						
-												
-						<tr>
-							<td><strong><digi:trn>Title:</digi:trn></strong><font color="red">*</font></td>
-							<td><html:text property="docTitle" size="30" /></td>
-						</tr>
-						<tr>
-							<td><strong><digi:trn>Description:</digi:trn></strong></td>
-							<td><html:textarea property="docDescription" cols="28"/></td>
-						</tr>
-						<tr>
-							<td><strong><digi:trn>Notes:</digi:trn></strong></td>
-							<td><html:textarea property="docNotes" cols="28" /></td>
-						</tr>						
-						<tr>
-		                    <td>
-		                    	<strong><digi:trn>Year Of Publication</digi:trn></strong>
-		                    </td>
-		                    <td>		
-		                        <html:select property="yearOfPublication" styleClass="inp-text">
-		                        	<html:option value="-1"><digi:trn>select...</digi:trn></html:option>
-		                        	<c:forEach var="year" items="${crDocumentManagerForm.years}">
-		                        		<html:option value="${year}">${year}</html:option>
-		                        	</c:forEach>
-		                        </html:select>
-		                    </td>
-		                </tr>
-						
-						<tr>
-							<td><strong><digi:trn>Type:</digi:trn></strong></td>
-							<td>
-								<c:set var="translation">
-									<digi:trn>Please select a type from below</digi:trn>
-								</c:set>
-								<category:showoptions  firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
-							</td>
-						</tr>						
-						<tr id="tr_path">
-							<td><strong><digi:trn>Path:</digi:trn><font color="red">*</font></strong></td>
-							<td>
-				                <div class="fileinputs"> 
-									<input id="fileData" name="fileData" type="file" class="file buton">
-			                	</div>
-			               </td>
-						</tr>
-						<tr style="display: none" id="tr_url">
-							<td><strong><digi:trn>URL:</digi:trn><font color="red">*</font></strong></td>
-							<td><html:text property="webLink" size="32"></html:text></td>
-						</tr>
-						<tr>
-							<td align="right">
-								<html:submit styleClass="buttonx" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
-							</td>
-							<td align="left">
-								&nbsp;
-								<button class="buttonx" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
-									<digi:trn>Cancel</digi:trn>
-								</button>
-							</td>
-						</tr>
-					</table>
-				</digi:form>
-				</div>
-		    </div>
-		</td></tr></table>
+			</div>			
 		<%-- END -- Table for "My Documents" --%>
         <br />
       </td>
 	</tr>
 </table>
+<!-- MAIN CONTENT PART END -->
 <br/>
 
 <c:set var="publicResourcesWindowName">

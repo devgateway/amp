@@ -17,7 +17,7 @@ public class CheckboxField extends TemplateField {
 			for (PossibleValue posVal : getPossibleValuesList()) {
 			//submits in request parameter "doc_checkbox_5" if checkbox  for this template is 5th field.			
 			retVal="<input type=\"checkbox\" name=\"doc_checkbox_"+getOrdinalNumber().intValue()+"\" value=\""+posVal.getValue()+"\">";			
-				retVal+=posVal.getValue();
+				retVal+="<span class=\"t_sm\">"+posVal.getValue()+"</span>";
 			}
 			retVal+="</input>";
 		}		

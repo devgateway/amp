@@ -10,7 +10,7 @@ public class DropDownField extends TemplateField {
 
 	@Override
 	public String getRendered() {		
-		String retVal="<select name=\"doc_select_"+getOrdinalNumber().intValue()+"\" styleClass=\"inp-text\" >";
+		String retVal="<select name=\"doc_select_"+getOrdinalNumber().intValue()+"\" styleClass=\"inputx\" >";
 		retVal+="<option value=\"-Select-\">" + "<digi:trn>Please Select</digi:trn>" + "</option>";
 		if(getPossibleValuesList()!=null && getPossibleValuesList().size()>0){
 			for (PossibleValue pv : getPossibleValuesList()) {

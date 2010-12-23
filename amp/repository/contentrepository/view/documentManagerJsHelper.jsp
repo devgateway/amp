@@ -208,7 +208,7 @@
 </c:set>
 
 <c:set var="translation_mandatory_fields">
-			<digi:trn>The marked fields are mandatory</digi:trn>
+	<digi:trn>The marked fields are mandatory</digi:trn>
 </c:set>
 <c:set var="translation_add_new_content">
 			<digi:trn>Add new content</digi:trn>

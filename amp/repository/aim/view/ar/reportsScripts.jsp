@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
-
+<link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -301,6 +301,32 @@ saveReportEngine	= null;
 		filterForm.submit();
 	}
 	
+	function showFilter() {
+		YAHOO.amptab.init();
+		YAHOO.amptab.afterFiltersLoad();
+		var element = document.getElementById("myFilter");
+		element.style.display   = "block";
+ 	 	element.style.height    = "380px";
+
+ 	 	myPanel1.setBody(element);
+ 	 	myPanel1.cfg.setProperty("height", "400px" );
+		myPanel1.center();
+		myPanel1.show();
+
+		initCalendar();
+
+		<field:display name="Project Category" feature="Identification">
+			try {
+				addTitleSelect("selectedProjectCategory");
+			}
+			catch(e)
+			{
+//				alert(e);
+			}
+		</field:display>
+		
+	}
+
 	function addTitleSelect(selectName){
 		var categoryOptions = document.getElementsByName(selectName);
 		if(categoryOptions[0])
@@ -375,45 +401,20 @@ saveReportEngine	= null;
 		}
 	}
 	function hideFilter() {
-		$('#myFilter').dialog( "close" );
+		myPanel1.hide();
 	}
-	
-	$(".tab_opt_cont a").click(function(){
-		var selector = $(this).attr("href");
-		var dlgopts = {
-			height: 200,
-			width: 400,
-			modal: true
-			};
-		switch (selector)
-        {
-			case '#mySorter':
-				dlgopts.width = 400;
-				dlgopts.height = 180;
-
-			break;
-			case '#myFilter':
-				dlgopts.width = 900;
-				dlgopts.height = 500;
-			break;
-			case '#dialog3':
-				dlgopts.width = 400;
-				dlgopts.height = 110;
-				
-			break;
-			case '#customFormat':
-				dlgopts.width = 500;
-				dlgopts.height = 420;
-			break;
-		};	
-     		$(selector).dialog(dlgopts);
-			return false;
-		});
-		
+	function showSorter() {
+		if ( myPanel2EmptyBody ) {
+			var element2 = document.getElementById("mySorter");
+			element2.style.display 	= "inline";
+			myPanel2.setBody(element2);
+			myPanel2EmptyBody		= false;
+		}
+		myPanel2.show();
+	}
 	function hideSorter() {
-		$('#mySorter').dialog( "close" );
+		myPanel2.hide();
 	}
-	
 	function showRange(){
 		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");
@@ -427,6 +428,9 @@ saveReportEngine	= null;
 		myPanel3.hide();
 	}
 	
+	function hideFilter() {
+		myPanel1.hide();
+	}
 	function checkProjectId(x){
 		var s_len = x.value.length;
 		var s_charcode = 0;

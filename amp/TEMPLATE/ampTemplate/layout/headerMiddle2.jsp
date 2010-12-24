@@ -24,7 +24,13 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
 
-         <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
+        <!-- Core + Skin CSS -->
+        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+
+        <!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+		<jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
  		<div id="customAbout" style="display: none" class="content">
  			<jsp:include page="/repository/aim/view/helpAbout.jsp" />
  		</div>
@@ -43,6 +49,12 @@ ${fn:replace(message,quote,escapedQuote)}
 String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
 if("On".equals(publicView)) { 
 %>
+<style>
+.yuiampmenuitemlabel
+{
+border-right:1px solid white;
+}
+</style>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">

@@ -9,7 +9,7 @@
 <logic:present name="starFlag" scope="request">
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
-<div class="desktop_project_name">
+<div align="left">
 	<logic:present name="starFlag" scope="request">
 		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 		<bean:define id="starFlag" value="" scope="page" toScope="request" />
@@ -20,10 +20,10 @@
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="trnTextCell" property="hasLongVersion" value="true">
-<div class="desktop_project_name" id='<bean:write name="trnTextCell" property="column.name"/>-<bean:write name="trnTextCell" property="ownerId"/>'> 
+<div style='position:relative;display:none;' id='<bean:write name="trnTextCell" property="column.name"/>-<bean:write name="trnTextCell" property="ownerId"/>'> 
 	<bean:write name="trnTextCell" filter="false"/>
 </div>
-<div class="desktop_project_name">
+<div align="left">
 ......
 </div>
 <div align="center" onMouseOver="stm(['<bean:write name="trnTextCell" property="column.name"/> Full Text',document.getElementById('<bean:write name="trnTextCell" property="column.name"/>-<bean:write name="trnTextCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>full text</u>]

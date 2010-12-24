@@ -118,7 +118,6 @@
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="Language Option" module="Tools"></feature:display>
-<feature:display name="Desktop Search form" module="Tools"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 

@@ -18,9 +18,9 @@
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
 <% if (reportData.getLevelDepth() < 3) { %>		
-		<td class="inside"; style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>">
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD">
 	<% } else { %>	
-		<td class="inside" style="background-repeat:repeat-x; padding-left:33px; font-size:12px; padding-left:<%=10*(reportData.getLevelDepth()-1)%>" class="ins_title">
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white"  class="reportsBorderTD">
 	<% } %>			
 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -28,20 +28,16 @@
 			WARNING:
 				Do not add Translations here!
 		 ***************************************************-->
-	   	<div class="desktop_project_name">
+	   <div align="left" style="max-width: 95%; text-align: justify">
             <c:if test="${!(reportData.name == reportMeta.name)}">      
-                <img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="img_2/ico_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
+                <img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
             </c:if>
-            
-            	<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
-            <b>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
-           	    
-      	 </div>
+            <b><%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+            (<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>    
+       </div>
 	<% } else { %>
-        <b class="desktop_project_name">
-        	<bean:write name="reportData" property="name"/>
-        	(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
-        </b>
+        <b><bean:write name="reportData" property="name"/>
+        (<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
     <% } %> 
 </td>
 	
@@ -49,9 +45,9 @@
 		<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<c:if test="${cell!=null}">
 		<% if (reportData.getLevelDepth() < 3) { %>
-			<td class="inside">
+			<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
 		<% } else { %>	
-			<td class="inside">
+			<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
 		<% } %>
 			<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
@@ -63,9 +59,9 @@
 		<c:if test="${cell==null}">
 			<c:if test="${firstCell==false}">
 					<% if (reportData.getLevelDepth() < 3) { %>
-						<td class="inside">
+						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
 					<% } else { %>	
-						<td class="inside">
+						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
 					<% } %>
 					&nbsp;
 					</td>

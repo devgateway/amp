@@ -39,7 +39,7 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 	return true;	
 }
 
-SaveReportEngine.prototype.showPanel= function () {
+SaveReportEngine.prototype.showPanel		= function () {
 	if (this.panel == null) {
 		document.getElementById("saveTitlePanel").style.display	= "";
 		this.panel = new YAHOO.widget.Panel("saveTitlePanel", 

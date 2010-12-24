@@ -16,10 +16,9 @@
 <div align="center">
   <table width="1000" class="layoutTable" border="0">
     <tr>
-      <td valign="top" width="740px"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
+      <td valign="top"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
-      <td width="20">&nbsp;</td>
-      <td valign="top" width="240">
+      <td valign="top" width="250">
       <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
           <table width="250" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;clear:both;">
@@ -35,15 +34,6 @@
       <br />
       </c:if>
       </td>
-    </tr>
-    <tr>
-    	<td>
-    		<div class="welcome_note">
-    			<digi:trn>
-    				Please note that this version of the AMP platform has been designed for the following browsers: Internet Explorer 7 (or above) and Mozilla Firefox 3.5 (or above).
-    			</digi:trn>
-    		</div>
-    	</td>
     </tr>
   </table>
 </div>

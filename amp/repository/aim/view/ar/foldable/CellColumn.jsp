@@ -14,11 +14,11 @@
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 <logic:equal name="columnNo" value="0">
 <bean:define id="reportData" name="cellColumn" property="parent" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="page"/>
-<td class="inside" style="padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;"  >
+<td style=" padding-top: 1px; padding-bottom: 1px; padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" >
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 
-<td class="inside">
+<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#dbe5f1":"#ffffff" %>" >
 </logic:notEqual> 
 <% if(c!=null) {
 	request.setAttribute("cell",c);
@@ -28,10 +28,10 @@
 
 <logic:equal name="columnNo" value="0">
 <logic:present name="currentMember" scope="session">
-	<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
+<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
-	<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
+<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
 </logic:notPresent>
 </logic:equal>
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	

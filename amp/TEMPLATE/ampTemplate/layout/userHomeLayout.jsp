@@ -96,7 +96,7 @@
 			</TR>
 
 			<TR>
-				<TD width="100%" align="center" bgcolor="#376091">
+				<TD width="100%" align="center" bgcolor="#FFFFFF">
 					<TABLE cellSpacing=0 cellPadding=0 width="98%">
 						<TBODY>
 						  	<TR>

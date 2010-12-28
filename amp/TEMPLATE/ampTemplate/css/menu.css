@@ -174,12 +174,14 @@
 }
 
 .yuiamp-skin-amp .yuiampmenuitem {
-	background-color:#AMP-9237;
+	background-color:#F2F2F2;
 	margin-right:5px;
 	border:1px solid #E8E8E8;
-
-
 }
+
+.yuiamp-skin-amp .yuiampmenuitem a {color:#376091;}
+
+
 .yuiamp-skin-amp .yuiampmenuitemlabel, A.yuiampmenuitemlabel:visited{
 	color:white;
 	padding: 2px 20px;

@@ -42,7 +42,6 @@
 		<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
 		<digi:ref href="/TEMPLATE/ampTemplate/css_2/jquery-ui.css" type="text/css" rel="stylesheet" />
         
-        
         <!--[if IE 6]><link href='css/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->
 		<!--[if IE 7]><link href='css/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
 		<!--[if IE 8]><link href='css/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]--> 

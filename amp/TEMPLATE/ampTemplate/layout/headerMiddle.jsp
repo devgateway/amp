@@ -104,7 +104,7 @@ cursor:pointer;
                     <digi:trn>Public Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;background-color:#376091;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                 		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">

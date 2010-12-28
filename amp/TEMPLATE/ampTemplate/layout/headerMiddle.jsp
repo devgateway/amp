@@ -104,7 +104,7 @@ cursor:pointer;
                     <digi:trn>Public Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;background-color:#376091;text-decoration:none; padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;background-color:#376091;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                 		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -141,7 +141,7 @@ cursor:pointer;
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
 	                    </span>
-	                    <a onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                    <a onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                    </a>
 	                    <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
@@ -181,7 +181,7 @@ cursor:pointer;
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn>Language</digi:trn>
 		                </span>
-		                 <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                 <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu">
@@ -230,7 +230,7 @@ else  //In case the public view aren't activated
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
-		                <a  onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                <a  onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
@@ -279,7 +279,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -314,7 +314,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
@@ -435,7 +435,7 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
@@ -519,7 +519,7 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -609,7 +609,7 @@ function adminHelp(){
                               </a>
                           	</c:if>
                           	<feature:display name="Create Event" module="Calendar">
-                          		<a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
+                          		<a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
@@ -643,7 +643,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
@@ -707,7 +707,7 @@ function adminHelp(){
 
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
@@ -735,7 +735,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -798,7 +798,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">

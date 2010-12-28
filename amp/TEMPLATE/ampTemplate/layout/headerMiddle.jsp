@@ -177,7 +177,7 @@ cursor:pointer;
           --%> 	
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
-		            <li style="float:left;">
+		            <li style="float:left;" class="yuiampmenuitem">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn>Language</digi:trn>
 		                </span>

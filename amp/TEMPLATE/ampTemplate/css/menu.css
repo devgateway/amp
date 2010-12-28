@@ -179,7 +179,7 @@
 	border:1px solid #E8E8E8;
 }
 
-.yuiamp-skin-amp .yuiampmenuitem a {color:#376091;}
+.yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:12px; font-weight:bold;}
 
 
 .yuiamp-skin-amp .yuiampmenuitemlabel, A.yuiampmenuitemlabel:visited{
@@ -188,6 +188,8 @@
 	text-decoration: none;
 	text-transform:uppercase;
 	cursor: default;
+	font-size:12px;
+	font-weight:bold;
 }
 .yuiamp-skin-amp .yuiampmenuitemlabel .helptext {
 	margin-top: -1.5em;

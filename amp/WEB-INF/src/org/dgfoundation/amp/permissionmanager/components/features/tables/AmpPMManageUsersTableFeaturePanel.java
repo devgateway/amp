@@ -49,12 +49,12 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 				item.add(new Label("userLabel", item.getModelObject().getName()));
 				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
 				item.add(new Label("editUser", "editMe"));
-				String tooltipText = "info text de test";
-				if (tooltipText != null) {
-					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
-					toolTip.setPositionPreference(TipPosition.bottom);
-					item.add(toolTip);
-				}
+//				String tooltipText = "info text de test";
+//				if (tooltipText != null) {
+//					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
+//					toolTip.setPositionPreference(TipPosition.bottom);
+//					item.add(toolTip);
+//				}
 			}
 		};
 		list.setReuseItems(true);

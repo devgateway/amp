@@ -204,12 +204,6 @@ cursor:pointer;
 else  //In case the public view aren't activated
 {
 %>
-<style>
-.yuiampmenuitemlabel
-{
-border-right:1px solid white;
-}
-</style>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">

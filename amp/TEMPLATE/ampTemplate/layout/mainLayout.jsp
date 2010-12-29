@@ -66,7 +66,7 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
-	<div class="main_menu" style="margin-left: 215px">
+	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
 	</div>
 	<!-- BREADCRUMP START -->

@@ -140,9 +140,7 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 		text-decoration:none;
 	}
 	#demo .yui-nav {
-		border-color:#222E5D;
-		border-style:solid;
-		border-width:0pt 0pt 2px;
+		border-bottom:#1px solid #D0D0D0;
 	}
 	
 	#tab_no_link .yui-nav{

@@ -93,9 +93,11 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 8pt; 
+			font-size: 12px;
+			font-weight:bold; 
 			/* background:#222E5D url(tableftcorner.gif) no-repeat scroll left top; */
-			color: white;
+			color: #FF6000;
+			background-color:#F7F7F7;
 	}
 
    

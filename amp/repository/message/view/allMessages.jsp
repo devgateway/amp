@@ -73,7 +73,7 @@
 <!-- MAIN CONTENT PART START -->
 
 
-	<div id="tabs-1">
+	<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 		
 		<div class="tab_opt_box">
 				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
@@ -135,9 +135,10 @@
 <!-- MAIN CONTENT PART END -->
 <script language="javascript">
 $(document).ready(function(){
-	$("#tabs").tabs();
-	$("#filter_tabs").tabs();
-
+	
+//	$("#tabs").tabs();
+//	$("#filter_tabs").tabs();
+//		console.log($("#tabs"));
 
 	$("#tabs>ul>li>a").unbind("click");
 	$("#tabs>ul>li>a").bind("click", tabsClick);

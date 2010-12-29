@@ -6,6 +6,7 @@
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/amp/common.js"/>"></script>
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
 
 	<!-- Styles -->	
 	<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
@@ -55,7 +56,9 @@ ${fn:replace(message,quote,escapedQuote)}
 <div class="header">
 	<div class="centering">
 		<div class="login_nav">
-			<digi:insert attribute="logWidget"/>
+			
+			<digi:insert attribute="loginWidget"/>
+			
 		</div>
 		<div class="logo">
             <logic:notEmpty name="defFlagExist" scope="application">

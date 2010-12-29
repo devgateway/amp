@@ -222,7 +222,7 @@
 			<put-item name="body" module="content" instance="default" teaser="contentView"/>
 		</layout>
 		<layout name="headerTopLayout" file="headerTop.jsp">
- 	 	    <put-item name="logWidget" file="loginWidget3.jsp"/>
+ 	 	    <put-item name="loginWidget" file="loginWidget3.jsp"/>
  	 	</layout>
 		<layout name="loginBody" file="loginLayout.jsp">
 			<put name="title">Please log in</put>

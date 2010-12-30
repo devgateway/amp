@@ -91,19 +91,32 @@ public class AmpMessageActions extends DispatchAction {
         String srchStr = request.getParameter("srchStr");
 
         String[] srcResArray = ActivityUtil.searchActivitiesNamesAndIds(teamMember, srchStr);
+        /*
         XMLDocument relatedActivityAutocompData = new XMLDocument();
         XML root = new XML("activities");
         relatedActivityAutocompData.addElement(root);
+          */
 
+        StringBuffer retVal = new StringBuffer();
         for (int srcResIdx = 0; srcResIdx < srcResArray.length; srcResIdx ++){
+            /*
             XML actNode = new XML ("activity");
             actNode.addElement(srcResArray[srcResIdx]);
             root.addElement(actNode);
+            */
+            retVal.append(srcResArray[srcResIdx]);
+            if (srcResIdx < srcResArray.length - 1) {
+                retVal.append("\n");
+            }
         }
 
+        response.getOutputStream().print(retVal.toString());
+        /*
         response.setContentType("text/xml");
         relatedActivityAutocompData.output(response.getOutputStream());
+        */
         response.getOutputStream().close();
+
 	    return null;
 	}
 
@@ -114,18 +127,28 @@ public class AmpMessageActions extends DispatchAction {
 
         String[] srcContactArray = AmpMessageUtil.searchExternalReceiversFromContacts(srchStr); 
 
+        /*
         XMLDocument contactsAutocompData = new XMLDocument();
         XML root = new XML("contacts");
         contactsAutocompData.addElement(root);
-
+          */
+        StringBuffer retVal = new StringBuffer();
         for (int contactIdx = 0; contactIdx < srcContactArray.length; contactIdx ++){
+            /*
             XML contactNode = new XML ("contact");
             contactNode.addElement(srcContactArray[contactIdx].replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
             root.addElement(contactNode);
+            */
+            retVal.append(srcContactArray[contactIdx]);
+            if (contactIdx < srcContactArray.length - 1) {
+                retVal.append("\n");
+            }
         }
-
+        response.getOutputStream().print(retVal.toString());
+        /*
         response.setContentType("text/xml");
         contactsAutocompData.output(response.getOutputStream());
+        */
         response.getOutputStream().close();
 	    return null;
 	}

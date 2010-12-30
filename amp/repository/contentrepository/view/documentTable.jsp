@@ -158,8 +158,7 @@
 											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}','${dynamicListLocal}',${currentTimeInMillis})" title="${translation}">
 												<digi:trn>Show Actions</digi:trn>
 											</a>
-									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;" 
-										>
+									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;position: absolute;" class="resource_popin">
 									<c:choose>
 										<c:when test="${documentData.webLink == null}">
 											<c:set var="translation">

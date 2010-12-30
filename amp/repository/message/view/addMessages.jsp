@@ -700,6 +700,10 @@ function addActionToURL(actionName){
     position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
 }
 
+span.extContactDropdownEmail {
+	color:grey;
+}
+
 -->
 </style>
 
@@ -1088,7 +1092,7 @@ function addActionToURL(actionName){
 
 			
 			//Related activity autocomplite
-			var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", "\t"]);
+			var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 			relatedActDataSource.scriptQueryAppend = "actionType=searchRelatedAcrivities";
 			relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 			relatedActDataSource.queryMatchContains = true;
@@ -1099,12 +1103,34 @@ function addActionToURL(actionName){
 			
 			
 			//External contact autocomplite
-			var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", "\t"]);
+			var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 			extContactDataSource.scriptQueryAppend = "actionType=searchExternalContacts";
+			//extContactDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 			extContactDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 			extContactDataSource.queryMatchContains = true;
 		  extContactDataSource.scriptQueryParam  = "srchStr";
 			var extContactAutoComp = new YAHOO.widget.AutoComplete("contactInput","extContactAutocom", extContactDataSource);
+			
+			extContactAutoComp.formatResult = function( oResultData , sQuery , sResultMatch ) {
+				var retVal;
+				//Hilight email separately
+				
+				if (oResultData[0].indexOf('<') > -1 && oResultData[0].indexOf('>') > -1) {
+					var contactEmail = oResultData[0].substring (oResultData[0].indexOf('<') + 1, oResultData[0].indexOf('>'));
+					console.log (contactEmail);
+					var contactName = oResultData[0].substring (0, oResultData[0].indexOf('<'));
+					
+					var markup = [contactName, '<span class="extContactDropdownEmail">(', contactEmail, ')<span>'];
+					
+					retVal = markup.join("");
+					
+				} else {
+					retVal = oResultData;
+				}
+				
+				return retVal;
+			}
+			
 			extContactAutoComp.queryDelay = 0.5;
 			$("#contactInput").css("position", "static");
 	

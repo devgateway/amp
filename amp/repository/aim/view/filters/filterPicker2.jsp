@@ -33,7 +33,7 @@
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px; borer-bottom:1px solid #D0D00;">
+<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px; border-bottom:1px solid #D0D0D0;">
 	<ul class="yui-nav">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a> </li>
 		<li class="pop-tab-item"><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a> </li>

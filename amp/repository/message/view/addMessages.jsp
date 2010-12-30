@@ -15,6 +15,33 @@
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
+ 
+<%--
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom.js"/>"></script>
+
+
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"/>"></script>
+
+
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>	
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"/>"></script>	
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"/>"></script>
+--%>
+	
+	<!-- Individual YUI CSS files --> 
+ 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script> 
+	
+
 <%--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -655,9 +682,10 @@ function addActionToURL(actionName){
     z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
     font-size: 12px;
 }
+
 #statesInput,
 #contactInput {
-    _position:absolute; /* abs pos needed for ie quirks */
+    font-size: 12px;
 }
 .charcounter {
     display: block;
@@ -768,6 +796,7 @@ function addActionToURL(actionName){
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
+				<div id="extContactAutocom"></div>
 				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 				<br><br>
 				
@@ -809,8 +838,9 @@ function addActionToURL(actionName){
     </td>
     <td>
       <div>
-        <div id="statesautocomplete" style="width:100%;">
-            <html:text property="selectedAct" name="messageForm" style="width:100%;font-size:100%"  styleId="statesinput"></html:text>
+        <div style="width:100%;">
+            <html:text property="selectedAct" name="messageForm" style="width:100%;"  styleId="statesinput"></html:text>
+            <div id="statesautocomplete"></div>
         </div>     
       </div>
         
@@ -912,7 +942,8 @@ function addActionToURL(actionName){
 
 
 <script type="text/javascript">
-   /* 	var myArray = [
+	/*
+    	var myArray = [
 		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
 			 "<bean:write name="relAct" filter="true"/>",
 		</c:forEach>
@@ -986,7 +1017,7 @@ function addActionToURL(actionName){
 		});
 
 
-	
+	/*	
 	//Related activity autocomplite
 	$("input#statesinput").autocomplete({source:populateRelActivitySuggections, delay:500});
 	  
@@ -1028,6 +1059,56 @@ function addActionToURL(actionName){
 			add(suggestions);
 		});
 	}
+	*/
+	/*
+			var relatedActDataSource = new YAHOO.widget.DS_JSFunction(function (param1) {
+				var url = "/message/messageActions.do?actionType=searchRelatedAcrivities&srchStr=" + param1;
+				
+				var retFn = function (data) {
+					console.log("func");
+					return data;
+				};
+				
+				
+				$.get(url, null, function(data) {  
+					var suggestions = [];  
+					var relActs = data.getElementsByTagName("activity");
+				
+					if (relActs != null && relActs.length > 0) {
+						var actIdx;
+						for (actIdx = 0; actIdx < relActs.length; actIdx ++) {
+							suggestions.push(relActs[actIdx].childNodes[0].nodeValue);  
+						}
+					}
+					retFn(suggestions);
+				});
+				console.log("ret");
+				return retFn;
+			});*/
+
+			
+			//Related activity autocomplite
+			var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", "\t"]);
+			relatedActDataSource.scriptQueryAppend = "actionType=searchRelatedAcrivities";
+			relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+			relatedActDataSource.queryMatchContains = true;
+		  relatedActDataSource.scriptQueryParam  = "srchStr";
+			var relatedActAutoComp = new YAHOO.widget.AutoComplete("statesinput","statesautocomplete", relatedActDataSource);
+			relatedActAutoComp.queryDelay = 0.5;
+			$("#statesinput").css("position", "static");
+			
+			
+			//External contact autocomplite
+			var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", "\t"]);
+			extContactDataSource.scriptQueryAppend = "actionType=searchExternalContacts";
+			extContactDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+			extContactDataSource.queryMatchContains = true;
+		  extContactDataSource.scriptQueryParam  = "srchStr";
+			var extContactAutoComp = new YAHOO.widget.AutoComplete("contactInput","extContactAutocom", extContactDataSource);
+			extContactAutoComp.queryDelay = 0.5;
+			$("#contactInput").css("position", "static");
+	
+
 	
 
 	$("input[name='sendToAll']").bind("change", function (event) { 

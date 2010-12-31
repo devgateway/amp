@@ -1064,31 +1064,7 @@ span.extContactDropdownEmail {
 		});
 	}
 	*/
-	/*
-			var relatedActDataSource = new YAHOO.widget.DS_JSFunction(function (param1) {
-				var url = "/message/messageActions.do?actionType=searchRelatedAcrivities&srchStr=" + param1;
-				
-				var retFn = function (data) {
-					console.log("func");
-					return data;
-				};
-				
-				
-				$.get(url, null, function(data) {  
-					var suggestions = [];  
-					var relActs = data.getElementsByTagName("activity");
-				
-					if (relActs != null && relActs.length > 0) {
-						var actIdx;
-						for (actIdx = 0; actIdx < relActs.length; actIdx ++) {
-							suggestions.push(relActs[actIdx].childNodes[0].nodeValue);  
-						}
-					}
-					retFn(suggestions);
-				});
-				console.log("ret");
-				return retFn;
-			});*/
+
 
 			
 			//Related activity autocomplite
@@ -1117,13 +1093,9 @@ span.extContactDropdownEmail {
 				
 				if (oResultData[0].indexOf('<') > -1 && oResultData[0].indexOf('>') > -1) {
 					var contactEmail = oResultData[0].substring (oResultData[0].indexOf('<') + 1, oResultData[0].indexOf('>'));
-					console.log (contactEmail);
 					var contactName = oResultData[0].substring (0, oResultData[0].indexOf('<'));
-					
 					var markup = [contactName, '<span class="extContactDropdownEmail">(', contactEmail, ')<span>'];
-					
 					retVal = markup.join("");
-					
 				} else {
 					retVal = oResultData;
 				}

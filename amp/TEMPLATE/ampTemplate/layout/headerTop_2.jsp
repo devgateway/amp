@@ -20,49 +20,31 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
-	<!-- Menu Source -->
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.dimensions.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.positionBy.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.bgiframe.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.jdMenu.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.core.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-ui.min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.widget.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.ui.tabs.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.cookie.js"/>"></script>
-		
-				
-
 	<!-- Stylesheet of AMP -->
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
-		<digi:ref href="/TEMPLATE/ampTemplate/css_2/jquery-ui.css" type="text/css" rel="stylesheet" />
-        
-        <!--[if IE 6]><link href='css/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->
-		<!--[if IE 7]><link href='css/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
-		<!--[if IE 8]><link href='css/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]--> 
-        
-        <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"/>"> 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
+	<!--[if IE 6]><link href='css/amp_ie_hacks_6.css' rel='stylesheet' type='text/css'><![endif]-->
+	<!--[if IE 7]><link href='css/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
+	<!--[if IE 8]><link href='css/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]-->
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
+		 
+    <!-- Individual YUI CSS files --> 
+	<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"/>"> 
+	<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"/>"> 
+	<!-- Individual YUI JS files --> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
 
 
 <script type="text/javascript">
 	var YAHOOAmp 	= YAHOO;
 </script>  
-        
-        
         
 <%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 <logic:present name="currentMember" scope="session">
@@ -89,34 +71,14 @@
 	    }
 	
 	}	
-
-	//SIMPLE MENU
-	var timeout    = 500;
-	var closetimer = 0;
-	var ddmenuitem = 0;
-
-	function wks_menu_open()
-	{  wks_menu_canceltimer();
-		wks_menu_close();
-	   ddmenuitem = $(this).find('ul').css('display', 'block');}
-
-	function wks_menu_close()
-	{  if(ddmenuitem) ddmenuitem.css('display', 'none');}
-
-	function wks_menu_timer()
-	{  closetimer = window.setTimeout(wks_menu_close, timeout);}
-
-	function wks_menu_canceltimer()
-	{  if(closetimer)
-	   {  window.clearTimeout(closetimer);
-	      closetimer = null;}}
-
-	$(document).ready(function()
-	{  $('#wks_menu > li').bind('mouseover', wks_menu_open)
-	   $('#wks_menu > li').bind('mouseout',  wks_menu_timer)});
-
-	document.onclick = wks_menu_close;
-
+	
+	YAHOO.util.Event.onContentReady("workspacemenu", function () {
+		var oMenu = new YAHOO.widget.Menu("productsandservices");
+	 	 oMenu.render();
+	 	oMenu.show();
+	});
+	 
+	
 </script>
 </logic:present>
 
@@ -144,33 +106,27 @@
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
 		<logic:notEmpty name="currentMember" scope="session">
-			<feature:display name="Change Workspace" module="My Desktop">
-				<div class="workspace_info">
-					<ul class="wks_menu" id="wks_menu">
-						<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-						<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-						<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-							<li style="cursor: pointer;margin-top:0px;"> 
-								<digi:trn>Workspace</digi:trn>:
-								<b><bean:write name="team" property="name"/><img src="img_2/arr_wrk.gif" border=0 class="menu_arr"></b>
-								<ul style="width: auto;">
-						</logic:equal>
-						</logic:iterate>
-						
-						<logic:iterate id="item2"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-						<bean:define id="team2" name="item2" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-						<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-							<li>
-								<a href='/selectTeam.do?id=<bean:write name="item2" property="ampTeamMemId"/>' onclick="return canExit()">
-									<bean:write name="team2" property="name"/>
-								</a>
-							</li>
-						</logic:notEqual>
-						</logic:iterate>
-			            	</ul>
-		            	</li>
-					</ul>
-				</div>
+			 <feature:display name="Change Workspace" module="My Desktop">
+             	<li class="yuiampmenuitem" style="_width:230px;">
+                	<a class="yuiampmenuitemlabel" href="#">
+                    	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
+                    </a>
+					<div id="workspacemenu" class="yuiampmenu">
+                    	<div class="bd"  style="width:500px;">                    
+                       		<ul class="first-of-type">
+								<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+									<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+									<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<li class="yuiampmenuitem yuiampmenuitem-checked" style="height:18px"><a href="#"><bean:write name="team" property="name"/></a></li>
+									</logic:equal>
+									<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<li class="yuiampmenuitem" style="height:18px"><a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a></li>
+									</logic:notEqual>
+								</logic:iterate>
+                           	</ul>
+						</div>
+					</div>
+				</li>
 			</feature:display>
 		</logic:notEmpty>
 		<div >

@@ -7,18 +7,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
-<script type="text/javascript">
-
-function toggle(obj) {
-	var el = document.getElementById(obj);
-	if(el.style.display == '' || el.style.display == 'none'){
-		el.style.display = 'block';
-	}else{
-		el.style.display = 'none';
-	}
-	
-}
-</script>
 
 <digi:secure authenticated="false">
 <logic:notPresent name="currentMember" scope="session">
@@ -28,7 +16,7 @@ function toggle(obj) {
   				<td>
   					<div class="login_here">
   						<div class="login_here_cont">
-  							<a id="show_login_pop" onclick="javascript:toggle('show_login_pop_box');" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;">
+  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;">
   								<digi:trn>Login Here</digi:trn>
   							</a>
   						</div>
@@ -122,4 +110,12 @@ function toggle(obj) {
 </logic:notPresent>
 </digi:secure>
 
+  <script type="text/javascript">
+
+$('#show_login_pop').click(function() {
+	  $('#show_login_pop_box').toggle('slow', function() {
+	  });
+	});
+
+</script>
   

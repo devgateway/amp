@@ -66,9 +66,11 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
+	
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
 	</div>
+	
 	<!-- BREADCRUMP START -->
 		<div class="breadcrump">
 			<div class="centering">

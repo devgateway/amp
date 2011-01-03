@@ -60,7 +60,7 @@ function fnEditProject(id)
 {
 	
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	document.aimChannelOverviewForm.action = "/wicket/onepager~pageId=1~step=1~resetMessages=true~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
+	document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~resetMessages=true~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
     
@@ -317,6 +317,8 @@ ${aimMainProjectDetailsForm.activityExists}
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a href="/wicket/onepager/activityId/<%=request.getParameter("ampActivityId")%>" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
 								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
+	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>"> 
+								<img src="/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>

@@ -16,7 +16,7 @@
 <!-- HEADER START -->
 <div class="header">
 <div class="centering">
-<div class="top_nav"><a href=#>AMP USER</a><img src="images/top_sep.gif" class="top_sep">HELP <a href=#><img src="images/arr_dwn.gif" border=0/></a><img src="images/top_sep.gif" class="top_sep">English <a href=#><img src="images/arr_dwn.gif" border=0 /></a><img src="images/top_sep.gif" class="top_sep"><a href=#>LOGOUT</a></div>
+<div class="top_nav"><a href=#>AMP USER</a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">HELP <a href=#><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0/></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">English <a href=#><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0 /></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep"><a href="/aim/j_acegi_logout">LOGOUT</a></div>
 <div class="logo"><img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left><div class="amp_label"> &nbsp;AMP 1.14</div></div>
 </div>
 </div>
@@ -28,8 +28,63 @@
 <!-- MAIN MENUSTART -->
 <div class="main_menu">
 <div class="centering">
-<div class="menu_item_sel"><div class="menu_item_cont_sel"><wicket:trn key="trn:myDesktop">MY DESKTOP</wicket:trn><img src="images/menu_arr_dwn_sel.gif" class="menu_arr" /></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:reports">REPORTS</wicket:trn></a><a href=#><img src="images/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:resources">RESOURCES</wicket:trn></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:calendar">calendar</wicket:trn></a><a href=#><img src="images/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:dashboards">dashboards</wicket:trn></a><a href=#><img src="images/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:messages">messages</wicket:trn></a><a href=#><img src="images/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=#><wicket:trn key="trn:tools">tools</wicket:trn></a><a href=#><img src="images/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><button wicket:id="changeTrnMode" class="buttonx">Translator Mode</button>
-<button wicket:id="changeFmMode" class="buttonx">FM Mode</button>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href="/showDesktop.do">
+				<wicket:trn key="trn:myDesktop">MY DESKTOP</wicket:trn>
+			</a>
+			<img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn_sel.gif" class="menu_arr" />
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href="/viewTeamReports.do?tabs=false">
+				<wicket:trn key="trn:reports">REPORTS</wicket:trn>
+			</a>
+			<a href=#><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a>
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href="/contentrepository/documentManager.do">
+				<wicket:trn key="trn:resources">RESOURCES</wicket:trn>
+			</a>
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href="/calendar/showCalendarView.do?filterInUse=false">
+				<wicket:trn key="trn:calendar">calendar</wicket:trn>
+			</a>
+			<a href=#><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a>
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href=#>
+				<wicket:trn key="trn:dashboards">dashboards</wicket:trn>
+			</a>
+			<a href=#><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a>
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href="/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">
+				<wicket:trn key="trn:messages">messages</wicket:trn>
+			</a>
+			<a href=#><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a>
+		</div>
+	</div>
+	<div class="menu_item">
+		<div class="menu_item_cont">
+			<a href=#>
+				<wicket:trn key="trn:tools">tools</wicket:trn>
+			</a>
+			<a href=#><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a>
+		</div>
+	</div>
+	<button wicket:id="changeTrnMode" class="buttonx">Translator Mode</button>
+	<button wicket:id="changeFmMode" class="buttonx">FM Mode</button>
 </div>
 </div>
 <!-- MAIN MENU END -->
@@ -51,7 +106,7 @@
 <!-- MAIN CONTENT PART END -->
 
 <!-- FOOTER START -->
-<div class="footer"><center><img src="images/logo_footer.gif" /> AMP 1.13.42 build 08.Feb.2010 - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</center></div>
+<div class="footer"><center><img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP 1.13.42 build 08.Feb.2010 - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</center></div>
 <!-- FOOTER END  -->
 
 </body>

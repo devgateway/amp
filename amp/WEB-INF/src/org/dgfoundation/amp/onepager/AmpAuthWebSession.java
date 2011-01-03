@@ -1,4 +1,10 @@
+/**
+ * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
+ *
+*/
 package org.dgfoundation.amp.onepager;
+
+import javax.servlet.http.HttpSession;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
@@ -13,18 +19,43 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.digijava.module.aim.helper.TeamMember;
 
+/**
+ * @author aartimon@dginternational.org 
+ * @since Jan 3, 2011
+ */
 public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private static Logger logger = Logger.getLogger(AmpAuthWebSession.class);
 	private static Request request;
 
 	private boolean translatorMode;
 	private boolean fmMode;
+	private TeamMember currentMember;
+	private HttpSession httpSession;
+	
 
+	public TeamMember getCurrentMember() {
+		return currentMember;
+	}
+	public void setCurrentMember(TeamMember currentMember) {
+		this.currentMember = currentMember;
+	}
 	public AmpAuthWebSession(final Request request) {
 		super(request);
 		fmMode = false;
 		translatorMode = false;
+		
+		ServletWebRequest wRequest = (ServletWebRequest) request;
+		httpSession = wRequest.getHttpServletRequest().getSession();
+		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+	}
+	public HttpSession getHttpSession() {
+		return httpSession;
+	}
+	public void setHttpSession(HttpSession httpSession) {
+		this.httpSession = httpSession;
 	}
 	/*
 	public AmpAuthWebSession(final AuthenticatedWebApplication application, final Request request) {

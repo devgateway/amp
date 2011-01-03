@@ -47,11 +47,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 @Override
 	 public void init() {
 		 super.init();
-		 
-		 getSecuritySettings().setAuthorizationStrategy(new MetaDataRoleAuthorizationStrategy(this));
-		 MetaDataRoleAuthorizationStrategy.authorize(OnePager.class, "ROLE_AUTHENTICATED");
-		 
-		 
+		 		 
 		 /**
 		  * 
 		  * Should be replaceable by annotations...
@@ -60,8 +56,9 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 
 		 // List every(!) page and component here for which access is forbidden unless
 		 // the current user has the correct role.
-		 MetaDataRoleAuthorizationStrategy.authorize(ManagerPage.class, SecurityConstants.ROLE_MANAGER);
 		 */
+		 getSecuritySettings().setAuthorizationStrategy(new MetaDataRoleAuthorizationStrategy(this));
+		 MetaDataRoleAuthorizationStrategy.authorize(OnePager.class, "ROLE_AUTHENTICATED");
 		 
 		 getPageSettings().addComponentResolver(new AmpComponentResolver());
 		 mountBookmarkablePage("onepager", OnePager.class);

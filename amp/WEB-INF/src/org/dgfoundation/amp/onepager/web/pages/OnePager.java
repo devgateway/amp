@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.web.pages;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.PageParameters;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
@@ -26,11 +27,10 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsForm
 public class OnePager extends OnePagerWrapper {
 	private static Logger logger = Logger.getLogger(OnePager.class);
 
-	public OnePager() {
-		super();
+	public OnePager(PageParameters parameters) {
+		super(parameters);
 
 		try {
-
 			AmpIdentificationFormSectionFeature identificationFeature = new AmpIdentificationFormSectionFeature(
 					"identification", "Identification", am);
 			activityForm.add(identificationFeature);

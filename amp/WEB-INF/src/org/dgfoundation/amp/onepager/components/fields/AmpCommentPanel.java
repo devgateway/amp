@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
@@ -35,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -230,7 +232,10 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				c.setAmpActivityId(activityModel.getObject());
 				c.setAmpFieldId(field);
 				c.setCommentDate(new Date());
-				AmpTeamMember user = SessionUtil.getCurrentUser();
+				AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+				
+				Long memberId = webSession.getCurrentMember().getMemberId();
+				AmpTeamMember user = TeamMemberUtil.getAmpTeamMember(memberId);
 				c.setMemberId(user);
 				c.setMemberName(user.getUser().getName());
 				c.setComment(trnAddCommentModel.getObject().toString());

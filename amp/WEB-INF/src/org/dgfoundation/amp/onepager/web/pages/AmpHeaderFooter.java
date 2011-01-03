@@ -7,6 +7,9 @@ package org.dgfoundation.amp.onepager.web.pages;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -15,7 +18,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.AmpWebSession;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -52,7 +57,7 @@ public class AmpHeaderFooter extends WebPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget arg0) {
-				AmpWebSession session = (AmpWebSession) getSession();
+				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 				if (session.isTranslatorMode())
 					session.setTranslatorMode(false);
 				else
@@ -72,5 +77,16 @@ public class AmpHeaderFooter extends WebPage {
 				setResponsePage(OnePager.class);
 			}
 		});
+	}
+	
+	public HttpServletRequest getServletRequest(){
+		ServletWebRequest servletWebRequest = (ServletWebRequest) getRequest();
+		HttpServletRequest request = servletWebRequest.getHttpServletRequest();
+		return request;
+	}
+	
+	public HttpSession getHttpSession(){
+		HttpSession session = getServletRequest().getSession();
+		return session;
 	}
 }

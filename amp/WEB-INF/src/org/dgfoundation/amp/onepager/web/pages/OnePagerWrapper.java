@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.web.pages;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
@@ -27,11 +28,13 @@ public class OnePagerWrapper extends AmpHeaderFooter {
 	protected IModel<AmpActivity> am;
 //	protected AmpActivityModel activityModelForSave;
 	
-	public OnePagerWrapper() {
+	public OnePagerWrapper(PageParameters parameters) {
 		super();
 		
+		String activityId = (String) parameters.get("activityId");
 		
-		am= new AmpActivityModel(578L);
+		
+		am = new AmpActivityModel(Long.valueOf(activityId));
 		
 		activityForm=new Form<AmpActivity>("activityForm") ;
 		activityForm.setOutputMarkupId(true);
@@ -53,7 +56,6 @@ public class OnePagerWrapper extends AmpHeaderFooter {
 				info("Activity saved successfully");
 				target.addComponent(feedbackPanel);
 			}
-			
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
 		activityForm.add(saveAndSubmit);

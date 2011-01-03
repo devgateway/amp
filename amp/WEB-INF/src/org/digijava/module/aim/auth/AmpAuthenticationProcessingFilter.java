@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
+import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
 import org.acegisecurity.userdetails.UserDetails;
 import org.digijava.kernel.exception.DgException;
@@ -41,7 +42,8 @@ public class AmpAuthenticationProcessingFilter
         } catch(DgException ex) {
             throw new RuntimeException(ex);
         }
-
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        
         SiteDomain siteDomain = RequestUtils.retreiveSiteDomain(request);
         Site site = siteDomain.getSite();
         Subject subject = UserUtils.getUserSubject(currentUser);

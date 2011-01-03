@@ -3,6 +3,7 @@ package org.dgfoundation.amp.onepager.util;
 import java.util.HashMap;
 
 import org.apache.wicket.Session;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.AmpWebSession;
 import org.dgfoundation.amp.onepager.components.AmpFMConfigurable;
 
@@ -43,7 +44,7 @@ public final class FMUtil {
 	
 
 	public static boolean isFmMode(Session session) {
-		AmpWebSession ampSession=(AmpWebSession) session;
+		AmpAuthWebSession ampSession=(AmpAuthWebSession) session;
 		return ampSession.isFmMode();
 	}
 	

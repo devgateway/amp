@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.translation;
 
 import org.apache.wicket.Session;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.AmpWebSession;
 
 /**
@@ -14,7 +15,7 @@ import org.dgfoundation.amp.onepager.AmpWebSession;
 public final class TranslatorUtil {
 
 	public static boolean isTranslatorMode(Session session) {
-		AmpWebSession ampSession=(AmpWebSession) session;
+		AmpAuthWebSession ampSession=(AmpAuthWebSession) session;
 		return ampSession.isTranslatorMode();
 	}
 	

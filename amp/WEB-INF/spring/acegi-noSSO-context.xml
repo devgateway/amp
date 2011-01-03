@@ -5,6 +5,13 @@
 - Acegi managed beans.
 -->
 <beans>
+
+  <bean id="wicketApp" class="org.dgfoundation.amp.onepager.OnePagerApp">
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+  </bean>
+
   <bean id="digiUserDetailsService" class="org.digijava.kernel.security.auth.DigiUserDetailsService">
     <property name="populateGroupAuthorities">
 	<value>false</value>

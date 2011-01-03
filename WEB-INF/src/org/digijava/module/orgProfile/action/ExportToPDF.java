@@ -888,14 +888,14 @@ public class ExportToPDF extends Action {
                                             ind5bii.setIndicatorCode("5bii");
                                             ind5bii.setAmpIndicatorId(piIndicator.getAmpIndicatorId());
 
-                                            PdfPCell indicator5bCode = new PdfPCell(new Paragraph("5aii", OrgProfileUtil.PLAINFONT));
+                                            PdfPCell indicator5bCode = new PdfPCell(new Paragraph("5bii", OrgProfileUtil.PLAINFONT));
                                             PdfPCell indicator5bName = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system", langCode, siteId), OrgProfileUtil.PLAINFONT));
                                             ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
-                                            PdfPCell indicator5bAllBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix));
-                                            PdfPCell indicator5bAllCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix));
-                                            PdfPCell indicator5bAllTargetValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix));
-                                            PdfPCell indicator5bOrgBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getOrgBaseLineValue() + sufix));
-                                            PdfPCell indicator5bOrgCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getOrgValue() + sufix));
+                                            PdfPCell indicator5bAllBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix,OrgProfileUtil.PLAINFONT));
+                                            PdfPCell indicator5bAllCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix,OrgProfileUtil.PLAINFONT));
+                                            PdfPCell indicator5bAllTargetValue = new PdfPCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix,OrgProfileUtil.PLAINFONT));
+                                            PdfPCell indicator5bOrgBaseline = new PdfPCell(new Paragraph(piInd5bHelper.getOrgBaseLineValue() + sufix,OrgProfileUtil.PLAINFONT));
+                                            PdfPCell indicator5bOrgCurrentValue = new PdfPCell(new Paragraph(piInd5bHelper.getOrgValue() + sufix,OrgProfileUtil.PLAINFONT));
 
                                             count++;
                                             parisDecTbl.addCell(indicator5bCode);

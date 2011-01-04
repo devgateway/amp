@@ -52,16 +52,6 @@
 			</table>
 		</div>
 
-<%--
-		<table>
-			<c:forEach var="recipient" items="${fn:split(messageForm.receiver,';')}">
-				<tr><td>
-				${recipient}---------
-				</td></tr>
-			</c:forEach>
-		</table>
---%>
-
 
 <c:if test="${not empty messageForm.objectURL}">
 

@@ -815,12 +815,18 @@ span.extContactDropdownEmail {
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width=200 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b></td>
+	    <td width=200 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b>
+	    	<br/>
+	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
+	    </td>
 	    <td valign="top"><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/>
 	  </tr>
 	</field:display>
   <tr>
-    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <b class="mand">*</b></td>
+    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <b class="mand">*</b>
+    	<br/>
+	    <span style="font-size:11px;" id="descCharCounter"></span>
+    </td>
     <td valign="top">
     	<html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/>
     </td>
@@ -946,69 +952,41 @@ span.extContactDropdownEmail {
 
 
 <script type="text/javascript">
-	/*
-    	var myArray = [
-		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
-			 "<bean:write name="relAct" filter="true"/>",
-		</c:forEach>
-	];
-
-
-	YAHOO.example.ACJSArray = new function() {
-		// Instantiate JS Array DataSource
-	    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
-	    // Instantiate AutoComplete
-	    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS2);
-	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-	    this.oAutoComp2.useShadow = true;
-	    this.oAutoComp2.forceSelection = true;
-            this.oAutoComp2.maxResultsDisplayed = myArray.length;
-	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-	        var sMarkup = oResultItem[0];
-	        return (sMarkup);
-	    };
-	    };
-	    
-	    
-
-	    var contactsArray= [
-	    	<c:forEach var="cont" items="${messageForm.contacts}">
-	        	"<bean:write name="cont" filter="true"/>",
-	        </c:forEach>
-	   ];
-
-	   YAHOO.example.ACJSArray = new function() {
-		   	for(var i=0;i<contactsArray.length;i++){
-		    	if(contactsArray[i]!= undefined ){
-		        	contactsArray[i]=contactsArray[i].replace("&lt;","<");
-		            contactsArray[i]=contactsArray[i].replace("&gt;",">");	
-		        }
-		    }
-	        // Instantiate JS Array DataSource
-	        this.oACDS2 = new YAHOO.widget.DS_JSArray(contactsArray);
-	        // Instantiate AutoComplete
-	        this.oAutoComp2 = new YAHOO.widget.AutoComplete('contactInput','contactsContainer', this.oACDS2);
-	        this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-	        this.oAutoComp2.useShadow = true;
-	        //this.oAutoComp2.forceSelection = true;
-	        this.oAutoComp2.maxResultsDisplayed = contactsArray.length;
-	        this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-		        var sMarkup = oResultItem[0];
-		        sMarkup=sMarkup.replace("<","&lt;");
-		        sMarkup=sMarkup.replace(">","&gt;");
-		        return (sMarkup);
-		    };
-	    };*/
-     
-        // attach character counters
-        $("#titleMax").charCounter(50,{
-	format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
-	pulse: false});
-
-    $("#descMax").charCounter(500,{
-		format: " (%1"+ " <digi:trn>characters remaining</digi:trn>)",
-		pulse: false
+	
+	//Char counters	
+	var titleLength = 50;
+	var titleCounter = $("#titleCharCounter");
+	initTitleCharCounter();
+	
+	function initTitleCharCounter() {
+		var titleCounterTxt = ["(", titleLength - $("#titleMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		titleCounter.html(titleCounterTxt.join(""));
+	}
+	$("#titleMax").bind("keyup", function (event) {
+		if (this.value.length > titleLength) {
+			this.value = this.value.substring(0, titleLength);
+		}
+		var titleCounterTxt = ["(", titleLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		titleCounter.html(titleCounterTxt.join(""));
 	});
+	
+	var descLength = 500;
+	var descCounter = $("#descCharCounter");
+	initDescCharCounter();
+	
+	function initDescCharCounter() {
+		var descCounterTxt = ["(", descLength - $("#descMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		descCounter.html(descCounterTxt.join(""));
+	}
+	$("#descMax").bind("keyup", function (event) {
+		if (this.value.length > descLength) {
+			this.value = this.value.substring(0, descLength);
+		}
+		var descCounterTxt = ["(", descLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+		descCounter.html(descCounterTxt.join(""));
+	});
+	//End of char counters	
+	
 
 	$(".group_checkbox").bind("change", function (event) { 
 		var selGrpCtrl = $(this);
@@ -1020,50 +998,6 @@ span.extContactDropdownEmail {
 			})
 		});
 
-
-	/*	
-	//Related activity autocomplite
-	$("input#statesinput").autocomplete({source:populateRelActivitySuggections, delay:500});
-	  
-	function populateRelActivitySuggections (req, add) {
-		var url = "/message/messageActions.do?actionType=searchRelatedAcrivities&srchStr=" + req.term;
-		
-		$.get(url, null, function(data) {  
-			var suggestions = [];  
-			var relActs = data.getElementsByTagName("activity");
-		
-		
-		
-			if (relActs != null && relActs.length > 0) {
-				var actIdx;
-				for (actIdx = 0; actIdx < relActs.length; actIdx ++) {
-					suggestions.push(relActs[actIdx].childNodes[0].nodeValue);  
-				}
-			}
-			add(suggestions);
-		});
-	}
-	
-	
-	//External contact autocomplite
-	$("input#contactInput").autocomplete({source:populateExtContactSuggections, delay:500});
-	  
-	function populateExtContactSuggections (req, add) {
-		var url = "/message/messageActions.do?actionType=searchExternalContacts&srchStr=" + req.term;
-		
-		$.get(url, null, function(data) {  
-			var suggestions = [];  
-			var contacts = data.getElementsByTagName("contact");
-			if (contacts != null && contacts.length > 0) {
-				var contIdx;
-				for (contIdx = 0; contIdx < contacts.length; contIdx ++) {
-					suggestions.push(contacts[contIdx].childNodes[0].nodeValue);  
-				}
-			}
-			add(suggestions);
-		});
-	}
-	*/
 
 
 			

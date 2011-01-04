@@ -137,6 +137,12 @@
 			<put-item name="body" module="message" page="forwardMessage"/>
 		</layout>
 
+		<layout name="viewSelectedMessage" file="viewSelectedMessageLayout.jsp">
+			<put-item name="body" module="message" page="viewSelectedMessage"/>
+		</layout>
+
+			
+
 		<layout name="headerMiddleLayout2" file="headerMiddle2.jsp">
 		<put name="version">1.14</put>
  	 	<put name="build_version">ALPHA</put>
@@ -566,9 +572,11 @@
 				<page>calendarOrgPopupLayout</page>
 				<page>recurringEventPopupLayout</page>
             </module>
+		<!--
             <module name="message">
             	<page>viewSelectedMessage</page>
             </module>
+		-->
             <module name="widget">
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>

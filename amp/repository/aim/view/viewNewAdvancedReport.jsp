@@ -12,8 +12,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
   <!-- Dependencies --> 
 
-        <!-- Stylesheet of AMP -->
-        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+       
+ <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" />
   
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
@@ -24,32 +24,23 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
+  		  
+		
+	<!-- Individual YUI JS files --> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
+		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 
-        <!-- Stylesheet of AMP -->
-        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 
 
-
-<style>
-.link{
-	text-decoration: none;
-	font-size: 8pt; font-family: Tahoma;
-}
-
-.reportname{
-	background:#bbe0e3; 
-	width: 100px;
-	margin-top: 20px;
-	margin-left: 5px;
-}
-</style>
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
 </c:set>
@@ -62,15 +53,17 @@ function toggleSettings(){
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+		displaySettingsButton.innerHTML = "${showCurrSettings}";
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+		displaySettingsButton.innerHTML = "${hideCurrSettings}";
 	}
 }
-	
+
+
+
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
@@ -346,33 +339,39 @@ session.setAttribute("progressValue", counter);
 				</feature:display>
 			</module:display>
 		</digi:secure>
+		<!-- DESKTOP TAB SETTINGS BOX-->
 		<digi:secure authenticated="true">
-			<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
-
-            <span style="cursor:pointer;float:left;">
-            <logic:notEmpty name="reportMeta" property="hierarchies">
-                <a class="settingsLink" onClick="showSorter();">
-                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-                </a> | 
-            </logic:notEmpty> 
-                <a class="settingsLink" onClick="showFilter(); " >
-                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
-                </a>
-                <%
-                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
-                if (arf.isPublicView()==false){%>
-                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
-	                |
-	          	 	<a class="settingsLink" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
-	                	${saveFilters}
-	                </a>
-           		</feature:display>
-           		<%}%>
-           	  <logic:notEqual name="viewFormat" value="foldable">
-           	  |
-           	  	<a  id="frezzlink" class="settingsLinkDisable">
-               		<script language="	">
+			<div class="tab_opt_box">
+				<div class="show_hide_setting">
+	        		<b>
+	        			<a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a>
+	        		</b>
+	        	</div>
+	        	<div class="tab_opt">
+		        	<div class="tab_opt_cont">
+		        		<logic:notEmpty name="reportMeta" property="hierarchies">
+	                		<a class="l_sm" href="#mySorter">
+	                			<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+	                		</a> 
+	                		&nbsp;|&nbsp; 
+	            		</logic:notEmpty> 
+	                	<a class="l_sm" href="#myFilter" style="cursor: pointer;text-decoration: underline;" >
+	                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+	                	</a>
+		                <%
+		                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+		                if (arf.isPublicView()==false){%>
+		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
+			                &nbsp;|&nbsp;
+			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
+			                	${saveFilters}
+			                </a>
+		           		</feature:display>
+		           		<%}%>
+		           	  <logic:notEqual name="viewFormat" value="foldable">
+		           	 	 &nbsp;|&nbsp;
+		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" class="l_sm">
+		               		<script language="	">
 						document.write((scrolling)?msg2:msg1);
 					</script>
                 </a>
@@ -385,7 +384,7 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
@@ -418,108 +417,102 @@ session.setAttribute("progressValue", counter);
 	</tr>
 	<tr>
 		<td>
-		<table width="100%">
-			<tr>
+			<div style="font-family: Arial,sans-serif;font-size: 11px">
+				<logic:notEmpty name="reportMeta" property="filterDataSet">
+				<span style="cursor:pointer;cursor:pointer;font-style: italic;">
+		        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
+				</span>
+				</logic:notEmpty>
+			</div>
+			<div class="show_legend">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+						<%
+				            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+				            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
+				            <digi:trn key="rep:pop:AllAmount">
+								Amounts are in thousands (000)
+							</digi:trn>&nbsp;
+		           		<%}%>
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+							<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+								<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+								<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
+							</logic:present>
+							&nbsp;|&nbsp;
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+							<logic:notEqual name="viewFormat" value="print">
+								<logic:present name="isUserLogged" scope="session">
+	          						<jsp:include page="legendPopup.jsp"/>
+	         					</logic:present>
+	          				</logic:notEqual>
+	          			</td>
+	          		</tr>
+	          	</table>
+			</div>	
 			
-			<td align="right">
-			<logic:notEmpty name="reportMeta" property="filterDataSet">
-			<span style="cursor:pointer;float:left;cursor:pointer;font-style: italic;">
-	        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
-			</span>
-			</logic:notEmpty>
-			<span style="color: red;font-family: Arial;padding-right: 5px">
-				<%
-	            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==true){%>
-	            <digi:trn key="rep:pop:AllAmount">
-					Amounts are in thousands (000)
-				</digi:trn>
-	           	<%}%>
-				
-				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-				</logic:present>
-			</span>
-			</td>
-			</tr>
-		</table>
+			<div class="paging">
+	   			<c:if test="${report.visibleRows/recordsPerPage>1}">
+				<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
+				<c:if test="${recordsPerPage ne max_value}">
+	           	<logic:notEqual name="viewFormat" value="print">
+		               	<logic:equal name="viewFormat" value="foldable">
+						<c:if test="${report.startRow != 0}">
+		                  		<!-- Go to FIRST PAGE -->
+		                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
+		                  				&lt;&lt;
+		                  		</a>
+		                  		&nbsp;|&nbsp;
+		                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
+		  		            		<digi:trn key="aim:previous">Previous</digi:trn>
+		                  		</a>
+		                  		&nbsp;|&nbsp;
+		                  	</c:if>
+					</logic:equal>
+					<c:set var="lastPage">0</c:set>
+		            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
+		                  <logic:equal name="viewFormat" value="html">
+		                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+		                  </logic:equal>
+		                  <logic:equal name="viewFormat" value="foldable">
+		                      <a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
+		                  </logic:equal>
+		                  <c:choose>							
+		                      <c:when  test="${i eq report.startRow}">
+		                          <b class="paging_sel">
+		                          	<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
+		                          </b>
+		                      </c:when>
+		                      <c:otherwise>
+		                          <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
+		                      </c:otherwise>								
+		                  </c:choose>
+		                  </a>
+		                  &nbsp;|&nbsp;
+		              	<c:set var="lastPage">
+		                  	${lastPage+1}
+		                  </c:set>
+					</c:forEach>
+					<logic:equal name="viewFormat" value="foldable">
+						<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
+							<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
+		                    	<digi:trn key="aim:next">Next</digi:trn>
+		                    </a>
+		                    &nbsp;|&nbsp;
+		                   	<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
+		                      &gt;&gt;
+							</a>
+						</c:if>
+					</logic:equal>
+			</logic:notEqual>
+			</c:if>
+	        </c:if>
+		</div>
 		</td>
 	</tr>
-		<tr>
-		<td style="padding-left: 5px;padding-right: 5px" align="left">
-		<table width="100%">
-			<tr>
-			<td>
-    <c:if test="${report.visibleRows/recordsPerPage>1}">
-<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
-<c:if test="${recordsPerPage ne max_value}">
-            <logic:notEqual name="viewFormat" value="print">
-                <logic:equal name="viewFormat" value="foldable">
-					<c:if test="${report.startRow != 0}">
-                    	<!-- Go to FIRST PAGE -->
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
-                    	&lt;&lt;
-                    	</a>
-                    	|
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
-    		            	<digi:trn key="aim:previous">Previous</digi:trn>
-                    	</a>
-                    	|
-                    </c:if>
-                </logic:equal>
-				<c:set var="lastPage">
-                	0
-                </c:set>
-                <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
-                    <logic:equal name="viewFormat" value="html">
-                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-                    </logic:equal>
-                    <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
-                    </logic:equal>
-                    <c:choose>							
-                        <c:when  test="${i eq report.startRow}">
-                            <font color="#FF0000"><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
-                        </c:when>
-                        <c:otherwise>
-                            <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
-                        </c:otherwise>								
-                    </c:choose>
-                    </a>
-                    |
-                	<c:set var="lastPage">
-                    	${lastPage+1}
-                    </c:set>
-				</c:forEach>
-
-
-                <logic:equal name="viewFormat" value="foldable">
-					<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
-                            <digi:trn key="aim:next">Next</digi:trn>
-                        </a>
-                        |
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
-                        &gt;&gt;
-                        </a>
-                    </c:if>
-                </logic:equal>
-				</logic:notEqual>
-</c:if>
-                 </c:if>
-            </td>
-            <logic:notEqual name="viewFormat" value="print">
-             <logic:present name="isUserLogged" scope="session">
-            	<td align="right">
-            		<jsp:include page="legendPopup.jsp"/>
-            	</td>
-             </logic:present>
-            </logic:notEqual>
-            </tr>
-            </table>
-			</td>
-		</tr>
 	</logic:equal>
 	
 	<logic:notEmpty name="reportMeta" property="hierarchies">
@@ -555,27 +548,19 @@ session.setAttribute("progressValue", counter);
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter(\"pageNumber\"))%>" scope="request"/>
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
-			<table id='reportTable'  cellSpacing="0" width="900" style="overflow:hidden">
+			<table id='reportTable' cellSpacing="0" width="900" style="overflow:hidden">
 				<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
-	<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
-				
+		<table id='reportTable' class="inside" width=100% cellpadding="0" cellspacing="0">
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
-			
-	</tr>
-		
+			</tr>
 			</tbody>
-	</table>
-
-		
-
-
-
-	</logic:notEqual>
+		</table>
+		</logic:notEqual>
 		</td>
 		</tr>
 		</table>
@@ -600,90 +585,68 @@ session.setAttribute("progressValue", counter);
 		</tr>
 		</logic:equal>
 		<tr>
-			 <td style="padding-left: 5px;padding-right: 5px">
-			 <table width="100%">
-			 <tr>
-			 <td>
- <c:if test="${report.visibleRows/recordsPerPage>1}">
-<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
-<c:if test="${recordsPerPage ne max_value}">
-            <logic:notEqual name="viewFormat" value="print">
-                <logic:equal name="viewFormat" value="foldable">
-					<c:if test="${report.startRow != 0}">
-                    	<!-- Go to FIRST PAGE -->
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
-                    	&lt;&lt;
-                    	</a>
-                    	|
-                    	<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
-    		            	<digi:trn key="aim:previous">Previous</digi:trn>
-                    	</a>
-                    	|
-                    </c:if>
-                </logic:equal>
-				<c:set var="lastPage">
-                	0
-                </c:set>
-                <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
-                    <logic:equal name="viewFormat" value="html">
-                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-                    </logic:equal>
-                    <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
-                    </logic:equal>
-                    <c:choose>							
-                        <c:when  test="${i eq report.startRow}">
-                            <font color="#FF0000"><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
-                        </c:when>
-                        <c:otherwise>
-                            <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
-                        </c:otherwise>								
-                    </c:choose>
-                    </a>
-                    |
-                	<c:set var="lastPage">
-                    	${lastPage+1}
-                    </c:set>
-				</c:forEach>
-
-                <logic:equal name="viewFormat" value="foldable">
-					<c:if  test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
-                            <digi:trn key="aim:next">Next</digi:trn>
-                        </a>
-                        |
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
-                        &gt;&gt;
-                        </a>
-                    </c:if>
-                </logic:equal>
+			<td style="padding-left: 5px;padding-right: 5px">
+			<!-- PAGINATION -->	 
+				<div class="paging">
+		   			<c:if test="${report.visibleRows/recordsPerPage>1}">
+					<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
+					<c:if test="${recordsPerPage ne max_value}">
+		           	<logic:notEqual name="viewFormat" value="print">
+			               	<logic:equal name="viewFormat" value="foldable">
+							<c:if test="${report.startRow != 0}">
+			                  		<!-- Go to FIRST PAGE -->
+			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
+			                  				&lt;&lt;
+			                  		</a>
+			                  		&nbsp;|&nbsp;
+			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
+			  		            		<digi:trn key="aim:previous">Previous</digi:trn>
+			                  		</a>
+			                  		&nbsp;|&nbsp;
+			                  	</c:if>
+						</logic:equal>
+						<c:set var="lastPage">0</c:set>
+			            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
+			                  <logic:equal name="viewFormat" value="html">
+			                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+			                  </logic:equal>
+			                  <logic:equal name="viewFormat" value="foldable">
+			                      <a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
+			                  </logic:equal>
+			                  <c:choose>							
+			                      <c:when  test="${i eq report.startRow}">
+			                          <b class="paging_sel">
+			                          	<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
+			                          </b>
+			                      </c:when>
+			                      <c:otherwise>
+			                          <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
+			                      </c:otherwise>								
+			                  </c:choose>
+			                  </a>
+			                  &nbsp;|&nbsp;
+			              	<c:set var="lastPage">
+			                  	${lastPage+1}
+			                  </c:set>
+						</c:forEach>
+						<logic:equal name="viewFormat" value="foldable">
+							<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
+								<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
+			                    	<digi:trn key="aim:next">Next</digi:trn>
+			                    </a>
+			                    &nbsp;|&nbsp;
+			                   	<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
+			                      &gt;&gt;
+								</a>
+							</c:if>
+						</logic:equal>
 				</logic:notEqual>
-</c:if>
-                </c:if>
-            </td>
-            <logic:notEqual name="viewFormat" value="print">
-             <logic:present name="isUserLogged" scope="session">
-     		<td align="right">
-            	<jsp:include page="legendPopup.jsp" />
-            </td>
-             </logic:present>
-            </logic:notEqual>
-            </tr>
-            <tr>
-            	<td align="left">
-            	<%
-                	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
-                %>
-				<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
-				<c:if test="${accessTypeLocal == 'Management'}">
-                <digi:trn key="aim:noNewActivitiesManagement">Number of activities that do not show up in the list (these include draft and new activities that are pending approvals)</digi:trn>:
-                &nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
-                </c:if>&nbsp;
-			</td>
-            </tr>
-            </table>
-			</td>
-			</tr>
+				</c:if>
+		        </c:if>
+			</div>
+           <!-- END PAGINATION -->
+		</td>
+	</tr>
 		</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>

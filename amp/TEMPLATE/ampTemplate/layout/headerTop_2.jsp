@@ -25,7 +25,6 @@
 	<!--[if IE 7]><link href='css/amp_ie_hacks_7.css' rel='stylesheet' type='text/css'><![endif]-->
 	<!--[if IE 8]><link href='css/amp_ie_hacks_8.css' rel='stylesheet' type='text/css'><![endif]-->
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
-	<digi:ref href="/TEMPLATE/ampTemplate/css_2/tabs.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
@@ -40,6 +39,7 @@
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
 
 
 <script type="text/javascript">
@@ -106,6 +106,7 @@
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
 		<logic:notEmpty name="currentMember" scope="session">
+		<!-- 
 			 <feature:display name="Change Workspace" module="My Desktop">
              	<li class="yuiampmenuitem" style="_width:230px;">
                 	<a class="yuiampmenuitemlabel" href="#">
@@ -128,6 +129,7 @@
 					</div>
 				</li>
 			</feature:display>
+			 -->
 		</logic:notEmpty>
 		<div >
 			<table class="top_nav">
@@ -139,6 +141,7 @@
 						<img src="img_2/top_sep.gif" class="top_sep">
 					</td>
 					<td>
+					<!-- 
 						<module:display name="HELP">
 							<ul class="wks_menu" id="wks_menu" style="text-transform: uppercase;">
 								<li style="margin-top:15px;padding: 0px;height: 0px;margin-right:0px">
@@ -189,6 +192,7 @@
 								</li>
 							</ul>
 						</module:display>			
+						 -->
 					</td>
 					
 					<td style="text-transform: uppercase;">

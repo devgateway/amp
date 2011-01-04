@@ -29,8 +29,7 @@
         <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
 
         <!-- Stylesheet of AMP -->
-        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-		<jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
+        <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
  		<div id="customAbout" style="display: none" class="content">
  			<jsp:include page="/repository/aim/view/helpAbout.jsp" />
  		</div>

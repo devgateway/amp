@@ -8,7 +8,7 @@
 
 <HTML>
 	<digi:base />
-	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+	
 	<digi:context name="digiContext" property="context"/>
 
 	<HEAD>

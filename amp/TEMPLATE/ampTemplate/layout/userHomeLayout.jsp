@@ -9,25 +9,11 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-
-
-<HTML>
-
+<html>
 	<digi:base />
-
-	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
-	
-    
-
 	<digi:context name="digiContext" property="context"/>
-
-
-
-	<HEAD>
-
-		<TITLE>
+	<head>
+		<title>
 			<%
 			String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
 			String key=(title.replaceAll(" ",""));
@@ -37,158 +23,86 @@
 				<digi:trn key="${key}">
 					<%=title%>
 				</digi:trn>
-		</TITLE>
+		</title>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-
 		<META HTTP-EQUIV="Expires" CONTENT="0">
-
-		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
-
-		<script language="javascript">
-
-		function quitRnot1(message)
-		{
-		}
-
-		</script>
-            
+		<META HTTP-EQUIV="Cache-Control" CONTENT="private"
+		
         <!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="js_2/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="js_2/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="js_2/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="js_2/yui/connection-min.js"/>"></script>
         
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
-
-        <!-- Core + Skin CSS -->
-        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
-
-        <!-- Stylesheet of AMP -->
-        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-
-
-	</HEAD>
-
-
-
-	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
-
-			<TBODY>
-
-			<TR>
-
-				<TD width="100%" vAlign="center" align="left">
-
-					<digi:insert attribute="headerTop" />
-
-				</TD>
-
-			</TR>
-
-			<TR>
-				<TD width="100%" align="center" bgcolor="#FFFFFF" style="padding-top:15px;">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%">
-						<TBODY>
-						  	<TR>
-                                <TD>
-                                    <digi:insert attribute="headerMiddle" />
-									<!-- digi:insert attribute="dropdownLangSwitch" /-->
-                                </TD>
-                                <TD align="right" valign="middle" nowrap="nowrap">
-                                    <digi:insert attribute="loginWidget" />
-                                </TD>
-							</TR>
-						</TBODY>
-					</TABLE>
-				</TD>
-			</TR>
-			<TR>
-
-				<TD width="100%" vAlign="top" align="left">
-
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="left" border=0>
-
-						<TR>
-							<TD align=center vAlign=top>
-								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
-
-									<TR>
-
-										<TD vAlign="top" align="left" width="85%">
-											<logic:notPresent name="currentMember">
-											<br/>
-											</logic:notPresent>
-
-											<digi:insert attribute="body" />
-<br/><br/><br/><br/>
-										</TD>
-
-										<TD vAlign="top" align="left" width="15%">
-											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
-												<logic:present name="currentMember">
-
-												<TR><TD vAlign="top" align="left">
-
-													<digi:insert attribute="myReports" />
-
-												</TD></TR>
-											
-
-												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
-												
-													<TR><TD vAlign="top" align="left">
-														<digi:insert attribute="myMessages"/>
-													</TD></TR>
-												<TR>
-														<TD vAlign="top" align="left">
-															<digi:insert attribute="myLinks" />
-														</TD>
-		
-												</logic:present>
-												</TR>
-										</TABLE>
-
-										</TD>
-
-									</TR>
-
-								</TABLE>
-                            </TD>
-
-						</TR>
-
-					</TABLE>
-
-				</TD>
-
-			</TR>
-
-
-			</TBODY>
-
-		</TABLE>
+        <script type="text/javascript" src="<digi:file src="js_2/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="js_2/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="js_2/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="js_2/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="js_2/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="js_2/yui/tabview-min.js"/>"></script>
         
-		<table cellpadding="0" cellspacing="0" width="100%" style="clear:both;position:fixed;bottom:0px;top:auto;">
-			<TR>
-
-				<TD width="100%" bgcolor="#27415f">
-					 <digi:insert attribute="footer" />
-				</TD>
-
-			</TR>
-		</TABLE>
-
-	</BODY>
-
-</HTML>
-
+        <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
+        
+	</head>
+     	
+	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+	<jsp:include page="headerTop_2.jsp"/>
+	<div class="main_menu">
+		<digi:insert attribute="headerMiddle"/>
+	</div>
+	
+	<!-- BREADCRUMP START -->
+	<div class="breadcrump">
+		<div class="centering">
+			<div class="breadcrump_cont">
+				<span class="sec_name">My Desktop</span>
+			</div>
+		</div>
+	</div>
+	<!-- BREADCRUMP END -->
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+		<tbody>
+			<tr>
+				<td width=900px valign=top>
+					<digi:insert attribute="body"/>
+				</td>
+				<td width=20px align=center background="img_2/close_panel_bg.gif" valign=top>
+					<a style="cursor: pointer;" ><img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel"></a>
+				</td>
+				<td valign="top">
+					<div id="rightpanel">
+						<feature:display name="Desktop Search form" module="Tools">
+							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
+						</feature:display>
+						<logic:present name="currentMember">
+							<digi:insert attribute="myLinks" />
+							<digi:insert attribute="myReports"/>
+							<digi:insert attribute="myMessages"/>
+						</logic:present>
+						
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>		
+		<digi:insert attribute="footer" />
+    </body>
+</html>
+<script language=javascript>
+	$("#closepanel").click(function(event){
+    	$("#rightpanel").toggle('slow');
+    	if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
+    		$("#closepanel").attr('src','img_2/open_panel.gif');
+ 	        return false;    
+ 	    }
+		if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
+			$("#closepanel").attr('src','img_2/close_panel.gif');
+ 	        return false;    
+ 	    }
+	});
+	
+	$('#li_desktop').css('background-color','#FF6000');
+	$('#a_desk').css('color','#ffffff');
+	$('#li_desktop img').attr("src","img_2/menu_arr_dwn_sel.gif");
+</script

@@ -7,9 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <html>
 <digi:base />
-<link href="css/global.css" rel="stylesheet" type="text/css">
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
 <head>
 			<%
 				String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");

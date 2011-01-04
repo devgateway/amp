@@ -27,9 +27,9 @@
     var deleteData='<digi:trn key="message:plzDeleteData" jsFriendly="true">Please delete messages or you will not get newer ones</digi:trn>';
     var newmessages=' <digi:trn key="message:newmessages" jsFriendly="true">New Messages</digi:trn>';
     var newalerts=' <digi:trn key="message:newalerts" jsFriendly="true">New Alerts</digi:trn>';
-    var newapprovals=' <digi:trn key="message:newaprovals" jsFriendly="true">New Approvals</digi:trn>;'
-    var newcalevents=' <digi:trn key="message:newcalevents" jsFriendly="true">New Calendar Events</digi:trn>;'
-    var moremessages=' <digi:trn key="message:moremessages" jsFriendly="true">More messages</digi:trn>;'
+    var newapprovals=' <digi:trn key="message:newaprovals" jsFriendly="true">New Approvals</digi:trn>'
+    var newcalevents=' <digi:trn key="message:newcalevents" jsFriendly="true">New Calendar Events</digi:trn>'
+    var moremessages='<digi:trn key="message:moremessages" jsFriendly="true">More messages</digi:trn>'
     var newCount=0;
     var prevCount=0;
     var isInboxFull='false';
@@ -136,66 +136,54 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
       
 
       newCount=msgsAmount+alertsAmount+approvalsAmount+calEventsAmount;
-
+		
+      $('#msgLinks li').each(function(index) {
+    	  var n = jQuery(this)// <- This works
+    	  n.remove();
+  	  });
+      
+      $('#msgLinks a').each(function(index) {
+    	  var n = jQuery(this)// <- This works
+    	  n.remove();
+  	  });
       //creating table
-      var tbl=document.getElementById('msgLinks');
-      if(tbl.childNodes!=null && tbl.childNodes.length>0){
-        while (tbl.childNodes.length>0){
-          tbl.removeChild(tbl.childNodes[0]);
-        }
-      }
-      
-      var body=document.createElement('TBODY');
-      var tr1=document.createElement('TR');
-      var td1=document.createElement('TD');
-      td1.title=clickToViewMsg;
-      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>';
-      <feature:display name="Message tab" module="Messages">
-      	tr1.appendChild(td1);
-      	body.appendChild(tr1);
+      var div=$('#msgLinks');
+    
+        var li= $('<li></li>');
+      li.title=clickToViewMsg;
+      li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>');
+      li.addClass('tri');
+	  <feature:display name="Message tab" module="Messages">
+      	div.append(li);
       </feature:display>
       
-	 
-      var tr1=document.createElement('TR');
-      var td1=document.createElement('TD');
-      td1.title=clickToViewMsg;
-      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>';
+      var li= $('<li></li>');
+      li.title=clickToViewMsg;
+      li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>');
+      li.addClass('tri');
       <feature:display name="Alert tab" module="Messages">
- 		tr1.appendChild(td1);
-     	body.appendChild(tr1);
+      	div.append(li);
       </feature:display>
       
-      //if("${teamType}"!='Management'){
-     var tr1=document.createElement('TR');
-      var td1=document.createElement('TD');
-      td1.title=clickToViewMsg;
-      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>';
+      var li= $('<li></li>');
+      li.title=clickToViewMsg;
+      li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>');
+      li.addClass('tri');
       <feature:display name="Approval Tab" module="Messages">
-      	tr1.appendChild(td1);
-     	 body.appendChild(tr1);
+      	div.append(li);
       </feature:display>
-  	//}
-     
-      var tr1=document.createElement('TR');
-      var td1=document.createElement('TD');
-      td1.title=clickToViewMsg;
-      td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>';
+	 
+      var li= $('<li></li>');
+      li.title=clickToViewMsg;
+      li.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>');
+      li.addClass('tri');
       <feature:display name="Event Tab" module="Messages">
-      	tr1.appendChild(td1);
-      	body.appendChild(tr1);
-     </feature:display>
+      	div.append(li);
+      </feature:display>
       
-      var tr1=document.createElement('TR');
-      var td1=document.createElement('TD');
-      td1.title=moreMsgs;
-      td1.innerHTML='<div  style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'...</a></div>';
-      tr1.appendChild(td1);
-      body.appendChild(tr1);
-      tbl.appendChild(body);
+      div.append('<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'</a>');
+      
+      
     }
 
     function addActionToURL(actionName){
@@ -208,34 +196,23 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     }
     </script>
     
-    <br />
-    <div id="content" class="yui-skin-sam" style="width:100%;">
-      <div id="tab_no_link" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-        <ul class="yui-nav">
-          <li class="">
-            <a title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-            <div>
-              <digi:trn key="message:myMessages">My Messages</digi:trn>
-            </div>
-			</a>
-          </li>
-        </ul>
-        <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-          <TABLE id="msgLinks" border="0" cellPadding="0" cellSpacing="0" width="100%" >
-          </TABLE>
-        </div>
-      </div>
-    </div>   
+    <feature:display name="My Messages" module="Messages">
+    <div class="right_menu">
+		<div class="right_menu_header">
+			<div class="right_menu_header_cont"><digi:trn key="message:myMessages">My Messages</digi:trn></div>
+		</div>
+		<div class="right_menu_box">
+			<div id="msgLinks" class="right_menu_cont">
+				<!-- LINKS HERE -->
+			</div>
+		</div>
+	</div>
     <div id="msgDiv" name="msgDiv" style="display : none; position: absolute;width: 250px; background-color: #317082;">
       <table style="width: 250px;">
         <tr>
           <td id="titleTD" style="font-family: Tahoma; font-size: 12px; color: White; font-weight: bold;background-color: #317082; padding: 5px 2px 2px 2px;">
-         
+       			  
           </td>
-          <!--
-          <td style="font-size: 11px; color: Red; text-align: right; font-weight: bold;" onclick="hideMessage();">
-          [Close]
-          </td>-->
         </tr>
         <tr>
           <td id="textTD" colspan="2" style="font-family: Verdana; font-size: 10px; font-weight:bold;color: Black; background-color: #DBF0E6; margin-top: 2px; padding: 35px 35px 35px 35px;">
@@ -244,6 +221,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
         </tr>
       </table>
     </div>
+    </feature:display>
   </digi:form>
   <script type="text/javascript">
     $(document).ready(function(){

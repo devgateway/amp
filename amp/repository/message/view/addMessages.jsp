@@ -16,21 +16,6 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
  
-<%--
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom.js"/>"></script>
-
-
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"/>"></script>
-
-
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>	
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"/>"></script>	
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"/>"></script>
---%>
 	
 	<!-- Individual YUI CSS files --> 
  
@@ -42,12 +27,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script> 
 	
 
-<%--
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
---%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
 
 
 <style>
@@ -112,6 +92,24 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+
+div.charcounter-progress-container {
+	width:100%; 
+	height:3px;
+	max-height:3px;
+	border: 1px solid gray; 
+	filter:alpha(opacity=20); 
+	opacity:0.2;
+}
+
+div.charcounter-progress-bar {
+	height:3px; 
+	max-height:3px;
+	font-size:3px;
+	background-color:#5E8AD1;
+}
+
+
 -->
 </style>
 
@@ -818,6 +816,9 @@ span.extContactDropdownEmail {
 	    <td width=200 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b>
 	    	<br/>
 	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
+	    	<div class="charcounter-progress-container">
+	    		<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
+	    	</div>
 	    </td>
 	    <td valign="top"><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/>
 	  </tr>
@@ -826,6 +827,9 @@ span.extContactDropdownEmail {
     <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <b class="mand">*</b>
     	<br/>
 	    <span style="font-size:11px;" id="descCharCounter"></span>
+	    <div class="charcounter-progress-container">
+	    	<div id="descProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
+	    </div>
     </td>
     <td valign="top">
     	<html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/>
@@ -956,11 +960,13 @@ span.extContactDropdownEmail {
 	//Char counters	
 	var titleLength = 50;
 	var titleCounter = $("#titleCharCounter");
+	var titleProgressBar = $("#titleProgressBar");
 	initTitleCharCounter();
 	
 	function initTitleCharCounter() {
 		var titleCounterTxt = ["(", titleLength - $("#titleMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		titleCounter.html(titleCounterTxt.join(""));
+		titleProgressBar.css("width", $("#titleMax").val().length/titleLength*100 + "%");
 	}
 	$("#titleMax").bind("keyup", function (event) {
 		if (this.value.length > titleLength) {
@@ -968,15 +974,19 @@ span.extContactDropdownEmail {
 		}
 		var titleCounterTxt = ["(", titleLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		titleCounter.html(titleCounterTxt.join(""));
+		titleProgressBar.css("width", this.value.length/titleLength*100 + "%");
 	});
 	
 	var descLength = 500;
 	var descCounter = $("#descCharCounter");
+	var descProgressBar = $("#descProgressBar");
+	
 	initDescCharCounter();
 	
 	function initDescCharCounter() {
 		var descCounterTxt = ["(", descLength - $("#descMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		descCounter.html(descCounterTxt.join(""));
+		descProgressBar.css("width", $("#descMax").val().length/descLength*100 + "%");
 	}
 	$("#descMax").bind("keyup", function (event) {
 		if (this.value.length > descLength) {
@@ -984,6 +994,7 @@ span.extContactDropdownEmail {
 		}
 		var descCounterTxt = ["(", descLength - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		descCounter.html(descCounterTxt.join(""));
+		descProgressBar.css("width", this.value.length/descLength*100 + "%");
 	});
 	//End of char counters	
 	

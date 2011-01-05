@@ -32,7 +32,7 @@
 <bean:define id="selectedType" name="myForm" property="type" />
 
 <%@include file="documentManagerJsHelper.jsp" %>
-<digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" /> 
+<digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
 
 <style type="text/css">
 <!--

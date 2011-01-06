@@ -35,14 +35,16 @@ scheduler.set_sizes=function(){
 	var w = this._x = this._obj.clientWidth;
 	var h = this._y = this._obj.clientHeight;
 	
+	//alert(w+"-"+h);
+	
 	//not-table mode always has scroll - need to be fixed in future
 	var scale_x=this._table_view?0:(this.xy.scale_width+this.xy.scroll_width);
 	var scale_s=this._table_view?-1:this.xy.scale_width;
 	var data_y=this.xy.scale_height+this.xy.nav_height+(this._quirks?-2:0);
 	
 	this.set_xy(this._els["dhx_cal_navline"][0],w,this.xy.nav_height,0,0);
-	this.set_xy(this._els["dhx_cal_header"][0],w-scale_x,this.xy.scale_height,scale_s,this.xy.nav_height+(this._quirks?-1:1));
-	this.set_xy(this._els["dhx_cal_data"][0],w,h-(data_y+2),0,data_y+2);
+	this.set_xy(this._els["dhx_cal_header"][0],w-scale_x-20,this.xy.scale_height,scale_s+11,this.xy.nav_height+(this._quirks?-1:1)+15);
+	this.set_xy(this._els["dhx_cal_data"][0],w-20,h-(data_y+2),0+11,data_y+2+15);
 }
 scheduler.set_xy=function(node,w,h,x,y){
 	node.style.width=Math.max(0,w)+"px";

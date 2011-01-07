@@ -279,7 +279,7 @@ session.setAttribute("progressValue", counter);
 		                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
 		                </a> | 
 		            </logic:notEmpty> 
-		                <a class="settingsLink" onClick="showFilter(); " >
+		                <a class="l_sm" onClick="showFilter(); " >
 		                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 		                </a>
 		                <%
@@ -287,22 +287,22 @@ session.setAttribute("progressValue", counter);
 		                if (arf.isPublicView()==false){%>
 		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 			                |
-			          	 	<a class="settingsLink" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
+			          	 	<a class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
 			                	${saveFilters}
 			                </a>
 		           		</feature:display>
 		           		<%}%>
 		           	  <logic:notEqual name="viewFormat" value="foldable">
 		           	  |
-		           	  	<a  id="frezzlink" class="settingsLinkDisable">
-		               		<script language="	">
+		           	  	<a  id="frezzlink" class="l_sm">
+		               		<script language="">
 						document.write((scrolling)?msg2:msg1);
 					</script>
 		                </a>
 		           	  
 		              </logic:notEqual>
 		                
-		                |<a  class="settingsLink" onClick="showFormat(); " >
+		                |<a  class="l_sm" onClick="showFormat(); " >
 		                <digi:trn>Tab Settings</digi:trn>
 		                </a>
 		           
@@ -350,12 +350,12 @@ session.setAttribute("progressValue", counter);
 	        	<div class="tab_opt">
 		        	<div class="tab_opt_cont">
 		        		<logic:notEmpty name="reportMeta" property="hierarchies">
-	                		<a class="l_sm" href="#mySorter">
+	                		<a class="l_sm" onClick="showSorter();" style="cursor: pointer;text-decoration: underline;">
 	                			<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
 	                		</a> 
 	                		&nbsp;|&nbsp; 
 	            		</logic:notEmpty> 
-	                	<a class="l_sm" href="#myFilter" style="cursor: pointer;text-decoration: underline;" >
+	                	<a class="l_sm" onClick="showFilter();" style="cursor: pointer;text-decoration: underline;" >
 	                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 	                	</a>
 		                <%

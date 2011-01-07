@@ -64,11 +64,11 @@
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 		<tbody>
 			<tr>
-				<td width=900px valign=top>
+				<td width="90%" valign=top id="maintd">
 					<digi:insert attribute="body"/>
 				</td>
-				<td width=20px align=center background="img_2/close_panel_bg.gif" valign=top>
-					<a style="cursor: pointer;" ><img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel"></a>
+				<td width="20px" align=center background="img_2/close_panel_bg.gif" valign="top">
+					<a style="cursor: pointer;" ><img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel" style="padding: 5px"></a>
 				</td>
 				<td valign="top">
 					<div id="rightpanel">
@@ -90,19 +90,21 @@
     </body>
 </html>
 <script language=javascript>
-	$("#closepanel").click(function(event){
-    	$("#rightpanel").toggle('slow');
-    	if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
-    		$("#closepanel").attr('src','img_2/open_panel.gif');
- 	        return false;    
- 	    }
-		if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
-			$("#closepanel").attr('src','img_2/close_panel.gif');
- 	        return false;    
- 	    }
-	});
+	$("#closepanel").click(function(){
+		$('#rightpanel').toggle('slow', function() {
+			if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
+	    		$("#closepanel").attr('src','img_2/open_panel.gif');
+	 	        return false;    
+	 	    }
+			if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
+				$("#closepanel").attr('src','img_2/close_panel.gif');
+	 	        return false;    
+	 	    }
+		});
+    });
 	
-	$('#li_desktop').css('background-color','#FF6000');
-	$('#a_desk').css('color','#ffffff');
-	$('#li_desktop img').attr("src","img_2/menu_arr_dwn_sel.gif");
-</script
+	function showlegend() {
+		var contentId = document.getElementById("show_legend_pop_box");
+  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+	}
+</script>

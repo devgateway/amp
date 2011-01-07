@@ -279,7 +279,7 @@ function toggleSettings(){
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <br />
-<div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
+<div id="content"  class="yui-skin-sam"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 
 <ul id="MyTabs" class="yui-nav"">
@@ -311,7 +311,7 @@ function toggleSettings(){
 <div class="yui-content" style="display:none">
 </div>
 </div>
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:410px;_height:410px;">
 <digi:trn key="aim:addATab">
 <p/>
 Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.

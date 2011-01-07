@@ -11,13 +11,6 @@
 		
 <%@page import="org.digijava.module.aim.helper.Constants"%>
 
-        
-        <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-
 <jsp:include page="/repository/aim/view/ar/aboutScripts.jsp"/>
 <!--<div id="myAboutFilterWrapper" style="display: none;" >-->
 	<div id="customAbout" style="display: none" class="content">
@@ -32,8 +25,8 @@
 </div>
 
         <!-- Core + Skin CSS -->
-        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
-        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="/TEMPLATE/ampTemplate/css_2/container.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
     <c:choose>
@@ -61,7 +54,7 @@ if("On".equals(publicView)) {
 <style>
 .yuiampmenuitemlabel
 {
-cursor:pointer;
+	cursor:pointer;
 }
 </style>
 <div class="yuiamp-skin-amp" style="clear:both;">

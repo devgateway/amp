@@ -28,10 +28,12 @@
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
+	
 		 
     <!-- Individual YUI CSS files --> 
 	<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"/>"> 
-	<link rel="stylesheet" type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"/>"> 
+	
+	 
 	<!-- Individual YUI JS files --> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"/>"></script> 
@@ -39,6 +41,9 @@
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu/menu-min.js"/>"></script>
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom-min.js"/>"></script>
+	
+	<!-- Jquery Base Library -->
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
 
 
@@ -71,14 +76,6 @@
 	    }
 	
 	}	
-	
-	YAHOO.util.Event.onContentReady("workspacemenu", function () {
-		var oMenu = new YAHOO.widget.Menu("productsandservices");
-	 	 oMenu.render();
-	 	oMenu.show();
-	});
-	 
-	
 </script>
 </logic:present>
 
@@ -106,32 +103,35 @@
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
 		<logic:notEmpty name="currentMember" scope="session">
-		<!-- 
-			 <feature:display name="Change Workspace" module="My Desktop">
-             	<li class="yuiampmenuitem" style="_width:230px;">
-                	<a class="yuiampmenuitemlabel" href="#">
-                    	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
-                    </a>
-					<div id="workspacemenu" class="yuiampmenu">
-                    	<div class="bd"  style="width:500px;">                    
-                       		<ul class="first-of-type">
-								<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-									<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-									<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<li class="yuiampmenuitem yuiampmenuitem-checked" style="height:18px"><a href="#"><bean:write name="team" property="name"/></a></li>
-									</logic:equal>
-									<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<li class="yuiampmenuitem" style="height:18px"><a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a></li>
-									</logic:notEqual>
-								</logic:iterate>
-                           	</ul>
-						</div>
-					</div>
-				</li>
-			</feature:display>
-			 -->
+		<feature:display name="Change Workspace" module="My Desktop">
+			<div class="workspace_info">
+				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
+		 		<a id="menutoggle" style="color:#FFFFFF;cursor: pointer;">
+		 			<strong>
+				 		<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
+						${teamMember.teamName}
+					</strong>
+					<img border="0" src="img_2/arr_wrk.gif">
+				</a>
+				<div id="workspacemenu" class="yuimenu">
+    				<div class="bd">
+	        			<ul class="first-of-type">
+	           				<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+									<li class="yuimenuitem" style="height:18px;"><a href="#"><bean:write name="team" property="name"/></a></li>
+								</logic:equal>
+								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+									<li class="yuimenuitem" style="height:18px;"><a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a></li>
+								</logic:notEqual>
+							</logic:iterate>
+	        			</ul>            
+    				</div>
+				</div>
+			</div>
+		</feature:display>
 		</logic:notEmpty>
-		<div >
+		<div>
 			<table class="top_nav">
 				<tr>
 					<td>
@@ -141,60 +141,16 @@
 						<img src="img_2/top_sep.gif" class="top_sep">
 					</td>
 					<td>
-					<!-- 
-						<module:display name="HELP">
-							<ul class="wks_menu" id="wks_menu" style="text-transform: uppercase;">
-								<li style="margin-top:15px;padding: 0px;height: 0px;margin-right:0px">
-									<a style="cursor: pointer;">
-										<digi:trn>HELP</digi:trn><img src="img_2/arr_wrk.gif" border=0 class="menu_arr">
-									</a>
-									<ul style="width: auto;">
-										<feature:display name="Admin Help" module="HELP">
-		                                 <li>
-	                                        <a onClick="adminHelp();" style="cursor: pointer;">
-	                                        	<digi:trn>AMP Admin Help</digi:trn>
-	                                        </a>
-	                                    </li>
-										</feature:display>
-										<feature:display name="User Help" module="HELP">
-	                                     <li>
-	                                     <a onClick="help();" style="cursor: pointer;">
-	                                 	    <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-	                                     </a>
-	                                     </li>
-										</feature:display>
-										<feature:display name="Glossary" module="HELP">
-	                                     <li>	
-		                                 	<a href="/help/glossary.do">
-		                                 		<digi:trn>Glossary</digi:trn>
-		                                 	</a>
-	                                     </li>
-										</feature:display>
-										<feature:display name="Support Request Form" module="HELP">
-	                                    <li>	
-	                                    	<a href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
-	                                        	<digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
-	                                        </a>
-	                                    </li>
-										</feature:display>
-										<feature:display name="About AMP" module="HELP">
-	                                    <li>
-	                                    	<%
-											siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
-											session.setAttribute("site", siteDomain);
-											%>
-	                                        <a target="name" onClick="showAbout(); return false;" style="cursor: pointer;"> 
-	                                        	<digi:trn key="aim:aboutamp">About AMP</digi:trn>
-	                                        </a>
-	                                    </li>
-	                                    </feature:display>
-									</ul>
-								</li>
-							</ul>
-						</module:display>			
-						 -->
-					</td>
-					
+						<feature:display name="Language Option" module="Tools">
+	               			<div id="reports2" class="yuiampmenu" style="margin-top: 10px">
+	                          <div class="bd">                    
+	                              <ul>
+	                              	<digi:insert flush="false" attribute="dropdownLangSwitch" />
+	                              </ul>
+	                          </div>
+	                      	</div>                              
+	                   	</feature:display>
+			  		</td>
 					<td style="text-transform: uppercase;">
 						<img src="img_2/top_sep.gif" class="top_sep">
 						<digi:link styleClass="loginWidget" href="/j_acegi_logout" module="aim">
@@ -207,6 +163,16 @@
 	</div>
 </div>
 <!-- HEADER END -->
+
+<script language="javascript">
+var oMenu = new YAHOO.widget.Menu("workspacemenu", {  });
+oMenu.render();
+YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu); 
+var lMenu = new YAHOO.widget.Menu("languageemenu", {  });
+lMenu.render();
+
+
+</script>
 
 
 

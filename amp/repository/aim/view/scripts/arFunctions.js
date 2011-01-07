@@ -18,14 +18,19 @@ function toggleRows(caller,hideId){
 	var closing=false;
 	if(caller.alt=='shown') 
 		closing=true;
-
+	
+	var parentdiv = caller.parentNode;
  	//hideAllRows();
 	if(caller.alt=='hidden') {
 		caller.alt='shown';
 		caller.src=minus_sign;
+		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name'); 
+		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name_op');
 	} else {
 		caller.alt='hidden'; 
 		caller.src=plus_sign;
+		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op'); 
+		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name');
 	}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');

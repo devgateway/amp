@@ -34,7 +34,7 @@ import org.hibernate.Session;
 
 public class DashboardUtil {
 	
-	private static Logger logger = Logger.getLogger(SectorDashboardUtil.class);
+	private static Logger logger = Logger.getLogger(DashboardUtil.class);
 	
 	private static Collection<AmpOrganisation> getAllOrganizations() {
 		Session session = null;

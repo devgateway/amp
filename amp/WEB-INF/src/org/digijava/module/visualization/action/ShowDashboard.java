@@ -24,6 +24,7 @@ import org.digijava.module.um.action.addWorkSpaceUser;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.Constants;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class ShowDashboard extends Action {
@@ -77,31 +78,20 @@ public class ShowDashboard extends Action {
 		}
 
 		// Get Summary Information
-		getDonorSummaryInformation(visualizationForm);
+		DashboardUtil.getSummaryInformation(visualizationForm);
 
+		visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors(false));
+		visualizationForm.getRanksInformation().setTopDonors(DashboardUtil.getRankDonors(true));
+		visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities(false));
+		visualizationForm.getRanksInformation().setTopProjects(DashboardUtil.getRankActivities(true));
+		visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions(false));
+		visualizationForm.getRanksInformation().setTopRegions(DashboardUtil.getRankRegions(true));
+		
 		// Get Top Projects
 		// Get Top Sectors
 		// Get Top Regions
 		// Get Sector Working Groups (define where this is going to be set)
 
-	}
-
-	private void getDonorSummaryInformation(VisualizationForm visualizationForm) {
-		//Aggregated information for the header
-		
-		//Total Commitments
-		visualizationForm.getSummaryInformation().setTotalCommitments(new BigDecimal(1000));
-		//Total Disbursements
-		visualizationForm.getSummaryInformation().setTotalDisbursements(new BigDecimal(1000));
-		//Total Number of Projects
-		visualizationForm.getSummaryInformation().setNumberOfProjects(100);
-		//Total Number of Sectors
-		visualizationForm.getSummaryInformation().setNumberOfSectors(100);
-		//Total Number of Regions
-		visualizationForm.getSummaryInformation().setTotalCommitments(new BigDecimal(1000));
-		//Average Project Size
-		visualizationForm.getSummaryInformation().setTotalCommitments(new BigDecimal(1000));
-		
 	}
 
 	private void initializeFilter(DashboardFilter filter) {

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.module.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL">
+	<class name="org.digijava.module.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL" >
 		<cache usage="read-write" />
 		<id name="ampFundDetailId" column="amp_fund_detail_id" type="java.lang.Long">
 			<generator class="native">
@@ -10,7 +10,7 @@
 			</generator>
 		</id>
 
-		<property name="thousandsTransactionAmount" type="java.lang.Double" formula="applyThousandsForVisibility(transaction_amount)" />
+<!--		<property name="thousandsTransactionAmount" type="java.lang.Double" formula="applyThousandsForVisibility(transaction_amount)" not-null="true"/>-->
 		<property name="fiscalYear" column="fiscal_year" type="java.lang.Integer" />
 		<property name="fiscalQuarter" column="fiscal_quarter" type="java.lang.Integer" />
 		<property name="transactionType" column="transaction_type" type="java.lang.Integer" />
@@ -37,7 +37,7 @@
 		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" />
-		<property name="transactionAmountInBaseCurrency" type="java.lang.Double" formula="getTransactionAmountInBaseCurr(amp_fund_detail_id)" />
+<!--		<property name="transactionAmountInBaseCurrency" type="java.lang.Double" formula="getTransactionAmountInBaseCurr(amp_fund_detail_id)" not-null="true"/>-->
 	<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
 	</class>
 </hibernate-mapping>

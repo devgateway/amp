@@ -310,9 +310,11 @@
 				var isRead=messages[i].getAttribute('read');
 				if(isRead){
 					var msgTd = $("#msg_body_" + msgId);
-					msgTd.find("IMG.show_msg_link").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
-					msgTd.find("A.show_msg_link").text(msgTd.find("B.show_msg_link").text());
-					msgTd.find("B.show_msg_link").remove();
+					if (msgTd.find("B.show_msg_link")[0] != null) {
+						msgTd.find("IMG.show_msg_link").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
+						msgTd.find("A.show_msg_link").text(msgTd.find("B.show_msg_link").text());
+						msgTd.find("B.show_msg_link").remove();
+					}
 				}
 			}
 			deselectAllCheckboxes();

@@ -19,7 +19,7 @@
 			color:#376091;
 			font-weight: bold;
 			background-color: #EBEBEB;
-			margin:0pt 0px 0pt 0pt;
+			margin:0pt 5px 0pt 0pt;
 			/* background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top; */
 	}
 	
@@ -40,7 +40,7 @@
 		
 	#demo li.selected a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top; */
-			padding:  0.7em 2em;
+			/* padding:  0.7em 2em; */
 	}
 	#demo .yui-nav li a:hover {
 	   /* background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;   */

@@ -31,10 +31,16 @@ public class OnePagerWrapper extends AmpHeaderFooter {
 	public OnePagerWrapper(PageParameters parameters) {
 		super();
 		
-		String activityId = (String) parameters.get("activityId");
+		String activityId = (String) parameters.get("activity");
+		
+		if ((activityId == null) || (activityId.compareTo("new") == 0)){
+			am = new AmpActivityModel();
+		}
+		else{
+			am = new AmpActivityModel(Long.valueOf(activityId));
+		}
 		
 		
-		am = new AmpActivityModel(Long.valueOf(activityId));
 		
 		activityForm=new Form<AmpActivity>("activityForm") ;
 		activityForm.setOutputMarkupId(true);

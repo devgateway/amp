@@ -5,7 +5,6 @@
 package org.dgfoundation.amp.onepager;
 
 import javax.servlet.http.HttpSession;
-
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
 import org.acegisecurity.AuthenticationManager;
@@ -20,7 +19,9 @@ import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
  * @author aartimon@dginternational.org 
@@ -33,15 +34,11 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private boolean translatorMode;
 	private boolean fmMode;
 	private TeamMember currentMember;
+	private AmpTeamMember ampCurrentMember;
 	private HttpSession httpSession;
 	
 
-	public TeamMember getCurrentMember() {
-		return currentMember;
-	}
-	public void setCurrentMember(TeamMember currentMember) {
-		this.currentMember = currentMember;
-	}
+	
 	public AmpAuthWebSession(final Request request) {
 		super(request);
 		fmMode = false;
@@ -50,7 +47,23 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		ServletWebRequest wRequest = (ServletWebRequest) request;
 		httpSession = wRequest.getHttpServletRequest().getSession();
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+		ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 	}
+
+	public AmpTeamMember getAmpCurrentMember() {
+		return ampCurrentMember;
+	}
+	public void setAmpCurrentMember(AmpTeamMember ampCurrentMember) {
+		this.ampCurrentMember = ampCurrentMember;
+	}
+
+	public TeamMember getCurrentMember() {
+		return currentMember;
+	}
+	public void setCurrentMember(TeamMember currentMember) {
+		this.currentMember = currentMember;
+	}
+
 	public HttpSession getHttpSession() {
 		return httpSession;
 	}

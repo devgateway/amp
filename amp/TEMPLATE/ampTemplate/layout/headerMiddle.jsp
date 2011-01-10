@@ -380,6 +380,11 @@ function adminHelp(){
 	
 	}	
 
+	function newAddActivity() {
+		selectedLevelId=0; 
+		window.location.href="/wicket/onepager/activity/new";	
+	}
+	
 	function addActivity() {
 		selectedLevelId=0; 
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~resetMessages=true~action=create~activityLevelId="+selectedLevelId;	
@@ -441,6 +446,14 @@ function adminHelp(){
 <c:if test="${not empty sessionScope.currentMember}">
 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 												<field:display name="Add Activity Button" feature="Edit Activity">
+		                                        <li class="yuiampmenuitem">
+                                                    <c:set var="trnClickToAddNewActivit">
+                                                    <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+                                                    </c:set>
+                                                    <a class="yuiampmenuitemlabel" href="javascript:newAddActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
+                                                    <digi:trn key="btn:addActivity">(New) Add Activity</digi:trn>
+                                                    </a>
+												</li>
 		                                        <li class="yuiampmenuitem">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>

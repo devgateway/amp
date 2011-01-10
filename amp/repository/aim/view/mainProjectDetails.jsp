@@ -315,7 +315,7 @@ ${aimMainProjectDetailsForm.activityExists}
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
-	                		<a href="/wicket/onepager/activityId/<%=request.getParameter("ampActivityId")%>" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+	                		<a href="/wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
 								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>"> 
 								<img src="/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;

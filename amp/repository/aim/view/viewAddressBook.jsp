@@ -46,16 +46,16 @@
 <style type="text/css">
 
 
-.nana .yui-ac{position:relative;font-family:arial;font-size:100%;}
-.nana .yui-ac-input{position:absolute;width:100%;}
-.nana .yui-ac-container{position:absolute;top:1.6em;width:100%;}
-.nana .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
-.nana .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
-.nana .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
-.nana .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.nana .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
-.nana .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
-.nana .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+.autocompleteClass .yui-ac{position:relative;font-family:arial;font-size:100%;}
+.autocompleteClass .yui-ac-input{position:absolute;width:100%;}
+.autocompleteClass .yui-ac-container{position:absolute;top:1.6em;width:100%;}
+.autocompleteClass .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
+.autocompleteClass .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.autocompleteClass .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
+.autocompleteClass .yui-ac-content ul{margin:0;padding:0;width:100%;}
+.autocompleteClass .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
+.autocompleteClass .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
+.autocompleteClass .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
 
 #myContainer .yui-ac-content { 
@@ -338,7 +338,7 @@
 	
 
 	// don't remove or change this line!!!
-	document.getElementsByTagName('body')[0].className='nana';
+	document.getElementsByTagName('body')[0].className='autocompleteClass';
 </script>
 <table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	
 <tbody>

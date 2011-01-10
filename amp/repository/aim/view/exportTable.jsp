@@ -2,8 +2,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script type="text/javascript">
     function exportXSL(){
@@ -45,46 +43,27 @@
 
     }
 </script>
-<style type="text/css">
-.toolbar{
-	width: 50px;
-	background: #addadd;
-	background-color: #addadd;
-	padding: 3px 3px 3px 3px;
-	position: relative;
-	top: 10px;
-	left: 10px;
-	bottom: 100px;
-}
-.toolbartable{
-	border-color: #FFFFFF;
-	border-width: 2px;
-	border-bottom-width: 2px;
-	border-right-width: 2px;
-	border-left-width: 2px;
-	border-style: solid;
-}
 
-</style>
+
 
 <form action="/aim/exportAdminTable.do" method="post" name="exportTableForm" >
-    <input type="hidden" name="data" class="reportData"/>
-    <div class="toolbar" align="center">
-        <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
-            <tr>
-                <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
-                    <a target="_blank" onclick="exportXSL(); return false;">
-                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
-                    </a>
-                </td>
+ <input type="hidden" name="data" class="reportData"/>
+ 	<table cellspacing="0" class="report_indicator" cellpadding="0" border="0" align="center" width="100%" >
+ 	<tbody><tr>
+<td valign="top">
+		<div class="tab_opt_box">
+			<div class="tab_opt">
+			<div class="tab_opt_cont">
+			<a href="#" target="_blank" onclick="exportXSL(); return false;" class="l_sm">
+			<img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a href="#" class="l_sm">Export to Excel</a> &nbsp;&nbsp; 
+			<a href="#" class="l_sm"><img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
+			</div>
+			</div>
+		</div>
+</td>
+</tr>
+</tbody>
+</table>
 
-                <td noWrap align=left valign="middle">
-                    <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly"/>
-                    </digi:link>
-                </td>
-            </tr>
-        </table>
-    </div>
 </form>
 

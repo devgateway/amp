@@ -5,53 +5,57 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+
+
 
 <digi:instance property="addressbookForm" />
 <digi:context name="digiContext" property="context" />
 
-<style type="text/css">
-	.jcol{												
-		padding-left:10px;												 
-	}
-	.jlien{
-		text-decoration:none;
-	}
-	.tableEven {
-		background-color:#dbe5f1;
-		font-size:8pt;
-		padding:2px;
-	}
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
 
-	.tableOdd {
-		background-color:#FFFFFF;
-		font-size:8pt !important;
-		padding:2px;
-	}
-		 
-	.Hovered {
-		background-color:#a5bcf2;
-	}
-    .pagination {
-           float:left;   padding:3px;border:1px solid #999999;
-    }	
-</style>
+
+
+<style>
+		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
+		color:#000000;
+		font-weight:bold;
+		font-size: 11px;
+		text-decoration:none;
+		vertical-align:bottom;
+		}
+	
+		.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
+		background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
+		}
+		.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
+		background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
+		}
+		.yui-skin-sam .yui-dt td {
+		color:#000000;
+		font-size: 11px;
+		text-decoration:none;
+		vertical-align:bottom;
+		}
+
+
+	</style>
 
 <!-- for auto complete -->
 <style type="text/css">
-<!--
 
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}
-.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}
-.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
-.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
-.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
-.yui-skin-sam .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
-.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
-.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
-.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
+.nana .yui-ac{position:relative;font-family:arial;font-size:100%;}
+.nana .yui-ac-input{position:absolute;width:100%;}
+.nana .yui-ac-container{position:absolute;top:1.6em;width:100%;}
+.nana .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
+.nana .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.nana .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
+.nana .yui-ac-content ul{margin:0;padding:0;width:100%;}
+.nana .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
+.nana .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
+.nana .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
 
 #myContainer .yui-ac-content { 
@@ -59,11 +63,6 @@
     _height:16em; /* ie6 */ 
 }
 
-.contentbox_border{
-        border: 1px solid black;
-	border-width: 1px 1px 1px 1px; 
-	background-color: #ffffff;
-}
 
 #myAutoComplete ul {
 	list-style: square;
@@ -96,153 +95,44 @@
 #myImage {
     position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
 }
--->
+
+
 </style>
 
-<!-- tabs styles -->
-<style type="text/css">
 
 
-#tabs {
-	font-family: Arial,Helvetica,sans-serif;
-	font-size: 8pt;
-	clear: both;
-	text-align: center;
-}
-
-#tabs ul {
-	display: inline;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-#tabs li { 
-	 float: left;
-}
-
-
-
-#tabs a, #tabs span { 
-	font-size: 8pt;
-}
-
-#tabs ul li a { 
-	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
-	color:#FFFFFF;
-	float:left;
-	margin:0pt 0px 0pt 0pt;
-	position:relative;
-	text-decoration:none;
-	top:0pt;
-
-}
-
-#tabs ul li a div { 
-	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
-	padding: 4px 10px 4px 10px;
-}
-
-#tabs ul li span a { 
-	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
-	color:#FFFFFF;
-	float:left;
-	margin:0pt 0px 0pt 0pt;
-	position:relative;
-	text-decoration:none;
-	top:0pt;
-
-}
-
-#tabs ul li span a div { 
-	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
-	padding: 4px 10px 4px 10px;
-}
-
-#tabs a:hover {
-    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
-}
-
-#tabs a:hover span {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
-}
-#tabs a:hover div {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
-}
-
-#tabs a.active {
-	position: relative;
-	top: 0;
-	margin: 0 2px 0 0;
-	float: left;
-	background: #FFF3B3;
-	padding: 4px 10px 4px 10px;
-	text-decoration: none;
-	color: #333;
-}
-
-#tabs a.active:hover {
-	position: relative;
-	top: 0;
-	margin: 0 2px 0 0;
-	float: left;
-	background: #FFF3B3;
-	padding: 6px 10px 6px 10px;
-	text-decoration: none;
-	color: #333;
-}
-
-#main {
-	clear:both;
-	text-align: left;
-	border-top: 2px solid #222E5D;
-	border-left: 1px solid #222E5D;
-	border-right: 1px solid #222E5D;
-    border-bottom: 1px solid #222E5D;
-	padding: 2px 4px 2px 4px;
-}
-</style>
-
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/datatable.css" />
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/paginator.css" />
 
 
 <!-- Individual YUI JS files --> 
 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datatable-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/json-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/event-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/paginator-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/container-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script>
+ 
+
+ 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+
+
+
+
+
+
+
+
+ 
+
+ 
+
+	
   
 
-	<style>
-		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
-		color:#000000;
-		font-weight:bold;
-		font-size: 11px;
-		text-decoration:none;
-		vertical-align:bottom;
-		}
-		.yui-skin-sam th.yui-dt-asc, .yui-skin-sam th.yui-dt-desc {
-		background:#B8B8B0;
-		}
-		.yui-skin-sam .yui-dt th {
-		background:#B8B8B0;
-		}
-		.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
-		background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
-		}
-		.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
-		background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
-		}
 
-	</style>
 	
 <script language="JavaScript">
 	var msgDataError = '<digi:trn>Data error</digi:trn>';
@@ -274,13 +164,13 @@
 		        };        
 		        
 		        var myColumnDefs = [
-		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true, width: 50},
-		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 150},
-		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false, width: 150},
-		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false, width: 100},
-		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true, width: 100},
-		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false, width: 100},
-		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false, width: 100},
+		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true},
+		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true},
+		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false},
+		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false},
+		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true},
+		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false},
+		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false},
 		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
 		  
@@ -304,7 +194,7 @@
 		        	rowsPerPage:10,
 		        	//totalRecords:document.getElementById("totalResults").value,
 		        	containers : ["dt-pag-nav"], 
-		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
+		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>[{FirstPageLink} {PreviousPageLink}] {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
 		        	pageReportTemplate		: "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
 		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
 		        	firstPageLinkLabel		: '<< <digi:trn jsFriendly="true">first</digi:trn>',
@@ -443,97 +333,47 @@
 		addressbookForm.submit();
 	}
 
-	function setHoveredTable(tableId, hasHeaders) {
 
-		var tableElement = document.getElementById(tableId);
-		if(tableElement){
-	    var className = 'Hovered',
-	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-	        rows      = tableElement.getElementsByTagName('tr');
-
-			for(var i = 0, n = rows.length; i < n; ++i) {
-				rows[i].onmouseover = function() {
-					this.className += ' ' + className;
-				};
-				rows[i].onmouseout = function() {
-					this.className = this.className.replace(pattern, ' ');
-
-				};
-			}
-			rows = null;
-		}
-	}
 
 	
 
 	// don't remove or change this line!!!
-	document.getElementsByTagName('body')[0].className='yui-skin-sam';
+	document.getElementsByTagName('body')[0].className='nana';
 </script>
-
-
-	<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
-		<tr>
-			<td width="14">&nbsp;</td>
-			<td align="left"vAlign="top" width="750">
-				<table cellPadding="0" cellSpacing="0" width="879">
-					<tr>
-						<!-- Start Navigation -->
-						<td height="33" colspan="7" width="867">
-							<span class="crumb">
-				              	<c:set var="translation">
-									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-								</c:set>
-								<digi:link href="/showDesktop.do" styleClass="comment" title="${translation}">
-									<digi:trn>Portfolio</digi:trn>
-								</digi:link>&nbsp;&gt;&nbsp;
-								<digi:trn>Address Book</digi:trn>
-			              </span>
-						</td>
-						<!-- End navigation -->
-					</tr>
-					<tr><td align="left">
-                    	<jsp:include page="/repository/aim/view/exportTable.jsp" />
-                	</td></tr>					
-					<tr>
-						<td height="16" vAlign="center" width="867" colspan="7">
-							<span class=subtitle-blue><digi:trn>Address Book</digi:trn></span>
-						</td>
-					</tr>
-					<tr>
-						<td height="100%">
-							<DIV id="tabs">
-								<UL>
-							      	<LI>
-							           	<a name="node">
-							               	<div>
-												<digi:trn>Existing Contacts</digi:trn>							
-							                </div>
-							            </a>
-							        </LI>
-									<LI>
-							           	<span>
-											<a href="${contextPath}/aim/addressBook.do?actionType=addContact">
-							               		<div title='<digi:trn>Add New Contact</digi:trn>'>
-													<digi:trn>Add New Contact</digi:trn>
-							                    </div>
-											</a>							
-							            </span>
-							        </LI>
-								</UL>					
-							</DIV>
-							
-						</td>
-					</tr>					
-					<tr>
-						<td noWrap width=100% vAlign="top" height="100%">
+<table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	
+<tbody>
+<tr>
+<td valign="top" align="left">
+<div style="padding-left: 10px; width: 98%; min-width: 680px;"   class="yui-skin-sam" id="content"> 
+<div id="demo"  class="yui-navset yui-navset-top ">
+<ul  class="yui-nav"> 
+	<li class="selected">
+	<a>
+	<div>
+	<digi:trn>Existing Contacts</digi:trn>
+	</div>
+	</a>
+	</li>
+	<li>
+	<a href="${contextPath}/aim/addressBook.do?actionType=addContact">
+	<div title='<digi:trn>Add New Contact</digi:trn>'>
+		<digi:trn>Add New Contact</digi:trn>
+	</div>
+	</a>		
+	</li>
+</ul>
+<div class="yui-content resource_popin" style="border-color: rgb(208, 208, 208);">
+<jsp:include page="/repository/aim/view/exportTable.jsp" />
+<table>
+<tbody>
+<tr>
+						<td noWrap vAlign="top">
 						<digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">
-							<div id="main" style="width:100%;">
-								<table bgColor="#ffffff" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+
+								<table bgColor="#ffffff" align="center" cellPadding="1" cellSpacing="1" width="95%" valign="top">
 											<tr bgColor="#ffffff">
 												<td vAlign="top" width="100%">
-													<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-														<tr><td>&nbsp;</td></tr>
-														<tr><td class="box-title" >
+													
 															<!-- Table title -->
 															<div style="width:100%;">
 																<table width="100%">
@@ -584,23 +424,27 @@
 																	<div id="errors"></div>
                                                                     <div id="tooltipsCtx"></div>
 																</div>
-															</td>
-														</tr>														
-													</table>
+													
 												</td>
 											</tr>
 										</table>
-								</div>
 							</digi:form>
 						</td>
 					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</td>
+</tr>
+					
+					</tbody>
+</table>
+	
 
-<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/new/datasource-min.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="script/yui/new/autocomplete-min.js"/>"></script>
+
+
 
 
 <script type="text/javascript">
@@ -639,7 +483,5 @@
 	    };
 	}();    
 
-
-	setHoveredTable("dataTable", false);
 </script>
 

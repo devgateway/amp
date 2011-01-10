@@ -55,8 +55,8 @@
 			<div class="tab_opt">
 			<div class="tab_opt_cont">
 			<a href="#" target="_blank" onclick="exportXSL(); return false;" class="l_sm">
-			<img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a href="#" class="l_sm">Export to Excel</a> &nbsp;&nbsp; 
-			<a href="#" class="l_sm"><img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
+			<img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a href="#" onclick="exportXSL(); return false;" class="l_sm">Export to Excel</a> &nbsp;&nbsp; 
+			<a href="#" onclick="window.print(); return false;" class="l_sm"><img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
 			</div>
 			</div>
 		</div>

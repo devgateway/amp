@@ -625,6 +625,9 @@ function addActionToURL(actionName){
 			return false;
 		}
 		//check submit selected receivers
+		
+		//$("input[type=checkbox][name=receiversIds]:checked");
+		
 		var list = document.getElementById('selreceivers');
 		if(list!=null){
     		for(var i = 0; i < list.length; i++) {

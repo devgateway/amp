@@ -18,24 +18,61 @@
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
 		
 		
-		
-		
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 		<tr>
 			<td width=768  valign=top>
 				<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 					<ul style="height:29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 						<feature:display name="Message tab" module="Messages">
-							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a></li>
+							<c:if test="${messageForm.tabIndex  == 1}">
+								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+									<a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a>
+								</li>
+							</c:if>
+							<c:if test="${messageForm.tabIndex  != 1}">
+								<li class="desktop_tab ui-state-default ui-corner-top">
+									<a href="#tabs-1" class="tab_link"><digi:trn>Messages</digi:trn></a>
+								</li>
+							</c:if>
 						</feature:display>
+						
 						<feature:display name="Alert tab" module="Messages">
-							<li class="desktop_tab ui-state-default ui-corner-top"><a href="#tabs-2" class="tab_link"><digi:trn>Alerts</digi:trn></a></li>
+							<c:if test="${messageForm.tabIndex  == '2'}">
+								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-2" class="tab_link">
+									<digi:trn>Alerts</digi:trn></a>
+								</li>
+							</c:if>
+							<c:if test="${messageForm.tabIndex  != '2'}">
+								<li class="desktop_tab ui-state-default ui-corner-top"><a href="#tabs-2" class="tab_link">
+									<digi:trn>Alerts</digi:trn></a>
+								</li>
+							</c:if>
 						</feature:display>
+						
 						<feature:display name="Approval Tab" module="Messages">
-							<li class="desktop_tab ui-state-default ui-corner-top"><a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a></li>
+							<c:if test="${messageForm.tabIndex  == '3'}">
+								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+									<a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a>
+								</li>
+							</c:if>
+							<c:if test="${messageForm.tabIndex  != '3'}">
+								<li class="desktop_tab ui-state-default ui-corner-top">
+									<a href="#tabs-3" class="tab_link"><digi:trn>Approvals</digi:trn></a>
+								</li>
+							</c:if>
 						</feature:display>
+						
 						<feature:display name="Event Tab" module="Messages">
-							<li class="desktop_tab ui-state-default ui-corner-top"><a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a></li>
+							<c:if test="${messageForm.tabIndex  == '4'}">
+								<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+									<a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a>
+								</li>
+							</c:if>
+							<c:if test="${messageForm.tabIndex  != '4'}">
+								<li class="desktop_tab ui-state-default ui-corner-top">
+									<a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a>
+								</li>
+							</c:if>
 						</feature:display>
 					</ul>
 					

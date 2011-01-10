@@ -50,7 +50,7 @@
 	//used to hold already rendered messages
 	var myArray=new Array();
 	
-	window.onload=getMessages;
+	//window.onload=getMessages;
 	</script>
 
 <digi:instance property="messageForm"/>
@@ -79,41 +79,49 @@
 				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
 					<digi:link href="/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"><b><digi:trn>Create new message</digi:trn></b></digi:link>
 				</div>
+			
+				<c:if test="${messageForm.tabIndex  == 1 || messageForm.tabIndex  == 2}">
+					<div id="subtabContainer" class="tab_opt">
+				</c:if>
+				<c:if test="${messageForm.tabIndex  != 1 && messageForm.tabIndex  != 2}">
+					<div id="subtabContainer" class="tab_opt" style="visibility:hidden">
+				</c:if>
+				
+						<div class="tab_opt_cont">
+							<span id="tab_inbox">
+								<c:if test="${messageForm.childTab=='inbox'}">
+									<b class="sm_sel"><digi:trn>Inbox</digi:trn></b> 
+								</c:if>
+								<c:if test="${messageForm.childTab!='inbox'}">
+									<a href="#tab_inbox" class="l_sm"><digi:trn>Inbox</digi:trn></a> 
+								</c:if>
+							</span>
+							&nbsp;|&nbsp;
+								
+							<span id="tab_sent">
+								<c:if test="${messageForm.childTab=='sent'}">
+									<b class="sm_sel"><digi:trn>Sent</digi:trn></b> 
+								</c:if>
+								<c:if test="${messageForm.childTab!='sent'}">
+									<a href="#tab_sent" class="l_sm"><digi:trn>Sent</digi:trn></a>
+								</c:if>
+							</span>
+							&nbsp;|&nbsp; 
+							
+							<span id="tab_draft">
+								<c:if test="${messageForm.childTab=='draft'}">
+									<b class="sm_sel"><digi:trn>Draft</digi:trn></b>
+								</c:if>
+								<c:if test="${messageForm.childTab!='draft'}">
+									<a href="#tab_draft" class="l_sm"><digi:trn>Draft</digi:trn></a>
+								</c:if>
+							</span>
+							
+						</div>
+					</div>
+				
+			
 
-			<div class="tab_opt">
-				<div class="tab_opt_cont">
-					<span id="tab_inbox">
-						<c:if test="${messageForm.childTab=='inbox'}">
-							<b class="sm_sel"><digi:trn>Inbox</digi:trn></b> 
-						</c:if>
-						<c:if test="${messageForm.childTab!='inbox'}">
-							<a href="#tab_inbox" class="l_sm"><digi:trn>Inbox</digi:trn></a> 
-						</c:if>
-					</span>
-					&nbsp;|&nbsp;
-						
-					<span id="tab_sent">
-						<c:if test="${messageForm.childTab=='sent'}">
-							<b class="sm_sel"><digi:trn>Sent</digi:trn></b> 
-						</c:if>
-						<c:if test="${messageForm.childTab!='sent'}">
-							<a href="#tab_sent" class="l_sm"><digi:trn>Sent</digi:trn></a>
-						</c:if>
-					</span>
-					&nbsp;|&nbsp; 
-					
-					<span id="tab_draft">
-						<c:if test="${messageForm.childTab=='draft'}">
-							<b class="sm_sel"><digi:trn>Draft</digi:trn></b>
-						</c:if>
-						<c:if test="${messageForm.childTab!='draft'}">
-							<a href="#tab_draft" class="l_sm"><digi:trn>Draft</digi:trn></a>
-						</c:if>
-					</span>
-					
-					
-				</div>
-			</div>
 		</div>
 		
 
@@ -150,10 +158,14 @@ $(document).ready(function(){
 		var selTab = $(this).attr("href");
 		$("#tabs ul li").removeClass("ui-tabs-selected").removeClass("ui-state-active");
 		$(this).parent().addClass("ui-tabs-selected").addClass("ui-state-active");
-		
-		//alert (selTab.substring(6));
-		
 		tabIndex = parseInt(selTab.substring(6));
+		
+		if (tabIndex == 1 || tabIndex == 2) {
+			$("div #subtabContainer").css("visibility", "visible");
+		} else if (tabIndex == 3 || tabIndex == 4) {
+			$("div #subtabContainer").css("visibility", "hidden");
+		}
+		
 		currentPage = 1;
 		switchBoxTab('#tab_inbox');
 		

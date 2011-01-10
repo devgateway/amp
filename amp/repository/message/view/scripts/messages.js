@@ -15,9 +15,16 @@
 		 
      function loadSelectedMessage(id){
      		
-     		if (openedMessageId == id) return;
+     		if (openedMessageId == id) {
+     			$("#msg_body_" + openedMessageId + " > .message").hide("slow");
+     			openedMessageId = null;
+     			return;
+     		}
+     		
      		//Close previously opened message
-     		$("#msg_body_" + openedMessageId + " > .message").hide("slow");
+     		if (openedMessageId != null) {
+	     		$("#msg_body_" + openedMessageId + " > .message").hide("slow");
+  	   	}
      	
      		openedMessageId = id;
      		
@@ -67,10 +74,21 @@
 					msgContainer.find(".message").show("slow");
 					$(".view_all_recipients").unbind("click");
 					$(".view_all_recipients").bind("click", toggleAllRecipientVisibility);
+					
+					//Mark loaded message as read					
+					for (var msgStIdIdx = 0; msgStIdIdx < messageIdStateMap.length; msgStIdIdx ++) {
+						if (parseInt(openedMessageId) == parseInt(messageIdStateMap[msgStIdIdx][1])) {
+							markMsgeAsRead(messageIdStateMap[msgStIdIdx][0]);
+							break;
+						}
+					}
+					
 				} else {
 					$("#msg_body_" + openedMessageId + " > .message").show("slow")
 				}
 		}
+		
+		
         
     function unCheckMessages() {
          var chk=document.messageForm.getElementsByTagName('input');
@@ -292,9 +310,9 @@
 				var isRead=messages[i].getAttribute('read');
 				if(isRead){
 					var msgTd = $("#msg_body_" + msgId);
-					msgTd.find("IMG").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
-					msgTd.find("A").text(msgTd.find("B").text());
-					msgTd.find("B").remove();
+					msgTd.find("IMG.show_msg_link").attr("src", "/TEMPLATE/ampTemplate/img_2/ico_read.gif");
+					msgTd.find("A.show_msg_link").text(msgTd.find("B.show_msg_link").text());
+					msgTd.find("B.show_msg_link").remove();
 				}
 			}
 			deselectAllCheckboxes();
@@ -306,6 +324,7 @@
 	
 	function getMessages(){
 		lastTimeStamp = new Date().getTime();
+		
 		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+ currentPage + '&childTab=' + childTab + '&tabIndex=' + tabIndex +'&timeStamp='+lastTimeStamp);			
 		$("#msgsList").html("<tr><td><div align='center'><img src='/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif'/></div></td></tr>");
 		var async=new Asynchronous();
@@ -398,22 +417,32 @@
 	          		messageListMarkup.push('"');
 	
 	            	if (messages[i].getAttribute('read') == "false") {
-		            	messageListMarkup.push(' class=inside valign="top"><img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" align=left style="margin-right:5px;">');
+		            	messageListMarkup.push(' class=inside valign="top">');
 		            	messageListMarkup.push('<a href=');
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
-	            		messageListMarkup.push(')');
-	            		messageListMarkup.push(' class=l_sm>');
-	            		messageListMarkup.push('<b>');
-		            	messageListMarkup.push(messages[i].getAttribute('name'));
-		            	messageListMarkup.push('</b>');
-	            	} else {
-	            		messageListMarkup.push('" class=inside><img src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" align=left style="margin-right:5px;">');
-	            		messageListMarkup.push('<a href=');
+	            		messageListMarkup.push(')>');
+		            	messageListMarkup.push('<img class="show_msg_link" src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" border="0" align=left style="margin-right:5px;">');
+	            		messageListMarkup.push('</a><a href=');
 	            		messageListMarkup.push('javascript:loadSelectedMessage(');
 	            		messageListMarkup.push(msgId);
 	            		messageListMarkup.push(')');
-	            		messageListMarkup.push(' class=l_sm>');
+	            		messageListMarkup.push(' class="l_sm show_msg_link">');
+	            		messageListMarkup.push('<b class="show_msg_link">');
+		            	messageListMarkup.push(messages[i].getAttribute('name'));
+		            	messageListMarkup.push('</b>');
+	            	} else {
+	            		messageListMarkup.push('" class=inside>');
+	            		messageListMarkup.push('<a href=');
+	            		messageListMarkup.push('javascript:loadSelectedMessage(');
+	            		messageListMarkup.push(msgId);
+	            		messageListMarkup.push(')>');
+	            		messageListMarkup.push('<img class="show_msg_link" src="/TEMPLATE/ampTemplate/img_2/ico_read.gif" border="0" align=left style="margin-right:5px;">');
+	            		messageListMarkup.push('</a><a href=');
+	            		messageListMarkup.push('javascript:loadSelectedMessage(');
+	            		messageListMarkup.push(msgId);
+	            		messageListMarkup.push(')');
+	            		messageListMarkup.push(' class="l_sm show_msg_link">');
 	            		 
 		            	messageListMarkup.push(messages[i].getAttribute('name'));
 	            	}
@@ -581,6 +610,14 @@ $(document).ready(function(){
 	     	$("#show").css("background", "#CCDBFF" );
 	     	$("#show").show('fast');
 	   	});
+	   	
+	   	tabIndex = $("input[name=tabIndex]").val();
+			childTab = $("input[name=childTab]").val();
+			
+			
+			
+			getMessages();
+	   	
 });
     
 function addActionToURL(actionName){

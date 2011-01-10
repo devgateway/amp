@@ -110,7 +110,6 @@
 					<div class="right_menu_header"><div class="right_menu_header_cont"><digi:trn>Icons Reference</digi:trn></div></div>
 					<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - <digi:trn>Unread message</digi:trn><br/>
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_unread.gif" style="margin-right:5px;"> - <digi:trn>Unread message</digi:trn><br/>
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" style="margin-right:5px;"> - <digi:trn>Reply to message</digi:trn><br/>
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" style="margin-right:5px;"> - <digi:trn>Forward message</digi:trn><br/>
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_trash.gif" style="margin-right:5px;"> - <digi:trn>Delete message</digi:trn><br/>

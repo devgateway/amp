@@ -827,7 +827,7 @@ span.extContactDropdownEmail {
 	  </tr>
 	</field:display>
   <tr>
-    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <b class="mand">*</b>
+    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b>
     	<br/>
 	    <span style="font-size:11px;" id="descCharCounter"></span>
 	    <div class="charcounter-progress-container">

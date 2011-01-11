@@ -318,9 +318,9 @@
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 <div class="required_fields">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 	
-	<table cellspacing="0" cellpadding="0" width="100%" id="config_table">
+	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>
-    <td align="right" valign="top"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
+    <td valign="top"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
     <td valign="top">
       <c:set var="translation">
        <digi:trn>Please select from below</digi:trn>
@@ -328,7 +328,7 @@
      <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>
      </td>
  
-    <td align="right" valign="top">Organization</td>
+    <td class="t_mid">Organization</td>
     <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/>
 </tr>
 <tr>
@@ -364,9 +364,9 @@
 </td>
 </tr>
 <tr>
-<td align="right" valign="top"><digi:trn>Firstname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
+<td class="t_mid"><digi:trn>Firstname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
 <td valign="top"><html:text property="name" styleId="name" size="33" styleClass="inputx insidex"/></td>
-<td align="right" valign="top"><digi:trn>Phone Number</digi:trn>:</td>
+<td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
 <td valign="top"><logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 <div><c:set var="translationNone">
@@ -393,9 +393,9 @@
 </logic:empty></td>
 </tr>
 <tr>
-  <td align="right" valign="top"><digi:trn>Lastname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
+  <td class="t_mid"><digi:trn>Lastname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
   <td valign="top"><html:text property="lastname" styleId="lastname" size="33" styleClass="inputx insidex"/></td>
-  <td align="right" valign="top"><digi:trn>Fax</digi:trn>:</td>
+  <td class="t_mid"><digi:trn>Fax</digi:trn>:</td>
   <td valign="top">
   <logic:notEmpty name="addressbookForm" property="faxes">
 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
@@ -414,7 +414,7 @@
   </td>
 </tr>
 <tr>
-  <td align="right" valign="top"><digi:trn>Email</digi:trn>:</td>
+  <td class="t_mid"><digi:trn>Email</digi:trn>:</td>
   <td valign="top">
   <logic:notEmpty name="addressbookForm" property="emails">
 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
@@ -432,11 +432,11 @@
 <a href="#" id="addEmailBtn" onclick="addNewData('email');return false;">${trnadd}</a>
 </logic:empty>
 </td>
-  <td align="right" valign="top"><digi:trn>Office Address</digi:trn>:</td>
+  <td class="t_mid"><digi:trn>Office Address</digi:trn>:</td>
   <td rowspan="2" valign="top"><html:textarea property="officeaddress" styleClass="address_textarea" cols="40" /></td>
 </tr>
 <tr>
-  <td align="right" valign="top"><digi:trn>Function</digi:trn>:</td>
+  <td class="t_mid"><digi:trn>Function</digi:trn>:</td>
   <td valign="top"><html:text property="function" size="33" styleClass="inputx insidex"/></td>
   <td align="right" valign="top">&nbsp;</td>
   </tr>

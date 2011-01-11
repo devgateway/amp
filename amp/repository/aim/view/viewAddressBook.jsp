@@ -378,24 +378,24 @@
 															<div style="width:100%;">
 																<table width="100%">
 																	<tr>
-																		<td class="t_mid" style="padding-right:10px;">
+																		<td class="t_mid" style="padding-right:10px;" width=50 valign=top>
 																			<digi:trn>keyword:</digi:trn>
 																		</td>
-																		<td align="left">
+																		<td align="left" width=300 style="padding-right:10px;">
 																			<div id="myAutoComplete">
 																				<html:text property="keyword" styleId="myInput" style="width:320px;font-size:100%; font-size:12px; border:1px solid #D0D0D0; background-color:#FFFFFF;"></html:text>																																								
 																		    	<div id="myContainer" style="width:315px;"></div>																		    	
 																		    	<html:hidden property="keyword" styleId="myHidden"/>																			   																			    	
 																		   	</div>
 																		</td>
-																		<td align="left">
+																		<td align="left" valign=top>
 																			<c:set var="trn">
 																				<digi:trn>find</digi:trn>
 																			</c:set>
 																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>
-													</td><td align=right>						
+													</td><td align=right class="t_mid" valign=top>						
 																			<digi:trn>Go To : </digi:trn>
-																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px; margin-right:100px;" onchange="clearKeyword()" styleId="alphaDropdown">
+																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="clearKeyword()" styleId="alphaDropdown">
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">
 																					<html:option value="${addressbookForm.currentAlpha}">${addressbookForm.currentAlpha}</html:option>
 																				</c:if>

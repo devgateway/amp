@@ -63,7 +63,7 @@
 					class="green_text">${searchform.keyword}</span>"</div>
 			</c:if>
 
-			<div class="help_search"><digi:trn>Keyword</digi:trn>: <html:text
+			<div class="help_search txt_sm_b"><digi:trn>Keyword</digi:trn>: <html:text
 				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
 			<html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">
@@ -106,9 +106,6 @@
 								</c:choose>
 
 							</c:set>
-							<c:set var="anotherKeyWord">
-							<digi:trn>Please try another keyword.</digi:trn>
-							</c:set>
 							<c:set var="resultFound">
 							<digi:trn>Results found in</digi:trn>
 							</c:set>
@@ -116,8 +113,7 @@
 							<c:if test="${searchform.queryType==-1||searchform.queryType==0}">
 								<div class="${search_results_block_class}"><span
 									class="button_green">${fn:length(resultActivities)}</span>
-								 ${resultFound} <span class="button_green"><digi:trn>Archives</digi:trn></span>
-								${anotherKeyWord}
+								 ${resultFound} <span class="button_green"><digi:trn>Activities</digi:trn></span>
 								<ul>
 									<c:forEach items="${resultActivities}" var="activity">
 										<li><digi:link module="search"
@@ -128,7 +124,7 @@
 								</c:if>
 								<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
 							<div class="${search_results_block_class}"><span
-								class="button_green">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green"><digi:trn>Tabs</digi:trn></span> ${anotherKeyWord}
+								class="button_green">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green"><digi:trn>Tabs</digi:trn></span>
 							<ul>
 								<c:forEach items="${resultTabs}" var="tab">
 									<li><a
@@ -140,7 +136,7 @@
 							</c:if>
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 							<div class="${search_results_block_class}"><span
-								class="button_green">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green"><digi:trn>Reports</digi:trn></span> ${anotherKeyWord}
+								class="button_green">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green"><digi:trn>Reports</digi:trn></span> 
 							<ul>
 								<c:forEach items="${resultReports}" var="report">
 									<li><a
@@ -154,7 +150,6 @@
 							<div class="search_results_block_last"><span
 								class="button_green">${fn:length(resultResources)}</span>
 							${resultFound} <span class="button_green"><digi:trn>Resources</digi:trn></span>
-							${anotherKeyWord}
 							<ul>
 								<c:forEach items="${resultResources}" var="resource">
 									<li><c:choose>

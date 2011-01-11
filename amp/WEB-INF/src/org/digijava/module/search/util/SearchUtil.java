@@ -271,7 +271,7 @@ public class SearchUtil {
 					String uuid = (String) iterator.next();
 					Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
 					NodeWrapper nw = new NodeWrapper(lastVersion);
-					if (keywordMatches(nw, keyword)) {
+					if (nw!=null&&keywordMatches(nw, keyword)) {
 						Resource resource = new Resource();
 						resource.setName(nw.getTitle());
 						resource.setUuid(nw.getUuid());
@@ -301,11 +301,11 @@ public class SearchUtil {
 		String link = n.getWebLink();
 		String name = n.getName();
 
-		if (title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+		if (title!=null&&title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 			return true;
 		}
 
-		if (description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+		if (description!=null&&description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 			return true;
 		}
 
@@ -316,7 +316,7 @@ public class SearchUtil {
 			}
 		} else // It's a doc
 		{
-			if (name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+			if (name!=null&&name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 				return true;
 			}
 		}

@@ -414,8 +414,6 @@
 															</div>
 															<!-- end table title -->
 														</td></tr>
-										
-														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>
                                                                 <div class='yui-skin-sam'>

@@ -297,9 +297,9 @@
 <tbody>
 <tr>
 <td valign="top" align="left">
-<div style="padding-left: 10px; width: 98%; min-width: 680px;"   class="yui-skin-sam" id="content"> 
-<div id="demo"  class="yui-navset yui-navset-top ">
-<ul  class="yui-nav"> 
+<div id="content" class="yui-skin-sam"> 
+<div id="demo" class="yui-navset">
+<ul class="yui-nav">
 	<li>
 	<a href="${contextPath}/aim/addressBook.do?actionType=viewAddressBook&reset=true&tabIndex=1">
 	<div title='<digi:trn>Existing Contacts</digi:trn>'>
@@ -314,13 +314,13 @@
 	</a>
 	</li>
 </ul>
-<div class="yui-content resource_popin">
+<div class="yui-content t_mid" style="border: 1px solid rgb(208, 208, 208);">
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 <div class="required_fields">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 <hr />
 	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>
-    <td class="t_mid"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
+    <td class="t_mid"><digi:trn>Title</digi:trn></td>
     <td>
       <c:set var="translation">
        <digi:trn>Please select from below</digi:trn>

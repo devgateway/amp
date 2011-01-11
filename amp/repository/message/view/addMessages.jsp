@@ -891,7 +891,7 @@ span.extContactDropdownEmail {
 			<c:if test="${not empty messageForm.sdmDocument}">
 				<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
 					<tr>
-						<td colspan="2" style="font-size:12px;>
+						<td colspan="2" style="font-size:12px;">
 							<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 							<c:if test="${not empty messageForm.sdmDocument.id}">
 								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
@@ -900,7 +900,7 @@ span.extContactDropdownEmail {
 								<img src="/repository/message/view/images/attachment.png" border="0" />
 								${attachedDoc.contentTitle}
 							</digi:link>
-							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border=0"/></a>
+							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/></a>
 						</td>
 					</tr>
 				</c:forEach>

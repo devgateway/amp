@@ -583,24 +583,42 @@ function addActionToURL(actionName){
 	
 	var addedGuests = new Array();
 	
+	function validateGuestEmail (email) {
+		var successVal = true;
+		if(email.indexOf("<")!=-1){
+			email=email.substr(email.indexOf("<")+1, email.indexOf(">")-email.indexOf("<")-1); //cut email from "some text <email>"
+		}
+		
+		var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		var expression = new RegExp(pattern)
+    if(expression.test(email)!=true){
+	    var trn='<digi:trn>Please provide correct email</digi:trn>';
+			alert(trn);
+	    successVal = false; 
+    }
+    return successVal;
+	}
+		
+	
 	function addContact(contact){
 		var guestVal=contact.value;
-		if(guestVal.length>0 && $.inArray("c:" + guestVal, addedGuests) < 0){
-			addedGuests.push("c:" + guestVal);
-			var filteredGusetId = guestVal.replace("<", "&lt;").replace(">", "&gt;");
-
-			var guestListItemMarkup = new Array();
-			guestListItemMarkup.push('<div class="msg_added_cont">');
-			guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
-			guestListItemMarkup.push(filteredGusetId);
-			guestListItemMarkup.push('<input name="receiversIds" class="guest_contact_hidden" type="hidden" value="c:');
-			guestListItemMarkup.push(filteredGusetId);
-			guestListItemMarkup.push('">');
-			guestListItemMarkup.push('</div></div>');
-			$('#guest_user_container').append(guestListItemMarkup.join(''));
-		}	
-
-		contact.value = "";
+		if (validateGuestEmail(guestVal)) {
+			if(guestVal.length>0 && $.inArray("c:" + guestVal, addedGuests) < 0){
+				addedGuests.push("c:" + guestVal);
+				var filteredGusetId = guestVal.replace("<", "&lt;").replace(">", "&gt;");
+	
+				var guestListItemMarkup = new Array();
+				guestListItemMarkup.push('<div class="msg_added_cont">');
+				guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+				guestListItemMarkup.push(filteredGusetId);
+				guestListItemMarkup.push('<input name="receiversIds" class="guest_contact_hidden" type="hidden" value="c:');
+				guestListItemMarkup.push(filteredGusetId);
+				guestListItemMarkup.push('">');
+				guestListItemMarkup.push('</div></div>');
+				$('#guest_user_container').append(guestListItemMarkup.join(''));
+			}	
+			contact.value = "";
+		}
 	}
 	
 	function removeGuest(obj) {

@@ -13,5 +13,18 @@
 			<forward name="donor" path="/showLayout.do?layout=donorDashboard" />
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
+	    <action name="visualizationform" path="/visualization/dataDispatcher" parameter="action" scope="session" type="org.digijava.module.visualization.action.DataDispatcher" validate="false">
+	      <forward name="list" path="/showLayout.do?layout=list" />
+	      <forward name="addEdit" path="/showLayout.do?layout=edit"  />
+	      <forward name="save" path="/content/contentManager.do?action=list" redirect="true" />
+	      <forward name="homepage" path="/content/contentManager.do?action=list" redirect="true" />
+	      <forward name="delete" path="/content/contentManager.do?action=list" redirect="true" />
+	    </action>
+		<action name="visualizationform" path="/visualization/filters"
+			scope="session" type="org.digijava.module.visualization.action.ApplyFilter">
+			<forward name="sector" path="/showLayout.do?layout=sectorDashboard" />
+			<forward name="donor" path="/showLayout.do?layout=donorDashboard" />
+			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
+		</action>
 	</action-mappings>
 </struts-config>

@@ -24,16 +24,16 @@ import com.visural.wicket.behavior.beautytips.TipPosition;
  * @author dan
  *
  */
-public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
+public class AmpPMOrganizationsUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
 
 
 
-	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
 		super(id, model, fmName, hideLeadingNewLine);
 		// TODO Auto-generated constructor stub
 	}
 
-	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
+	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
 		super(id, model, fmName);
 		// TODO Auto-generated constructor stub
 		
@@ -42,7 +42,7 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 		AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
 		//IModel usersModel = new Model((Serializable)users);
 		
-		list = new PageableListView<User>("usersList", listModel, 5) {
+		list = new PageableListView<User>("orgsList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<User> item) {

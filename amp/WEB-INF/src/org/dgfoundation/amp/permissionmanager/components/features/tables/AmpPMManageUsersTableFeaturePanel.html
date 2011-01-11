@@ -1,13 +1,18 @@
 <wicket:extend>
 	<tr wicket:id="tableHeading">
-	    <td width=600 background="images/ins_bg.gif" class=inside><b class="ins_title">User Information</b></td>
-	    <td width=110 background="images/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td>
+	    <td width=600 background="img_2/ins_bg.gif" class=inside><b class="ins_title">User Information</b></td>
 	</tr>
 	<tr wicket:id="usersList">
 		<td class="inside" align="left">
-			<b><span wicket:id="userLabel"/></b> - <span wicket:id="userEmailLabel"/>
+			<div id="a">
+				<a href="#" class="sliderPM">
+					<b><span wicket:id="userLabel"/></b> - <span wicket:id="userEmailLabel"/>
+				</a>
+				<div style="display: none;" >
+					<span wicket:id="assignedOrgs"/>
+				</div>
+			</div>
 		</td>
-		<td class="inside" align="center"><span wicket:id="editUser"/></td>
 	</tr>
 
 </wicket:extend>

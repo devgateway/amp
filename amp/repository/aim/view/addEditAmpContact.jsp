@@ -317,7 +317,7 @@
 <div class="yui-content resource_popin">
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 <div class="required_fields">All fields marked with <b style="color:#ff0000">*</b> are required</div>
-	
+<hr />
 	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>
     <td class="t_mid"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
@@ -359,9 +359,9 @@
 </tr>
 <tr>
 <td class="t_mid"><digi:trn>Firstname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-<td valign="top"><html:text property="name" styleId="name" size="33" styleClass="inputx insidex"/></td>
+<td><html:text property="name" styleId="name" size="33" styleClass="inputx insidex"/></td>
 <td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
-<td valign="top"><logic:notEmpty name="addressbookForm" property="phones">
+<td><logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 <div><c:set var="translationNone">
 <digi:trn>None</digi:trn>
@@ -388,9 +388,9 @@
 </tr>
 <tr>
   <td class="t_mid"><digi:trn>Lastname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-  <td valign="top"><html:text property="lastname" styleId="lastname" size="33" styleClass="inputx insidex"/></td>
+  <td><html:text property="lastname" styleId="lastname" size="33" styleClass="inputx insidex"/></td>
   <td class="t_mid"><digi:trn>Fax</digi:trn>:</td>
-  <td valign="top">
+  <td>
   <logic:notEmpty name="addressbookForm" property="faxes">
 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 <html:text name="addressbookForm" property="faxes[${ctr}].value" size="33" styleClass="inputx insidex" styleId="fax_${ctr}"/>																												                    																												                    
@@ -435,8 +435,7 @@
   <td align="right" valign="top">&nbsp;</td>
   </tr>
 </tbody></table>
-<br /><br />
-<input type="button" class="buttonx_sm btn_save" value="Save" onclick="saveContact()">
+<hr /><center><input type="button" class="buttonx_sm btn_save" value="Save" onclick="saveContact()"></center>
 </digi:form>
 </div>
 </div>

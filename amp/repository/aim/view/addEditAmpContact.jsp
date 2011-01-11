@@ -337,14 +337,14 @@
 <td colspan="2">&nbsp;</td>
 <td  colspan="2" align="center">
 <c:if test="${not empty addressbookForm.organizations}">
-<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+<table width="100%" cellSpacing=1 cellPadding=5 class="added_org_nc">
 <c:forEach var="organization" items="${addressbookForm.organizations}">
 <tr>
 <td width="3px">
 <html:multibox property="selOrgs">
 <bean:write name="organization" property="ampOrgId" />
 </html:multibox></td>
-<td align="left" class="l_mid_b"><div style="border:1px solid #CCCCCC;"><bean:write name="organization" property="name" /></div></td>
+<td align="left" class="l_mid_b"><bean:write name="organization" property="name" /></td>
 </tr>
 </c:forEach>
 <tr>

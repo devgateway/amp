@@ -858,7 +858,8 @@ span.extContactDropdownEmail {
         <div style="width:100%;">
             <html:text property="selectedAct" name="messageForm" style="width:100%;"  styleId="statesinput"></html:text>
             <div id="statesautocomplete"></div>
-        </div>     
+        </div>
+        <br>
       </div>
         
     </td>

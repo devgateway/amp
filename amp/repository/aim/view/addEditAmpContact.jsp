@@ -314,9 +314,9 @@
 	</a>
 	</li>
 </ul>
-<div class="yui-content t_mid" style="border: 1px solid rgb(208, 208, 208);">
+<div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
-<div class="required_fields">All fields marked with <b style="color:#ff0000">*</b> are required</div>
+<div class="required_fields t_mid">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 <hr />
 	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>

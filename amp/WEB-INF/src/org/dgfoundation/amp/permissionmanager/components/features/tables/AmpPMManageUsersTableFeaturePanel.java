@@ -53,7 +53,7 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 //				String tooltipText = "info text de test";
 //				if (tooltipText != null) {
 //					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
-//					toolTip.setPositionPreference(TipPosition.bottom);
+//					toolTip.setPositionPreference(TipPosition.right);
 //					item.add(toolTip);
 //				}
 			}

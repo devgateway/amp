@@ -403,7 +403,7 @@
 </logic:iterate>
 </logic:notEmpty>
 <logic:empty name="addressbookForm" property="faxes">
- <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;"> ${trnadd}</a>
+ <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
 </logic:empty>
   </td>
 </tr>
@@ -423,7 +423,7 @@
 </logic:notEmpty> 
 <logic:empty name="addressbookForm" property="emails">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="addEmailBtn" onclick="addNewData('email');return false;">${trnadd}</a>
+<a href="#" id="addEmailBtn" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a>
 </logic:empty>
 </td>
   <td class="t_mid"><digi:trn>Office Address</digi:trn>:</td>

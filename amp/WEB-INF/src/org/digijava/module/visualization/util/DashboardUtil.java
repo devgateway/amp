@@ -201,6 +201,27 @@ public class DashboardUtil {
 		return count;
 	}
 	
+	private static Collection<AmpSector> getAllSectors(){
+		Session session = null;
+        Collection col = new ArrayList();
+        try {	
+        	session = PersistenceManager.getSession();
+			String queryString = "select sec from " + AmpSector.class.getName() + " sec where sec.parentSectorId is null";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception while getting sectors :" + ex);
+		} finally {
+			try {
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+	
 	private static int getRegionsAmount(){
 		Session session = null;
         Query qry = null;
@@ -251,6 +272,44 @@ public class DashboardUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception while getting funding details by regions:" + ex);
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+	
+	private static Collection<AmpFundingDetail>  getFundingDetailsBySector(Long id){
+		Session session = null;
+		Collection col = new ArrayList();
+        try {	
+        	session = PersistenceManager.getRequestDBSession();
+        	String queryString = "SELECT " +
+					"afd.`amp_fund_detail_id`,afd.`fiscal_year`,afd.`fiscal_quarter`,afd.`transaction_type`," +
+					"afd.`adjustment_type`,afd.`transaction_date`,afd.`transaction_date2`,afd.`reporting_date`," +
+					"(afd.`transaction_amount`*aas.`sector_percentage`/100) as transaction_amount," +
+					"afd.`language`,afd.`version`,afd.`cal_type`,afd.`org_role_code`,afd.`exp_category`," +
+					"afd.`fixed_exchange_rate`,afd.`disb_order_id`,afd.`disbursement_order_rejected`,afd.`reporting_org_id`," +
+					"afd.`amp_currency_id`,afd.`amp_funding_id`,afd.`ipa_contract_id`,afd.`fixed_base_currency_id`,afd.`pledge_id` " +
+					"FROM `amp_funding_detail` afd " +
+					"INNER JOIN `amp_funding` af ON (af.`amp_funding_id`=afd.`amp_funding_id`) " +
+					"INNER JOIN `amp_activity` act ON (af.`amp_activity_id`=act.`amp_activity_id`) " +
+					"INNER JOIN `amp_activity_sector` aas ON (act.`amp_activity_id`=aas.`amp_activity_id`) " +
+					"INNER JOIN `amp_sector` asec ON (asec.`amp_sector_id`= aas.`amp_sector_id`) " +
+					"WHERE (asec.`amp_sector_id` =:id " +
+					"OR asec.`parent_sector_id` =:id " +
+					"OR asec.`parent_sector_id` IN (SELECT asec1.`amp_sector_id` FROM  `amp_sector` asec1 WHERE asec1.`parent_sector_id` =:id)) ";
+					 
+        	Query qry = session.createSQLQuery(queryString).addEntity(AmpFundingDetail.class);
+        	qry.setParameter("id", id, Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception while getting funding details by sector:" + ex);
 			ex.printStackTrace();
 		} finally {
 			try {
@@ -332,6 +391,24 @@ public class DashboardUtil {
 	        cal.doCalculations(fundDetList, "USD");
 	        BigDecimal total = cal.getTotActualDisb().getValue();
 	        map.put(region, total);
+		}
+		if (top) {
+			return sortByValueUsingTop (map);
+		} else {
+			return sortByValue (map);
+		}	
+	}
+	
+	public static Map<AmpSector, BigDecimal> getRankSectors (boolean top){
+		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
+		Collection<AmpSector> sectorsList = getAllSectors();
+		for (Iterator iterator = sectorsList.iterator(); iterator.hasNext();) {
+			AmpSector sector = (AmpSector) iterator.next();
+			Collection<AmpFundingDetail> fundDetList = getFundingDetailsBySector(sector.getAmpSectorId());
+			FundingCalculationsHelper cal = new FundingCalculationsHelper();
+	        cal.doCalculations(fundDetList, "USD");
+	        BigDecimal total = cal.getTotActualDisb().getValue();
+	        map.put(sector, total);
 		}
 		if (top) {
 			return sortByValueUsingTop (map);

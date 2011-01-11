@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.visualization.helper.DashboardFilter;
 
@@ -107,6 +108,8 @@ public class VisualizationForm extends ActionForm {
 		private Map<AmpActivity, BigDecimal> fullProjects;
 		private Map<AmpCategoryValueLocations, BigDecimal> topRegions;
 		private Map<AmpCategoryValueLocations, BigDecimal> fullRegions;
+		private Map<AmpSector, BigDecimal> topSectors;
+		private Map<AmpSector, BigDecimal> fullSectors;
 		
 		public Map<AmpOrganisation, BigDecimal> getTopDonors() {
 			return topDonors;
@@ -144,6 +147,18 @@ public class VisualizationForm extends ActionForm {
 		public void setFullRegions(
 				Map<AmpCategoryValueLocations, BigDecimal> fullRegions) {
 			this.fullRegions = fullRegions;
+		}
+		public Map<AmpSector, BigDecimal> getTopSectors() {
+			return topSectors;
+		}
+		public void setTopSectors(Map<AmpSector, BigDecimal> topSectors) {
+			this.topSectors = topSectors;
+		}
+		public Map<AmpSector, BigDecimal> getFullSectors() {
+			return fullSectors;
+		}
+		public void setFullSectors(Map<AmpSector, BigDecimal> fullSectors) {
+			this.fullSectors = fullSectors;
 		}
 		
 	}

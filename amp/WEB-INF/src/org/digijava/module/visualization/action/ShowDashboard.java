@@ -86,6 +86,8 @@ public class ShowDashboard extends Action {
 		visualizationForm.getRanksInformation().setTopProjects(DashboardUtil.getRankActivities(true));
 		visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions(false));
 		visualizationForm.getRanksInformation().setTopRegions(DashboardUtil.getRankRegions(true));
+		visualizationForm.getRanksInformation().setFullSectors(DashboardUtil.getRankSectors(false));
+		visualizationForm.getRanksInformation().setTopSectors(DashboardUtil.getRankSectors(true));
 		
 		// Get Top Projects
 		// Get Top Sectors

@@ -1513,9 +1513,9 @@ public class DbUtil {
             c = q.list();
            
             if ( c != null ) {
-            	Object[] details = new Object[5];
             	Iterator<AmpFundingDetail> iter	= c.iterator();
             	while ( iter.hasNext() ) {
+            		Object[] details = new Object[5];
             		AmpFundingDetail afd	= iter.next();
             		details[0] = afd.getThousandsTransactionAmount();
             		details[1] = afd.getTransactionDate();

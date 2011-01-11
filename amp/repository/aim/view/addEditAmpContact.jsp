@@ -336,13 +336,7 @@
 <tr>
 <td colspan="2">&nbsp;</td>
 <td  colspan="2" align="center">
-<c:choose>
-<c:when test="${empty addressbookForm.organizations}">
-<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
-<digi:trn>Add Organizations</digi:trn>
-</aim:addOrganizationButton>
-</c:when>
-<c:otherwise>
+<c:if test="${not empty addressbookForm.organizations}">
 <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 <c:forEach var="organization" items="${addressbookForm.organizations}">
 <tr>
@@ -359,8 +353,8 @@
 <input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
 </tr>
 </table>
-</c:otherwise>
-</c:choose>
+</c:if>
+
 </td>
 </tr>
 <tr>

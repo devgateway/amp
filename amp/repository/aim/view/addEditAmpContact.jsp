@@ -344,7 +344,7 @@
 <html:multibox property="selOrgs">
 <bean:write name="organization" property="ampOrgId" />
 </html:multibox></td>
-<td align="left"><bean:write name="organization" property="name" /></td>
+<td align="left" class="l_mid_b"><div style="border:1px solid #CCCCCC;"><bean:write name="organization" property="name" /></div></td>
 </tr>
 </c:forEach>
 <tr>

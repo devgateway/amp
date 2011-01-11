@@ -320,8 +320,8 @@
 	
 	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>
-    <td valign="top"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
-    <td valign="top">
+    <td class="t_mid"><digi:trn>Title</digi:trn><b style="color: rgb(255, 0, 0);">*</b></td>
+    <td>
       <c:set var="translation">
        <digi:trn>Please select from below</digi:trn>
        </c:set>
@@ -329,7 +329,7 @@
      </td>
  
     <td class="t_mid">Organization</td>
-    <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/>
+    <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' />
 </tr>
 <tr>
 <td colspan="2">&nbsp;</td>
@@ -356,7 +356,7 @@
 <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
 <digi:trn>Add Organizations</digi:trn>
 </aim:addOrganizationButton> 
-<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
+</td>
 </tr>
 </table>
 </c:otherwise>
@@ -380,7 +380,7 @@
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;">${trnadd}</a>
+<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
 </c:if>
 </div>
 </logic:iterate>
@@ -389,7 +389,7 @@
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;">${trnadd}</a>
+<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
 </logic:empty></td>
 </tr>
 <tr>
@@ -403,7 +403,7 @@
 <a href="javascript:removeData('fax',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
 <c:if test="${ctr==addressbookForm.faxesSize-1}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
- <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;"> ${trnadd}</a>
+ <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
 </c:if>
 <br>
 </logic:iterate>
@@ -422,7 +422,7 @@
  <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 
  <c:if test="${ctr==addressbookForm.emailsSize-1}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="addEmailBtn" onclick="addNewData('email');return false;">${trnadd}</a>
+<a href="#" id="addEmailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a>
 </c:if>
 </div>
 </logic:iterate>

@@ -329,7 +329,9 @@
      </td>
  
     <td class="t_mid">Organization</td>
-    <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' />
+    <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
+<digi:trn>Add Organizations</digi:trn>
+</aim:addOrganizationButton> 
 </tr>
 <tr>
 <td colspan="2">&nbsp;</td>
@@ -353,10 +355,8 @@
 </c:forEach>
 <tr>
 <td colspan="2">
-<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
-<digi:trn>Add Organizations</digi:trn>
-</aim:addOrganizationButton> 
-</td>
+
+<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
 </tr>
 </table>
 </c:otherwise>

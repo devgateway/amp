@@ -43,7 +43,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpPMSearchOrganizationsFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
+	public AmpPMSearchOrganizationsFeaturePanel(String id, IModel<User> model, String fmName) throws Exception {
 		super(id, model, fmName);
 		// TODO Auto-generated constructor stub
 	}
@@ -55,7 +55,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMSearchOrganizationsFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLabel) throws Exception {
+	public AmpPMSearchOrganizationsFeaturePanel(String id, IModel<User> model, String fmName, boolean hideLabel) throws Exception {
 		super(id, model, fmName, hideLabel);
 
 		add(new Label("searchOrganizations","search orgs..."));

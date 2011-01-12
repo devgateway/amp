@@ -53,12 +53,12 @@ public class AmpPMOrganizationsUsersTableFeaturePanel extends AmpFormTableFeatur
 //					toolTip.setPositionPreference(TipPosition.bottom);
 //					item.add(toolTip);
 //				}
+				//item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgs", model, "Assigning Organizations", false));
 			}
 		};
 		list.setReuseItems(true);
 		add(list);
 		
-		add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgs", model, "Assigning Organizations", false));
 		
 	}
 

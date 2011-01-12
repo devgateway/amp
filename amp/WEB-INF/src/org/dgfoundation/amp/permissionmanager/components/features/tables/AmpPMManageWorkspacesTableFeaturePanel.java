@@ -52,6 +52,7 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends
 			protected void populateItem(final ListItem<AmpTeam> item) {
 				final MarkupContainer listParent=this.getParent();
 				item.add(new Label("workspaceName", item.getModelObject().getName()));
+				item.add(new Label("workspaceMembers", item.getModelObject().getName()));
 			//	item.add(new Label("editUser", "editMe"));
 //				String tooltipText = "info text de test";
 //				if (tooltipText != null) {

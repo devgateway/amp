@@ -9,3 +9,4 @@ version: 2.5.2
 
 .yui-pg-container {font-size:12px; line-height:22px; margin-top:15px;}
 .yui-pg-current-page {background-color:#FF6000; color:#FFFFFF; padding:2px;}
+.yui-pg-page {border-right:1px solid #CCCCCC; border-left:1px solid #CCCCCC; padding-left:10px; padding-right:10px}

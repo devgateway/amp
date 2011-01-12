@@ -458,18 +458,25 @@
 								messageListMarkup.push('<td class=inside align=center valign="top">');
 								
 								
-								
-								messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~reply=fillForm~editingMessage=true~msgStateId=');
-								messageListMarkup.push(messages[i].getAttribute('id'));
-								messageListMarkup.push('">');
-								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" border="0" width="16" height="14" style="margin-right:10px;">');
-								messageListMarkup.push('</a>');
-								
-								messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~fwd=fillForm~msgStateId=');
-								messageListMarkup.push(messages[i].getAttribute('id'));
-								messageListMarkup.push('">');
-								messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" border="0" width="16" height="14" style="margin-right:10px;">');
-								messageListMarkup.push('</a>');
+								if (childTab != "draft") {
+									messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~reply=fillForm~editingMessage=true~msgStateId=');
+									messageListMarkup.push(messages[i].getAttribute('id'));
+									messageListMarkup.push('">');
+									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_reply.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('</a>');
+									
+									messageListMarkup.push('<a href="/message/messageActions.do~actionType=replyOrForwardMessage~fwd=fillForm~msgStateId=');
+									messageListMarkup.push(messages[i].getAttribute('id'));
+									messageListMarkup.push('">');
+									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_forward.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('</a>');
+								} else {
+									messageListMarkup.push('<a href="/message/messageActions.do~actionType=fillTypesAndLevels~editingMessage=true~msgStateId=');
+									messageListMarkup.push(messages[i].getAttribute('id'));
+									messageListMarkup.push('">');
+									messageListMarkup.push('<img src="/TEMPLATE/ampTemplate/img_2/ico_edit.gif" border="0" width="16" height="14" style="margin-right:10px;">');
+									messageListMarkup.push('</a>');
+								}
 								
 								messageListMarkup.push('<a href="javascript:deleteMessage(\'');
 								messageListMarkup.push(messages[i].getAttribute('id'));

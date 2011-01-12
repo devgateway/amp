@@ -290,7 +290,7 @@ function isInvalid(field){
 
 																	<tr>
 																		<td width="169" align="right" height="30">
-                                                                 			<digi:trn key="aim:viewEditUser:verifiedAssignedOrg">Verified Assigned Organisation</digi:trn>
+                                                                 			<digi:trn key="aim:viewEditUser:selectOrgVeified">Select Organization To Add as Verified</digi:trn> 
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:select name="umViewEditUserForm" property="assignedOrgId" style="font-family:verdana;font-size:11px;width:180px;">
@@ -306,9 +306,44 @@ function isInvalid(field){
 																            </html:select>
 																		</td>
 																	</tr>
+																	
 																	<tr>
-																		<td>&nbsp;</td>
+																		<td width="169" align="right" height="30">&nbsp;</td>
+																		<td>
+		 	 	 	 		                                                <input type="button" value="Add Organisation" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
+	 	                                                                </td>
 																	</tr>
+																	
+																	<tr>
+																		<td width="169" align="right" height="30"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
+                                                                        <td>
+	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
+    	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs">
+        		                                                                    <tr>
+                	                                                                    <td width="2%">
+                                                                                             <html:multibox name="umViewEditUserForm" property="selAssignedOrgs">
+                                                                                                     <bean:write name="org" property="ampOrgId" scope="page"/>
+                                                                                             </html:multibox>
+                    	                                                                 </td>
+                        	                                                             <td align="left" width="49%">
+                                                                                             <bean:write name="org" property="name" scope="page"/>
+                            	                                                         </td>                                                                                                   
+                                		                                             </tr>
+                                        	                                     </logic:iterate>
+                                            		                         </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+																		<td width="169" align="right" height="30">&nbsp;</td>
+ 	 	 	 															<td>
+																			<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
+																				<input type="button" value="Remove Organisations" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
+																			</logic:notEmpty>                                                                                                                                                       
+ 	 	 	 															</td>
+																	</tr>
+                                                                    
+                                                                    
 																	<tr>
 																		<td width="169" align="right" height="30">
                                                                      		 <digi:trn key="aim:viewEditUser:languageSettings">Language settings</digi:trn>

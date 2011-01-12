@@ -38,6 +38,7 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class User
     extends Entity implements Serializable, Comparable{
@@ -77,6 +78,9 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private Long assignedOrgId;
+
+    private Set<AmpOrganisation> assignedOrgs;
+    
 
 
 	public Long getAssignedOrgId() {
@@ -431,4 +435,13 @@ public class User
 		return this.getName().compareTo(aux.getName());
 	}
 
+   	public Set<AmpOrganisation> getAssignedOrgs() {
+   		return assignedOrgs;
+   	}
+     
+   	public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
+   		this.assignedOrgs = assignedOrgs;
+   	}
+
+	
 }

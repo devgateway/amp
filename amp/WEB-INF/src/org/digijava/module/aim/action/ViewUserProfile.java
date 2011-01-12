@@ -61,14 +61,15 @@ public class ViewUserProfile
                 return mapping.getInputForward();
             }
         } else if (member != null) {
-        	user = DbUtil.getUser(member.getUser().getId()); 
-        	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
-                AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-                if(organization != null){
-                	user.setOrganizationName( organization.getName() );
-                }
-
-            }
+//        	user = DbUtil.getUser(member.getUser().getId()); 
+//        	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
+//                AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
+//                if(organization != null){
+//                	user.setOrganizationName( organization.getName() );
+//                }
+//
+//            }
+        	user = DbUtil.getUser(member.getUser().getId());    
             if(user!=null) 
             	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         }

@@ -53,6 +53,26 @@ public class ViewEditUserForm extends ActionForm {
 	private String confirmNewPassword;
 	private String newPassword;
 	private Boolean displaySuccessMessage;
+	
+	private Collection<AmpOrganisation> assignedOrgs;
+	private Long selAssignedOrgs[];
+	
+
+	public Collection<AmpOrganisation> getAssignedOrgs() {
+		return assignedOrgs;
+	}
+
+	public void setAssignedOrgs(Collection<AmpOrganisation> assignedOrgs) {
+		this.assignedOrgs = assignedOrgs;
+	}
+
+	public Long[] getSelAssignedOrgs() {
+		return selAssignedOrgs;
+	}
+
+	public void setSelAssignedOrgs(Long[] selAssignedOrgs) {
+		this.selAssignedOrgs = selAssignedOrgs;
+	}
 
 	public ViewEditUserForm() {
 

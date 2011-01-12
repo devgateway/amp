@@ -621,6 +621,26 @@ function addActionToURL(actionName){
 		}
 	}
 	
+	function fillExternalContact() {
+		if (selContacts != null && selContacts.length > 0) {
+			var guestListItemMarkup = new Array();
+			for (var contIdx = 0; contIdx < selContacts.length; contIdx ++) {
+				var curContact = selContacts[contIdx];
+				
+				if (curContact.substring(0,2) == "c:") {
+					guestListItemMarkup.push('<div class="msg_added_cont">');
+					guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+					guestListItemMarkup.push(curContact.substring(2));
+					guestListItemMarkup.push('<input name="receiversIds" class="guest_contact_hidden" type="hidden" value="');
+					guestListItemMarkup.push(curContact);
+					guestListItemMarkup.push('">');
+					guestListItemMarkup.push('</div></div>');
+				}
+			}
+			$('#guest_user_container').append(guestListItemMarkup.join(''));
+		}
+	}
+	
 	function removeGuest(obj) {
 		var delControl = $(obj);
 		delControl.parent().parent().remove();
@@ -1137,6 +1157,15 @@ span.extContactDropdownEmail {
 
 <script type="text/javascript">
 	initFileUploads();
+	
+	var selContacts = new Array();
+	<logic:present name="messageForm" property="receiversIds">
+		<logic:iterate indexId="idxId" name="messageForm" property="receiversIds" id="receiversId">
+			selContacts[<bean:write name="idxId"/>] = '<bean:write name="receiversId"/>';
+		</logic:iterate>
+		fillExternalContact();
+	</logic:present>
+	
 </script>
 
 

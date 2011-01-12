@@ -18,6 +18,11 @@ public class ReciverName {
 	public String getUserNeme() {
 		return userNeme;
 	}
+
+    public String getUserNameFiltered() {
+		return userNeme.replaceAll("<", "&lt;").replaceAll(">", "&gt");
+	}
+
 	public void setUserNeme(String userNeme) {
 		this.userNeme = userNeme;
 	}

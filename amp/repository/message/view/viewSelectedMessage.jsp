@@ -44,7 +44,7 @@
 				<tr><td colspan=2><hr /></td></tr>
 				<c:forEach var="recipient" items="${messageForm.receivesrsNameMail}">
 					<tr><td>
-						${recipient.userNeme}
+						${recipient.userNameFiltered}
 					</td><td>
 						${recipient.teamName}
 					</td></tr>

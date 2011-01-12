@@ -17,9 +17,6 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeat
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSearchOrganizationsFeaturePanel;
 import org.digijava.kernel.user.User;
 
-import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
-import com.visural.wicket.behavior.beautytips.TipPosition;
-
 /**
  * @author dan
  *

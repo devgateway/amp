@@ -107,8 +107,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			}
 
 			@Override
-			public void onSelect(AjaxRequestTarget target,
-					AmpOrganisation choice) {
+			public void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
 				ampOrgRole.setOrganisation(choice);
 				ampOrgRole.setActivity(am.getObject());

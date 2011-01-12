@@ -17,15 +17,11 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeat
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSearchOrganizationsFeaturePanel;
 import org.digijava.kernel.user.User;
 
-import com.visural.wicket.behavior.beautytips.BeautyTipBehavior;
-import com.visural.wicket.behavior.beautytips.TipPosition;
-
 /**
  * @author dan
  *
  */
 public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
-
 
 
 	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
@@ -56,12 +52,16 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 //					toolTip.setPositionPreference(TipPosition.right);
 //					item.add(toolTip);
 //				}
+				try {
+					item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgsPerUser", item.getModel(), "Assigning Organizations", true));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
 			}
 		};
 		list.setReuseItems(true);
 		add(list);
-		
-		add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgs", model, "Assigning Organizations", false));
 		
 	}
 

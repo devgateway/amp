@@ -14,8 +14,10 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageUsersSectionFeature;
+import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageWorkspacesSectionFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSectionFeaturePanel;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.um.exception.UMException;
 
 /**
@@ -33,6 +35,7 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
 		
+		//managing users
 		Set<User> s = new TreeSet<User>();
 		List<User> users = new ArrayList<User>();
 		try {
@@ -46,7 +49,21 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		add(new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel));
 		
 		
-		add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
+		//managing workspaces
+		Set<AmpTeam> w = new TreeSet<AmpTeam>();
+		List<AmpTeam> teams = new ArrayList<AmpTeam>();
+		try {
+			teams = org.digijava.module.um.util.DbUtil.getList(AmpTeam.class.getName(),"name");
+		} catch (UMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		w.addAll(teams);
+		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
+		add(new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false));
+		
+		
+		//add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
 		add(new AmpPMSectionFeaturePanel("manageGlobalPermissions", "Manage Global Permissions"));
 		add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
 	}

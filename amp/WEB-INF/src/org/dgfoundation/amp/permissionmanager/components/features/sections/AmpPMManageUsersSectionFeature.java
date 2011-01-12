@@ -41,24 +41,11 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		
 		//OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);
-		IModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);//new Model(new ArrayList());
+	//	IModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);//new Model(new ArrayList());
 		//$users
 		add(usersTable);
 		add(new PagingNavigator("navigator", (PageableListView)usersTable.getList()));
 		idsList = usersTable.getList();
-		
-		
-		//$searchUsers
-//		idsList = new ListView<User>("searchedUsers", listModel) {
-//			
-//			private static final long serialVersionUID = 7218457979728871528L;
-//			@Override
-//			protected void populateItem(final ListItem<User> item) {
-//				item.add(new Label("foundUser", item.getModelObject().getName()));
-//			}
-//		};
-//		idsList.setReuseItems(true);
-//		add(idsList);
 		
 		final AbstractAmpAutoCompleteTextField<User> autoComplete = new AbstractAmpAutoCompleteTextField<User>(AmpPMUserSearchModel.class) {
 

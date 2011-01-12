@@ -654,19 +654,23 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                                       <aim:formatNumber  value="${month.actualAmount}"/>                                                                                    </td>
                                                                                     
                                                                                     
-                                                                                </tr>    <tr>
-                                                                                      <td align="left" valign="baseline"><span class="note"> <font color="blue">*</font>
-                              <digi:trn key="aim:total">Total</digi:trn>
-                  </span></td>
-                                                                                      <td valign="baseline">&nbsp;</td>
-                                                                                        <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
-                                                                                      <td align="center" class="note" valign="baseline"><aim:formatNumber  value="${aimMonthlyInfoForm.totalPlanned}"/></td></c:if>
-                                                                                      <td valign="baseline" class="note" align="right" style="padding-right:5px">
-                                                                                      
-                                                                                       <aim:formatNumber  value="${aimMonthlyInfoForm.totalActual}"/>
-                                                                                      </td></tr>
+                                                                                </tr>    
                                                                             </logic:iterate>
-                                                                       </logic:notEmpty>
+                                                                            <tr>
+                                                                            	<td align="left" valign="baseline">
+                                                                            		<span class="note"> <font color="blue">*</font>
+                              															<digi:trn key="aim:total">Total</digi:trn>
+                  																	</span>
+                  																</td>
+                                                                                <td valign="baseline">&nbsp;</td>
+                                                                                <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
+                                                                                	<td align="center" class="note" valign="baseline"><aim:formatNumber  value="${aimMonthlyInfoForm.totalPlanned}"/></td>
+                                                                                </c:if>
+                                                                                <td valign="baseline" class="note" align="right" style="padding-right:5px">
+																					<aim:formatNumber  value="${aimMonthlyInfoForm.totalActual}"/>
+																				</td>
+																			</tr>
+                                                                       	</logic:notEmpty>
                                                                     </TABLE>
                                                                     
                                                                

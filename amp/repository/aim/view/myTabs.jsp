@@ -278,7 +278,6 @@ function toggleSettings(){
 
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-<br />
 <div id="content"  class="yui-skin-sam"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 

@@ -444,43 +444,47 @@ public class AmpMessageActions extends DispatchAction {
         fillFormFields(message, messagesForm, id,isMessageStateId);
 
         String name = messagesForm.getReceiver();
-        String [] temp = null;
-        temp = name.split(";");
 
-        int i=0;
-        while(i+1 < temp.length){
-        	ReciverName recName = new ReciverName();
-            String tmpName = temp[i];
-            if (tmpName.startsWith(",")) {
-                tmpName = tmpName.substring(1);
-            }
-            String tmpGroup = temp[i+1];
-            recName.setUserNeme(tmpName);
-            recName.setTeamName(tmpGroup);
-            if(messagesForm.getReceivesrsNameMail()==null){
-            	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
-            }
-            messagesForm.getReceivesrsNameMail().add(recName);
-            i+=2;
+        if (name != null) {
+            String [] temp = null;
+            temp = name.split(";");
 
-        }
-        
-      //external people
-        if(message.getExternalReceivers()!=null && message.getExternalReceivers().length()>0){        	
-            String externalPeople=temp[temp.length-1];
-            String[] externalReceivers=externalPeople.split(",");
-            for(int j=0;j<externalReceivers.length;j++){
-            	ReciverName recName = new ReciverName();
-            	String receiverName=externalReceivers[j];
-            	if(j!=externalReceivers.length-1){
-            		receiverName+=",";
-            	}
-                recName.setUserNeme(receiverName);
-                recName.setTeamName("");
+            int i=0;
+            while(i+1 < temp.length){
+                ReciverName recName = new ReciverName();
+                String tmpName = temp[i];
+                if (tmpName.startsWith(",")) {
+                    tmpName = tmpName.substring(1);
+                }
+                String tmpGroup = temp[i+1];
+                recName.setUserNeme(tmpName);
+                recName.setTeamName(tmpGroup);
                 if(messagesForm.getReceivesrsNameMail()==null){
-                	messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
+                    messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
                 }
                 messagesForm.getReceivesrsNameMail().add(recName);
+                i+=2;
+
+            }
+
+        
+            //external people
+            if(message.getExternalReceivers()!=null && message.getExternalReceivers().length()>0){
+                String externalPeople=temp[temp.length-1];
+                String[] externalReceivers=externalPeople.split(",");
+                for(int j=0;j<externalReceivers.length;j++){
+                    ReciverName recName = new ReciverName();
+                    String receiverName=externalReceivers[j];
+                    if(j!=externalReceivers.length-1){
+                        receiverName+=",";
+                    }
+                    recName.setUserNeme(receiverName);
+                    recName.setTeamName("");
+                    if(messagesForm.getReceivesrsNameMail()==null){
+                        messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
+                    }
+                    messagesForm.getReceivesrsNameMail().add(recName);
+                }
             }
         }
 
@@ -1285,7 +1289,7 @@ public class AmpMessageActions extends DispatchAction {
                     result += messages2XML(forwarded,state.getId(),true);
                 }
                 AmpMessage replied = state.getMessage().getRepliedMessage();
-                if(replied!=null){
+                if(replied!=null && replied.getName() != null){
                 	result += messages2XML(replied,state.getId(),false);
                 }
                 result += "</message>";

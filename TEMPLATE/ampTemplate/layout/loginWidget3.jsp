@@ -91,11 +91,12 @@
 		var upass = $(".inp-upassword").attr("value");
 		var password = "<digi:trn jsFriendly='true'>Password</digi:trn>"
 		if (upass=="") {
-			$(".inp-upastext").attr({value: password});
-			$(".inp-upastext").css({color: "grey"});
-			$(".inp-upastext").css({display: ""});
-			$(".inp-upassword").css({display: "none"});
-			$(".inp-upassword").attr({value: ""});
+			//$(".inp-upastext").attr({value: password});
+			//$(".inp-upastext").css({color: "grey"});
+			//$(".inp-upastext").css({display: ""});
+			//$(".inp-upassword").css({display: "none"});
+			$(".inp-upassword").attr({value: password});
+			$(".inp-upassword").css({color: "grey"});
 		}
 	});
 

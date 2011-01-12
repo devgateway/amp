@@ -13,7 +13,7 @@
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"> 
 
 
 
@@ -344,9 +344,10 @@
 <tbody>
 <tr>
 <td valign="top" align="left">
-<div style="padding-left: 10px; width: 98%; min-width: 680px;"   class="yui-skin-sam" id="content"> 
-<div id="demo"  class="yui-navset yui-navset-top ">
-<ul  class="yui-nav"> 
+<div id="content" class="yui-skin-sam"> 
+<div id="demo" class="yui-navset">
+<ul class="yui-nav">
+
 	<li class="selected">
 	<a>
 	<div>
@@ -362,7 +363,7 @@
 	</a>		
 	</li>
 </ul>
-<div class="yui-content resource_popin" style="border-color: rgb(208, 208, 208);">
+<div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
 <jsp:include page="/repository/aim/view/exportTable.jsp" />
 <table>
 <tbody>

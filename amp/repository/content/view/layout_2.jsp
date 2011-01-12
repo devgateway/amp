@@ -11,6 +11,14 @@
 <digi:secure authenticated="true">
   <c:set var="thumbnailCount"> ${fn:length(sessionScope.contentThumbnails)} </c:set>
 </digi:secure>
+<!-- BREADCRUMP START -->
+	<div class="breadcrump">
+		<div class="centering">
+			<div class="breadcrump_cont">
+			</div>
+		</div>
+	</div>
+<!-- BREADCRUMP END -->
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <div align="center">

@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
@@ -28,6 +29,9 @@
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" type="text/css" rel="stylesheet" />
 	<digi:ref href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css" type="text/css" rel="stylesheet" />
+	<digi:ref href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+	
 	
 		 
     <!-- Individual YUI CSS files --> 
@@ -106,29 +110,20 @@
 		<feature:display name="Change Workspace" module="My Desktop">
 			<div class="workspace_info">
 				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-		 		<a id="menutoggle" style="color:#FFFFFF;cursor: pointer;">
-		 			<strong>
-				 		<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
-						${teamMember.teamName}
-					</strong>
-					<img border="0" src="img_2/arr_wrk.gif">
-				</a>
-				<div id="workspacemenu" class="yuimenu">
-    				<div class="bd">
-	        			<ul class="first-of-type">
-	           				<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-									<li class="yuimenuitem" style="height:18px;"><a href="#"><bean:write name="team" property="name"/></a></li>
-								</logic:equal>
-								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-									<li class="yuimenuitem" style="height:18px;"><a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a></li>
-								</logic:notEqual>
-							</logic:iterate>
-	        			</ul>            
-    				</div>
-				</div>
-			</div>
+		 		 <select onchange="selectwkspace(this.value)">
+		 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+						<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+						<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+								<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
+						</logic:equal>
+						<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+								<option value="<bean:write name="item" property="ampTeamMemId"/>">
+									<bean:write name="team" property="name"/>
+								</option>
+						</logic:notEqual>
+					</logic:iterate>
+				</select>
+		 	</div>			
 		</feature:display>
 		</logic:notEmpty>
 		<div>
@@ -142,15 +137,9 @@
 					</td>
 					<td>
 						<feature:display name="Language Option" module="Tools">
-	               			<div id="reports2" class="yuiampmenu" style="margin-top: 10px">
-	                          <div class="bd">                    
-	                              <ul>
-	                              	<digi:insert flush="false" attribute="dropdownLangSwitch" />
-	                              </ul>
-	                          </div>
-	                      	</div>                              
-	                   	</feature:display>
-			  		</td>
+	               			<digi:insert flush="false" attribute="dropdownLangSwitch" />
+	               	 	</feature:display>
+	                </td>
 					<td style="text-transform: uppercase;">
 						<img src="img_2/top_sep.gif" class="top_sep">
 						<digi:link styleClass="loginWidget" href="/j_acegi_logout" module="aim">
@@ -164,16 +153,11 @@
 </div>
 <!-- HEADER END -->
 
-<script language="javascript">
-var oMenu = new YAHOO.widget.Menu("workspacemenu", {  });
-oMenu.render();
-YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu); 
-var lMenu = new YAHOO.widget.Menu("languageemenu", {  });
-lMenu.render();
-
-
+<script type="text/javascript">
+	function selectwkspace(id){
+		var url = "/selectTeam.do?id="+id;
+		document.location.href=url;
+	}
 </script>
-
-
 
 

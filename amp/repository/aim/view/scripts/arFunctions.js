@@ -19,18 +19,35 @@ function toggleRows(caller,hideId){
 	if(caller.alt=='shown') 
 		closing=true;
 	
-	var parentdiv = caller.parentNode;
- 	//hideAllRows();
+	//Get the project name div
+	var parentdiv = caller.parentNode.parentNode.childNodes[5];
+	
+	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[1].children[0];
+	var amountcell_2 = caller.parentNode.parentNode.parentNode.children[2].children[0];
+
+	//hideAllRows();
 	if(caller.alt=='hidden') {
 		caller.alt='shown';
 		caller.src=minus_sign;
 		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name'); 
 		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name_op');
+		
+		YAHOO.util.Dom.removeClass(amountcell_1, 'desktop_project_count');
+		YAHOO.util.Dom.removeClass(amountcell_2, 'desktop_project_count');
+		YAHOO.util.Dom.addClass(amountcell_1, 'desktop_project_count_bolder');
+		YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count_bolder');
+		
+		
 	} else {
 		caller.alt='hidden'; 
 		caller.src=plus_sign;
 		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op'); 
 		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name');
+		
+		YAHOO.util.Dom.removeClass(amountcell_1, 'desktop_project_count_bolder');
+		YAHOO.util.Dom.removeClass(amountcell_2, 'desktop_project_count_bolder');
+		YAHOO.util.Dom.addClass(amountcell_1, 'desktop_project_count');
+		YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count');
 	}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
@@ -71,9 +88,16 @@ function toggleRows(caller,hideId){
 			}
 		}
 		//alert("Found=" + found + " RowDepth=" + rowDepth + " HideDepth=" + hideDepth + " Arty=" + notLevelTooGreat);
-		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) )
+		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) ){
 			tb.rows[i].style.display = display;
-	}
+			var amountdiv_1=tb.rows[i].children[1].children[0];
+			var amountdiv_2=tb.rows[i].children[2].children[0];
+			YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
+			YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
+			YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
+			YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');
+		}
+		}
 
 	//put sub-images to -
 	imgs = tb.getElementsByTagName('img');

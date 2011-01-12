@@ -15,16 +15,7 @@
 <%@page import="java.util.Collections"%>
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
-<%-- <bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" /> --%>
-
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2.css'/>">
-<!--[if IE]>
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters/filters2_IE_.css'/>">
-<![endif]-->
 
 <digi:instance property="aimReportsFilterPickerForm" />
 <digi:form action="/reportsFilterPicker.do">

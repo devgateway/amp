@@ -136,9 +136,10 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px;}
 .show_legend {float:right; font-size:11px; padding-top:9px;} 
 .desktop_project_name {font-size:11px;}
-.desktop_project_name_op {font-size:11px; color:#FF6000;}
+.desktop_project_name_op {font-size:11px; color:#FF6000;font-weight:bolder;}
 .desktop_project_name_sel {background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px; font-size:11px;}
 .desktop_project_count {font-size:11px;}
+.desktop_project_count_bolder {font-size:11px;font-weight:bolder;}
 .desktop_project_count_sel {font-size:11px; background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC;}
 .organization_box {background-color:#EFEFEF; font-size:11px; margin-bottom:5px;}
 .organization_box_content {padding:10px;}
@@ -170,7 +171,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .resource_label_or {background-color:#FF7800; font-size:11px; color:#FFFFFF; padding:2px; margin-right:3px;}
 .resource_label_red {background-color:#FF0000; font-size:11px; color:#FFFFFF; padding:2px; margin-right:3px;}
 #add_resource {display:none; margin-top:3px;}
-#show_legend_pop_box {display:none; margin-top:3px; position:absolute; width:300px; padding:8px; border:1px solid #CCCCCC; background-color:#FDFFE3;}
+#show_legend_pop_box {display:none; margin-top:13px; position:absolute; width:300px; padding:8px; border:1px solid #CCCCCC; background-color:#FDFFE3;}
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}

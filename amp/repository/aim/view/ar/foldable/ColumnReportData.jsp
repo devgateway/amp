@@ -56,7 +56,9 @@
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr style="<%=display%>">
 		<c:if test="${addFakeColumn}">
-				<td class="desktop_project_name" ></td>
+				<td>
+					<div class="desktop_project_name_sel"></div>
+				</td>
 		</c:if>
 		
 		<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">

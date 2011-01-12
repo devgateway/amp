@@ -61,15 +61,15 @@
 	<div class="hd" style="font-size: 8pt">
 		${plsEnterTitle}
 	</div>
-	<div class="bd" id="titlePanelBody">
-		<input type="text" id="saveReportName" onkeyup="saveReportEngine.checkTyping(event)" onkeypress="saveReportEngine.checkEnter(event)"  
-			class="inp-text" style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" value="${reportObject.name}" />
+	<div class="bd" id="titlePanelBody" style="padding: 10px 5px">
+		<input type="text" id="saveReportName" 
+			onkeyup="saveReportEngine.checkTyping(event)" onkeypress="saveReportEngine.checkEnter(event)"  
+			class="inputx" value="${reportObject.name}" style="margin-bottom: 10px;width: 380px" />
 		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
 		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
-		<br /> <br />
-		<div align="right">
-			<button id="dynamic_save_button" type="button" class="buton" 
-				style="font-weight: bold;" onclick="saveReportEngine.saveReport();">
+		
+		<div align="center">
+			<button id="dynamic_save_button" type="button" class="buttonx" onclick="saveReportEngine.saveReport();">
 					${saveBtn}
 			</button>
 			&nbsp;&nbsp;&nbsp;

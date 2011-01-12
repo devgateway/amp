@@ -21,10 +21,10 @@
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">
-<div class="desktop_project_name" id='<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>'> 
+<div class="desktop_project_name_sel" id='<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>'> 
 	<bean:write name="textCell" filter="false"/>
 </div>
-<div class="desktop_project_name">
+<div class="desktop_project_name_sel">
 ......
 </div>
 <div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> Full Text',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>full text</u>]

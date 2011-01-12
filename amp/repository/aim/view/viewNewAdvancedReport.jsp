@@ -13,7 +13,7 @@
   <!-- Dependencies --> 
 
        
- <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" />
+ 
   
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
@@ -69,16 +69,9 @@ function toggleSettings(){
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 
-<div id="mySorter" style="display: none">
+<div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto;">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
-        <!--
-		<a href='#' onclick='hideSorter();return false'>
-			<b>
-				<digi:trn key="rep:pop:Close">Close</digi:trn>
-			</b>
-		</a>
-		 -->
-	</div>
+</div>
 <%
 Integer counter = (Integer)session.getAttribute("progressValue");
 counter++;
@@ -88,19 +81,17 @@ session.setAttribute("progressValue", counter);
 <logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none; height: 100%; overflow: hidden;" >
-			<jsp:include page="/aim/reportsFilterPicker.do" />
+		<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
 	<div id="myRange" style="display: none">
-	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
+		<jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
 	</div>
-	<div id="customFormat" style="display: none">
-	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
+	<div id="customFormat" style="display: none;height: 372px;width: auto;">
+		<jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 	</div>
 </div>
 </logic:notEqual>
-
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 <%
 counter++;
@@ -274,13 +265,13 @@ session.setAttribute("progressValue", counter);
 			        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
 		
 		            <span style="cursor:pointer;float:left;">
-		            <logic:notEmpty name="reportMeta" property="hierarchies">
-		                <a class="settingsLink" onClick="showSorter();">
-		                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-		                </a> | 
-		            </logic:notEmpty> 
+			            <logic:notEmpty name="reportMeta" property="hierarchies">
+			                <a class="settingsLink" onClick="showSorter();">
+			                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+			                </a> | 
+			            </logic:notEmpty> 
 		                <a class="l_sm" onClick="showFilter(); " >
-		                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+		                	<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 		                </a>
 		                <%
 		                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
@@ -296,17 +287,15 @@ session.setAttribute("progressValue", counter);
 		           	  |
 		           	  	<a  id="frezzlink" class="l_sm">
 		               		<script language="">
-						document.write((scrolling)?msg2:msg1);
-					</script>
+								document.write((scrolling)?msg2:msg1);
+							</script>
 		                </a>
 		           	  
 		              </logic:notEqual>
-		                
-		                |<a  class="l_sm" onClick="showFormat(); " >
-		                <digi:trn>Tab Settings</digi:trn>
+		                |<a onClick="showFormat();" class="l_sm">
+		                	<digi:trn>Tab Settings</digi:trn>
 		                </a>
-		           
-		            </span>
+		           	</span>
 		             &nbsp;<br>
 		             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
 		             <table cellpadding="0" cellspacing="0" border="0" width="80%">
@@ -377,9 +366,9 @@ session.setAttribute("progressValue", counter);
                 </a>
            	  
               </logic:notEqual>
-                
-                |<a  class="settingsLink" onClick="showFormat(); " >
-                <digi:trn>Tab Settings</digi:trn>
+                 &nbsp;|&nbsp;
+                 <a class="l_sm" onClick="showFormat(); " style="text-decoration: underline;cursor: pointer;">
+                	<digi:trn>Tab Settings</digi:trn>
                 </a>
            
             </span>

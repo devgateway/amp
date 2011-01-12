@@ -28,12 +28,13 @@
 			WARNING:
 				Do not add Translations here!
 		 ***************************************************-->
-	   	<div class="desktop_project_name">
-            <c:if test="${!(reportData.name == reportMeta.name)}">      
+		  <c:if test="${!(reportData.name == reportMeta.name)}">   
+		  	<div style="width: auto;float: left;margin-right: 10px;margin-bottom: 3px">   
                 <img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="img_2/ico_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
-            </c:if>
-            
-            	<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+          	</div>
+         </c:if>
+	   	<div class="desktop_project_name">
+           <%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
             <b>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
            	    
       	 </div>
@@ -63,9 +64,9 @@
 		<c:if test="${cell==null}">
 			<c:if test="${firstCell==false}">
 					<% if (reportData.getLevelDepth() < 3) { %>
-						<td class="inside">
+						<td class="inside">aaa
 					<% } else { %>	
-						<td class="inside">
+						<td class="inside">bbb
 					<% } %>
 					&nbsp;
 					</td>

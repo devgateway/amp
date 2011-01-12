@@ -396,7 +396,7 @@
     
     				if (messages.length != 0) {
 		    
-		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" type="checkbox" value="" /></td>');
+		    			messageListMarkup.push('<tbody><tr><td width=20 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><input name="" id="select_all_msg_checkbox" type="checkbox" value="" /></td>');
 							messageListMarkup.push('<td width=620 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Message Title</b></td>');
 							messageListMarkup.push('<td width=100 background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align=center><b class="ins_title">Actions</b></td></tr>');
 					
@@ -506,6 +506,11 @@
 						
 						tbl.html(messageListMarkup.join(""));
 						
+						//Set "select all" checkbox handler						
+						$("#select_all_msg_checkbox").bind("change", function () {
+							$("input[id^='delChkbox_']").attr("checked", this.checked);
+						});
+						
 					}			
 				//messages end
 				
@@ -575,24 +580,7 @@
 		}
 	}				
 	
-
-       
-	function selectAllCheckboxes(){
-		var allChkboxes=$("input[id^='delChkbox_']");
-		if(allChkboxes!=null && allChkboxes.length>0){
-			for(var i=0;i<allChkboxes.length;i++){
-				allChkboxes[i].checked=true;
-			}
-		}
-	}
-	function deselectAllCheckboxes(){
-		var allChkboxes=$("input[id^='delChkbox_']");
-		if(allChkboxes!=null && allChkboxes.length>0){
-			for(var i=0;i<allChkboxes.length;i++){
-				allChkboxes[i].checked=false;
-			}
-		}
-	}
+	
 
 	function createMessage(){
 		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels";

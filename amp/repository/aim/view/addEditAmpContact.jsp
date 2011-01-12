@@ -290,7 +290,7 @@
 <!-- Individual YUI CSS files --> 
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"> 
 
 
 <table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	

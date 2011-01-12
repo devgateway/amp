@@ -52,7 +52,14 @@
 
 
 <!-- MAIN CONTENT PART START -->
-
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+<div class="centering">
+<div class="breadcrump_cont">
+<span class="sec_name"><digi:trn>AMP Search</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>AMP Search</digi:trn></span></div>
+</div>
+</div>
+<!-- BREADCRUMP END -->
 <table cellspacing="0" cellpadding="0" border="0" align="center"
 	width="1000">
 	<tr>
@@ -63,7 +70,7 @@
 					class="green_text">${searchform.keyword}</span>"</div>
 			</c:if>
 
-			<div class="help_search txt_sm_b"><digi:trn>Keyword</digi:trn>: <html:text
+			<div class="help_search txt_sm_b" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: <html:text
 				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
 			<html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">

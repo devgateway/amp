@@ -71,14 +71,6 @@
 		<digi:insert attribute="headerMiddle"/>
 	</div>
 	
-	<!-- BREADCRUMP START -->
-		<div class="breadcrump">
-			<div class="centering">
-				<div class="breadcrump_cont">
-				</div>
-			</div>
-		</div>
-	<!-- BREADCRUMP END -->
 			
 	<table width="100%">
 		<tr>

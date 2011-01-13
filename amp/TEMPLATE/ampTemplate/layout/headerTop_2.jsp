@@ -110,7 +110,7 @@
 		<feature:display name="Change Workspace" module="My Desktop">
 			<div class="workspace_info">
 				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-		 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm">
+		 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
 		 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
 						<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
 						<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">

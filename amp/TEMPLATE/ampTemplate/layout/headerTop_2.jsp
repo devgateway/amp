@@ -135,7 +135,7 @@
 						</logic:notEmpty>
 						<img src="img_2/top_sep.gif" class="top_sep">
 					</td>
-					<td>
+					<td valign=bottom>
 						<feature:display name="Language Option" module="Tools">
 	               			<digi:insert flush="false" attribute="dropdownLangSwitch" />
 	               	 	</feature:display>

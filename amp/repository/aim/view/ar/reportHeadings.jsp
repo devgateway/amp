@@ -61,7 +61,7 @@
             		</c:otherwise>
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a class="ins_title" style="cursor:pointer;color:#767676;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a class="ins_title" style="cursor:pointer;color:#FFFFFF; font-size:16px;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -88,7 +88,7 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><b class="ins_title"><c:out value="${reportHeading}"/></b></digi:trn>
+				<digi:trn key="aim:reportBuilder:${reportHeading}"><b class="ins_title" style="color:#FFFFFF;"><c:out value="${reportHeading}"/></b></digi:trn>
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				

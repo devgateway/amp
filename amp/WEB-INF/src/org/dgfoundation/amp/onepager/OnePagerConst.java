@@ -27,9 +27,15 @@ public final class OnePagerConst {
 			//"alert($(this).siblings('div:first').children('div:first').children('div:first').children('div:first').children('div:first')); " +
 			"return false;})";
 
+	public final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
+	
 	public static String getToggleJS(Component c)
 	{
 		return String.format(toggleJS, c.getMarkupId());
+	}
+	public static String getToggleJSPM(Component c)
+	{
+		return String.format(toggleJSPM, c.getMarkupId());
 	}
 
 

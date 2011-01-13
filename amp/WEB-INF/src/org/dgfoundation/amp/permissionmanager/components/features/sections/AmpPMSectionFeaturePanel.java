@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 
 /**
@@ -12,6 +13,8 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
  */
 public class AmpPMSectionFeaturePanel extends AmpFeaturePanel {
 
+	private TransparentWebMarkupContainer sliderPM;
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -20,6 +23,9 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel {
 	public AmpPMSectionFeaturePanel(String id, String fmName) throws Exception {
 		super(id, fmName);
 		// TODO Auto-generated constructor stub
+		sliderPM = new TransparentWebMarkupContainer("sliderPM");
+		sliderPM.setOutputMarkupId(true);
+		add(sliderPM);
 	}
 
 	/**
@@ -32,6 +38,10 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel {
 			throws Exception {
 		super(id, model, fmName);
 		// TODO Auto-generated constructor stub
+		sliderPM = new TransparentWebMarkupContainer("sliderPM");
+		sliderPM.setOutputMarkupId(true);
+		add(sliderPM);
+
 	}
 
 	/**
@@ -45,6 +55,14 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel {
 			boolean hideLabel) throws Exception {
 		super(id, model, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
+		sliderPM = new TransparentWebMarkupContainer("sliderPM");
+		sliderPM.setOutputMarkupId(true);
+		add(sliderPM);
+
 	}
 
+	public TransparentWebMarkupContainer getSliderPM() {
+		return sliderPM;
+	}
+	
 }

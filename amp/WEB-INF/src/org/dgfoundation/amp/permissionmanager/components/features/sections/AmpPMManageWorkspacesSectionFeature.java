@@ -7,12 +7,16 @@ import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMWorkspaceSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageWorkspacesTableFeaturePanel;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
@@ -22,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  */
 public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePanel {
 
+	protected ListView<AmpTeam> idsList;
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -50,22 +56,16 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMManageWorkspacesSectionFeature(String id, IModel<Set<AmpTeam>> workspacesModel,	String fmName, boolean hideLabel) throws Exception {
+	public AmpPMManageWorkspacesSectionFeature(String id, final IModel<Set<AmpTeam>> workspacesModel,	String fmName, boolean hideLabel) throws Exception {
 		super(id, workspacesModel, fmName, hideLabel);
 		
-		AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
-//		
-//		//OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);
-//		IModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);//new Model(new ArrayList());
-//		//$users
-//		add(usersTable);
-//		add(new PagingNavigator("navigator", (PageableListView)usersTable.getList()));
-//		idsList = usersTable.getList();
+		final AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
 		
 		add(workspacesTable);
 		add(new PagingNavigator("workspacesNavigator", (PageableListView)workspacesTable.getList()));
+		idsList = workspacesTable.getList();
 		
-		final AbstractAmpAutoCompleteTextField<AmpTeam> autoComplete = new AbstractAmpAutoCompleteTextField<AmpTeam>(org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMWorkspaceSearchModel.class) {
+		final AbstractAmpAutoCompleteTextField<AmpTeam> autoComplete = new AbstractAmpAutoCompleteTextField<AmpTeam>(AmpPMWorkspaceSearchModel.class) {
 
 			@Override
 			protected String getChoiceValue(AmpTeam choice) throws Throwable {
@@ -74,13 +74,19 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpTeam choice) {
-			//	Set<User> set = usersModel.getObject();
-			//	set.clear();
-			//	set.add(choice);
-				//idsList.removeAll();
+				Set<AmpTeam> set = workspacesModel.getObject();
+				set.clear();
+				set.add(choice);
+				idsList.removeAll();
 				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
-//				add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
-			//	target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+				//target.addComponent(workspacesTable);
+				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
+				System.out.println("+++++++++++++  " + OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
+				for (TransparentWebMarkupContainer sl : workspacesTable.getSliders()) {
+					target.appendJavascript(OnePagerConst.getToggleJSPM(sl));
+					System.out.println("------------  " + OnePagerConst.getToggleJSPM(sl));
+				}
+				//target.appendJavascript(OnePagerConst.toggleJSPM);
 			}
 
 			@Override

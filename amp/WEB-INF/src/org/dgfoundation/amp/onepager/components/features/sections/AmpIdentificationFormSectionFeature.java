@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -49,7 +51,20 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			AmpTextFieldPanel<String> title = new AmpTextFieldPanel<String>(
 					"title", m, "Project Title");
 			title.getTextContainer().setRequired(true);
+			title.getTextContainer().add(new AttributeAppender("size", new Model("36"), ";"));
 			add(title);
+			
+			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
+					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
+					new AmpCategoryValueByKeyModel(
+							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+							CategoryConstants.ACTIVITY_STATUS_KEY),
+							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null);
+			add(status);
+			
+			add(new AmpTextAreaFieldPanel<String>("statusReason",
+					new PropertyModel<String>(am, "statusReason"), "Status Reason", true));
+			
 			AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
 					"budgetCodeProjectID", new PropertyModel<String>(am,
 							"budgetCodeProjectID"), "Budget Code Project ID");

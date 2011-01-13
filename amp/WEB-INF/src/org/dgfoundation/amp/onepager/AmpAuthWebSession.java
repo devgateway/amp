@@ -47,7 +47,10 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		ServletWebRequest wRequest = (ServletWebRequest) request;
 		httpSession = wRequest.getHttpServletRequest().getSession();
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
-		ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		if (currentMember != null)
+			ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
+		else
+			ampCurrentMember = null;
 	}
 
 	public AmpTeamMember getAmpCurrentMember() {

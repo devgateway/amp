@@ -114,20 +114,6 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
 		acsw2.setOutputMarkupId(true);
 		add(acsw2);
-
-		AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
-				"status", CategoryConstants.ACTIVITY_STATUS_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(actModel,"categories"),
-						CategoryConstants.ACTIVITY_STATUS_KEY),
-						CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null);
-		add(status);
-		
-		add(new AmpTextAreaFieldPanel<String>("statusReason",
-				new PropertyModel<String>(actModel, "statusReason"), "Status Reason", true));
-		
-
-	
 	}
 
 }

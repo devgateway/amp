@@ -23,6 +23,7 @@ h1 {text-transform:uppercase;}
 .inputx {border:1px solid #D0D0D0; background-color:#FFFFFF}
 .insidex{font-size:11px;color:#767676;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
+.dropdwn_sm_wksp {border:1px solid #D0D0D0; font-size:11px; background-color:#D0D0D0; color:#FFFFFF;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
 .legend_label {line-height:22px;}
@@ -260,4 +261,3 @@ table.report_indicator{margin-bottom:15px}
 
 .added_org_nc {background-color:#F8F8F8; border:1px solid #EBEBEB; margin-bottom:15px; margin-top:15px;}
 .required_fields {font-size:11px;}
-

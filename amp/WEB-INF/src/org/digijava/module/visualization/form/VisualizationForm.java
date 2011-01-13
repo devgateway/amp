@@ -1,6 +1,10 @@
 package org.digijava.module.visualization.form;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
@@ -10,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.visualization.helper.DashboardFilter;
+import org.digijava.module.visualization.util.Constants;
 
 public class VisualizationForm extends ActionForm {
 
@@ -122,6 +127,7 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullDonors(Map<AmpOrganisation, BigDecimal> fullDonors) {
 			this.fullDonors = fullDonors;
+			this.topDonors = getTop(fullDonors);
 		}
 		public Map<AmpActivity, BigDecimal> getTopProjects() {
 			return topProjects;
@@ -134,6 +140,7 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullProjects(Map<AmpActivity, BigDecimal> fullProjects) {
 			this.fullProjects = fullProjects;
+			this.topProjects = getTop(fullProjects);
 		}
 		public Map<AmpCategoryValueLocations, BigDecimal> getTopRegions() {
 			return topRegions;
@@ -147,6 +154,7 @@ public class VisualizationForm extends ActionForm {
 		public void setFullRegions(
 				Map<AmpCategoryValueLocations, BigDecimal> fullRegions) {
 			this.fullRegions = fullRegions;
+			this.topRegions = getTop(fullRegions);
 		}
 		public Map<AmpSector, BigDecimal> getTopSectors() {
 			return topSectors;
@@ -159,8 +167,24 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullSectors(Map<AmpSector, BigDecimal> fullSectors) {
 			this.fullSectors = fullSectors;
+			this.topSectors = getTop(fullSectors);
 		}
 		
+		private Map getTop (Map map){
+			int top = Constants.GlobalSettings.TOP_LIMIT;
+		    List list = new LinkedList(map.entrySet());
+			Map result = new LinkedHashMap();
+		    int counter = 0;
+		    for (Iterator it = list.iterator(); it.hasNext();) {
+		        Map.Entry entry = (Map.Entry)it.next();
+		        result.put(entry.getKey(), entry.getValue());
+		        counter++;
+		        if (counter>=top) {
+					break;
+				}
+		    }
+		    return result;
+		}
 	}
 
 }

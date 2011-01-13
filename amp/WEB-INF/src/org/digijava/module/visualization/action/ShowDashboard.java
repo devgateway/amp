@@ -80,14 +80,10 @@ public class ShowDashboard extends Action {
 		// Get Summary Information
 		DashboardUtil.getSummaryInformation(visualizationForm);
 
-		visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors(false));
-		visualizationForm.getRanksInformation().setTopDonors(DashboardUtil.getRankDonors(true));
-		visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities(false));
-		visualizationForm.getRanksInformation().setTopProjects(DashboardUtil.getRankActivities(true));
-		visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions(false));
-		visualizationForm.getRanksInformation().setTopRegions(DashboardUtil.getRankRegions(true));
-		visualizationForm.getRanksInformation().setFullSectors(DashboardUtil.getRankSectors(false));
-		visualizationForm.getRanksInformation().setTopSectors(DashboardUtil.getRankSectors(true));
+		visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors());
+		visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities());
+		visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions());
+		visualizationForm.getRanksInformation().setFullSectors(DashboardUtil.getRankSectors());
 		
 		// Get Top Projects
 		// Get Top Sectors

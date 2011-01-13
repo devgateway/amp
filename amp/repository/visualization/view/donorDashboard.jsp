@@ -220,50 +220,78 @@ Web Link: <b>Not applicable</b>
 </fieldset>	
 	<fieldset>
 	<legend><span class=legend_label>Top Projects</span></legend>
-	<div class="field_text">
-1. Project one <b>($25,1)</b>
-<hr />
-2. Project two <b>($21)</b>
-<hr />
-3. Project three <b>($19,3)</b>
-<hr />
-4. Project four <b>($18,2)</b>
-<hr />
-5. Project five <b>($15,2)</b>
-<hr />
-<a href=# style="float:right;">View Full List</a>
-</div>
+	<div id="divTopProjects" class="field_text">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${projectItem.key}"/>  <b>($<c:out value="${projectItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:showFullProjects()" style="float:right;">View Full List</a>
+	</div>
+	<div id="divFullProjects" class="field_text" style="display: none;">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.fullProjects}" var="projectItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${projectItem.key}"/>  <b>($<c:out value="${projectItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:hideFullProjects()" style="float:right;">View Top List</a>
+	</div>
 </fieldset>	
 	<fieldset>
 	<legend><span class=legend_label>Top Sectors</span></legend>
-	<div class="field_text">
-1. Sector one <b>($25,1)</b>
-<hr />
-2. Sector two <b>($21)</b>
-<hr />
-3. Sector three <b>($19,3)</b>
-<hr />
-4. Sector four <b>($18,2)</b>
-<hr />
-5. Sector five <b>($15,2)</b>
-<hr />
-<a href=# style="float:right;">View Full List</a>
-</div>
+	<div id="divTopSectors" class="field_text">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.topSectors}" var="sectorItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:showFullSectors()" style="float:right;">View Full List</a>
+	</div>
+	<div id="divFullSectors" class="field_text" style="display: none;">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.fullSectors}" var="sectorItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:hideFullSectors()" style="float:right;">View Top List</a>
+	</div>
 </fieldset>	
 	<fieldset>
 	<legend><span class=legend_label>Top Regions</span></legend>
-	<div class="field_text">
-1. Region one <b>($25,1)</b>
-<hr />
-2. Region two <b>($21)</b>
-<hr />
-3. Region three <b>($19,3)</b>
-<hr />
-4. Region four <b>($18,2)</b>
-<hr />
-5. Region five <b>($15,2)</b>
-<hr /><a href=# style="float:right;">View Full List</a>
-</div>
+	<div id="divTopRegions" class="field_text">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:showFullRegions()" style="float:right;">View Full List</a>
+	</div>
+	<div id="divFullRegions" class="field_text" style="display: none;">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.fullRegions}" var="regionItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:hideFullRegions()" style="float:right;">View Top List</a>
+	</div>
 </fieldset>	
 	<fieldset>
 	<legend><span class=legend_label>Sector Working Groups</span></legend>
@@ -429,6 +457,48 @@ YAHOO.util.Event.addListener("applyButton", "click", callbackApply);
 var myTabs = new YAHOO.widget.TabView("demo");
 myTabs.selectTab(0);
 var loadingPanel = new yuiLoadingPanel();
+
+function showFullProjects(){
+	var divFull = document.getElementById("divFullProjects");
+	var divTop = document.getElementById("divTopProjects");
+	divFull.style.display = "";
+	divTop.style.display = "none";
+}
+
+function hideFullProjects(){
+	var divFull = document.getElementById("divFullProjects");
+	var divTop = document.getElementById("divTopProjects");
+	divFull.style.display = "none";
+	divTop.style.display = "";
+}
+
+function showFullSectors(){
+	var divFull = document.getElementById("divFullSectors");
+	var divTop = document.getElementById("divTopSectors");
+	divFull.style.display = "";
+	divTop.style.display = "none";
+}
+
+function hideFullSectors(){
+	var divFull = document.getElementById("divFullSectors");
+	var divTop = document.getElementById("divTopSectors");
+	divFull.style.display = "none";
+	divTop.style.display = "";
+}
+
+function showFullRegions(){
+	var divFull = document.getElementById("divFullRegions");
+	var divTop = document.getElementById("divTopRegions");
+	divFull.style.display = "";
+	divTop.style.display = "none";
+}
+
+function hideFullRegions(){
+	var divFull = document.getElementById("divFullRegions");
+	var divTop = document.getElementById("divTopRegions");
+	divFull.style.display = "none";
+	divTop.style.display = "";
+}
 
 //-->
 </script>

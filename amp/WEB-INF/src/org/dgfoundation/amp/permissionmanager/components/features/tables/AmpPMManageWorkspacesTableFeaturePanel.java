@@ -52,20 +52,14 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends
 			protected void populateItem(final ListItem<AmpTeam> item) {
 				final MarkupContainer listParent=this.getParent();
 				item.add(new Label("workspaceName", item.getModelObject().getName()));
-				item.add(new Label("workspaceMembers", item.getModelObject().getName()));
-			//	item.add(new Label("editUser", "editMe"));
-//				String tooltipText = "info text de test";
-//				if (tooltipText != null) {
-//					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
-//					toolTip.setPositionPreference(TipPosition.right);
-//					item.add(toolTip);
-//				}
-//				try {
-//					item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgsPerUser", item.getModel(), "Assigning Organizations", true));
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}	
+				AmpPMViewUsersTableFeaturePanel usersList = null;
+				try {
+						usersList = new AmpPMViewUsersTableFeaturePanel("workspaceMembers", item.getModel(), "Workspace Members", false);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				item.add(usersList);
 			}
 		};
 		list.setReuseItems(true);

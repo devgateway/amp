@@ -1,8 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class TeamMember {
+public class TeamMember implements Comparable, Serializable{
 
 	private Long memberId;
 
@@ -257,6 +258,14 @@ public class TeamMember {
 
 	public boolean isApprover() {
 		return approver;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		if(arg0!=null || !(arg0 instanceof Long)) return -1;
+		Long newId = (Long)arg0;
+		return this.getMemberId().compareTo(newId); 
 	}	
 	
 }

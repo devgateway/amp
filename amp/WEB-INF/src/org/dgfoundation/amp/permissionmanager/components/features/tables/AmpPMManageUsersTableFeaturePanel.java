@@ -31,7 +31,6 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 
 	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
 		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
 		
 		//final List<User> users= org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
 		//final IModel<Set<User>> usersModel = new AmpPMUserModel();

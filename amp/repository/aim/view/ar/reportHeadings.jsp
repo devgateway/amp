@@ -50,7 +50,7 @@
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
         
-        <td background="img_2/ins_bg_1.gif" class="inside" style="padding-left:33px; font-size:16px; font-weight:bold; color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        <td background="img_2/ins_bg_1.gif" class="inside" align=center style="font-size:16px; font-weight:bold; color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
             	<c:choose>
             		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">
@@ -61,7 +61,7 @@
             		</c:otherwise>
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a class="ins_title" style="cursor:pointer;color:#FFFFFF; font-size:16px;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a class="ins_title" style="cursor:pointer;color:#FFFFFF; font-size:16px; float:left; padding-left:33px;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>

@@ -123,7 +123,7 @@
       </logic:iterate>
       
     </logic:iterate>
-    <td width="16"><img src=img_2/ins_bg_1.gif width=16 height=1 /></td>
+    <td width="16" bgcolor=#FFFFFF><img src=img_2/t.gif width=16 height=1 /></td>
   </tr>
 
   <%}

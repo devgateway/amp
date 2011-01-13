@@ -24,7 +24,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  */
 public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	private TransparentWebMarkupContainer slider;
+	
 	private List<TransparentWebMarkupContainer> sliders;
 	
 	/**
@@ -53,7 +53,6 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 		super(id, model, fmName, hideLeadingNewLine);
 		sliders = new ArrayList<TransparentWebMarkupContainer>();
 
-		
 		AbstractReadOnlyModel<List<AmpTeam>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
 		list = new PageableListView<AmpTeam>("usersList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;
@@ -61,6 +60,7 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 			protected void populateItem(final ListItem<AmpTeam> item) {
 				final MarkupContainer listParent=this.getParent();
 				item.add(new Label("workspaceName", item.getModelObject().getName()));
+				final TransparentWebMarkupContainer slider;
 				slider = new TransparentWebMarkupContainer("sliderWorkspaceInfo");
 				slider.setOutputMarkupId(true);
 				item.add(slider);
@@ -79,10 +79,6 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 		list.setReuseItems(true);
 		add(list);
 		
-	}
-	
-	public TransparentWebMarkupContainer getSlider() {
-		return slider;
 	}
 	
 	public List<TransparentWebMarkupContainer> getSliders() {

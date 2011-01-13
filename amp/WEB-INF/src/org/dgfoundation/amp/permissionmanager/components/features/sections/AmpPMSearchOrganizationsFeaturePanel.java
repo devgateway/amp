@@ -58,7 +58,41 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 	public AmpPMSearchOrganizationsFeaturePanel(String id, IModel<User> model, String fmName, boolean hideLabel) throws Exception {
 		super(id, model, fmName, hideLabel);
 
-		add(new Label("searchOrganizations","search orgs..."));
+	//	add(new Label("searchOrganizations","search orgs..."));
+		
+		
+		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {
+
+			@Override
+			protected String getChoiceValue(AmpOrganisation choice)
+					throws Throwable {
+				return choice.getAcronymAndName();
+			}
+
+			@Override
+			public void onSelect(AjaxRequestTarget target,AmpOrganisation choice) {
+//				AmpOrganisationContact ampOrgCont = new AmpOrganisationContact();
+//				ampOrgCont.setOrganisation(choice);
+//				ampOrgCont.setContact(model.getObject());
+//				Set<AmpOrganisationContact> set = setModel.getObject();
+//				set.add(ampOrgCont);
+//				idsList.removeAll();
+				target.addComponent(idsList.getParent());
+			}
+
+			@Override
+			public Integer getChoiceLevel(AmpOrganisation choice) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
+		autoComplete.add(sizeModifier);
+		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
+		add(searchOrgs);
+		
+		
+		
 		//TODO
 		
 //		final AbstractAmpAutoCompleteTextField<AmpOrganisation> autoComplete = new AbstractAmpAutoCompleteTextField<AmpOrganisation>(AmpOrganisationSearchModel.class) {

@@ -8,7 +8,7 @@
 
 	<digi:instance property="translationForm"/>
 	<logic:present name="translationForm" property="languages">
-		<html:select property="referUrl" onchange="SwithLanguage(this)">
+		<html:select property="referUrl" onchange="SwithLanguage(this)" styleClass="dropdwn_sm_lng">
 			<logic:iterate id="languages" name="translationForm" property="languages" type="org.digijava.module.translation.form.TranslationForm.TranslationInfo">
 				<bean:define id="langReferUrl" name="languages" property="referUrl" type="java.lang.String"/>
 				<html:option value='<%= langReferUrl %>'>

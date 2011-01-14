@@ -859,18 +859,7 @@ A.menu:hover
 
 .buton, input[type="button"], input[type="reset"],input[type="submit"] 
 {  
-	font-family: Verdana, Arial, Helvetica, sans-serif; 
-	font-size: 11px; 
-	color: #000000; 
-	text-decoration: none; 
-	background-color: #ECF3FD; 
-	border-color: #FFFFFF #003399 #003399 #FFFFFF; 
-	border-style: solid; 
-	border-top-width: 1px; 
-	border-right-width: 1px; 
-	border-bottom-width: 1px; 
-	border-left-width: 1px
-}
+background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 
 .button 
 {  

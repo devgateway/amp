@@ -43,7 +43,7 @@
 			          		<td valign="top"  align="left">
 			          			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				                	<tr>
-				                  		<td style="font-weight:Bold;font-family:Tahoma;padding:10px;font-size: 12px;color: #800000">
+				                  		<td style="font-weight:Bold;font-family:Tahoma;padding-left:10px;font-size: 12px;color: #000000">
 				                   			<digi:trn> Today&nbsp;is:</digi:trn>
 				       	            		${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
 				                  		</td>

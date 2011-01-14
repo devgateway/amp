@@ -18,35 +18,60 @@
 
 
 <style>
-		.yui-skin-sam .yui-dt th, .yui-skin-sam .yui-dt th a {
-		color:#000000;
-		font-weight:bold;
-		font-size: 11px;
-		text-decoration:none;
-		vertical-align:bottom;
-		}
-	
-		.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
-		background:transparent url(/repository/aim/images/up.gif) no-repeat scroll right center;
-		}
-		.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
-		background:transparent url(/repository/aim/images/down.gif) no-repeat scroll right center;
-		}
-		.yui-skin-sam .yui-dt td {
-		color:#000000;
-		font-size: 11px;
-		text-decoration:none;
-		vertical-align:bottom;
-		}
+.yui-skin-sam .yui-dt th,.yui-skin-sam .yui-dt th a {
+	color: #000000;
+	font-weight: bold;
+	font-size: 11px;
+	text-decoration: none;
+	vertical-align: bottom;
+}
 
+.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
+	background: transparent url(/repository/aim/images/up.gif) no-repeat
+		scroll right center;
+}
 
-	</style>
+.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
+	background: transparent url(/repository/aim/images/down.gif) no-repeat
+		scroll right center;
+}
+
+.yui-skin-sam .yui-dt td {
+	color: #000000;
+	font-size: 11px;
+	text-decoration: none;
+	vertical-align: bottom;
+}
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
+}
+
+</style>
 
 <!-- for auto complete -->
 <style type="text/css">
 
 
-.autocompleteClass .yui-ac{position:relative;font-family:arial;font-size:100%;}
+.autocompleteClass .yui-ac{position:relative;font-size:12px;}
 .autocompleteClass .yui-ac-input{position:absolute;width:100%;}
 .autocompleteClass .yui-ac-container{position:absolute;top:1.6em;width:100%;}
 .autocompleteClass .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
@@ -193,14 +218,31 @@
 		        var myPaginator = new YAHOO.widget.Paginator({ 
 		        	rowsPerPage:10,
 		        	//totalRecords:document.getElementById("totalResults").value,
-		        	containers : ["dt-pag-nav"], 
-		        	template : "<digi:trn>Results:</digi:trn>{RowsPerPageDropdown}<br/>[{FirstPageLink} {PreviousPageLink}] {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;{CurrentPageReport}", 
-		        	pageReportTemplate		: "<digi:trn>Showing items</digi:trn> {startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}", 
+		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
+		        	template : "{CurrentPageReport} <span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>", 
+		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
 		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-		        	firstPageLinkLabel		: '<< <digi:trn jsFriendly="true">first</digi:trn>',
-		        	previousPageLinkLabel	: '< <digi:trn jsFriendly="true">prev</digi:trn>',
-		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn> >',
-		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn> >>'
+		        	firstPageLinkLabel : 	"<digi:trn>first</digi:trn>", 
+		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+		        	firstPageLinkClass : "l_sm",
+		        	lastPageLinkClass: "l_sm",
+		        	nextPageLinkClass: "l_sm",
+		        	previousPageLinkClass: "l_sm",
+		        	rowsPerPageDropdownClass:"l_sm",
+		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn>',
+		        	 // use custom page link labels
+		            pageLabelBuilder: function (page,paginator) {
+		                var curr = paginator.getCurrentPage();
+		                if(curr==page){
+		                	return "<span class='current-page'>"+page+"</span>|";
+		                }
+		                else{
+		                	return page;
+		                }
+		                
+		            }
+
 		        });
 		         
 		        var myConfigs = {
@@ -340,6 +382,14 @@
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='autocompleteClass';
 </script>
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+<div class="centering">
+<div class="breadcrump_cont">
+<span class="sec_name"><digi:trn>Address Book</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Address Book</digi:trn></span></div>
+</div>
+</div>
+<!-- BREADCRUMP END --> 
 <table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	
 <tbody>
 <tr>
@@ -418,6 +468,7 @@
 														<tr>
 															<td>
                                                                 <div class='yui-skin-sam'>
+                                                                <div id="dt-pag-nav2"></div>
 									                            	<div id="dynamicdata" class="report"></div>                            	
 																	<div id="dt-pag-nav"></div>
 																	<div id="errors"></div>

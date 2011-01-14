@@ -259,7 +259,7 @@
 								<digi:trn>Search Organizations</digi:trn></td>
 						</tr>
 						<tr>
-							<td align="center" bgcolor="#ECF3FD">
+							<td align="center" bgcolor="#F8F8F8">
 								<table cellSpacing="2" cellPadding="2">
 									<tr>
 										<td>
@@ -329,19 +329,19 @@
 										<table width="100%" cellPadding="3" id="searchResults">
 											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
-													<td bgcolor=#ECF3FD width="1%">&nbsp;</td>		
+													<td bgcolor=#F8F8F8 width="1%">&nbsp;</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">		
-														<td bgcolor="#ECF3FD" width="10%">
+														<td bgcolor="#F8F8F8" width="10%">
 															<html:multibox	property="selOrganisations" styleClass="orgsMultibox">
 																<bean:write name="organisations" property="ampOrgId" />
 															</html:multibox>&nbsp;
 														</td>
 													</logic:equal>
-													<td bgcolor="#ECF3FD" width="90%">
+													<td bgcolor="#F8F8F8" width="90%">
 														<bean:write	name="organisations" property="acronym" />&nbsp;&nbsp; ( <bean:write  name="organisations" property="name" /> )
 													</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="false">
-														<td bgcolor="#ECF3FD" width="1%">
+														<td bgcolor="#F8F8F8" width="1%">
 															<logic:equal name="aimSelectOrganizationForm" property="useClient" value="false">
 																<html:button property="select" onclick="setOrganization(${organisations.ampOrgId})">
 																	<digi:trn>Select</digi:trn>

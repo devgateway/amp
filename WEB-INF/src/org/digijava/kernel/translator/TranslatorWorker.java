@@ -221,6 +221,7 @@ public class TranslatorWorker {
      */
     public static String translateText(String text, String keyWords, String locale, String siteId) throws WorkerException{
         String retVal = null;
+        text=text.trim();
         TranslatorWorker worker = getInstance("");
         //Try to find translation
         Message msg = worker.getByBody(text, keyWords, locale, siteId);

@@ -1048,6 +1048,15 @@ public class SectorUtil {
  	 				ret.add(ampSector);
  	 				Collection<AmpSector> dbChildReturnSet = SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
  	 				ampSector.getChildren().addAll( dbChildReturnSet);
+ 	 				if ( ampSector.getChildren() != null ) {
+ 	 					Iterator<AmpSector> iter2	= ampSector.getChildren().iterator();
+ 	 					while (iter2.hasNext() ) {
+ 	 						AmpSector ampSubSector	= iter2.next();
+ 	 						Collection<AmpSector> dbChildReturnSet2 = SectorUtil.getAllChildSectors( ampSubSector.getAmpSectorId() );
+ 	 						if (dbChildReturnSet2 != null)
+ 	 							ampSubSector.getChildren().addAll(dbChildReturnSet2);
+ 	 					}
+ 	 				}
  	 			}
  	 		}
 		} catch (DgException e) {

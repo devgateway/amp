@@ -496,8 +496,9 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 					String translColName	= TranslatorWorker.translateText(colName, this.locale, this.siteId);
 					ret						+= " / " + translColName;
 				}
+				ret		+= " /";
 				if ( ret.length() > 0 )
-					ret		= ret.substring(3);
+					ret		= ret.substring(1);
 			}
 		}
 		catch (Exception e) {

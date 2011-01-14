@@ -28,7 +28,14 @@
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
   <c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
-  	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">&nbsp;</td>
+  	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">
+  		<% if ( curDepth == 1 ) {  %>
+		<logic:notEmpty name="reportMeta" property="hierarchies">
+       		${reportMeta.hierarchiesPath}
+		</logic:notEmpty>
+		<%} %>
+		&nbsp;
+  	</td>
   </c:if>
   <%boolean first=true; %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
@@ -45,7 +52,7 @@
       	if(first && (token!=null || total!=null)){%>
       	
       	<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
-      	  <td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "> </td>	
+      	  <td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "></td>	
         <%}
         first=false;
         %>
@@ -56,8 +63,12 @@
         
         <logic:equal name="column" property="columnDepth" value="1">
         	
-        	<td style="border-bottom:#E2E2E2 0px solid;background-color:#EAEAEA;padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'> 
-        	  
+        	<td style="border-bottom:#E2E2E2 0px solid;background-color:#EAEAEA;padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        	  		<logic:notEmpty name="reportMeta" property="hierarchies">
+		           		<c:if test="${colIndexId==0 && (reportMeta.hideActivities == null || !reportMeta.hideActivities)}">
+		           			${reportMeta.hierarchiesPath}<br/> 
+		           		</c:if>
+		           </logic:notEmpty>
 	        		<c:choose>
 	            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == column.name}">
 	            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", ! filterBean.getSortByAsc() ); %>
@@ -90,9 +101,6 @@
 	                	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	              	</logic:equal>
 	            </c:if>
-	           <logic:notEmpty name="reportMeta" property="hierarchies">
-	           		<c:if test="${colIndexId==0}"> <br/> ( ${reportMeta.hierarchiesPath} )</c:if>
-	           </logic:notEmpty>      
 	         </td>
           </logic:equal>
           

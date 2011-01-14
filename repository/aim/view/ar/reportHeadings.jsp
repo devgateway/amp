@@ -61,6 +61,9 @@
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
 	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              		<logic:notEmpty name="reportMeta" property="hierarchies">
+			           		<c:if test="${colIndexId==0}">${reportMeta.hierarchiesPath}<br/> </c:if>
+			           </logic:notEmpty>
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -116,9 +119,7 @@
 	                    		
           	</logic:equal>            
           </logic:notEqual>
-          	<logic:notEmpty name="reportMeta" property="hierarchies">
-           		<c:if test="${colIndexId==0}"> <br/> ( ${reportMeta.hierarchiesPath} )</c:if>
-           </logic:notEmpty> 
+          	
         </td>
 
       </logic:iterate>

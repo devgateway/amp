@@ -33,7 +33,6 @@ public class TrnTextColWorker extends TextColWorker {
 		
 		TrnTextCell ret=new TrnTextCell(ownerId);
 		ret.setId(id);
-		value=(value!=null)?value.trim():"";
 		ret.setValue(value);
 		return ret;
 	}

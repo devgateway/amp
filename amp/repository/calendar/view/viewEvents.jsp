@@ -12,7 +12,7 @@
 
 <digi:instance  property="calendarViewForm"/>
 <c:if test="${!calendarViewForm.print}">			
-	<table border="0" width="95%" height="100%" align="center"> 
+	<table border="0" width="1000" height="100%" align="center"> 
        	<tr>			
 			<td height="33" colspan="2">				
 				<span class="crumb">					

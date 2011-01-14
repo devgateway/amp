@@ -96,25 +96,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
 		add(searchOrgs);
 
-//		AmpButtonField addbutton = new AmpButtonField("saveButton", "Save Verified Organizations") {
-//			@Override
-//			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-////				AmpCo<>mponent comp = new AmpComponent();
-////				setModel.getObject().add(comp);
-//				try {
-//					DbUtil.updateUser(model.getObject());
-//				} catch (UMException e) {
-//					e.printStackTrace();
-//				}
-//				target.addComponent(this.getParent());
-////				target.appendJavascript(OnePagerConst.slideToggle);
-//				
-//			}
-//		};
-//		add(addbutton);
-
 		add(new Link("saveButton"){
-
 			@Override
 			public void onClick() {
 				try {
@@ -122,6 +104,21 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+		});
+
+		add(new Link("resetButton"){
+			@Override
+			public void onClick() {
+				model.getObject().getAssignedOrgs().clear();
+				model.getObject().getAssignedOrgs().addAll(org.digijava.module.aim.util.DbUtil.getUser(model.getObject().getEmail()).getAssignedOrgs());
+				idsList.removeAll();
+			}
+		});
+
+		add(new Link("cancelButton"){
+			@Override
+			public void onClick() {
 			}
 			
 		});

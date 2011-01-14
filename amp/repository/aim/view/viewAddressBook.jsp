@@ -219,7 +219,7 @@ padding-left: 0px;
 		        	rowsPerPage:10,
 		        	//totalRecords:document.getElementById("totalResults").value,
 		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
-		        	template : "{CurrentPageReport} <span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>", 
+		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>", 
 		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
 		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
 		        	firstPageLinkLabel : 	"<digi:trn>first</digi:trn>", 

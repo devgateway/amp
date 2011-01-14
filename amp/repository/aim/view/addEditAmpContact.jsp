@@ -18,6 +18,14 @@
     </div>
 </div>
 
+<style type="text/css">
+   #popin .content {
+        overflow:auto;
+        height:500px;
+        background-color:#ffffff;
+        padding:10px;
+    }
+ </style>
 
 
 
@@ -295,7 +303,7 @@
 <div class="breadcrump">
 <div class="centering">
 <div class="breadcrump_cont">
-<span class="sec_name"><digi:trn>AMP Search</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>AMP Search</digi:trn></span></div>
+<span class="sec_name"><digi:trn>Address Book</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Address Book</digi:trn></span></div>
 </div>
 </div>
 <!-- BREADCRUMP END --> 
@@ -304,7 +312,7 @@
 <table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	
 <tbody>
 <tr>
-<td valign="top" align="left">
+<td valign="top">
 <div id="content" class="yui-skin-sam"> 
 <div id="demo" class="yui-navset">
 <ul class="yui-nav">
@@ -322,7 +330,7 @@
 	</a>
 	</li>
 </ul>
-<div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
+<div class="yui-content" style="border: 1px solid rgb(208, 208, 208);" >
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 <div class="required_fields t_mid">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 <hr />

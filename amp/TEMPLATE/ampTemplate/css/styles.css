@@ -1,36 +1,5 @@
 
-A:link 
-{
-	FONT-SIZE: 10px; 
-	COLOR: #05528b; 
-	TEXT-DECORATION: underline
-}
 
-A.plus-minus
-{
-	TEXT-DECORATION: none
-}
-
-A:visited 
-{
-	FONT-SIZE: 10px; 
-	COLOR: #05528b; 
-	TEXT-DECORATION: underline
-}
-
-A:hover 
-{
-	FONT-SIZE: 10px; 
-	COLOR: #0e69b3; 
-	TEXT-DECORATION: none
-}
-
-A.h-box 
-{
-	FONT-WEIGHT: bold; 
-	MARGIN-BOTTOM: 22px; 
-	LETTER-SPACING: 1px
-}
 
 .label 
 {
@@ -690,8 +659,6 @@ TD
 
 TABLE {
 	border-spacing: 0;
-	padding: 0;
-	margin: 0;
 }
 
 .home-scroll 

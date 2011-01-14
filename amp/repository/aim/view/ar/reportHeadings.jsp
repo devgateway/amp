@@ -50,7 +50,7 @@
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
         
-        <td background="img_2/ins_bg_1.gif" class="inside" align=center style="font-size:16px; font-weight:bold; color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        <td background="img_2/ins_bg_1.gif" class="inside" align=center style="color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
             	<c:choose>
             		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">
@@ -61,7 +61,7 @@
             		</c:otherwise>
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a class="ins_title" style="cursor:pointer;color:#FFFFFF; font-size:16px; float:left; padding-left:33px;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a class="ins_title_reg" style="cursor:pointer;color:#FFFFFF; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -70,7 +70,7 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <a class="ins_title" style="cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.name}~${sortAscString}">
+	              <a class="ins_title_reg" style="cursor:pointer" href="/aim/viewNewAdvancedReport.do~sortBy=${subColumn.name}~${sortAscString}">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </a>
 	            </logic:notEqual>
@@ -88,7 +88,11 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><b class="ins_title" style="color:#FFFFFF;"><c:out value="${reportHeading}"/></b></digi:trn>
+				<b class="ins_title_reg" style="color:#FFFFFF;">
+					<digi:trn key="aim:reportBuilder:${reportHeading}">
+						<c:out value="${reportHeading}"/>
+					</digi:trn>
+				</b>
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				
@@ -101,7 +105,7 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link styleClass="ins_title" style="cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	              <html:link styleClass="ins_title_reg" style="cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>  
@@ -123,7 +127,7 @@
       </logic:iterate>
       
     </logic:iterate>
-    <td width="16" bgcolor=#FFFFFF><img src=img_2/t.gif width=16 height=1 /></td>
+    <td width="16" bgcolor=#FFFFFF><img src="img_2/t.gif" width="16" height="1" /></td>
   </tr>
 
   <%}

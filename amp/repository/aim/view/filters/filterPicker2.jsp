@@ -16,24 +16,22 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
-
 <digi:instance property="aimReportsFilterPickerForm" />
 <digi:form action="/reportsFilterPicker.do">
-
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;">
-	<ul class="yui-nav">
-		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a> </li>
-		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a> </li>
-		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a> </li>
-		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a> </li>
-		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a> </li>
-		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a> </li>
+<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
+	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
+		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
+		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
+		<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
+		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
+		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 92%;">
+	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;" >
 		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
@@ -76,7 +74,7 @@
 					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
-				<div style="width: 24%; margin-left: 76%; height: 100%;">
+				<div style="width: 24%; margin-left: 76%; height: 100%;font-size: 11px">
 					<field:display name="Joint Criteria" feature="Budget">
 							<html:checkbox property="jointCriteria" value="true" /> &nbsp;
 							<digi:trn>Display Only Projects Under Joint Criteria.</digi:trn>
@@ -155,22 +153,23 @@
 		</div>
 	</div>
 </div>
-<div style="background-color: #f6faff; display: block; padding: 3px; overflow:hidden; height: 7%; ">
-	<table width="100%" style="height: 100%;">
+<div style="display: block; overflow:hidden;">
+	<table width="100%">
 		<tr>
-			<td width="30%">&nbsp;</td>
-			<td width="40%" align="center">
-			<html:hidden property="ampReportId" />
-			<html:hidden property="defaultCurrency" />
-			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
-				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
-			<html:button onclick="resetFilter();" styleClass="dr-menu"
-				property="reset">
-				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-			</html:button> </td>
-			<td width="30%">
+			<td width="100%" align="center" style="font-size: 11px">
 				<html:checkbox property="justSearch" value="true" />&nbsp;
 				<digi:trn>Use filter as advanced search</digi:trn>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%" align="center">
+				<html:hidden property="ampReportId" />
+				<html:hidden property="defaultCurrency" />
+				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
+				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
+				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset">
+					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
+				</html:button> 
 			</td>
 		</tr>
 	</table>

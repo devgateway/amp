@@ -1,4 +1,3 @@
-
 	#tabview_container .yui-nav{
 
 	}
@@ -6,7 +5,7 @@
 		margin-right:0;
  	}
 
-	#tabview_container .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
+	#tabview_container .yui-content {}
 	
 	#tabview_container .yui-nav li a { 
 			border-top:1px solid #D0D0D0;
@@ -15,11 +14,11 @@
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 8pt; 
+			font-size: 12px; 
 			color:#376091;
 			font-weight: bold;
 			background-color: #EBEBEB;
-			margin:0pt 0px 0pt 0pt;
+			margin:0pt 5px 0pt 0pt;
 			/* background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top; */
 	}
 	
@@ -27,7 +26,7 @@
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 8pt; 
+			font-size: 12px; 
 			font-weight: bold;
 			/* background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top; */
 			color: #FF6000;
@@ -35,12 +34,12 @@
 	}
 	#tabview_container li a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top; */
-			padding: 6px 10px 6px 10px;
+			padding:  0.6em 1em;
 	}
 		
 	#tabview_container li.selected a div{ 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top; */
-			padding: 6px 10px 6px 10px;
+			/* padding:  0.7em 2em;*/
 	}
 	#tabview_container .yui-nav li a:hover {
 	   /* background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;   */
@@ -50,6 +49,12 @@
 	    /* background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;   */
 	}
 	#tabview_container .yui-content {
-		border-top:1px solid #000;
+		
 	}
 	
+	#tabview_container .yui-nav{
+
+	}
+	#tabview_container .yui-nav li {
+		margin-right:0;
+ 	}

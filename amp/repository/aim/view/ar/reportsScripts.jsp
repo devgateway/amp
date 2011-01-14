@@ -309,7 +309,8 @@ saveReportEngine	= null;
  	 	element.style.height    = "380px";
 
  	 	myPanel1.setBody(element);
- 	 	myPanel1.cfg.setProperty("height", "400px" );
+ 	 	myPanel1.cfg.setProperty("height", "452px" );
+ 	 	myPanel1.cfg.setProperty("width", "870px" );
 		myPanel1.center();
 		myPanel1.show();
 

@@ -537,13 +537,13 @@ session.setAttribute("progressValue", counter);
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter(\"pageNumber\"))%>" scope="request"/>
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
-			<table id='reportTable' cellSpacing="0" width="900" style="overflow:hidden">
+			<table id='reportTable' cellSpacing="0" width="900px" style="overflow:hidden">
 				<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
-		<table id='reportTable' class="inside" width=100% cellpadding="0" cellspacing="0">
+		<table id='reportTable' class="inside" width="100%" cellpadding="0" cellspacing="0">
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
 			</tr>

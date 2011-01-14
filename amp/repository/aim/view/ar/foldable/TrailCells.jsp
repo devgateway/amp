@@ -64,9 +64,9 @@
 		<c:if test="${cell==null}">
 			<c:if test="${firstCell==false}">
 					<% if (reportData.getLevelDepth() < 3) { %>
-						<td class="inside">aaa
+						<td class="inside">
 					<% } else { %>	
-						<td class="inside">bbb
+						<td class="inside">
 					<% } %>
 					&nbsp;
 					</td>

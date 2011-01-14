@@ -22,43 +22,51 @@
 <logic:notEmpty scope="request" name="reqSelectorHeaderSize">
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
-	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%">
-		<div style="background: #4C6185; margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%;
-			border-left: 1px solid black; border-bottom: 1px solid black;border-top: 1px solid black;">
-			<div class="memberSelectorHeader" style="float: left" >&nbsp;&nbsp;<digi:trn>Grouping Selector</digi:trn> </div>
+	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
+			<div class="inside">
+				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
+			</div>
 		</div>
-		<div style="border: 1px solid #b3c5d4; height: ${100-selectorHeaderSize}%; width: 100%; background: white;">		
-					<table style="width: 100%; " >
-						<logic:iterate id="element" name="elements" scope="page">
-							<tr style="cursor: pointer;"
-								onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
-								onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
-								onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
-								<td style="font-family: Arial; font-size: 12px;  padding: 4px;" width="90%"><digi:trn>${element.name}</digi:trn></td>
-								<td style="font-family: Arial; font-size: 12px;  padding: 4px;">(${element.rootHierarchyListable.countDescendants})
-									<button type="button"
-									onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
-									style="display: none;">Fake</button>
-								</td>
-							</tr>
-						</logic:iterate>
-					</table>
+		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;">		
+				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
+					<logic:iterate id="element" name="elements" scope="page">
+						<tr style="cursor: pointer;"
+							onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
+							onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
+							onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
+							<td>
+								<div class="selector_type_cont">
+									<digi:trn>${element.name}</digi:trn>
+									<span style="float: right;">
+										(${element.rootHierarchyListable.countDescendants})
+										<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
+										style="display: none;">Fake</button>
+									</span>
+								</div>
+							</td>
+							
+						</tr>
+					</logic:iterate>
+				</table>
 		</div>
 	</div>
 	<div class="member_selector_wrapper" style="margin-left:40%; padding: 0px; height: 98%;">
-		<div style="background: #4C6185; margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%;
-			border-right: 1px solid black; border-bottom: 1px solid black;border-top: 1px solid black;">
-				<div class="memberSelectorHeader" style="float: left" >&nbsp;<digi:trn>Member Selector</digi:trn></div>
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%;border: 1px solid #CCCCCC;border-bottom: 0px;">
+				<div class="inside" style="float: left" >&nbsp;
+					<b class="ins_header">
+						<digi:trn>Member Selector</digi:trn>
+					</b>
+				</div>
 				<div class="memberSelectorInputWrapper" style="float: right">
-					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" 
-						style="width: ${searchFieldWidth};" class="memberSelectorTextbox" />&nbsp;
-					<button class="memberSelectorButton" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" class="buton" type="button">&lt;&lt;</button>&nbsp;
-					<button class="memberSelectorButton" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" class="buton" type="button">&gt;&gt;</button>
+					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" style="margin-top:3px; width: ${searchFieldWidth};" class="inputx" />&nbsp;
+					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" class="buton" type="button">&gt;&gt;</button>
+					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" class="buton" type="button">&lt;&lt;</button>
 				</div>
 		</div>
 					<c:set var="displayProperty"> </c:set>
 					<logic:iterate id="element" name="elements" scope="page">
-						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #b3c5d4; overflow: auto; background: white;" id="${element.htmlDivId}">
+						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;" id="${element.htmlDivId}">
 							<bean:define id="reqEntityList" name="element" property="rootHierarchyListable.children" toScope="request" />
 							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
 							<ul style="list-style-type: none;">

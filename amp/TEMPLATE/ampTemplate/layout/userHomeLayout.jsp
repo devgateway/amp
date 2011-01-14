@@ -64,13 +64,13 @@
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 		<tbody>
 			<tr>
-				<td width="90%" valign=top id="maintd">
+				<td width="100%" valign=top id="maintd">
 					<digi:insert attribute="body"/>
 				</td>
 				<td width="20px" align=center background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;" ><img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel" style="padding: 5px"></a>
 				</td>
-				<td valign="top">
+				<td valign="top" width="1px">
 					<div id="rightpanel">
 						<feature:display name="Desktop Search form" module="Tools">
 							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>

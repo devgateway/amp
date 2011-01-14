@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
@@ -29,6 +30,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	protected final IModel<T> model;
 	protected WebMarkupContainer titleHeader;
 	protected WebMarkupContainer tableHeading;
+	protected TransparentWebMarkupContainer tableId;
 	
 	protected ListView<L> list;
 
@@ -56,7 +58,10 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	public WebMarkupContainer getTableHeading() {
 		return tableHeading;
 	}
-
+	
+	public TransparentWebMarkupContainer getTableId() {
+		return tableId;
+	}
 	/**
 	 * Sets the title header rowspan based on how many columns you want to show in this table
 	 * The default is set in the markup to 3
@@ -64,6 +69,10 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	 */
 	public void setTitleHeaderColSpan(final Integer colspan) {
 		titleHeader.add(new AttributeModifier("colspan", new Model<Integer>(colspan)));	
+	}
+	
+	public void setTableWidth(final Integer width) {
+		tableId.add(new AttributeModifier("width", new Model<Integer>(width)));	
 	}
 
 	/**
@@ -100,6 +109,11 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		remove(labelContainer);
 		titleHeader.add(labelContainer);
 		add(titleHeader);
+		
+		tableId = new TransparentWebMarkupContainer("tableId");
+		tableId.setOutputMarkupId(true);
+		add(tableId);
+		
 	}
 
 }

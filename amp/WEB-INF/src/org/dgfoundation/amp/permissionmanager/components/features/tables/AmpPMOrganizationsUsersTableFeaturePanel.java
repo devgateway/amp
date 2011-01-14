@@ -12,10 +12,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
-import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSearchOrganizationsFeaturePanel;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author dan
@@ -25,39 +27,28 @@ public class AmpPMOrganizationsUsersTableFeaturePanel extends AmpFormTableFeatur
 
 
 
-	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<User> model, String fmName, boolean hideLeadingNewLine) throws Exception {
 		super(id, model, fmName, hideLeadingNewLine);
-		// TODO Auto-generated constructor stub
-	}
-
-	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
+		final PropertyModel<Set<AmpOrganisation>> setModel=new PropertyModel<Set<AmpOrganisation>>(model,"assignedOrgs");
 		
-		//final List<User> users= org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
-		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
-		AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
-		//IModel usersModel = new Model((Serializable)users);
+		final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 		
-		list = new PageableListView<User>("orgsList", listModel, 5) {
+		list = new PageableListView<AmpOrganisation>("orgsList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
-			protected void populateItem(final ListItem<User> item) {
+			protected void populateItem(final ListItem<AmpOrganisation> item) {
 				final MarkupContainer listParent=this.getParent();
-				item.add(new Label("userLabel", item.getModelObject().getName()));
-				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
-			//	item.add(new Label("editUser", "editMe"));
-//				String tooltipText = "info text de test";
-//				if (tooltipText != null) {
-//					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
-//					toolTip.setPositionPreference(TipPosition.bottom);
-//					item.add(toolTip);
-//				}
-				//item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgs", model, "Assigning Organizations", false));
+				item.add(new Label("orgName", item.getModelObject().getName()));
+				item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
 			}
 		};
 		list.setReuseItems(true);
 		add(list);
+	}
+
+	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<User> model, String fmName) throws Exception {
+		super(id, model, fmName);
+		
 		
 		
 	}

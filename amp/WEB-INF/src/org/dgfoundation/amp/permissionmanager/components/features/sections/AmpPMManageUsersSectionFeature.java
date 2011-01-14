@@ -36,13 +36,9 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 	public AmpPMManageUsersSectionFeature(String id, String fmName, final IModel<Set<User>> usersModel)
 			throws Exception {
 		super(id, fmName);
-		// TODO Auto-generated constructor stub
 		
 		AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
-		
-		//OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);
-	//	IModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersModel);//new Model(new ArrayList());
-		//$users
+		//usersTable.setTableWidth(300);
 		add(usersTable);
 		add(new PagingNavigator("navigator", (PageableListView)usersTable.getList()));
 		idsList = usersTable.getList();

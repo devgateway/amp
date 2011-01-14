@@ -23,7 +23,6 @@ import org.digijava.kernel.user.User;
  */
 public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-
 	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
 		super(id, model, fmName, hideLeadingNewLine);
 		// TODO Auto-generated constructor stub
@@ -31,11 +30,8 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 
 	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
 		super(id, model, fmName);
-		
-		//final List<User> users= org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
-		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
+
 		AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
-		//IModel usersModel = new Model((Serializable)users);
 		
 		list = new PageableListView<User>("usersList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;

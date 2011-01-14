@@ -254,7 +254,7 @@
 					<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
 						class=box-border-nopadding>
-						<tr bgcolor="#006699">
+						<tr bgcolor="#4A687A">
 							<td vAlign="center" width="100%" align="center" class="textalb" height="20">
 								<digi:trn>Search Organizations</digi:trn></td>
 						</tr>
@@ -298,13 +298,13 @@
 	
 									<tr>
 										<td align="center" colspan="2">
-											<html:button styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
+											<html:button styleClass="buttonx" property="submitButton" onclick="return searchOrganization()">
 												<digi:trn>Search</digi:trn>
 											</html:button> &nbsp; 
-											<html:button styleClass="dr-menu" property="resetButton" onclick="resetForm()">
+											<html:button styleClass="buttonx" property="resetButton" onclick="resetForm()">
 												<digi:trn>Clear</digi:trn>
 											</html:button> &nbsp;
-											<html:button styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+											<html:button styleClass="buttonx" property="submitButton" onclick="closeWindow()">
 												<digi:trn>Close</digi:trn>
 											</html:button>
 										</td>
@@ -318,7 +318,7 @@
 				<tr>
 					<td align="left" vAlign="top">
 						<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
-							<tr bgcolor="#006699">
+							<tr bgcolor="#4A687A">
 								<td vAlign="center" width="100%" align="center" class="textalb"	height="20">
 									<digi:trn>List of Organizations</digi:trn>
 								</td>

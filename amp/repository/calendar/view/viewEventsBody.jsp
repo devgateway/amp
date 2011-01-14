@@ -134,7 +134,7 @@
 	  	<tr>
 	  		<td>	
 	 	
-		 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
+		 	<a target="_blank" title="Printing" onClick="window.print();" style="cursor: pointer">
 		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif"/>
 		 	</a>
 	 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
@@ -358,7 +358,7 @@ window.onload=init;
 			<div class="dhx_cal_tab" name="day_tab" style="left:225px;"></div>
 			
 		</div>
-		<div id="newContainer" style="width: 100%; height: 110%; background-color: #F5F5F5; position: relative; top: 13px; left: -10px; border: 1px #CCCCCC solid;">
+		<div id="newContainer" style="width: 100%; height: 110%; background-color: #F5F5F5; position: relative; top: 13px; border: 1px #CCCCCC solid;">
 			<table cellpadding="5" cellspacing="5">
 				<tr style="margin-bottom: 10px;">
 					<td>

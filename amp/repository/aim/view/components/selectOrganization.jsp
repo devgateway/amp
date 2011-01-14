@@ -385,7 +385,7 @@
 											
 											
 											<tr>
-												<td align="center" colspan="3">
+												<td align="center" colspan="3" bgcolor=#F8F8F8>
 													<table cellPadding=5>
 														<tr>
 			                                                <logic:notEqual value="true" name="removeAddButton">

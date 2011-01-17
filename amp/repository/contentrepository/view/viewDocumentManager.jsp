@@ -471,7 +471,6 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
-						        		<br />
 							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif"> 
 							        	</button>
@@ -513,7 +512,6 @@ function setHoveredTable(tableId, hasHeaders) {
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
-						        	<br />
 									<%if (DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) { %>
 										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
@@ -562,8 +560,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
-									<td>
-										<br />
+									<td>										
 										<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>

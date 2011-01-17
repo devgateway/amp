@@ -640,11 +640,11 @@ function submitForm(thisform){
                     </tr>
              		<tr>
 			            <td style="font-family: Tahoma;font-size: 12px;">                
-			                <div style="background-color: #ffffff; padding: 20px">
+			                <div style="background-color: #ffffff; padding: 20px; background-color:#F8F8F8;">
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table cellpadding="3" cellspacing="3" class="t_mid">
+			                    <table cellpadding="3" cellspacing="3" class="t_mid" align=center>
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
@@ -1049,9 +1049,9 @@ function submitForm(thisform){
 			                                          </select>
 			                                        </td>
 			                                        <td colspan="3" style="text-align: center;">
-					                                	<input type="button" onclick="MyaddUserOrTeam();" style="width:110px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+					                                	<input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:110px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
 					                                  	<br><br>
-					                       			  	<input type="button" style="width:110px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
+					                       			  	<input type="button" class="buttonx" style="width:110px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
 			                                        </td>
 			                                        <td>
 			                                        	<table width="100%" height="100%">
@@ -1072,7 +1072,7 @@ function submitForm(thisform){
 			                                        	</table>
 			                                        </td>			                                        
 			                                        <td style="vertical-align: top;" nowrap="nowrap">
-			                                        	<input type="button" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+			                                        	<input type="button" class="buttonx" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
 			                    	</tr>
@@ -1080,15 +1080,15 @@ function submitForm(thisform){
 			                    	<tr>
 			                          <td colspan="8" style="text-align:center;">
 			                          	<feature:display name="Preview Event button" module="Calendar">
-			                          		<input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+			                          		<input type="submit" class="buttonx" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 			                            	&nbsp;
 			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
-			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	<input type="submit" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
 			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
+			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
 			                            </feature:display>
 			                          </td>
 			                        </tr>

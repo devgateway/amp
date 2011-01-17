@@ -605,9 +605,8 @@ function submitForm(thisform){
     <html:hidden name="calendarEventForm" property="recurrSelectedEndTime" styleId="recurrSelectedEndTime"/>
     <html:hidden name="calendarEventForm" property="recurrSelectedStartTime" styleId="recurrSelectedStartTime"/>
 	
-    <table>
+    <table width=1000 align=center>
     	 <tr>
-			<td width=14>&nbsp;</td>
 			<td align=left vAlign=top width=750>
 				<table cellPadding=5 cellSpacing=0 width="100%">
 					<tr>
@@ -636,19 +635,12 @@ function submitForm(thisform){
             	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
                 	<tr>	
                 		<td align="center" style="padding: 0px 3px 0px 3px;">
-			           		<table width="100%">
-			                	<tr>
-			                    	<td  style="height: 5px;"/>
-			                    </tr>
-			                    <tr>
-			                   	 	<td style="background-color: #CCDBFF;height: 18px;"/>
-			                    </tr>
-			                </table>
+			           		
 			           </td>	
                     </tr>
              		<tr>
 			            <td style="font-family: Tahoma;font-size: 12px;">                
-			                <div style="background-color: #F5F5F5; padding: 20px">
+			                <div style="background-color: #ffffff; padding: 20px">
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
@@ -756,8 +748,8 @@ function submitForm(thisform){
 			                                                <td nowrap="nowrap">
 			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>
 			                                                </td>
-			                                                <td>
-			                                                &nbsp;
+			                                                <td>&nbsp;
+			                                                
 			                                                </td>
 			                                                <!-- <td>
 			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
@@ -889,8 +881,8 @@ function submitForm(thisform){
 			                                                <td nowrap="nowrap">
 			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px" styleClass="inp-text"/>
 			                                                </td>
-			                                                <td>
-			                                                &nbsp;
+			                                                <td>&nbsp;
+			                                                
 			                                                </td>
 			                                                <!-- <td>
 			                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
@@ -1026,7 +1018,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>
 			                    	<tr height="25px;">
-			                    		<td colspan="8"> &nbsp;</td>
+			                    		<td colspan="8">&nbsp; </td>
 			                    	</tr>
 			                    	<tr>
 			                    		<td colspan="2">&nbsp;</td>
@@ -1034,7 +1026,7 @@ function submitForm(thisform){
 			                    			<font color="red" size="3px">*</font>
 			                    			<digi:trn key="calendar:Attendee">Attendee</digi:trn>			                                            
 			                    		</td>
-			                    		<td colspan="3"> &nbsp;</td>
+			                    		<td colspan="3">&nbsp; </td>
 			                    	</tr>			                    	
 			                    	<tr>
 			                    		<td colspan="2">&nbsp;</td>

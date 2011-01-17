@@ -310,7 +310,7 @@ div.tabpanel div.tab-row a:link, div.tabpanel div.tab-row a:visited {
 	border:1px solid #CCCCCC;
 	color:#666666;
 	float:left;
-	font-size:10px;
+	font-size:11px;
 	line-height:12px;
 	margin-right:4px;
 	padding:2px 4px;
@@ -322,6 +322,8 @@ div.tabpanel div.tab-row li.selected a:link, div.tabpanel div.tab-row a.active:v
 	border-bottom:1px solid #FFFFFF;
 	color:#FF6000;
 	margin-top:1px;
+	font-size:11px;
+	font-weight:bold;
 }
 div.tabpanel div.tab-row a:hover {
 	background:none repeat scroll 0 0 #FFFFFF;

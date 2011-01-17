@@ -644,11 +644,11 @@ function submitForm(thisform){
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table cellpadding="3" cellspacing="3">
+			                    <table cellpadding="3" cellspacing="3" class="t_mid">
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
-			                    			<digi:trn key="calendar:evntTitle">Event title</digi:trn>			                                
+			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                                
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
@@ -656,8 +656,8 @@ function submitForm(thisform){
 			                    		</td>
 			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
-			                    			<td rowspan="2" style="text-align: center;">
-				                    			<digi:trn key="cal:organizations">Organizations</digi:trn>
+			                    			<td rowspan="2" style="text-align: center;" valign=top>
+				                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>
 				                    		</td>
 				                    		<td width="2px">&nbsp;</td>
 				                    		<td rowspan="2" align="left" valign="top">
@@ -674,14 +674,14 @@ function submitForm(thisform){
 				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
 															<td>
-																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="myStyleClass"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
+																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="buttonx"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
 															</td>
 														</tr>
 				                    				</field:display>
 													<field:display name="Remove Donor Button" feature="Donors">
 														<tr>
 															<td>
-																<html:button  property="submitButton" onclick="return removeSelOrgs()" style="width:110px">
+																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
 																	<digi:trn key="btn:remove">Remove</digi:trn>
 																</html:button>
 															</td> 
@@ -693,7 +693,7 @@ function submitForm(thisform){
 			                    	</tr>
 			                    	<tr>
 			                    		<td align="right" nowrap="nowrap" style="text-align: right;">
-			                    			<digi:trn key="calendar:cType">Calendar type</digi:trn>
+			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left">
@@ -711,7 +711,7 @@ function submitForm(thisform){
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
 			                    			<td valign="top" align="right" nowrap="nowrap" rowspan="1">
-				                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
+				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>
 				                    		</td>
 				                    		<td width="2px">&nbsp;</td>
 				                    		<td align="left" valign="top" rowspan="1">
@@ -724,9 +724,9 @@ function submitForm(thisform){
 				                                 </html:select>
 				                    		</td>
 			                    		</feature:display>
-			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>			                    		
+			                    		<td width="30px"><div style="width:30px;">&nbsp;</div> </td>			                    		
 			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
-			                    			<digi:trn key="calendar:Description">Description</digi:trn>
+			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td style="width: 220px" align="left" rowspan="4">
@@ -736,7 +736,7 @@ function submitForm(thisform){
 			                    	</tr>			                    	
 			                    	<tr style="height: 25px;">
 			                    		<td nowrap="nowrap" align="right" style="text-align: right;vertical-align: top;" >
-			                    			<digi:trn key="calendar:StDate">Start date</digi:trn>
+			                    			<digi:trn key="calendar:StDate"><b>Start date</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
@@ -871,7 +871,7 @@ function submitForm(thisform){
 			                    	</tr>			                    	
 			                    	<tr height="25px;">
 			                    		<td  nowrap="nowrap" align="right" style="text-align: right">
-			                    			<digi:trn key="calendar:EndDate">End Date</digi:trn>
+			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td>
@@ -1008,7 +1008,7 @@ function submitForm(thisform){
 			                    		<td colspan="2">&nbsp;</td>
 			                    		<td style="vertical-align: top">
 			                    			<html:hidden name="calendarEventForm" property="privateEvent"/>
-			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
+			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" /> 
 				                                          <c:if test="${!calendarEventForm.privateEvent }">
 				                                          	CHECKED
 				                                          </c:if>                                          

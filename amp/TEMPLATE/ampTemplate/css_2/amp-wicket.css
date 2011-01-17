@@ -315,11 +315,13 @@ div.tabpanel div.tab-row a:link, div.tabpanel div.tab-row a:visited {
 	margin-right:4px;
 	padding:2px 4px;
 	text-decoration:none;
+	margin-top:1px;
 }
 div.tabpanel div.tab-row li.selected a:link, div.tabpanel div.tab-row a.active:visited {
 	background:none repeat scroll 0 0 #FFFFFF;
 	border-bottom:1px solid #FFFFFF;
-	color:#000000;
+	color:#FF6000;
+	margin-top:1px;
 }
 div.tabpanel div.tab-row a:hover {
 	background:none repeat scroll 0 0 #FFFFFF;

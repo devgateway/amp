@@ -79,14 +79,10 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				set.add(choice);
 				idsList.removeAll();
 				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
-				//target.addComponent(workspacesTable);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
-				System.out.println("+++++++++++++  " + OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
 				for (TransparentWebMarkupContainer sl : workspacesTable.getSliders()) {
 					target.appendJavascript(OnePagerConst.getToggleJSPM(sl));
-					System.out.println("------------  " + OnePagerConst.getToggleJSPM(sl));
 				}
-				//target.appendJavascript(OnePagerConst.toggleJSPM);
 			}
 
 			@Override

@@ -54,4 +54,8 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 		setOutputMarkupId(true);
 	}
 
+	public Label getLabelContainer(){
+		return labelContainer;
+	}
+	
 }

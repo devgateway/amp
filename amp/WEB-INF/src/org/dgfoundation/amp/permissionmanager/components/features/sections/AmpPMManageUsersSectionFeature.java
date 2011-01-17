@@ -3,23 +3,25 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageUsersTableFeaturePanel;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author dan
@@ -28,6 +30,7 @@ import org.digijava.kernel.user.User;
 public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 
 	protected ListView<User> idsList;
+	protected boolean visible = true ;
 	
 	/**
 	 * @param id
@@ -38,10 +41,40 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 			throws Exception {
 		super(id, fmName);
 		
-		AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
+		Set<AmpOrganisation> s = new TreeSet<AmpOrganisation>();
+//		List<AmpOrganisation> allOrgs = new ArrayList<AmpOrganisation>();
+//		try {
+//			allOrgs = org.digijava.module.um.util.DbUtil.getList(AmpOrganisation.class.getName(),"name");
+//		} catch (UMException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		s.addAll(allOrgs);
+		final IModel<Set<AmpOrganisation>> allOrgsModel = new Model((Serializable)s);
+
+		Set<User> t = new TreeSet<User>();
+//		List<User> allUsers = new ArrayList<User>();
+//		try {
+//			allUsers = org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
+//		} catch (UMException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		t.addAll(allUsers);
+		final IModel<Set<User>> allUsersModel = new Model((Serializable)t);
+
+		
+		
+		final AmpPMAssignVerifiedOrgs usersOrgs = new AmpPMAssignVerifiedOrgs("assignMultiUsersMultiOrgs",allOrgsModel, allUsersModel, "Assign Verified Organizations to Users", false);
+		usersOrgs.getLabelContainer().add(new AttributeModifier("class",new Model("perm_h3")));
+		add(usersOrgs);
+		usersOrgs.setVisible(!visible);
+		
+		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		//usersTable.setTableWidth(300);
 		add(usersTable);
-		add(new PagingNavigator("navigator", (PageableListView)usersTable.getList()));
+		final PagingNavigator paginator = new PagingNavigator("navigator", (PageableListView)usersTable.getList());
+		add(paginator);
 		idsList = usersTable.getList();
 		
 		final AbstractAmpAutoCompleteTextField<User> autoComplete = new AbstractAmpAutoCompleteTextField<User>(AmpPMUserSearchModel.class) {
@@ -73,6 +106,19 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		autoComplete.add(sizeModifier);
 		final AmpComboboxFieldPanel<User> searchContacts=new AmpComboboxFieldPanel<User>("searchUsers", "Search Users", autoComplete,true);
 		add(searchContacts);
+		
+		
+		add(new Link("addOrgsToUsers"){
+			@Override
+			public void onClick() {
+				visible = !visible;
+				usersTable.setVisible(visible);
+				paginator.setVisible(visible);
+				searchContacts.setVisible(visible);
+				usersOrgs.setVisible(!visible);
+			}
+			
+		});
 		
 	}
 

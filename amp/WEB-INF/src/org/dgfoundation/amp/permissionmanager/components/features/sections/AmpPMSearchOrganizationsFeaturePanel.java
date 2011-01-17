@@ -76,9 +76,6 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 
 			@Override
 			public void onSelect(AjaxRequestTarget target,AmpOrganisation choice) {
-//				AmpOrganisation ampOrg = new AmpOrganisation();
-//				ampOrgCont.setOrganisation(choice);
-//				ampOrgCont.setContact(model.getObject());
 				Set<AmpOrganisation> set = model.getObject().getAssignedOrgs();
 				set.add(choice);
 				idsList.removeAll();

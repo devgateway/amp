@@ -180,15 +180,19 @@ public class GetFoundingDetails extends Action {
 
                     List mapDataSegments = map.getSegments();
 
-                    String imageMapCode = gisUtil.getImageMap(mapDataSegments,
+
+                    XMLDocument xml = gisUtil.getImageMap(mapDataSegments,
                             20,
                             canvasWidth,
                             canvasHeight, rect.getLeft(),
                             rect.getRight(), rect.getTop(),
-                            rect.getBottom()).toString();
+                            rect.getBottom());
 
+//                    String imageMapCode = xml.toString();
 
-                    sos.write(imageMapCode.getBytes());
+                    xml.output(sos);
+
+//                    sos.write(imageMapCode.getBytes());
 
                     //sos.print(imageMapCode);
                 } else if (action.equalsIgnoreCase("getDataForSectorFin")) {

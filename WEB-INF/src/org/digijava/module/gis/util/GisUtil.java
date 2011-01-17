@@ -585,6 +585,7 @@ public class GisUtil {
                                    float mapLowY) {
 
         XMLDocument retVal = new XMLDocument();
+        retVal.setCodeset("UTF-8");
         XML imageMapDefRoot = null;
         imageMapDefRoot = new XML("map");
         retVal.addElement(imageMapDefRoot);

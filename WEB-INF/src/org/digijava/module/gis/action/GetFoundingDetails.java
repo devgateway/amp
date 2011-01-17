@@ -187,7 +187,10 @@ public class GetFoundingDetails extends Action {
                             rect.getRight(), rect.getTop(),
                             rect.getBottom()).toString();
 
-                    sos.print(imageMapCode);
+
+                    sos.write(imageMapCode.getBytes());
+
+                    //sos.print(imageMapCode);
                 } else if (action.equalsIgnoreCase("getDataForSectorFin")) {
                 	response.setContentType("image/png");
                 	String secIdStr = request.getParameter("sectorId");

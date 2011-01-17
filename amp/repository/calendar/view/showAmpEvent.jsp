@@ -193,7 +193,7 @@
 <!--
 
 .contentbox_border {
-    border: 1px solid black;
+    border: 1px solid #cccccc;
 	border-width: 1px 1px 1px 1px; 
 	background-color: #ffffff;
 }
@@ -644,7 +644,7 @@ function submitForm(thisform){
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table>
+			                    <table cellpadding="3" cellspacing="3">
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>

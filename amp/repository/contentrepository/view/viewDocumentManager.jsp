@@ -33,6 +33,7 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"> 
 
 <style type="text/css">
 <!--
@@ -103,6 +104,31 @@ div.fakefile2 input{
  
 .Hovered {
 	background-color:#a5bcf2;
+}
+</style>
+
+<style>
+.yui-skin-sam a.yui-pg-page{
+margin-left: 2px;
+padding-right: 7px;
+font-size: 11px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages{
+border: 0px;
+padding-left: 0px;
+}
+.yui-pg-current-page {
+    background-color: #FFFFFF;
+    color: rgb(208, 208, 208);
+    padding: 0px;
+}
+.current-page {
+    background-color: #FF6000;
+    color: #FFFFFF;
+    padding: 2px;
+    font-weight: bold;
 }
 </style>
 
@@ -307,6 +333,15 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+<div class="centering">
+<div class="breadcrump_cont">
+<span class="sec_name"><digi:trn>Resources</digi:trn></span></div>
+</div>
+</div>
+<!-- BREADCRUMP END --> 
+
 <!-- POPUPS START-->
 <div id="menuContainerDiv"></div>
 <div id="addDocumentDiv" class="dialog">
@@ -393,8 +428,9 @@ function setHoveredTable(tableId, hasHeaders) {
 <!-- POPUPS END-->
 
 <!-- MAIN CONTENT PART START -->
-<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center"">	
-	<tr>
+<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center">	
+	<tbody>
+		<tr>
 		<td align=left vAlign=top>
 			<div style="padding-left: 10px; width: 98%; min-width: 680px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
@@ -431,7 +467,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			     
 			    <div class="yui-content" style="border-color: #d0d0d0">
 			    	<feature:display name="My Resources" module="Resources">
-			      		<div id="my_res" class="resource_popin" style="border-top: none;">				        	       
+			      		<div id="my_res" class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
@@ -461,7 +497,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									          	</table>
 											</div>
 											<br />
-											<div id="my_markup" align="left" style="clear: both;">
+											<div id="my_markup" align="left" style="clear: both;" >
 											</div>
 									</td>
 								</tr>
@@ -473,7 +509,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					
 					<feature:display name="Team Resources" module="Resources">
-						<div id="team_res" class="resource_popin"  style="border-top: none;">				        	       
+						<div id="team_res" class="resource_popin"  style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
@@ -497,10 +533,9 @@ function setHoveredTable(tableId, hasHeaders) {
 								    	</button>
 									</td>
 								</tr>						
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>	
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
 								<tr>
-									<td>
-										<br/>
+									<td>									
 											<div style="width: 80%; float: left" id="teamFilterInfo" class="t_sm"></div>
 											<div class="show_legend" align="right" style="width: 15%; float: left">
 												<table border="0" cellspacing="0" cellpadding="0">
@@ -524,7 +559,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					<!-- Shared Resources Start  -->
 					<feature:display name="Shared Resources" module="Resources">
-						<div id="shared_res"  class="resource_popin" style="border-top: none;">				        	       
+						<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 									<td>
@@ -537,10 +572,9 @@ function setHoveredTable(tableId, hasHeaders) {
 								    	</button>
 									</td>
 								</tr>						
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>	
+								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
 								<tr>
-									<td>
-										<br />
+									<td>										
 										<div style="width: 80%; float: left" id="sharedFilterInfo" class="t_sm"></div>
 										<br />
 										<div id="shared_markup" align="left" class="all_markup">
@@ -559,11 +593,10 @@ function setHoveredTable(tableId, hasHeaders) {
 					
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
-				        <div id="public_res"  class="resource_popin" style="border-top: none;">				        	       
+				        <div id="public_res"  class="resource_popin" style="border: none;">				        	       
 							<table border="0" cellPadding=1 cellSpacing=0 width="100%" style="position: relative; left: 0px" >
 								<tr>
-									<td>
-										<br />
+									<td>										
 										<div id="public_markup" align="left" class="all_markup">
 										
 										</div>
@@ -584,6 +617,7 @@ function setHoveredTable(tableId, hasHeaders) {
         <br />
       </td>
 	</tr>
+	</tbody>
 </table>
 <!-- MAIN CONTENT PART END -->
 <br/>

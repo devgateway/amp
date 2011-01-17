@@ -107,9 +107,12 @@
 								</td>
 							</tr>
 						</logic:iterate>
-					</table>					
-					<font color="red">*</font> indicates shared versions of the document
-					* The colored row marks the public version					
+					</table>
+					<span class="t_sm">
+						<font color="red">*</font> indicates shared versions of the document
+					* The colored row marks the public version
+					</span>
+										
 					<br />
 				</logic:notEmpty>
 				

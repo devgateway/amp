@@ -58,8 +58,8 @@
 </style>
 
 
-<!-- Individual YUI CSS files --> 
-
+<!-- Individual YUI CSS files -->
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
@@ -329,15 +329,15 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	}else {
 		//alert(3);
 	    this.columnHeaders = [
-      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:100},
        		    {key:"type",label:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:120},
         	    {key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate },
         	    {key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true},
 	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	            {key:"labels",label:"${trans_headerLabels}",sortable:false,width:150},
-	            {key:"actions",label:"${trans_headerActions}",sortable:false,width:60}
+	            {key:"labels",label:"${trans_headerLabels}",sortable:false,width:100},
+	            {key:"actions",label:"${trans_headerActions}",sortable:false}
 	    ];
 	}
 //    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
@@ -351,9 +351,30 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
     var oConfigs = { 
-	                paginator:new YAHOO.widget.Paginator({ 
+    		 // Create the Paginator	       
+	         paginator:new YAHOO.widget.Paginator({ 
 	                	rowsPerPage:10,
-	                	template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;"
+	                	template : "<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>",
+	                	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
+	                	firstPageLinkLabel : 	"<digi:trn>first</digi:trn>", 
+	        	        previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
+	        	        nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+	        	        lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn>',
+	                	firstPageLinkClass : "l_sm",
+	        	        lastPageLinkClass: "l_sm",
+	        	        nextPageLinkClass: "l_sm",
+	        	        previousPageLinkClass: "l_sm",
+	        	        // use custom page link labels
+	        	        pageLabelBuilder: function (page,paginator) {
+	        	                var curr = paginator.getCurrentPage();
+	        	                if(curr==page){
+	        	                	return "<span class='current-page'>"+page+"</span>|";
+	        	                }
+	        	                else{
+	        	                	return page;
+	        	                }
+	        	                
+	        	        }
 	                }),
 	                MSG_EMPTY: "${trans_no_resources}" 
 	        		}; 
@@ -376,7 +397,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
 	
 	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
-	//dataTable.width='2000px';
+	//dataTable.width='100%';
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);

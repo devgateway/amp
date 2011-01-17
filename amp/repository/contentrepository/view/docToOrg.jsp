@@ -22,7 +22,7 @@
 	<ul>
 		<c:forEach var="org" items="${myForm.orgs}">
 			<li>
-				${org.acronym} ( ${org.name} )
+				<span class="t_sm">${org.acronym} ( ${org.name} )</span>
 				<c:if test="${myForm.hasAddParticipatingOrgRights}">
 					<img onClick="deleteDocToOrgObj('${myForm.uuidForOrgsShown}', ${org.ampOrgId});"  style="cursor:pointer; text-decoration:underline;"
 					title="<digi:trn>Click here to remove this organisation</digi:trn>"
@@ -34,7 +34,10 @@
 </logic:notEmpty>
 
 <logic:empty name="myForm" property="orgs">
-	<digi:trn>No organizations have participated in creating this document</digi:trn>
+	<span class="t_sm">
+		<digi:trn>No organizations have participated in creating this document</digi:trn>
+		<br />
+	</span>	
 </logic:empty>
 
 

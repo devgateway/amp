@@ -9,8 +9,6 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 
-
-
 <logic:notEmpty name="checkBoxToHide" scope="request">
 	<bean:define id="checkBoxToHideLocal" value="true"></bean:define>
 </logic:notEmpty> 
@@ -114,26 +112,18 @@
 									</c:if>
 								</td>
 								<td>
-									<a style="cursor:pointer; color: #222222; font-size: 11px">
-										<bean:write name="documentData" property="calendar" />
-									</a>
+									<bean:write name="documentData" property="calendar" />
 								</td>
 								
-								<td>
-									<a style="cursor:pointer; color: #222222; font-size: 11px">
-										<bean:write name="documentData" property="yearofPublication" />
-									</a>
+									<td>
+									<bean:write name="documentData" property="yearofPublication" />
 								</td>
 								<td>
-									<a style="cursor:pointer; color: #222222; font-size: 11px">
-										<bean:write name="documentData" property="fileSize" />
-									</a>
+									<bean:write name="documentData" property="fileSize" />
 								</td>
 								<td>
-									<a style="cursor:pointer; color: #222222; font-size: 11px">
-										${documentData.cmDocType }
-									</a>
-									<a id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
+									${documentData.cmDocType }
+									<a  id="aflag${documentData.uuid}" style="display: none">&nbsp;</a>
 								</td>
 								<td>
 									<c:set var="labelUUIDs" value="[" />
@@ -299,4 +289,3 @@
 						</logic:iterate>
 						</tbody>
 					</table>
-

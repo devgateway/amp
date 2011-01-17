@@ -57,19 +57,22 @@ es:
       total_oda_disbursements: Total Desembolso ODA
 
   donor_agencies:
+    new:
+      title: Adicione Agência
+      back: Anterior
+    form:
+      submit: Salvar Agência
     edit:
       title: Editar Agência
       back: Anterior
     index:
-      new: Adicione Agência
+      title: Editar Agências
+      add: Adicione Agência
       edit: Editar
       delete: Eliminar
       confirm_delte: Tem certeza de que deseja excluir "{{agency}}"?
       empty: 'Não agências existem para este doadores. Por favor, crie uma nova agência.'
-      new:
-        title: 'Adicione Agência de Doador {{donor}}'
-        back: Anterior
-
+      new: 'Adicione Agência de Doador'
   donor_details:
     general_info: 'Informações Gerais'
     donor_profile: Perfil dos doadores

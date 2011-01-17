@@ -57,19 +57,23 @@ en:
       total_oda_disbursements: Total ODA Disbursements
   
   donor_agencies:
+    new:
+      title: Add Agency
+      back: Back
+    form:
+      submit: Save Agency
     edit:
       title: Edit Agency
       back: Back
     index:
-      new: Add Agency
+      title: Edit Agencies
+      add: Add Agency
       edit: Edit
       delete: Delete
       confirm_delte: Are you sure you want to delete "{{agency}}"?
       empty: No Agencies Exist for this Donor. Please create a New Agency.
-      new:
-        title: Add New Agency for Donor {{donor}}
-        back: Back
-  
+      new: Add New Agency for Donor 
+ 
   donor_details:
     general_info: General Information
     donor_profile: Donor Profile

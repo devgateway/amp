@@ -374,12 +374,12 @@
                 }
               });
             }
-
-            government_project_code = $("#project_government_project_code");
+//            alert(government_project_code_2);
+            government_project_code_object = $("#project_government_project_code");
             //Extract the Agency Code
             donor_agency_code = ($("#project_donor_agency_id option:selected").val() == "") ? "" : $("#project_donor_agency_id option:selected").text().split(" - ")[0];
-//            government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
-            government_project_code.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code);
-
+              government_counterpart_code = ($("#project_government_counterpart_id option:selected").val() == "") ? "" : $("#project_government_counterpart_id option:selected").text().split(" - ")[0];
+            government_project_code_object.val(number1 + "" + number2 + "" + number3 + "" + donor_agency_code);
+  
           }
   </script>

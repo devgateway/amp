@@ -609,13 +609,14 @@ function addActionToURL(actionName){
 	
 				var guestListItemMarkup = new Array();
 				guestListItemMarkup.push('<div class="msg_added_cont">');
-				guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
+				guestListItemMarkup.push('<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
 				guestListItemMarkup.push(filteredGusetId);
 				guestListItemMarkup.push('<input name="receiversIds" class="guest_contact_hidden" type="hidden" value="c:');
 				guestListItemMarkup.push(filteredGusetId);
 				guestListItemMarkup.push('">');
-				guestListItemMarkup.push('</div></div>');
-				$('#guest_user_container').append(guestListItemMarkup.join(''));
+				guestListItemMarkup.push('</div>');
+				var html=guestListItemMarkup.join('');
+				$('#guest_user_container').append(html);
 			}	
 			contact.value = "";
 		}
@@ -676,8 +677,8 @@ function addActionToURL(actionName){
 	}	
 
 	// don't remove or change this line!!!
-	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
+	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
 
 <style  type="text/css">
@@ -893,7 +894,7 @@ span.extContactDropdownEmail {
     </td>
     <td>
       <div>
-        <div style="width:100%;">
+        <div style="width:100%;" class="">
             <html:text property="selectedAct" name="messageForm" style="width:100%;"  styleId="statesinput"></html:text>
             <div id="statesautocomplete"></div>
         </div>

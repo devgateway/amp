@@ -207,6 +207,9 @@ class Project < ActiveRecord::Base
     [:contracted_agencies].each do |assoc|
       cloned_instance.send("#{assoc}=", self.send(assoc))
     end
+    [:government_counterparts].each do |assoc|
+      cloned_instance.send("#{assoc}=", self.send(assoc))
+    end
     
     cloned_instance
   end

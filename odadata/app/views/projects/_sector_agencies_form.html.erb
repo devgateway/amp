@@ -48,7 +48,7 @@
 		
 		<div id="contracted_agencies">
 			<% if @project.contracted_agencies.any? %>
-				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
+				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies %>
 			<% else %>
 				<%= render :partial => 'contracted_agency', :object => Agency.new %>
 			<% end %>
@@ -172,7 +172,7 @@
 
 		<div id="government_counterpart">
 			<% if @project.government_counterparts.any? %>
-				<%= render :partial => 'government_counterpart', :collection => @project.government_counterparts.ordered %>
+				<%= render :partial => 'government_counterpart', :collection => @project.government_counterparts %>
 			<% else %>
 				<%= render :partial => 'government_counterpart', :object => GovernmentCounterpart.new %>
 			<% end %>

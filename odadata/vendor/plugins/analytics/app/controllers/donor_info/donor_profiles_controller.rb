@@ -52,7 +52,7 @@ def show
     @total_forecasts_loans = @donor.total_loan_forecasts(year + 1).in(@currency)
        
     # Disbursment percentage of the donors projects relative to the total spent in the country
-    @disbursement =  @donor.annual_payments[year].in(@currency).to_f * 100 / @eu_total_payments.to_f unless @donor.annual_payments.empty?
+    @disbursement =  @donor.annual_payments[year].andand.in(@currency).to_f * 100 / @eu_total_payments.to_f unless @donor.annual_payments.empty?
    
     # Specific donor's grant projects disbursements
     @disbursement_grants = @total_payments_grants[year].to_f * 100 / @total_payments.in(@currency).to_f

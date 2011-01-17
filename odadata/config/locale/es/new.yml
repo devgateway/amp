@@ -70,7 +70,7 @@ es:
       add: Adicione Agência
       edit: Editar
       delete: Eliminar
-      confirm_delte: Tem certeza de que deseja excluir "{{agency}}"?
+      confirm_delete: Tem certeza de que deseja excluir "{{agency}}"?
       empty: 'Não agências existem para este doadores. Por favor, crie uma nova agência.'
       new: 'Adicione Agência de Doador'
   donor_details:

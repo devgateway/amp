@@ -70,7 +70,7 @@ en:
       add: Add Agency
       edit: Edit
       delete: Delete
-      confirm_delte: Are you sure you want to delete "{{agency}}"?
+      confirm_delete: Are you sure you want to delete "{{agency}}"?
       empty: No Agencies Exist for this Donor. Please create a New Agency.
       new: Add New Agency for Donor 
  

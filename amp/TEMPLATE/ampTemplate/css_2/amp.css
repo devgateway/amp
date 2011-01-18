@@ -124,8 +124,8 @@ top_nav a {color:#FFFFFF;}
 .desktop_tab_base {border-bottom:1px solid #D0D0D0;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
 .filter_tab {border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; float:left; background-color:#F2F2F2;}
-.desktop_tab {border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; float:left; background-color:#F2F2F2; list-style:none;}
-li.ui-tabs-selected.desktop_tab {border:1px solid #D0D0D0; float:left; margin-right:10px; margin-top:1px; border-bottom:#FFFFFF; background-color:#FFFFFF; list-style:none;}
+.desktop_tab {border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; float:left; background-color:#F2F2F2; list-style:none; margin-top:1px; margin-left:5px;}
+li.ui-tabs-selected.desktop_tab {border:1px solid #D0D0D0; float:left; margin-left:5px; margin-top:1px; border-bottom:#FFFFFF; background-color:#FFFFFF; list-style:none;}
 li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-right:10px; margin-top:1px; border-bottom:#FFFFFF;	background-color:#FFFFFF;}
 .tab_link {font-size:12px; font-weight:bold;}
 .tab_opt {background-color:#F2F2F2;}

@@ -1,2 +1,0 @@
-delete FROM amp_fields_templates where field=(SELECT id FROM amp_fields_visibility where name like 'Related Actvitiy Dropdown');
-delete from amp_fields_visibility where name like 'Related Actvitiy Dropdown';

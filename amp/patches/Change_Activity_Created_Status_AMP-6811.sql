@@ -1,1 +1,0 @@
-UPDATE `amp_activity` set `amp_activity`.`approval_status` = 'started' where approval_status = 'created';

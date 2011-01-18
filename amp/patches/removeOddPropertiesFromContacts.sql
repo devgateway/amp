@@ -1,1 +1,0 @@
-delete from amp_contact_properties where contact_id is null;

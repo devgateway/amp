@@ -1,1 +1,0 @@
-INSERT INTO amp_columns (columnName, aliasName, cellType, extractorView, relatedContentPersisterClass, tokenExpression, filterRetrievable, description) VALUES ('Average Size of Disbursements', NULL, 'org.dgfoundation.amp.ar.cell.ComputedAmountCell', null, NULL, 'averageSizeofDisbursements', NULL,'Sun Actual Disbursments / Number of Actual disbursments' ); 

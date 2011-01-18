@@ -1,2 +1,0 @@
-INSERT INTO amp_global_settings (settingsName,settingsValue,possibleValues,description,section) 
-VALUES  ('Alert if sum of expenditures is bigger than sum of disbursments','true','t_Boolean','Alert if sum of expenditures is bigger than sum of disbursments','funding');

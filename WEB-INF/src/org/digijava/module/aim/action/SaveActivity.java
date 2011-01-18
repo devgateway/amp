@@ -946,19 +946,19 @@ public class SaveActivity extends Action {
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
-			//Do the checks here
-			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
-			if(activityActualStartDate!=null){
-				Collection<FundingDetail> fundDets = eaForm.getFunding().getFundingDetails();
-				if(fundDets!=null && fundDets.size()>0){
-					for (FundingDetail fundingDetail : fundDets) {
-						Date transDate = DateConversion.getDate(fundingDetail.getTransactionDate());
-						if(transDate.before(activityActualStartDate)){
-							errors.add("",new ActionMessage("error.aim.invalidFundingDate", TranslatorWorker.translateText("Funding contains transaction, which precedes activity actual start date. Please change date", request)));
-						}
-					}
-				}
-			}
+//			//Do the checks here
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<FundingDetail> fundDets = eaForm.getFunding().getFundingDetails();
+//				if(fundDets!=null && fundDets.size()>0){
+//					for (FundingDetail fundingDetail : fundDets) {
+//						Date transDate = DateConversion.getDate(fundingDetail.getTransactionDate());
+//						if(transDate.before(activityActualStartDate)){
+//							errors.add("",new ActionError("error.aim.invalidFundingDate", TranslatorWorker.translateText("Funding contains transaction, which precedes activity actual start date. Please change date", request)));
+//						}
+//					}
+//				}
+//			}
 			
 			
 			end:
@@ -1187,38 +1187,70 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
-			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
-			if(activityActualStartDate!=null){
-				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
-				if(regFundDets!=null && regFundDets.size()>0){
-					for (RegionalFunding fundingDetail : regFundDets) {
-						Date transDate = null;
-						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
-						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
-						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
-						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
-						if(commitments!=null && commitments.size()>0){
-							allFundDets.addAll(commitments);
-						}
-						if(disbursements!=null && disbursements.size() >0){
-							allFundDets.addAll(disbursements);
-						}
-						if(expenditures!=null && expenditures.size() >0){
-							allFundDets.addAll(expenditures);
-						}
-						
-						if(allFundDets!=null && allFundDets.size() > 0){
-							for (FundingDetail commitmentsFundDet : allFundDets) {
-								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
-								if(transDate.before(activityActualStartDate)){
-									errors.add("",new ActionMessage("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
+//				if(regFundDets!=null && regFundDets.size()>0){
+//					for (RegionalFunding fundingDetail : regFundDets) {
+//						Date transDate = null;
+//						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
+//						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
+//						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
+//						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
+//						if(commitments!=null && commitments.size()>0){
+//							allFundDets.addAll(commitments);
+//						}
+//						if(disbursements!=null && disbursements.size() >0){
+//							allFundDets.addAll(disbursements);
+//						}
+//						if(expenditures!=null && expenditures.size() >0){
+//							allFundDets.addAll(expenditures);
+//						}
+//						
+//						if(allFundDets!=null && allFundDets.size() > 0){
+//							for (FundingDetail commitmentsFundDet : allFundDets) {
+//								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
+//								if(transDate.before(activityActualStartDate)){
+//									errors.add("",new ActionError("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
+//				if(regFundDets!=null && regFundDets.size()>0){
+//					for (RegionalFunding fundingDetail : regFundDets) {
+//						Date transDate = null;
+//						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
+//						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
+//						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
+//						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
+//						if(commitments!=null && commitments.size()>0){
+//							allFundDets.addAll(commitments);
+//						}
+//						if(disbursements!=null && disbursements.size() >0){
+//							allFundDets.addAll(disbursements);
+//						}
+//						if(expenditures!=null && expenditures.size() >0){
+//							allFundDets.addAll(expenditures);
+//						}
+//						
+//						if(allFundDets!=null && allFundDets.size() > 0){
+//							for (FundingDetail commitmentsFundDet : allFundDets) {
+//								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
+//								if(transDate.before(activityActualStartDate)){
+//									errors.add("",new ActionError("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 			
 			end:
 			if (errors.size() > 0){

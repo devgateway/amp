@@ -2,8 +2,6 @@
 <module-config>
 	<name>editor</name>
 	<security>
-		<action pattern="/showEditText">ADMIN</action>
-		<action pattern="/saveText">ADMIN</action>
 		<action pattern="/showInEnglish">ADMIN</action>
 		<action pattern="/showEditText">
 			<param name="id"/>

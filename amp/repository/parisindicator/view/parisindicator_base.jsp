@@ -177,7 +177,7 @@
 			                        <td>
 			                        	<div id="demo" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 				                            <logic:notEmpty name="parisIndicatorForm" property="availablePIReports">
-			                                	<ul class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" id="MyTabs" style="background-color: #F2F2F2;">
+			                                	<ul class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" id="MyTabs" style="background-color: #EBEBEB;">
 			                                    	<logic:iterate id="element" name="parisIndicatorForm" property="availablePIReports" indexId="index">
 														<%String selected = ""; 
 														String style = "background: none; background-color: #C0C0C0;";

@@ -310,7 +310,7 @@ function toggleSettings(){
 <div class="yui-content" style="display:none">
 </div>
 </div>
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:410px;_height:410px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;">
 <digi:trn key="aim:addATab">
 <p/>
 Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.

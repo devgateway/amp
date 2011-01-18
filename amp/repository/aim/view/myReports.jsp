@@ -25,7 +25,7 @@
 <c:set var="translation2">
 	<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>
 </c:set>
-<div class="right_menu">
+<div class="right_menu" style="margin-top:20px;">
 	<div class="right_menu_header">
 		<div class="right_menu_header_cont">	
 			<digi:trn key="aim:portfolioReports">Reports</digi:trn>

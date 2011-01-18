@@ -1,0 +1,1 @@
+insert into amp_global_settings(settingsName,settingsValue,possibleValues, description,section) values('Project Title Hierarchy','false','t_Boolean','Enable Or Disable Project Title as Hierarchy','general');

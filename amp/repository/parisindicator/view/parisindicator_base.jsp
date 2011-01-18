@@ -59,7 +59,7 @@
 				<html:hidden property="exportXLS" value="false"/>
 			    <html:hidden property="reportId" value="<%=reportId%>"/>
 			    
-				<table width="980px" border="0" cellpadding="10" cellspacing="0" bgcolor="#F2F2F2" style="border-color: gray; border-width: 1px 1px 1px 1px; border-style: solid;">
+				<table width="1000" border="0" cellpadding="10" cellspacing="0" bgcolor="#F2F2F2" style="border-color: #D0D0D0; border-width: 1px 1px 1px 1px; border-style: solid;" align=center>
 					<tr>
 						<td align="left" valign="top" border="1" style="padding-left: 5px; padding-right: 5px; padding-bottom: 5px;">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0">

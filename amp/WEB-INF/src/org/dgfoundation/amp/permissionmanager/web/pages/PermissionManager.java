@@ -13,6 +13,7 @@ import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageGlobalPermissionsSectionFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageUsersSectionFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageWorkspacesSectionFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSectionFeaturePanel;
@@ -64,7 +65,9 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		
 		//add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
-		add(new AmpPMSectionFeaturePanel("manageGlobalPermissions", "Manage Global Permissions"));
+		//add(new AmpPMSectionFeaturePanel("manageGlobalPermissions", "Manage Global Permissions"));
+		add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", teamsModel, "Manage Global Permissions", false));
+		
 		add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
 	}
 

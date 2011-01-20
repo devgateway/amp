@@ -439,12 +439,12 @@ padding-left: 0px;
 																		    	<html:hidden property="keyword" styleId="myHidden"/>																			   																			    	
 																		   	</div>
 																		</td>
-																		<td align="left" valign=top>
+																		<td align="left" valign=top width=50>
 																			<c:set var="trn">
 																				<digi:trn>find</digi:trn>
 																			</c:set>
 																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>
-													</td><td align=right class="t_mid" valign=top>						
+													</td><td class="t_mid" valign=top>						
 																			<digi:trn>Go To : </digi:trn>
 																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="clearKeyword()" styleId="alphaDropdown">
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">

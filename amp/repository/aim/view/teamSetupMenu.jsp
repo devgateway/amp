@@ -765,17 +765,11 @@ function putLoading(){
 					</c:if>
 				</ul>
 				<!-- SubTabs -->
-				
-				<%--				
-				${selectedTab}/${selectedSubTab}
-					------------------------------------ ${selectedSubTab  == '0'}
-					--%>
-				
 				<logic:present  name="selectedSubTab">
 					<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 						<c:if test="${selectedTab  == '4'}">
 							<c:if test="${selectedSubTab  == '0'}">
-								<span class="bread_sel">ggggggggggggggg
+								<span class="bread_sel">
 										<digi:trn key="aim:workspaceDocuments">Documents</digi:trn>								
 	              </span>
 							</c:if>

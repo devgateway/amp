@@ -61,7 +61,7 @@
             		</c:otherwise>
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
-	              <a class="ins_title_reg" style="cursor:pointer;color:#FFFFFF; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              <a class="ins_title_reg" style="cursor:pointer;color:#000000; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -88,7 +88,7 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<b class="ins_title_reg" style="color:#FFFFFF;">
+				<b class="ins_title_reg" style="color:#000000;">
 					<digi:trn key="aim:reportBuilder:${reportHeading}">
 						<c:out value="${reportHeading}"/>
 					</digi:trn>
@@ -96,7 +96,7 @@
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a class="ins_title_reg" style="cursor:pointer;color:#FFFFFF;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
+	              <a class="ins_title_reg" style="cursor:pointer;color:#000000;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>

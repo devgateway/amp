@@ -106,7 +106,7 @@
 			<img src="img_2/amp_logo.gif" align=left>
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
-		<logic:notEmpty name="currentMember" scope="session">
+		<!-- <logic:notEmpty name="currentMember" scope="session">
 		<feature:display name="Change Workspace" module="My Desktop">
 			<div class="workspace_info">
 				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
@@ -125,7 +125,7 @@
 				</select>
 		 	</div>			
 		</feature:display>
-		</logic:notEmpty>
+		</logic:notEmpty> -->
 		<div>
 			<table class="top_nav">
 				<tr>

@@ -633,10 +633,15 @@ function putLoading(){
 --%>
 
 
+
+<%--
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 	<tr>
 		<td valign=top>
 			<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+			--%>
+			
+			
 				<ul style="height: 29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 						<c:if test="${selectedTab == '0'}">
 							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
@@ -764,9 +769,10 @@ function putLoading(){
 						</li>
 					</c:if>
 				</ul>
+				
+				<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 				<!-- SubTabs -->
 				<logic:present  name="selectedSubTab">
-					<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 						<c:if test="${selectedTab  == '4'}">
 							<c:if test="${selectedSubTab  == '0'}">
 								<span class="bread_sel">
@@ -912,10 +918,17 @@ function putLoading(){
 								</c:if>
 							</c:if>
 						</c:if>						
-						
-					</div>
 				</logic:present>	
+				
+				
+				
+				
+				
+				<%--
+				
 			</div>
 		</td>
 	</tr>
 </table>
+
+--%>

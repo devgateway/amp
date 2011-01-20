@@ -165,12 +165,18 @@ function loadShareRules(){
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="0" scope="request"/>
 									<c:set var="selectedSubTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
-								</td>
-							</tr>
-							<tr>
-								<td valign="top">
-                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+										
+										
+										<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<tr>
+											<td valign=top>
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+													<jsp:include page="teamSetupMenu.jsp" flush="true" />
+										
+										
+										
+										
+										
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
 											<td style="padding-left:78px">
@@ -428,12 +434,19 @@ function loadShareRules(){
 											</td>
 										</tr>
 									</table>
-                                </div>
+								</div>
+													</div>											
+												
+											</td>
+										</tr>
+									</table>
+										
+										
+										
+										
+										
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;
-
-							</td></tr>
 						</table>
 					</td>
 				</tr>

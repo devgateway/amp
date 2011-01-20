@@ -166,13 +166,18 @@ function addTeamMember(id) {
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
+										
+										<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<tr>
+											<td valign=top>
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+										
+													<jsp:include page="teamSetupMenu.jsp" flush="true" />
+										
+										
+										
+										
+<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
 										<tr>
 											<td valign="top" align="center">
 												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
@@ -311,10 +316,20 @@ function addTeamMember(id) {
 												</table>
 											</td>
 										</tr>
+									</table>										
+										
+										
+										
+										</div>
+										</div>											
+												
+											</td>
+										</tr>
 									</table>
-                                    </div>
+										
 								</td>
 							</tr>
+							
 						</table>			
 					</td>
 				</tr>

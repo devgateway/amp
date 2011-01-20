@@ -132,159 +132,166 @@ function updateChild(action) {
 									</c:choose>
 									<c:set var="teamAccessTypeLocal" scope="session"><bean:write name="aimUpdateWorkspaceForm" property="teamAccessType"/>
 									</c:set>
-
-									<jsp:include page="teamSetupMenu.jsp" flush="true"/>
-
-								</td>
-							</tr>
-							<tr>
-								<td valign="top">
-                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
-                                	<table align=center cellPadding=0 cellSpacing=0 width="90%">
+									
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 										<tr>
-											<td style="padding-left:10px">
-												<table border=0 cellPadding=3 cellSpacing=0 width="500">
-													<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
-													<tr>
-														<td colspan="2" align="center">
-															<font color="blue"><b>
-															<digi:trn key="aim:updateToAMPComplete">
-																Update to AMP Complete
-															</digi:trn></b></font>
-														</td>
-													</tr>
-													</logic:equal>
-													<tr>
-														<td colspan="2" align="center">
-															<digi:errors/>
-														</td>
-													</tr>
+											<td valign=top>
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+													<jsp:include page="teamSetupMenu.jsp" flush="true"/>
+												
 
-													<c:if test="${subtabId == 0 }">
-													
-														<tr>
-															<td align="right" width="50%">
-																<digi:trn key="aim:teamName">
-																Team Name
-																</digi:trn>
-															</td>
-															<td align="left">
-																<html:text property="teamName" size="50" styleClass="inp-text" />
-															</td>
-														</tr>
-														<tr>
-															<td align="right" width="50%" valign="top">
-																<digi:trn key="aim:teamDescription">
-																Team Description
-																</digi:trn>
-															</td>
-															<td align="left" >
-																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
-															</td>
-														</tr>
-														<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
-														<tr>
-															<td align="right" width="50%">
-																<digi:trn key="aim:relatedTeam">
-																Related Team
-																</digi:trn>
-															</td>
-															<td align="left">
-																<bean:write name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" />
-															</td>
-														</tr>
-														</logic:notEmpty>
-	
-														
-															<td align="right">
-																<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
-															</td>
-															<td align="left">
-																<html:select property="workspaceType" styleClass="inp-text" disabled="true">
-																	<html:option value="">-- <digi:trn key="aim:selectType">Select Type</digi:trn> --</html:option>
-																	<html:option value="Donor"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
-																	<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
-																	<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
-																</html:select>
-															</td>
-														</tr>
-														<tr>
-															<c:set var="translation">
-																<digi:trn key="aim:btnSave">Save</digi:trn>
-															</c:set>
-															<td colspan="2" align="center">
-																<input type="button" class="dr-menu" value=" ${translation} " onclick="update('edit')"/>
-															</td>																	
-														</tr>													
-													</c:if>
-													<c:if test="${subtabId == 2 }">
-
-														<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
-														<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
-														<tr>
-															<td align="right" width="150">
-																<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
-															</td>
-															<td align="left">
-																<c:set var="translation">
-																	<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
-																</c:set>
-																<input type="button" value="${translation}" class="dr-menu" onclick="addChildWorkspaces()">
-															</td>
-														</tr>
-														<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
-														<tr>
-															<td colspan="2" align="center">
-																<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
-																class="box-border-nopadding">
-																<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
-																	<tr>
-																		<td align="left">&nbsp;
-																			<c:out value="${workspaces.name}"/>
-																		</td>
-																		<td align="right" width="10">
-																			<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																			<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																		 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
-																			border="0" alt="Remove this child workspace"/></a>&nbsp;
-																			</c:if>
-																		</td>
-																	</tr>
-																</c:forEach>
-																</table>
-															</td>
-														</tr>
-														</c:if>
-														<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
-														<tr>
-															<td colspan="2" align="center">
-																<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
-																class="box-border-nopadding">
+															<table align=center cellPadding=0 cellSpacing=0 width="90%">
 																<tr>
-																	<td align="left">
-																		<digi:trn key="aim:noChildTeams">No child teams</digi:trn>
+																	<td style="padding-left:10px">
+																		<table border=0 cellPadding=3 cellSpacing=0 width="500">
+																			<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
+																			<tr>
+																				<td colspan="2" align="center">
+																					<font color="blue"><b>
+																					<digi:trn key="aim:updateToAMPComplete">
+																						Update to AMP Complete
+																					</digi:trn></b></font>
+																				</td>
+																			</tr>
+																			</logic:equal>
+																			<tr>
+																				<td colspan="2" align="center">
+																					<digi:errors/>
+																				</td>
+																			</tr>
+						
+																			<c:if test="${subtabId == 0 }">
+																			
+																				<tr>
+																					<td align="right" width="50%">
+																						<digi:trn key="aim:teamName">
+																						Team Name
+																						</digi:trn>
+																					</td>
+																					<td align="left">
+																						<html:text property="teamName" size="50" styleClass="inp-text" />
+																					</td>
+																				</tr>
+																				<tr>
+																					<td align="right" width="50%" valign="top">
+																						<digi:trn key="aim:teamDescription">
+																						Team Description
+																						</digi:trn>
+																					</td>
+																					<td align="left" >
+																						<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
+																					</td>
+																				</tr>
+																				<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
+																				<tr>
+																					<td align="right" width="50%">
+																						<digi:trn key="aim:relatedTeam">
+																						Related Team
+																						</digi:trn>
+																					</td>
+																					<td align="left">
+																						<bean:write name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" />
+																					</td>
+																				</tr>
+																				</logic:notEmpty>
+							
+																				
+																					<td align="right">
+																						<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
+																					</td>
+																					<td align="left">
+																						<html:select property="workspaceType" styleClass="inp-text" disabled="true">
+																							<html:option value="">-- <digi:trn key="aim:selectType">Select Type</digi:trn> --</html:option>
+																							<html:option value="Donor"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
+																							<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
+																							<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+																						</html:select>
+																					</td>
+																				</tr>
+																				<tr>
+																					<c:set var="translation">
+																						<digi:trn key="aim:btnSave">Save</digi:trn>
+																					</c:set>
+																					<td colspan="2" align="center">
+																						<input type="button" class="dr-menu" value=" ${translation} " onclick="update('edit')"/>
+																					</td>																	
+																				</tr>													
+																			</c:if>
+																			<c:if test="${subtabId == 2 }">
+						
+																				<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
+																				<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
+																				<tr>
+																					<td align="right" width="150">
+																						<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
+																					</td>
+																					<td align="left">
+																						<c:set var="translation">
+																							<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
+																						</c:set>
+																						<input type="button" value="${translation}" class="dr-menu" onclick="addChildWorkspaces()">
+																					</td>
+																				</tr>
+																				<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
+																				<tr>
+																					<td colspan="2" align="center">
+																						<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+																						class="box-border-nopadding">
+																						<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
+																							<tr>
+																								<td align="left">&nbsp;
+																									<c:out value="${workspaces.name}"/>
+																								</td>
+																								<td align="right" width="10">
+																									<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																									<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
+																								 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
+																									border="0" alt="Remove this child workspace"/></a>&nbsp;
+																									</c:if>
+																								</td>
+																							</tr>
+																						</c:forEach>
+																						</table>
+																					</td>
+																				</tr>
+																				</c:if>
+																				<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
+																				<tr>
+																					<td colspan="2" align="center">
+																						<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+																						class="box-border-nopadding">
+																						<tr>
+																							<td align="left">
+																								<digi:trn key="aim:noChildTeams">No child teams</digi:trn>
+																							</td>
+																						</tr>
+																						</table>
+																					</td>
+																				</tr>
+																				</c:if>
+																				<tr><td>&nbsp;</td></tr>
+																				<tr>
+																					<c:set var="translation">
+																						<digi:trn key="btn:teamWorkspaceUpdate">Update</digi:trn>
+																					</c:set>
+																					<td colspan="2" align="center">
+																						<input type="button" class="dr-menu" value=" ${translation} " onclick="updateChild('edit')"/>
+																					</td>																	
+																				</tr>
+																			</c:if>
+																		</table>
 																	</td>
 																</tr>
-																</table>
-															</td>
-														</tr>
-														</c:if>
-														<tr><td>&nbsp;</td></tr>
-														<tr>
-															<c:set var="translation">
-																<digi:trn key="btn:teamWorkspaceUpdate">Update</digi:trn>
-															</c:set>
-															<td colspan="2" align="center">
-																<input type="button" class="dr-menu" value=" ${translation} " onclick="updateChild('edit')"/>
-															</td>																	
-														</tr>
-													</c:if>
-												</table>
+															</table>	
+
+														</div>
+													</div>											
+												
 											</td>
 										</tr>
 									</table>
-                                </div>
-                                </td>
+
+								</td>
 							</tr>
 						</table>
 					</td>

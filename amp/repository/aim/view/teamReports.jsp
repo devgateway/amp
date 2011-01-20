@@ -204,15 +204,17 @@ function setHoveredTable(tableId, hasHeaders) {
 										<c:set var="selectedTab" value="8" scope="request"/>
 									</c:if>									
 									<c:set var="selectedSubTab" value="0" scope="request"/>
+										
+										<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<tr>
+											<td valign=top>
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+										
+										
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
-									<div align="center">
-                                
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">
+										
+										
+<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">
 										<tr><td>
 										<digi:errors />
 										</td></tr>
@@ -553,15 +555,19 @@ function setHoveredTable(tableId, hasHeaders) {
 											</td>
 
 										</tr>
-									</table>
-
-									</div>
-                                    </div>                                 
+									</table>										
+										
+										
+										</div>
+										</div>											
+												
+											</td>
+										</tr>
+									</table>	
+										
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;
-								
-							</td></tr>
+							
 						</table>
 					</td>
 				</tr>

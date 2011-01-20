@@ -50,7 +50,7 @@
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
         
-        <td background="img_2/ins_bg_1.gif" class="inside" align=center style="color:#FFFFFF;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        <td background="img_2/ins_bg_1.gif" class="inside" align=center style="color:#000000;" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
             	<c:choose>
             		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.name}">

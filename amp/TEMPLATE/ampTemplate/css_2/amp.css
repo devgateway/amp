@@ -23,7 +23,7 @@ h1 {text-transform:uppercase;}
 .inputx {border:1px solid #D0D0D0; background-color:#FFFFFF}
 .insidex{font-size:11px;color:#767676;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
-.dropdwn_sm_wksp {border:1px solid #728896; font-size:11px; background-color:#496678; color:#FFFFFF;}
+.dropdwn_sm_wksp {border:1px solid #CCCCCC; font-size:11px; background-color:#FFFFFF; color:#000000;}
 .dropdwn_sm_lng {border:1px solid #728896; font-size:11px; background-color:#496678; color:#FFFFFF;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
@@ -77,7 +77,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0; background-color:
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
-.workspace_info {float:left; margin-left:15px; padding-left:15px; border-left:1px solid #688193; padding-top:20px; color:#E8F0F5; font-size:11px;}
+.workspace_info {float:left; color:#000000; font-size:11px;}
 .workspace_choose {line-height:35px; font-size:17px; margin-top:25px;}
 
 /* MENU */

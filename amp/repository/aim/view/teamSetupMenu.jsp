@@ -19,6 +19,9 @@
 <c:set target="${urlParamsChild}" property="dest" value="teamLead"/>			
 <c:set target="${urlParamsChild}" property="subtab" value="2"/>			
 
+
+<link type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
+<%--
 <style type="text/css">
 
 
@@ -170,6 +173,9 @@ html>body #mainEmpty {
 }
 
 </style>
+
+--%>
+
 <c:set var="loadstatustext">
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
@@ -191,6 +197,8 @@ function putLoading(){
 	return true;
 }
 </script>
+
+<%--
 <div style="width:100%;">
 				<DIV id="tabs">
 					<UL>
@@ -622,4 +630,298 @@ function putLoading(){
 				</logic:present>
 
 </div>
+--%>
 
+
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+	<tr>
+		<td valign=top>
+			<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+				<ul style="height: 29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<c:if test="${selectedTab == '0'}">
+							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+								<a class="tab_link">
+									<digi:trn key="aim:workspaceConfiguration">Configuration</digi:trn>
+								</a>
+							</li>
+						</c:if>	
+						<c:if test="${selectedTab != '0'}">
+							<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/workspaceOverview.do" name="urlParams" styleClass="tab_link">
+								<digi:trn key="aim:workspaceConfiguration">Configuration</digi:trn>
+							</digi:link>
+							</li>
+						</c:if>
+
+						<c:if test="${selectedTab == '1'}">
+							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+								<a class="tab_link">
+									<digi:trn key="aim:members">Members</digi:trn>
+								</a>
+							</li>
+						</c:if>
+						<c:if test="${selectedTab != '1'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/teamMemberList.do" styleClass="tab_link">
+								<digi:trn key="aim:members">Members</digi:trn>
+							</digi:link>
+							</li>
+						</c:if>
+					
+					<c:if test="${teamAccessTypeLocal != 'Management' }">
+						<c:if test="${selectedTab != '2'}">
+							<li class="desktop_tab ui-state-default ui-corner-top">
+								<digi:link href="/teamActivityList.do" name="urlParams" styleClass="tab_link">
+									<digi:trn key="aim:activities">Activities</digi:trn>
+								</digi:link>
+							</li>
+						</c:if>
+						<c:if test="${selectedTab == '2'}">
+							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+								<a class="tab_link">
+									<digi:trn key="aim:activities">Activities</digi:trn>
+								</a>
+							</li>
+						</c:if>
+					</c:if>
+					
+					<c:if test="${selectedTab == '3'}">
+						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+							<a class="tab_link">
+								<digi:trn key="aim:workspaceReports">Reports</digi:trn>
+							</a>
+						</li>
+					</c:if>
+					<c:if test="${selectedTab != '3'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/teamReportList.do" styleClass="tab_link">
+								<digi:trn key="aim:workspaceReports">Reports</digi:trn>
+							</digi:link>
+						</li>
+					</c:if>
+					
+					<c:if test="${selectedTab == '4'}">
+						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+							<a class="tab_link">
+								<digi:trn key="fm:documentmanagement">Document Management</digi:trn>
+							</a>	
+						</li>
+					</c:if>
+					<c:if test="${selectedTab != '4'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<bean:define id="subtabLink" value="0" />
+							<digi:link href="/relatedLinksList.do" onclick="return putLoading();" paramId="subtab" paramProperty="subtabLink" styleClass="tab_link">
+								<digi:trn key="fm:documentmanagement">Document Management</digi:trn>
+							</digi:link>
+						</li>
+					</c:if>
+					
+					
+					<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
+						<c:if test="${selectedTab == '6'}">
+							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+								<a class="tab_link" >
+									<digi:trn key="aim:m&e">M&E</digi:trn>
+								</a>
+							</li>
+						</c:if>
+						<c:if test="${selectedTab != '6'}">
+							<li class="desktop_tab ui-state-default ui-corner-top">
+								<digi:link href="/getTeamActivities.do" styleClass="tab_link" >
+									<digi:trn key="aim:m&e">M&E</digi:trn>
+								</digi:link>
+							</li>
+						</c:if>
+					</module:display>
+					
+					<c:if test="${selectedTab  == '7'}">
+						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+							<a class="tab_link">
+								<digi:trn key="aim:workspaceaudittrail">Audit Trail</digi:trn>
+							</a>
+						</li>
+					</c:if>
+					<c:if test="${selectedTab  != '7'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/teamAuditList.do" styleClass="tab_link">
+								<digi:trn key="aim:workspaceaudittrail">Audit Trail</digi:trn>
+							</digi:link>
+						</li>
+					</c:if>
+
+					<c:if test="${selectedTab  == '8'}">
+						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+							<a class="tab_link">
+								<digi:trn key="aim:workspacedesktoptabs">Desktop Tabs</digi:trn>
+							</a>
+						</li>
+					</c:if>					
+					<c:if test="${selectedTab  != '8'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/teamDesktopTabList.do" styleClass="tab_link">
+								<digi:trn key="aim:workspacedesktoptabs">Desktop Tabs</digi:trn>
+							</digi:link>
+						</li>
+					</c:if>
+				</ul>
+				<!-- SubTabs -->
+				
+				<%--				
+				${selectedTab}/${selectedSubTab}
+					------------------------------------ ${selectedSubTab  == '0'}
+					--%>
+				
+				<logic:present  name="selectedSubTab">
+					<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+						<c:if test="${selectedTab  == '4'}">
+							<c:if test="${selectedSubTab  == '0'}">
+								<span class="bread_sel">ggggggggggggggg
+										<digi:trn key="aim:workspaceDocuments">Documents</digi:trn>								
+	              </span>
+							</c:if>
+							<c:if test="${selectedSubTab != '0'}">
+								<bean:define id="subtabDocuments" value="0" />
+								<digi:link href="/relatedLinksList.do" paramId="subtab" paramName="subtabDocuments" styleClass="l_sm">	
+									<digi:trn key="aim:workspaceDocuments">Documents</digi:trn>
+								</digi:link>							
+							</c:if>
+							<span class="breadcrump_sep">|</span>
+							<c:if test="${selectedSubTab  == '1'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:workspaceLinks">Links</digi:trn>								
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '1'}">
+								<bean:define id="subtabLinks" value="1" />
+								<digi:link href="/relatedLinksList.do" paramId="subtab" paramName="subtabLinks" styleClass="l_sm">
+									<digi:trn key="aim:workspaceLinks">Links</digi:trn>
+								</digi:link>
+							</c:if>
+						</c:if>
+						
+						<c:if test="${selectedTab  == '2'}">
+							<c:if test="${selectedSubTab  == '0'}">
+	              <span class="bread_sel">
+		              <digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>								
+	              </span>
+							</c:if>
+							<c:if test="${selectedSubTab != '0'}">
+								<digi:link href="/teamActivityList.do" name="urlParams" styleClass="l_sm">
+									<digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>
+								</digi:link>							
+							</c:if>
+							<span class="breadcrump_sep">|</span>
+
+							<c:if test="${selectedSubTab  == '1'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:workspaceActivitiesDonor">Donor</digi:trn>								
+								</span>
+							</c:if>
+									
+	            <c:if test="${aimTeamActivitiesForm.donorFlag == false}">
+	            	<c:if test="${selectedSubTab  == '2'}">
+	            		<span class="bread_sel">
+										<digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn>
+									</span>
+								</c:if>
+								<c:if test="${selectedSubTab != '2'}">
+									<digi:link href="/updateTeamActivity.do" name="urlParams" styleClass="l_sm">
+										<digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn>
+									</digi:link>							
+								</c:if>					
+	          	</c:if>					
+						</c:if>
+						
+						
+						<c:if test="${selectedTab  == '3'}">
+							<c:if test="${selectedSubTab  == '0'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '0'}">
+								<digi:link href="/teamReportList.do" name="urlParams" styleClass="l_sm">
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+								</digi:link>
+							</c:if>
+							<span class="breadcrump_sep">|</span>
+							<c:if test="${selectedSubTab  == '1'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '1'}">
+								<a href="javascript:listReports()" class="l_sm">
+									<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+								</a>
+							</c:if>
+						</c:if>
+						
+						<c:if test="${selectedTab  == '8'}">
+							<c:if test="${selectedSubTab  == '0'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '0'}">
+								<digi:link href="/teamDesktopTabList.do" name="urlParams" styleClass="l_sm">
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+								</digi:link>
+							</c:if>
+							<span class="breadcrump_sep">|</span>
+							<c:if test="${selectedSubTab  == '1'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '1'}">
+								<a href="javascript:listReports()" class="l_sm">
+									<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+								</a>
+							</c:if>
+						</c:if>
+						
+
+						<c:if test="${selectedTab  == '0'}">
+							<c:if test="${selectedSubTab  == '0'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:workspaceGeneralSettings">General Settings</digi:trn>
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '0'}">
+								<digi:link href="/workspaceOverview.do" name="urlParams" styleClass="l_sm">
+									<digi:trn key="aim:workspaceGeneralSettings">General Settings</digi:trn>
+								</digi:link>							
+							</c:if>
+							<span class="breadcrump_sep">|</span>
+							<c:if test="${selectedSubTab  == '1'}">
+								<span class="bread_sel">
+									<digi:trn key="aim:workspaceApplicationSettings">Application Settings</digi:trn>								
+								</span>
+							</c:if>
+							<c:if test="${selectedSubTab != '1'}">
+								<digi:link href="/defaultSettings.do" styleClass="l_sm">
+									<digi:trn key="aim:workspaceApplicationSettings">Application Settings</digi:trn>
+								</digi:link>							
+							</c:if>
+							<c:if test="${childWorkspaces == 'enabled'}" >
+								<span class="breadcrump_sep">|</span>
+								<c:if test="${selectedSubTab  == '2'}">
+									<span class="bread_sel">
+										<digi:trn key="aim:workspaceChildWorkspaces">Child Workspaces</digi:trn>								
+									</span>
+								</c:if>
+								<c:if test="${selectedSubTab != '2'}">
+									<digi:link href="/workspaceOverview.do" name="urlParamsChild" styleClass="l_sm">
+										<digi:trn key="aim:workspaceChildWorkspaces">Child Workspaces</digi:trn>
+									</digi:link>							
+								</c:if>
+							</c:if>
+						</c:if>						
+						
+					</div>
+				</logic:present>	
+			</div>
+		</td>
+	</tr>
+</table>

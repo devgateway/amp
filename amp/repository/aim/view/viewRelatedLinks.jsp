@@ -142,7 +142,9 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="4" scope="request"/>
-									<c:set var="selectedSubTab" value="<%=request.getParameter("subtab") == null ? "0": request.getParameter("subtab") %>" scope="request"/>
+									<c:set var="selectedSubTab">
+										<%=request.getParameter("subtab") == null ? "0": request.getParameter("subtab") %>
+									</c:set>	
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>

@@ -53,27 +53,26 @@
 	//window.onload=getMessages;
 	</script>
 
-<digi:instance property="messageForm"/>
-<digi:form action="/messageActions.do">
-<html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
-<html:hidden name="messageForm" property="tabIndex"/>
-<html:hidden name="messageForm" property="childTab"/>
-<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
-
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
-
-<script language="javascript" type="text/javascript">
-	//setting timer to check for new messages after specified time	
-	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
-		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
-	}
-</script>	
-
 <!-- MAIN CONTENT PART START -->
 
 
 	<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+	<digi:instance property="messageForm"/>
+		<digi:form action="/messageActions.do">
+		<html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
+		<html:hidden name="messageForm" property="tabIndex"/>
+		<html:hidden name="messageForm" property="childTab"/>
+		<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+		
+		
+		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+		
+		<script language="javascript" type="text/javascript">
+			//setting timer to check for new messages after specified time	
+			if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
+				id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+			}
+		</script>	
 		
 		<div class="tab_opt_box">
 				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
@@ -119,10 +118,11 @@
 							
 						</div>
 					</div>
+					</div>
 				
 			
 
-		</div>
+		
 		
 
 		<div class="paging">
@@ -208,3 +208,4 @@ $(document).ready(function(){
 
 </script>
 </digi:form>
+</div>

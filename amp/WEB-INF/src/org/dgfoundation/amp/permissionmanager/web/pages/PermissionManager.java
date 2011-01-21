@@ -19,6 +19,8 @@ import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPM
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSectionFeaturePanel;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.gateperm.core.Permission;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.um.exception.UMException;
 
 /**
@@ -66,8 +68,11 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		//add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
 		//add(new AmpPMSectionFeaturePanel("manageGlobalPermissions", "Manage Global Permissions"));
-		add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", teamsModel, "Manage Global Permissions", false));
 		
+		
+		Set<Permission> permissonsSet = new TreeSet<Permission>(PermissionUtil.getAllUnDedicatedPermissions());
+		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
+		add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
 		add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
 	}
 

@@ -67,8 +67,8 @@ public class AmpPMTabsFieldWrapper extends AmpFieldPanel {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public AmpPMTabsFieldWrapper(String id, String fmName, List<ITab> tabs) {
-		super(id, fmName);
+	public AmpPMTabsFieldWrapper(String id, String fmName, List<ITab> tabs, boolean hideLabel) {
+		super(id, fmName,hideLabel);
 		AjaxTabbedPanel atp = new AjaxTabbedPanel("tabs", tabs);
 		atp.setOutputMarkupId(true);
 		add(atp);

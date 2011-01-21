@@ -219,6 +219,11 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .search_results_block_last{font-size:12px;margin:20px 0;}
 .search_results_header{float:left;padding:8px;font-weight:bold;font-size:12px}
 
+.team_name{font-size:11px;padding-right:50px}
+.team_name strong,.w_manager strong{padding:0 20px}
+.w_manager{font-size:11px}
+.normal{color:#767676}
+
 
 /* PREVIEW */
 .prv_left {font-size:11px; color:#6A6A6A; padding-right:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8; }

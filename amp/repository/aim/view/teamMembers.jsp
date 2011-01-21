@@ -5,69 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<style>
-.contentbox_border{
-	border: 	1px solid #666666;
-	width: 		750px;
-	background-color: #f4f4f2;
-}
-</style>
-<style>
-
-.tableEven {
-	background-color:#dbe5f1;
-	font-size:8pt;
-	padding:2px;
-}
-
-.tableOdd {
-	background-color:#FFFFFF;
-	font-size:8pt;!important
-	padding:2px;
-}
- 
-.Hovered {
-	background-color:#a5bcf2;
-}
-
-</style>
-
-<script language="javascript">
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
-	}
-	rows = null;
-}
-function setHoveredTable(tableId, hasHeaders) {
-
-	var tableElement = document.getElementById(tableId);
-	if(tableElement){
-    var className = 'Hovered',
-        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-        rows      = tableElement.getElementsByTagName('tr');
-
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			rows[i].onmouseover = function() {
-				this.className += ' ' + className;
-			};
-			rows[i].onmouseout = function() {
-				this.className = this.className.replace(pattern, ' ');
-
-			};
-		}
-		rows = null;
-	}
-	
 
 
-}
-</script>
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
@@ -133,27 +72,29 @@ function addTeamMember(id) {
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33>
-                    	<span class=crumb>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</c:set>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
-						<digi:trn key="aim:portfolio">
-						Portfolio
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
-						</c:set>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}">
-						<digi:trn key="aim:teamWorkspaceSetup">
-						Team Workspace Setup
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:members">
-						Members
-						</digi:trn>
-						</span>
+						
+						
+						<div class="breadcrump_cont">
+							<span class="sec_name">
+								<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
+							</span>
+							
+							<span class="breadcrump_sep">|</span>
+							<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
+								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+							</digi:link>
+							<span class="breadcrump_sep"><b>»</b></span>
+							<c:set var="translation">
+								<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
+							</c:set>
+							<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
+							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
+							<span class="breadcrump_sep"><b>»</b></span>
+							<span class="bread_sel"><digi:trn key="aim:members">Members</digi:trn></span>
+						</div>
+						
+						
+						
 					</td>
 				</tr>
 				<tr>
@@ -175,9 +116,120 @@ function addTeamMember(id) {
 													<jsp:include page="teamSetupMenu.jsp" flush="true" />
 										
 										
+											<div class="breadcrump_cont">
+												<table border="0" cellpadding="0" cellspacing="0">
+													<tr>
+														<td nowrap>
+															<span class="team_name"><digi:trn key="aim:teamname">Team Name</digi:trn>:</span>
+														</td>
+														<td nowrap width="45%">
+															<span class="team_name"><strong><c:out value="${aimTeamMemberForm.teamName}"/></strong></span>
+														</td>
+														<td nowrap>
+															<span class="w_manager"><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>:&nbsp;</span>
+														</td>
+														<td nowrap width="45%">
+															<table border="0" cellpadding="0" cellspacing="0" style="font-size:11px">
+																<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
+																	
+																		<tr>
+																			<td nowrap>
+																				<strong>
+																					<c:if test="${mem.teamHead == true}">
+																						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+																						<c:set target="${urlParams1}" property="id">
+																							<c:out value="${mem.memberId}"/>
+																						</c:set>	
+																						<c:set target="${urlParams1}" property="action" value="edit" />
+																						<c:set var="translation">
+																							<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
+																						</c:set>
+																						<digi:link href="/viewMemberDetails.do" name="urlParams1" title="${translation}" >
+																							<c:out value="${mem.memberName}"/>
+																						</digi:link>																		
+																						(<c:out value="${mem.email}"/>)
+																					</c:if>
+																				</strong>
+																		</td>
+																	</tr>
+																</c:forEach>
+															</table>
+														</td>
+													</tr>
+												</table>
+											</div>
+
 										
+										<table class="inside members normal" width=100% cellpadding="0" cellspacing="0">
+<tr>
+  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>&nbsp;</td>
+    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Name</b></td>
+    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">User ID </b></td>
+    <%--
+    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Role</b></td>
+    --%>
+</tr>
+<logic:empty name="aimTeamMemberForm" property="teamMembers">
+	<tr>
+		<td colspan="4">
+			<digi:trn key="aim:noMembers">No members present</digi:trn>
+		</td>
+	</tr>
+</logic:empty>
+<logic:notEmpty name="aimTeamMemberForm" property="teamMembers">
+	<%--
+<tr>
+  <td class=inside valign=top><input type="checkbox" name="checkbox" value="checkbox" /></td>
+    <td class=inside valign=top><span class="desktop_project_name normal">aaa aaa</span></td>
+    <td class=inside valign=top><span class="desktop_project_name normal">aaa@aaa.org</span></td>
+    
+    <td class=inside valign=top><select name="" class="inputx insidex"/><option value="1">Workspace Member</option></select><input name="role" type="submit" id="role" value="Change Role" /></td>
+    
+</tr>
+--%>
+
+		<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
+			<c:if test="${mem.teamHead == false}">
+				<tr>
+					<td class=inside valign=top>
+						<html:multibox property="selMembers" >
+						<c:out value="${mem.memberId}"/>
+						</html:multibox>																
+					</td>
+					<td class=inside valign=top>
+						<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+						<c:set target="${urlParams}" property="id">
+						<c:out value="${mem.memberId}"/>
+						</c:set>	
+						<c:set target="${urlParams}" property="action" value="edit" />
+						<c:set var="translation">
+						<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
+						</c:set>
+						<digi:link href="/viewMemberDetails.do" name="urlParams" title="${translation}" >
+						<c:out value="${mem.memberName}"/>
+						</digi:link>
+					</td>
+					<td class=inside valign=top>
+						<c:out value="${mem.email}"/>
+					</td>																	
+				</tr>
+			</c:if>
+		</c:forEach>
+
+</logic:notEmpty>
+</table>
+<br />
+<div class="buttons" align="center">
+	<input type="button" value="<digi:trn key='btn:addMember'>Add Member</digi:trn>" class="buttonx_sm btn"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>
+	<html:submit styleClass="buttonx_sm btn" property="removeMember"  onclick="return checkSelMembers()">
+		<digi:trn key="btn:removeSelectedMembers"> Remove Selected Members</digi:trn> 
+	</html:submit>
+	
+	
+</div>
 										
-<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
+<%--										
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
 										<tr>
 											<td valign="top" align="center">
 												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
@@ -208,9 +260,7 @@ function addTeamMember(id) {
 																<tr>	
 																	<td bgcolor="#f4f4f2" width="100">
 																		<b>
-                                                                            <digi:trn key="aim:teamname">
-                                                                                Team Name  
-                                                                            </digi:trn>
+                                                                            <digi:trn key="aim:teamname">Team Name</digi:trn>
                                                                         </b>
 																	</td>
 																	<td bgcolor="#f4f4f2" width="100">
@@ -299,7 +349,7 @@ function addTeamMember(id) {
 															<table cellspacing="5">
 																<tr>
 																	<td>	
-							<input type="button" value="<digi:trn key='btn:addMember'>Add Member</digi:trn>" class="dr-menu"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>											
+																	<input type="button" value="<digi:trn key='btn:addMember'>Add Member</digi:trn>" class="dr-menu"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>											
 																	</td>
 																	<td>
 																		<html:submit   styleClass="dr-menu" property="removeMember"  onclick="return checkSelMembers()">
@@ -317,7 +367,7 @@ function addTeamMember(id) {
 											</td>
 										</tr>
 									</table>										
-										
+										--%>
 										
 										
 										</div>
@@ -344,8 +394,4 @@ function addTeamMember(id) {
 
 
 
-<script language="javascript">
-setStripsTable("dataTable", "tableEven", "tableOdd");
-setHoveredTable("dataTable", false);
-</script>
 

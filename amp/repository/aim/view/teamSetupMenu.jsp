@@ -917,7 +917,8 @@ function putLoading(){
 									</digi:link>							
 								</c:if>
 							</c:if>
-						</c:if>						
+						</c:if>	
+						<br>&nbsp;
 				</logic:present>	
 				
 				

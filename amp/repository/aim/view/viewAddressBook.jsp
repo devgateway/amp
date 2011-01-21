@@ -57,7 +57,20 @@ padding-left: 0px;
     font-weight: bold;
 }
 
+.yui-tt {
+	visibility:hidden;
+	position:absolute;
+	color:#000;
+	background-color:#FFF;
+	font-size:11px;
+	padding:2px;
+	border:1px solid #CCC;
+	width:auto;
+}
+
 </style>
+
+
 
 <!-- for auto complete -->
 <style type="text/css">
@@ -282,6 +295,7 @@ padding-left: 0px;
 					if (column.key == 'name' || column.key == 'email' || column.key == 'organizations' || column.key == 'phones' || column.key == 'faxes') {
 						var record = this.getRecord(target);
 						var tooltipText = record.getData(column.key);
+	
 
                         if(tooltipText!=null && tooltipText.length > 0){
                             var event=oArgs.event;

@@ -122,7 +122,6 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 				set.add(aaContact);
 				idsList.removeAll();
 				target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-//				target.appendJavascript(OnePagerConst.getSearchContactsToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
 			}
 

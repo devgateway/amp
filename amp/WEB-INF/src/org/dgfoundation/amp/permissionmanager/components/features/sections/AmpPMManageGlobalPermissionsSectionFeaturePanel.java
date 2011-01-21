@@ -3,6 +3,10 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -47,7 +51,17 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends
 		super(id, model, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		
-		System.out.println("aaaaaaaaaaaaaaaaaaaaa");
+		
+		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
+//		AmpPMGlobalPanel a = new AmpPMGlobalPanel("asd", "asd");
+//		AmpPMGlobalPanel b = new AmpPMGlobalPanel("123", "123");
+		globalPermissionsTabs.add(new AmpPMTab("OV Indicators" , "Objective Objectively Verifiable Indicators", AmpPMGlobalPanel.class));
+		globalPermissionsTabs.add(new AmpPMTab("Assumption" , "Objective Assumption", AmpPMGlobalPanel.class));
+//		globalPermissionsTabs.add(new AmpPMTab("Verification" , "Objective Verification", AmpPMGlobalPanel.class));
+		
+		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("objectiveTabs", "Objective Comments", globalPermissionsTabs);
+		add(objTabs);
+		
 	}
 
 }

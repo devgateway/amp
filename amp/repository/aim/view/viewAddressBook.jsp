@@ -26,15 +26,7 @@
 	vertical-align: bottom;
 }
 
-.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
-	background: transparent url(/repository/aim/images/up.gif) no-repeat
-		scroll right center;
-}
 
-.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
-	background: transparent url(/repository/aim/images/down.gif) no-repeat
-		scroll right center;
-}
 
 .yui-skin-sam .yui-dt td {
 	color: #000000;
@@ -429,8 +421,8 @@ padding-left: 0px;
 															<div style="width:100%;">
 																<table width="100%">
 																	<tr>
-																		<td class="t_mid" style="padding-right:10px;" width=50 valign=top>
-																			<digi:trn>keyword:</digi:trn>
+																		<td class="t_mid" style="padding-right:10px;" width=95 valign=top>
+																			<digi:trn>Search Contacts</digi:trn>:
 																		</td>
 																		<td align="left" width=300 style="padding-right:10px;">
 																			<div id="myAutoComplete">

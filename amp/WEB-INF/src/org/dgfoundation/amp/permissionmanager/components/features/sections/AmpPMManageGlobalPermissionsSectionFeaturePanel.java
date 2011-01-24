@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.digijava.module.gateperm.core.Permission;
+import org.digijava.module.gateperm.core.PermissionMap;
 
 /**
  * @author dan
@@ -50,23 +51,26 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(final String id, final IModel<Set<Permission>> model, String fmName, boolean hideLabel) throws Exception {
-		super(id, model, fmName, hideLabel);
+	public AmpPMManageGlobalPermissionsSectionFeaturePanel(final String id, final IModel<Set<Permission>> permissionsModel, String fmName, boolean hideLabel) throws Exception {
+		super(id, permissionsModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		
 		
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
+		final IModel<PermissionMap> globalPermissionMapForPermissibleClass=null;
+		final IModel<Permission> globalPermission=null;
+		
 		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
 		      public Panel getPanel(String panelId)
 		      {
-		        return new AmpPMManageGlobalPanel(panelId, model, "Manage Permissions", true);
+		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Manage Permissions", true);
 		      }
 		});
 		
 		globalPermissionsTabs.add(new AbstractTab(new Model("Add New Permission")){
 		      public Panel getPanel(String panelId)
 		      {
-		        return new AmpPMManageGlobalPanel(panelId, model, "Add New Permission", true);
+		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission,"Add New Permission", true);
 		      }
 		});
 

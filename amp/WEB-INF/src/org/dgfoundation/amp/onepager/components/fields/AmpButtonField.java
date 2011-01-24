@@ -48,5 +48,18 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		};
 		addFormComponent(button);
 	}
+	
+	public AmpButtonField(String id, String fmName,boolean hideLabel) {
+		super(id, fmName, hideLabel);
+		button = new IndicatingAjaxButton("fieldButton",new Model<String>(fmName)) {
+			private static final long serialVersionUID = -5699378405978605979L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				AmpButtonField.this.onSubmit(target, form);
+			}
+		};
+		addFormComponent(button);
+	}
 
 }

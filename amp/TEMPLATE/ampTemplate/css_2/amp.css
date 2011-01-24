@@ -32,7 +32,7 @@ legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bol
 table.inside, td.inside {border-color: #CCC; border-style: solid; font-size:12px;}
 table.inside, td.inside_zebra {background-color:#F2F2F2;}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
-td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0; background-color: #FFF;}
+td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
 .ins_title_reg {font-size:11px; color:#767676; font-weight:bold;}
 .ins_title_sm {font-size:9px; color:#767676;}

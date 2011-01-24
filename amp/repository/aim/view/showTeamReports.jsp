@@ -243,22 +243,22 @@ function confirmFunc() {
 					                     						<td>
 					                        						<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
 					                          							<tr>
-					                          								<td align="center" height="10" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">&nbsp;
+					                          								<td align="center" class="inside_header">&nbsp;
 					                            								
 					                            							</td>
-					                            							<td align="center" height="20" class="inside_header">
+					                            							<td align="center" class="inside_header">
 					                              								<b>${titleColumn}</b>
 					                            							</td>
-					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">
+					                            							<td align="center" class="inside_header">
 					                            								<b><digi:trn key="aim:reportOwnerName">Owner</digi:trn></b>
 					                            							</td>
-					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">
+					                            							<td align="center" class="inside_header">
 					                              								<b><digi:trn key="aim:reportCreationDate">Creation Date</digi:trn></b>
 					                            							</td>
-					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray; padding-right: 35px; padding-left: 35px;" class="inside">
+					                            							<td align="center" class="inside_header">
 					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
 					                            							</td>
-					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">
+					                            							<td align="center" class="inside_header">
 					                              								<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
 					                            							</td>
 					                            							<%
@@ -266,10 +266,10 @@ function confirmFunc() {
 					                               							TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 					                             							if(tm!=null) {
 					                            							%>
-					                              								<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">
+					                              								<td align="center" class="inside_header">
 																					<b><digi:trn>Fields</digi:trn></b>
 																				</td>
-					                              								<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">
+					                              								<td align="center" class="inside_header">
 					                                								<b><digi:trn key="aim:reportAction">Action</digi:trn></b>
 					                              								</td>
 					                            							<% } %>

@@ -219,7 +219,8 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .search_results_block{font-size:12px;margin:20px 0;border-bottom:1px solid #dcdcdc}
 .search_results_block_last{font-size:12px;margin:20px 0;}
 .search_results_header{float:left;padding:8px;font-weight:bold;font-size:12px}
-
+#private{width:330px;color:#939393;float:left;font-size:11px;margin-bottom:10px}
+#private img{float:left;padding:0 10px 10px 0}
 
 /* PREVIEW */
 .prv_left {font-size:11px; color:#6A6A6A; padding-right:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8; }

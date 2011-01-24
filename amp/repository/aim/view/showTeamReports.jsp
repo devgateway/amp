@@ -243,10 +243,10 @@ function confirmFunc() {
 					                     						<td>
 					                        						<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
 					                          							<tr>
-					                          								<td align="center" height="10" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">
-					                            								&nbsp;
+					                          								<td align="center" height="10" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; " class="inside">&nbsp;
+					                            								
 					                            							</td>
-					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; border-style:solid; color:gray;" class="inside">
+					                            							<td align="center" height="20" class="inside_header">
 					                              								<b>${titleColumn}</b>
 					                            							</td>
 					                            							<td align="center" height="20" background="img_2/ins_bg.gif" style="background-repeat: repeat-x; font-size: 12px; color:gray;" class="inside">

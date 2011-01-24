@@ -313,7 +313,7 @@
 											</html:submit>
 										</c:if>
 										<c:if test="${aimTeamReportsForm.showReportList == false}">
-											<html:submit  styleClass="dr-menu" property="assignReports"  onclick="return validate()">
+											<html:submit  styleClass="buttonx_sm btn" property="assignReports"  onclick="return validate()">
 												<digi:trn key="btn:addTabsToTheWorkspace">Add Tabs to the Workspace</digi:trn> 
 											</html:submit>
 										</c:if>

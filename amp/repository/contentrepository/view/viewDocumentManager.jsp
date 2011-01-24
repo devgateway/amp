@@ -432,7 +432,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	<tbody>
 		<tr>
 		<td align=left vAlign=top>
-			<div style="padding-left: 10px; width: 98%; min-width: 680px;" class="yui-skin-sam" id="content"> 
+			<div style="width:1000px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">

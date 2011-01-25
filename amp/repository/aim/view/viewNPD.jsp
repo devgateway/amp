@@ -1446,7 +1446,7 @@ function showFilter(){
         </td>
     </tr>
 				<tr>
-					<td style="border-bottom:1px solid black;" valign="top">
+					<td style="border-bottom:1px solid #CCCCCC;" valign="top">
 						<table id="topLeftTable" border="0" width="100%" cellspacing="0" cellpadding="5">
 							<tr bgcolor="silver">
 								<td>
@@ -1473,7 +1473,7 @@ function showFilter(){
 							</tr>
 						</table>
 					</td>
-					<td valign="top" width="100%" style="border-left:1px solid black;border-bottom:1px solid black;">
+					<td valign="top" width="100%" style="border-left:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">
 						<div id="tree" style="width: 100%;"></div>
 					</td>
 				</tr>

@@ -179,7 +179,7 @@ function loadShareRules(){
 									<digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn>
                 </td>
                 <td class=inside>
-									<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
+									<html:text property="defRecsPerPage" size="5"  styleClass="inputx insidex" styleId="defRecsPerPage"/>
 									<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
 										<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                   </a>
@@ -190,7 +190,7 @@ function loadShareRules(){
 									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>
 								</td>
 								<td class=inside>
-									<html:text property="defReportsPerPage" size="5"  styleClass="inp-text" styleId="repsPerPage"/>
+									<html:text property="defReportsPerPage" size="5"  styleClass="inputx insidex" styleId="repsPerPage"/>
 										<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
 											<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                     </a>
@@ -201,7 +201,7 @@ function loadShareRules(){
 									<digi:trn key="aim:defLanguage">Language</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="language" styleClass="inp-text">
+									<html:select property="language" styleClass="inputx insidex">
 								  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
 								    <html:options collection="languages" property="code" labelProperty="name" />
 									</html:select>
@@ -212,7 +212,7 @@ function loadShareRules(){
 									<digi:trn key="aim:defCurrency">Currency</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="currencyId" styleClass="inp-text">
+									<html:select property="currencyId" styleClass="inputx insidex">
 										<html:option value="">------ <digi:trn key="aim:selDefCurrency">Select Currency</digi:trn> ------</html:option>
 										<html:optionsCollection name="aimUpdateAppSettingsForm" property="currencies" value="ampCurrencyId" label="currencyCode" />
 									</html:select>
@@ -234,7 +234,7 @@ function loadShareRules(){
 									<c:if test="${aimUpdateAppSettingsForm.validation=='allOff'}">
 										<bean:define id="allOff" value="selected"/>
 									</c:if>
-									<html:select property="validation" styleClass="inp-text">
+									<html:select property="validation" styleClass="inputx insidex">
 										<option value="newOnly" <c:out  value="${newOnly}"></c:out> ><digi:trn key="aim:defValidationNewOnly">Validate New Only</digi:trn></option>
 										<option value="allEdits" <c:out  value="${allEdits }"></c:out> ><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>
 										<option value="allOff" <c:out  value="${allOff}"></c:out> ><digi:trn>Off</digi:trn></option>
@@ -246,7 +246,7 @@ function loadShareRules(){
 									<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
 								</td>
 								<td class=inside>
-									<html:text property="reportStartYear" size="5"  styleClass="inp-text"/>
+									<html:text property="reportStartYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr>
@@ -254,7 +254,7 @@ function loadShareRules(){
 									<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
 								</td>
 								<td class=inside>
-									<html:text property="reportEndYear" size="5"  styleClass="inp-text"/>
+									<html:text property="reportEndYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr>
@@ -262,7 +262,7 @@ function loadShareRules(){
 									<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="fisCalendarId" styleClass="inp-text">
+									<html:select property="fisCalendarId" styleClass="inputx insidex">
 										<html:option value="">------ <digi:trn key="aim:selFisCalendar">Select Fiscal Calendar</digi:trn> ------</html:option>
 										<html:optionsCollection name="aimUpdateAppSettingsForm" property="fisCalendars" value="ampFiscalCalId" label="name" />
 									</html:select>
@@ -273,7 +273,7 @@ function loadShareRules(){
 									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="defaultReportForTeamId" styleClass="inp-text" onchange="changePanel()" styleId="defaultReport">
+									<html:select property="defaultReportForTeamId" styleClass="inputx insidex" onchange="changePanel()" styleId="defaultReport">
 										<html:option value="0">
 											------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
 										</html:option>
@@ -295,7 +295,7 @@ function loadShareRules(){
 									<digi:trn>Rights for Team Resources</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="allowAddTeamRes" styleClass="inp-text" onchange="return loadShareRules()" styleId="allowAddTeamRes">
+									<html:select property="allowAddTeamRes" styleClass="inputx insidex" onchange="return loadShareRules()" styleId="allowAddTeamRes">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.possibleValsAddTR}">
 											<c:set var="trn">
 												<digi:trn>${element.value}</digi:trn>
@@ -312,7 +312,7 @@ function loadShareRules(){
 									<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="allowShareAccrossWRK" styleClass="inp-text">
+									<html:select property="allowShareAccrossWRK" styleClass="inputx insidex">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.shareResAmongWorkspacesPossibleVals}">
 											<c:set var="trn">
 												<digi:trn>${element.value}</digi:trn>
@@ -329,7 +329,7 @@ function loadShareRules(){
 									<digi:trn>Rights For Publishing Resources</digi:trn>
 								</td>
 								<td class=inside>
-									<html:select property="allowPublishingResources" styleClass="inp-text" onchange="publishingRigthsChanged()" styleId="publResRights">
+									<html:select property="allowPublishingResources" styleClass="inputx insidex" onchange="publishingRigthsChanged()" styleId="publResRights">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.publishResourcesPossibleVals}">
 											<c:set var="trn">
 												<digi:trn>${element.value}</digi:trn>
@@ -355,7 +355,7 @@ function loadShareRules(){
 								</td>
 								<td class=inside>
 									<div style="${displayDiv}"  id="membersDiv">																	
-										<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px">
+										<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px" styleClass="inputx insidex">
 											<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">
 												<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
 											</logic:empty>

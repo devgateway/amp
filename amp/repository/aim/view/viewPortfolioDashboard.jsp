@@ -165,7 +165,7 @@
                                      </TD>
                                 </TR>
                                   <TR>
-                                       <TD BGCOLOR="#C7D4DB" style="font-weight : bold;height:20px;">
+                                       <TD BGCOLOR="#C7D4DB" style="font-weight : bold; padding:6px;">
                                       	<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
                                    
                                         <a style="cursor:pointer; color:#376091; font-size:12px;" onclick="javascript:showPrinterFriendlyPortPerf()"><digi:trn >Printer Friendly Version</digi:trn></a>
@@ -179,7 +179,7 @@
                                      </TD>
                                 </TR>
 
-								<TR><TD class="highlight">
+								<TR><TD class="highlight" align=center>
 
 									<digi:trn key="aim:overallPortfolioRisk">Overall Risk</digi:trn>:
 

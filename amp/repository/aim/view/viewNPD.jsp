@@ -1482,7 +1482,7 @@ function showFilter(){
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:15px;">
                             <tr>
                                 <td style="padding-left:-2px;">
-                                    <div style="width:99.7%;background-color:#C7D4DB; padding:5px 2px 5px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+                                    <div style="width:99.7%;background-color:#C7D4DB; padding:5px 0px 7px 5px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
                                         <span style="cursor:pointer;float:left;">
                                             <DIV id="subtabs">
                                                 <UL>

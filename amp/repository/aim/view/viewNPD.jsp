@@ -1385,7 +1385,7 @@ function showFilter(){
 	<html:hidden property="myYears" value="${sys}"/>
 </c:forEach>
 
-<div style="padding-left:10px;padding-top:10px;width:96%;">
+<div style="width:1000px; margin-left:auto; margin-right:auto;">
     <div id="content" class="yui-skin-sam" style="width:100%;">
         <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
             <ul class="yui-nav">
@@ -1410,7 +1410,7 @@ function showFilter(){
             </ul>
         </div>
 	</div>
-<div class="yui-content" style="background-color:#ffffff;border:1px solid black;">
+<div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC;">
 <table id="topParttable" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td colspan="2">
@@ -1441,8 +1441,8 @@ function showFilter(){
         </td>
     </tr>
     <tr>
-        <td colspan="2">
-            &nbsp;
+        <td colspan="2">&nbsp;
+            
         </td>
     </tr>
 				<tr>
@@ -1611,8 +1611,8 @@ function showFilter(){
                                 </td>
                             </tr>
                             <tr id="activityResultsPlace">
-                                <td colspan="8">
-                                    &nbsp;
+                                <td colspan="8">&nbsp;
+                                    
 
                                 </td>
                             </tr>

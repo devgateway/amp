@@ -57,7 +57,6 @@ document.getElementById(containerid).innerHTML=page_request.responseText;
 	{
 		//alert(e);
 	}
-	
 }
 }
 

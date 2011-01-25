@@ -16,7 +16,7 @@
   				<td>
   					<div class="login_here">
   						<div class="login_here_cont">
-  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;">
+  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;" onclick="toggle('show_login_pop_box');">
   								<digi:trn>Login Here</digi:trn>
   							</a>
   						</div>
@@ -111,11 +111,14 @@
 </digi:secure>
 
   <script type="text/javascript">
-
-$('#show_login_pop').click(function() {
-	  $('#show_login_pop_box').toggle('slow', function() {
-	  });
-	});
-
+  function toggle(obj) {
+		var el = document.getElementById(obj);
+		if (el.style.display == 'none' || el.style.display == '') {
+			el.style.display = 'block';
+		}
+		else {
+			el.style.display = 'none';
+		}
+	}
 </script>
   

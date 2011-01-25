@@ -18,9 +18,9 @@
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
 <% if (reportData.getLevelDepth() < 3) { %>		
-		<td class="inside"; style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>">
+		<td class="inside"; style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% } else { %>	
-		<td class="inside" style="background-repeat:repeat-x; padding-left:33px; font-size:12px; padding-left:<%=10*(reportData.getLevelDepth()-1)%>" class="ins_title">
+		<td class="inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% } %>			
 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -68,7 +68,7 @@
 					<% } else { %>	
 						<td class="inside">
 					<% } %>
-					&nbsp;
+					
 					</td>
 			</c:if>
 		</c:if>

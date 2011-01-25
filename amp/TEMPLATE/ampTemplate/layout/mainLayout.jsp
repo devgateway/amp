@@ -53,7 +53,7 @@
 	</logic:notPresent>
 	
 	<!-- Scripts  -->
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/scripts.js"></script>
+	
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/common.js"/>"></script>
 </head>
 

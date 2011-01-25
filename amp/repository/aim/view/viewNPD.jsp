@@ -1479,10 +1479,10 @@ function showFilter(){
 				</tr>
                 <tr>
                     <td colspan="2">
-                        <table width="100%" cellpadding="0" cellspacing="0">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:15px;">
                             <tr>
                                 <td style="padding-left:-2px;">
-                                    <div style="width:99.7%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+                                    <div style="width:99.7%;background-color:#C7D4DB;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
                                         <span style="cursor:pointer;float:left;">
                                             <DIV id="subtabs">
                                                 <UL>

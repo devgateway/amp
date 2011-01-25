@@ -15,6 +15,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -78,12 +79,12 @@ public class ShowDashboard extends Action {
 		}
 
 		// Get Summary Information
-		DashboardUtil.getSummaryInformation(visualizationForm);
+		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
 
-		visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors());
-		visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities());
-		visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions());
-		visualizationForm.getRanksInformation().setFullSectors(DashboardUtil.getRankSectors());
+		//visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors());
+		//visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities());
+		//visualizationForm.getRanksInformation().setFullRegions(DashboardUtil.getRankRegions());
+		//visualizationForm.getRanksInformation().setFullSectors(DashboardUtil.getRankSectors());
 		
 		// Get Top Projects
 		// Get Top Sectors
@@ -111,8 +112,11 @@ public class ShowDashboard extends Action {
 				filter.getOrganizationGroupId(), false); // TODO: Determine how
 															// this will work in
 															// the public view
-
 		filter.setOrganizations(orgs);
+		
+		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getSectors());
+		filter.setSectors(sectors);
+
 		if (filter.getYear() == null) {
 			Long year = null;
 			try {

@@ -127,7 +127,11 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullDonors(Map<AmpOrganisation, BigDecimal> fullDonors) {
 			this.fullDonors = fullDonors;
-			this.topDonors = getTop(fullDonors);
+			if (fullDonors!=null) {
+				this.topDonors = getTop(fullDonors);
+			} else {
+				this.topDonors = null;
+			}
 		}
 		public Map<AmpActivity, BigDecimal> getTopProjects() {
 			return topProjects;
@@ -140,7 +144,11 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullProjects(Map<AmpActivity, BigDecimal> fullProjects) {
 			this.fullProjects = fullProjects;
-			this.topProjects = getTop(fullProjects);
+			if (fullProjects!=null) {
+				this.topProjects = getTop(fullProjects);
+			} else {
+				this.topProjects = null;
+			}
 		}
 		public Map<AmpCategoryValueLocations, BigDecimal> getTopRegions() {
 			return topRegions;
@@ -154,7 +162,11 @@ public class VisualizationForm extends ActionForm {
 		public void setFullRegions(
 				Map<AmpCategoryValueLocations, BigDecimal> fullRegions) {
 			this.fullRegions = fullRegions;
-			this.topRegions = getTop(fullRegions);
+			if (fullRegions!=null) {
+				this.topRegions = getTop(fullRegions);
+			} else {
+				this.topRegions = null;
+			}
 		}
 		public Map<AmpSector, BigDecimal> getTopSectors() {
 			return topSectors;
@@ -167,7 +179,11 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setFullSectors(Map<AmpSector, BigDecimal> fullSectors) {
 			this.fullSectors = fullSectors;
-			this.topSectors = getTop(fullSectors);
+			if (fullSectors!=null) {
+				this.topSectors = getTop(fullSectors);
+			} else {
+				this.topSectors = null;
+			}
 		}
 		
 		private Map getTop (Map map){

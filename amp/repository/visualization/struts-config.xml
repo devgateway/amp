@@ -21,9 +21,9 @@
 	      <forward name="delete" path="/content/contentManager.do?action=list" redirect="true" />
 	    </action>
 		<action name="visualizationform" path="/visualization/filters"
-			scope="session" type="org.digijava.module.visualization.action.ApplyFilter">
+			scope="session" type="org.digijava.module.visualization.action.ApplyFilters">
 			<forward name="sector" path="/showLayout.do?layout=sectorDashboard" />
-			<forward name="donor" path="/showLayout.do?layout=donorDashboard" />
+			<forward name="donor" path="/visualization/showDashboard.do" />
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
 	</action-mappings>

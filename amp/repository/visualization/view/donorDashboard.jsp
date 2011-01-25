@@ -101,16 +101,7 @@ yuiLoadingPanel.prototype = {
   <tr>
     <td>
     <div class="dashboard_name">
-    	<c:if test="${visualizationform.filter.organizationGroupId eq '-1' }">
-	    	<digi:trn>ALL DONORS</digi:trn>
-    	</c:if>
-    	<c:if test="${visualizationform.filter.organizationGroupId ne '-1' }">
-			<c:forEach var="organizationGroup" items="${visualizationform.filter.orgGroups}">
-			<c:if test="${organizationGroup.ampOrgGrpId eq visualizationform.filter.organizationGroupId}">
-				${organizationGroup}
-			</c:if>
-			</c:forEach>
-    	</c:if>
+	  	
     </div>
     </td>
     <td><div class="dash_ico"><img src="images/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="images/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="images/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
@@ -129,7 +120,7 @@ yuiLoadingPanel.prototype = {
 	<hr />
 	<table cellspacing="0" cellpadding="0" width=100%> 
   <tr>
-    <td>Organization Group:</td>
+    <td><digi:trn>Organization Group</digi:trn>:</td>
     <td align=right>
        <html:select property="filter.organizationGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -138,10 +129,10 @@ yuiLoadingPanel.prototype = {
 	</td>
   </tr>
    <tr>
-    <td>Organization:</td>
+    <td><digi:trn>Organization</digi:trn>:</td>
     <td align=right>
     <select class="dropdwn_sm" style="width:145px;" name="org_dropdown_id" id="org_dropdown_id">
-		<option value="All">All</option>
+		<option value="-1"><digi:trn>All</digi:trn></option>
 	</select>
 	</td>
   </tr>
@@ -162,29 +153,31 @@ yuiLoadingPanel.prototype = {
        </html:select>
 	</td>
   </tr> 
-     <tr>
-		   <td><digi:trn>Sector</digi:trn>:</td>
-		   <td align=right>
-		   <select class="dropdwn_sm" style="width:145px;" name="funding.proProjCost.currencyCode">
-			<option value="All">All</option>
-		</select>
-		</td>
+  <tr>
+  <td><digi:trn>Sector</digi:trn>:</td>
+	   <td align=right>
+	   <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
+       </html:select>
+	</td>
   </tr>
   <tr>
     <td><digi:trn>Sub-Sector</digi:trn>:</td>
     <td align=right>
-    	<select class="dropdwn_sm" style="width:145px;" name="funding.proProjCost.currencyCode">
-			<option value="All">All</option>
+    	<select class="dropdwn_sm" style="width:145px;" name="sub_sector_dropdown_id" id="sub_sector_dropdown_id">
+			<option value="-1"><digi:trn>All</digi:trn></option>
 		</select>
 	</td>
   </tr>
  </table>
 
 	<center>
-	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
+	<input type="button" onclick="runFilter()" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
 	</center>
 	</fieldset>
 	<fieldset>
+	
 	<legend><span class=legend_label>Dashboard Info</span></legend>
 	<div class="field_text">This is a <b>Sector</b> dashboard which presents 
 statistics and aggregates related to the Sector 
@@ -374,11 +367,19 @@ var callbackChildrenCall = {
 			    var results = YAHOO.lang.JSON.parse(o.responseText);
 			    switch(results.objectType)
 			    {
-			    	case "Organization":
+				    case "Organization":
 			    		var orgDropdown = document.getElementById("org_dropdown_id");
 			    		orgDropdown.options.length = 0;
 			    		for(var i = 0; i < results.children.length; i++){
 			    			orgDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
+				    case "Sector":
+			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
+			    		subSectorDropdown.options.length = 0;
+			    		subSectorDropdown.options[0] = new Option("All", -1);
+			    		for(var i = 1; i < results.children.length; i++){
+			    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
 			    	case "Region":
@@ -398,6 +399,9 @@ function callbackChildren(e) {
 	var objectType = "";
 
 	switch(e.target.id){
+		case "sector_dropdown_id":
+			objectType = "Sector";
+			break;
 		case "region_dropdown_id":
 			objectType = "Region";
 			break;
@@ -452,6 +456,7 @@ function refreshBoxes(){
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApply);
 
 var myTabs = new YAHOO.widget.TabView("demo");
@@ -498,6 +503,23 @@ function hideFullRegions(){
 	var divTop = document.getElementById("divTopRegions");
 	divFull.style.display = "none";
 	divTop.style.display = "";
+}
+
+function runFilter(){
+	var orgIds = null;
+	var secIds = null;
+	if (document.getElementById("org_dropdown_id").value != -1) {
+		orgIds = document.getElementById("org_dropdown_id").value;
+	}
+	if (document.getElementById("sub_sector_dropdown_id").value == -1) {
+		if (document.getElementById("sector_dropdown_id").value != -1) {
+			secIds = document.getElementById("sector_dropdown_id").value;
+		}
+	} else {
+		secIds = document.getElementById("sub_sector_dropdown_id").value;
+	}
+	document.visualizationform.action="/visualization/filters.do?orgIds="+orgIds+"&secIds="+secIds;
+	document.visualizationform.submit();
 }
 
 //-->

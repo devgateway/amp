@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -79,8 +80,26 @@ public class DataDispatcher extends DispatchAction {
 	        } catch (Exception e) {
 	            logger.error("unable to load organizations", e);
 	        }
-		}
-		else if (parentId != null && objectType != null && objectType.equals("Region")){
+		} else if (parentId != null && objectType != null && objectType.equals("Sector")) {
+			Long sectorId = Long.parseLong(parentId);
+	        List<AmpSector> sectors;
+	        try {
+	        	sectors = DbUtil.getSubSectors(sectorId); 
+				JSONObject child = new JSONObject();
+				Iterator<AmpSector> it = sectors.iterator();
+				while(it.hasNext()){
+					AmpSector sector = it.next();
+					child.put("ID", sector.getAmpSectorId());
+					child.put("name", sector.getName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+	        } catch (Exception e) {
+	            logger.error("unable to load organizations", e);
+	        }
+		} else if (parentId != null && objectType != null && objectType.equals("Region")){
 			Long regionId = Long.parseLong(parentId);
 	        List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 

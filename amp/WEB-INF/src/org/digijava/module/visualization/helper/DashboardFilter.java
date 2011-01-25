@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -23,13 +24,16 @@ public class DashboardFilter {
     private Boolean workspaceOnly;
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
+    private List<AmpOrganisation>organizationsSelected;
+    private List<AmpSector>sectors;
+    private List<AmpSector>sectorsSelected;
+    private Long sectorId; //used to fill subsectors list
     private Collection<BeanWrapperImpl> years;
     private int transactionType;
     private List<AmpOrgGroup> orgGroups;
     private Long organizationGroupId;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
-    private Long[] orgIds;
     private Integer largestProjectNumber;
     private Boolean divideThousands;
     private Integer divideThousandsDecimalPlaces;
@@ -37,6 +41,7 @@ public class DashboardFilter {
     private Long selZoneIds[];
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
+    private List<AmpCategoryValueLocations> locationsSelected;
     private int yearsInRange;
     private Boolean pledgeVisible;
     private Boolean expendituresVisible;
@@ -82,7 +87,7 @@ public class DashboardFilter {
         this.selRegionId = selRegionId;
     }
 
-    public Long[] getSelZoneIds() {
+     public Long[] getSelZoneIds() {
         return selZoneIds;
     }
 
@@ -204,7 +209,7 @@ public class DashboardFilter {
         }
         return name;
     }
-
+    /*
     public String getOrgsName() {
         String name = "";
         if (orgIds != null) {
@@ -218,7 +223,7 @@ public class DashboardFilter {
         }
         return name;
 
-    }
+    }*/
     public String getLocationsName() throws DgException {
         String name = "";
         if (selZoneIds != null && selZoneIds.length > 0 && selZoneIds[0] != -1) {
@@ -247,14 +252,7 @@ public class DashboardFilter {
         return name;
 
     }
-     public Long[] getOrgIds() {
-        return orgIds;
-    }
 
-    public void setOrgIds(Long[] orgIds) {
-        this.orgIds = orgIds;
-    }
-    
     public Boolean getDivideThousands() {
         return divideThousands;
     }
@@ -293,6 +291,47 @@ public class DashboardFilter {
 
 	public int getDashboardType() {
 		return dashboardType;
+	}
+
+	public List<AmpOrganisation> getOrganizationsSelected() {
+		return organizationsSelected;
+	}
+
+	public void setOrganizationsSelected(List<AmpOrganisation> organizationsSelected) {
+		this.organizationsSelected = organizationsSelected;
+	}
+
+	public List<AmpSector> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(List<AmpSector> sectors) {
+		this.sectors = sectors;
+	}
+
+	public List<AmpSector> getSectorsSelected() {
+		return sectorsSelected;
+	}
+
+	public void setSectorsSelected(List<AmpSector> sectorsSelected) {
+		this.sectorsSelected = sectorsSelected;
+	}
+
+	public Long getSectorId() {
+		return sectorId;
+	}
+
+	public void setSectorId(Long sectorId) {
+		this.sectorId = sectorId;
+	}
+
+	public List<AmpCategoryValueLocations> getLocationsSelected() {
+		return locationsSelected;
+	}
+
+	public void setLocationsSelected(
+			List<AmpCategoryValueLocations> locationsSelected) {
+		this.locationsSelected = locationsSelected;
 	}
 	
 

@@ -1410,7 +1410,7 @@ function showFilter(){
             </ul>
         </div>
 	</div>
-<div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC;">
+<div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC; padding:10px;">
 <table id="topParttable" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td colspan="2">

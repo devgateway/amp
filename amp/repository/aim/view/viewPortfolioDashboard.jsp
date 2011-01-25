@@ -168,7 +168,7 @@
                                        <TD BGCOLOR="#C7D4DB" style="font-weight : bold;height:20px;">
                                       	<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
                                    
-                                        <a style="cursor:pointer; " onclick="javascript:showPrinterFriendlyPortPerf()" style="color:#376091; font-size:12px;"><digi:trn >Printer Friendly Version</digi:trn></a>
+                                        <a style="cursor:pointer; color:#376091; font-size:12px;" onclick="javascript:showPrinterFriendlyPortPerf()"><digi:trn >Printer Friendly Version</digi:trn></a>
 
                                     </field:display>
                                      </TD>
@@ -198,7 +198,7 @@
 
 								<TR><TD>
 
-									<TABLE cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+									<TABLE cellspacing="2" cellpadding="2" valign="top" align="center" border=0>
 
 										<TR>
 

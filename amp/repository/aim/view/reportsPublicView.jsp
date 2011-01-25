@@ -45,6 +45,12 @@
 	%>
 	</logic:notPresent>
 </logic:present>
+<c:set var="showCurrSettings">
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+</c:set>
+<c:set var="hideCurrSettings">
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+</c:set>
 
 <script language="JavaScript">
 function toggleSettings(){
@@ -52,12 +58,12 @@ function toggleSettings(){
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+		displaySettingsButton.innerHTML = "${showCurrSettings}";
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+		displaySettingsButton.innerHTML = "${hideCurrSettings}";
 	}
 }
 	

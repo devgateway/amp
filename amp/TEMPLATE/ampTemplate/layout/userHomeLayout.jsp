@@ -47,48 +47,102 @@
 	</head>
      	
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-	<jsp:include page="headerTop_2.jsp"/>
+	<digi:secure authenticated="false">
+		<logic:notPresent name="currentMember" scope="session">
+			<digi:insert attribute="headerTop" />	
+		</logic:notPresent>
+	</digi:secure>
+	<digi:secure authenticated="true">
+		<jsp:include page="headerTop_2.jsp"/>
+	</digi:secure>
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
 	</div>
-	
+	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
 	<!-- BREADCRUMP START -->
 	<div class="breadcrump">
 		<div class="centering">
 			<div class="breadcrump_cont">
 			<div style="float:right;">
-			
-			
 			<logic:notEmpty name="currentMember" scope="session">
-		<feature:display name="Change Workspace" module="My Desktop">
-			<div class="workspace_info">
-				<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-		 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
-		 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-						<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-						<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-								<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
-						</logic:equal>
-						<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-								<option value="<bean:write name="item" property="ampTeamMemId"/>">
-									<bean:write name="team" property="name"/>
-								</option>
-						</logic:notEqual>
-					</logic:iterate>
-				</select>
-		 	</div>			
-		</feature:display>
-		</logic:notEmpty>
-			
-			
+				<feature:display name="Change Workspace" module="My Desktop">
+					<div class="workspace_info">
+						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
+				 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
+				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
+								</logic:equal>
+								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option value="<bean:write name="item" property="ampTeamMemId"/>">
+											<bean:write name="team" property="name"/>
+										</option>
+								</logic:notEqual>
+							</logic:iterate>
+						</select>
+				 	</div>			
+			</feature:display>
+			</logic:notEmpty>
 			</div>
-				<span class="sec_name">My Desktop</span>
+				<%if (arf.isPublicView()==false){%>
+					<span class="sec_name">My Desktop</span>
+				<%}%>
+			
+			<%if (arf.isPublicView()==true){%>
+				<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+					<tr>
+    					<td width="740" valign=top>	
+		    				<div class="wlcm_txt_menu">
+				    			<b class="sel_mid">
+				    				<digi:trn>
+				    					Public Tab's
+				    				</digi:trn>
+				    			</b>
+				    			<span class="wlcm_txt_menu_spc">|</span>
+				    			<a onClick="showAbout(); return false;" style="text-decoration: underline;cursor: pointer;">
+				    				<digi:trn>
+				    					About AMP
+				    				</digi:trn>
+				    			</a>
+				    			<span class="wlcm_txt_menu_spc">|</span>
+				    			<a href="/viewTeamReports.do?tabs=false">
+				    				<digi:trn>
+				    					Reports
+				    				</digi:trn>
+				    			</a>
+				    			<span class="wlcm_txt_menu_spc">|</span>
+				    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">
+				    				<digi:trn>
+				    					Resources
+				    				</digi:trn>
+				    			</a><span class="wlcm_txt_menu_spc">|</span>
+				    			<a href=#>
+				    				<digi:trn>
+				    					Donor Profiles
+				    				</digi:trn>
+				    			</a>
+				    			<span class="wlcm_txt_menu_spc">|</span>
+				    				<a href=#>
+				    					<digi:trn>
+				    						Aid Map
+				    					</digi:trn>
+				    					</a>
+				    			<span class="wlcm_txt_menu_spc">|</span>
+				    				<a href=#>
+				    					<digi:trn>
+				    						Contact us
+				    					</digi:trn>		
+				    				</a>
+		    				</div>
+    					</td>
+    				</tr>
+    			</table>
+    		<%}%>
 			</div>
 		</div>
 	</div>
 	<!-- BREADCRUMP END -->
-	
-	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 		<tbody>
 			<tr>
@@ -119,8 +173,10 @@
 				</td>
 			</tr>
 			</tbody>
-		</table>		
-		<digi:insert attribute="footer" />
+		</table>
+		<digi:insert attribute="footer" />		
+		
+		
     </body>
 </html>
 <script language=javascript>

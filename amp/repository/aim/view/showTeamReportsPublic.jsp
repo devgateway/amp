@@ -78,16 +78,46 @@ function popup(mylink, windowname)
 	<tr>
     	<td width="740" valign=top>	
     		<div class="wlcm_txt_menu">
-    			<a onClick="showAbout(); return false;">About AMP</a>
+    			<a href="/reportsPublicView.do" style="text-decoration: underline;cursor: pointer;">
+    				<digi:trn>
+    					Public Tab's
+    				</digi:trn>
+    			</a>
     			<span class="wlcm_txt_menu_spc">|</span>
-    			<b class="sel_mid">Reports</b>
+    			<a onClick="showAbout(); return false;" style="text-decoration: underline;cursor: pointer;">
+    				<digi:trn>
+    					About AMP
+    				</digi:trn>
+    			</a>
     			<span class="wlcm_txt_menu_spc">|</span>
-    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">Resources</a><span class="wlcm_txt_menu_spc">|</span>
-    			<a href=#>Donor Profiles</a>
+    			<b class="sel_mid">
+    				<digi:trn>
+    					Reports
+    				</digi:trn>
+    			</b>
     			<span class="wlcm_txt_menu_spc">|</span>
-    			<a href=#>Aid Map</a>
+    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">
+    				<digi:trn>
+    					Resources
+    				</digi:trn>
+    			</a><span class="wlcm_txt_menu_spc">|</span>
+    			<a href=#>
+    				<digi:trn>
+    					Donor Profiles
+    				</digi:trn>
+    			</a>
     			<span class="wlcm_txt_menu_spc">|</span>
-    			<a href=#>Contact us</a>
+    				<a href=#>
+    					<digi:trn>
+    						Aid Map
+    					</digi:trn>
+    					</a>
+    			<span class="wlcm_txt_menu_spc">|</span>
+    				<a href=#>
+    					<digi:trn>
+    						Contact us
+    					</digi:trn>		
+    				</a>
     		</div>
 		<table class="inside" width=100% cellpadding="0" cellspacing="0">
    			<tr>

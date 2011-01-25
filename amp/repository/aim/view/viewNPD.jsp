@@ -1482,14 +1482,14 @@ function showFilter(){
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:15px;">
                             <tr>
                                 <td style="padding-left:-2px;">
-                                    <div style="width:99.7%;background-color:#C7D4DB; padding:5px 2px 5px 2px;font-family:Arial,Helvetica,sans-serif;">
+                                    <div style="width:99.7%;background-color:#C7D4DB; padding:5px 2px 5px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
                                         <span style="cursor:pointer;float:left;">
                                             <DIV id="subtabs">
                                                 <UL>
                                                     <LI>
                                                         <div>
                                                             <span>
-                                                                <a href="JavaScript:showFilter();" style="color:#376091;">
+                                                                <a href="JavaScript:showFilter();">
                                                                     <digi:trn>Filter</digi:trn>
                                                                 </a>&nbsp;&nbsp;|
                                                             </span>
@@ -1499,7 +1499,7 @@ function showFilter(){
                                                         <div>
                                                             <span>
                                                                 <a href="JavaScript:openOptionsWindow();">
-                                                                    <digi:trn key="aim:NPD:changeOptionsLink" style="color:#376091;">Change Options</digi:trn>
+                                                                    <digi:trn key="aim:NPD:changeOptionsLink">Change Options</digi:trn>
                                                                 </a>&nbsp;&nbsp;|
                                                             </span>
                                                         </div>
@@ -1515,7 +1515,7 @@ function showFilter(){
                                                 </UL>
                                             </DIV>
                                         </span>
-                                        <span style="cursor:pointer;font-style: italic;float:right; font-size:12px; color:#376091;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
+                                        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
                                         &nbsp;
                                     </div>
                                     <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >

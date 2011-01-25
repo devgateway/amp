@@ -269,3 +269,5 @@ table.report_indicator{margin-bottom:15px}
 
 .added_org_nc {background-color:#F8F8F8; border:1px solid #EBEBEB; margin-bottom:15px; margin-top:15px;}
 .required_fields {font-size:11px;}
+
+.highlight {font-size:12px; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:10px;}

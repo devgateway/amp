@@ -33,62 +33,32 @@
 
 </td></tr>
 
-<tr><td width="100%" valign="top" align="left">
-
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
-
-	<tr>
-
-		<td width=14>&nbsp;</td>
-
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-
-
-
-			<table cellPadding=5 cellSpacing=0 width="100%">
-
-				<tr>
-
-					<td height=33>
-						
-						<div class="breadcrump_cont">
-							<span class="sec_name">
-								<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
-							</span>
-							
-							<span class="breadcrump_sep">|</span>
-							<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
-								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
-							<c:set var="translation">
-								<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
-							</c:set>
-							<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
-							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
-							<span class="bread_sel"><digi:trn key="aim:activityList">Activity List</digi:trn></span>
-						</div>
-						
-
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td noWrap width=571 vAlign="top">
-
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0  width="100%">
-
-							<tr >
-
-								<td vAlign="top" width="100%">
-
 									<c:set var="selectedTab" value="6" scope="request"/>
 
 
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<tr>
+											<td>
+												<div class="breadcrump_cont">
+													<span class="sec_name">
+														<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
+													</span>
+													
+													<span class="breadcrump_sep">|</span>
+													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
+														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+													</digi:link>
+													<span class="breadcrump_sep"><b>»</b></span>
+													<c:set var="translation">
+														<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
+													</c:set>
+													<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
+													<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
+													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="bread_sel"><digi:trn key="aim:activityList">Activity List</digi:trn></span>
+												</div>
+											</td>
+										</tr>
 										<tr>
 											<td valign=top>
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -162,33 +132,14 @@
 							
 										
 								</div>
-										</div>											
+								</div>											
 												
-											</td>
-										</tr>
-									</table>											
+							</td>
+						</tr>
+					</table>											
 
-								</td>
-
-							</tr>
-
-							
-
-						</table>			
-
-					</td>
-
-				</tr>
-
-			</table>
 
 		</td>
-
 	</tr>
-
-</table>
-
-</td></tr>
-
 </table>
 

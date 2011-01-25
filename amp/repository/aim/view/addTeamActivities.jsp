@@ -83,59 +83,46 @@ function checkSelActivities() {
 <html:hidden property="page" />
 
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
-<tr><td width="100%" vAlign="top" align="left">
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
-</td></tr>
-<tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
+		<td>
+			<jsp:include page="teamPagesHeader.jsp" flush="true" />
+		</td>
+	</tr>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<td height=33>
-						
-						<div class="breadcrump_cont">
-							<span class="sec_name">
-								<digi:trn>List of Unassigned Activities</digi:trn>
-							</span>
-							
-							<span class="breadcrump_sep">|</span>
-							<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
-								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
-							<c:set var="translation">
-							<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
-							</c:set>
-							<digi:link href="/configureTeam.do" title="${translation}" styleClass="l_sm">
-								<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
-							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
-							<c:set var="translation">
-							<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
-							</c:set>
-							<digi:link href="/teamActivityList.do" title="${translation}" styleClass="l_sm">
-								<digi:trn key="aim:activityList">Activity List</digi:trn>
-							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
-							<span class="bread_sel"><digi:trn key="aim:addActivity">Add Activity</digi:trn></span>
-						</div>
-						
-						
-											</td>
-				</tr>
-	
-				<tr>
-					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
-							<tr>
-								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="2" scope="request"/>
 									<c:set var="selectedSubTab" value="2" scope="request"/>
 										
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<tr>
+											<td>
+												<div class="breadcrump_cont">
+													<span class="sec_name">
+														<digi:trn>List of Unassigned Activities</digi:trn>
+													</span>
+													
+													<span class="breadcrump_sep">|</span>
+													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
+														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+													</digi:link>
+													<span class="breadcrump_sep"><b>»</b></span>
+													<c:set var="translation">
+													<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
+													</c:set>
+													<digi:link href="/configureTeam.do" title="${translation}" styleClass="l_sm">
+														<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
+													</digi:link>
+													<span class="breadcrump_sep"><b>»</b></span>
+													<c:set var="translation">
+													<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
+													</c:set>
+													<digi:link href="/teamActivityList.do" title="${translation}" styleClass="l_sm">
+														<digi:trn key="aim:activityList">Activity List</digi:trn>
+													</digi:link>
+													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="bread_sel"><digi:trn key="aim:addActivity">Add Activity</digi:trn></span>
+												</div>
+											</td>
+										</tr>
 										<tr>
 											<td valign=top>
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
@@ -262,17 +249,8 @@ function checkSelActivities() {
 										</tr>
 									</table>	
 									
-								</td>
-							</tr>
-													
-						</table>			
-					</td>
-				</tr>
-			</table>
 		</td>
 	</tr>
-</table>
-</td></tr>
 </table>
 
 </digi:form>

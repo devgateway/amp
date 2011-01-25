@@ -165,10 +165,10 @@
                                      </TD>
                                 </TR>
                                   <TR>
-                                       <TD BGCOLOR="#CCDBFF" style="font-weight : bold;height:20px;">
+                                       <TD BGCOLOR="#C7D4DB" style="font-weight : bold;height:20px;">
                                       	<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
                                    
-                                        <a style="cursor:pointer; " onclick="javascript:showPrinterFriendlyPortPerf()"><digi:trn >Printer Friendly Version</digi:trn></a>
+                                        <a style="cursor:pointer; " onclick="javascript:showPrinterFriendlyPortPerf()" style="color:#376091; font-size:12px;"><digi:trn >Printer Friendly Version</digi:trn></a>
 
                                     </field:display>
                                      </TD>

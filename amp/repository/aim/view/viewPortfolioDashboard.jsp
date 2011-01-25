@@ -123,7 +123,7 @@
 
 <digi:form action="/viewPortfolioDashboard.do">
 
-<div style="padding-left:10px;padding-top:10px;width:98%;">
+<div style="margin-left:auto; margin-right:auto; width:1000px;">
     <div id="content" class="yui-skin-sam" style="width:100%;">
         <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
             <ul class="yui-nav">
@@ -148,7 +148,7 @@
             </ul>
         </div>
 	</div>
-<div class="yui-content" style="background-color:#ffffff;border:1px solid black;height:auto;">
+<div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC;height:auto;">
         <feature:display name="Portfolio Dashboard" module="M & E">
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
 			<TR><TD align=left>
@@ -160,8 +160,8 @@
 
 							<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center">
                                  <TR>
-                                       <TD>
-                                     &nbsp;
+                                       <TD>&nbsp;
+                                     
                                      </TD>
                                 </TR>
                                   <TR>
@@ -174,8 +174,8 @@
                                      </TD>
                                 </TR>
                                  <TR>
-                                       <TD>
-                                     &nbsp;
+                                       <TD>&nbsp;
+                                     
                                      </TD>
                                 </TR>
 

@@ -14,7 +14,7 @@
 		<many-to-one name="activity" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" not-null="true" />
 
-		<many-to-one name="location" column="amp_location_id" lazy="false"
+		<many-to-one name="location" column="amp_location_id" 
 			class="org.digijava.module.aim.dbentity.AmpLocation" cascade="none" not-null="true" />
 
 		<property name="locationPercentage" column="location_percentage" type="java.lang.Float" />

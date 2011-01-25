@@ -71,14 +71,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Organizations, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 
@@ -95,14 +88,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Activities, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 
@@ -120,14 +106,7 @@ public class DbUtil {
 			
 		} catch (Exception ex) {
 			logger.error("Unable to get Fundings Details, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 
@@ -143,14 +122,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Fundings, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 
@@ -167,14 +139,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get regions, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 
@@ -189,14 +154,7 @@ public class DbUtil {
              count= ((Integer) qry.iterate().next()).intValue();
 		} catch (Exception ex) {
 			logger.error("Exception while getting activities amount:" + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return count;
 		
 	}
@@ -212,14 +170,7 @@ public class DbUtil {
              count=((Integer)qry.uniqueResult()).intValue();
 		} catch (Exception ex) {
 			logger.error("Exception while getting sectors amount:" + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return count;
 	}
 	
@@ -233,14 +184,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception while getting sectors :" + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 	
@@ -258,14 +202,7 @@ public class DbUtil {
              
 		} catch (Exception ex) {
 			logger.error("Exception while getting regions amount:" + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return count;
 	}
 	
@@ -295,14 +232,7 @@ public class DbUtil {
 		} catch (Exception ex) {
 			logger.error("Exception while getting funding details by regions:" + ex);
 			ex.printStackTrace();
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 	
@@ -333,14 +263,7 @@ public class DbUtil {
 		} catch (Exception ex) {
 			logger.error("Exception while getting funding details by sector:" + ex);
 			ex.printStackTrace();
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 	
@@ -377,14 +300,7 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Activities with filter, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
 		return col;
 	}
 	
@@ -402,14 +318,7 @@ public class DbUtil {
 	             col = qry.list();
 			} catch (Exception ex) {
 				logger.error("Exception while getting sectors : " + ex);
-			} finally {
-				try {
-					if (session != null)
-						PersistenceManager.releaseSession(session);
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
-			}
+			} 
         }
 		return col;
 	}
@@ -427,14 +336,7 @@ public class DbUtil {
              col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception while getting sectors : " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
         return col;
 	}
 	
@@ -451,14 +353,7 @@ public class DbUtil {
              col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception while getting sub-sectors : " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
+		} 
         return col;
 	}
 	
@@ -478,14 +373,7 @@ public class DbUtil {
 	             
 			} catch (Exception ex) {
 				logger.error("Exception while getting regions :" + ex);
-			} finally {
-				try {
-					if (session != null)
-						PersistenceManager.releaseSession(session);
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
-			}
+			} 
         }
 		return col;
 	}
@@ -506,14 +394,7 @@ public class DbUtil {
 	             
 			} catch (Exception ex) {
 				logger.error("Exception while getting regions :" + ex);
-			} finally {
-				try {
-					if (session != null)
-						PersistenceManager.releaseSession(session);
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
-			}
+			} 
         }
 		return col;
 	}

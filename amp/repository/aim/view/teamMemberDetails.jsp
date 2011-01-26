@@ -72,125 +72,100 @@
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
-<tr><td width="100%" vAlign="top" align="left">
-<table cellPadding=0 cellSpacing=0 width=780>
-	<tr>
-		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
 
-			<table cellPadding="5" cellSpacing="0" width="100%">
-				<tr>
-					<td height="33">
-						<span class="crumb">
-							<c:set var="translation">
-								<digi:trn>Click here to view MyDesktop</digi:trn>
-							</c:set>
-							<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-								<digi:trn>Portfolio</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp;
-							<c:set var="translation">
-								<digi:trn>Click here to view Team Workspace Setup</digi:trn>
-							</c:set>
-							<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
-							<digi:trn>Team Workspace Setup</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp;
-							<c:set var="translation">
-								<digi:trn>Click here to view Members</digi:trn>
-							</c:set>
-							<digi:link href="/teamMemberList.do" styleClass="comment" title="${translation}" >
-							<digi:trn>Members</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp;
-							<digi:trn>Member Details</digi:trn>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<td height=16 vAlign="middle" width="571">
-						<span class="subtitle-blue">
-							<digi:trn>Team Workspace Setup</digi:trn>
-						</span>
-					</td>
-				</tr>
 				<tr>
 					<td noWrap width="571" vAlign="top">
-						<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="100%">
-							<tr >
-								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+						<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+							<tr>
+							<tr>
+								<td >
+									<div class="breadcrump_cont">
+										<span class="sec_name">
+											<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
+										</span>
+										
+										<span class="breadcrump_sep">|</span>
+										<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
+											<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+										</digi:link>
+										<span class="breadcrump_sep"><b>»</b></span>
+										<c:set var="translation">
+											<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
+										</c:set>
+										<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
+										<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
+										<span class="breadcrump_sep"><b>»</b></span>
+										<c:set var="translation">
+											<digi:trn>Click here to view Members</digi:trn>
+										</c:set>
+										<digi:link href="/teamMemberList.do" styleClass="l_sm" title="${translation}" >
+											<digi:trn>Members</digi:trn>
+										</digi:link>
+										<span class="breadcrump_sep"><b>»</b></span>
+										<span class="bread_sel"><digi:trn>Member Details</digi:trn></span>
+									</div>
+									
 								</td>
 							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top" align="center">
-                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+							<tr >
+								<td vAlign="top" width="100%">
+									
+									<c:set var="selectedTab" value="1" scope="request"/>
+										
+										<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+									<jsp:include page="teamSetupMenu.jsp" flush="true" />	
+									
+										
+								
+									
+									
+                                
 									<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParams}" property="id">
 										<bean:write name="aimTeamMemberForm" property="teamMemberId" />
 									</c:set>
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
-										<tr>
-											<td valign="top" align="left">
-												<table border="0" cellPadding="3" cellSpacing="0" width="35%">
+									<div align="center">
+												<table border="0" cellPadding="3" cellSpacing="0" width="200px" style="border:0px;" class="inside">
 													<tr>
-														<td bgcolor="#f4f4f2">
-															<table width="100%" border="0" cellspacing="0" cellPadding="3" >
-																<tr>
-																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<digi:trn>Name</digi:trn>
-																	</td>
-																	<td align="left" width="50%" bgcolor="#f4f4f2">
-																		<bean:write name="aimTeamMemberForm" property="name" />
-																	</td>
-																</tr>
-																<tr>
-																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<digi:trn>Role</digi:trn>
-																	</td>
-																	<td align="left" width="50%" bgcolor="#f4f4f2">
-																		<html:select property="role" styleId="selRole">
-																			<%@include file="teamMemberRolesDropDown.jsp" %>
-																			<%-- <html:optionsCollection name="aimTeamMemberForm" 
-																			property="ampRoles" value="ampTeamMemRoleId" label="role" /> --%>
-																		</html:select>
-																	</td>
-																</tr>
-																<tr>
-                                                                	<td>&nbsp;
-                                                                  	</td>
-																</tr>
-																<tr >
-																	<td align="center" colspan="2">
-																		<table width="100%" cellspacing="5">
-																			<tr>
-																				<td width="50%" align="right">
-																					<c:set var="translation"><digi:trn>Save</digi:trn> </c:set>
-																					<html:submit value="${translation}" styleClass="dr-menu" onclick="return checkRole()"/>
-																				</td>	
-																				<td width="50%" align="left">	
-																					<c:set var="translation"><digi:trn>Cancel</digi:trn> </c:set>
-																					<html:reset value="${translation}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
-																				</td>
-																			</tr>
-																		</table>
-																	</td>
-																</tr>
-															</table>
+														<td class="inside" style="border:0px;">
+															<digi:trn>Name</digi:trn>
+														</td>
+														<td class="inside" style="border:0px;" align="right">
+															<bean:write name="aimTeamMemberForm" property="name" />
+														</td>
+													</tr>
+													<tr>
+														<td class="inside" style="border:0px;">
+															<digi:trn>Role</digi:trn>
+														</td>
+														<td class="inside" style="border:0px;" align="right">
+															<html:select property="role" styleId="selRole" styleClass="inputx insidex">
+																<%@include file="teamMemberRolesDropDown.jsp" %>
+															</html:select>
+														</td>
+													</tr>
+													<tr >
+														<td align="center" colspan="2">
+																		<c:set var="translation"><digi:trn>Save</digi:trn> </c:set>
+																		<html:submit value="${translation}" styleClass="buttonx_sm btn_save" onclick="return checkRole()"/>
+
+																		<c:set var="translation"><digi:trn>Cancel</digi:trn> </c:set>
+																		<html:reset value="${translation}" styleClass="buttonx_sm btn_save" onclick="javascript:history.go(-1)"/>
 														</td>
 													</tr>
 												</table>
-											</td>
-										</tr>
-									</table>
-                                </div>
-								</td>
+									</div>
+															
+															
+															
+</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;
-								
-							</td></tr>
-						</table>			
-					</td>
-				</tr>
-			</table>
+						</table>
+						</div>
+						</div>												
+											
+											
+											
 		</td>
 	</tr>
 </table>

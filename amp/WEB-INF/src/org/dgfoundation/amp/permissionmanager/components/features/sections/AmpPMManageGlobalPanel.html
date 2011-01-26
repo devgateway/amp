@@ -1,4 +1,4 @@
-<wicket:panel>
+<wicket:extend>
 <div class="perm_manage">
 	<center>
 	    <form wicket:id="ampGlobalPMForm">
@@ -17,5 +17,22 @@
 			<hr style="height:2px; margin-top:15px; margin-bottom:15px;">
 		</form>
 	</center>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td valign="top" width="712"><span wicket:id="viewGlobalPerms"/>
+	    <center><span wicket:id="globalPermsNavigator"/></center>
+	    </td>
+		<td valign="top" width="20">&nbsp;</td>
+		<td valign="top" width="220">
+			<b>Legend</b>:
+			<div class="perm_legend"><hr />
+				<b class="red">Red text</b> <br /> permission assigned to Amp Field Level Object<br />
+				<b class="green">Green text</b> <br />permission assigned to Amp Activity Object		
+			</div>
+		</td>
+	  </tr>
+	  
+	</table>	
 </div>
-</wicket:panel>
+</wicket:extend>

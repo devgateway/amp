@@ -42,36 +42,16 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		super(id, fmName);
 		
 		Set<AmpOrganisation> s = new TreeSet<AmpOrganisation>();
-//		List<AmpOrganisation> allOrgs = new ArrayList<AmpOrganisation>();
-//		try {
-//			allOrgs = org.digijava.module.um.util.DbUtil.getList(AmpOrganisation.class.getName(),"name");
-//		} catch (UMException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		s.addAll(allOrgs);
 		final IModel<Set<AmpOrganisation>> allOrgsModel = new Model((Serializable)s);
-
 		Set<User> t = new TreeSet<User>();
-//		List<User> allUsers = new ArrayList<User>();
-//		try {
-//			allUsers = org.digijava.module.um.util.DbUtil.getList(User.class.getName(),"firstNames");
-//		} catch (UMException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		t.addAll(allUsers);
 		final IModel<Set<User>> allUsersModel = new Model((Serializable)t);
 
-		
-		
 		final AmpPMAssignVerifiedOrgs usersOrgs = new AmpPMAssignVerifiedOrgs("assignMultiUsersMultiOrgs",allOrgsModel, allUsersModel, "Assign Verified Organizations to Users", false);
 		usersOrgs.getLabelContainer().add(new AttributeModifier("class",new Model("perm_h3")));
 		add(usersOrgs);
 		usersOrgs.setVisible(!visible);
 		
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
-		//usersTable.setTableWidth(300);
 		add(usersTable);
 		final PagingNavigator paginator = new PagingNavigator("navigator", (PageableListView)usersTable.getList());
 		add(paginator);

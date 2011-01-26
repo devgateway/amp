@@ -37,7 +37,6 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<User> item) {
-				final MarkupContainer listParent=this.getParent();
 				item.add(new Label("userLabel", item.getModelObject().getName()));
 				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
 			//	item.add(new Label("editUser", "editMe"));

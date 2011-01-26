@@ -647,4 +647,38 @@ public final class PermissionUtil {
 
     }
 
+	public static Session saveGlobalPermission(Class permCatClass,	Long permissionId, String permissibleCategory) throws DgException, HibernateException, SQLException {
+		// TODO Auto-generated method stub
+		Session hs = PersistenceManager.getRequestDBSession();
+		Long globalPermissionMapIdForPermissibleClass = PermissionUtil.getGlobalPermissionMapIdForPermissibleClass(permCatClass);
+		PermissionMap globalPermissionMapForPermissibleClass=null;
+		if (globalPermissionMapIdForPermissibleClass == null)
+		    globalPermissionMapForPermissibleClass = new PermissionMap();
+		else 
+			globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass );	
+		
+		if(permissionId.longValue()==0 && globalPermissionMapForPermissibleClass.getId()==null)  {
+			PersistenceManager.releaseSession(hs);
+			 return null;// mapping.getInputForward();
+		} else if(permissionId.longValue()==0) {
+			hs.delete(globalPermissionMapForPermissibleClass);
+			hs.flush();
+		//	pf.setPermissionId(new Long(0));
+		//	PersistenceManager.releaseSession(hs);
+			return hs;//mapping.getInputForward();		
+		}
+		
+		globalPermissionMapForPermissibleClass.setObjectIdentifier(null);
+		globalPermissionMapForPermissibleClass.setPermissibleCategory(permissibleCategory);
+		Permission p = (Permission) hs.get(Permission.class, permissionId);
+		globalPermissionMapForPermissibleClass.setPermission(p);	
+		hs.saveOrUpdate(globalPermissionMapForPermissibleClass);
+		
+		hs.flush();
+		
+		PersistenceManager.releaseSession(hs);
+		return null;//mapping.getInputForward();
+
+	}
+
 }

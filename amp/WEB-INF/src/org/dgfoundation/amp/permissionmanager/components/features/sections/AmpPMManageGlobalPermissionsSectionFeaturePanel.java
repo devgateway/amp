@@ -58,17 +58,16 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		
 		
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
-		final IModel<PermissionMap> globalPermissionMapForPermissibleClass=null;
-		final IModel<Permission> globalPermission=null;
+
 		
 
 		
-//		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
-//		      public Panel getPanel(String panelId)
-//		      {
-//		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Project Title", true);
-//		      }
-//		});
+		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
+		      public Panel getPanel(String panelId)
+		      {
+		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, "Global Permissions", true);
+		      }
+		});
 //		
 //		globalPermissionsTabs.add(new AbstractTab(new Model("Add New Permission")){
 //		      public Panel getPanel(String panelId)
@@ -77,9 +76,9 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 //		      }
 //		});
 //
-//		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
-//		add(objTabs);
-		add(new AmpPMManageGlobalPanel("globalPermsTabs", permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Project Title", true));
+		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
+		add(objTabs);
+//		add(new AmpPMManageGlobalPanel("globalPermsTabs", permissionsModel, "Global Permissions", true));
 	}
 
 }

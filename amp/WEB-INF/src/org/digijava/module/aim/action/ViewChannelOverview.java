@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -159,6 +160,20 @@ public class ViewChannelOverview extends TilesAction {
 			} catch (DgException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			/**
+			 * Fixing lazy issues
+			 * 
+			 */
+			activity.getLocations();
+			AmpActivityLocation l = ((AmpActivityLocation) activity.getLocations().iterator().next());
+			
+			Iterator<AmpActivityLocation> it = activity.getLocations().iterator();
+			while (it.hasNext()) {
+				AmpActivityLocation actLocation = (AmpActivityLocation) it
+						.next();
+				actLocation.getLocation().getLocation().getName();
 			}
 
 			formBean.clearMessages();

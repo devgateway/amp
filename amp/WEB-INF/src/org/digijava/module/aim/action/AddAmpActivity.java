@@ -1027,7 +1027,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	        }
 	        else {
-	          AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.
+	          AmpActivity activity = ActivityUtil.loadActivity(eaForm.
 	              getActivityId());
 	          if("edit".equals(action)) {
 	          	//check if we have edit permissin for this activity

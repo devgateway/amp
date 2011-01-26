@@ -202,7 +202,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     //those permissions can come from someplace else
     boolean gatePermEditAllowed = false;
     if (activityId != null) {
-        activity = ActivityUtil.getAmpActivity(activityId);
+        activity = ActivityUtil.loadActivity(activityId);
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {

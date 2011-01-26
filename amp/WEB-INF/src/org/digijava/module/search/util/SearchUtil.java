@@ -201,7 +201,7 @@ public class SearchUtil {
 			while (it.hasNext()) {
 				Long activityId = (Long) it.next();
 
-				AmpActivity act = ActivityUtil.getAmpActivity(activityId);
+				AmpActivity act = ActivityUtil.loadActivity(activityId);
 				resultList.add(act);
 
 			}

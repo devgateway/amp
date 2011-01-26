@@ -196,7 +196,7 @@ public class ResetAll extends Action
 	    }
 		else
 	    {
-	    	AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+	    	AmpActivity activity = ActivityUtil.loadActivity(eaForm.getActivityId());
 			if(eaForm.getStep().equals("1"))
 		    {
 				eaForm.getIdentification().setTitle(activity.getName().trim());

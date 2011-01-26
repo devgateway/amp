@@ -85,7 +85,7 @@ public class LuceneIndex extends Action {
 				  Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, field, search);
 				  for(int i = 0; i < hits.length(); i++) {
 					   Document doc = hits.doc(i);
-					   AmpActivity act = ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+					   AmpActivity act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
 					   logger.info(doc.get("id") + "[" + act.getAmpId() + "] " + act.getName());
 				  }
 				  

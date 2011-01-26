@@ -2015,8 +2015,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   //WTF!!!!
   public static AmpActivity getAmpActivity(Long id) {
 	  //TODO: This is a mess, shouldn't be here. Check where it is used and change it.
+
+	  /**
+	   * Quick fix for mess
+	   */
+	  try {
+		return loadActivity(id);
+	} catch (DgException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	}
 	  
-    Session session = null;
+	  
+/*    Session session = null;
     AmpActivity activity = null;
 
     try {
@@ -2030,7 +2042,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       e.printStackTrace(System.out);
     }
     return activity;
-  }
+*/  }
   
   public static AmpActivityVersion getAmpActivityVersion(Long id) {
 		// TODO: This is a mess, shouldn't be here. Check where it is used and

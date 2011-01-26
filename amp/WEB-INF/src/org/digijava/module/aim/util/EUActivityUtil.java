@@ -41,13 +41,6 @@ public final class EUActivityUtil {
 			logger.error("Unable to get EUActivities for activityid="+actId +" "+ ex);
 			ex.printStackTrace();
 		}
-//		finally {
-//			try {
-//				PersistenceManager.releaseSession(session);
-//			} catch (Exception ex2) {
-//				logger.error("releaseSession() failed ");
-//			}
-//		}
 		return euActivities;
 	}
 

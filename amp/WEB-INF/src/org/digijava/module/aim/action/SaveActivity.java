@@ -2066,7 +2066,12 @@ public class SaveActivity extends Action {
 			//AMP-3464
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
-			AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+			AmpActivity aAct = null;
+			try {
+				aAct = ActivityUtil.loadActivity(eaForm.getActivityId());
+			} catch (DgException e) {
+				logger.error(e);
+			}
 			teamId=aAct.getTeam().getAmpTeamId();
 			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
@@ -2694,7 +2699,7 @@ public class SaveActivity extends Action {
 			String additionalDetails="approved";
 			//if validation is off in team setup no messages should be generated
 			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
-				AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
+				AmpActivity aAct = ActivityUtil.loadActivity(actId);
                 if (aAct.getDraft() != null && !aAct.getDraft() &&
                 		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
                     if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
@@ -2791,7 +2796,7 @@ public class SaveActivity extends Action {
 			activity = rsp.getActivity();
 			String additionalDetails="approved";
                         
-			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+			AmpActivity aAct=ActivityUtil.loadActivity(actId);
 			//get member, who previously edited activity. Needed for approved activity trigger
         	AmpTeamMember previouslyUpdatedBy=ActivityUtil.getActivityUpdator(eaForm.getActivityId());
 			//if validation is off in team setup no messages should be generated

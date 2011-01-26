@@ -435,7 +435,15 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true) { 
-			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();	
+			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+			
+			Iterator<AmpCategoryValueLocations> it = regions.iterator();
+			while (it.hasNext()) {
+				AmpCategoryValueLocations loc = (AmpCategoryValueLocations) it
+						.next();
+				loc.getCountDescendants();
+			}
+			
 			HierarchyListableImplementation rootRegions	= new HierarchyListableImplementation();
 			rootRegions.setLabel("All Regions");
 			rootRegions.setUniqueId("0");

@@ -53,35 +53,35 @@ public class ViewMainProjectDetails extends TilesAction {
 			String documentsTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
 			formBean.setAmpActivityId(id.longValue());
 			formBean.setTabIndex(tabIndex);
-			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
-			if(ampActivity!=null){
-				if (ampActivity.getProjectComments() == null)
+			AmpActivity activity = ActivityUtil.getProjectChannelOverview(id);
+			if(activity!=null){
+				if (activity.getProjectComments() == null)
 					formBean.setProjectComments("");
 				else {
-					formBean.setProjectComments(ampActivity.getProjectComments());
+					formBean.setProjectComments(activity.getProjectComments());
 				}
-				if (ampActivity.getDescription() == null)
+				if (activity.getDescription() == null)
 					formBean.setDescription("");
 				else {
-					formBean.setDescription(ampActivity.getDescription());
+					formBean.setDescription(activity.getDescription());
 				}
-				if (ampActivity.getObjective() == null)
+				if (activity.getObjective() == null)
 					formBean.setObjectives("");
 				else
-					formBean.setObjectives(ampActivity.getObjective());
-				if (ampActivity.getPurpose() == null)
+					formBean.setObjectives(activity.getObjective());
+				if (activity.getPurpose() == null)
 					formBean.setPurpose("");
 				else
-					formBean.setPurpose(ampActivity.getPurpose());
-				if (ampActivity.getResults() == null)
+					formBean.setPurpose(activity.getPurpose());
+				if (activity.getResults() == null)
 					formBean.setResults("");
 				else
-					formBean.setResults(ampActivity.getResults());
-				if (ampActivity.getDescription() != null)
-					formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity
+					formBean.setResults(activity.getResults());
+				if (activity.getDescription() != null)
+					formBean.setFlag(COverSubString.getCOverSubStringLength(activity
 							.getDescription(), 'D'));
-				formBean.setName(ampActivity.getName());
-				formBean.setAmpId(ampActivity.getAmpId());
+				formBean.setName(activity.getName());
+				formBean.setAmpId(activity.getAmpId());
 			}
 			
 			if (tabIndex == 0) {
@@ -102,7 +102,7 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setDocumentsTabColor(documentsTabColor);
 			
 			//Long id = new Long(request.getParameter("ampActivityId"));
-			AmpActivity activity = ActivityUtil.getAmpActivity(id);
+			//AmpActivity activity = ActivityUtil.getAmpActivity(id);
 			//AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
 			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");

@@ -58,7 +58,7 @@ public class ViewKnowledge extends TilesAction {
 				formBean.setDocuments(DbUtil.getKnowledgeDocuments(id));
 
 				/* Content Repository */
-				 AmpActivity act	 				= ActivityUtil.getAmpActivity(id);
+				 AmpActivity act	 				= ActivityUtil.loadActivity(id);
 				 SelectDocumentDM.clearContentRepositoryHashMap(request);
                  if (act.getActivityDocuments() != null) {
                  	ActivityDocumentsUtil.injectActivityDocuments(request, act.getActivityDocuments() );
@@ -66,7 +66,7 @@ public class ViewKnowledge extends TilesAction {
 				/* END - Content Repository */
 
                 if (DocumentUtil.isDMEnabled()) {
-                    AmpActivity activity = ActivityUtil.getAmpActivity(id);
+                    AmpActivity activity = ActivityUtil.loadActivity(id);
                     Site currentSite = RequestUtils.getSite(request);
                     formBean.setManagedDocuments(DocumentUtil.
                                                  getDocumentsForActivity(

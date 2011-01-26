@@ -36,10 +36,8 @@ public class SelectActivityForIndicator
                 
                 if(selInds != null){
                 	for(int i=0; i<selInds.length; i++){
-                	
-                		AmpActivity act = ActivityUtil.getAmpActivity(selInds[i]);
+                		AmpActivity act = ActivityUtil.loadActivity(selInds[i]);
                 		activities.add(act);
-                		
                 	}
                 }
 		       if(activities != null){

@@ -663,7 +663,7 @@ public class LuceneUtil implements Serializable {
 			}
 			IndexWriter indexWriter = null;
 			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
-			AmpActivity act = ActivityUtil.getAmpActivity(id);
+			AmpActivity act = ActivityUtil.loadActivity(id);
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);

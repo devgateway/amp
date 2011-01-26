@@ -219,7 +219,7 @@ public class ActivityManager extends Action {
 		String tIds=request.getParameter("tIds");
 		List<Long> topicsIds=getActsIds(tIds.trim());
 		for (Long ampActId : topicsIds) {
-			AmpActivity activity = ActivityUtil.getAmpActivity(ampActId);
+			AmpActivity activity = ActivityUtil.loadActivity(ampActId);
 			AuditLoggerUtil.logObject(session, request, activity, "delete");
 			ActivityUtil.deleteActivity(ampActId);
 		}

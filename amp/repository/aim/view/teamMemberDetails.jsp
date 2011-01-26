@@ -124,7 +124,7 @@
 									<c:set target="${urlParams}" property="id">
 										<bean:write name="aimTeamMemberForm" property="teamMemberId" />
 									</c:set>
-									<div align="center">
+									<div align="left">
 												<table border="0" cellPadding="3" cellSpacing="0" width="200px" style="border:0px;" class="inside">
 													<tr>
 														<td class="inside" style="border:0px;">

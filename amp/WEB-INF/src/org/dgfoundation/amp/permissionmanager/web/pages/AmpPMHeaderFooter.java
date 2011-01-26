@@ -35,8 +35,7 @@ public class AmpPMHeaderFooter extends WebPage {
 	public AmpPMHeaderFooter() {
 		// TODO Auto-generated constructor stub
 		
-		add(new HeaderContributor(
-				new com.google.excanvas.ExCanvasHeaderContributor()));
+		add(new HeaderContributor(new com.google.excanvas.ExCanvasHeaderContributor()));
 		add(new JQueryBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
 		add(ampajax);
@@ -44,17 +43,14 @@ public class AmpPMHeaderFooter extends WebPage {
 
 		IModel variablesModel = new AbstractReadOnlyModel() {
 			public Map getObject() {
-				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
-						2);
+				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(2);
 				variables.put("callBackUrl", callBackUrl);
 				return variables;
 			}
 		};
 
-		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
-				"translations.js", variablesModel));
-		add(JavascriptPackageResource.getHeaderContribution(
-				AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
+		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
+		add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
 //		String changeTrnMode = "Enable TrnMode";
 ////		add(new AjaxLink("changeTrnMode", new Model(changeTrnMode)) {
 //

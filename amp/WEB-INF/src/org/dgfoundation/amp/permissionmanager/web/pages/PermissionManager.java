@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageGlobalPermissionsSectionFeaturePanel;
@@ -38,6 +39,8 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
 		
+		Form adminPMForm = new Form("adminPMForm");
+		
 		//managing users
 		Set<User> s = new TreeSet<User>();
 		List<User> users = new ArrayList<User>();
@@ -49,7 +52,7 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		}
 		s.addAll(users);
 		final IModel<Set<User>> usersModel = new Model((Serializable)s);
-		add(new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel));
+		adminPMForm.add(new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel));
 		
 		
 		//managing workspaces
@@ -63,7 +66,7 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		}
 		w.addAll(teams);
 		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-		add(new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false));
+		adminPMForm.add(new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false));
 		
 		
 		//add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
@@ -72,8 +75,9 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		Set<Permission> permissonsSet = new TreeSet<Permission>(PermissionUtil.getAllUnDedicatedPermissions());
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
-		add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
-		add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
+		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
+		adminPMForm.add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
+		add(adminPMForm);
 	}
 
 	/**

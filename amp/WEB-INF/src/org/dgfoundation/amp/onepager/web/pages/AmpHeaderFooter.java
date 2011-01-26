@@ -69,7 +69,7 @@ public class AmpHeaderFooter extends WebPage {
 		add(new AjaxLink("changeFmMode", new Model("FM Mode")) {
 			@Override
 			public void onClick(AjaxRequestTarget arg0) {
-				AmpWebSession session = (AmpWebSession) getSession();
+				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 				if (session.isFmMode())
 					session.setFmMode(false);
 				else

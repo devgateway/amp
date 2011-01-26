@@ -75,6 +75,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		fmBorder = new TransparentWebMarkupContainer("fmBorder");
 		add(fmBorder);
 		visibleFmButton=new IndicatingAjaxButton("visibleFmButton",new Model<String>(FMUtil.isFmVisible(this)?"Hide":"Show")) {	
+			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				FMUtil.switchFmVisible(AmpComponentPanel.this);

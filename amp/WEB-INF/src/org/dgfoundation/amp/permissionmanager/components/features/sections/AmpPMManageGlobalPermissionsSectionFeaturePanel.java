@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -60,28 +61,25 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		final IModel<PermissionMap> globalPermissionMapForPermissibleClass=null;
 		final IModel<Permission> globalPermission=null;
 		
-		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
-		      public Panel getPanel(String panelId)
-		      {
-		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Manage Permissions", true);
-		      }
-		});
-		
-		globalPermissionsTabs.add(new AbstractTab(new Model("Add New Permission")){
-		      public Panel getPanel(String panelId)
-		      {
-		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission,"Add New Permission", true);
-		      }
-		});
 
 		
-//		globalPermissionsTabs.add(new AmpPMTab("OV Indicators" , "Objective Objectively Verifiable Indicators", AmpPMGlobalPanel.class));
-//		globalPermissionsTabs.add(new AmpPMTab("Assumption" , "Objective Assumption", AmpPMGlobalPanel.class));
-//		globalPermissionsTabs.add(new AmpPMTab("Verification" , "Objective Verification", AmpPMGlobalPanel.class));
-		
-		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
-		add(objTabs);
-		
+//		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
+//		      public Panel getPanel(String panelId)
+//		      {
+//		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Project Title", true);
+//		      }
+//		});
+//		
+//		globalPermissionsTabs.add(new AbstractTab(new Model("Add New Permission")){
+//		      public Panel getPanel(String panelId)
+//		      {
+//		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission,"Project Title", true);
+//		      }
+//		});
+//
+//		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
+//		add(objTabs);
+		add(new AmpPMManageGlobalPanel("globalPermsTabs", permissionsModel, globalPermissionMapForPermissibleClass, globalPermission, "Project Title", true));
 	}
 
 }

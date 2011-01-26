@@ -37,5 +37,7 @@
       <forward name="showAdmin" path="/editor/admin.do" redirect="true" />
     </action>
     <action forward="/editor/admin.do" path="/editor/index" />
+    <action name="editorForm" type="org.digijava.module.editor.action.UploadImage"  scope="session" path="/editor/uploadImg"/>
+    
   </action-mappings>
 </struts-config>

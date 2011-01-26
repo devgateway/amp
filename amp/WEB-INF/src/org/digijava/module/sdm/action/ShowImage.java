@@ -60,13 +60,22 @@ public class ShowImage
         SdmForm formBean = (SdmForm) form;
         Sdm sdmDoc = null;
 
-        Long paramDocId = new Long(Long.parseLong(request.getParameter(
-            "documentId")));
-        if (paramDocId == null) {
-            sdmDoc = formBean.getSdmDocument();
-        }
-        Long paramParagId = new Long(Long.parseLong(request.getParameter(
-            "activeParagraphOrder")));
+        Long paramDocId = null;
+        if(request.getParameter("documentId")!=null){
+        	paramDocId=new Long(request.getParameter("documentId"));
+        } else {
+          	if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
+          		sdmDoc=(Sdm)request.getSession().getAttribute("document");
+          	}else{ //from sdm module
+          		sdmDoc = formBean.getSdmDocument();
+          	}      
+          }
+        
+        
+//        if (paramDocId == null) {
+//            sdmDoc = formBean.getSdmDocument();
+//        }
+        Long paramParagId = new Long(request.getParameter("activeParagraphOrder"));
 
         if (paramParagId != null) {
             byte[] picture = null;

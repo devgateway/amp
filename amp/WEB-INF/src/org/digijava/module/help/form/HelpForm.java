@@ -9,6 +9,7 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
+import org.digijava.module.sdm.dbentity.Sdm;
 
 public class HelpForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +37,8 @@ public class HelpForm extends ActionForm {
 	private String page ;
 	private Boolean glossaryMode;
 	FormFile fileUploaded;
+	
+	private Sdm sdm;
 	
 
 	public Boolean getBlankPage() {
@@ -230,6 +233,14 @@ public class HelpForm extends ActionForm {
 
 	public Collection<HelpTopicsTreeItem> getGlossaryTree() {
 		return glossaryTree;
+	}
+
+	public Sdm getSdm() {
+		return sdm;
+	}
+
+	public void setSdm(Sdm sdm) {
+		this.sdm = sdm;
 	}
 
 

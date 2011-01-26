@@ -31,7 +31,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -41,11 +43,10 @@ import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.jaxbi.AmpHelpRoot;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
-import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.util.DbUtil;
 import org.xml.sax.InputSource;
-
-import bsh.classpath.BshClassPath.MappingFeedback;
 
 
 public class HelpActions extends DispatchAction {
@@ -94,7 +95,12 @@ public class HelpActions extends DispatchAction {
 	            List editor = HelpUtil.getEditor(bodyKey, lang);
 	            helpForm.setTopicKey(bodyKey);
 	
-	
+//	            if(key.getImgsHolder()!=null){
+//					//Sdm doc= DbUtil.getDocument(topic.getImgsHolder().getId())
+//					 request.getSession().setAttribute("document", key.getImgsHolder());
+//				}
+				
+	            
 	            if(!editor.isEmpty()){
 	               Iterator iter = editor.iterator();
 					while (iter.hasNext()) {
@@ -290,7 +296,7 @@ public class HelpActions extends DispatchAction {
 			helpForm.setSearched(null);
 			helpForm.setFlag(true);
 			LuceneUtil.addUpdatehelp(true, request.getSession().getServletContext());
-	  
+			
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());
 		}
@@ -334,10 +340,6 @@ public class HelpActions extends DispatchAction {
 			}			
 		}
 		
-
-			
-	
-		
         if(page != null){
             if(!page.equals("admin")){
                 return mapping.findForward("helpHome");
@@ -369,6 +371,10 @@ public class HelpActions extends DispatchAction {
 		}
 		case 3: {
 			createTopicStep3(helpForm, request);
+			//clear session if it contains sdm doc
+	        if(request.getSession().getAttribute("document")!=null){
+	        	request.getSession().removeAttribute("document");
+	        }
 			break;
 		}
 		default:
@@ -407,6 +413,10 @@ public class HelpActions extends DispatchAction {
 			}
 			case 2: {
 				editTopicStep1(helpForm, request, helpTopic);
+				//clear session if it contains sdm doc
+		        if(request.getSession().getAttribute("document")!=null){
+		        	request.getSession().removeAttribute("document");
+		        }
 			}
 			default:
 				break;
@@ -456,6 +466,10 @@ public class HelpActions extends DispatchAction {
 			form.setParentId(null);
 		}
 		form.setTopicKey(topic.getTopicKey());
+//		if(topic.getImgsHolder()!=null){
+//			//Sdm doc= DbUtil.getDocument(topic.getImgsHolder().getId())
+//			 request.getSession().setAttribute("document", topic.getImgsHolder());
+//		}
 	}
 
 	/**
@@ -479,8 +493,7 @@ public class HelpActions extends DispatchAction {
 		form.setEdit(false);
 	}
 
-	public ActionForward cancelHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward cancelHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String topickey=null;
 		if(helpForm.getBodyEditKey()!=null){
@@ -489,6 +502,34 @@ public class HelpActions extends DispatchAction {
 		}		
 		helpForm.setTopicKey(topickey);
 		setDefaultValues(helpForm);
+		//clear session if it contains sdm doc
+        if(request.getSession().getAttribute("document")!=null){
+        	request.getSession().removeAttribute("document");
+        }
+        //if we were creating new help topic and decided to cancel it, than editor object which was created has to be removed, not to have garbage data in db
+        if(helpForm.getHelpTopicId()==null){
+        	ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
+            Site site;
+            if (moduleInstance == null) {
+                site = RequestUtils.getSite(request);
+            }
+            else {
+                site = moduleInstance.getSite();
+            }
+            
+        	List<Editor> editors = org.digijava.module.editor.util.DbUtil.getEditorList(helpForm.getBodyEditKey(),site.getSiteId());
+    		if (editors!=null && editors.size()>0){
+    			for (Editor editor : editors) {
+    				org.digijava.module.editor.util.DbUtil.deleteEditor(editor);
+    			}
+    		}
+        	
+        	
+        	
+        	//Editor helpBody= org.digijava.module.editor.util.DbUtil.getEditor(site.getSiteId(), helpForm.getBodyEditKey(),RequestUtils.getNavigationLanguage(request).getCode());
+        	//org.digijava.module.editor.util.DbUtil.deleteEditor(helpBody);
+        }
+        
 		if (helpForm.getGlossaryMode()!=null && helpForm.getGlossaryMode().booleanValue()==true){
 			mapping.findForward("glossaryHome");
 		}
@@ -572,10 +613,9 @@ public class HelpActions extends DispatchAction {
 	 * @param request
 	 * @throws AimException
 	 */
-	private void createTopicStep3(HelpForm form, HttpServletRequest request)throws AimException {
+	private void createTopicStep3(HelpForm form, HttpServletRequest request)throws AimException, Exception {
 		String siteId = RequestUtils.getSite(request).getSiteId();
-		String moduleInstance = RequestUtils.getRealModuleInstance(request)
-				.getInstanceName();
+		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();		
 		HelpTopic helpTopic = new HelpTopic();
 		helpTopic.setTitleTrnKey(form.getTitleTrnKey());
 		helpTopic.setKeywordsTrnKey(form.getKeywordsTrnKey());
@@ -589,12 +629,26 @@ public class HelpActions extends DispatchAction {
 			helpTopic.setParent(null);
 		}
 		helpTopic.setSiteId(siteId);
-		HelpUtil.saveOrUpdateHelpTopic(helpTopic);
+		
+		//save attached files
+//		if(request.getSession().getAttribute("document")!=null){
+//			Sdm document=(Sdm)request.getSession().getAttribute("document");
+//	    	Sdm doc=null;
+//	    	if(document!=null){
+//	    		document.setName(helpTopic.getTopicKey());
+//	    		doc=DbUtil.saveOrUpdateDocument(document);
+//	    		helpTopic.setImgsHolder(doc);
+//	    	}
+//		}
+		
+		HelpUtil.saveOrUpdateHelpTopic(helpTopic);		
+		
 		// cleaning form
 		form.setParentId(null);
 		form.setFirstLevelTopics(null);
 		form.setWizardStep(0);
 		form.setHelpErrors(null);
+		
 	}
 
 	/**

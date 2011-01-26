@@ -437,7 +437,7 @@ function SetUrl( url, width, height, alt )
 }
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
-{
+{	
 	switch ( errorNumber )
 	{
 		case 0 :	// No errors

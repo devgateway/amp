@@ -145,7 +145,7 @@ public class DbUtil {
 
             queryString =
                 "select new org.digijava.module.sdm.form.SdmInfo(h.id,h.name) from  " +
-                Sdm.class.getName() + " h, " +
+                Sdm.class.getName() + " h " +
                 " where (h.siteId=:siteId) and (h.instanceId=:instanceId)";
 
             q = session.createQuery(queryString);
@@ -630,5 +630,23 @@ public class DbUtil {
         return null;
     }
 
+    public static SdmItem getSdmItem(long sdmId, long paragraphId) throws SDMException {
+    	Session session = null;
+    	SdmItem result =null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery("select itm from " +SdmItem.class.getName() +
+                                          " itm where itm.document.id=:docId and itm.paragraphOrder=:paragraphId");
+            query.setLong("docId", sdmId);
+            query.setLong("paragraphId", paragraphId);
 
+            result = (SdmItem)query.uniqueResult();
+       }
+        catch (Exception ex) {
+
+            logger.debug("Unable to get sdmItem",ex);
+            throw new SDMException("Unable to get sdmItem", ex);
+        }
+        return result;
+    }
 }

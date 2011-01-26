@@ -66,7 +66,7 @@ FCKConfig.DocType = '' ;
 
 
 
-FCKConfig.BaseHref = '' ;
+FCKConfig.BaseHref = 'http://amp.ge:8080' ;
 
 
 
@@ -559,9 +559,9 @@ FCKConfig.JustifyClasses = [] ;
 
 // Custom implementations should just ignore it.
 
-var _FileBrowserLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
+var _FileBrowserLanguage	= 'Java' ;	// asp | aspx | cfm | lasso | perl | php | py
 
-var _QuickUploadLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
+var _QuickUploadLanguage	= 'Java' ;	// asp | aspx | cfm | lasso | perl | php | py
 
 
 
@@ -587,7 +587,7 @@ FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/upload/simpleuploade
 
 FCKConfig.FlashUploadURL = FCKConfig.BasePath + 'filemanager/upload/simpleuploader?Type=Flash' ;
 
-FCKConfig.ImageUploadURL =FCKConfig.BasePath + 'filemanager/upload/simpleuploader?Type=Image' ;
+//FCKConfig.ImageUploadURL =FCKConfig.BasePath + 'filemanager/upload/simpleuploader?Type=Image' ;
 
 
 
@@ -629,9 +629,11 @@ FCKConfig.LinkUploadDeniedExtensions	= "" ;	// empty for no one
 
 
 
-FCKConfig.ImageUpload = false;
+FCKConfig.ImageUpload = true;
 
 //FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ;
+//FCKConfig.ImageUploadURL = FCKConfig.BaseHref + '/editor/uploadImg.do' ;
+FCKConfig.ImageUploadURL = '/editor/uploadImg.do' ;
 
 FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
 

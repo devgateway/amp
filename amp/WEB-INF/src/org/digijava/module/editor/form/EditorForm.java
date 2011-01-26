@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 import org.digijava.module.editor.dbentity.Editor;
 
 /**
@@ -121,6 +122,8 @@ public class EditorForm
     
     private String activityName;
     private String activityFieldName;
+    
+    private FormFile attachment;
 
     public String getActivityName() {
         return activityName;
@@ -252,4 +255,13 @@ public class EditorForm
 	public void setActivityFieldName(String activityFieldName) {
 		this.activityFieldName = activityFieldName;
 	}
+
+	public FormFile getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(FormFile attachment) {
+		this.attachment = attachment;
+	}
+	
 }

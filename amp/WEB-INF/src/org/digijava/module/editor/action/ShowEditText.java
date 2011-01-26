@@ -66,6 +66,10 @@ public class ShowEditText
 
         String name=(String)session.getAttribute("activityName");
         String fieldName=(String)session.getAttribute("activityFieldName");
+        //clear session from sdm item if language is changed
+        if(session.getAttribute("document")!=null){
+        	session.removeAttribute("document");
+        }
         EditorForm formBean = (EditorForm) form;
         formBean.setActivityName(name);
         formBean.setActivityFieldName(fieldName);

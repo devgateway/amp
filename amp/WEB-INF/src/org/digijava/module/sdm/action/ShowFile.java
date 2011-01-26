@@ -69,7 +69,7 @@ public class ShowFile
         sdmDoc = DbUtil.getDocument(paramDocId);
       }
       else {
-      	if(request.getSession().getAttribute("document")!=null){ //view file from messaging module
+      	if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
       		sdmDoc=(Sdm)request.getSession().getAttribute("document");
       	}else{ //from sdm module
       		sdmDoc = formBean.getSdmDocument();

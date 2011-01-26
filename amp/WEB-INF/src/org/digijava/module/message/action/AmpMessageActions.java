@@ -159,6 +159,11 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward cancelMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	//AmpMessageForm alertsForm=(AmpMessageForm)form;
     	//setDefaultValues(alertsForm);
+    	
+    	//clear session if it contains sdm doc
+        if(request.getSession().getAttribute("document")!=null){
+        	request.getSession().removeAttribute("document");
+        }
         return mapping.findForward("showAllMessages");
     }
 

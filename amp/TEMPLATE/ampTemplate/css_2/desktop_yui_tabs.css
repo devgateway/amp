@@ -50,6 +50,6 @@
 	    /* background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;   */
 	}
 	#demo .yui-content {
-		border-top:1px solid #000;
+		border:1px solid #CCCCCC;
 	}
 	

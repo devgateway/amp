@@ -47,110 +47,75 @@
 <html:hidden property="pageId" />
 <html:hidden property="valuesSet" value="false"/>
 
-<table width="60%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
-
+<table class="inside" width=100% cellpadding="0" cellspacing="0">
 	<tr>
-		<td vAlign="top" align="center">
-			<table width="100%%" cellSpacing="1" cellPadding="5" vAlign="top" align="center">
-				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						<b>
-						<digi:trn key="aim:nameOfActivity">Activity</digi:trn></b>
-					</td>
-					<td width="80%" align="left" bgcolor="#f4f4f4">
-						<c:out value="${aimRelatedLinksForm.document.activityName}" />
-					</td>
-				</tr>
-				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						<b>
-						<digi:trn key="aim:docTitle">Title</digi:trn></b>
-					</td>
-					<td width="80%" align="left" bgcolor="#f4f4f4">
-						<c:out value="${aimRelatedLinksForm.document.title}" />
-					</td>
-				</tr>
-				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						<b>
-						<digi:trn key="aim:docDescription">Description</digi:trn></b>
-					</td>
-					<td width="80%" align="left" bgcolor="#f4f4f4">
-						<c:out value="${aimRelatedLinksForm.document.docDescription}" />
-					</td>
-				</tr>
-				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						<b>
-						<digi:trn key="aim:docType">Type</digi:trn></b>
-					</td>
-					<td width="80%" align="left" bgcolor="#f4f4f4">
-						<c:if test="${aimRelatedLinksForm.document.isFile == true}">
-							<digi:trn key="aim:docIsFile">File</digi:trn>
-						</c:if>
-						<c:if test="${aimRelatedLinksForm.document.isFile == false}">
-							<digi:trn key="aim:docIsURL">URL</digi:trn>
-						</c:if>
-					</td>
-				</tr>
-				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						<b>
-						<c:if test="${aimRelatedLinksForm.document.isFile == true}">
-							<digi:trn key="aim:fileName">File name</digi:trn>
-						</c:if>
-						<c:if test="${aimRelatedLinksForm.document.isFile == false}">
-							<digi:trn key="aim:url">URL</digi:trn>
-						</c:if></b>
-					</td>
-					<td width="80%" align="left" bgcolor="#f4f4f4">
-						<c:if test="${aimRelatedLinksForm.document.isFile == true}">
-							<a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<c:out value="${aimRelatedLinksForm.document.uuid}"/>">
-								<c:out value="${aimRelatedLinksForm.document.fileName}" />
-								<i><bean:write name="relatedLink" property="fileName" /></i></a>
-						</c:if>
-						<c:if test="${aimRelatedLinksForm.document.isFile == false}">
-							<a href="<c:out value="${aimRelatedLinksForm.document.url}" />" target="_blank">
-							<c:out value="${aimRelatedLinksForm.document.url}" /></a>
-						</c:if>
-					</td>
-				</tr>
-			</table>
+		<td class="inside">
+			<digi:trn key="aim:nameOfActivity">Activity</digi:trn>
+		</td>
+		<td class="inside">
+			<c:out value="${aimRelatedLinksForm.document.activityName}" />
 		</td>
 	</tr>
-	<c:if test="${aimRelatedLinksForm.pageId == 1}">
 	<tr>
-		<td vAlign="top" align="center">
-						<c:set var="translation">
-							<digi:trn key="btn:back">Back</digi:trn>
-						</c:set>					
-						<input type="button" value="${translation}" class="dr-menu" onclick="history.back()">
-
+		<td class="inside">
+			<digi:trn key="aim:docTitle">Title</digi:trn>
+		</td>
+		<td class="inside">
+			<c:out value="${aimRelatedLinksForm.document.title}" />
 		</td>
 	</tr>
-    
-<!-- Removed since DM is done via Resources (AMP-4243)
 	<tr>
-		<td vAlign="top" align="center">
-			<table cellSpacing="3" cellPadding="3">
-				<tr>
-					<td>
-						<c:set var="translation">
-							<digi:trn key="aim:btnEdit">Edit</digi:trn>
-						</c:set>					
-						<input type="button" value="${translation}" class="dr-menu" onclick="editDocument('${aimRelatedLinksForm.document.uuid}',${aimRelatedLinksForm.document.activityId})")">
-					</td>
-					<td>
-						<c:set var="translation">
-							<digi:trn key="aim:btnRemove">Remove</digi:trn>
-						</c:set>										
-						<input type="button" value="${translation}" class="dr-menu"	onclick="deleteDocument('${aimRelatedLinksForm.document.uuid}',${aimRelatedLinksForm.document.activityId})">
-					</td>
-				</tr>
-			</table>
+		<td class="inside">
+			<digi:trn key="aim:docDescription">Description</digi:trn>
+		</td>
+		<td class="inside">
+			<c:out value="${aimRelatedLinksForm.document.docDescription}" />
 		</td>
 	</tr>
--->
-	</c:if>
+	<tr>
+		<td class="inside">
+			<digi:trn key="aim:docType">Type</digi:trn>
+		</td>
+		<td class="inside">
+			<c:if test="${aimRelatedLinksForm.document.isFile == true}">
+				<digi:trn key="aim:docIsFile">File</digi:trn>
+			</c:if>
+			<c:if test="${aimRelatedLinksForm.document.isFile == false}">
+				<digi:trn key="aim:docIsURL">URL</digi:trn>
+			</c:if>
+		</td>
+	</tr>
+	<tr>
+		<td class="inside">
+			<c:if test="${aimRelatedLinksForm.document.isFile == true}">
+				<digi:trn key="aim:fileName">File name</digi:trn>
+			</c:if>
+			<c:if test="${aimRelatedLinksForm.document.isFile == false}">
+				<digi:trn key="aim:url">URL</digi:trn>
+			</c:if>
+		</td>
+		<td class="inside">
+			<c:if test="${aimRelatedLinksForm.document.isFile == true}">
+				<a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<c:out value="${aimRelatedLinksForm.document.uuid}"/>" class="l_sm">
+					<c:out value="${aimRelatedLinksForm.document.fileName}" />
+					<bean:write name="relatedLink" property="fileName" />
+				</a>
+			</c:if>
+			<c:if test="${aimRelatedLinksForm.document.isFile == false}">
+				<a href="<c:out value="${aimRelatedLinksForm.document.url}" />" target="_blank" class="l_sm">
+				<c:out value="${aimRelatedLinksForm.document.url}" /></a>
+			</c:if>
+		</td>
+	</tr>
 </table>
+<br>
+<div class="buttons" align="center">
+	<c:if test="${aimRelatedLinksForm.pageId == 1}">
+							<c:set var="translation">
+								<digi:trn key="btn:back">Back</digi:trn>
+							</c:set>					
+							<input type="button" value="${translation}" class="buttonx_sm btn" onclick="history.back()">
+	</c:if>
+</div>
+
 </digi:form>

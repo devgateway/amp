@@ -5,13 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<style>
-.contentbox_border{
-	border: 	1px solid #666666;
-	width: 		750px;
-	background-color: #f4f4f2;
-}
-</style>
+
+
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -23,16 +18,16 @@
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
-<tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
-	<tr>
-		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
+<tr><td>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<td height=33>
-                    <span class=crumb>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+			
+							<tr>
+								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="4" scope="request"/>
+                  <c:set var="selectedSubTab" value="-1" scope="request"/>
+
+<span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
@@ -71,54 +66,19 @@
 						View Document
 						</digi:trn>						
 					</span>
-					</td>
-				</tr>
-				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
-					</td>
-				</tr>
-				<tr>
-					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
-							<tr>
-								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="4" scope="request"/>
-                                    <c:set var="selectedSubTab" value="-1" scope="request"/>
 
 
+									<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-                                    <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
-	                                    <div align="center">
-                                	
-                                        <table align=center cellPadding=0 cellSpacing=0 width="98%">	
-                                            <tr><td>
-                                                <digi:errors />
-                                            </td></tr>
-                                            <tr>
-                                                <td valign="top">
+									<jsp:include page="viewDocumentDetails.jsp" flush="true" />
+									
+                                                    	
+                  </div>
+										</div>											
 												
-                                                    <jsp:include page="viewDocumentDetails.jsp" flush="true" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                     </div>
-                                     </div>
-								</td>
-							</tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;
-								
-							</td></tr>
-						</table>			
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+											</td>
+										</tr>
+									</table>
 </td></tr>
 </table>
 

@@ -52,7 +52,9 @@
 </a>
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
-&nbsp;
+<div class="desktop_project_count">
+	0
+</div>
 </logic:notEqual>
  <% } %>
 </td>

@@ -9,8 +9,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<!--<link href="css/global.css" rel="stylesheet" type="text/css">-->
-<!--<link href="/TEMPLATE/ampTemplate/css/styles.css" rel="stylesheet" type="text/css"></link>-->
 
 <script language="JavaScript">
 <!--
@@ -24,101 +22,62 @@ function unload() {
 -->
 </script>
 
-<!--<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />-->
+
 <digi:instance property="aimUserDetailForm" />
 
 <digi:errors/>
 
-<!--<style type="text/css">-->
-<!--	.text1 {-->
-<!--	  font-size:9px;-->
-<!--	  font:Arial;-->
-<!--	  color:#666666;-->
-<!--	  text-decoration: none;-->
-<!--	  font-style: normal;-->
-<!--	}-->
-<!--	-->
-<!--	TD -->
-<!--	{-->
-<!--		cellpadding: 0px;-->
-<!--		cellspacing: 0px;-->
-<!--		padding: 0px;-->
-<!--		margin: 0px;-->
-<!--		FONT-WEIGHT: normal; -->
-<!--		FONT-SIZE: 10px;-->
-<!--		border-color:#FFFFFF;-->
-<!--	}-->
-<!--	-->
-<!--	TR{-->
-<!--		padding:0px; -->
-<!--		margin:0px;-->
-<!--		border-color:#FFFFFF;-->
-<!--	}-->
-<!---->
-<!--	TABLE {-->
-<!--		border-spacing: 0;-->
-<!--		border-color:#FFFFFF;-->
-<!--		padding: 0;-->
-<!--		margin: 0;-->
-<!--	}-->
-<!--</style>-->
 
-<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" border=0 height="500px">
-	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=2 cellSpacing=2 width="100%"  border=0 height="500px">
-			<tr>
-				<td align=left vAlign=top>
-					<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top"
-					bgcolor="#aaaaaa">
+					<table class="inside" width=100% cellpadding="0" cellspacing="0" border="1">
 						<tr>
-							<td colspan="2"  align="center" class="text1">
-								<b><digi:trn key="aim:userProfile">User Profile</digi:trn></b>
+							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>
 						<tr>
-							<td  bgcolor="#f4f4f2" width="150" class="text1">
+							<td class=inside>
 								<digi:trn key="aim:firstName">First Name</digi:trn>
 							</td>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								 <bean:write name="aimUserDetailForm" property="firstNames" />
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<digi:trn key="aim:lastName" >Last Name</digi:trn>
 							</td>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<bean:write name="aimUserDetailForm" property="lastName" />
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<digi:trn key="aim:mailingAddress" >Mailing Address	</digi:trn>
 							</td>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<bean:write name="aimUserDetailForm"
 								property="mailingAddress" />
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<digi:trn key="aim:address" >Address</digi:trn>
 							</td>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<bean:write name="aimUserDetailForm" property="address" />
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<digi:trn key="aim:organizationName">Organization Name</digi:trn>
 							</td>
-							<td bgcolor="#f4f4f2" class="text1">
+							<td class=inside>
 								<bean:write name="aimUserDetailForm" property="organizationName" />
 							</td>
 						</tr>
 						<tr>
-							<td><digi:trn key="aim:autologinlink"><b>Autologin Link</b></digi:trn></td>
-							<td>
+							<td class=inside><digi:trn key="aim:autologinlink">Autologin Link</digi:trn></td>
+							<td class=inside>
 								<%
 								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
 								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
@@ -133,41 +92,43 @@ function unload() {
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#f4f4f2" colspan="2" class="text1">
-								<table width="97%" cellPadding=2 cellSpacing="2" bgcolor="#aaaaaa" align="center" border=0>
-									<tr>
-										<td align="center" bgcolor="#dddddd" colspan="2" class="text1">
-											<digi:trn key="aim:teamsAssociatedWith" ><b>Teams Associated with</b>	</digi:trn>
-										</td>
-									</tr>
-									<% int i = 0; %>
-									<c:forEach var="info" items="${aimUserDetailForm.info}">
-									<tr>
-										<td bgcolor="#f4f4f2"  width="300px" class="text1">
-											<% if ((i%2) == 0) { %>
-												<digi:trn key="aim:teamName">Team Name</digi:trn>
-											<% } else { %>
-												<digi:trn key="aim:role">Role</digi:trn>
-											<% }
-											   i++;
-											%>
-										</td>
-										<td bgcolor="#f4f4f2" class="text1" width="500px">
-											<c:out value="${info}"/>
-										</td>
-									</tr>
-									</c:forEach>
-								</table>
+							<td class=inside colspan="2" align="center">
+								&nbsp;
 							</td>
 						</tr>
+						<tr>
+							<td class=inside colspan="2" align="center">
+								<digi:trn key="aim:teamsAssociatedWith" >Teams Associated with</digi:trn>
+							</td>
+						</tr>
+						<% int i = 0; %>
+						<tr>
+							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+								<digi:trn key="aim:teamName">Team Name</digi:trn>
+							</td>
+							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+								<digi:trn key="aim:role">Role</digi:trn>
+							</td>
+						</tr>
+						<c:forEach var="info" items="${aimUserDetailForm.info}">
+							<% if ((i%2) == 0) { %>
+								<tr>
+							<% } %>
+							<td class=inside>
+								<c:out value="${info}"/>
+							</td>
+							
+							<% if ((i%2) != 0) { %>
+								</tr>
+								<% }
+								i++;
+							%>
+						
+						</c:forEach>
 					</table>
-				</td>
-			</tr>
-			<tr align="center">
-				<td>
-					<input type="button" value="Close" class="dr-menu" onclick="hidePWorkspaceframe()">
-				</td>
-			</tr>
-		</table>
-	</td></tr>
-</table>
+
+<br>					
+<div class="buttons" align="center">					
+	<input type="button" value="Close" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">
+</div>
+	

@@ -161,7 +161,7 @@
 
 							<div id="searchContainer">
 								<div>
-									<input id="edtSearchField" type="text" name="searchGlossary" style="margin-bottom:10px;">
+									<input id="edtSearchField" type="text" name="searchGlossary" style="margin-bottom:10px;" class="inputx">
 								</div>
 								<div>	
 									<c:set var="lblSearchButton"><digi:trn>Search</digi:trn></c:set>

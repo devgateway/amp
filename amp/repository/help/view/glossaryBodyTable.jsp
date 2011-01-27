@@ -61,7 +61,6 @@
 </style> 
 
 <digi:form action="/glossary.do">
-<div style="margin: 10px">
 
 	<table border="0" width="1000" align=center>
 		<tr>
@@ -76,7 +75,7 @@
 			<td>
 				<table width="100%" border="0">
 					<tr>
-						<td width="20%" valign="top">
+						<td width="20%" valign="top" style="padding-right:15px;">
 						
 						
 	<div id="content" class="yui-skin-sam" style="width: 100%;">
@@ -106,7 +105,7 @@
 							<a href="/help/showAddGlossary.do"><digi:trn>Add top level topic</digi:trn> </a>
 					</digi:secure>
 						</td>
-						<td valign="top" width="100%">
+						<td valign="top" width="60%">
 						
 						
 	<div id="content" class="yui-skin-sam" style="width: 100%;">
@@ -135,12 +134,12 @@
 							
 	  		</div>
 		</div>
-	  </div>
+	  </div>с
 	</div>
 							
 							
 						</td>
-						<td align="right" valign="top">
+						<td align="right" valign="top" style="padding-left:15px;" width=20%>
 						
 							<table border="0">
 								<tr>
@@ -162,7 +161,7 @@
 
 							<div id="searchContainer">
 								<div>
-									<input id="edtSearchField" type="text" name="searchGlossary">
+									<input id="edtSearchField" type="text" name="searchGlossary" style="margin-bottom:10px;">
 								</div>
 								<div>	
 									<c:set var="lblSearchButton"><digi:trn>Search</digi:trn></c:set>
@@ -196,7 +195,6 @@
 		</tr>
 	</table>
 
-</div>
 </digi:form>
 
 <script type="text/javascript">

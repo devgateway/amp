@@ -133,7 +133,7 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 	    /*background: url(tabrightcornerhover.gif) right top no-repeat; */
 	}
 	#demo .yui-content {
-		border-top:1px solid #000;
+		border:1px solid #CCCCCC;
 	}
 	#demo .yui-nav a {
 		border-color:#A3A3A3;

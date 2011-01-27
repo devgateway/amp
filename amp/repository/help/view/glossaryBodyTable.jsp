@@ -63,7 +63,7 @@
 <digi:form action="/glossary.do">
 <div style="margin: 10px">
 
-	<table border="0" width="100%">
+	<table border="0" width="1000" align=center>
 		<tr>
 			<td class="subtitle-blue">
 				<digi:trn>Glossary</digi:trn>	

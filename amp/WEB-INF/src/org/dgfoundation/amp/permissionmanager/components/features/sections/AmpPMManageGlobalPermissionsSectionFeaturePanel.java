@@ -65,7 +65,14 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
 		      public Panel getPanel(String panelId)
 		      {
-		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, "Global Permissions", true);
+		    	AmpPMManageGlobalPanel mgp = null;
+		    	try {
+					mgp = new AmpPMManageGlobalPanel(panelId, permissionsModel, "Global Permissions", true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        return mgp;
 		      }
 		});
 //		

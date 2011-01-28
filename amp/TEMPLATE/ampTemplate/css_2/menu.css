@@ -238,14 +238,6 @@
 	padding:2px 20px;
 }
 
-/* .bd a:hover {
-	background-color:#376091;
-	color:white;
-}
-.bd a {
-	color:white;
-	font-size:10px;
-}
-*/
 
-.yuiampmenuitem_drop {border:1px solid #CCCCCC;}
+.yuiampmenuitem_drop {border-bottom:1px solid #CCCCCC;}
+.bd  {border-top:1px solid #CCCCCC; border-left:1px solid #CCCCCC; border-right:1px solid #CCCCCC;}

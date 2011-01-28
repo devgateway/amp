@@ -90,11 +90,19 @@ function toggleRows(caller,hideId){
 		//alert("Found=" + found + " RowDepth=" + rowDepth + " HideDepth=" + hideDepth + " Arty=" + notLevelTooGreat);
 		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) ){
 			tb.rows[i].style.display = display;
+			var first=tb.rows[i].children[0].children[0].children[0];
 			var amountdiv_1=tb.rows[i].children[1].children[0];
 			var amountdiv_2=tb.rows[i].children[2].children[0];
-			YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
+			if (amountdiv_1.nodeName!='FONT'){
+				YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
+				YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
+			}
+			if (first.nodeName!='FONT'){
+				YAHOO.util.Dom.removeClass(first, 'desktop_project_count');
+				YAHOO.util.Dom.addClass(first, 'desktop_project_name_sel');
+			}
+			
 			YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
-			YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
 			YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');
 		}
 		}

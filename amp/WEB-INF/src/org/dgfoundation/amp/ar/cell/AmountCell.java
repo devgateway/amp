@@ -123,10 +123,10 @@ public class AmountCell extends Cell {
 	 */
 	public String toString() {
 		// mf.setMaximumFractionDigits(2);
-		//double am = getAmount();
-		//if (am == 0)
-			//return "";
-		//else
+		double am = getAmount();
+		if (am == 0)
+			return " ";
+		else
 			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
 	}
 

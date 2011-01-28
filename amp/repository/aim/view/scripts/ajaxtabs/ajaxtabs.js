@@ -57,6 +57,18 @@ document.getElementById(containerid).innerHTML=page_request.responseText;
 	{
 		//alert(e);
 	}
+	//Remove yellow shadow from trails cells
+	tb = document.getElementById('reportTable');
+	var len = tb.rows.length;
+	for(i=0 ; i< len; i++){
+		if (tb.rows[i].getAttribute("id")){
+			for(x=1 ; x< tb.rows[i].children.length; x++){
+				var div = tb.rows[i].children[x].children[0];
+				YAHOO.util.Dom.removeClass(div,'desktop_project_count_sel');
+				YAHOO.util.Dom.addClass(div,'desktop_project_count');
+			}
+		}
+	}
 }
 }
 

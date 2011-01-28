@@ -178,17 +178,17 @@
 		
 		
     </body>
-</html>
+</html>	
 <script language=javascript>
 	$("#closepanel").click(function(){
 		$('#rightpanel').toggle('slow', function() {
 			if($("#closepanel").attr("src") == 'img_2/close_panel.gif') {
 	    		$("#closepanel").attr('src','img_2/open_panel.gif');
-	 	        return false;    
+	    		return false;    
 	 	    }
 			if($("#closepanel").attr("src") == 'img_2/open_panel.gif') {
 				$("#closepanel").attr('src','img_2/close_panel.gif');
-	 	        return false;    
+				return false;    
 	 	    }
 		});
     });

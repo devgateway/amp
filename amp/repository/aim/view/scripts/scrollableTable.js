@@ -89,6 +89,10 @@ function scrollableTable(tableId,height){
 					}
 					
 					switch (cellWidths.length) {
+					case 6:
+						this.tbody.rows[0].cells[0].width=cellWidths[0];
+						this.tbody.rows[0].cells[1].width=cellWidths[1];
+						break;
 					case 7:
 						this.tbody.rows[0].cells[0].width=cellWidths[0];
 						if (cellWidths[4]!=null){
@@ -101,7 +105,7 @@ function scrollableTable(tableId,height){
 					case 8:
 						this.tbody.rows[0].cells[0].width=cellWidths[0];
 						this.tbody.rows[0].cells[1].width=cellWidths[1];
-						this.tbody.rows[0].cells[2].width=cellWidths[2];
+						this.tbody.rows[0].cells[2].width=cellWidths[5];
 						this.tbody.rows[0].cells[3].width=cellWidths[6];
 						break;
 					case 9:
@@ -115,6 +119,8 @@ function scrollableTable(tableId,height){
 					default:
 						break;
 					}
+					
+
 			}	
 				
 			//this function should be used only in the case that the rows are using display = none

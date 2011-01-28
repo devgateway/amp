@@ -504,31 +504,31 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
-	                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true"  onclick="return canExit()">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
 	                                    <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
                                             	<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
-                                                <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                                                <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
                                                     <a class="yuiampmenuitemlabel" href="/parisindicator/parisindicator.do?reportId=3&reset=true&header=true"  onclick="return canExit()">
                                                         <b><digi:trn>Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>
                                         </feature:display>
                                         <feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
-                                        	<li class="yuiampmenuitem" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
+                                        	<li class="yuiampmenuitem_drop" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
                                             	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
                                                 	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
 												</a>

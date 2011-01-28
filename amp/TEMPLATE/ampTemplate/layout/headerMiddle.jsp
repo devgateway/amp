@@ -783,10 +783,10 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
 										<feature:display name="User Help" module="HELP">
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
                                          <a class="yuiampmenuitemlabel" href="#" onClick="help();">
                                         	<digi:trn>AMP Help</digi:trn>
                                         </a>
@@ -794,7 +794,7 @@ function adminHelp(){
 										</feature:display>
 										
 										<feature:display name="Glossary" module="HELP">
-                                        <li>	
+                                        <li class="yuiampmenuitem_drop">	
                                         <a class="yuiampmenuitemlabel" href="/help/glossary.do">
                                         <digi:trn>Glossary</digi:trn>
                                         </a>
@@ -802,14 +802,14 @@ function adminHelp(){
 										</feature:display>
 										
 										<feature:display name="Support Request Form" module="HELP">
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/" target="_blank">
                                         <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>
 										<feature:display name="About AMP" module="HELP">
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
 										<%
 										siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 										session.setAttribute("site", siteDomain);

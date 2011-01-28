@@ -254,7 +254,7 @@ function adminHelp(){
 </script>
 			 <div class="yuiamp-skin-amp" style="clear:both;">
               <div id="mainmenuHeader" class="yuiampmenu">
-                  <div class="bd">
+                  <div class="bd_drop">
                       <ul class="first-of-type">
                     		  <li class="yuiampmenuitem">
                                           <c:set var="message">

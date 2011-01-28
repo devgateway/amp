@@ -692,9 +692,9 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
                                         	<digi:trn key="aim:createmessage">Create Message</digi:trn>
                                         </a>
@@ -720,17 +720,17 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                       	<feature:display name="Workspace Info" module="Tools">
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>
                                         </feature:display>
                                         <feature:display name="Language Option" module="Tools">
-		                                        <li style="_width:300px">
+		                                        <li class="yuiampmenuitem_drop">
 		                                        <a class="yuiampmenuitemlabel" href="#">
 		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                                        </a>
@@ -750,20 +750,20 @@ function adminHelp(){
                                         </logic:notEmpty>                                        
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure group="UserSideAdmins">
-		                                        <li>
+		                                        <li class="yuiampmenuitem_drop">
 			                                        <a class="yuiampmenuitemlabel" href="/aim/switchDevelopmentMode.do">
 														<digi:trn key="admin:userdevmode">Developer Mode</digi:trn>
 			                                        </a>
 		                                        </li>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
                                         <digi:trn key="aim:search">Search</digi:trn>
                                         </a>
                                         </li>
                                         
-                                        <li>
+                                        <li class="yuiampmenuitem_drop">
 	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true">
 	                                        	<digi:trn>Address Book</digi:trn>
 	                                        </a>

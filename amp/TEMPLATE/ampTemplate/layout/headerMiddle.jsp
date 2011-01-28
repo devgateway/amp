@@ -628,24 +628,24 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
                                             <digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>
                                        </feature:display>
                                         <module:display name="GIS DASHBOARD">
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="javascript:openGIS()"  onclick="return canExit()">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>
                                         <module:display name="Org Profile" >
-                                            <li class="yuiampmenuitem">
+                                            <li class="yuiampmenuitem_drop">
                                                 <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
                                                     <digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
                                                 </a> 

@@ -594,9 +594,9 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">
+                                  <div class="bd_drop">
                                       <ul>
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
                                             	<digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
                                             </a>

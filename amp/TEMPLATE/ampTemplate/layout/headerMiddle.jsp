@@ -454,7 +454,7 @@ function adminHelp(){
                                                     <digi:trn key="btn:addActivity">(New) Add Activity</digi:trn>
                                                     </a>
 												</li>
-		                                        <li class="yuiampmenuitem">
+		                                        <li class="yuiampmenuitem_drop">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
@@ -468,12 +468,12 @@ function adminHelp(){
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>
                                             <module:display name="Tab Generator" parentModule="REPORTING">
-		                                      	<li class="yuiampmenuitem" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
+		                                      	<li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel"  onclick="return canExit()" href="/reportWizard.do?tab=true&reset=true">
 		                                                <digi:trn key="aim:addTab">Add Tab</digi:trn>
 		                                            </a>
 		                                        </li>
-		                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+		                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewTeamReports.do?tabs=true">
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
@@ -482,7 +482,7 @@ function adminHelp(){
 	                                    	<c:if test="${not empty sessionScope.currentMember}">
 											<c:if test="${sessionScope.currentMember.pledger == 'true'}">
 		 										<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
-			                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
+			                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToManagePledges">Click here to manage pledges</digi:trn>'>
 				                                       <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewPledgesList.do">
 				                                           <digi:trn key="aim:Pledges">Pledges</digi:trn>
 				                                        </a>

@@ -59,7 +59,7 @@ if("On".equals(publicView)) {
 </style>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
-      <div class="bd">
+      <div class="bd_drop">
           <ul class="first-of-typeamp">
             <li class="yuiampmenuitem">
                 <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
@@ -98,7 +98,7 @@ if("On".equals(publicView)) {
                 		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
-	                	<div class="bd">                    
+	                	<div class="bd_drop">                    
 	                		<ul>
 	           					<li class="yuiampmenuitem" style="float:left;">
 	               					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
@@ -135,7 +135,7 @@ if("On".equals(publicView)) {
 	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                    </a>
 	                    <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-	                    	<div class="bd">                    
+	                    	<div class="bd_drop">                    
 	                    		<ul>
 	                        		<module:display name="Org Profile" >
 	                        			<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
@@ -175,7 +175,7 @@ if("On".equals(publicView)) {
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="reports2" class="yuiampmenu">
-		                    <div class="bd">                    
+		                    <div class="bd_drop">                    
 		                        <ul>
 		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
@@ -195,7 +195,7 @@ else  //In case the public view aren't activated
 %>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
-      <div class="bd">
+      <div class="bd_drop">
           <ul class="first-of-type">
             <li class="yuiampmenuitem">
                 <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
@@ -224,7 +224,7 @@ else  //In case the public view aren't activated
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
-		                    <div class="bd">                    
+		                    <div class="bd_drop">                    
 		                        <ul>
 		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
@@ -273,7 +273,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                        <feature:display name="Language Option" module="Tools">
 		                                        <li style="_width:240px">
@@ -281,7 +281,7 @@ function adminHelp(){
 		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                                        </a>
 		                                          <div id="reports2" class="yuiampmenu">
-		                                              <div class="bd">                    
+		                                              <div class="bd_drop">                    
 		                                                  <ul>
 															<digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                                                  </ul>
@@ -308,7 +308,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
 										<feature:display name="Admin Help" module="HELP">
                                         <li>
@@ -423,7 +423,7 @@ function adminHelp(){
    --> 
              <div class="yuiamp-skin-amp" style="clear: both; width: 940px;">
               <div id="mainmenuHeader" class="yuiampmenu">
-                  <div class="bd">
+                  <div class="bd_drop">
                       <ul class="first-of-type">
                       	<module:display name="My Desktop" parentModule="PROJECT MANAGEMENT">
                     	 <li class="yuiampmenuitem" style="float:left;">
@@ -434,7 +434,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">
+                                  <div class="bd_drop">
                                       <ul>
 <!--
  										<li class="yuiampmenuitem">
@@ -504,7 +504,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
@@ -594,7 +594,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">
+                                  <div class="bd_drop">
                                       <ul>
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
@@ -628,7 +628,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem">
@@ -692,7 +692,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                         <li class="yuiampmenuitem">
                                         <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
@@ -720,7 +720,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li>
@@ -735,7 +735,7 @@ function adminHelp(){
 		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                                        </a>
 		                                          <div id="reports2" class="yuiampmenu">
-		                                              <div class="bd">                    
+		                                              <div class="bd_drop">                    
 		                                                  <ul>
 		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                                                  </ul>
@@ -783,7 +783,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd_drop">                    
                                       <ul>
 										<feature:display name="User Help" module="HELP">
                                         <li>

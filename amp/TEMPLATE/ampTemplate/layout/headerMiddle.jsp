@@ -446,7 +446,7 @@ function adminHelp(){
 <c:if test="${not empty sessionScope.currentMember}">
 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 												<field:display name="Add Activity Button" feature="Edit Activity">
-		                                        <li class="yuiampmenuitem">
+		                                        <li class="yuiampmenuitem_drop">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>

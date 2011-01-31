@@ -72,13 +72,13 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		visualizationForm.getFilter().setOrganizationsSelected(orgs);
-		ArrayList<AmpSector> secs = new ArrayList<AmpSector>();
-		for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
-			if (visualizationForm.getFilter().getSectorIds()[i]!=null && !visualizationForm.getFilter().getSectorIds()[i].equals("null")) {
-				secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
-			}
-		}
-		visualizationForm.getFilter().setSectorsSelected(secs);
+//		ArrayList<AmpSector> secs = new ArrayList<AmpSector>();
+//		for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
+//			if (visualizationForm.getFilter().getSectorIds()[i]!=null && !visualizationForm.getFilter().getSectorIds()[i].equals("null")) {
+//				secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
+//			}
+//		}
+//		visualizationForm.getFilter().setSectorsSelected(secs);
 		
 		return null;
 	}

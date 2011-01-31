@@ -82,6 +82,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		this(id,null,fmName,hideLabel);
 	}
 	
+	public AmpFieldPanel(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
+		this(id,null,fmName,hideLabel, hideNewLine);
+	}
+	
 	public AmpFieldPanel(String id, String fmName,IModel<T> model) {
 		this(id,model,fmName,false);
 	}
@@ -94,6 +98,21 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 *            id and the feature manager name for this field
 	 */
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
+		this(id, model,fmName, hideLabel, hideLabel);
+
+	}
+
+
+	public AmpFieldPanel(String id, String fmName) {
+		this(id, fmName, false);
+	}
+
+	public AmpFieldPanel(String id, IModel<T> model, String fmName) {
+		this(id,model,fmName,false);
+	}
+
+	
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
 		super(id, model,fmName, AmpFMTypes.FIELD);
 		setOutputMarkupId(true);
 		this.fmName = fmName;
@@ -102,7 +121,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");
-		newLine.setVisible(!hideLabel);
+		newLine.setVisible(!hideNewLine);
 		add(newLine);
 
 		String tooltipText = FMUtil.getTooltip(this);
@@ -121,12 +140,5 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		add(feedbackContainer);
 	}
 
-	public AmpFieldPanel(String id, String fmName) {
-		this(id, fmName, false);
-	}
-
-	public AmpFieldPanel(String id, IModel<T> model, String fmName) {
-		this(id,model,fmName,false);
-	}
-
+	
 }

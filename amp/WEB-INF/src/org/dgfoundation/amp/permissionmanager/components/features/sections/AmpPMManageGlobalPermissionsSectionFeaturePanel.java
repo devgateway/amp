@@ -55,13 +55,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 	public AmpPMManageGlobalPermissionsSectionFeaturePanel(final String id, final IModel<Set<Permission>> permissionsModel, String fmName, boolean hideLabel) throws Exception {
 		super(id, permissionsModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
-		
-		
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
-
-		
-
-		
 		globalPermissionsTabs.add(new AbstractTab(new Model("Manage Permissions")){
 		      public Panel getPanel(String panelId)
 		      {
@@ -75,17 +69,22 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		        return mgp;
 		      }
 		});
-//		
-//		globalPermissionsTabs.add(new AbstractTab(new Model("Add New Permission")){
-//		      public Panel getPanel(String panelId)
-//		      {
-//		        return new AmpPMManageGlobalPanel(panelId, permissionsModel, globalPermissionMapForPermissibleClass, globalPermission,"Project Title", true);
-//		      }
-//		});
-//
+		globalPermissionsTabs.add(new AbstractTab(new Model("Add Global Permission")){
+		      public Panel getPanel(String panelId)
+		      {
+		    	  AmpPMAddGlobalPermissionPanel newGlobalPerm = null;
+		    	try {
+					newGlobalPerm = new AmpPMAddGlobalPermissionPanel(panelId, permissionsModel, "Add Global Permission");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        return newGlobalPerm;
+		      }
+		});
 		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
 		add(objTabs);
-//		add(new AmpPMManageGlobalPanel("globalPermsTabs", permissionsModel, "Global Permissions", true));
+
 	}
 
 }

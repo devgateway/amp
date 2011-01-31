@@ -39,5 +39,12 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 		addFormComponent(textContainer);
 	}
 	
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
+		textContainer = new TextField<T>("textContainer",model);
+		textContainer.setOutputMarkupId(true);
+		addFormComponent(textContainer);
+	}
+	
 	
 }

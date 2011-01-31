@@ -45,9 +45,7 @@ public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePa
 	public AmpPMViewGlobalPermsTableFeaturePanel(String id, IModel<Set<Permission>> permissionsModel, String fmName, boolean hideLeadingNewLine) throws Exception {
 		super(id, permissionsModel, fmName, hideLeadingNewLine);
 		// TODO Auto-generated constructor stub
-		
 		AbstractReadOnlyModel<List<Permission>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(permissionsModel);
-		
 		list = new PageableListView<Permission>("globalPermsList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
@@ -57,8 +55,6 @@ public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePa
 		};
 		list.setReuseItems(true);
 		add(list);
-
-		
 		
 	}
 

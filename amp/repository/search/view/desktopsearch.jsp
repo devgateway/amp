@@ -14,16 +14,17 @@ function search() {
 </script>
 <div class="right_menu">
 	<div class="right_menu_header">
-		<div class="right_menu_header_cont">Search</div></div>
+		<div class="right_menu_header_cont">Search</div>
+		</div>
 			<div class="right_menu_box">
 				<div class="right_menu_cont">
-				 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				 	<table width="85%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 								<td class="tbl_spacing">
 									<div class="search_label">Keyword:</div>
 								</td>
 								<td align=right class="tbl_spacing">
-									<input name="" type="text" class="inputx" style="width:147px;" id="keyword">
+									<input name="" type="text" class="inputx" style="width:130px;" id="keyword">
 								</td>
 						</tr>
 						<tr>
@@ -31,8 +32,8 @@ function search() {
 									<div class="search_label">Type:</div>
 								</td>
 								<td align=right>
-									<select class="dropdwn_sm" style="width: 150px;" id="querytype" >
-										<option value="-1"><digi:trn>ALL</digi:trn></option>
+									<select class="dropdwn_sm" style="width: 130px;" id="querytype" >
+									<option value="-1"><digi:trn>ALL</digi:trn></option>
 									<option value="0"><digi:trn>Activities</digi:trn></option>
 									<option value="1"><digi:trn>Reports</digi:trn></option>
 									<option value="2"><digi:trn>Tabs</digi:trn></option>

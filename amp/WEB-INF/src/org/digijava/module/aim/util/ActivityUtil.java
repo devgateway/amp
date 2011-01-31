@@ -3398,7 +3398,26 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  return execRate;
   	}
 
-  	
+  	public static List<AmpActivity> getLastUpdatedActivities() {
+		List col = null;
+		Session session = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			//String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct group by ampAct.ampActivityGroup having count(*) > 1 order by ampAct.ampActivityGroup";
+			//String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct order by ampAct.ampActivityId desc";
+			String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct, "
+					+ AmpActivityGroup.class.getName() + " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion order by ampAct.ampActivityId desc";
+			qry = session.createQuery(queryString).setMaxResults(5);
+			col = qry.list();
+		} catch (Exception e1) {
+			logger.error("Could not retrieve the activities list from getLastUpdatedActivities");
+			e1.printStackTrace();
+		}
+		return col;
+	}	
+  
   /*
    * get the list of all the activities
    * to display in the activity manager of Admin

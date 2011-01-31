@@ -167,6 +167,7 @@
 							<digi:insert attribute="myLinks" />
 							<digi:insert attribute="myReports"/>
 							<digi:insert attribute="myMessages"/>
+							<digi:insert attribute="myLastVersions"/>
 						</logic:present>
 					</div>
 					<%}%>

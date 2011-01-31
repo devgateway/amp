@@ -171,6 +171,8 @@
     <form-bean name="exportTableForm" type="org.digijava.module.aim.form.ExportTableForm"/>
     <form-bean name="saveFmDescriptionForm" type="org.digijava.module.aim.form.SaveFmDescriptionForm"/>
     
+    <form-bean name="lastVersionsForm" type="org.digijava.module.versioning.form.AmpLastVersionsForm"/>
+    
 </form-beans>
 
   <global-forwards>
@@ -1825,7 +1827,8 @@
    <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
    <action name="saveFmDescriptionForm" path="/aim/saveFMDescription"  scope="request" type="org.digijava.module.aim.action.SaveFmDescription"/>
 
-    
+	<action path="/aim/getLastVersions" name="lastVersionsForm" scope="session" type="org.digijava.module.versioning.action.ViewLastVersions" />
+	    
   </action-mappings>
 </struts-config>
 

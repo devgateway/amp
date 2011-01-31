@@ -457,7 +457,10 @@
 	<teaser name="myReports" action="getDesktopReports.do">
 		myReports.jsp
 	</teaser>
-
+	
+	<teaser name="myLastVersions" action="getLastVersions.do">
+		myLastVersions.jsp
+	</teaser>
 
 	<teaser name="myTabs" action="getDesktopReports.do">
 		myTabs.jsp

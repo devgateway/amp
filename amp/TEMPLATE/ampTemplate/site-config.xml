@@ -456,6 +456,7 @@
 			<put-item name="myTeamMembers" module="aim" instance="default" teaser="myTeamMembers"/>
 			<put-item name="myTasks" module="aim" instance="default" teaser="myTasks"/>
 			<put-item name="myMessages" module="message" instance="default" teaser="myMessages"/>
+			<put-item name="myLastVersions" module="aim" instance="default" teaser="myLastVersions"/>
 	 		<put-item name="footer" layout="footerLayout"/>
  		</layout>
 
@@ -698,6 +699,7 @@
                 <page>setbudgetprogram</page>
                 <page>editdepartment</page>
                 <page>viewActivityHistory</page>
+                <page>myLastVersions</page>
             </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

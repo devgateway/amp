@@ -32,7 +32,7 @@ public class DashboardFilter {
 
     private List<AmpSector>sectors;
     private List<AmpSector>sectorsSelected;
-    private Collection<Long> sectorIds;
+    private Long[] sectorIds;
     private Long sectorId; //used to fill subsectors list
 
     private List<AmpCategoryValueLocations> locationsSelected;
@@ -381,11 +381,11 @@ public class DashboardFilter {
 		return true;
 	}
 
-	public void setSectorIds(Collection<Long> sectorIds) {
+	public void setSectorIds(Long[] sectorIds) {
 		this.sectorIds = sectorIds;
 	}
 
-	public Collection<Long> getSectorIds() {
+	public Long[] getSectorIds() {
 		return sectorIds;
 	}
 

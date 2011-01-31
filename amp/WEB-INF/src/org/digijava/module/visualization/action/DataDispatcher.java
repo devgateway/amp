@@ -72,11 +72,13 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		visualizationForm.getFilter().setOrganizationsSelected(orgs);
+
 		ArrayList<AmpSector> secs = new ArrayList<AmpSector>();
-		Iterator it = visualizationForm.getFilter().getSectorIds().iterator();
-		while (it.hasNext()){
-			Long currentSectorId = (Long) it.next();
-			secs.add(SectorUtil.getAmpSector(currentSectorId));
+		for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
+			//We need to have an empty collection in the organizationsSelected list so the query goes through Organization Group Id
+			if(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i]) != -1){
+				orgs.add(DbUtil.getOrganisation(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
+			}
 		}
 		visualizationForm.getFilter().setSectorsSelected(secs);
 

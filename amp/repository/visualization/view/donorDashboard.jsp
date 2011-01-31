@@ -337,6 +337,18 @@ Web Link: <b>Not applicable</b>
 				</div>
 			</div>
 		</fieldset>
+		<fieldset>
+			<legend><span class=legend_label>Aid Predictability</span></legend>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictabilityChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictabilityChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Data View</a></div>
+			<br />
+			<div class="flashcontent" name="flashContent">
+				<div id="AidPredictabilityChart">
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				</div>
+			</div>
+		</fieldset>
 	</div>
 	<div id="tab2">
 		Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
@@ -433,11 +445,11 @@ var callbackApplyFilterCall = {
 			  try {
 				  refreshGraphs();
 				  refreshBoxes();
-				  loadingPanel.hide();
 				}
 				catch (e) {
-				    alert("Invalid response.");
+				    //alert("Invalid response.");
 				}
+			  loadingPanel.hide();
 		  },
 		  failure: function(o) {alert("fasha");}
 		};
@@ -489,10 +501,7 @@ YAHOO.util.Event.onDOMReady(initDashboard);
 function initDashboard(){
 	//Initialize First Chart
 	changeChart(null, 'bar', 'FundingChart');
-	
-	//Trigger Clicks to Load valid data
-	document.getElementById("org_group_dropdown_id").click();
-	
+	changeChart(null, 'bar', 'AidPredictabilityChart');
 }
 
 function changeChart(e, chartType, container){
@@ -512,16 +521,16 @@ function changeChart(e, chartType, container){
 	attributes.id = container;
 	switch(chartType){
 		case "bar":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "donut":
-			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/PieChart_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "line":
-			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "dataview":
-			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			swfobject.embedSWF("/repository/visualization/view/charts/DataViewSeries_" + container + ".swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
 			break;
 	}
 	return false;

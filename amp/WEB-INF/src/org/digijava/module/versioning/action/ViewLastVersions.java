@@ -13,9 +13,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.versioning.form.AmpLastVersionsForm;
 
 public class ViewLastVersions extends TilesAction {
@@ -25,8 +27,11 @@ public class ViewLastVersions extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-		//TODO: Add check to show only activities for this workspace.
-		List<AmpActivity> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
+		AmpTeam currentTeam = null;
+		if (tm != null) {
+			currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+		}
+		List<AmpActivity> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam);
 		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
 		return null;
 	}

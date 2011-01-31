@@ -3398,7 +3398,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  return execRate;
   	}
 
-  	public static List<AmpActivity> getLastUpdatedActivities() {
+  	public static List<AmpActivity> getLastUpdatedActivities(AmpTeam team) {
 		List col = null;
 		Session session = null;
 		Query qry = null;
@@ -3407,9 +3407,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			session = PersistenceManager.getRequestDBSession();
 			//String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct group by ampAct.ampActivityGroup having count(*) > 1 order by ampAct.ampActivityGroup";
 			//String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct order by ampAct.ampActivityId desc";
-			String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct, "
-					+ AmpActivityGroup.class.getName() + " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion order by ampAct.ampActivityId desc";
+			String queryString = "select ampAct from "
+					+ AmpActivityVersion.class.getName()
+					+ " ampAct, "
+					/*+ AmpTeam.class.getName()
+					+ " ampTeam, "*/
+					+ AmpActivityGroup.class.getName()
+					+ " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion and ampAct.team.ampTeamId = ? order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
+			qry.setParameter(0, team.getAmpTeamId());
 			col = qry.list();
 		} catch (Exception e1) {
 			logger.error("Could not retrieve the activities list from getLastUpdatedActivities");

@@ -22,7 +22,10 @@
 			        	<li class="tri"><bean:write name='iter' property='name'/></li>
 			        </a>
 				</logic:iterate>
-			</logic:notEmpty>	
+			</logic:notEmpty>
+			<logic:empty name="lastVersions" scope="session">
+				<p style="color: #376091"><digi:trn>No results</digi:trn></p>
+			</logic:empty>
 		</div>
 	</div>
 </div>

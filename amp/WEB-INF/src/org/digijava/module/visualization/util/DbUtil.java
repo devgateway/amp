@@ -3,10 +3,13 @@ package org.digijava.module.visualization.util;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -19,7 +22,16 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.form.VisualizationForm;
+import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -398,5 +410,221 @@ public class DbUtil {
         }
 		return col;
 	}
+	//TODO: Move this to Util class.
+    /**
+     * Returns pledge amount in selected currency
+     * for selected organization and year
+     * @param orgID
+     * @param year
+     * @param currCode
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
+    @SuppressWarnings("unchecked")
+    public static double getPledgesFunding(Long[] orgIds, Long orgGroupId,
+            Date startDate, Date endDate,
+            String currCode) throws DgException {
+        double totalPlannedPldges = 0;
+        String oql = "select fd ";
+        oql += " from ";
+        oql += FundingPledgesDetails.class.getName()
+                + " fd inner join fd.pledgeid plg ";
+        oql += " inner join  plg.organization org  ";
+        oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
+        if (orgIds == null) {
+            if (orgGroupId != -1) {
+                oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
+            }
+        } else {
+            oql += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
+        }
+        Session session = PersistenceManager.getRequestDBSession();
+        List<FundingPledgesDetails> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            if (orgIds == null && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
+            fundingDets = query.list();
+            Iterator<FundingPledgesDetails> fundDetIter = fundingDets.iterator();
+            while (fundDetIter.hasNext()) {
+                FundingPledgesDetails pledge = fundDetIter.next();
+                //converting amounts
+                java.sql.Date dt = new java.sql.Date(pledge.getFunding_date().getTime());
+                double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
+                double toExRt = Util.getExchange(currCode, dt);
+                DecimalWraper amt = CurrencyWorker.convertWrapper(pledge.getAmount(), frmExRt, toExRt, dt);
+                totalPlannedPldges += amt.doubleValue();
+            }
+
+
+
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return totalPlannedPldges;
+    }
+    /**
+     * Returns funding amount
+     * @param orgID
+     * @param year
+     * @param assistanceTypeId
+     * @param currCode
+     * @param transactionType
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
+    @SuppressWarnings("unchecked")
+    public static DecimalWraper getFunding(DashboardFilter filter, Date startDate,
+            Date endDate, Long assistanceTypeId,
+            Long financingInstrumentId,
+            int transactionType,int adjustmentType) throws DgException {
+        DecimalWraper total = null;
+        String oql = "";
+        String currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+        
+        List<AmpOrganisation> selectedOrganizations = filter.getOrganizationsSelected();
+        Long orgGroupId = filter.getOrganizationGroupId();
+        
+        TeamMember tm = filter.getTeamMember();
+        Collection<Long> locationIds = filter.getLocationIds();
+        boolean locationCondition = locationIds != null && locationIds.size() > 0;
+
+        if (locationCondition) {
+            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+        } else {
+            oql = "select fd ";
+        }
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        if (locationCondition) {
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+
+        oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        if (selectedOrganizations == null || selectedOrganizations.size() == 0) {
+            if (orgGroupId != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, selectedOrganizations);
+            }
+        } else {
+            oql += DashboardUtil.getOrganizationQuery(false, selectedOrganizations);
+        }
+        if (locationCondition) {
+            oql += " and loc.id in (:locations) ";
+        }
+
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        if (assistanceTypeId != null) {
+            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
+        }
+        if (financingInstrumentId != null) {
+            oql += "   and f.financingInstrument=:financingInstrumentId  ";
+        }
+
+        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        if(filter.getFromPublicView() != filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+        }
+        else
+        {
+            oql += DashboardUtil.getTeamQuery(tm);
+        }
+
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            if ((selectedOrganizations == null || selectedOrganizations.size() == 0) && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
+            if (assistanceTypeId != null) {
+                query.setLong("assistanceTypeId", assistanceTypeId);
+            }
+            if (financingInstrumentId != null) {
+                query.setLong("financingInstrumentId", financingInstrumentId);
+            }
+            query.setLong("transactionType", transactionType);
+            query.setLong("adjustmentType",adjustmentType);
+            if (locationCondition) {
+                query.setParameterList("locations", locationIds);
+            }
+            fundingDets = query.list();
+            /*the objects returned by query  and   selected currency
+            are passed doCalculations  method*/
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            cal.doCalculations(fundingDets, currCode);
+            /*Depending on what is selected in the filter
+            we should return either actual commitments
+            or actual Disbursement or  */
+            switch (transactionType) {
+                case Constants.EXPENDITURE:
+                    if (Constants.PLANNED == adjustmentType) {
+                        total = cal.getTotPlannedExp();
+                    } else {
+                        total = cal.getTotActualExp();
+                    }
+                    break;
+                case Constants.DISBURSEMENT:
+                    if (Constants.ACTUAL == adjustmentType) {
+                        total = cal.getTotActualDisb();
+                    } else {
+                        total = cal.getTotPlanDisb();
+                    }
+                    break;
+                default:
+                    if (Constants.ACTUAL == adjustmentType) {
+                        total = cal.getTotActualComm();
+                    } else {
+                        total = cal.getTotPlannedComm();
+                    }
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return total;
+    }
+    public static AmpOrganisation getOrganisation(Long id) {
+        Session session = null;
+        AmpOrganisation org = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            // modified by Priyajith
+            // desc:used select query instead of session.load
+            // start
+            String queryString = "select o from "
+                + AmpOrganisation.class.getName() + " o "
+                + "where (o.ampOrgId=:id)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("id", id, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                org = (AmpOrganisation) itr.next();
+            }
+            // end
+
+        } catch (Exception ex) {
+            logger.error("Unable to get organisation from database", ex);
+        }
+        logger.debug("Getting organisation successfully ");
+        return org;
+    }
 		
 }

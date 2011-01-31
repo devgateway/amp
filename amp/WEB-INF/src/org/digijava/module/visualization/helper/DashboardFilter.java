@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -22,12 +23,21 @@ public class DashboardFilter {
     private Long year;
     private Long currencyId;
     private Boolean workspaceOnly;
+    private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
+
     private List<AmpOrganisation>organizationsSelected;
+    private Long[] orgIds;
+
     private List<AmpSector>sectors;
     private List<AmpSector>sectorsSelected;
+    private Collection<Long> sectorIds;
     private Long sectorId; //used to fill subsectors list
+
+    private List<AmpCategoryValueLocations> locationsSelected;
+    private Collection<Long> locationIds;
+
     private Collection<BeanWrapperImpl> years;
     private int transactionType;
     private List<AmpOrgGroup> orgGroups;
@@ -41,12 +51,15 @@ public class DashboardFilter {
     private Long selZoneIds[];
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
-    private List<AmpCategoryValueLocations> locationsSelected;
+
+
     private int yearsInRange;
     private Boolean pledgeVisible;
     private Boolean expendituresVisible;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
+
+    
 
     public Boolean getExpendituresVisible() {
         return expendituresVisible;
@@ -64,6 +77,7 @@ public class DashboardFilter {
         this.pledgeVisible = pledgeVisible;
     }
     public int getYearsInRange() {
+    	if(yearsInRange == 0) yearsInRange = 5;
         return yearsInRange;
     }
 
@@ -333,6 +347,46 @@ public class DashboardFilter {
 			List<AmpCategoryValueLocations> locationsSelected) {
 		this.locationsSelected = locationsSelected;
 	}
+
+	public boolean isPledgeVisible() {
+		// TODO CHANGE THIS!
+		return true;
+	}
+    public Long[] getOrgIds() {
+        return orgIds;
+    }
+
+    public void setOrgIds(Long[] orgIds) {
+        this.orgIds = orgIds;
+    }
+
+	public void setTeamMember(TeamMember teamMember) {
+		this.teamMember = teamMember;
+	}
+
+	public TeamMember getTeamMember() {
+		return teamMember;
+	}
 	
+    public Collection<Long> getLocationIds() {
+        return locationIds;
+    }
+
+    public void setLocationIds(Collection<Long> locationIds) {
+        this.locationIds = locationIds;
+    }
+
+	public boolean isExpendituresVisible() {
+		// TODO CHANGE THIS!
+		return true;
+	}
+
+	public void setSectorIds(Collection<Long> sectorIds) {
+		this.sectorIds = sectorIds;
+	}
+
+	public Collection<Long> getSectorIds() {
+		return sectorIds;
+	}
 
 }

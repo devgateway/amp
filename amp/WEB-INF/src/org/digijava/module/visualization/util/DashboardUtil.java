@@ -3,15 +3,19 @@ package org.digijava.module.visualization.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -19,13 +23,21 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
+
+import fi.joensuu.joyds1.calendar.EthiopicCalendar;
+import fi.joensuu.joyds1.calendar.NepaliCalendar;
 
 public class DashboardUtil {
 	
@@ -216,5 +228,182 @@ public class DashboardUtil {
 		
 		
 	}
-	
-}
+    public static String getInStatement(Long ids[]) {
+        String oql = "";
+        for (int i = 0; i < ids.length; i++) {
+            oql += "" + ids[i];
+            if (i < ids.length - 1) {
+                oql += ",";
+            }
+        }
+        return oql;
+    }
+    public static Date getStartDate(Long fiscalCalendarId, int year) {
+        Date startDate = null;
+        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
+            } else {      
+                 startDate = getGregorianCalendarDate(calendar, year, true);
+            }
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.YEAR, year);
+            startDate = cal.getTime();
+        }
+        return startDate;
+    }
+
+    public static Date getEndDate(Long fiscalCalendarId, int year) {
+        Date endDate = null;
+        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+            if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
+                //we need data including the last day of toYear,this is till the first day of toYear+1
+                int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+                endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
+            } else {
+                endDate=getGregorianCalendarDate(calendar, year, false);
+            }
+
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.YEAR, year + 1);
+            endDate = cal.getTime();
+        }
+        return endDate;
+    }
+
+    public static Date getStartOfYear(int year, int month, int day) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(year, month, day, 0, 0, 0);
+        return cal.getTime();
+    }
+
+    public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
+        Date date;
+        fi.joensuu.joyds1.calendar.Calendar calendar = getCalendar(fiscalCalendar, startDate, year);
+        Calendar gregorianCal = calendar.toJavaUtilGregorianCalendar();
+        date = gregorianCal.getTime();
+        return date;
+    }
+    
+    public static fi.joensuu.joyds1.calendar.Calendar getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+        fi.joensuu.joyds1.calendar.Calendar calendar = null;
+        String calendarType = fiscalCalendar.getBaseCal();
+        if (calendarType.equals("ETH-CAL")) {
+            calendar = new EthiopicCalendar();
+        } else {
+            if (calendarType.equals("NEP-CAL")) {
+                calendar = new NepaliCalendar();
+            }
+        }
+        if (startDate) {
+            calendar.set(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
+        } else {
+            calendar.set(year + 1, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
+            calendar.addDays(-1);
+        }
+        return calendar;
+    }
+
+    public static String getOrganizationQuery(boolean orgGroupView, List<AmpOrganisation> selectedOrganizations) {
+        String qry = "";
+        if (orgGroupView) {
+            qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
+        } else {
+            qry = " and f.ampDonorOrgId in (" + getInStatementList(selectedOrganizations) + ") ";
+        }
+        return qry;
+    }
+
+    private static String getInStatementList(
+			List selectedItems) {
+        String oql = "";
+        Iterator it = selectedItems.iterator();
+
+        while(it.hasNext()){
+        	Object object = it.next();
+        	if (object instanceof AmpOrganisation) {
+    			AmpOrganisation ampOrganization = (AmpOrganisation)object;
+            	oql += ampOrganization.getAmpOrgId();
+            	if (it.hasNext()){
+            		oql += ",";
+            	}
+        	}
+        	
+        }
+        return oql;
+	}
+
+	public static String getTeamQueryManagement() {
+        String qr = "";
+        qr += " and act.draft=false and act.approvalStatus ='approved' ";
+        qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
+		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
+        
+        return qr;
+    }
+    public static String getTeamQuery(TeamMember teamMember) {
+        String qr = "";
+        if (teamMember != null) {
+            AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
+            List<AmpTeam> teams = new ArrayList<AmpTeam>();
+            getTeams(team, teams);
+            String relatedOrgs = "";
+            String teamIds = "";
+            if (teamMember.getTeamAccessType().equals("Management")) {
+                qr += " and act.draft=false and act.approvalStatus ='approved' ";
+            }
+            qr += " and (";
+            for (AmpTeam tm : teams) {
+                if (tm.getComputation() != null && tm.getComputation()) {
+                    relatedOrgs += getComputationOrgsQry(tm);
+                }
+                teamIds += tm.getAmpTeamId() + ",";
+
+            }
+            if (teamIds.length() > 1) {
+                teamIds = teamIds.substring(0, teamIds.length() - 1);
+                qr += " act.team.ampTeamId in ( " + teamIds + ")";
+
+            }
+            if (relatedOrgs.length() > 1) {
+                relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
+                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+            }
+            qr += ")";
+
+        } else {
+            qr += "  and act.team is not null ";
+        }
+        return qr;
+    }
+
+    public static String getComputationOrgsQry(AmpTeam team) {
+        String orgIds = "";
+        if (team.getComputation() != null && team.getComputation()) {
+            Set<AmpOrganisation> orgs = team.getOrganizations();
+            Iterator<AmpOrganisation> orgIter = orgs.iterator();
+            while (orgIter.hasNext()) {
+                AmpOrganisation org = orgIter.next();
+                orgIds += org.getAmpOrgId() + ",";
+            }
+
+        }
+        return orgIds;
+    }    
+    public static void getTeams(AmpTeam team, List<AmpTeam> teams) {
+        teams.add(team);
+        Collection<AmpTeam> childrenTeams =  TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+        if (childrenTeams != null) {
+            for (AmpTeam tm : childrenTeams) {
+                getTeams(tm, teams);
+            }
+        }
+    }}

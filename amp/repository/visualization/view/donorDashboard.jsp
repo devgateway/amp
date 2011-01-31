@@ -23,7 +23,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/AC_OETags.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
 
 <script language="javascript">
 <!--
@@ -101,10 +101,19 @@ yuiLoadingPanel.prototype = {
   <tr>
     <td>
     <div class="dashboard_name">
-	  	
+    	<c:if test="${visualizationform.filter.organizationGroupId eq '-1' }">
+	    	<digi:trn>ALL DONORS</digi:trn>
+    	</c:if>
+    	<c:if test="${visualizationform.filter.organizationGroupId ne '-1' }">
+			<c:forEach var="organizationGroup" items="${visualizationform.filter.orgGroups}">
+			<c:if test="${organizationGroup.ampOrgGrpId eq visualizationform.filter.organizationGroupId}">
+				${organizationGroup}
+			</c:if>
+			</c:forEach>
+    	</c:if>
     </div>
     </td>
-    <td><div class="dash_ico"><img src="images/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="images/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="images/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
+    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
   </tr>
 </table>
 <div class="dashboard_stat">Total Disbursements: <b>${visualizationform.summaryInformation.totalDisbursements}</b><span class="breadcrump_sep">|</span>Total Number of Projects: <b>${visualizationform.summaryInformation.numberOfProjects}</b><span class="breadcrump_sep">|</span>Total Number of Sectors: <b>${visualizationform.summaryInformation.numberOfSectors}</b><span class="breadcrump_sep">|</span>Total Number of Regions: <b>${visualizationform.summaryInformation.numberOfRegions}</b><span class="breadcrump_sep">|</span>Average Project Size: <b>${visualizationform.summaryInformation.averageProjectSize}</b></div>
@@ -131,9 +140,14 @@ yuiLoadingPanel.prototype = {
    <tr>
     <td><digi:trn>Organization</digi:trn>:</td>
     <td align=right>
+       <html:select property="filter.orgIds" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+       </html:select>
+<!-- 
     <select class="dropdwn_sm" style="width:145px;" name="org_dropdown_id" id="org_dropdown_id">
 		<option value="-1"><digi:trn>All</digi:trn></option>
 	</select>
+ -->
 	</td>
   </tr>
    <tr>
@@ -165,15 +179,15 @@ yuiLoadingPanel.prototype = {
   <tr>
     <td><digi:trn>Sub-Sector</digi:trn>:</td>
     <td align=right>
-    	<select class="dropdwn_sm" style="width:145px;" name="sub_sector_dropdown_id" id="sub_sector_dropdown_id">
-			<option value="-1"><digi:trn>All</digi:trn></option>
-		</select>
+       <html:select property="filter.sectorIds" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+       </html:select>
 	</td>
   </tr>
  </table>
 
 	<center>
-	<input type="button" onclick="runFilter()" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
+	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
 	</center>
 	</fieldset>
 	<fieldset>
@@ -313,26 +327,14 @@ Web Link: <b>Not applicable</b>
 	<div id="tab1">
 		<fieldset>
 			<legend><span class=legend_label>Commitments, Disbursements, Expenditures, Pledges</span></legend>
-			<div class="dash_graph_opt"><b class=sel_sm>Bar Chart</b></a><span class="breadcrump_sep">|</span><a href=#>Donut</a><span class="breadcrump_sep">|</span><a href=#>Line Chart</a><span class="breadcrump_sep">|</span><a href=#>Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FundingChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
-				<script language="JavaScript" type="text/javascript">
-				<!--
-						AC_FL_RunContent(
-									"src", "/repository/visualization/view/charts/LineAreaSeries",
-									"width", "634",
-									"height", "350",
-									"align", "middle",
-									"id", "LineAreaSeries",
-									"quality", "high",
-									"bgcolor", "#869ca7",
-									"name", "LineAreaSeries",
-									"allowScriptAccess","sameDomain",
-									"type", "application/x-shockwave-flash",
-									"pluginspage", "http://www.adobe.com/go/getflashplayer"
-					);
-				// -->
-				</script>
+				<div id="FundingChart">
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				</div>
 			</div>
 		</fieldset>
 	</div>
@@ -370,8 +372,9 @@ var callbackChildrenCall = {
 				    case "Organization":
 			    		var orgDropdown = document.getElementById("org_dropdown_id");
 			    		orgDropdown.options.length = 0;
+			    		orgDropdown.options[0] = new Option("All", -1);
 			    		for(var i = 0; i < results.children.length; i++){
-			    			orgDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
 				    case "Sector":
@@ -391,14 +394,25 @@ var callbackChildrenCall = {
 			    alert("Invalid respose.");
 			}
 	  },
-	  failure: function(o) {alert("fasha");}
+	  failure: function(o) {//Fail silently
+		  }
 	};
 
 function callbackChildren(e) {
-	var parentId = e.target.value;
+	var parentId, targetId;
+	if (e == undefined){
+		parentId = this.value;
+		targetId = this.id;
+	}
+	else
+	{
+		parentId = e.target.value;
+		targetId = e.target.id;
+	}
+	
 	var objectType = "";
 
-	switch(e.target.id){
+	switch(targetId){
 		case "sector_dropdown_id":
 			objectType = "Sector";
 			break;
@@ -414,11 +428,12 @@ function callbackChildren(e) {
 		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + parentId, callbackChildrenCall, null);
 	}
 }
-var callbackApplyCall = {
+var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
 				  refreshGraphs();
 				  refreshBoxes();
+				  loadingPanel.hide();
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -427,37 +442,90 @@ var callbackApplyCall = {
 		  failure: function(o) {alert("fasha");}
 		};
 
-function callbackApply(e){
+function callbackApplyFilter(e){
+	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
-	var cObj = YAHOO.util.Connect.asyncRequest('POST', '/visualization/dataDispatcher.do?action=applyFilter', callbackApplyCall);
+/*	var orgIds = null;
+	var secIds = null;
+//	if (document.getElementById("org_dropdown_id").value != -1) {
+		orgIds = document.getElementById("org_dropdown_id").value;
+//	}
+	if (document.getElementById("sub_sector_dropdown_id").value == -1) {
+		if (document.getElementById("sector_dropdown_id").value != -1) {
+			secIds = document.getElementById("sector_dropdown_id").value;
+		}
+	} else {
+		secIds = document.getElementById("sub_sector_dropdown_id").value;
+	}*/
+	//var sUrl="/visualization/filters.do?orgIds="+orgIds+"&secIds="+secIds;
+	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
+
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 }
 
 function refreshGraphs(){
-	loadingPanel.show();
 
 	//Get array of graphs
-	var allGraphs = document.getElementsByName("flashcontent");
+	var allGraphs = document.getElementsByName("flashContent");
 	
-	//Iterate and refresh the source and graph
+	//Iterate and refresh the graph
 	for(var idx = 0; idx < allGraphs.length; idx++){
-		allGraphs[idx];
+		// Get flash object and refresh it by calling internal
+		allGraphs[idx].children[0].refreshGraph();
 	}
-	loadingPanel.hide();
-	
-	
 }
 function refreshBoxes(){
-	loadingPanel.show();
-	
-	loadingPanel.hide();
+
 }
 
 
-YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.addListener("applyButton", "click", callbackApply);
+YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
+YAHOO.util.Event.onDOMReady(initDashboard);
+
+function initDashboard(){
+	//Initialize First Chart
+	changeChart(null, 'bar', 'FundingChart');
+	
+	//Trigger Clicks to Load valid data
+	document.getElementById("org_group_dropdown_id").click();
+	
+}
+
+function changeChart(e, chartType, container){
+	//Get the calling object to select it and remove style.
+	if(e != null){
+		var caller = e.target || e.srcElement;
+		var linkBar = caller.parentNode.getElementsByTagName("A");
+	    for(var i in linkBar)
+	    {
+	    	linkBar[i].className = "";
+	    }
+	    caller.className = "sel_sm_b";
+	}
+    var flashvars = {};
+	var params = {};
+	var attributes = {};
+	attributes.id = container;
+	switch(chartType){
+		case "bar":
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			break;
+		case "donut":
+			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			break;
+		case "line":
+			swfobject.embedSWF("/repository/visualization/view/charts/LineAreaSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			break;
+		case "dataview":
+			swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeriesFunding.swf", container, "634", "350", "10.0.0", false, flashvars, params, attributes);
+			break;
+	}
+	return false;
+}
 
 var myTabs = new YAHOO.widget.TabView("demo");
 myTabs.selectTab(0);
@@ -503,23 +571,6 @@ function hideFullRegions(){
 	var divTop = document.getElementById("divTopRegions");
 	divFull.style.display = "none";
 	divTop.style.display = "";
-}
-
-function runFilter(){
-	var orgIds = null;
-	var secIds = null;
-	if (document.getElementById("org_dropdown_id").value != -1) {
-		orgIds = document.getElementById("org_dropdown_id").value;
-	}
-	if (document.getElementById("sub_sector_dropdown_id").value == -1) {
-		if (document.getElementById("sector_dropdown_id").value != -1) {
-			secIds = document.getElementById("sector_dropdown_id").value;
-		}
-	} else {
-		secIds = document.getElementById("sub_sector_dropdown_id").value;
-	}
-	document.visualizationform.action="/visualization/filters.do?orgIds="+orgIds+"&secIds="+secIds;
-	document.visualizationform.submit();
 }
 
 //-->

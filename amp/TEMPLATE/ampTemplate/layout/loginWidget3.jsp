@@ -56,7 +56,7 @@
 				    				</div>
 				    			</td>
 				    			<td>
-				    				<input name="j_username" type="text" class="inputx">
+				    				<input name="j_username" type="text" class="inputx" style="width:150px">
 				    			</td>
 							</tr>
 							<tr>
@@ -65,7 +65,7 @@
     									<digi:trn>Password</digi:trn>:</div>
     							</td>
 	    						<td>
-	    							<input name="j_password" type="password" class="inputx">
+	    							<input name="j_password" type="password" class="inputx" style="width:150px">
 	    						</td>
 							</tr>
 							<tr>

@@ -339,10 +339,10 @@ Web Link: <b>Not applicable</b>
 		</fieldset>
 		<fieldset>
 			<legend><span class=legend_label>Aid Predictability</span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictabilityChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictabilityChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictabilityChart')">Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictability')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictability')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictability')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictability')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
-				<div id="AidPredictabilityChart">
+				<div id="AidPredictability">
 					<a href="http://www.adobe.com/go/getflashplayer">
 						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
@@ -501,7 +501,7 @@ YAHOO.util.Event.onDOMReady(initDashboard);
 function initDashboard(){
 	//Initialize First Chart
 	changeChart(null, 'bar', 'FundingChart');
-	changeChart(null, 'bar', 'AidPredictabilityChart');
+	changeChart(null, 'bar', 'AidPredictability');
 }
 
 function changeChart(e, chartType, container){

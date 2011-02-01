@@ -38,6 +38,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -84,7 +85,122 @@ public class DataDispatcher extends DispatchAction {
 
 		return null;
 	}
+	
+	public ActionForward getSecondGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
 
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		
+		boolean nodata = true; // for displaying no data message
+
+		Long year = filter.getYear();
+		BigDecimal divideByDenominator;
+
+        if (filter.getDivideThousands())
+        	divideByDenominator=new BigDecimal(1000000000);
+        else
+        	divideByDenominator=new BigDecimal(1000000);
+        
+
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            if (filter.getDivideThousands())
+            	divideByDenominator=new BigDecimal(1000000);
+            else
+            	divideByDenominator=new BigDecimal(1000);
+        }
+
+
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+		Long currId = filter.getCurrencyId();
+		String currCode;
+		if (currId == null) {
+			currCode = "USD";
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+			
+		} else {
+			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+		}
+		int yearsInRange = filter.getYearsInRange() - 1;
+		Long fiscalCalendarId = filter.getFiscalCalendarId();
+
+		String plannedTitle = "Planned";
+        String actualTitle = "Actual";
+
+		if(format != null && format.equals("xml")){
+			StringBuffer xmlString = new StringBuffer();
+			//Loop funding types
+			
+			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+				xmlString.append("<year name=\"" + i + "\">\n");
+				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,Constants.COMMITMENT, Constants.PLANNED);
+				xmlString.append("<fundingtype category=\"Planned\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator) + "\"/>\n");
+	            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,Constants.COMMITMENT, Constants.ACTUAL);
+				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator) + "\"/>\n");
+				xmlString.append("</year>\n");
+				
+			}
+			
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+					response.getOutputStream(), "UTF-8"), true);
+
+			out.println(xmlString.toString());
+
+			out.close();
+
+			return null;
+			
+			
+		}
+        
+        
+        StringBuffer csvString = new StringBuffer();
+		csvString.append("Year");
+		csvString.append(",");
+		csvString.append(plannedTitle);
+		csvString.append(",");
+		csvString.append(actualTitle);
+		csvString.append("\n");
+
+        for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+            // apply calendar filter
+			csvString.append(i);
+			csvString.append(",");
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,Constants.COMMITMENT, Constants.ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator));
+			csvString.append(",");
+            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,Constants.COMMITMENT, Constants.PLANNED);
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator));
+            if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
+				nodata = false;
+			}
+			csvString.append("\n");
+		}
+		if (nodata) {
+//			result = new DefaultCategoryDataset();
+		}
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+				response.getOutputStream(), "UTF-8"), true);
+
+		out.println(csvString.toString());
+
+		out.close();
+
+		return null;
+	}
+	
 	public ActionForward getFirstGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {

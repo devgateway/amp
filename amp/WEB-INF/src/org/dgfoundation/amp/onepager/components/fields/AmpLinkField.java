@@ -44,7 +44,15 @@ public abstract class AmpLinkField extends AmpFieldPanel<Void> {
 	 * @param qModel the string Model of the confirmation question, if any. Use Null otherwise
 	 */
 	public AmpLinkField(String id, String fmName,final IModel<String> qModel) {
-		super(id, fmName, true);
+		this(id, fmName, qModel, true, true);
+	}
+	
+	public AmpLinkField(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
+		this(id,fmName,null, hideLabel, hideNewLine);
+	}
+	
+	public AmpLinkField(String id, String fmName,final IModel<String> qModel, boolean hideLabel, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
 		link = new IndicatingAjaxLink<String>(
 				"fieldLink", new Model<String>(fmName)) {
 			private static final long serialVersionUID = -5699378405978605979L;

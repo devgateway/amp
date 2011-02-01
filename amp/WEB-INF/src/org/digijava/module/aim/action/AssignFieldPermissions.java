@@ -71,21 +71,26 @@ public class AssignFieldPermissions extends Action {
 	//saving the data
 	if(request.getParameter("save")!=null) { 
 		PermissionMap permissionMap = PermissionUtil.getOwnPermissionMapForPermissible(afv);
-		if(permissionMap!=null) { 
+		if(permissionMap!=null) {
 		    Permission p=permissionMap.getPermission();
 		    //we delete the old permissions, if they are dedicated
 		    if (p!=null && p.isDedicated()) {
 			CompositePermission cp = (CompositePermission)p;
-			Iterator<Permission> i = cp.getPermissions().iterator();
-			while (i.hasNext()) {
-			    Permission element = (Permission) i.next();
-			    Object object = session.load(Permission.class, element.getId());
-			    session.delete(object);
-			}
-			    Object object = session.load(Permission.class, cp.getId());
-			session.delete(object);
+			
+			PMUtil.deleteCompositePermission(cp, session);
+
+//			moved to PMUtil.java
+//			Iterator<Permission> i = cp.getPermissions().iterator();
+//			while (i.hasNext()) {
+//			    Permission element = (Permission) i.next();
+//			    Object object = session.load(Permission.class, element.getId());
+//			    session.delete(object);
+//			}
+//			    Object object = session.load(Permission.class, cp.getId());
+//			session.delete(object);
+//		    }
+//		    session.flush();
 		    }
-		    session.flush();
 		}
 	
 		//we create a fresh list of permissions and bind them with the field

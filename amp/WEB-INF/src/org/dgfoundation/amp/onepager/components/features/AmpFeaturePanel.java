@@ -39,13 +39,11 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 		this(id, null, fmName, false);
 	}
 
-	public AmpFeaturePanel(String id, IModel<T> model, String fmName)
-			throws Exception {
+	public AmpFeaturePanel(String id, IModel<T> model, String fmName) {
 		this(id, model, fmName, false);
 	}
 
-	public AmpFeaturePanel(String id, IModel<T> model, String fmName,
-			boolean hideLabel) throws Exception {
+	public AmpFeaturePanel(String id, IModel<T> model, String fmName, boolean hideLabel){
 		super(id, model, fmName, AmpFMTypes.FEATURE);
 		labelContainer = new TrnLabel("featureLabel",
 				new Model<String>(fmName), fmName);

@@ -95,8 +95,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	 * @param hideLeadingNewLine
 	 * @throws Exception
 	 */
-	public AmpFormTableFeaturePanel(String id, final IModel<T> model,
-			String fmName, boolean hideLeadingNewLine) throws Exception {
+	public AmpFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine)  {
 		super(id, model, fmName);
 		this.model = model;
 		WebMarkupContainer leadingNewLine = new WebMarkupContainer("leadingNewLine");

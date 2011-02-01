@@ -71,10 +71,6 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		adminPMForm.add(new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false));
 		
 		
-		//add(new AmpPMSectionFeaturePanel("manageWorkspaces", "Manage Workspaces"));
-		//add(new AmpPMSectionFeaturePanel("manageGlobalPermissions", "Manage Global Permissions"));
-		
-		
 		Set<Permission> permissonsSet = new TreeSet<Permission>(PermissionUtil.getAllUnDedicatedPermissions());
 		
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);

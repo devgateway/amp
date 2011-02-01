@@ -6,7 +6,6 @@ package org.dgfoundation.amp.permissionmanager.components.features.tables;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -15,19 +14,18 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpEditLinkField;
-import org.dgfoundation.amp.permissionmanager.web.PMUtil;
+import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMAddPermissionFormFeaturePanel;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 /**
  * @author dan
@@ -69,16 +67,16 @@ public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePa
 				
 				item.add(new Label("globalPermName", item.getModelObject().getName()));
 				
-				final Label editGlobalPerm = new Label("editGlobalPerm","un teasta sdgsad gag aga dsgsdga sdhgadshahasd asdfha hdfshadfhadfhdfahafdhfdhdh");
-				editGlobalPerm.setVisible(false);
-				editGlobalPerm.setOutputMarkupId(true);
-				item.add(editGlobalPerm);
+				IModel<CompositePermission> cpModel = new Model(new CompositePermission());
+				final AmpPMAddPermissionFormFeaturePanel editPermTable = new AmpPMAddPermissionFormFeaturePanel("editGlobalPerm", cpModel, "Edit Permission Form", "Edit Permission", true);
+				editPermTable.setOutputMarkupId(true);
+				editPermTable.setVisible(false);
+				item.add(editPermTable);
 				
 				AmpEditLinkField editLink = new AmpEditLinkField("editGlobalPermLink", "Edit Global Permission Link", true, true) {
-					
 					@Override
 					protected void onClick(AjaxRequestTarget target) {
-						editGlobalPerm.setVisible(!editGlobalPerm.isVisible());
+						editPermTable.setVisible(!editPermTable.isVisible());
 						target.addComponent(listParent);
 					}
 				};

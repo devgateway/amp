@@ -57,10 +57,11 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 	 * @param hideLeadingNewLine
 	 * @throws Exception
 	 */
-	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<CompositePermission> cpModel, String fmName, boolean hideLeadingNewLine) throws Exception {
+	
+	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<CompositePermission> cpModel, String fmName, boolean hideLeadingNewLine) {
 		super(id, cpModel, fmName, hideLeadingNewLine);
 
-		this.gatesSet = generateGatesList();
+		this.gatesSet = generateDefaultGatesList();
 		AbstractReadOnlyModel<List<AmpPMGateWrapper>> gatesSetModel = OnePagerUtil.getReadOnlyListModelFromSetModel(new Model((Serializable) gatesSet));
 		
 		list = new ListView<AmpPMGateWrapper>("permGatesList", gatesSetModel) {
@@ -77,7 +78,7 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 		
 	}
 	
-	private Set<AmpPMGateWrapper> generateGatesList(){
+	private Set<AmpPMGateWrapper> generateDefaultGatesList(){
 		Set<AmpPMGateWrapper> gatesList = new TreeSet<AmpPMGateWrapper>();
 		
 		gatesList.add(new AmpPMGateWrapper(new Long(1),"Everyone", UserLevelGate.PARAM_EVERYONE, UserLevelGate.class, Boolean.FALSE,Boolean.FALSE));

@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -60,7 +61,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 	 * @param fmName
 	 * @throws Exception 
 	 */
-	public AmpPMAddPermissionFormFeaturePanel(String id, final IModel<CompositePermission> cpModel, String fmName) throws Exception {
+	public AmpPMAddPermissionFormFeaturePanel(String id, final IModel<CompositePermission> cpModel, String fmName, String permissionActionTitle, boolean isEdit) {
 		super(id, cpModel, fmName);
 		
 		final Form addPermForm = new Form ("addPermissionForm")
@@ -71,10 +72,13 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 		};
 		addPermForm.setOutputMarkupId(true);
 		
+		addPermForm.add(new Label("permissionActionTitle", permissionActionTitle));
+		
 		AmpTextFieldPanel permName = new AmpTextFieldPanel("permissionName", new PropertyModel(cpModel,"name"), "Permission Name", false, true);
 		addPermForm.add(permName);
 	
-		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("permissionFormTable", cpModel, "Permission Form Table", false);	
+		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("permissionFormTable", cpModel, "Permission Form Table", false);
+		permGatesFormTable.setTableWidth(300);
 		addPermForm.add(permGatesFormTable);
 		
 		addPermForm.add(new AjaxFallbackLink("resetPermissionButton"){
@@ -95,7 +99,6 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 					try {
 						PMUtil.savePermission(cpModel,permGatesFormTable.getGatesSet());
 					} catch (DgException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					cpModel.setObject(null);

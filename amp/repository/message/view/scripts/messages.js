@@ -324,6 +324,16 @@
 	var tabIndex = 1;
 	var childTab = "inbox";
 	
+	function getMsgParams() {
+		var requestURL = "../../message/messageActions.do?actionType=getMsgParams&tabIndex=" + tabIndex + "&childTab=" + childTab + "&unique=" + new Date().getTime();
+		$.get(requestURL, getMsgParamsComplited, "xml");
+	}
+	
+	function getMsgParamsComplited(data, textStatus) {
+		var msgCount = data.getElementsByTagName('message-info')[0].attributes.getNamedItem("total").value;
+		$("#totalMsgCountContainer").html(msgCount);
+	}
+	
 	function getMessages(){
 		lastTimeStamp = new Date().getTime();
 		
@@ -535,6 +545,9 @@
 				//pagination end
 			}
 		}
+		
+		
+		getMsgParams();
 	}
        	
 	function setupPagionation (paginationTag,page,allPages){

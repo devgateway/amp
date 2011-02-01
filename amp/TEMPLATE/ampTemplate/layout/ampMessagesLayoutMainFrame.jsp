@@ -85,7 +85,7 @@
 							<div class="right_menu_header_cont"><digi:trn>Information</digi:trn></div>
 						</div>
 						<div class="right_menu_box"><div class="right_menu_cont" style="font-size:11px;">
-							<digi:trn key="message:totalNum">Total Number</digi:trn>: <b>${messageForm.allmsg}</b><br />
+							<digi:trn key="message:totalNum">Total Number</digi:trn>: <b id="totalMsgCountContainer">${messageForm.allmsg}</b><br />
 							<digi:trn key="message:numofhidden">Total Number Of Hidden</digi:trn>:	<b>${messageForm.hiddenMsgCount}</b>
 							<hr />
 							<b><digi:trn key="message:adminSetings">Admin Settings</digi:trn>:</b><br />	 

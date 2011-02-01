@@ -260,6 +260,56 @@ public class AmpMessageActions extends DispatchAction {
     	return mapping.findForward(forwardPath);
     }
 
+    public ActionForward getMsgParams(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+        response.setContentType("text/xml");
+    	AmpMessageForm messageForm = (AmpMessageForm) form;
+        HttpSession session = request.getSession();
+        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+        int maxStorage = 0;
+        if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
+            maxStorage = settings.getMsgStoragePerMsgType().intValue();
+        }
+
+        int tabIndex = messageForm.getTabIndex();
+    	String childTab = messageForm.getChildTab();
+
+
+        int count=0;
+
+    	if(tabIndex==1){
+    		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
+    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
+    		}else if(childTab.equalsIgnoreCase("sent")){
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
+    		}else if(childTab.equalsIgnoreCase("draft")){
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),true,false);
+    		}
+    	}else if(tabIndex==2){
+    		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
+    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
+    		}else if(childTab.equalsIgnoreCase("sent")){
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
+    		}else if(childTab.equalsIgnoreCase("draft")){
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),true,false);
+    		}
+    	}else if(tabIndex==3){
+			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false,maxStorage);
+    	}else if(tabIndex==4){
+			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false,maxStorage);
+    	}
+
+        XMLDocument msgInfo = new XMLDocument();
+        XML root = new XML("message-info");
+        root.addAttribute("total", count);
+
+        msgInfo.addElement(root);
+        msgInfo.output(response.getOutputStream());
+        response.getOutputStream().close();
+
+        return null;
+    }
+
     /**
      * @return All Messages that belong to this Team Member.
      * @throws Exception
@@ -269,9 +319,7 @@ public class AmpMessageActions extends DispatchAction {
     	AmpMessageForm messageForm=(AmpMessageForm)form;
 
     	HttpSession session = request.getSession();
-    	TeamMember teamMember = new TeamMember();
-    	 // Get the current team member
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 
     	int tabIndex=0;
     	if(request.getParameter("tabIndex")!=null){

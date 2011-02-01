@@ -47,8 +47,18 @@
 	</head>
      	
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-	<jsp:include page="headerTop.jsp"/>
-	 <digi:insert attribute="headerMiddle"/>	
+		<digi:secure authenticated="false">
+		<logic:notPresent name="currentMember" scope="session">
+			<digi:insert attribute="headerTop" />	
+		</logic:notPresent>
+	</digi:secure>
+	<digi:secure authenticated="true">
+		<jsp:include page="headerTop_2.jsp"/>
+	</digi:secure>
+	
+	<div class="main_menu">
+		<digi:insert attribute="headerMiddle"/>
+	</div>
 
 	<!-- BREADCRUMP START -->
 	<div class="breadcrump">

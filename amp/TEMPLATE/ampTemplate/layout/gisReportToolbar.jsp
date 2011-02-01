@@ -30,15 +30,15 @@
 -->
 </style>
 
-<div style="margin-left:auto; margin-right:auto; width:700px; border:1px solid #CCCCCC; background-color:#F8F8F8;">
-	<table border="0" align="left"  cellpadding="3"  cellspacing="5" bgcolor="#FFFFFF">
+
+	<table border="0" align="center" cellpadding="3" cellspacing="5" bgcolor="#FFFFFF">
         <tr>
             <td colspan="3">&nbsp;</td>
         </tr>
 		<tr>
 			<td>
 			
-					<table border="0" align="left">
+					<table border="0" align="left" bgcolor="#EDF5FF" >
 						<tr>
 							<td nowrap="nowrap" height="30px">
 								<digi:trn>From Date:</digi:trn>
@@ -64,7 +64,7 @@
                 
             </td>
             <td>
-					<table border="0" align="center">
+					<table border="0" align="center" bgcolor="#EDF5FF">
 						<tr>
 							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
 								<a target="_blank" onclick="exportPDF(); return false;">
@@ -88,5 +88,5 @@
 			</td>
 		</tr>
 	</table>
-</div>
+
 <br>

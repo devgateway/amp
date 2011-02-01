@@ -327,7 +327,7 @@ Web Link: <b>Not applicable</b>
 	<div id="tab1">
 		<fieldset>
 			<legend><span class=legend_label>Commitments, Disbursements, Expenditures, Pledges</span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FundingChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FundingChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FundingChart')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
@@ -339,7 +339,7 @@ Web Link: <b>Not applicable</b>
 		</fieldset>
 		<fieldset>
 			<legend><span class=legend_label>Aid Predictability</span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictabilityChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictabilityChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictabilityChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictabilityChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictabilityChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictabilityChart')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictabilityChart">

@@ -81,7 +81,8 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
 				for (TransparentWebMarkupContainer sl : workspacesTable.getSliders()) {
-					target.appendJavascript(OnePagerConst.getToggleJSPM(sl));
+					System.out.println("Javascript to be append:  "+OnePagerConst.getToggleJS(sl));
+					target.appendJavascript(OnePagerConst.getToggleJS(sl));
 				}
 			}
 

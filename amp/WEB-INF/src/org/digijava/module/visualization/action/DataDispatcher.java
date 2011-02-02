@@ -37,6 +37,9 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.util.DbUtil;
@@ -44,6 +47,7 @@ import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.widget.helper.ChartOption;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jfree.data.category.CategoryDataset;
@@ -85,6 +89,136 @@ public class DataDispatcher extends DispatchAction {
 
 		return null;
 	}
+	public ActionForward getThirdGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
+
+
+		boolean typeOfAid = false;
+
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        double divideByDenominator;
+
+        if (filter.getDivideThousands()) {
+        	divideByDenominator=1000000000;
+        }
+        else
+        {
+        	divideByDenominator=1000000;
+        }
+        
+
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            if (filter.getDivideThousands()) {
+            	divideByDenominator=1000000;
+            }
+            else
+            {
+            	divideByDenominator=1000;
+            }
+        }
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Collection<AmpCategoryValue> categoryValues = null;
+        if (typeOfAid) {
+            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+        } else {
+            categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+        }
+        int yearsInRange=filter.getYearsInRange()-1;
+
+        if(selectedYear != null){
+        	year = selectedYear;
+        	yearsInRange = 0;
+        }
+        
+		if(format != null && format.equals("xml")){
+			StringBuffer xmlString = new StringBuffer();
+			//Loop funding types
+			Iterator<AmpCategoryValue> it = categoryValues.iterator();
+			while (it.hasNext()){
+				AmpCategoryValue value = it.next();
+				xmlString.append("<aidtype name=\"" + value.getValue() + "\">\n");
+				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+					Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+					Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+	                DecimalWraper funding = null;
+	                if (typeOfAid) {
+	                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+	                } else {
+	                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
+	                }
+					xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+				}
+				xmlString.append("</aidtype>\n");
+			}
+			
+			
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+					response.getOutputStream(), "UTF-8"), true);
+			out.println(xmlString.toString());
+			out.close();
+			return null;
+		}
+        
+        
+        
+        StringBuffer csvString = new StringBuffer();
+		csvString.append("Year");
+		csvString.append(",");
+		Iterator<AmpCategoryValue> it = categoryValues.iterator();
+		while (it.hasNext()){
+			AmpCategoryValue value = it.next();
+//            String title = TranslatorWorker.translateText(categoryValue.getValue(), opt.getLangCode(), opt.getSiteId());
+			csvString.append(value.getValue());
+			if(it.hasNext()) 
+				csvString.append(",");
+			else
+				csvString.append("\n");
+		}
+        for (Long i = year - yearsInRange; i <= year; i++) {
+    		csvString.append(i);
+    		csvString.append(",");
+    		it = categoryValues.iterator();
+    		while (it.hasNext()){
+    			AmpCategoryValue value = it.next();
+                // apply calendar filter
+                Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
+                Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
+                DecimalWraper funding = null;
+                if (typeOfAid) {
+                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+                } else {
+                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
+                }
+        		csvString.append(funding.doubleValue()/divideByDenominator);
+    			if(it.hasNext()) 
+    				csvString.append(",");
+    			else
+    				csvString.append("\n");
+    		}
+        }
+		
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    			response.getOutputStream(), "UTF-8"), true);
+
+    	out.println(csvString.toString());
+
+    	out.close();
+
+    	return null;
+		}
+        
 	
 	public ActionForward getSecondGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,

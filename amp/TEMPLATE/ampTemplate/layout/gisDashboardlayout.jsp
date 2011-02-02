@@ -183,7 +183,7 @@ else {
 
 <jsp:include page="/TEMPLATE/ampTemplate/layout/gisScripts.jsp" />
 
-<h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
+<h2 style="padding-left:10px;font-size:15pt; text-align:center;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
@@ -321,8 +321,8 @@ else {
                                           </div>
                                         </div>
 										</td>
-										<td valign="top">
-                                        	&nbsp;
+										<td valign="top">&nbsp;
+                                        	
 										</td>
 										</field:display>
 												</feature:display>

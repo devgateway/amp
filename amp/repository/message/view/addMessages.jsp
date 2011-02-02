@@ -387,6 +387,7 @@ function addActionToURL(actionName){
 	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
 	var extraReceivers='<digi:trn>Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
 	var tmHelp='<digi:trn>A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
+	var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
 
 	function getElementOffset (domObject) {
 		var pos = {top: 0, left: 0}
@@ -407,16 +408,7 @@ function addActionToURL(actionName){
 	}
 
 
-    function showMessagesHelpTooltip(obj) {
-    	var callerPos = getElementOffset(obj);
-      var div=document.getElementById("createMessagesHelpTooltip");
-      div.style.left = callerPos.left;
-      div.style.top = callerPos.top + 15;
-    	div.style.display = "block";
-    }
-	function hideMessagesHelpTooltip(){
-  		document.getElementById("createMessagesHelpTooltip").style.display = "none";
-	}
+   
     
     
   function MyremoveUserOrTeam(){
@@ -880,15 +872,8 @@ span.extContactDropdownEmail {
   <tr>
     <td valign="top">
     	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b>
-    	&nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="showMessagesHelpTooltip(this)" onmouseout="hideMessagesHelpTooltip()"/>
-    	
-    	
-  		<div id="createMessagesHelpTooltip" style="display:none; z-index:10; position:absolute; border: 1px solid silver;">
-          <TABLE WIDTH='200px' BORDER='0' CELLPADDING='0' CELLSPACING='0'>
-              <TR style="background-color:#376091"><TD style="color:#FFFFFF" nowrap><digi:trn>Message Help</digi:trn></TD></TR>
-              <TR style="background-color:#FFFFFF"><TD><digi:trn>Type first letter of activity to view suggestions</digi:trn></TD></TR>
-          </TABLE>
-      </div>
+    	&nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,relatedActivityHelpText],Style[15])" onmouseout="htm()"/>
+  		
       
       
     </td>

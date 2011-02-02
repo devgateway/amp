@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
@@ -22,7 +29,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  * @author dan
  *
  */
-public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeaturePanel {
+public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeaturePanel implements IHeaderContributor {
+
 
 	
 	private List<TransparentWebMarkupContainer> sliders;
@@ -40,6 +48,12 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 //		slider = new TransparentWebMarkupContainer("sliderWorkspaceInfo");
 //		slider.setOutputMarkupId(true);
 //		add(slider);
+		
+		add(new AjaxEventBehavior("onload"){
+			      protected void onEvent(AjaxRequestTarget target){
+		        	target.appendJavascript("alert('hello)';");
+			       }
+		 });
 	}
 
 	/**
@@ -83,6 +97,14 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 	
 	public List<TransparentWebMarkupContainer> getSliders() {
 		return sliders;
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		 for (TransparentWebMarkupContainer c: sliders) {
+			response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
+		} ;
+		 
 	}
 }
 

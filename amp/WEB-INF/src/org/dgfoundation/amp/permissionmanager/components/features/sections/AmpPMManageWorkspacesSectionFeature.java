@@ -3,11 +3,12 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
@@ -96,5 +97,5 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		add(searchContacts);		
 		
 	}
-
+	
 }

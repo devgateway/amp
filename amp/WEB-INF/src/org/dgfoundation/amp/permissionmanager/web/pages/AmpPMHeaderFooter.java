@@ -50,7 +50,7 @@ public class AmpPMHeaderFooter extends WebPage {
 		};
 
 		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
-		add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
+		//add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
 //		String changeTrnMode = "Enable TrnMode";
 ////		add(new AjaxLink("changeTrnMode", new Model(changeTrnMode)) {
 //

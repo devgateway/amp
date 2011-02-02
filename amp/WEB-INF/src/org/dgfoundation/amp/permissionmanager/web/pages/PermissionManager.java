@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -20,8 +21,6 @@ import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPM
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSectionFeaturePanel;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.um.exception.UMException;
@@ -68,7 +67,8 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		}
 		w.addAll(teams);
 		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-		adminPMForm.add(new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false));
+		AmpPMManageWorkspacesSectionFeature workspaceSection = new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false);
+		adminPMForm.add(workspaceSection);
 		
 		
 		Set<Permission> permissonsSet = new TreeSet<Permission>(PermissionUtil.getAllUnDedicatedPermissions());

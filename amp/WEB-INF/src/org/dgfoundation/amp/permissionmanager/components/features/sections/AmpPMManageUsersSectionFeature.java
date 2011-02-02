@@ -70,10 +70,9 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				set.clear();
 				set.add(choice);
 				idsList.removeAll();
+				usersTable.getSliders().clear();
 				target.addComponent(AmpPMManageUsersSectionFeature.this);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
-//				add(JavascriptPackageResource.getHeaderContribution(AmpSubsectionFeaturePanel.class, "subsectionSlideTogglePM.js"));
-			//	target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
 			}
 
 			@Override

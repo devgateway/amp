@@ -68,7 +68,7 @@
 				<feature:display name="Change Workspace" module="My Desktop">
 					<div class="workspace_info">
 						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-				 		 <select onchange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
+				 		 <select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
 				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
 								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
 								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
@@ -112,7 +112,7 @@
 				    				</digi:trn>
 				    			</a>
 				    			<span class="wlcm_txt_menu_spc">|</span>
-				    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">
+				    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onClick="return quitRnot()">
 				    				<digi:trn>
 				    					Resources
 				    				</digi:trn>
@@ -152,7 +152,7 @@
 				<td width="20px" align=center background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">
 						<%if (arf.isPublicView()==false){%>
-							<img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel" style="padding: 5px">
+							<img src="img_2/close_panel.gif" width="9" height="96" border=0 id="closepanel" style="padding: 6px">
 						<%}%>
 					</a>
 				</td>

@@ -41,19 +41,8 @@ public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeatureP
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel model,
-			String fmName) throws Exception {
+	public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel model,	String fmName) throws Exception {
 		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-//		slider = new TransparentWebMarkupContainer("sliderWorkspaceInfo");
-//		slider.setOutputMarkupId(true);
-//		add(slider);
-		
-		add(new AjaxEventBehavior("onload"){
-			      protected void onEvent(AjaxRequestTarget target){
-		        	target.appendJavascript("alert('hello)';");
-			       }
-		 });
 	}
 
 	/**

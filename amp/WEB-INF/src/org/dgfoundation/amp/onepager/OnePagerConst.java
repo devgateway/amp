@@ -22,6 +22,7 @@ public final class OnePagerConst {
 	//TODO: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
 	public final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";
 	public final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	public final static String actionToggleJS= "$('#%s').siblings('div:first').slideToggle();";
 
 	public final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
 	
@@ -32,6 +33,11 @@ public final class OnePagerConst {
 	public static String getToggleJSPM(Component c)
 	{
 		return String.format(toggleJSPM, c.getMarkupId());
+	}
+	
+	public static String getActionToggleJS(Component c)
+	{
+		return String.format(actionToggleJS, c.getMarkupId());
 	}
 
 

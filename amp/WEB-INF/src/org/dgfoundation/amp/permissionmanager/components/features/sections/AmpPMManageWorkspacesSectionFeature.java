@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
@@ -78,12 +79,9 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				set.clear();
 				set.add(choice);
 				idsList.removeAll();
+				workspacesTable.getSliders().clear();
 				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
 				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
-				for (TransparentWebMarkupContainer sl : workspacesTable.getSliders()) {
-					System.out.println("Javascript to be append:  "+OnePagerConst.getToggleJS(sl));
-					target.appendJavascript(OnePagerConst.getToggleJS(sl));
-				}
 			}
 
 			@Override
@@ -96,7 +94,6 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		autoComplete.add(sizeModifier);
 		final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,true);
 		add(searchContacts);		
-		
 		
 	}
 

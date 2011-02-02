@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +27,10 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
@@ -79,14 +83,156 @@ public class DataDispatcher extends DispatchAction {
 		visualizationForm.getFilter().setOrganizationsSelected(orgs);
 
 		ArrayList<AmpSector> secs = new ArrayList<AmpSector>();
-		for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
-			//We need to have an empty collection in the organizationsSelected list so the query goes through Organization Group Id
-			if(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i]) != -1){
-				orgs.add(DbUtil.getOrganisation(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
+		if (visualizationForm.getFilter().getSectorIds()!=null && visualizationForm.getFilter().getSectorIds().length>0) {
+			for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
+				//We need to have an empty collection in the organizationsSelected list so the query goes through Organization Group Id
+				if(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i]) != -1){
+					secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
+				}
+			}
+		} else {
+			if(Long.valueOf(visualizationForm.getFilter().getSectorId()) != -1){
+				secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorId())));
 			}
 		}
+		
 		visualizationForm.getFilter().setSectorsSelected(secs);
 
+		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
+		
+		JSONObject root = new JSONObject();
+		JSONArray children = new JSONArray();
+		JSONArray rankProjects = new JSONArray();
+		JSONArray topProjects = new JSONArray();
+		JSONObject rootProjects = new JSONObject();
+		JSONArray rankSectors = new JSONArray();
+		JSONArray topSectors = new JSONArray();
+		JSONObject rootSectors = new JSONObject();
+		JSONArray rankRegions = new JSONArray();
+		JSONArray topRegions = new JSONArray();
+		JSONObject rootRegions = new JSONObject();
+		JSONObject child = new JSONObject();
+		JSONObject rootTotComms = new JSONObject();
+		JSONObject rootTotDisbs = new JSONObject();
+		JSONObject rootNumOfProjs = new JSONObject();
+		JSONObject rootNumOfSecs = new JSONObject();
+		JSONObject rootNumOfRegs = new JSONObject();
+		JSONObject rootAvgProjs = new JSONObject();
+		
+		Map<AmpActivity, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
+		List list = null;
+		if (projectsList!=null) {
+			list = new LinkedList(projectsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				rankProjects.add(child);
+			}
+		}
+		projectsList = visualizationForm.getRanksInformation().getTopProjects();
+		if (projectsList!=null) {
+			list = new LinkedList(projectsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				topProjects.add(child);
+			}
+		}
+		rootProjects.put("type", "ProjectsList");
+		rootProjects.put("list", rankProjects);
+		rootProjects.put("top", topProjects);
+		children.add(rootProjects);
+
+		Map<AmpSector, BigDecimal> sectorsList = visualizationForm.getRanksInformation().getFullSectors();
+		if (sectorsList!=null) {
+			list = new LinkedList(sectorsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				rankSectors.add(child);
+			}
+		}
+		sectorsList = visualizationForm.getRanksInformation().getTopSectors();
+		if (sectorsList!=null) {
+			list = new LinkedList(sectorsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				topSectors.add(child);
+			}
+		}
+		rootSectors.put("type", "SectorsList");
+		rootSectors.put("list", rankSectors);
+		rootSectors.put("top", topSectors);
+		children.add(rootSectors);
+		
+		Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getFullRegions();
+		if (regionsList!=null) {
+			list = new LinkedList(regionsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				rankRegions.add(child);
+			}
+		}
+		regionsList = visualizationForm.getRanksInformation().getTopRegions();
+		if (regionsList!=null) {
+			list = new LinkedList(regionsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				topRegions.add(child);
+			}
+		}
+		rootRegions.put("type", "RegionsList");
+		rootRegions.put("list", rankRegions);
+		rootRegions.put("top", topRegions);
+		children.add(rootRegions);
+		
+		rootTotComms.put("type", "TotalComms");
+		rootTotComms.put("value", visualizationForm.getSummaryInformation().getTotalCommitments().toString());
+		children.add(rootTotComms);
+		
+		rootTotDisbs.put("type", "TotalDisbs");
+		rootTotDisbs.put("value", visualizationForm.getSummaryInformation().getTotalDisbursements().toString());
+		children.add(rootTotDisbs);
+		
+		rootNumOfProjs.put("type", "NumberOfProjs");
+		rootNumOfProjs.put("value", visualizationForm.getSummaryInformation().getNumberOfProjects().toString());
+		children.add(rootNumOfProjs);
+		
+		rootNumOfSecs.put("type", "NumberOfSecs");
+		rootNumOfSecs.put("value", visualizationForm.getSummaryInformation().getNumberOfSectors().toString());
+		children.add(rootNumOfSecs);
+		
+		rootNumOfRegs.put("type", "NumberOfRegs");
+		rootNumOfRegs.put("value", visualizationForm.getSummaryInformation().getNumberOfRegions().toString());
+		children.add(rootNumOfRegs);
+		
+		rootAvgProjs.put("type", "AvgProjSize");
+		rootAvgProjs.put("value", visualizationForm.getSummaryInformation().getAverageProjectSize().toString());
+		children.add(rootAvgProjs);
+		
+		root.put("objectType", "lists");
+		root.put("children", children);
+
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
 		return null;
 	}
 	public ActionForward getThirdGraphData(ActionMapping mapping,

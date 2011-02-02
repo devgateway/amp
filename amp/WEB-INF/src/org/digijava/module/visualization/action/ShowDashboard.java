@@ -79,7 +79,7 @@ public class ShowDashboard extends Action {
 		}
 
 		// Get Summary Information
-		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
+		//DashboardUtil.getSummaryAndRankInformation(visualizationForm);
 
 		//visualizationForm.getRanksInformation().setFullDonors(DashboardUtil.getRankDonors());
 		//visualizationForm.getRanksInformation().setFullProjects(DashboardUtil.getRankActivities());

@@ -96,7 +96,8 @@ yuiLoadingPanel.prototype = {
 <!-- MAIN CONTENT PART START -->
 <div class="dashboard_header">
 <digi:form action="/filters.do">
-<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
+<!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
+<div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
@@ -116,7 +117,9 @@ yuiLoadingPanel.prototype = {
     <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
   </tr>
 </table>
-<div class="dashboard_stat">Total Disbursements: <b>${visualizationform.summaryInformation.totalDisbursements}</b><span class="breadcrump_sep">|</span>Total Number of Projects: <b>${visualizationform.summaryInformation.numberOfProjects}</b><span class="breadcrump_sep">|</span>Total Number of Sectors: <b>${visualizationform.summaryInformation.numberOfSectors}</b><span class="breadcrump_sep">|</span>Total Number of Regions: <b>${visualizationform.summaryInformation.numberOfRegions}</b><span class="breadcrump_sep">|</span>Average Project Size: <b>${visualizationform.summaryInformation.averageProjectSize}</b></div>
+<div class="dashboard_stat" id="divSummaryInfo" ></div>
+<!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
+
 </div>
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
   <tr>
@@ -456,7 +459,7 @@ var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
 				  refreshGraphs();
-				  refreshBoxes();
+				  refreshBoxes(o);
 				}
 				catch (e) {
 				    //alert("Invalid response.");
@@ -498,8 +501,103 @@ function refreshGraphs(){
 		allGraphs[idx].children[0].refreshGraph();
 	}
 }
-function refreshBoxes(){
+function refreshBoxes(o){
 
+	var results = YAHOO.lang.JSON.parse(o.responseText);
+	var inner = "";
+	var trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
+	var trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
+	var trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
+	var trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
+	var trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
+	var valTotalDisbs="";
+	var valNumOfProjs="";
+	var valNumOfSecs="";
+	var valNumOfRegs="";
+	var valAvgProjSize="";
+	
+	for(var j = 0; j < results.children.length; j++){
+		var child = results.children[j];
+		switch(child.type){
+			case "ProjectsList":
+				for(var i = 0; i < child.list.length; i++){
+					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>Hide Full List</a>";
+				var div = document.getElementById("divFullProjects");
+				div.innerHTML = inner;
+				inner = "";
+				for(var i = 0; i < child.top.length; i++){
+					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>Show Full List</a>";
+				var div = document.getElementById("divTopProjects");
+				div.innerHTML = inner;
+				break;
+			case "SectorsList":
+				inner = "";
+				for(var i = 0; i < child.list.length; i++){
+					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>Hide Full List</a>";
+				var div = document.getElementById("divFullSectors");
+				div.innerHTML = inner;
+				inner = "";
+				for(var i = 0; i < child.top.length; i++){
+					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:showFullSectors()' style='float:right;'>Show Full List</a>";
+				var div = document.getElementById("divTopSectors");
+				div.innerHTML = inner;
+				break;
+			case "RegionsList":
+				inner = "";
+				for(var i = 0; i < child.list.length; i++){
+					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>Hide Full List</a>";
+				var div = document.getElementById("divFullRegions");
+				div.innerHTML = inner;
+				inner = "";
+				for(var i = 0; i < child.top.length; i++){
+					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>Show Full List</a>";
+				var div = document.getElementById("divTopRegions");
+				div.innerHTML = inner;
+				break;
+			case "TotalComms":
+				inner = "<b class='dashboard_total_num'>" + child.value + "</b>";
+				var div = document.getElementById("divTotalComms");
+				div.innerHTML = inner;
+				break;
+			case "TotalDisbs":
+				valTotalDisbs = child.value;
+				break;
+			case "NumberOfProjs":
+				valNumOfProjs = child.value;
+				break;
+			case "NumberOfSecs":
+				valNumOfSecs = child.value;
+				break;
+			case "NumberOfRegs":
+				valNumOfRegs = child.value;
+				break;
+			case "AvgProjSize":
+				valAvgProjSize = child.value;
+				break;
+				
+		}
+		inner = trnTotalDisbs + "<b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + trnNumOfProjs + "<b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + trnNumOfSecs + "<b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + trnNumOfRegs + "<b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + trnAvgProjSize + "<b>" + valAvgProjSize;
+		var div = document.getElementById("divSummaryInfo");
+		div.innerHTML = inner;
+		
+	}
+	
 }
 
 
@@ -507,6 +605,7 @@ YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("sector_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.onDOMReady(initDashboard);
 
@@ -515,6 +614,7 @@ function initDashboard(){
 	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
+	callbackApplyFilter();
 }
 
 function changeChart(e, chartType, container){

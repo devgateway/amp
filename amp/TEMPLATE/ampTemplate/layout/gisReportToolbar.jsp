@@ -31,14 +31,11 @@
 </style>
 
 
-	<table border="0" align="center" cellpadding="3" cellspacing="5" bgcolor="#FFFFFF">
-        <tr>
-            <td colspan="3">&nbsp;</td>
-        </tr>
+	<table border="0" align="center" cellpadding="3" cellspacing="5" bgcolor="#FFFFFF" style="border:1px solid #CCCCCC; background-color:#C0D6E2; margin-top:15px;">
 		<tr>
 			<td>
 			
-					<table border="0" align="left" bgcolor="#EDF5FF" >
+					<table border="0" align="left">
 						<tr>
 							<td nowrap="nowrap" height="30px">
 								<digi:trn>From Date:</digi:trn>
@@ -64,7 +61,7 @@
                 
             </td>
             <td>
-					<table border="0" align="center" bgcolor="#EDF5FF">
+					<table border="0" align="center">
 						<tr>
 							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
 								<a target="_blank" onclick="exportPDF(); return false;">

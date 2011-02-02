@@ -12,6 +12,8 @@ import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -20,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -27,21 +30,16 @@ import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 
 /**
  * @author dmihaila@dginternational.org
  * since Dec 6, 2010
  */
-public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivity>{
-
-	/**
-	 * 
-	 */
+public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivity> implements IHeaderContributor{
+	
 	private static final long serialVersionUID = -2114204838953838609L;
 	protected ListView<AmpActivityContact> idsList;
-
+	private List<TransparentWebMarkupContainer> sliders;
 	/**
 	 * @param id
 	 * @param fmName
@@ -71,6 +69,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 			}
 		};
 		
+		sliders = new ArrayList<TransparentWebMarkupContainer>();
 
 		idsList = new ListView<AmpActivityContact>("contactsList", listModel) {
 			
@@ -97,6 +96,9 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				contactDetails.setOutputMarkupId(true);
+				sliders.add(contactDetails.getSlider());
+				
 				item.add(contactDetails);
 			}
 		};
@@ -136,5 +138,14 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 		final AmpComboboxFieldPanel<AmpContact> searchContacts=new AmpComboboxFieldPanel<AmpContact>("searchContacts", "Search Contacts", autoComplete);
 		add(searchContacts);
 		
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		 for (TransparentWebMarkupContainer c: sliders) {
+			response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
+			System.out.println("-------"+OnePagerConst.getToggleJS(c));
+		} ;
+		 
 	}
 }

@@ -75,7 +75,11 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
 		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
+		
+		
 		adminPMForm.add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
+		
+		
 		add(adminPMForm);
 	}
 

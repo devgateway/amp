@@ -77,9 +77,9 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 		AmpTextFieldPanel permName = new AmpTextFieldPanel("permissionName", new PropertyModel(cpModel,"name"), "Permission Name", false, true);
 		addPermForm.add(permName);
 	
-		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("permissionFormTable", cpModel, "Permission Form Table", false);
-		permGatesFormTable.setTableWidth(300);
-		addPermForm.add(permGatesFormTable);
+//		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("permissionFormTable", cpModel, "Permission Form Table", false);
+//		permGatesFormTable.setTableWidth(300);
+//		addPermForm.add(permGatesFormTable);
 		
 		addPermForm.add(new AjaxFallbackLink("resetPermissionButton"){
 			//@Override
@@ -96,11 +96,11 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 			public void onSubmit() {
 					// TODO Auto-generated method stub
 					System.out.println("savePermissionButton  submit pressed");
-					try {
-						PMUtil.savePermission(cpModel,permGatesFormTable.getGatesSet());
-					} catch (DgException e) {
-						e.printStackTrace();
-					}
+//					try {
+//						//PMUtil.savePermission(cpModel,permGatesFormTable.getGatesSet());
+//					} catch (DgException e) {
+//						e.printStackTrace();
+//					}
 					cpModel.setObject(null);
 					addPermForm.clearInput();
 					//target.addComponent(AmpPMAddPermissionFormFeaturePanel.this);

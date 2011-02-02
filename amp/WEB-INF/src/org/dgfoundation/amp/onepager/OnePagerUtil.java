@@ -24,8 +24,7 @@ public final class OnePagerUtil {
 	 * @param setModel the given set model
 	 * @return the returned model
 	 */
-	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(
-			final IModel<Set<T>> setModel) {
+	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel) {
 		return new AbstractReadOnlyModel<List<T>>() {
 			private static final long serialVersionUID = 3706184421459839210L;
 

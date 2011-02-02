@@ -1,16 +1,15 @@
 <wicket:extend>	
 	<center>
+	<br/><br/>
 	    <form wicket:id="ampGlobalPMForm">
 			<table border="0" cellspacing="4" cellpadding="4">
 	  			<tr>
 	    			<td align=right><div class="txt_sm_b">Permissible Category:</div></td>
 	    			<td align=left><select wicket:id="globalPermCategories" class="dropdwn_sm"></select></td>
 	  			</tr>
-	  			<tr>
-	  				<td align=right><div class="txt_sm_b">Assign a global permission to the entire class:</div></td>
-	  				<td><select wicket:id="globalPerms" class="dropdwn_sm"></select></td>
-	  			</tr>
 			</table>
+			<span wicket:id="gatePermForm" />
+			<br/>
 			<input type="submit" wicket:id="saveGlobalPermissionButton" value="Save" class="buttonx"/>
 			<input type="button" wicket:id="resetGlobalPermissionButton" value="Reset" class="buttonx"/>
 			<hr style="height:2px; margin-top:15px; margin-bottom:15px;">

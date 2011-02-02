@@ -65,10 +65,10 @@ public class AmpPMAddGlobalPermissionPanel extends AmpComponentPanel {
 		assignGlobalPerm.setOutputMarkupId(true);
 		add(assignGlobalPerm);
 		
-		IModel<CompositePermission> cpModel = new Model(new CompositePermission());
-		AmpPMAddPermissionFormFeaturePanel addPermTable = new AmpPMAddPermissionFormFeaturePanel("addPermTable", cpModel, "Add Permission Form", "Add New Permission", false);
-		addPermTable.setOutputMarkupId(true);
-		add(addPermTable);
+//		IModel<CompositePermission> cpModel = new Model(new CompositePermission());
+//		AmpPMAddPermissionFormFeaturePanel addPermTable = new AmpPMAddPermissionFormFeaturePanel("addPermTable", cpModel, "Add Permission Form", "Add New Permission", false);
+//		addPermTable.setOutputMarkupId(true);
+//		add(addPermTable);
 		
 	}
 

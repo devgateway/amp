@@ -108,8 +108,8 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
             color:white;
             font-weight:bold;
             height:25px;
-            padding-top:5px;
-            background-color:#222E5D
+            background-color:#4A687A;
+			line-height:25px;
 			
 	}
 	#demo li a div{ 

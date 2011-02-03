@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
+import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
@@ -54,9 +55,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 
 	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName) {
 		super(id, globalPermissionsModel, fmName);
-		// TODO Auto-generated constructor stub
 		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(null);
-//		final IModel<Permission> globalPermissionModel = new Model(null);
 
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
 		List<Permission> globalPermissionsList = new ArrayList<Permission>(globalPermissionsModel.getObject());
@@ -69,10 +68,11 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.setOutputMarkupId(true);
 
-		
+		PermissionMap pmAux = new PermissionMap();
+		final IModel<PermissionMap> pmAuxModel = new Model(pmAux);
 		final IModel<CompositePermission> cpModel = new Model(new CompositePermission(false));
 		Set<AmpPMGateWrapper> a = new TreeSet();
-		a.addAll(generateGatesList(cpModel.getObject(),a));
+		generateGatesList(cpModel.getObject(),a);
 		final IModel<Set<AmpPMGateWrapper>> gatesSetModel = new Model((Serializable) a);
 		
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", false);
@@ -86,32 +86,32 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: "+globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
-				PermissionMap pmAux =	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
-				if(pmAux!=null)
-					{
-						pmModel.setObject(pmAux);
-						if(pmModel.getObject().getPermission() instanceof CompositePermission) 
-							cpModel.setObject((CompositePermission)pmModel.getObject().getPermission());
-						gatesSetModel.getObject().clear();
-						generateGatesList(cpModel.getObject(),gatesSetModel.getObject());
-						
-						for (AmpPMGateWrapper agw : gatesSetModel.getObject()) {
-							System.out.println("+++++++++++ "+agw.getName()+" : "+agw.getReadFlag()+": "+agw.getEditFlag());
-						}
-					}
-//				target.addComponent(this.getComponent().getParent());
-//				permGatesFormTable.setTableWidth(600);
+				pmAuxModel.setObject(PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject()));
+				if(pmAuxModel.getObject()==null)
+				{
+					pmAuxModel.setObject(new PermissionMap());
+					pmAuxModel.getObject().setPermissibleCategory(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
+					pmAuxModel.getObject().setObjectIdentifier(null);
+					CompositePermission cp=new CompositePermission(false);
+					cp.setDescription("This permission was created using the PM UI by admin user");
+					cp.setName(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission");
+					cpModel.setObject(cp);
+					pmAuxModel.getObject().setPermission(cpModel.getObject());
+					pmModel.setObject(pmAuxModel.getObject());
+				}
+				else{
+					pmModel.setObject(pmAuxModel.getObject());
+					if(pmModel.getObject().getPermission() instanceof CompositePermission) 
+						cpModel.setObject((CompositePermission)pmModel.getObject().getPermission());
+				}
+				
+				TreeSet aa = new TreeSet();
+				generateGatesList(cpModel.getObject(), aa);
+				gatesSetModel.setObject(aa);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
-//				permGatesFormTable.getList().removeAll();
-//				target.addComponent(permGatesFormTable);
-				//target.addComponent(permGatesFormTable.getList().getParent());
-
 			}
 		});
 		form.add(dropDownPermCategories);
-		
-
 
 //		DropDownChoice dropDownPerms = new DropDownChoice("globalPerms", globalPermissionModel, globalPermissionsList, new ChoiceRenderer("name"));
 //		form.add(dropDownPerms);
@@ -125,13 +125,10 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		});
 		
 		Button saveAndSubmit = new Button("saveGlobalPermissionButton") {
-
-			//AjaxRequestTarget target, Form<?> form
 			public void onSubmit() {
-					// TODO Auto-generated method stub
 					System.out.println("saveGlobalPermissionButton  submit pressed");
 					//PMUtil.setGlobalPermission(globalPermissionMapForPermissibleClassModel.getObject(),globalPermissionModel.getObject(), globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
-					
+					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject());
 					System.out.println("PM global permission assigned");
 			}
 		};
@@ -140,8 +137,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 	}
 	
 	
-	private Set<AmpPMGateWrapper> generateDefaultGatesList(){
-		Set<AmpPMGateWrapper> gatesSet = new TreeSet<AmpPMGateWrapper>();
+	private void generateDefaultGatesList(Set<AmpPMGateWrapper> gatesSet){
 		gatesSet.add(new AmpPMGateWrapper(new Long(1),"Everyone", UserLevelGate.PARAM_EVERYONE, UserLevelGate.class, Boolean.FALSE,Boolean.FALSE));
 		gatesSet.add(new AmpPMGateWrapper(new Long(2),"Guest", UserLevelGate.PARAM_GUEST, UserLevelGate.class, Boolean.FALSE,Boolean.FALSE));
 		gatesSet.add(new AmpPMGateWrapper(new Long(3),"Owner", UserLevelGate.PARAM_OWNER, UserLevelGate.class, Boolean.FALSE,Boolean.FALSE));
@@ -153,19 +149,17 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		gatesSet.add(new AmpPMGateWrapper(new Long(9),"Responsible Agency", "RO", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 		gatesSet.add(new AmpPMGateWrapper(new Long(10),"Regional Group", "RG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 		gatesSet.add(new AmpPMGateWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
-		return gatesSet;
 	}
 	
-	public Set<AmpPMGateWrapper> generateGatesList(CompositePermission cp, Set<AmpPMGateWrapper> gatesSet){
+	public void generateGatesList(CompositePermission cp, Set<AmpPMGateWrapper> gatesSet){
 		if(cp==null || cp.getId() == null) 
-			return generateDefaultGatesList();
-		//Set<AmpPMGateWrapper> gatesSet = new TreeSet<AmpPMGateWrapper>();
-		cp.getPermissions();
-		
+			{
+				generateDefaultGatesList(gatesSet);
+				return;
+			}
 		Iterator i=cp.getPermissions().iterator();
 		while (i.hasNext()) {
 		    GatePermission ap = (GatePermission) i.next();
-
 		    if(ap.hasParameter("BA")) {
 		    	gatesSet.add(new AmpPMGateWrapper(new Long(4),"Beneficiary Agency","BA",OrgRoleGate.class, hasView(ap),hasEdit(ap)));
 		    }
@@ -199,19 +193,14 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		    if(ap.hasParameter(UserLevelGate.PARAM_OWNER)) {
 				gatesSet.add(new AmpPMGateWrapper(new Long(3),"Owner", UserLevelGate.PARAM_OWNER, UserLevelGate.class, hasView(ap),hasEdit(ap)));
 			} 
-
 		}
-		return gatesSet;
-		
 	}
 
 	private boolean hasEdit(GatePermission agencyPerm) {
-		// TODO Auto-generated method stub
 		return agencyPerm.hasAction(GatePermConst.Actions.EDIT);
 	}
 
 	private boolean hasView(GatePermission agencyPerm) {
-		// TODO Auto-generated method stub
 		return agencyPerm.hasAction(GatePermConst.Actions.VIEW);
 	}
 

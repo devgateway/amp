@@ -54,7 +54,7 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 				System.out.println("edit Flag: "+ item.getModelObject().getEditFlag());
 			}
 		};
-		list.setReuseItems(true);
+		//list.setReuseItems(true);
 		list.setOutputMarkupId(true);
 		add(list);
 		

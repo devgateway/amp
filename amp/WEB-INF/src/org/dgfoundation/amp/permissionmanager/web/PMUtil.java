@@ -17,6 +17,8 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
+import org.digijava.module.gateperm.gates.OrgRoleGate;
+import org.digijava.module.gateperm.gates.UserLevelGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -153,6 +155,42 @@ public final class PMUtil {
 		session.delete(object);
 	    session.flush();		
 	}
-	
+
+
+
+
+	public static void assignGlobalPermission(PermissionMap pm, Set<AmpPMGateWrapper> gatesSet) {
+		// TODO Auto-generated method stub
+		Session session = null;
+			try {
+				session = PersistenceManager.getRequestDBSession();
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		if(pm!=null && session!=null) {
+		    Permission p=pm.getPermission();
+		    //we delete the old permissions, if they are dedicated
+		    if (p!=null) {
+		    String name = p.getName();
+			CompositePermission cp = (CompositePermission)p;
+			if(cp.getId()!=null) 
+				PMUtil.deleteCompositePermission(cp, session);
+			
+			cp=new CompositePermission(false);
+			cp.setDescription("This permission was created using the PM UI by admin user");
+			cp.setName(name);
+			
+			for (AmpPMGateWrapper ampPMGateWrapper : gatesSet) {
+				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
+			}
+			session.save(cp);
+			pm.setPermission(cp);
+			session.save(pm);
+			session.flush();
+		    }
+		}
+	}
 
 }

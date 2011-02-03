@@ -294,6 +294,11 @@ public class DbUtil {
 			if (form.getFilter().getOrganizationsSelected()!=null && form.getFilter().getOrganizationsSelected().size() > 0) {
 				queryString += "AND amp_activity_id IN (SELECT v.amp_activity_id FROM v_donors v  " +
 						"WHERE v.amp_donor_org_id IN ("	+ Util.toCSString(form.getFilter().getOrganizationsSelected()) + "))";
+			} else {
+				if (form.getFilter().getOrganizationGroupId()!=null && form.getFilter().getOrganizationGroupId()!=-1) {
+					queryString += "AND amp_activity_id IN (SELECT v.amp_activity_id FROM v_donor_groups v  " +
+					"WHERE v.amp_org_grp_id IN ("	+ form.getFilter().getOrganizationGroupId() + "))";
+				}
 			}
 			
 			if (form.getFilter().getSectorsSelected()!=null && form.getFilter().getSectorsSelected().size() > 0) {

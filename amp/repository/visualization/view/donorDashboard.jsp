@@ -103,7 +103,7 @@ yuiLoadingPanel.prototype = {
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-    <div class="dashboard_name">
+    <div class="dashboard_name" id="donor_name">
     	<c:if test="${visualizationform.filter.organizationGroupId eq '-1' }">
 	    	<digi:trn>ALL DONORS</digi:trn>
     	</c:if>
@@ -622,6 +622,12 @@ function refreshBoxes(o){
 		var div = document.getElementById("divSummaryInfo");
 		div.innerHTML = inner;
 		
+		var donorPlaceholder = document.getElementById("donor_name");
+		
+		var donorName = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+		var donorOrganizationName = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		donorPlaceholder.innerHTML = donorName + "<br/><span style=\"font-size:16px\">" + donorOrganizationName + "</span>";
+		
 	}
 	
 }
@@ -641,7 +647,7 @@ function initDashboard(){
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');
-	changeChart(null, 'bar', 'RegionProfile');
+//	changeChart(null, 'bar', 'RegionProfile');
 	callbackApplyFilter();
 }
 

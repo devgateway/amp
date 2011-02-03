@@ -1,0 +1,11 @@
+/* CSS file */
+@font-face {
+    src: url(MyriadPro.swf);
+    fontFamily: "Myriad Pro";
+}
+
+ @font-face {
+    src: url(MyriadPro.swf);
+    fontFamily: "Myriad Pro";
+    fontWeight: bold;
+}

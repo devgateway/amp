@@ -321,15 +321,7 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
+		} 
 
 		return col;
 	}

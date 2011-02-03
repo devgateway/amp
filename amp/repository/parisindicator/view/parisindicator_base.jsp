@@ -68,7 +68,7 @@
 										<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#FFFFFF" 
 										style="border-width: 1px; border-color: #D0D0D0; border-style: solid; padding: 5px;">
 											<tr>
-												<td noWrap="nowrap" align="left">
+												<td noWrap="nowrap" align="left" style="color: #376091; font-weight: bold;">
 													<a onclick="javascript:exportPDFs(); resetExport(); return false;" target="_blank" style="cursor: pointer" title="<digi:trn>Export to PDF</digi:trn>">
 												    	<digi:img width="17" height="20" src="/TEMPLATE/ampTemplate/module/aim/images/pdf.gif" style="vertical-align: bottom;" border="0" />
 												    	<digi:trn>Export to PDF</digi:trn>
@@ -82,7 +82,7 @@
 														<digi:trn>Print</digi:trn> 
 													</a>|&nbsp;
 												</td>
-												<td noWrap="nowrap" align="right" style="padding-right: 5px; padding-top: 5px;">
+												<td noWrap="nowrap" align="right" style="padding-right: 5px; padding-top: 5px; color: #376091;font-weight: bold;">
 													<a style="height: 20px; cursor: pointer;" class="settingsLink" onClick="showFilter(); "><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></a>
 													|&nbsp;
 													<span style="cursor: pointer;" onClick="toggleSettings();" id="displaySettingsButton">

@@ -65,9 +65,9 @@
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
  <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
- <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/event-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/treeview-min.js"></script>
+ <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"></script>
     
 
 <script type="text/javascript">
@@ -174,6 +174,8 @@
 
 <!-- END - For DHTML Tab View of Filters -->
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript">
 	SaveReportEngine.connectionErrorMessage = '<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>';

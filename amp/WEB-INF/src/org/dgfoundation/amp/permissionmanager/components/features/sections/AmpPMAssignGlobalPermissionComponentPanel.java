@@ -105,7 +105,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 						cpModel.setObject((CompositePermission)pmModel.getObject().getPermission());
 				}
 				
-				TreeSet aa = new TreeSet();
+				TreeSet<AmpPMGateWrapper> aa = new TreeSet<AmpPMGateWrapper>();
 				generateGatesList(cpModel.getObject(), aa);
 				gatesSetModel.setObject(aa);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);

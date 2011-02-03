@@ -1,6 +1,6 @@
 var bustcachevar=1 //bust potential caching of external pages after initial request? (1=yes, 0=no)
-var loadstatustext="<img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' /> Requesting content..."
-
+var loadstatustext="<div align='center' style='font-size: 11px;margin-top:260px;'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'/><p>Requesting content...</p></div>"
+	
 ////NO NEED TO EDIT BELOW////////////////////////
 var loadedobjects=""
 var defaultcontentarray=new Object()

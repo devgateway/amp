@@ -10,22 +10,72 @@
 	}
 	
 		 var openedMessageId = -1;
+		 var innerMessageId = -1;
 		 var loadedMessageIds = new Array();
 		 var messageIdStateMap = new Array();
+		 
+		 function loadInnerMessage(id){
+		 		var msgContainer = $("td#msg_body_" + openedMessageId).find("div#msg_body_" + id);
+		 		var collapseContainer = msgContainer.children(".message");
+		 		if (collapseContainer[0] == null) {
+	     		innerMessageId = id;
+	        var div=document.createElement('DIV');
+	        div.id="message_loader_indicator";
+	        div.className="message";
+	        div.align="center";
+					div.innerHTML='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
+					msgContainer.append(div);
+	        var url;
+	        url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId=' + id);
+	        var async=new Asynchronous();
+	        async.complete=viewInnerMsg;
+	        async.call(url);
+      	} else {
+      		//collapseContainer.css("display", collapseContainer.css("display")=="block"?"none":"block");
+      		if (collapseContainer.css("display")=="block") {
+      			collapseContainer.hide("slow");
+      		} else {
+      			collapseContainer.show("slow");
+      		}
+      	}
+    	}
+	    function viewInnerMsg(status, statusText, responseText, responseXML) {
+	    		if (status =! null && statusText != null && responseText != null) {
+						var ajaxLoader = $("td#msg_body_" + openedMessageId).find("div#msg_body_" + innerMessageId + " > #message_loader_indicator");
+						var msgContainer = $("td#msg_body_" + openedMessageId).find("div#msg_body_" + innerMessageId);
+						ajaxLoader.remove();
+						msgContainer.append(responseText);
+						msgContainer.find(".message").hide();
+						msgContainer.find(".message").show("slow");
+						$(".view_all_recipients").unbind("click");
+						$(".view_all_recipients").bind("click", toggleAllRecipientVisibility);
+						
+						//Mark loaded message as read					
+						for (var msgStIdIdx = 0; msgStIdIdx < messageIdStateMap.length; msgStIdIdx ++) {
+							if (parseInt(innerMessageId) == parseInt(messageIdStateMap[msgStIdIdx][1])) {
+								markMsgeAsRead(messageIdStateMap[msgStIdIdx][0]);
+								break;
+							}
+						}
+						
+					} else {
+						$("td#msg_body_" + openedMessageId).find("div#msg_body_" + innerMessageId + " > .message").show("slow")
+					}
+			}
 		 
      function loadSelectedMessage(id){
      		
      		if (openedMessageId == id) {
-     			$("#msg_body_" + openedMessageId + " > .message").hide("slow");
+     			$("td#msg_body_" + openedMessageId + " > .message").hide("slow");
      			openedMessageId = null;
      			return;
      		}
      		
      		//Close previously opened message
      		if (openedMessageId != null) {
-	     		$("#msg_body_" + openedMessageId + " > .message").hide("slow");
+	     		$("td#msg_body_" + openedMessageId + " > .message").hide("slow");
   	   	}
-     	
+
      		openedMessageId = id;
      		
      		var alreadyLoaded = false;
@@ -45,7 +95,7 @@
 	        div.className="message";
 	        div.align="center";
 					div.innerHTML='<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif"/>';
-					$("#msg_body_" + id).append(div);
+					$("td#msg_body_" + id).append(div);
 	        var url;
 	        url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId=' + id);
 	            /*
@@ -66,8 +116,8 @@
 	
     function viewMsg(status, statusText, responseText, responseXML) {
     		if (status =! null && statusText != null && responseText != null) {
-					var ajaxLoader = $("#msg_body_" + openedMessageId + " > #message_loader_indicator");
-					var msgContainer = $("#msg_body_" + openedMessageId);
+					var ajaxLoader = $("td#msg_body_" + openedMessageId + " > #message_loader_indicator");
+					var msgContainer = $("td#msg_body_" + openedMessageId);
 					ajaxLoader.remove();
 					msgContainer.append(responseText);
 					msgContainer.find(".message").hide();
@@ -84,7 +134,7 @@
 					}
 					
 				} else {
-					$("#msg_body_" + openedMessageId + " > .message").show("slow")
+					$("td#msg_body_" + openedMessageId + " > .message").show("slow")
 				}
 		}
 		
@@ -640,7 +690,7 @@ function addActionToURL(actionName){
 function toggleAllRecipientVisibility() {
 	
 	var toggleLink = $(this);
-	var recipientContainerDiv = toggleLink.parent().parent().find(".msg_all");
+	var recipientContainerDiv = toggleLink.parent().children(".msg_all");
 	if (recipientContainerDiv.css("display") == "none") {
 		recipientContainerDiv.show("slow");
 		toggleLink.text("hide all");

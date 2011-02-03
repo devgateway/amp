@@ -1241,6 +1241,10 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setClassName(message.getClassName());
 			 form.setObjectURL(message.getObjectURL());
              form.setReceiver(message.getReceivers());
+
+             form.setRepliedMessage(message.getRepliedMessage());
+             form.setForwardedMessage(message.getForwardedMessage());
+
 	         if(message.getSenderType().equalsIgnoreCase("User")){
 	        	 form.setSender(message.getSenderName());
 	         } else{
@@ -1416,7 +1420,7 @@ public class AmpMessageActions extends DispatchAction {
             AmpMessage forwarded = forwardedOrRepliedMessage.getForwardedMessage();
             result += messages2XML(forwarded,parentStateId,true);
         }else if(forwardedOrRepliedMessage.getRepliedMessage()!=null){
-        	AmpMessage replied = forwardedOrRepliedMessage.getForwardedMessage();
+        	AmpMessage replied = forwardedOrRepliedMessage.getRepliedMessage();
             result += messages2XML(replied,parentStateId,false);
         }
         return result;

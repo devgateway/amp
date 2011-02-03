@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
+import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
@@ -108,7 +109,25 @@ public class AmpMessageForm extends ActionForm {
 	
 	
 	private FormFile fileUploaded;
-	
+
+    AmpMessage repliedMessage;
+    AmpMessage forwardedMessage;
+
+    public AmpMessage getForwardedMessage() {
+        return forwardedMessage;
+    }
+
+    public void setForwardedMessage(AmpMessage forwardedMessage) {
+        this.forwardedMessage = forwardedMessage;
+    }
+
+    public AmpMessage getRepliedMessage() {
+        return repliedMessage;
+    }
+
+    public void setRepliedMessage(AmpMessage repliedMessage) {
+        this.repliedMessage = repliedMessage;
+    }
 
 	public List<TemplateAlert> getTemplates() {
 		return templates;

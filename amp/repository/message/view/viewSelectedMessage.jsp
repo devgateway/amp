@@ -16,7 +16,9 @@
 
 
 
-<div class="message"><div class="message_cont">
+	<div class="message">
+
+	<div class="message_cont">
 	<div style="float:right;">Priority: <b>
 		<logic:equal name="messageForm" property="priorityLevel" value="0">None</logic:equal>
 		<logic:equal name="messageForm" property="priorityLevel" value="1">low</logic:equal>
@@ -64,8 +66,7 @@
 <div class="message_body">
 ${messageForm.description}
 </div>
-
-	<c:if test="${not empty messageForm.sdmDocument}">
+<c:if test="${not empty messageForm.sdmDocument}">
 		<%--
 		<hr class=hr_3>
 		--%>
@@ -84,5 +85,29 @@ ${messageForm.description}
 			</c:forEach>
 			</div>
 	</c:if>
+
+	<logic:notPresent name="messageForm" property="forwardedMessage">
+		<logic:present name="messageForm" property="repliedMessage">
+			<br>
+			<div style="width:100%;" id="msg_body_<bean:write name="messageForm" property="repliedMessage.id"/>">
+				<div style="width:100%;">
+					<a href="javascript:loadInnerMessage(<bean:write name="messageForm" property="repliedMessage.id"/>)" style="float:right;font-size:10px;">
+						Replied
+					</a>
+				</div>
+			</div>
+		</logic:present>
+	</logic:notPresent>
+		
+	<logic:present name="messageForm" property="forwardedMessage">
+		<br>
+		<div style="width:100%;" id="msg_body_<bean:write name="messageForm" property="forwardedMessage.id"/>">
+			<div style="width:100%;">
+				<a href="javascript:loadInnerMessage(<bean:write name="messageForm" property="forwardedMessage.id"/>)" style="float:right;font-size:10px;">
+					Forwarded
+				</a>
+			</div>
+		</div>
+	</logic:present>
 
 </div>

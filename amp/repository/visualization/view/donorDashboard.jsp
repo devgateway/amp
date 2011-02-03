@@ -196,13 +196,13 @@ yuiLoadingPanel.prototype = {
 	</center>
 	</fieldset>
 	<fieldset>
-	
+<!-- 	
 	<legend><span class=legend_label>Dashboard Info</span></legend>
 	<div class="field_text">This is a <b>Sector</b> dashboard which presents 
 statistics and aggregates related to the Sector 
 <b>AGRICULTURE</b>. Read about our methodology.</div>
-</fieldset>	
-	<fieldset>
+</fieldset>
+ 	<fieldset>
 	<legend><span class=legend_label>Organization Profile</span></legend>
 	<div class="field_text">
 	Type: <b>All</b>
@@ -230,6 +230,7 @@ Donor Group: <b>All</b>
 Web Link: <b>Not applicable</b>
 	</div>
 </fieldset>	
+-->	
 	<fieldset>
 	<legend><span class=legend_label>Top Projects</span></legend>
 	<div id="divTopProjects" class="field_text">
@@ -484,18 +485,36 @@ function callbackChildren(e) {
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
-				  refreshGraphs();
 				  refreshBoxes(o);
+				  refreshGraphs();
 				}
 				catch (e) {
 				    //alert("Invalid response.");
 				}
+				//Get array of graphs
+				var allGraphs = document.getElementsByName("flashContent");
+				
+				//Iterate and refresh the graph
+				for(var idx = 0; idx < allGraphs.length; idx++){
+					// Get flash object and refresh it by calling internal
+					allGraphs[idx].style.display = "";
+				}
 			  loadingPanel.hide();
 		  },
-		  failure: function(o) {alert("fasha");}
+		  failure: function(o) {
+			  loadingPanel.hide();
+		  }
 		};
 
 function callbackApplyFilter(e){
+	//Get array of graphs
+	var allGraphs = document.getElementsByName("flashContent");
+	
+	//Iterate and refresh the graph
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		// Get flash object and refresh it by calling internal
+		allGraphs[idx].style.display = "none";
+	}
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
 /*	var orgIds = null;

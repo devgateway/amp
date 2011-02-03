@@ -30,6 +30,8 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
@@ -470,6 +472,219 @@ public class DbUtil {
 
         return totalPlannedPldges;
     }
+    @SuppressWarnings("unchecked")
+    public static List<AmpFundingDetail> getUnallocatedFunding(DashboardFilter filter)
+            throws DgException {
+        List<AmpOrganisation> selectedOrganizations = filter.getOrganizationsSelected();
+        Long orgGroupId = filter.getOrganizationGroupId();
+        int transactionType = filter.getTransactionType();
+        TeamMember tm = filter.getTeamMember();
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        Session session = PersistenceManager.getRequestDBSession();
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        oql += " left join act.locations actloc  ";
+
+        oql += "  where  "
+                + "   fd.adjustmentType = 1 ";
+        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            oql += " and fd.transactionType =:transactionType  ";
+        } else {
+            oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
+        }
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
+        if (selectedOrganizations == null || selectedOrganizations.size() == 0) {
+            if (orgGroupId != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, selectedOrganizations);
+            }
+        } else {
+            oql += DashboardUtil.getOrganizationQuery(false, selectedOrganizations);
+        }
+     
+        if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+            oql += DashboardUtil.getTeamQueryManagement();
+        }
+        else
+        {
+            oql += DashboardUtil.getTeamQuery(tm);
+        }
+        
+        oql += " and actloc is NULL ";
+
+        if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+			oql += ActivityUtil.getApprovedActivityQueryString("act");
+		}
+        
+        Query query = session.createQuery(oql);
+        query.setDate("startDate", startDate);
+        query.setDate("endDate", endDate);
+        if (selectedOrganizations == null && orgGroupId != -1) {
+            query.setLong("orgGroupId", orgGroupId);
+        }
+        if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            query.setLong("transactionType", transactionType);
+        }
+        List<AmpFundingDetail> fundingDets = query.list();
+        return fundingDets;
+
+    }
+    
+    
+    public static List<AmpFundingDetail> getLocationFunding(DashboardFilter filter,AmpCategoryValueLocations location) throws DgException {
+        Long orgGroupId = filter.getOrganizationGroupId();
+        List<AmpOrganisation> selectedOrganizations = filter.getOrganizationsSelected();
+        int transactionType = filter.getTransactionType();
+        TeamMember teamMember = filter.getTeamMember();
+        // apply calendar filter
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+
+            /* query that creates new  AmpFundingDetail objects
+            which amounts are calculated by multiplication
+            of the region percent and amount value*/
+            String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+            oql += " from ";
+            oql += AmpFundingDetail.class.getName()
+                    + " as fd inner join fd.ampFundingId f ";
+            oql += "   inner join f.ampActivityId act ";
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+
+            oql += " where  fd.adjustmentType = 1 ";
+            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            oql += " and fd.transactionType =:transactionType  ";
+            }
+            else{
+                 oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+            }
+            if (selectedOrganizations == null || selectedOrganizations.size() == 0) {
+                if (orgGroupId != -1) {
+                    oql += DashboardUtil.getOrganizationQuery(true, selectedOrganizations);
+                }
+            } else {
+                oql += DashboardUtil.getOrganizationQuery(false, selectedOrganizations);
+            }
+            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and  loc.id=  " + location.getId();
+            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+                oql += DashboardUtil.getTeamQueryManagement();
+            }
+            else
+            {
+                oql += DashboardUtil.getTeamQuery(teamMember);
+            }
+            
+            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+            	oql += ActivityUtil.getApprovedActivityQueryString("act");
+            }
+            
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            if (selectedOrganizations == null && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
+             if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+            query.setLong("transactionType", transactionType);
+             }
+
+            List<AmpFundingDetail> fundingDets = query.list();
+            return fundingDets;
+    }
+
+    public static List<AmpCategoryValueLocations> getLocations(DashboardFilter filter) throws DgException {
+        Long orgGroupId = filter.getOrganizationGroupId();
+        List<AmpCategoryValueLocations> locations=null;
+        List<AmpOrganisation> selectedOrganizations = filter.getOrganizationsSelected();
+//        Long[] orgIds = filter.getOrgIds();
+        
+        int transactionType = filter.getTransactionType();
+        TeamMember teamMember = filter.getTeamMember();
+        // apply calendar filter
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+        /*
+         * We are selecting regions which are funded
+         * In selected year by the selected organization
+         *
+         */
+        try {
+            Long regionId = filter.getSelRegionId();
+            String oql = "select distinct loc  from ";
+            oql += AmpFundingDetail.class.getName()
+                    + " as fd inner join fd.ampFundingId f ";
+            oql += "   inner join f.ampActivityId act ";
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+            oql += "  where fd.adjustmentType = 1";
+            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+                oql += " and fd.transactionType =:transactionType  ";
+            } else {
+                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+            }
+            if (selectedOrganizations == null || selectedOrganizations.size() == 0) {
+                if (orgGroupId != -1) {
+                    oql += DashboardUtil.getOrganizationQuery(true, selectedOrganizations);
+                }
+            } else {
+                oql += DashboardUtil.getOrganizationQuery(false, selectedOrganizations);
+            }
+            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+            
+            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+                oql += DashboardUtil.getTeamQueryManagement();
+            }
+            else
+            {
+                oql += DashboardUtil.getTeamQuery(teamMember);
+            }
+            if (regionId != null && regionId != -1) {
+                oql += " and loc.id in (:locations) ";
+            }
+            
+            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+				oql += ActivityUtil.getApprovedActivityQueryString("act");
+			}
+            
+            oql+=" order by loc.parentCategoryValue";
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(oql);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
+            if (selectedOrganizations == null && orgGroupId != -1) {
+                query.setLong("orgGroupId", orgGroupId);
+            }
+            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+                query.setLong("transactionType", transactionType);
+            }
+
+            Collection<Long> locationIds = filter.getLocationIds();
+            Iterator<AmpCategoryValueLocations> it = filter.getLocationsSelected().iterator();
+            while(it.hasNext()){
+            	AmpCategoryValueLocations loc = it.next();
+            	locationIds.clear();
+            	locationIds.add(loc.getId());
+            }
+            if (regionId != null && regionId != -1) {
+                query.setParameterList("locations", locationIds);
+            }
+            locations = query.list();
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new DgException("Cannot load locations fundings by donors from db", e);
+        }
+        return locations;
+
+     }
+    
+    
     /**
      * Returns funding amount
      * @param orgID

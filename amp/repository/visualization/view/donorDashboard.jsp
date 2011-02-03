@@ -17,6 +17,8 @@
 		margin:5px 0px 0px 0px;
 		padding:0px 0px 0px 0px;
 		vertical-align:top;
+		width:634px;
+		height:350px;
 	}
 </style>
 <!-- Visualization's Scripts-->
@@ -364,6 +366,30 @@ Web Link: <b>Not applicable</b>
 				</div>
 			</div>
 		</fieldset>
+		<fieldset>
+			<legend><span class=legend_label>Financing Instrument</span></legend>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FinancingInstrument')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FinancingInstrument')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FinancingInstrument')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FinancingInstrument')">Data View</a></div>
+			<br />
+			<div class="flashcontent" name="flashContent">
+				<div id="FinancingInstrument">
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend><span class=legend_label>Region Profile</span></legend>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'RegionProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'RegionProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'RegionProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'RegionProfile')">Data View</a></div>
+			<br />
+			<div class="flashcontent" name="flashContent">
+				<div id="RegionProfile">
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				</div>
+			</div>
+		</fieldset>
 	</div>
 	<div id="tab2">
 		Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
@@ -614,6 +640,8 @@ function initDashboard(){
 	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
+	changeChart(null, 'bar', 'FinancingInstrument');
+	changeChart(null, 'bar', 'RegionProfile');
 	callbackApplyFilter();
 }
 

@@ -11,9 +11,14 @@ import java.util.Set;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetField;
+import org.dgfoundation.amp.onepager.components.fields.AmpBudgetClassificationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCommentPanel;
@@ -25,8 +30,13 @@ import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import com.rc.retroweaver.runtime.Arrays;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+import com.visural.wicket.component.dropdown.DropDown;
 
 /**
  * Identification section in activity form. This is also an AMP feature
@@ -87,6 +97,24 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 							CategoryConstants.ACCHAPTER_KEY), 
 							CategoryConstants.ACCHAPTER_NAME, true, true, null);
 			add(acChapter);
+			
+			AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
+			budgetExtras.setOutputMarkupId(true);
+
+			WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
+			budgetExtrasContainter.add(budgetExtras);
+			budgetExtrasContainter.setOutputMarkupId(true);
+			add(budgetExtrasContainter);
+			
+			WebMarkupContainer budgetClassificationContainer = new WebMarkupContainer("budgetClassificationContainer");
+			budgetClassificationContainer.setOutputMarkupId(true);
+			AmpBudgetClassificationField budgetClassification = new AmpBudgetClassificationField("budgetClassification", am, "Budget Classification");
+			budgetClassification.setOutputMarkupId(true);
+			budgetClassificationContainer.add(budgetClassification);
+			add(budgetClassificationContainer);
+			
+			AmpActivityBudgetField activityBudget = new AmpActivityBudgetField("activityBudget", new PropertyModel(am, "budget"), "Activity Budget", budgetExtras, budgetClassification);
+			add(activityBudget);
 
 			AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(
 					"financialInstrument",

@@ -67,8 +67,6 @@ public class OnePager extends OnePagerWrapper {
 			AmpDonorFundingFormSectionFeature donorFundingFeature = new AmpDonorFundingFormSectionFeature(
 					"donorFunding", "Donor Funding", am);
 			activityForm.add(donorFundingFeature);
-			
-		
 
 			AmpRelatedOrganizationsFormSectionFeature relatedOrganizations = new AmpRelatedOrganizationsFormSectionFeature(
 					"relatedOrganizations", "Related Organizations", am);
@@ -82,9 +80,10 @@ public class OnePager extends OnePagerWrapper {
 			
 			AmpRegionalObservationsFormSectionFeature regionalObs = new AmpRegionalObservationsFormSectionFeature("regionalObs", "Regional Observations", am);
 			activityForm.add(regionalObs);
-			
+			/*
 			AmpContactsFormSectionFeature contacts = new AmpContactsFormSectionFeature("contacts", "Contacts", am);
 			activityForm.add(contacts);
+			*/
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);

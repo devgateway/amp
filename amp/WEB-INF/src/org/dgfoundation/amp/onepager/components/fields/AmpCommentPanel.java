@@ -121,7 +121,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					protected void onClick(AjaxRequestTarget target) {
 						Transaction tx = null;
 						try {
-							Session session = PersistenceManager.getRequestDBSession();
+							Session session = PersistenceManager.getSession();
 							tx = session.beginTransaction();
 							session.delete(item.getModelObject());
 							tx.commit();
@@ -185,7 +185,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 						Session session;
 						Transaction tx = null;
 						try {
-							session = PersistenceManager.getRequestDBSession();
+							session = PersistenceManager.getSession();
 							tx = session.beginTransaction();
 							session.update(item.getModelObject());
 							tx.commit();
@@ -242,11 +242,11 @@ public class AmpCommentPanel extends AmpFieldPanel {
 				String msg = savedMsg;
 				Transaction tx = null;
 				try {
-					Session session = PersistenceManager.getRequestDBSession();
+					Session session = PersistenceManager.getSession();
 					tx = session.beginTransaction();
 					session.save(c);
 					tx.commit();
-					session.flush();
+					//session.flush();
 					session.close();
 				} catch (Exception e) {
 					error(e);

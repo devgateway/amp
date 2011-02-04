@@ -55,10 +55,9 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 
 	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName) {
 		super(id, globalPermissionsModel, fmName);
-		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(null);
 
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
-		List<Permission> globalPermissionsList = new ArrayList<Permission>(globalPermissionsModel.getObject());
+		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(availablePermissibleCategories.get(0));
 		
 		final Form form = new Form("ampGlobalPMForm")
 		{
@@ -68,20 +67,22 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.setOutputMarkupId(true);
 
-		PermissionMap pmAux = new PermissionMap();
+		PermissionMap pmAux = null;
+		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
+
+		Set<AmpPMGateWrapper> gatesSet = new TreeSet();
+		if(pmAux==null){
+			pmAux = createPermissionMap(globalPermissionMapForPermissibleClassModel);
+		}
 		final IModel<PermissionMap> pmAuxModel = new Model(pmAux);
-		final IModel<CompositePermission> cpModel = new Model(new CompositePermission(false));
-		Set<AmpPMGateWrapper> a = new TreeSet();
-		generateGatesList(cpModel.getObject(),a);
-		final IModel<Set<AmpPMGateWrapper>> gatesSetModel = new Model((Serializable) a);
+		generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
+		final IModel<Set<AmpPMGateWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", false);
 		permGatesFormTable.setTableWidth(300);
 		permGatesFormTable.setOutputMarkupId(true);
 		form.add(permGatesFormTable);
 		
-		final IModel<PermissionMap> pmModel = new Model(null);
-
 		DropDownChoice dropDownPermCategories = new DropDownChoice("globalPermCategories", globalPermissionMapForPermissibleClassModel ,availablePermissibleCategories, new ChoiceRenderer("simpleName"));
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
@@ -89,24 +90,10 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 				pmAuxModel.setObject(PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject()));
 				if(pmAuxModel.getObject()==null)
 				{
-					pmAuxModel.setObject(new PermissionMap());
-					pmAuxModel.getObject().setPermissibleCategory(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
-					pmAuxModel.getObject().setObjectIdentifier(null);
-					CompositePermission cp=new CompositePermission(false);
-					cp.setDescription("This permission was created using the PM UI by admin user");
-					cp.setName(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission");
-					cpModel.setObject(cp);
-					pmAuxModel.getObject().setPermission(cpModel.getObject());
-					pmModel.setObject(pmAuxModel.getObject());
+					pmAuxModel.setObject(createPermissionMap(globalPermissionMapForPermissibleClassModel));
 				}
-				else{
-					pmModel.setObject(pmAuxModel.getObject());
-					if(pmModel.getObject().getPermission() instanceof CompositePermission) 
-						cpModel.setObject((CompositePermission)pmModel.getObject().getPermission());
-				}
-				
 				TreeSet<AmpPMGateWrapper> aa = new TreeSet<AmpPMGateWrapper>();
-				generateGatesList(cpModel.getObject(), aa);
+				generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),aa);
 				gatesSetModel.setObject(aa);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
@@ -135,6 +122,18 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		form.add(saveAndSubmit);
 		add(form);
 	}
+
+	private PermissionMap createPermissionMap(final IModel<Class> globalPermissionMapForPermissibleClassModel) {
+		PermissionMap pmAux;
+		pmAux = new PermissionMap();
+		pmAux.setPermissibleCategory(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
+		pmAux.setObjectIdentifier(null);
+		CompositePermission cp=new CompositePermission(false);
+		cp.setDescription("This permission was created using the PM UI by admin user");
+		cp.setName(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission");
+		pmAux.setPermission(cp);
+		return pmAux;
+	}
 	
 	
 	private void generateDefaultGatesList(Set<AmpPMGateWrapper> gatesSet){
@@ -157,43 +156,37 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 				generateDefaultGatesList(gatesSet);
 				return;
 			}
-		Iterator i=cp.getPermissions().iterator();
-		while (i.hasNext()) {
-		    GatePermission ap = (GatePermission) i.next();
-		    if(ap.hasParameter("BA")) {
-		    	gatesSet.add(new AmpPMGateWrapper(new Long(4),"Beneficiary Agency","BA",OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-		    }
-		    if(ap.hasParameter("CA")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(5),"Contracting Agency", "CA", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-		    }
-		    if(ap.hasParameter("EA")) {		
-		    	gatesSet.add(new AmpPMGateWrapper(new Long(6),"Executing Agency", "EA", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-		    }
-		    if(ap.hasParameter("IA")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(8),"Implementing Agency", "IA", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-		    }
-		    if(ap.hasParameter("DN")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(7),"Funding Agency", "DN", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-		    }
-		    if(ap.hasParameter("SG")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, hasView(ap),hasEdit(ap)));		
+    	gatesSet.add(new AmpPMGateWrapper(new Long(4),"Beneficiary Agency","BA",OrgRoleGate.class, hasView(cp.getPermissions(),"BA"),hasEdit(cp.getPermissions(),"BA")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(5),"Contracting Agency", "CA", OrgRoleGate.class, hasView(cp.getPermissions(),"CA"),hasEdit(cp.getPermissions(),"CA")));
+    	gatesSet.add(new AmpPMGateWrapper(new Long(6),"Executing Agency", "EA", OrgRoleGate.class, hasView(cp.getPermissions(),"EA"),hasEdit(cp.getPermissions(),"EA")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(8),"Implementing Agency", "IA", OrgRoleGate.class, hasView(cp.getPermissions(),"IA"),hasEdit(cp.getPermissions(),"IA")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(7),"Funding Agency", "DN", OrgRoleGate.class, hasView(cp.getPermissions(),"DN"),hasEdit(cp.getPermissions(),"DN")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, hasView(cp.getPermissions(),"SG"),hasEdit(cp.getPermissions(),"SG")));		
+		gatesSet.add(new AmpPMGateWrapper(new Long(10),"Regional Group", "RG", OrgRoleGate.class, hasView(cp.getPermissions(),"RG"),hasEdit(cp.getPermissions(),"RG")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(9),"Responsible Agency", "RO", OrgRoleGate.class, hasView(cp.getPermissions(),"RO"),hasEdit(cp.getPermissions(),"RO")));
+		gatesSet.add(new AmpPMGateWrapper(new Long(1),"Everyone", UserLevelGate.PARAM_EVERYONE, UserLevelGate.class, hasView(cp.getPermissions(),UserLevelGate.PARAM_EVERYONE),hasEdit(cp.getPermissions(),UserLevelGate.PARAM_EVERYONE)));
+		gatesSet.add(new AmpPMGateWrapper(new Long(2),"Guest", UserLevelGate.PARAM_GUEST, UserLevelGate.class, hasView(cp.getPermissions(),UserLevelGate.PARAM_GUEST),hasEdit(cp.getPermissions(),UserLevelGate.PARAM_GUEST)));
+		gatesSet.add(new AmpPMGateWrapper(new Long(3),"Owner", UserLevelGate.PARAM_OWNER, UserLevelGate.class, hasView(cp.getPermissions(),UserLevelGate.PARAM_OWNER),hasEdit(cp.getPermissions(),UserLevelGate.PARAM_OWNER)));
+	}
+	
+	private Boolean hasEdit(Set<Permission> permissions, String param) {
+		for (Permission p : permissions) {
+			{
+				GatePermission ap = (GatePermission)p;
+				if(ap.hasParameter(param)) return hasEdit(ap);
 			}
-		    if(ap.hasParameter("RG")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(10),"Regional Group", "RG", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-			}  
-		    if(ap.hasParameter("RO")) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(9),"Responsible Agency", "RO", OrgRoleGate.class, hasView(ap),hasEdit(ap)));
-			}  
-		    if(ap.hasParameter(UserLevelGate.PARAM_EVERYONE)) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(1),"Everyone", UserLevelGate.PARAM_EVERYONE, UserLevelGate.class, hasView(ap),hasEdit(ap)));
-			}    
-		    if(ap.hasParameter(UserLevelGate.PARAM_GUEST)) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(2),"Guest", UserLevelGate.PARAM_GUEST, UserLevelGate.class, hasView(ap),hasEdit(ap)));
-			}
-		    if(ap.hasParameter(UserLevelGate.PARAM_OWNER)) {
-				gatesSet.add(new AmpPMGateWrapper(new Long(3),"Owner", UserLevelGate.PARAM_OWNER, UserLevelGate.class, hasView(ap),hasEdit(ap)));
-			} 
 		}
+		return false;
+	}
+
+	private Boolean hasView(Set<Permission> permissions, String param) {
+		for (Permission p : permissions) {
+			{
+				GatePermission ap = (GatePermission)p;
+				if(ap.hasParameter(param)) return hasView(ap);
+			}
+		}
+		return false;
 	}
 
 	private boolean hasEdit(GatePermission agencyPerm) {

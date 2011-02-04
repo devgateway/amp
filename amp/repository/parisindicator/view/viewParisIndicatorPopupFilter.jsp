@@ -27,14 +27,14 @@
                 <a href="#sectorsgroups"><div><digi:trn>Status and Sectors</digi:trn></div></a>
             </li>
         </ul>
-        <div class="yui-content" style="background-color: #EEEEEE">
-            <div id="keyword" class="yui-tab-content">
+        <div class="yui-content">
+            <div id="keyword" class="yui-tab-content" style="border-color: #EEEEEE; border-style: solid; border-width: 1px;">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr valign="top">
                             <td align="center">
                                 <table align="center" cellpadding="2" cellspacing="2">
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5">
                                             <b><digi:trn key="rep:filter:CalendarTitle">Calendar</digi:trn></b>
                                         </td>
@@ -79,12 +79,12 @@
                             </td>
                             <td>
                                 <table align="center" cellpadding="2" cellspacing="2">
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5">
                                             <b><digi:trn key="rep:pop:CurrencyType">Currency Type:</digi:trn></b>
                                         </td>
                                     </tr>
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="4">
                                             <html:select property="selectedCurrency" name="parisIndicatorForm" styleClass="dr-menu" styleId="selectedCurrency">
                                                 <logic:notEmpty name="parisIndicatorForm" property="currencyTypes">
@@ -94,10 +94,10 @@
                                         </td>
                                     </tr>
                                     <tr><td>&nbsp;</td></tr>
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5"><b><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
                                     </tr>
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5">
                                             <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedFinancingIstruments" name="parisIndicatorForm" styleId="selectedFinancingIstruments"
                                                 keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" multiselect="true" size="6"/>
@@ -106,23 +106,23 @@
                                 </table>
                             </td> 
                         </tr>
-                        <tr bgcolor="#EEEEEE">
+                        <tr >
                                 
                         </tr>
                 </table>
             </div>
-            <div id="financing" class="yui-hidden">
+            <div id="financing" class="yui-hidden" style="border-color: #EEEEEE; border-style: solid; border-width: 1px;">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr>
                             <td>
                                 <table align="center" cellpadding="2" cellspacing="2">
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5"><b><digi:trn>Donor Groups:</digi:trn></b></td>
                                         <td>&nbsp;</td>
                                         <td colspan="5"><b><digi:trn key="rep:pop:Groups">Groups:</digi:trn></b></td>
                                     </tr>
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5" styleClass="inp-text">
                                             <html:select property="selectedDonorGroups" name="parisIndicatorForm" styleClass="dr-menu" size="8" multiple="true" styleId="selectedDonorGroups">
                                                 <html:option value="0"><digi:trn key="aim:allGroups">All Groups</digi:trn></html:option>
@@ -144,18 +144,18 @@
                         </tr>
                 </table>
             </div>
-            <div id="sectorsgroups" class="yui-hidden">
+            <div id="sectorsgroups" class="yui-hidden" style="border-color: #EEEEEE; border-style: solid; border-width: 1px;">
                 <br />
                     <table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px" >
                         <tr valign="top">
                             <td align="center">
                                 <table align="center" cellpadding="2" cellspacing="2">
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5"><b><digi:trn key="rep:pop:sectors">Sectors:</digi:trn></b></td>
                                         <td>&nbsp;</td>
                                         <td colspan="5"><b><digi:trn key="rep:pop:Status">Status:</digi:trn></b></td>
                                     </tr>
-                                    <tr bgcolor="#EEEEEE">
+                                    <tr >
                                         <td colspan="5" styleClass="inp-text">
                                             <html:select styleId="selectedSectors" property="selectedSectors" size="8" style="width: 300px" styleClass="inp-text" multiple="true">
                                                 <html:option value="0"><digi:trn key="aim:allSectors">All Sectors</digi:trn></html:option>
@@ -171,14 +171,14 @@
                                 </table>
                             </td> 
                         </tr>
-                        <tr bgcolor="#EEEEEE">
+                        <tr >
                             <td colspan="5" styleClass="inp-text">&nbsp;<br/><br/></td>
                         </tr>
                 </table>
             </div>
         </div>
     </div>
-    <div style="background-color: #EEEEEE; ">
+    <div >
         <br />
         <table width="100%">
             <tr>

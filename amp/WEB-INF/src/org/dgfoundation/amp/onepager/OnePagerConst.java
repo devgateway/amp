@@ -34,6 +34,4 @@ public final class OnePagerConst {
 		return String.format(toggleJSPM, c.getMarkupId());
 	}
 	
-
-
 }

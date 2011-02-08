@@ -64,6 +64,8 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permissionPriorityChoices.setSuffix("");
 		add(permissionPriorityChoices);
 		
+		AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", permissionChoiceModel, "FM Fields Panel");
+		add(tree);
 	}
 
 	public Boolean getShowWorkspaces(){

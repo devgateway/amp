@@ -1,34 +1,31 @@
 <wicket:extend>	
 <div class="perm_level">
 	<table width="952" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	  	<tr>
-		    <td width="440"><b>Fields for:</b> <input name="" type="text" class="inputx" style="width:365px;"></td>
-			<td width="10">&nbsp;</td>
-		    <td>
-		    <!-- 
-		    	<b>Type of view:</b><input name="" type="radio" value="" checked="checked" /> 
-		    	Quick View <input name="" type="radio" value="" /> DetailedView |
-		    	 --> 
-		    	<input wicket:id="showWorkspace" type="checkbox" /> Show Workspace</td>
-	  	</tr>
-	  	<tr><td colspan="3">&nbsp;</td></tr>
-	  	<tr><td colspan="3">&nbsp;</td></tr>
-	  	<tr><td colspan="3" bgcolor="#F4F4F4" align="center"><b>Permission priority:</b>
-	  			<span wicket:id="permissionPriorityChoices">
-					<input type="radio"/>Cummulative 
-					<input type="radio"/>Workspace based permission 
-					<input type="radio"/>Role based permission
-				</span> 
+
+	  	<tr><td colspan="3" bgcolor="#F4F4F4"><center><h3>Assign Field Permission</h3></center></td></tr>
+	  	<tr><td colspan="3" bgcolor="#F4F4F4">&nbsp;</td></tr>
+	  	<tr><td colspan="3" bgcolor="#F4F4F4" align="center">
+	  			<div style="float: left;"><input wicket:id="showWorkspace" type="checkbox" /> Show Workspace</div>
+	  			<div style="float: right;">
+	  				<b>Permission priority:</b>
+		  			<span wicket:id="permissionPriorityChoices">
+						<input type="radio"/>Cummulative 
+						<input type="radio"/>Workspace based permission 
+						<input type="radio"/>Role based permission
+					</span>
+				</div> 
 			</td>
+			
 		</tr>
-			  	<tr><td colspan="3" bgcolor="#F4F4F4">&nbsp;</td></tr>
+		<tr><td colspan="3" bgcolor="#F4F4F4">&nbsp;</td></tr>
 	  	<tr>
-		    <td valign="top" bgcolor="#F4F4F4">
+		    <td valign="top" bgcolor="#F4F4F4" width="440">
+		    	<b>Fields for:</b> <input name="" type="text" class="inputx" style="width:365px;">
 		    	<div class="perm_tree">
-		      		<div class="perm_tree_cont">ala bala portocala  </div>
+		    		<div wicket:id="fmFieldsPanel" />
 		      	</div>
 		     </td>
-			 <td bgcolor="#F4F4F4">&nbsp;</td>
+			 <td bgcolor="#F4F4F4" width="10">&nbsp;</td>
 	    	 <td valign="top" bgcolor="#F4F4F4">
 	    	 	<div class="perm_view_cont"><b>Edit field permissions:</b><br />
 				<div class="perm_wrksp_det">Form permission checboxes</div>

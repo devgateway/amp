@@ -52,12 +52,12 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		// TODO Auto-generated constructor stub
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();
 
-		fieldPermissionsTabs.add(new AbstractTab(new Model("Add Global Permission")){
+		fieldPermissionsTabs.add(new AbstractTab(new Model("Add Field Permission")){
 		      public Panel getPanel(String panelId)
 		      {
 		    	  AmpPMAddFieldPermissionPanel newGlobalPerm = null;
 		    	try {
-					newGlobalPerm = new AmpPMAddFieldPermissionPanel(panelId, ampTreeVisibilityModel, "Add Global Permission");
+					newGlobalPerm = new AmpPMAddFieldPermissionPanel(panelId, ampTreeVisibilityModel, "Add Field Permission");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

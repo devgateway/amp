@@ -162,8 +162,6 @@ public class AMPStartupListener extends HttpServlet implements
 
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 			// get the default amp template!!!
-			AmpTreeVisibility ampTreeVisibilityAux = new AmpTreeVisibility();
-			AmpTreeVisibility ampTreeVisibilityAux2 = new AmpTreeVisibility();
 			Session session = PersistenceManager.getSession();
 
 			AmpTemplatesVisibility currentTemplate = null;

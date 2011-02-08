@@ -27,8 +27,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id,
-			String fmName) throws Exception {
+	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id,String fmName) throws Exception {
 		super(id, fmName);
 		// TODO Auto-generated constructor stub
 	}
@@ -39,8 +38,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id,
-			IModel model, String fmName) throws Exception {
+	public AmpPMManageGlobalPermissionsSectionFeaturePanel(String id, IModel model, String fmName) throws Exception {
 		super(id, model, fmName);
 		// TODO Auto-generated constructor stub
 	}

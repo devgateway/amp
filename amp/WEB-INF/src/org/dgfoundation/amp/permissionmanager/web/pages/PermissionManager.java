@@ -11,19 +11,23 @@ import java.util.TreeSet;
 
 import org.apache.wicket.IPageMap;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageFieldPermissionsSectionFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageGlobalPermissionsSectionFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageUsersSectionFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageWorkspacesSectionFeature;
-import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMSectionFeaturePanel;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.um.exception.UMException;
+import org.hibernate.Session;
 
 /**
  * @author dan
@@ -77,7 +81,15 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
 		
 		
-		adminPMForm.add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
+		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+		// get the default amp template!!!
+		Session session = PersistenceManager.getRequestDBSession();
+		AmpTemplatesVisibility currentTemplate = null;
+		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+		final IModel<AmpTreeVisibility> ampTreeVisibilityModel = new Model((Serializable)ampTreeVisibility);
+		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityModel, "Manage Field Permissions", false));
+//		adminPMForm.add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
 		
 		
 		add(adminPMForm);

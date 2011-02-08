@@ -14,6 +14,8 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.dgfoundation.amp.visibility.AmpTreeVisibilityAlphaOrderComparator;
+import org.dgfoundation.amp.visibility.AmpTreeVisibilityAlphaTreeOrderComparator;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -23,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
@@ -38,7 +41,6 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 
 /**
  * @author medea
@@ -2766,7 +2768,10 @@ public class FeaturesUtil {
 		return properCase.toString();    
 
 	}
-
+	
+	public static final Comparator ALPHA_ORDER = new AmpTreeVisibilityAlphaOrderComparator();
+	public static final Comparator ALPHA_AMP_TREE_ORDER = new AmpTreeVisibilityAlphaTreeOrderComparator();
+/*
 	public static final Comparator ALPHA_ORDER = new Comparator()
 	{
 		public int compare(Object a, Object b)
@@ -2788,7 +2793,7 @@ public class FeaturesUtil {
 			return pairA.getRoot().getName().compareTo(pairB.getRoot().getName());
 		}
 	};
-
+*/
 	public static Boolean isShowComponentFundingByYear() {
 		String componentFundingByYearStr = FeaturesUtil
 		.getGlobalSettingValue(Constants.GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR);

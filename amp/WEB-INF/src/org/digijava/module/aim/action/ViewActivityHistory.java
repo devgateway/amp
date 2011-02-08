@@ -39,9 +39,9 @@ public class ViewActivityHistory extends Action {
 				if (a1.getCreatedDate() == null && a2.getCreatedDate() == null) {
 					return 0;
 				} else if (a1.getCreatedDate() == null) {
-					return (a1.getCreatedDate().compareTo(a2.getCreatedDate())) * -1;
+					return -1;
 				} else if (a2.getCreatedDate() == null) {
-					return (a2.getCreatedDate().compareTo(a1.getCreatedDate())) * -1;
+					return 1;
 				}
 				return a1.getCreatedDate().compareTo(a2.getCreatedDate()) * -1;
 			}

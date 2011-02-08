@@ -11,7 +11,11 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp.css">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+
 <style type="text/css">
 .tableEven {
 	background-color: #dbe5f1;
@@ -38,45 +42,59 @@
 
 <digi:instance property="aimCompareActivityVersionsForm" />
 <digi:form action="/compareActivityVersions.do" method="post">
-	<span class="subtitle-blue">
-		<digi:trn>Compare Activities</digi:trn>
-	</span>
-<div style="text-align:center;width:1000px;">
-	<br/>
-	<br/>
-	<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable">
-		<tr>
-			<td bgcolor="#999999" align="left" style="padding-left: 5px;" width="8%">
-				<strong><digi:trn>Value name</digi:trn></strong>
-			</td>
-			<td  bgcolor="#999999" align="left" valign="top" style="padding-left: 5px;" width="46%">
-				<strong><digi:trn>First version (Older)</digi:trn></strong>
-			</td>
-			<td  bgcolor="#999999" align="left" valign="top" style="padding-left: 5px;" width="46%">
-				<strong><digi:trn>Second version (Newer)</digi:trn></strong>
-			</td>
-		</tr>
-		<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm">
-			<tr>
-				<td align="left" valign="center" style="padding-left: 5px;" width="8%">
-					<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
-				</td>
-				<td align="left" valign="top" style="padding-left: 5px;" width="46%">
-					<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
-					<bean:write name="iter" property="stringOutput[1]" filter="false"/>
-				</td>
-				<td align="left" valign="top" style="padding-left: 5px;" width="46%">
-					<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
-					<bean:write name="iter" property="stringOutput[0]" filter="false"/>
-				</td>
-			</tr>
-		</logic:iterate>
-	</table>
-	<br/>
-	<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="history.back()" />
+	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
+		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
+			<ul id="MyTabs" class="yui-nav">
+				<li class="selected">
+					<a href=""/><div><digi:trn>Compare Activities</digi:trn></div></a>
+				</li>
+			</ul>
+		</div>
+		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;" class="contentstyle" id="ajaxcontentarea">
+			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
+				<tr>
+					<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	            		<div align="center">
+	                		<strong><digi:trn>Value name</digi:trn></strong>
+	            		</div>
+	        		</td>
+					<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	            		<div align="center">
+	                		<strong><digi:trn>First version (Older)</digi:trn></strong>
+	            		</div>
+	        		</td>
+	        		<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	            		<div align="center">
+	                		<strong><digi:trn>Second version (Newer)</digi:trn></strong>
+	            		</div>
+	        		</td>
+	        		<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; visibility: hidden">
+	            		<div align="center">
+	                		<strong><digi:trn>Merge</digi:trn></strong>
+	            		</div>
+	        		</td>
+				</tr>
+				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm">
+					<tr>
+						<td align="left" valign="center" style="padding-left: 5px;" width="8%">
+							<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
+						</td>
+						<td align="left" valign="top" style="padding-left: 5px;" width="46%">
+							<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
+							<bean:write name="iter" property="stringOutput[1]" filter="false"/>
+						</td>
+						<td align="left" valign="top" style="padding-left: 5px;" width="46%">
+							<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
+							<bean:write name="iter" property="stringOutput[0]" filter="false"/>
+						</td>
+					</tr>
+				</logic:iterate>
+			</table>
+			<br/>
+			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="history.back()" />
+		</div>	
 	</div>
 </digi:form>
-
 
 <script language="Javascript">
 function setStripsTable(tableId, classOdd, classEven) {

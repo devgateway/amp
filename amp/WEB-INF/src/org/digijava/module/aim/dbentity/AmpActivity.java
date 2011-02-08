@@ -58,7 +58,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
-    @VersionableFieldSimple(fieldTitle = "Internal ID")
+    @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     private Long ampActivityId ;
 
     @VersionableFieldSimple(fieldTitle = "AMP Id")
@@ -239,9 +239,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
     										  // This field is defunct
 
-	@VersionableFieldSimple(fieldTitle = "Created By")
+	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	private AmpTeamMember activityCreator;
-	@VersionableFieldSimple(fieldTitle = "Creation Date")
+	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	private Date createdDate;
 	private Date updatedDate;
 	

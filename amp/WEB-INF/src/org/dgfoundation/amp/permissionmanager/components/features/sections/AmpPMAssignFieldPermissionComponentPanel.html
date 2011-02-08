@@ -5,12 +5,21 @@
 		    <td width="440"><b>Fields for:</b> <input name="" type="text" class="inputx" style="width:365px;"></td>
 			<td width="10">&nbsp;</td>
 		    <td>
-		    	<b>Type of view:</b> <input name="" type="radio" value="" checked="checked" /> Quick View <input name="" type="radio" value="" /> DetailedView | <input name="" type="checkbox" value="" checked="checked" /> Show Workspace</td>
+		    <!-- 
+		    	<b>Type of view:</b><input name="" type="radio" value="" checked="checked" /> 
+		    	Quick View <input name="" type="radio" value="" /> DetailedView |
+		    	 --> 
+		    	<input wicket:id="showWorkspace" type="checkbox" /> Show Workspace</td>
 	  	</tr>
 	  	<tr><td colspan="3">&nbsp;</td></tr>
 	  	<tr><td colspan="3">&nbsp;</td></tr>
 	  	<tr><td colspan="3" bgcolor="#F4F4F4" align="center"><b>Permission priority:</b>
-				<input name="" type="radio" value="" />Cummulative <input name="" type="radio" value="" />Workspace based permission <input name="" type="radio" value="" />Role based permission </td>
+	  			<span wicket:id="permissionPriorityChoices">
+					<input type="radio"/>Cummulative 
+					<input type="radio"/>Workspace based permission 
+					<input type="radio"/>Role based permission
+				</span> 
+			</td>
 		</tr>
 			  	<tr><td colspan="3" bgcolor="#F4F4F4">&nbsp;</td></tr>
 	  	<tr>
@@ -24,8 +33,10 @@
 	    	 	<div class="perm_view_cont"><b>Edit field permissions:</b><br />
 				<div class="perm_wrksp_det">Form permission checboxes</div>
 				<hr />
-				<b>Choose workspace</b>:
-				<div class="perm_wrksp_det_short">please choose some workspaces...</div>
+				<div wicket:id="workspaces">
+					<b>Choose workspace</b>:
+					<div class="perm_wrksp_det_short">please choose some workspaces...</div>
+				</div>
 				<hr />
 				</div>
 			</td>

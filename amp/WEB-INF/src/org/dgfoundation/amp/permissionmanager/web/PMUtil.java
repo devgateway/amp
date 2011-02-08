@@ -29,6 +29,10 @@ import org.hibernate.Session;
  */
 public final class PMUtil {
 
+	public static final String CUMMULATIVE = "Cummulative";
+	public static final String WORKSPACE_PERMISSION = "Workspace based permission";
+	public static final String ROLE_PERMISSION = "Role based permission";
+	
 	public static void setGlobalPermission(Class globalPermissionMapForPermissibleClass, Permission permission,String simpleName) {
 		// TODO Auto-generated method stub
 		Session hs=null;

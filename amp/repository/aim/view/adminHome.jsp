@@ -37,7 +37,7 @@
           <td nowrap="nowrap" vAlign="top" align="center">
             <table bgColor="#ffffff" cellPadding=20 cellSpacing="1" class="box-border-nopadding" width="100%">
               <tr align="center" bgcolor="#E1E1E1" vAlign="top">
-                <td class="f-names" nowrap="nowrap" style="padding-top:10px; padding-bottom:10px;">
+                <td class="f-names" nowrap="nowrap">
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" >
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class="f-names" nowrap="nowrap">
@@ -47,7 +47,7 @@
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" valign="top">
-                      <td class="f-names">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
                         <table cellPadding="0" cellSpacing="0" width="320px">
 						<module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>

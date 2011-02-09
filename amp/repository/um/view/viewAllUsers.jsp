@@ -39,14 +39,13 @@ function banUser(txt) {
 
 </script>
 
-<digi:instance property="umViewAllUsersForm" />
-<digi:context name="digiContext" property="context" />
+
 
 <!--  AMP Admin Logo -->
 <!-- jsp:include page="/repositoryteamPagesHeader.jsp" flush="true" /-->
 <!-- End of Logo -->
 
-<digi:form action="/viewAllUsers.do" method="post">
+
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
@@ -82,6 +81,13 @@ function banUser(txt) {
               </span>
             </td>
           </tr>
+			<tr>
+				<td align="left"><!--  please note that this page contains form and you can not nested it inside other form -->
+				<jsp:include page="/repository/aim/view/exportTable.jsp" /></td>
+			</tr>
+			<digi:instance property="umViewAllUsersForm" />
+		<digi:context name="digiContext" property="context" />
+		<digi:form action="/viewAllUsers.do" method="post">
           <tr style="width:50%;">
           	<c:choose>
           		<c:when test="${umViewAllUsersForm.showBanned}">
@@ -179,8 +185,9 @@ function banUser(txt) {
 															<!-- end header -->
 														</tr>		
  														<tr>
-															<td width="100%">
+															<td width="100%" class="report">
 																<table width="734" BORDER=1 bordercolor="cccccc" RULES=ALL FRAME=VOID  bgColor="#f4f4f2">
+																	
 																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
 																			<td colspan="5">
@@ -190,6 +197,7 @@ function banUser(txt) {
 																		</tr>
 							                                        </c:if>
 																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
+																	<thead>
 																		<tr>
 																			<td height="30" width="220">
 																				<digi:link href="/viewAllUsers.do?sortBy=name&reset=false"><b>
@@ -204,10 +212,12 @@ function banUser(txt) {
 																			<td height="30" width="220"><b>
 																					<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
 																			</td>
-																			<td height="30"width="150" colspan="3"><b>
+																			<td height="30"width="150" colspan="3" class="ignore"><b>
 																				<digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
 																			</td>																		
 																		</tr>
+																		</thead>
+																		<tbody class="yui-dt-data">
 																	<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
 	                                                           			<tr>
 		                                                           			<td height="30">
@@ -233,14 +243,14 @@ function banUser(txt) {
 								                                                  </c:if>
 								                                                </div>
 																			</td>
-																			<td height="30" nowrap="nowrap" >
+																			<td height="30" nowrap="nowrap" class="ignore">
 																				<c:set var="translation">
 								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 								                                                </c:set>
 								                                                <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
 																			</td>
 																			
-																			<td height="30" nowrap="nowrap">
+																			<td height="30" nowrap="nowrap" class="ignore">
 																				<c:choose>
 								                                                  <c:when test="${us.ban}">
 								                                                    <c:set var="translation">
@@ -259,6 +269,7 @@ function banUser(txt) {
 																			</td>
 	                                                            		</tr>
 																	</c:forEach>
+																	</tbody>
 																</c:if>
 															</table>
 														</td>

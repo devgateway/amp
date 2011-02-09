@@ -57,15 +57,22 @@ function confirmDelete() {
 					</td>
 				</tr>
 				<tr>
+						<td align="left">
+						<!--  please note that this page contains form and you can not nested it inside other form -->
+						<jsp:include
+							page="/repository/aim/view/exportTable.jsp" /></td>
+					</tr>
+				<tr>
 					<td height=16 vAlign=center width=571>
 						<digi:errors />
 					</td>
 				</tr>
 				<tr>
-				<td>
+				<td class="report">
 				
 				<logic:notEmpty name="myForm" property="categories">
 					<table border="1px" >
+					<thead>
 						<tr align="center">
 							<td bgcolor="#006699" class="textalb" align="center">
 								<digi:trn key="aim:categoryName">
@@ -88,12 +95,14 @@ function confirmDelete() {
 									Category Options
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="textalb" align="center">
+							<td bgcolor="#006699" class="textalb ignore" align="center">
 								<digi:trn key="aim:categoryActions">
 									Actions
 								</digi:trn>
 							</td>
 						</tr>
+						</thead>
+						<tbody class="yui-dt-data">
 						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
 						<tr align="center">
 							<td>
@@ -151,7 +160,7 @@ function confirmDelete() {
 									Ordered
 								</digi:trn>
 							</td>
-							<td align="left">
+							<td align="left" class="ignore">
 								<ul>
 									<li>
 										<digi:link paramId="edit" paramName="category" paramProperty="id"  href='/categoryManager.do'>
@@ -171,6 +180,7 @@ function confirmDelete() {
 							</td>
 						</tr>
 						</logic:iterate>
+						</tbody>
 					</table>
 				
 				</logic:notEmpty>

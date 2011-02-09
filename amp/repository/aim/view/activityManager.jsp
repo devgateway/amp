@@ -107,8 +107,7 @@
 -->
 </script>
 
-<digi:instance property="aimActivityForm" />
-<digi:form action="/activityManager.do" method="post">
+
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -145,164 +144,179 @@
 						</span>
 					</td>
 				</tr>
+			<tr>
+				<td align="left">
+				<!--  please note that this page contains form and you can not nested it inside other form -->
+				<jsp:include
+					page="/repository/aim/view/exportTable.jsp" /></td>
+			</tr>
+			<digi:instance property="aimActivityForm" />
+			<digi:form action="/activityManager.do" method="post">
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
-					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
-							<tr bgColor=#ffffff>
-								<td vAlign="top" width="100%">
+						<tr>
+							<td noWrap width=600 vAlign="top">
+							<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%"
+								valign="top">
+								<tr bgColor=#ffffff>
+									<td vAlign="top" width="100%">
 
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top
+										align=left>
 										<tr>
 											<td>
-												<table>
-													<tr>
-														<td width="195">
-															<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" />
-														</td>
-														<td width="120">
-															<digi:trn key="aim:results">Results</digi:trn>&nbsp;
-															<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
-															<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
-															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity()">
-																<html:option value="10">10</html:option>
-																<html:option value="20">20</html:option>
-																<html:option value="50">50</html:option>
-																<html:option value="-1"><digi:trn key="aim:resultsAll">All</digi:trn></html:option>
-															</html:select>
-														</td>
-														<td width="50">
-									                    <c:set var="trnResetBtn">
-									                      <digi:trn key="aim:btnReset"> Reset </digi:trn>
-									                    </c:set>
-									                    <input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
-														</td>
-														<td width="260">					
-									                    <c:set var="trnGoBtn">
-									                      <digi:trn key="aim:btnGo"> GO </digi:trn>
-									                    </c:set>
-									                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity()">
-														</td>
-													</tr>
-												</table>
+											<table>
+												<tr>
+													<td width="195"><digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
+													<html:text property="keyword" styleClass="inp-text" /></td>
+													<td width="120"><digi:trn key="aim:results">Results</digi:trn>&nbsp;
+													<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
+													<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
+													<html:select property="tempNumResults"
+														styleClass="inp-text" onchange="return searchActivity()">
+														<html:option value="10">10</html:option>
+														<html:option value="20">20</html:option>
+														<html:option value="50">50</html:option>
+														<html:option value="-1">
+															<digi:trn key="aim:resultsAll">All</digi:trn>
+														</html:option>
+													</html:select></td>
+													<td width="50"><c:set var="trnResetBtn">
+														<digi:trn key="aim:btnReset"> Reset </digi:trn>
+													</c:set> <input type="button" value="${trnResetBtn}"
+														class="dr-menu" onclick="return resetSearch()"></td>
+													<td width="260"><c:set var="trnGoBtn">
+														<digi:trn key="aim:btnGo"> GO </digi:trn>
+													</c:set> <input type="button" value="${trnGoBtn}" class="dr-menu"
+														onclick="return searchActivity()"></td>
+												</tr>
+											</table>
 											</td>
 										</tr>
-									
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-											<!-- Table title -->
-											<digi:trn key="aim:activityList">
-												Activity List
-											</digi:trn>
-											<!-- end table title -->
-										</td></tr>
-										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
 
-													<logic:notEmpty name="aimActivityForm" property="activityList">
-														<tr><td>
-															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
-																<tr bgcolor="#ffffff">
-																		<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
-																		<c:set target="${urlParamsSort}" property="action" value="sort"/>						
-																		<td width="9" height="15">&nbsp;</td>
-																		<td>
-                                                                          <b>
-                                                                            <c:set target="${urlParamsSort}" property="sortByColumn" value="activityName"/>	
-																			<digi:link href="/activityManager.do" name="urlParamsSort">
-	                                                                            <digi:trn key="aim:ActivityNameCol">
+										<tr>
+											<td bgColor=#d7eafd class=box-title height="20"
+												align="center"><!-- Table title --> <digi:trn
+												key="aim:activityList">
+												Activity List
+											</digi:trn> <!-- end table title --></td>
+										</tr>
+										<tr>
+										
+											<td>
+											<table width="100%" cellspacing=1 cellpadding=4 valign=top
+												align=left bgcolor="#ffffff">
+												
+												<logic:notEmpty name="aimActivityForm"
+													property="activityList">
+													<tr>
+													<!--  to export table we are adding class "report" to its container -->
+														<td class="report">
+														<table width="100%" cellspacing=1 cellpadding=3
+															bgcolor="#d7eafd">
+															<thead>
+															<tr bgcolor="#ffffff">
+																<jsp:useBean id="urlParamsSort" type="java.util.Map"
+																	class="java.util.HashMap" />
+																<c:set target="${urlParamsSort}" property="action"
+																	value="sort" />
+																<td width="9" height="15">&nbsp;</td>
+																<td><b> <c:set target="${urlParamsSort}"
+																	property="sortByColumn" value="activityName" /> <digi:link
+																	href="/activityManager.do" name="urlParamsSort">
+																	<digi:trn key="aim:ActivityNameCol">
 	                                                                            	Activity Name
 	                                                                            </digi:trn>
-																			</digi:link>                                                                          
-                                                                          </b>
-																		</td>
-																		<td width="200">
-                                                                          <b>
-                                                                          	<c:set target="${urlParamsSort}" property="sortByColumn" value="activityTeamName"/>	
-																			 <digi:link href="/activityManager.do" name="urlParamsSort">
-	                                                                            <digi:trn key="aim:ActivityTeamName">
+																</digi:link> </b></td>
+																<td width="200"><b> <c:set
+																	target="${urlParamsSort}" property="sortByColumn"
+																	value="activityTeamName" /> <digi:link
+																	href="/activityManager.do" name="urlParamsSort">
+																	<digi:trn key="aim:ActivityTeamName">
 	                                                                            	Team Name
 	                                                                            </digi:trn>
-	                                                                        </digi:link> 
-                                                                          </b>
-																		</td>
+																</digi:link> </b></td>
 
-																		<td width="100">
-                                                                          <b>
-                                                                          	<c:set target="${urlParamsSort}" property="sortByColumn" value="activityId"/>	
-																			 <digi:link href="/activityManager.do" name="urlParamsSort">
-	                                                                            <digi:trn key="aim:ActivityIdCol">
+																<td width="100"><b> <c:set
+																	target="${urlParamsSort}" property="sortByColumn"
+																	value="activityId" /> <digi:link
+																	href="/activityManager.do" name="urlParamsSort">
+																	<digi:trn key="aim:ActivityIdCol">
 	                                                                            	Activity Id
 	                                                                            </digi:trn>
-	                                                                        </digi:link> 
-                                                                          </b>
-																		</td>
-																		<td width="5%" align="left" class="ignore">
-																			<c:set var="trnSelectAll">
-																				<digi:trn>Select All</digi:trn>
-																			</c:set> 
-																			<input type="checkbox" id="chkAll" onclick="javascript:selectAll()" title="${trnSelectAll}"/>
-																		</td>
-																</tr>
-
-																<logic:iterate name="aimActivityForm" property="activityList" id="activities"
+																</digi:link> </b></td>
+																<td width="5%" align="left" class="ignore"><c:set
+																	var="trnSelectAll">
+																	<digi:trn>Select All</digi:trn>
+																</c:set> <input type="checkbox" id="chkAll"
+																	onclick="javascript:selectAll()"
+																	title="${trnSelectAll}" /></td>
+															</tr>
+															</thead>
+														<!--  to export table we are adding class "yui-dt-data" to its tbody-->
+													<tbody class="yui-dt-data">
+															<logic:iterate name="aimActivityForm"
+																property="activityList" id="activities"
 																type="org.digijava.module.aim.dbentity.AmpActivity">
-																	<tr bgcolor="#ffffff">
+																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
-																	<td width="9" height="15">
-																		<img src= "../ampTemplate/images/arrow_right.gif" border=0>
-																	</td>
+																		<td width="9" height="15"><img
+																			src="../ampTemplate/images/arrow_right.gif" border=0>
+																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
-																	<td width="9" height="15">
-																		<img src= "../ampTemplate/images/start_button.gif" border=0>
-																	</td>
+																		<td width="9" height="15"><img
+																			src="../ampTemplate/images/start_button.gif" border=0>
+																		</td>
 																	</logic:empty>
-																	<td>
-																		<bean:write name="activities" property="name"/>
+																	<td><bean:write name="activities" property="name" />
 																	</td>
-																	<td width="100">
-																	<logic:notEmpty name="activities" property="team">
-																		<bean:write name="activities" property="team.name"/>
-																	</logic:notEmpty>
-																	</td>																	
-																	<td width="100">
-																		<bean:write name="activities" property="ampId"/>
-																	</td>
-																	
-																	<td align="left" width="12">
-																		<c:set var="actId">
-																			<bean:write name="activities" property="ampActivityId" />
-																		</c:set> 
-																		<input type="checkbox" value="${actId}" />
-																	</td>
-																	</tr>
-																</logic:iterate>																
-															</table>
-														</td></tr>														
-													</logic:notEmpty>
-													<logic:empty name="aimActivityForm" property="activityList">
-														<tr align="center" bgcolor="#ffffff"><td><b>
-                                                        <digi:trn key="aim:emptyActivitiesPresent">
+																	<td width="100"><logic:notEmpty name="activities"
+																		property="team">
+																		<bean:write name="activities" property="team.name" />
+																	</logic:notEmpty></td>
+																	<td width="100"><bean:write name="activities"
+																		property="ampId" /></td>
+
+																	<td align="left" width="12" class="ignore"><c:set var="actId">
+																		<bean:write name="activities" property="ampActivityId" />
+																	</c:set> <input type="checkbox" value="${actId}" /></td>
+																</tr>
+															</logic:iterate>
+															</tbody>
+														</table>
+														</td>
+													</tr>
+												</logic:notEmpty>
+												<logic:empty name="aimActivityForm" property="activityList">
+													<tr align="center" bgcolor="#ffffff">
+														<td><b> <digi:trn
+															key="aim:emptyActivitiesPresent">
 															No activities present
 														</digi:trn></b></td>
-														</tr>
-													</logic:empty>
+													</tr>
+												</logic:empty>
 											</table>
-										</td></tr>
-										<tr><td bgColor=#ffffff height="20" align="left">
-												<img src= "../ampTemplate/images/start_button.gif" border=0> - <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
-										</td></tr>
+											</td>
+										</tr>
+										<tr>
+											<td bgColor=#ffffff height="20" align="left"><img
+												src="../ampTemplate/images/start_button.gif" border=0>
+											- <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
+											</td>
+										</tr>
 										<tr bgcolor="#ffffff">
 											<td>&nbsp;</td>
 										</tr>
 										<logic:notEmpty name="aimActivityForm" property="activityList">
-																			
-										<tr bgcolor="#ffffff">
-											<td>
-											<table><tr><td>
-												<%
+
+											<tr bgcolor="#ffffff">
+												<td>
+												<table>
+													<tr>
+														<td>
+														<%
 													ActivityForm aimActivityForm = (ActivityForm) pageContext.getAttribute("aimActivityForm");
 													java.util.List pagelist = new java.util.ArrayList();
 													for(int i = 0; i < aimActivityForm.getTotalPages(); i++)
@@ -310,96 +324,119 @@
 													pageContext.setAttribute("pagelist",pagelist);
 													pageContext.setAttribute("maxpages", new Integer(aimActivityForm.getTotalPages()));
 													pageContext.setAttribute("actualPage", new Integer(aimActivityForm.getPage()));
-												%>
-												<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
-												<c:set target="${urlParamsPagination}" property="action" value="getPage"/>
-												<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
-												<c:if test="${aimActivityForm.currentPage >0}">
-													<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsFirst}" property="page" value="0"/>
-													<c:set target="${urlParamsFirst}" property="action" value="getPage"/>
-													<c:set var="translation">
-														<digi:trn key="aim:firstpage">First Page</digi:trn>
-													</c:set>
-													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+												%> <jsp:useBean id="urlParamsPagination"
+															type="java.util.Map" class="java.util.HashMap" /> <c:set
+															target="${urlParamsPagination}" property="action"
+															value="getPage" /> <digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
+														<c:if test="${aimActivityForm.currentPage >0}">
+															<jsp:useBean id="urlParamsFirst" type="java.util.Map"
+																class="java.util.HashMap" />
+															<c:set target="${urlParamsFirst}" property="page"
+																value="0" />
+															<c:set target="${urlParamsFirst}" property="action"
+																value="getPage" />
+															<c:set var="translation">
+																<digi:trn key="aim:firstpage">First Page</digi:trn>
+															</c:set>
+															<digi:link href="/activityManager.do"
+																style="text-decoration=none" name="urlParamsFirst"
+																title="${translation}">
 														&lt;&lt;
 													</digi:link>
-													
-													<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsPrevious}" property="page" value="${aimActivityForm.currentPage -1}"/>
-													<c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
-													<c:set var="translation">
-														<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-													</c:set>
-													<digi:link href="/activityManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+
+															<jsp:useBean id="urlParamsPrevious" type="java.util.Map"
+																class="java.util.HashMap" />
+															<c:set target="${urlParamsPrevious}" property="page"
+																value="${aimActivityForm.currentPage -1}" />
+															<c:set target="${urlParamsPrevious}" property="action"
+																value="getPage" />
+															<c:set var="translation">
+																<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+															</c:set>
+															<digi:link href="/activityManager.do"
+																name="urlParamsPrevious" style="text-decoration=none"
+																title="${translation}">
 														&lt;
 													</digi:link>
-												</c:if>
-												
-												<c:set var="length" value="${aimActivityForm.pagesToShow}"></c:set>
-												<c:set var="start" value="${aimActivityForm.offset}"/>
-												
-												<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-													<c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>													
-														<c:if test="${(pageidx - 1) eq actualPage}"> 
-																<bean:write name="pageidx"/>
-													 	</c:if>
-														<c:if test="${(pageidx - 1) ne actualPage}"> 
-															<digi:link href="/activityManager.do"  name="urlParamsPagination" >
-																<bean:write name="pageidx"/>
-															</digi:link>
-													 	</c:if>
-													<c:if test="${pageidx < maxpages}"> | </c:if>
-												</logic:iterate>
-												<c:if test="${aimActivityForm.currentPage+1 != aimActivityForm.totalPages}">
-													<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsNext}" property="page" value="${aimActivityForm.currentPage+1}"/>
-													<c:set target="${urlParamsNext}" property="action" value="getPage"/>
-													<c:set var="translation">
-														<digi:trn key="aim:nextpage">Next Page</digi:trn>
-													</c:set>
-													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+														</c:if> <c:set var="length"
+															value="${aimActivityForm.pagesToShow}"></c:set> <c:set
+															var="start" value="${aimActivityForm.offset}" /> <logic:iterate
+															name="pagelist" id="pageidx" type="java.lang.Integer"
+															offset="${start}" length="${length}">
+															<c:set target="${urlParamsPagination}" property="page"
+																value="${pageidx - 1}" />
+															<c:if test="${(pageidx - 1) eq actualPage}">
+																<bean:write name="pageidx" />
+															</c:if>
+															<c:if test="${(pageidx - 1) ne actualPage}">
+																<digi:link href="/activityManager.do"
+																	name="urlParamsPagination">
+																	<bean:write name="pageidx" />
+																</digi:link>
+															</c:if>
+															<c:if test="${pageidx < maxpages}"> | </c:if>
+														</logic:iterate> <c:if
+															test="${aimActivityForm.currentPage+1 != aimActivityForm.totalPages}">
+															<jsp:useBean id="urlParamsNext" type="java.util.Map"
+																class="java.util.HashMap" />
+															<c:set target="${urlParamsNext}" property="page"
+																value="${aimActivityForm.currentPage+1}" />
+															<c:set target="${urlParamsNext}" property="action"
+																value="getPage" />
+															<c:set var="translation">
+																<digi:trn key="aim:nextpage">Next Page</digi:trn>
+															</c:set>
+															<digi:link href="/activityManager.do"
+																style="text-decoration=none" name="urlParamsNext"
+																title="${translation}">
 														&gt;
 													</digi:link>
-													<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-													<c:if test="${aimActivityForm.totalPages  > aimActivityForm.pagesToShow}">
-														<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-aimOrgManagerForm.pagesToShow}"/>
-														</c:if>
-													
-													<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-1}"/>
-													<c:set target="${urlParamsLast}" property="action" value="getPage"/>
-													<c:set var="translation">
-														<digi:trn key="aim:lastpage">Last Page</digi:trn>
-													</c:set>
-													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+															<jsp:useBean id="urlParamsLast" type="java.util.Map"
+																class="java.util.HashMap" />
+															<c:if
+																test="${aimActivityForm.totalPages  > aimActivityForm.pagesToShow}">
+																<c:set target="${urlParamsLast}" property="page"
+																	value="${aimActivityForm.totalPages-aimOrgManagerForm.pagesToShow}" />
+															</c:if>
+
+															<c:set target="${urlParamsLast}" property="page"
+																value="${aimActivityForm.totalPages-1}" />
+															<c:set target="${urlParamsLast}" property="action"
+																value="getPage" />
+															<c:set var="translation">
+																<digi:trn key="aim:lastpage">Last Page</digi:trn>
+															</c:set>
+															<digi:link href="/activityManager.do"
+																style="text-decoration=none" name="urlParamsLast"
+																title="${translation}">
 														&gt;&gt; 
 													</digi:link>
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-												</c:if>
-												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
-											</td>
-											<td width="20%" align="right">
-												<c:set var="trnDeleteSelectedBtn">
-													<digi:trn>Delete Selected Activities</digi:trn>
-												</c:set> 
-												<input type="button" value="${trnDeleteSelectedBtn}" class="dr-menu" onclick="return deleteActivities()">
-											</td>
+												</c:if> <c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn
+															key="aim:of">of</digi:trn>&nbsp;<c:out
+															value="${aimActivityForm.totalPages}"></c:out></td>
+														<td width="20%" align="right"><c:set
+															var="trnDeleteSelectedBtn">
+															<digi:trn>Delete Selected Activities</digi:trn>
+														</c:set> <input type="button" value="${trnDeleteSelectedBtn}"
+															class="dr-menu" onclick="return deleteActivities()">
+														</td>
+													</tr>
+												</table>
+												</td>
 											</tr>
-											</table>
-											</td>										
-										</tr>
 										</logic:notEmpty>
 									</table>
 
-								</td>
-							</tr>
+									</td>
+								</tr>
 
-						</table>
+							</table>
+							</td>
+						</tr>
+					</table>
 					</td>
 				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+		</table>
 
 </digi:form>

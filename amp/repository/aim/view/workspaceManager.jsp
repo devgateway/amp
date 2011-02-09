@@ -25,6 +25,16 @@
 		return partialURL+"/"+actionName;
 	}
 
+	function exportXSL() {
+		var teams = "";
+		$(".teamsOnpage").each(function(i, element) {
+			teams += "~team=" + element.id;
+		});
+		<digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
+		document.aimWorkspaceForm.action = "${exportUrl}" + teams;
+		document.aimWorkspaceForm.target = "_blank";
+		document.aimWorkspaceForm.submit();
+	}
 </script>
 <DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 	
@@ -34,12 +44,7 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
-	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -63,7 +68,42 @@
 						<digi:errors />
 					</td>
 				</tr>
-				<tr>
+
+			<tr>
+			<td>
+			<table cellspacing="0" class="report_indicator" cellpadding="0"
+				border="0" align="center" width="100%">
+				<tbody>
+					<tr>
+						<td valign="top">
+						<div class="tab_opt_box">
+						<div class="tab_opt">
+						<div class="tab_opt_cont"><a href="#" target="_blank"
+							onclick="exportXSL(); return false;" class="l_sm"> <img
+							border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
+							href="#" onclick="exportXSL(); return false;" class="l_sm">Export
+						to Excel</a> &nbsp;&nbsp; <a href="#"
+							onclick="window.print(); return false;" class="l_sm"><img
+							border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
+							href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
+						</div>
+						</div>
+						</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<td>
+			</tr>
+
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+	<tr>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top width=750>
+			
+
+
+			<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
 					<tr><td noWrap width="750" vAlign="top">
@@ -131,7 +171,7 @@
 													</logic:empty>
 													<logic:notEmpty name="aimWorkspaceForm" property="workspaces">
 													<logic:iterate name="aimWorkspaceForm" property="workspaces"id="workspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
-													<tr>
+													<tr class="teamsOnpage" id="${workspaces.ampTeamId}">
 														<td bgcolor="#ffffff">
 															<c:set var="teamWrk" value="${workspaces}" target="request" scope="request" />
 															<jsp:include page="teamDetailsPopup.jsp" />

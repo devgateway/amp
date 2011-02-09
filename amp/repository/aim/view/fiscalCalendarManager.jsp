@@ -45,6 +45,12 @@
 					</td>
 				</tr>
 				<tr>
+						<td align="left">
+						<!--  please note that this page contains form and you can not nested it inside other form -->
+						<jsp:include
+							page="/repository/aim/view/exportTable.jsp" /></td>
+			</tr>
+				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
@@ -76,8 +82,9 @@
 														</logic:empty>
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
-															<td width="100%">
+															<td width="100%" class="report">
 																<table width="533" border=0 cellspacing="4"	 bgColor=#f4f4f2>
+																<thead>
 																	<tr>
 																	  <td width="144"><b>
 																			<digi:trn key="aim:nameFiscalCalendar">Name</digi:trn></b>
@@ -98,6 +105,9 @@
 																			<b><digi:trn key="aim:offsetFromCurrentYear">Offset (From current year)</digi:trn></b>
 																		</td>
 																	</tr>
+																	</thead>
+																		<!--  to export table we are adding class "yui-dt-data" to its tbody-->
+															<tbody class="yui-dt-data">
                                                                 <c:set value="0" var="monthIndex"/>
 																<logic:iterate name="aimFiscalCalendarForm" property="fiscalCal" id="fiscalCal">
 																	<tr>
@@ -140,6 +150,7 @@
 																		</td>
 																	</tr>
 																  </logic:iterate>
+																  </tbody>
 															  </table>
 															</td>
 														</tr>

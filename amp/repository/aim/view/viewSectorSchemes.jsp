@@ -52,6 +52,12 @@
 					</td>
 				</tr>
 				<tr>
+						<td align="left">
+						<!--  please note that this page contains form and you can not nested it inside other form -->
+						<jsp:include
+							page="/repository/aim/view/exportTable.jsp" /></td>
+				</tr>
+				<tr>
 					<td height=16 vAlign=center width=571>
 						<digi:errors />
 					</td>
@@ -62,16 +68,16 @@
 					<tr><td noWrap width=600 vAlign="top">
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
-								<td vAlign="top" width="100%">
+								<td vAlign="top" width="100%" class="report">
 
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+									<thead>
+										<tr><td colspan="3" bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:schemes">Schemes</digi:trn>
 											<!-- end table title -->
 										</td></tr>
-										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+										</thead>
 													<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
@@ -82,6 +88,8 @@
 													</tr>
 													</logic:empty>
 													<logic:notEmpty name="aimAddSectorForm" property="formSectorSchemes">
+														<!--  to export table we are adding class "yui-dt-data" to its tbody-->
+											<tbody class="yui-dt-data">
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
@@ -102,7 +110,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="97" align="right">
+														<td bgcolor="#ffffff" width="97" align="right" class="ignore">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -116,7 +124,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="75" align="left">
+														<td bgcolor="#ffffff" width="75" align="left" class="ignore">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
@@ -144,13 +152,13 @@
 														</logic:equal>--%>
 													</tr>
 													</logic:iterate>
+													</tbody>
 
 
 
 													</logic:notEmpty>
 													<!-- end page logic -->
-											</table>
-										</td></tr>
+									
 									</table>
 
 								</td>

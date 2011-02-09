@@ -39,8 +39,8 @@
               <tr align="center" bgcolor="#E1E1E1" vAlign="top">
                 <td class="f-names" nowrap="nowrap">
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" >
-                    <tr bgcolor="#C0D6E2" align="center" style="font-size:12px; font-weight:bold; padding:10px;">
-                      <td class="f-names" nowrap="nowrap">
+                    <tr bgcolor="#C0D6E2" align="center">
+                      <td class="f-names" nowrap="nowrap" style="font-size:12px; font-weight:bold; padding:10px;">
                       <digi:trn key="aim:administrative">
                       Administrative
                       </digi:trn>
@@ -303,8 +303,8 @@
                 </td>
                 <td>
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
-                    <tr bgcolor="#C0D6E2" align="center" style="font-size:12px; font-weight:bold; padding:10px;">
-                      <td class="f-names" nowrap="nowrap">
+                    <tr bgcolor="#C0D6E2" align="center">
+                      <td class="f-names" nowrap="nowrap" style="font-size:12px; font-weight:bold; padding:10px;">
                       <digi:trn key="aim:dataFields">
                       Data Fields
                       </digi:trn>
@@ -518,8 +518,8 @@
               <tr align="center" bgcolor="#E1E1E1" valign="top">
                 <td>
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
-                    <tr bgcolor="#C0D6E2" align="center" style="font-size:12px; font-weight:bold; padding:10px;">
-                      <td class="f-names" nowrap="nowrap">
+                    <tr bgcolor="#C0D6E2" align="center">
+                      <td class="f-names" nowrap="nowrap" style="font-size:12px; font-weight:bold; padding:10px;">
                       <digi:trn key="aim:programMonitoring">
                       Program Monitoring
                       </digi:trn>
@@ -640,8 +640,8 @@
                 </td>
                 <td>
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" title="">
-                    <tr bgcolor="#C0D6E2" align="center" style="font-size:12px; font-weight:bold; padding:10px;">
-                      <td class="f-names" nowrap="nowrap" align="center">
+                    <tr bgcolor="#C0D6E2" align="center">
+                      <td class="f-names" nowrap="nowrap" align="center" style="font-size:12px; font-weight:bold; padding:10px;">
                       <digi:trn key="aim:projectsActivities"> Projects / Activites</digi:trn>
                       </td>
                     </tr>

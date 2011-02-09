@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <td height="10" vAlign="middle" align="center">
-            <span class="subtitle-blue">
+            <span class="subtitle-blue" style="font-size:12px; font-weight:bold;">
               <digi:trn key="aim:AmpAdminTools">
               Admin Tools
               </digi:trn>
@@ -35,7 +35,7 @@
         </tr>
         <tr>
           <td nowrap="nowrap" vAlign="top" align="center">
-            <table bgColor="#ffffff" cellPadding=20 cellSpacing="0" class="box-border-nopadding" width="100%">
+            <table bgColor="#ffffff" cellPadding=20 cellSpacing="1" class="box-border-nopadding" width="100%">
               <tr align="center" bgcolor="#E1E1E1" vAlign="top">
                 <td class="f-names" nowrap="nowrap">
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" >

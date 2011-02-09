@@ -17,8 +17,17 @@ public class AmpTreeVisibilityModelBean implements Serializable
     private String property4;
     private String property5;
     private String property6;
+    private Boolean checked=true;
 
-    /**
+    public Boolean getChecked() {
+		return checked;
+	}
+
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
+	}
+
+	/**
      * Creates the bean.
      * 
      * @param s
@@ -32,6 +41,7 @@ public class AmpTreeVisibilityModelBean implements Serializable
         property4 = "4:" + s;
         property5 = "5:" + s;
         property6 = "6:" + s;
+        checked = true;
     }
 
     /**
@@ -166,6 +176,6 @@ public class AmpTreeVisibilityModelBean implements Serializable
     @Override
     public String toString()
     {
-        return getProperty1() + ", " + getProperty2() + ", " + getProperty3();
+        return getProperty1() + "++ " + getProperty2() + "++ " + getChecked();
     }
 }

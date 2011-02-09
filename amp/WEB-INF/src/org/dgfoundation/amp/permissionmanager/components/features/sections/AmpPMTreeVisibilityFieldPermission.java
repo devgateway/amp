@@ -3,23 +3,17 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.PropertyRenderableColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.PropertyTreeColumn;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.tree.AbstractTree;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMLinkTree;
 
 /**
  * @author dan
@@ -73,29 +67,7 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
                 new PropertyRenderableColumn(new ColumnLocation(Alignment.LEFT, 7, Unit.EM), "L2","userObject.property2"), };
 
         //tree = new TreeTable("tree", createTreeModel(), columns);
-        tree = new LinkTree("tree", createTreeModel()){
-        	@Override
-        	protected Component newNodeComponent(String id, IModel<Object> model)
-        	{
-        		return new LinkIconPanel(id, model, tree)
-        		{
-        			private static final long serialVersionUID = 1L;
-
-        			@Override
-        			protected void onNodeLinkClicked(Object node, BaseTree tree1, AjaxRequestTarget target)
-        			{
-        				super.onNodeLinkClicked(node, tree1, target);
-        				//tree.onNodeLinkClicked(node, tree1, target);
-        			}
-
-        			@Override
-        			protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model)
-        			{
-        				return new Label(componentId, getNodeTextModel(model));
-        			}
-        		};
-        	}
-        };
+        tree = new AmpPMLinkTree("tree", createTreeModel());
         tree.getTreeState().setAllowSelectMultiple(false);
         add(tree);
         tree.getTreeState().collapseAll();

@@ -84,7 +84,6 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		
 		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("globalPermsTabs", "Global Permissions", globalPermissionsTabs,true);
 		add(objTabs);
-
 	}
 
 }

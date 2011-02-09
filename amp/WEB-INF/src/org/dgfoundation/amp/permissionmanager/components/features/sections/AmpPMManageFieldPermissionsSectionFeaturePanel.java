@@ -67,7 +67,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		});
 		
 		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("fieldPermsTabs", "Field Permissions", fieldPermissionsTabs,true);
-		add(objTabs);
+		add(objTabs); 
 	}
 
 }

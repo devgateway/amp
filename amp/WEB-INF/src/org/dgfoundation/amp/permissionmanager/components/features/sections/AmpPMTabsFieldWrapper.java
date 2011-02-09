@@ -74,5 +74,5 @@ public class AmpPMTabsFieldWrapper extends Panel {
 		atp.setOutputMarkupId(true);
 		add(atp);
 	}
-
+ 
 }

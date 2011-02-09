@@ -311,7 +311,7 @@
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
-                      <td class="f-names">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
                         <table cellPadding="0" cellSpacing="0" width="320px">
                         
                          <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION"> 
@@ -526,7 +526,7 @@
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
-                      <td class="f-names">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
                         <table cellPadding="0" cellSpacing="0" width="320px">
 						 <feature:display name="Admin - Component Type" module="Components">
                           <tr>
@@ -646,7 +646,7 @@
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
-                      <td>
+                      <td style="padding-top:10px; padding-bottom:10px;">
                         <table cellPadding="0" cellSpacing="0" width="320">
                         <module:display name="Activity Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>

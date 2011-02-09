@@ -73,6 +73,29 @@ public class AmpPMLinkTree extends LinkTree {
 				IModel<Object> nodeTextModel = getNodeTextModel(model);
 				return new AmpPMTreeField(componentId, nodeTextModel,componentId);
 			}
+			
+			@Override
+			protected void addComponents(final IModel<Object> model, final BaseTree tree)
+			{
+				BaseTree.ILinkCallback callback = new BaseTree.ILinkCallback()
+				{
+					private static final long serialVersionUID = 1L;
+
+					public void onClick(AjaxRequestTarget target)
+					{
+						System.out.println("aaa");//onNodeLinkClicked(model.getObject(), tree, target);
+					}
+				};
+
+				MarkupContainer link = tree.newLink("iconLink", callback);
+				add(link);
+				link.add(newImageComponent("icon", tree, model));
+
+				link = tree.newLink("contentLink", callback);
+				add(link);
+				link.add(newContentComponent("content", tree, model));
+			}
+			
 		};
 	}
 	

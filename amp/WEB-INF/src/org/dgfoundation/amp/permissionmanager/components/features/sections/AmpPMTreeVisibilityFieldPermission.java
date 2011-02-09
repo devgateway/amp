@@ -62,9 +62,9 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 	public AmpPMTreeVisibilityFieldPermission(String id, IModel model, String fmName) {
 		super(id, model, fmName);
 		// TODO Auto-generated constructor stub
-        IColumn columns[] = new IColumn[] {
-                new PropertyTreeColumn(new ColumnLocation(Alignment.MIDDLE, 8, Unit.PROPORTIONAL),"Tree Column (middle)", "userObject.property1"),
-                new PropertyRenderableColumn(new ColumnLocation(Alignment.LEFT, 7, Unit.EM), "L2","userObject.property2"), };
+//        IColumn columns[] = new IColumn[] {
+//                new PropertyTreeColumn(new ColumnLocation(Alignment.MIDDLE, 8, Unit.PROPORTIONAL),"Tree Column (middle)", "userObject.property1"),
+//                new PropertyRenderableColumn(new ColumnLocation(Alignment.LEFT, 7, Unit.EM), "L2","userObject.property2"), };
 
         //tree = new TreeTable("tree", createTreeModel(), columns);
         tree = new AmpPMLinkTree("tree", createTreeModel());

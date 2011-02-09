@@ -47,7 +47,7 @@
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" valign="top">
-                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px; border-left:1px solid #C7C7C7; border-right:1px solid #C7C7C7; border-bottom:1px solid #C7C7C7;">
                         <table cellPadding="0" cellSpacing="0" width="320px" style="font-size:12px; line-height:22px; font-weight:bold;">
 						<module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
@@ -311,7 +311,7 @@
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
-                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px; border-left:1px solid #C7C7C7; border-right:1px solid #C7C7C7; border-bottom:1px solid #C7C7C7;">
                         <table cellPadding="0" cellSpacing="0" width="320px" style="font-size:12px; line-height:22px; font-weight:bold;">
                         
                          <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION"> 
@@ -526,7 +526,7 @@
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
-                      <td class="f-names" style="padding-top:10px; padding-bottom:10px;">
+                      <td class="f-names" style="padding-top:10px; padding-bottom:10px; border-left:1px solid #C7C7C7; border-right:1px solid #C7C7C7; border-bottom:1px solid #C7C7C7;">
                         <table cellPadding="0" cellSpacing="0" width="320px" style="font-size:12px; line-height:22px; font-weight:bold;">
 						 <feature:display name="Admin - Component Type" module="Components">
                           <tr>
@@ -646,7 +646,7 @@
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
-                      <td style="padding-top:10px; padding-bottom:10px;">
+                      <td style="padding-top:10px; padding-bottom:10px; border-left:1px solid #C7C7C7; border-right:1px solid #C7C7C7; border-bottom:1px solid #C7C7C7;">
                         <table cellPadding="0" cellSpacing="0" width="320" style="font-size:12px; line-height:22px; font-weight:bold;">
                         <module:display name="Activity Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>

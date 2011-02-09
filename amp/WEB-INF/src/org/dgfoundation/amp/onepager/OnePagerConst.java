@@ -22,6 +22,8 @@ public final class OnePagerConst {
 	//TODO: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
 	public final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";
 	public final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	public final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+	public final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
 
 	public final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
 	
@@ -29,9 +31,18 @@ public final class OnePagerConst {
 	{
 		return String.format(toggleJS, c.getMarkupId());
 	}
+
+	public static String getToggleChildrenJS(Component c)
+	{
+		return String.format(toggleChildrenJS, c.getMarkupId());
+	}
+
 	public static String getToggleJSPM(Component c)
 	{
 		return String.format(toggleJSPM, c.getMarkupId());
 	}
 	
+	public static String getClickToggleJS(Component c){
+		return String.format(clickToggleJS, c.getMarkupId());
+	}
 }

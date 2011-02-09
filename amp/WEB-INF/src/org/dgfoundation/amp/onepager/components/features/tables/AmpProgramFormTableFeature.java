@@ -61,7 +61,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				Iterator<AmpActivityProgram> it = allProgs.iterator();
 				while (it.hasNext()) {
 					AmpActivityProgram prog = (AmpActivityProgram) it.next();
-					if (prog.getProgramSetting().getAmpProgramSettingsId() == programSettings.getAmpProgramSettingsId())
+					if (prog.getProgramSetting() != null && prog.getProgramSetting().getAmpProgramSettingsId() == programSettings.getAmpProgramSettingsId())
 						specificProgs.add(prog);
 				}
 				

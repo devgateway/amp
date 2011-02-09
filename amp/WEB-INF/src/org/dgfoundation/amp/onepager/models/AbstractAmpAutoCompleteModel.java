@@ -93,11 +93,12 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 */
 	protected List createTreeView(List l) {
 		List ret=new ArrayList();
-		Set<AmpSector> root = new TreeSet();
+		Set<Object> root = new TreeSet();
 		for (Object o : l)
 			addToRootTree(root, (AmpComboboxDisplayable) o, true);
 		for (Object o : root)
 			addToRootList(ret, (AmpComboboxDisplayable) o);
+
 		return ret;
 	}
 

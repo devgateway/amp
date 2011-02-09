@@ -21,7 +21,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpSubsectionFeaturePanel(String id, String fmName) throws Exception {
+	public AmpSubsectionFeaturePanel(String id, String fmName){
 		this(id, fmName,null);
 		
 	}
@@ -32,14 +32,13 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 	 * @param model
 	 * @throws Exception
 	 */
-	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model)
-			throws Exception {
+	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model){
 		super(id, model, fmName);
 		slider = new TransparentWebMarkupContainer("slider");
 		slider.setOutputMarkupId(true);
 		add(slider);
 	}
-public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel) throws Exception  {
+public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel) {
 	// TODO Auto-generated constructor stub
 	super(id, model,fmName, hideLabel);
 	slider = new TransparentWebMarkupContainer("slider");

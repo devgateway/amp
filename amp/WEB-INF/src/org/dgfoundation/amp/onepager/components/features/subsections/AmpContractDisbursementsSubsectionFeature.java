@@ -93,7 +93,7 @@ public class AmpContractDisbursementsSubsectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		AmpButtonField addbutton = new AmpButtonField("add", "Add Contract") {
+		AmpButtonField addbutton = new AmpButtonField("add", "Add Disbursement") {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				IPAContractDisbursement comp = new IPAContractDisbursement();

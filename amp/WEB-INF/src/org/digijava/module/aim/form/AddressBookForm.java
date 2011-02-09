@@ -59,6 +59,8 @@ public class AddressBookForm   extends ActionForm {
     private List<AmpOrganisation> organizations;
 	
     //private List<AmpOrganisationContact> contactOrganizations;
+    private List<AmpContact> probablyDuplicatedContacs;
+    private Long contactIdToOverWrite;
     
     private Long[] selOrgs;
 
@@ -263,6 +265,23 @@ public class AddressBookForm   extends ActionForm {
 
 	public void setOrganizations(List<AmpOrganisation> organizations) {
 		this.organizations = organizations;
+	}
+
+	public void setProbablyDuplicatedContacs(
+			List<AmpContact> probablyDuplicatedContacs) {
+		this.probablyDuplicatedContacs = probablyDuplicatedContacs;
+	}
+
+	public List<AmpContact> getProbablyDuplicatedContacs() {
+		return probablyDuplicatedContacs;
+	}
+
+	public void setContactIdToOverWrite(Long contactIdToOverWrite) {
+		this.contactIdToOverWrite = contactIdToOverWrite;
+	}
+
+	public Long getContactIdToOverWrite() {
+		return contactIdToOverWrite;
 	}
 	
 }

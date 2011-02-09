@@ -152,15 +152,40 @@
 	 	return true;
 	}
 
-	function saveContact(){
+	function saveContact(action){
 		if(validateInfo()){
-		    <digi:context name="addCont" property="context/addressBook.do?actionType=saveContact"/>
-		    var url="<%= addCont %>";
+			
+		    <digi:context name="addCont" property="context/addressBook.do?"/>
+		    var url="${addCont}";
+
+			if(action=='check'){
+				url+="actionType=checkForDuplicationContact";
+			}
+			else{
+				if(action=='new'){
+					url+="actionType=saveContact";
+				}
+				else{
+					if(action=='cancel'){
+						url+="actionType=viewAddressBook";
+					}
+					else{
+						var selectedContactId=$("input[name='contactIdToOverWrite']:checked").val(); 
+						document.addressbookForm.contactId.value=selectedContactId;
+						url+="actionType=saveContact";
+						
+					}
+					
+				}
+			}
 		    //url+=getParamsData();
 		    document.addressbookForm.action = url;
 		    document.addressbookForm.target = "_self";
 		    document.addressbookForm.submit();
 		}
+	}
+	function cancelSave(){
+		
 	}
 
 	function validateInfo(){
@@ -331,8 +356,20 @@
 	</li>
 </ul>
 <div class="yui-content" style="border: 1px solid rgb(208, 208, 208);" >
-<digi:form action="/addressBook.do?actionType=saveContact" method="post">	
-<div class="required_fields t_mid">All fields marked with <b style="color:#ff0000">*</b> are required</div>
+<digi:form action="/addressBook.do?actionType=saveContact" method="post">
+				<c:set var="readonly">
+					<c:choose>
+						<c:when
+							test="${not empty addressbookForm.probablyDuplicatedContacs}">
+									true
+								</c:when>
+						<c:otherwise>
+									false
+								</c:otherwise>
+					</c:choose>
+				</c:set>
+				<html:hidden property="contactId"/>
+				<div class="required_fields t_mid">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 <hr />
 	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
 <tbody><tr>
@@ -375,8 +412,9 @@
 </tr>
 <tr>
 <td class="t_mid"><digi:trn>Firstname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-<td><html:text property="name" styleId="name" size="33" styleClass="inputx insidex"/></td>
-<td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
+							<td><html:text property="name" styleId="name" size="33"
+										styleClass="inputx insidex" readonly="${readonly}" /></td>
+							<td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
 <td><logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 <div><c:set var="translationNone">
@@ -404,7 +442,8 @@
 </tr>
 <tr>
   <td class="t_mid"><digi:trn>Lastname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-  <td><html:text property="lastname" styleId="lastname" size="33" styleClass="inputx insidex"/></td>
+  <td><html:text property="lastname" styleId="lastname" size="33"
+										styleClass="inputx insidex" readonly="${readonly}"/></td>
   <td class="t_mid"><digi:trn>Fax</digi:trn>:</td>
   <td>
   <logic:notEmpty name="addressbookForm" property="faxes">
@@ -451,7 +490,67 @@
   <td align="right" valign="top">&nbsp;</td>
   </tr>
 </tbody></table>
-<hr /><center><input type="button" class="buttonx_sm btn_save" value="Save" onclick="saveContact()"></center>
+<hr />
+			<c:choose>
+				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">
+					<table border="1">
+						<thead>
+							<tr>
+								<td />
+								<td><digi:trn>FirstName</digi:trn></td>
+								<td><digi:trn>LastName</digi:trn></td>
+								<td><digi:trn>Email</digi:trn></td>
+								<td><digi:trn>Organizations</digi:trn></td>
+								<td><digi:trn>Phone</digi:trn></td>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="contact"
+								items="${addressbookForm.probablyDuplicatedContacs}">
+								<tr>
+									<td><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
+									<td>${contact.name}</td>
+									<td>${contact.lastname}</td>
+									<td>
+									<ul>
+										<c:forEach var="property" items="${contact.properties}">
+											<c:if test="${property.name=='contact email'}">
+												<li>${property.value}</li>
+											</c:if>
+										</c:forEach>
+									</ul>
+									</td>
+									<td>
+									<ul>
+									<c:forEach var="contactOrg" items="${contact.organizationContacts}">
+									<li>${contactOrg.organisation.name}</li>
+									</c:forEach>
+									<c:if test="${not empty contact.organisationName}">
+									<li>${contact.organisationName}</li>
+									</c:if>
+									</ul>
+									</td>
+									<td>
+									<ul>
+										<c:forEach var="property" items="${contact.properties}">
+											<c:if test="${property.name=='contact phone'}">
+												<li>${property.value}</li>
+											</c:if>
+										</c:forEach>
+									</ul>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Create new Contact</digi:trn>' onclick="saveContact('new')">
+					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Overwrite</digi:trn>' onclick="saveContact('overwrite')">
+					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Cancel</digi:trn>'  onclick="saveContact('cancel')">
+				</c:when>
+				<c:otherwise>
+				<center><input type="button" class="buttonx_sm btn_save" value='<digi:trn>Save</digi:trn>' onclick="saveContact('check')"></center>
+				</c:otherwise>
+				</c:choose>
 </digi:form>
 </div>
 </div>

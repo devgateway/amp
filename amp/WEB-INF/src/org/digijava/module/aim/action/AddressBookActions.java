@@ -356,6 +356,22 @@ public class AddressBookActions extends DispatchAction {
    public ActionForward addOrganization(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
          return mapping.findForward("addOrEditContact");
    }
+   public ActionForward checkForDuplicationContact(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		AddressBookForm myForm=(AddressBookForm)form;
+		if (myForm.getContactId() == null||myForm.getContactId()==0) {
+			String name = myForm.getName().trim();
+			String lastname = myForm.getLastname().trim();
+
+			List<AmpContact> probablyDuplicatedContacs = ContactInfoUtil
+					.getContactsByNameLastName(name, lastname);
+			if (probablyDuplicatedContacs != null
+					&& !probablyDuplicatedContacs.isEmpty()) {
+				myForm.setProbablyDuplicatedContacs(probablyDuplicatedContacs);
+				return mapping.findForward("addOrEditContact");
+			}
+		}
+		return saveContact(mapping, myForm, request, response);
+   }
 	
    public ActionForward saveContact (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AddressBookForm myForm=(AddressBookForm)form;
@@ -363,8 +379,9 @@ public class AddressBookActions extends DispatchAction {
 		AmpContact contact=new AmpContact();
 		Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
 		Set<ContactPropertyHelper> emailsToLookFor=new HashSet<ContactPropertyHelper>();
+		
        if (myForm.getEmails() != null) {
-           if (myForm.getContactId() != null) {
+           if (myForm.getContactId() != null&&myForm.getContactId()!=0) {
                //get contact emails
                List<AmpContactProperty> properties = ContactInfoUtil.getContactProperties(myForm.getContactId());
                Set<AmpContactProperty> emails = null;
@@ -423,7 +440,7 @@ public class AddressBookActions extends DispatchAction {
 		//remove old contact and properties and organization contacts
 		List<AmpOrganisation> orgsForWhichContactWasPrimary=new ArrayList<AmpOrganisation>();
 		Set<AmpActivityContact> activityContacts=null;
-		if(myForm.getContactId()!=null){
+		if(myForm.getContactId()!=null&&myForm.getContactId()!=0){
 			AmpContact cont=ContactInfoUtil.getContact(myForm.getContactId());
 			List<AmpOrganisationContact> contOrgs=ContactInfoUtil.getContactOrganizations(myForm.getContactId());
         	if(contOrgs!=null && contOrgs.size()>0){
@@ -641,6 +658,8 @@ public class AddressBookActions extends DispatchAction {
 		form.setEmailsSize(0);
 		form.setPhonesSize(0);
 		form.setFaxesSize(0);
+		form.setContactIdToOverWrite(null);
+		form.setProbablyDuplicatedContacs(null);
 	}
 	
 	

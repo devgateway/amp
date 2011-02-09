@@ -220,6 +220,37 @@ public class ContactInfoUtil {
 		}
 		return contacts;
 	}
+	/**
+	 * @param fromRecord from which record should be loaded contacts
+	 * @param resultsNum how many contacts should be loaded
+	
+	 * @return contacts
+	 * @throws Exception
+	 */
+	public static List<AmpContact> getContactsByNameLastName(String name,
+			String lastname) throws Exception {
+		List<AmpContact> contacts = null;
+		Session session = null;
+		String queryString = null;
+		Query query = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select cont from " + AmpContact.class.getName()
+					+ " cont ";
+	
+			queryString += " where cont.name=:name "
+					+ "or cont.lastname =:lastname";
+
+			queryString += " order by cont.function desc ";
+			query = session.createQuery(queryString);
+			query.setString("name",  name);
+			query.setString("lastname",  lastname);
+			contacts = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return contacts;
+	}
 	
 	/**
 	 * get contact name and lastname for autocomplete box 

@@ -75,7 +75,20 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			pmAux = createPermissionMap(globalPermissionMapForPermissibleClassModel);
 		}
 		final IModel<PermissionMap> pmAuxModel = new Model(pmAux);
+		Permission pNothing=null;
+		if(!(pmAuxModel.getObject().getPermission() instanceof CompositePermission))
+			{
+				pNothing = pmAuxModel.getObject().getPermission();
+				pmAuxModel.getObject().setPermission(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+						"This permission was created using the PM UI by admin user",false));
+				
+			}
+		
 		generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
+//		else {
+//			generateGatesList(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+//					"This permission was created using the PM UI by admin user",false),gatesSet);
+//		}
 		final IModel<Set<AmpPMGateWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", false);
@@ -93,6 +106,19 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 					pmAuxModel.setObject(createPermissionMap(globalPermissionMapForPermissibleClassModel));
 				}
 				TreeSet<AmpPMGateWrapper> aa = new TreeSet<AmpPMGateWrapper>();
+//				if(pmAuxModel.getObject().getPermission() instanceof CompositePermission)
+//					generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),aa);
+//				else {
+//					generateGatesList(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+//							"This permission was created using the PM UI by admin user",false),aa);
+//				}
+				if(!(pmAuxModel.getObject().getPermission() instanceof CompositePermission))
+					{
+						Permission pNothing1 = pmAuxModel.getObject().getPermission();	
+						pmAuxModel.getObject().setPermission(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+							"This permission was created using the PM UI by admin user",false));
+						
+					}
 				generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),aa);
 				gatesSetModel.setObject(aa);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
@@ -128,11 +154,16 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		pmAux = new PermissionMap();
 		pmAux.setPermissibleCategory(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
 		pmAux.setObjectIdentifier(null);
-		CompositePermission cp=new CompositePermission(false);
-		cp.setDescription("This permission was created using the PM UI by admin user");
-		cp.setName(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission");
-		pmAux.setPermission(cp);
+		pmAux.setPermission(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+				"This permission was created using the PM UI by admin user",false));
 		return pmAux;
+	}
+	
+	private CompositePermission createCompositePermission(String name, String description, boolean dedicated){
+		CompositePermission cp=new CompositePermission(dedicated);
+		cp.setDescription(description);
+		cp.setName(name);
+		return cp;
 	}
 	
 	
@@ -150,7 +181,9 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		gatesSet.add(new AmpPMGateWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 	}
 	
-	public void generateGatesList(CompositePermission cp, Set<AmpPMGateWrapper> gatesSet){
+	public void generateGatesList(Object o, Set<AmpPMGateWrapper> gatesSet){
+		if(!(o instanceof CompositePermission)) return;
+		CompositePermission cp = (CompositePermission)o;
 		if(cp==null || cp.getId() == null) 
 			{
 				generateDefaultGatesList(gatesSet);

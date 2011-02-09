@@ -36,7 +36,7 @@
         <tr>
           <td nowrap="nowrap" vAlign="top" align="center">
             <table bgColor="#ffffff" cellPadding=20 cellSpacing="1" class="box-border-nopadding" width="100%">
-              <tr align="center" bgcolor="#E1E1E1" vAlign="top">
+              <tr align="center" bgcolor="#EBEBEB" vAlign="top">
                 <td class="f-names" nowrap="nowrap">
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" >
                     <tr bgcolor="#C0D6E2" align="center">
@@ -515,7 +515,7 @@
                 </td>
               </tr>
 
-              <tr align="center" bgcolor="#E1E1E1" valign="top">
+              <tr align="center" bgcolor="#EBEBEB" valign="top">
                 <td>
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
                     <tr bgcolor="#C0D6E2" align="center">

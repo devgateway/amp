@@ -515,7 +515,7 @@
                 </td>
               </tr>
 
-              <tr align="center" bgcolor="#E1E1E1" valign="top">
+              <tr align="center" bgcolor="#F2F2F2" valign="top">
                 <td>
                   <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
                     <tr bgcolor="#B7B7B7" align="center">

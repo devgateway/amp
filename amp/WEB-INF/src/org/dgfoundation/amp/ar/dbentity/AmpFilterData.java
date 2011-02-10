@@ -154,7 +154,10 @@ public class AmpFilterData implements Serializable {
 						Object element	= iter.next();
 						if (element != null) {
 							String elClassName	= element.getClass().getName();
-							int indexOfDollar	= elClassName.indexOf("$$");
+							int indexOfDollar	= elClassName.indexOf("_$$");
+							if ( indexOfDollar < 0)
+								indexOfDollar	= elClassName.indexOf("$$");
+								
 							if ( indexOfDollar >= 0 )
 								elClassName		= elClassName.substring(0, indexOfDollar); 
 									

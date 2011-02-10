@@ -7,6 +7,7 @@
 package org.digijava.module.aim.action;
 
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -45,10 +48,14 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
 
 /**
@@ -200,6 +207,7 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute("progressValue", progressValue); 
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			validateColumnsAndHierarchies(ar);
 			//This is for public views to avoid nullPointerException due to there is no logged user.
 			if(tm != null){
 				saveOrUpdateReportLog(tm, ar);
@@ -355,6 +363,37 @@ public class ViewNewAdvancedReport extends Action {
 			reportlog.setMember(ampTeamMember);
 			reportlog.setLastView(new Date());
 			DbUtil.add(reportlog);				
+		}
+	}
+	
+	/**
+	 * Checks if all columns in the report are added as 
+	 * hierarchies, if it is, then add the column "Project Title".
+	 * Also checks if the column "Project Title" is already added,
+	 * if it is, then removes it from the hierarchies list.
+	 * @param ampReport
+	 */
+	private void validateColumnsAndHierarchies (AmpReports ampReport){
+		AdvancedReportUtil.removeDuplicatedColumns(ampReport);
+		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
+		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+		if (ampReport.getColumns().size() == ampReport.getHierarchies().size()) {
+			for ( AmpColumns tempCol: availableCols ) {
+				if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+					if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
+						AmpReportColumn titleCol			= new AmpReportColumn();
+						titleCol.setLevel(level1);
+						titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
+						titleCol.setColumn(tempCol); 
+						ampReport.getColumns().add(titleCol);
+						break;
+					}else{
+						/*if Project Title column is already added then remove it from hierarchies list*/
+						AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
+						break;
+					}
+				}
+			}
 		}
 	}
 	

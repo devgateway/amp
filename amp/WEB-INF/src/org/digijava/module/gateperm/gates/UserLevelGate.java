@@ -68,10 +68,11 @@ public class UserLevelGate extends Gate {
 		String param = parameters.poll().trim();
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		if(tm!=null && tm.getTeamHead()) return true;
-		//if(tm!=null && tm.getTeamHead() && PARAM_WORKSPACE_MANAGER.equals(param)) return true;
 		
 		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		
+		//AMP-9768 - apply permissions to teamHead for other workspaces than his own 
+		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
 		if(act==null) act=(AmpActivity) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		boolean owner=false;
 		if (act.getActivityCreator()==null){

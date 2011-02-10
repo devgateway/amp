@@ -784,7 +784,9 @@
 													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
 														<html:option value="<%=new Integer(Constants.ACTUAL).toString()%>"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 														<html:option value="<%=new Integer(Constants.PLANNED).toString()%>"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
-														<html:option value="<%=new Integer(Constants.ADJUSTMENT_TYPE_PIPELINE).toString()%>"><digi:trn>Pipeline</digi:trn></html:option>
+														<field:display name="Pipeline" feature="Commitments">
+															<html:option value="<%=new Integer(Constants.ADJUSTMENT_TYPE_PIPELINE).toString()%>"><digi:trn>Pipeline</digi:trn></html:option>
+														</field:display>
 													</html:select>
 												</c:if>
 													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>

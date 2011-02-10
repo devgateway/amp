@@ -301,11 +301,14 @@ public class SearchUtil {
 		String link = n.getWebLink();
 		String name = n.getName();
 
+		if (title == null)
+			return false;
+		
 		if (title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 			return true;
 		}
 
-		if (description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+		if ( description != null && description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 			return true;
 		}
 
@@ -316,7 +319,7 @@ public class SearchUtil {
 			}
 		} else // It's a doc
 		{
-			if (name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+			if (name!=null && name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 				return true;
 			}
 		}

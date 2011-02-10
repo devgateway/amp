@@ -363,6 +363,12 @@ public class ShowActivityPrintPreview
                 if(ampCategoryValueForLevel != null)
                     eaForm.getLocation().setLevelId(ampCategoryValueForLevel.getId());
 
+                AmpCategoryValue ampCategoryValueLocationForLevel	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
+                if(ampCategoryValueLocationForLevel != null)
+                    eaForm.getLocation().setImplemLocationLevel(ampCategoryValueLocationForLevel.getId());
+
+                
                 // loading the locations
                 int impLevel = 0;
                 
@@ -480,18 +486,18 @@ public class ShowActivityPrintPreview
                         eaForm.setImplementationLevel("country");
                 }*/
                 
-                if (impLevel >= 0) {
-                	eaForm.getLocation().setImplemLocationLevel( 
-                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
-                													new Long(impLevel) ).getId()
-                	);
-                }
-                else
-                	eaForm.getLocation().setImplemLocationLevel( 
-                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
-									new Long(0) ).getId()
-                	);
-                
+//                if (impLevel >= 0) {
+//                	eaForm.getLocation().setImplemLocationLevel( 
+//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
+//                													new Long(impLevel) ).getId()
+//                	);
+//                }
+//                else
+//                	eaForm.getLocation().setImplemLocationLevel( 
+//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
+//									new Long(0) ).getId()
+//                	);
+//                
                 
 
         		Collection sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());

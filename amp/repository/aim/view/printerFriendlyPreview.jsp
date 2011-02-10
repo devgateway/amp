@@ -296,6 +296,23 @@
 									</logic:present>
 									</field:display>
 									
+									<field:display name="Project Impact" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display> 
+									
+									
 									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
@@ -364,6 +381,13 @@
 										<digi:trn>Budget Unallocated</digi:trn>
 										</logic:equal>
 										</field:display>
+										
+										<c:if test="${aimEditActivityForm.identification.budget == 1}">
+										<p/>
+										<field:display name="Project Code" feature="Budget">
+											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 
+										</field:display>										
+										</c:if>				
 										</td>
 									</tr>
 									</feature:display>
@@ -695,7 +719,7 @@
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
 											<digi:trn key="aim:level">
-										    Level</digi:trn>
+										    Implementation Level</digi:trn>
 										  </b>
 										</td>
 <td bgcolor="#ffffff">
@@ -704,6 +728,50 @@
 											</c:if>										</td>
 									</tr>
 									</field:display>
+									
+								  <field:display name="Implementation Location" feature="Location">	  
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:implementationLocation">
+										    Implementation Location</digi:trn>
+										  </b>
+										</td>
+<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+											</c:if>										</td>
+									</tr>
+									</field:display>
+									
+                            </feature:display>   
+                            
+                            
+							<feature:display name="Program" module="Program">
+                            <field:display name="National Planning Objectives" feature="NPD Programs">                       
+                          	<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
+                        					</b>
+                        				</td>
+							<td bgcolor="#ffffff">
+							<table width="100%" cellSpacing="2" cellPadding="1">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
+                                                          <tr><td>
+                                                                                 ${nationalPlanObjectivePrograms.hierarchyNames}
+                                                          <td align="right">
+                                                                    ${nationalPlanObjectivePrograms.programPercentage}%
+                                                          </td></tr>                                                          
+                                                          </c:forEach>
+
+                                                        </c:if>
+                            </table>
+							</td>
+							</tr>
+						</field:display>
                             </feature:display>   
                                     <feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

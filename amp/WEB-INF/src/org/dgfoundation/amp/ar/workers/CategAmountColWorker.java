@@ -258,11 +258,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		if (filter.getAmountinthousand()==null) {
 			filter.setAmountinthousand(Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 		} 
+		
 		if (filter.getAmountinthousand()){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d);
 			}
-		}else{
+		}
+		else{
 			acc.setAmount(tr_amount);
 		}
 		

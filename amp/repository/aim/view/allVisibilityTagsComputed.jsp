@@ -561,6 +561,7 @@
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
+<field:display name="Validate Mandatory Primary Sector" feature="Sectors"></field:display> 
 <field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Program Background" feature="Admin NPD"></field:display> 
@@ -638,7 +639,8 @@
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Secondary Sector" feature="Sectors"></field:display> 
+<field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Secondary Sector" feature="Sectors"></field:display> 
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 

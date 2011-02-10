@@ -655,7 +655,7 @@ public class SaveActivity extends Action {
 						}
 						
 						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
-							if(!hasPrimarySectorsAdded){
+							if(!hasPrimarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Primary Sector", ampContext)){
 								errors.add("noPrimarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
 							}
@@ -665,7 +665,7 @@ public class SaveActivity extends Action {
 
 						
 						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
-							if(!hasSecondarySectorsAdded){
+							if(!hasSecondarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Secondary Sector", ampContext)){
 								errors.add("noSecondarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
 							}
@@ -673,7 +673,7 @@ public class SaveActivity extends Action {
 								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 						}
                         if (Boolean.parseBoolean(eaForm.getSectors().getTertiarySectorVisible()) && isInConfig(eaForm, "Tertiary")){
-							if(!hasTertiarySectorsAdded){
+							if(!hasTertiarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Tertiary Sector", ampContext)){
 								errors.add("noTertiarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors",locale,siteId)));
 							}
@@ -2068,6 +2068,7 @@ public class SaveActivity extends Action {
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
 			AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+			String validation = DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation();
 			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
@@ -2079,30 +2080,41 @@ public class SaveActivity extends Action {
 						activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
-				if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+				if("newOnly".equals(validation))
 				{
 					if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
-
-				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+				
+				if("allEdits".equals(validation)){
 					if(!tm.getTeamHead()){
 						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()) || Constants.STARTED_APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 						else activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
+				
+				if("validationOff".equals(validation))
+				{
+					activity.setApprovalStatus(Constants.APPROVED_STATUS);
+				}
+				
 				if(tm.getTeamHead()) activity.setApprovalStatus(Constants.APPROVED_STATUS);
 			}
 			else{
-				if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+				if("newOnly".equals(validation))
 				{
 					if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
 
-				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+				if("allEdits".equals(validation)){
 					if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 					else activity.setApprovalStatus(aAct.getApprovalStatus());
+				}
+				
+				if("validationOff".equals(validation))
+				{
+					activity.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
 			}
 			activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
@@ -2113,7 +2125,13 @@ public class SaveActivity extends Action {
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
-			if (activity.getDraft() && tm.getTeamHead()){
+			//teamMember.getAmpTeamMemId()
+			Long ampTeamId = null;
+			if(activity!=null && activity.getTeam()!=null && activity.getTeam().getAmpTeamId() !=null)
+				ampTeamId = activity.getTeam().getAmpTeamId();
+			else ampTeamId = teamMember.getAmpTeamMemId();
+			String validation = DbUtil.getTeamAppSettingsMemberNotNull(ampTeamId).getValidation();
+			if (activity.getDraft() && tm.getTeamHead() || "validationOff".equals(validation)){
 				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}else{
 				activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());

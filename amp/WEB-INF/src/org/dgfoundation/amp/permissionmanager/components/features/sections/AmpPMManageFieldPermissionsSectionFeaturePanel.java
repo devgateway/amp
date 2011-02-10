@@ -11,7 +11,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 
 /**
  * @author dan
@@ -47,7 +47,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibility>  ampTreeVisibilityModel, String fmName, boolean hideLabel) throws Exception {
+	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibilityModelBean>  ampTreeVisibilityModel, String fmName, boolean hideLabel) throws Exception {
 		super(id, ampTreeVisibilityModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();

@@ -14,8 +14,8 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 
 /**
  * @author dan
@@ -30,7 +30,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	 * @param model
 	 * @param fmName
 	 */
-	public AmpPMAssignFieldPermissionComponentPanel(String id, IModel<AmpTreeVisibility> ampTreeVisibilityModel, String fmName) {
+	public AmpPMAssignFieldPermissionComponentPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
 		this.showWorkspace=true;
@@ -64,7 +64,8 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permissionPriorityChoices.setSuffix("");
 		add(permissionPriorityChoices);
 		
-		AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", permissionChoiceModel, "FM Fields Panel");
+		
+		AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", ampTreeVisibilityModel, "FM Fields Panel");
 		add(tree);
 	}
 

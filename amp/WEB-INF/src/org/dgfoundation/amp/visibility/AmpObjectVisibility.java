@@ -109,6 +109,15 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public Set getAllItems() {
 		return allItems;
 	}
+	
+	public TreeSet getSortedAlphaAllItems()
+	{
+		if(this.getAllItems()==null) return null; 
+		TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+		 mySet.addAll(this.getAllItems());
+		 return mySet;
+	}
+	
 	public void setAllItems(Set allItems) {
 		this.allItems = allItems;
 	}
@@ -124,6 +133,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	
 	public TreeSet getSortedAlphaItems()
 	{
+		if(this.getItems()==null) return null;
 		 TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
 		 mySet.addAll(this.getItems());
 		 return mySet;

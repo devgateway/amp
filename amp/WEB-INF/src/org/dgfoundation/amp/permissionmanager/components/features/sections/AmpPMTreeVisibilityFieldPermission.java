@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 
 /**
  * @author dan
@@ -22,17 +23,6 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 
 	private BaseTree tree;
 	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param fmType
-	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, String fmName,
-			AmpFMTypes fmType) {
-		super(id, fmName, fmType);
-		// TODO Auto-generated constructor stub
-	}
-
 	/**
 	 * @param id
 	 * @param fmName
@@ -55,15 +45,13 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 
 	/**
 	 * @param id
-	 * @param model
-	 * @param fmName
+	 * @param ampTreeVisibilityModel
+	 * @param string
 	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel model, String fmName) {
-		super(id, model, fmName);
+	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
+		super(id, ampTreeVisibilityModel, fmName);
 
-        //tree = new TreeTable("tree", createTreeModel(), columns);
-        //tree = new AmpPMLinkTree("tree", createTreeModel());
-		tree = new AmpPMCheckBoxTree("tree", createTreeModel()){
+		tree = new AmpPMCheckBoxTree("tree", createTreeModel(ampTreeVisibilityModel)){
 			@Override
 			protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target) {
 				if (!tree.getTreeState().isNodeSelected(node)) {

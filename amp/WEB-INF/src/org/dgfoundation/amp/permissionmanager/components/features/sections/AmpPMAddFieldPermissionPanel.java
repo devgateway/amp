@@ -6,7 +6,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 
 /**
  * @author dan
@@ -14,7 +14,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
  */
 public class AmpPMAddFieldPermissionPanel extends AmpComponentPanel {
 
-	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibility> ampTreeVisibilityModel, String fmName) {
+	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
 		

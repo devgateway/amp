@@ -77,7 +77,6 @@ public class AmpPMCheckBoxTree extends BaseTree {
 	 */
 	protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target)
 	{
-		System.out.println("aaaaaaaaaaa");
 	}
 	
 	/**

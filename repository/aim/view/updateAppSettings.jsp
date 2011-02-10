@@ -266,15 +266,20 @@ function loadShareRules(){
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<bean:define id="newOnly" value=""/>
 															<bean:define id="allEdits" value=""/>
+															<bean:define id="validationOff" value=""/>
 															<c:if test="${aimUpdateAppSettingsForm.validation=='newOnly'}">
 																<bean:define id="newOnly" value="selected"/>
 															</c:if>
 															<c:if test="${aimUpdateAppSettingsForm.validation=='allEdits'}">
 																<bean:define id="allEdits" value="selected"/>
 															</c:if>
+															<c:if test="${aimUpdateAppSettingsForm.validation=='validationOff'}">
+																<bean:define id="validationOff" value="selected"/>
+															</c:if>
 															<html:select property="validation" styleClass="inp-text">
 																<option value="newOnly" <c:out  value="${newOnly}"></c:out> ><digi:trn key="aim:defValidationNewOnly">Validate New Only</digi:trn></option>
-																<option value="allEdits" <c:out  value="${allEdits }"></c:out> ><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>
+																<option value="allEdits" <c:out  value="${allEdits}"></c:out> ><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>
+																<option value="validationOff" <c:out  value="${validationOff}"></c:out> ><digi:trn key="aim:noValidation">No Validation</digi:trn></option>
 															</html:select>
 														</td>
 													</tr>

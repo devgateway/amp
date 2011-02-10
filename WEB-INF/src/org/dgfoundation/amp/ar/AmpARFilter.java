@@ -34,6 +34,9 @@ import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -295,6 +298,13 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			String siteId = site.getId().toString();
+			String locale = navigationLanguage.getCode();
+			ampReport.setSiteId(siteId);
+			ampReport.setLocale(locale);
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
 					this.generatedFilterQuery = initialPledgeFilterQuery;
 			}
@@ -364,13 +374,13 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		
-		Long defaulCalenadarId=null;
+		Long defaultCalendarId=null;
 		
 		if (tempSettings!=null){
 			if (tempSettings.getFiscalCalendar()!=null){
-				defaulCalenadarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+				defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
 			}else{
-				defaulCalenadarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
+				defaultCalendarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
 			}
 		}	
 		///Set the range depending of workspase setup / global setting and selected calendar
@@ -395,8 +405,7 @@ public class AmpARFilter extends PropertyListable {
 			
 			
 			
-			if (renderStartYear!=null && calendarType != null && renderStartYear!=-1
-					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
@@ -425,8 +434,7 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 			
-			if (renderEndYear!=null && calendarType != null && renderStartYear!=-1 
-					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+			 if (renderEndYear!=null && renderEndYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);

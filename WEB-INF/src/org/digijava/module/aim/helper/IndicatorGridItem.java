@@ -16,12 +16,13 @@ import org.digijava.module.aim.util.DbUtil.AmpIndicatorValuesComparatorByTypeAnd
 import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
- * Indicator value helper bean.
- * Stores indicator name and both values, target, and latest actual value for one particular year.
- * Used in reports and grids on NPD inside the IndicatorGridRow beans
+ * Indicator value helper bean. Stores indicator name and both values, target,
+ * and latest actual value for one particular year. Used in reports and grids on
+ * NPD inside the IndicatorGridRow beans
+ * 
  * @see org.digijava.module.aim.helper.IndicatorGridRow
  * @author Irakli Kobiashvili ikobiashvili@picktek.com
- *
+ * 
  */
 public class IndicatorGridItem {
 	private Long valueId;
@@ -33,8 +34,11 @@ public class IndicatorGridItem {
 
 	/**
 	 * Constructs new object from set of indicator values
-	 * @param year string representing year
-	 * @param values set of AmpThemeIndicatorValue beans
+	 * 
+	 * @param year
+	 *            string representing year
+	 * @param values
+	 *            set of AmpThemeIndicatorValue beans
 	 * @see org.digijava.module.aim.dbentity.AmpThemeIndicatorValue
 	 */
 	public IndicatorGridItem(String year, Set<AmpIndicatorValue> values) {
@@ -66,8 +70,8 @@ public class IndicatorGridItem {
 			}
 
 			// Look for the Base value and Target for this particular year.
-			// NOTE: If we don't have an Actual value, then the next section
-			// will fail.
+			// NOTE: If we don't have an Actual value, then select Base and
+			// Target anyway.
 			iValues = values.iterator();
 			while (iValues.hasNext()) {
 				AmpIndicatorValue auxValue = iValues.next();
@@ -81,15 +85,28 @@ public class IndicatorGridItem {
 				if (auxCreationYear == yearValue) {
 					// Base value.
 					if (auxValue.getValueType() == 2) {
-						// Check this date is before the Actual date.
-						if (auxCreationDate.compareTo(actualValue.getValueDate()) <= 0) {
+						if (actualValue != null) {
+							// Check this date is before the Actual date.
+							if (auxCreationDate.compareTo(actualValue.getValueDate()) <= 0) {
+								if (baseValue == null) {
+									baseValue = auxValue;
+								} else {
+									// If we have more than 1 possible Base
+									// values
+									// then select the highest.
+									if (auxValue.getValueDate().compareTo(baseValue.getValueDate()) > 0) {
+										baseValue = auxValue;
+									}
+								}
+							}
+						} else {
+							// Just select latest Base date.
 							if (baseValue == null) {
 								baseValue = auxValue;
 							} else {
-								// If we have more than 1 possible Base values
-								// then select the highest (nearest to the
-								// Actual value)
-								// TODO: CHECK FORMER COMMENT WITH MEDEA.
+								// If we have more than 1 possible Base
+								// values
+								// then select the highest.
 								if (auxValue.getValueDate().compareTo(baseValue.getValueDate()) > 0) {
 									baseValue = auxValue;
 								}
@@ -98,14 +115,28 @@ public class IndicatorGridItem {
 					}
 					// Target value.
 					if (auxValue.getValueType() == 0) {
-						// Check this date is before the Actual date.
-						if (auxCreationDate.compareTo(actualValue.getValueDate()) >= 0) {
+						if (actualValue != null) {
+							// Check this date is before the Actual date.
+							if (auxCreationDate.compareTo(actualValue.getValueDate()) >= 0) {
+								if (targetValue == null) {
+									targetValue = auxValue;
+								} else {
+									// If we have more than 1 possible Target
+									// values
+									// then select the highest.
+									if (auxValue.getValueDate().compareTo(targetValue.getValueDate()) > 0) {
+										targetValue = auxValue;
+									}
+								}
+							}
+						} else {
+							// Just select latest Target date.
 							if (targetValue == null) {
 								targetValue = auxValue;
 							} else {
-								// If we have more than 1 possible Target values
+								// If we have more than 1 possible Target
+								// values
 								// then select the highest.
-								// TODO: CHECK FORMER COMMENT WITH MEDEA.
 								if (auxValue.getValueDate().compareTo(targetValue.getValueDate()) > 0) {
 									targetValue = auxValue;
 								}
@@ -136,7 +167,6 @@ public class IndicatorGridItem {
 							// If we have more than 1 possible Base values
 							// then select the highest (nearest to the
 							// Actual value)
-							// TODO: CHECK FORMER COMMENT WITH MEDEA.
 							if (auxValue.getValueDate().compareTo(baseValue.getValueDate()) > 0) {
 								baseValue = auxValue;
 							}
@@ -167,7 +197,6 @@ public class IndicatorGridItem {
 							// If we have more than 1 possible Target values
 							// then select the lowest (nearest to the
 							// Actual value)
-							// TODO: CHECK FORMER COMMENT WITH MEDEA.
 							if (auxValue.getValueDate().compareTo(targetValue.getValueDate()) < 0) {
 								targetValue = auxValue;
 							}
@@ -185,35 +214,44 @@ public class IndicatorGridItem {
 		if (targetValue != null) {
 			this.targetValue = targetValue.getValue().toString();
 		}
-	}	
-	
+	}
+
 	public String getActualValue() {
 		return actualValue;
 	}
+
 	public void setActualValue(String actualValue) {
 		this.actualValue = actualValue;
 	}
+
 	public Long getIndicatorId() {
 		return indicatorId;
 	}
+
 	public void setIndicatorId(Long indicatorId) {
 		this.indicatorId = indicatorId;
 	}
+
 	public String getTargetValue() {
 		return targetValue;
 	}
+
 	public void setTargetValue(String targetValue) {
 		this.targetValue = targetValue;
 	}
+
 	public Long getValueId() {
 		return valueId;
 	}
+
 	public void setValueId(Long valueId) {
 		this.valueId = valueId;
 	}
+
 	public String getYear() {
 		return year;
 	}
+
 	public void setYear(String year) {
 		this.year = year;
 	}
@@ -225,5 +263,4 @@ public class IndicatorGridItem {
 	public void setBaseValue(String baseValue) {
 		this.baseValue = baseValue;
 	}
-	
 }

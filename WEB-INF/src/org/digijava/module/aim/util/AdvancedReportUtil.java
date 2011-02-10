@@ -20,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpPages;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -592,4 +594,62 @@ public final class AdvancedReportUtil {
 	    }
 	    return false;
 	}
+	
+	/**
+	 * Return true if the column colName is already in the columns list.
+	 * @param columns
+	 * @param colName
+	 * @return
+	 */
+	public static boolean isColumnAdded (Set <AmpReportColumn> columns, String colName){
+		
+		for ( AmpReportColumn tempCol: columns ) {
+			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Removes the column colName from the hierarchies list.
+	 * @param columns
+	 * @param colName
+	 */
+	public static void removeColumnFromHierarchies (Set <AmpReportHierarchy> columns, String colName){
+		AmpReportHierarchy hierarchy = null;
+		for ( AmpReportHierarchy tempCol: columns ) {
+			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
+				hierarchy = tempCol;
+				break;
+			}
+		}
+		if (hierarchy!=null) {
+			columns.remove(hierarchy);
+		}
+	}
+	
+	/**
+	 * Find and removes duplicate columns from a AmpReport
+	 * @param ampReport
+	 */
+	public static void removeDuplicatedColumns(AmpReports ampReport){
+		Set<AmpReportColumn> cols1 = ampReport.getColumns();
+		Set<AmpReportColumn> cols2 = ampReport.getColumns();
+		for (Iterator iterator = cols1.iterator(); iterator.hasNext();) {
+			AmpReportColumn ampReportColumn1 = (AmpReportColumn) iterator.next();
+			int cont = 0;
+			for (Iterator iterator2 = cols2.iterator(); iterator2.hasNext();) {
+				AmpReportColumn ampReportColumn2 = (AmpReportColumn) iterator2.next();
+				if (ampReportColumn1.getColumn().getColumnName().equals(ampReportColumn2.getColumn().getColumnName())) {
+					cont++;
+				}
+			}
+			if (cont>1) {
+				iterator.remove();
+			}
+		}
+		ampReport.setColumns(cols1);
+	}
+	
 }

@@ -772,10 +772,12 @@ function collapseAll() {
 										<digi:trn>Budget Unallocated</digi:trn>
 										</logic:equal>
 										
+										<c:if test="${aimEditActivityForm.identification.budget == 1}">
 										<p/>
 										<field:display name="Project Code" feature="Budget">
 											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 
 										</field:display>										
+										</c:if>									
 																					
                                         <c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}">
 										<digi:trn>Code Chapitre</digi:trn>:
@@ -1122,15 +1124,59 @@ function collapseAll() {
                                     
                                     <field:display name="Implementation Level" feature="Location">	  
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">											<digi:trn key="aim:level">Level</digi:trn>										</td>
-										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+											<digi:trn key="aim:level">Implementation Level</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.location.levelId>0}" >
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
 											</c:if>										</td>
 									</tr>
 									</field:display>
+									
+									<field:display name="Implementation Location" feature="Location">	  
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+											<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+											</c:if>										</td>
+									</tr>
+									</field:display>
                             </feature:display>   
                             <!--19-->
+                            
+                            <feature:display name="Program" module="Program">
+                            <field:display name="National Planning Objectives" feature="NPD Programs">                       
+                          	<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">	
+                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
+                                                  <img id="npo_plus"  onclick="toggleGroup('npo')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="npo_minus" onclick="toggleGroup('npo')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
+							</td>
+							<td bgcolor="#ffffff">
+							<div id="npo_dots">...</div>
+							<div id="act_npo" style="display: none;">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
+                                                          <p/>
+                                                                                 ${nationalPlanObjectivePrograms.hierarchyNames}
+                                                                    ${nationalPlanObjectivePrograms.programPercentage}%
+                                                                                                                            
+                                                          </c:forEach>
+
+                                                        </c:if>
+							</div>
+							</td>
+							</tr>
+						</field:display>
+                        </feature:display>    
+                          
+                            
+                            
                             <feature:display name="Sectors" module="Project ID and Planning">
                                             
                                             <tr>

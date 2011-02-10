@@ -86,10 +86,10 @@ function popup(mylink, windowname)
         <tr>
           <td valign="bottom" class="crumb" >
 	        <c:set var="translation">
-            	<digi:trn>Home</digi:trn>
+            	<digi:trn>Home Page</digi:trn>
             </c:set>
             <digi:link href="/" styleClass="comment" title="${translation}">
-	            <digi:trn>Home</digi:trn>
+	            <digi:trn>Home Page</digi:trn>
             </digi:link>
             &gt; ${breadCrumb}</td>
         </tr>
@@ -236,7 +236,11 @@ function popup(mylink, windowname)
                             <td align="center" height="20" style="text-transform:capitalize;"><b>
                               <digi:trn>Measures</digi:trn>
                               </b> </td>
-                            <td align="center" height="20" style="text-transform:capitalize;"><strong>Export Options</strong></td>
+                            <td align="center" height="20" style="text-transform:capitalize;">
+                            	<strong>
+                            		<digi:trn>Export Options</digi:trn> 
+                            	</strong>
+                            </td>
                           </tr>
                           </thead>
                           <tbody>

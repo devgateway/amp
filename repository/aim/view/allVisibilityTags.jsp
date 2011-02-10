@@ -326,6 +326,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Activity Button" feature="Edit Activity"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Commitments"></field:display> 
+<field:display name="Pipeline" feature="Commitments"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Add Disbursement Button" feature="Disbursement"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 
@@ -777,9 +778,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Secondary Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Tertiary Sector" feature="Sectors"></field:display>
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 

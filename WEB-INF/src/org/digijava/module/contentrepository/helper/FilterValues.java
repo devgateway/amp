@@ -5,7 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -16,7 +22,7 @@ public class FilterValues {
 	public List<KeyValue> possibleTeams;
 	public List<KeyValue> possibleFileTypes;
 	
-	public FilterValues() {
+	public FilterValues(HttpServletRequest request) {
 		
 		Collection<User> allUsers	= TeamMemberUtil.getAllTeamMemberUsers();
 		if (allUsers != null) {
@@ -37,12 +43,21 @@ public class FilterValues {
 				possibleTeams.add(kv);
 			}
 		}
-		
-		possibleFileTypes			= new ArrayList<KeyValue>();
-		possibleFileTypes.add( new KeyValue("application/pdf", "PDF Document") );
-		possibleFileTypes.add( new KeyValue("application/msword", "Word Document") );
-		possibleFileTypes.add( new KeyValue("application/vnd.ms-excel", "Excel Spreadsheet") );
-		possibleFileTypes.add( new KeyValue("text/plain","Text") );
+		Site site = RequestUtils.getSite(request);
+ 	 	String siteId = site.getId().toString();
+ 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+ 	 	
+		possibleFileTypes = new ArrayList<KeyValue>();
+		try {
+			possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document",request)));
+			possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document",request)));
+			possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet",request)));
+			possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text",request)));
+			
+		} catch (WorkerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}

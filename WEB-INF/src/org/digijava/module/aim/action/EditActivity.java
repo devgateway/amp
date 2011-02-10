@@ -595,7 +595,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         
         //Added because of a problem with the save as draft and redirect.
         try {
-        	request.getParameterMap().put("viewAllRights", "true");
+        	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
+        	//request.getParameterMap().put("viewAllRights", "true");
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();

@@ -266,11 +266,12 @@ function validateSectorPercentage(){
         var j;
         var primaryDiv=sectorDiV.getElementsByTagName("div").length;
         var inputs=sectorDiV.getElementsByTagName("input");
+        /*
         if(inputs.length==0 && primaryDiv>0){
            alert("${errMsgAddSector}");
             empty=true;
             return false;
-        }
+        }*/
 
         for (j=0; j<inputs.length; j++){
             if (inputs[j].type == "text") {

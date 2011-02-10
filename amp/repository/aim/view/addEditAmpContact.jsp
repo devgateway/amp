@@ -497,10 +497,10 @@
 <hr />
 			<c:choose>
 				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">
-					<table border="1">
+					<table border="1" style="font-size:12px; margin-bottom:15px;" align=center>
 						<thead>
-							<tr>
-								<td />
+							<tr bgcolor=#C0D6E2>
+								<td></td>
 								<td><digi:trn>FirstName</digi:trn></td>
 								<td><digi:trn>LastName</digi:trn></td>
 								<td><digi:trn>Email</digi:trn></td>

@@ -497,25 +497,25 @@
 <hr />
 			<c:choose>
 				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">
-					<table border="1" style="font-size:12px; margin-bottom:15px;" align=center>
+					<table border="0" style="font-size:12px; margin-bottom:15px;" align=center width=100% class="inside">
 						<thead>
 							<tr bgcolor=#C0D6E2>
-								<td></td>
-								<td><digi:trn>FirstName</digi:trn></td>
-								<td><digi:trn>LastName</digi:trn></td>
-								<td><digi:trn>Email</digi:trn></td>
-								<td><digi:trn>Organizations</digi:trn></td>
-								<td><digi:trn>Phone</digi:trn></td>
+								<td class="inside"></td>
+								<td class="inside"><digi:trn><b>FirstName</b></digi:trn></td>
+								<td class="inside"><digi:trn><b>LastName</b></digi:trn></td>
+								<td class="inside"><digi:trn><b>Email</b></digi:trn></td>
+								<td class="inside"><digi:trn><b>Organizations</b></digi:trn></td>
+								<td class="inside"><digi:trn><b>Phone</b></digi:trn></td>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="contact"
 								items="${addressbookForm.probablyDuplicatedContacs}">
 								<tr>
-									<td><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
-									<td>${contact.name}</td>
-									<td>${contact.lastname}</td>
-									<td>
+									<td class="inside"><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
+									<td class="inside">${contact.name}</td>
+									<td class="inside">${contact.lastname}</td>
+									<td class="inside">
 									<ul>
 										<c:forEach var="property" items="${contact.properties}">
 											<c:if test="${property.name=='contact email'}">
@@ -524,7 +524,7 @@
 										</c:forEach>
 									</ul>
 									</td>
-									<td>
+									<td class="inside">
 									<ul>
 									<c:forEach var="contactOrg" items="${contact.organizationContacts}">
 									<li>${contactOrg.organisation.name}</li>
@@ -534,7 +534,7 @@
 									</c:if>
 									</ul>
 									</td>
-									<td>
+									<td class="inside">
 									<ul>
 										<c:forEach var="property" items="${contact.properties}">
 											<c:if test="${property.name=='contact phone'}">

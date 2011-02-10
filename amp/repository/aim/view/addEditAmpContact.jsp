@@ -512,7 +512,7 @@
 							<c:forEach var="contact"
 								items="${addressbookForm.probablyDuplicatedContacs}">
 								<tr>
-									<td class="inside"><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
+									<td class="inside" width=25><html:radio property="contactIdToOverWrite" value="${contact.id}"></html:radio></td>
 									<td class="inside">${contact.name}</td>
 									<td class="inside">${contact.lastname}</td>
 									<td class="inside">

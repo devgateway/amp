@@ -3,6 +3,11 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import java.util.Enumeration;
+
+import javax.swing.tree.TreeNode;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
@@ -55,17 +60,33 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 	 */
 	public AmpPMTreeVisibilityFieldPermission(String id, IModel model, String fmName) {
 		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-//        IColumn columns[] = new IColumn[] {
-//                new PropertyTreeColumn(new ColumnLocation(Alignment.MIDDLE, 8, Unit.PROPORTIONAL),"Tree Column (middle)", "userObject.property1"),
-//                new PropertyRenderableColumn(new ColumnLocation(Alignment.LEFT, 7, Unit.EM), "L2","userObject.property2"), };
 
         //tree = new TreeTable("tree", createTreeModel(), columns);
         //tree = new AmpPMLinkTree("tree", createTreeModel());
-		tree = new AmpPMCheckBoxTree("tree", createTreeModel());
+		tree = new AmpPMCheckBoxTree("tree", createTreeModel()){
+			@Override
+			protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target) {
+				if (!tree.getTreeState().isNodeSelected(node)) {
+					deselectTree( tree, node );
+				}
+				else{
+					selectTree( tree, node );
+				}
+			}
+		};
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().collapseAll();
+	}
+
+	protected void selectTree(BaseTree tree, TreeNode node) {
+		Enumeration nodeEnum = node.children();
+		while ( nodeEnum.hasMoreElements() ) {
+			TreeNode child = (TreeNode)nodeEnum.nextElement();
+			tree.getTreeState().selectNode( child, true );
+			selectTree( tree, child );
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -76,5 +97,15 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		// TODO Auto-generated method stub
 		return tree;
 	}
+	
+	private void deselectTree( BaseTree tree, TreeNode node ) {
+		Enumeration nodeEnum = node.children();
+		while ( nodeEnum.hasMoreElements() ) {
+			TreeNode child = (TreeNode)nodeEnum.nextElement();
+			tree.getTreeState().selectNode( child, false );
+			deselectTree( tree, child );
+		}
+	}
+	
 
 }

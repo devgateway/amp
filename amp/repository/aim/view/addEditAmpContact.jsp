@@ -516,7 +516,7 @@
 									<td class="inside">${contact.name}</td>
 									<td class="inside">${contact.lastname}</td>
 									<td class="inside">
-									<ul>
+									<ul style="margin:0;">
 										<c:forEach var="property" items="${contact.properties}">
 											<c:if test="${property.name=='contact email'}">
 												<li>${property.value}</li>
@@ -525,7 +525,7 @@
 									</ul>
 									</td>
 									<td class="inside">
-									<ul>
+									<ul style="margin:0;">
 									<c:forEach var="contactOrg" items="${contact.organizationContacts}">
 									<li>${contactOrg.organisation.name}</li>
 									</c:forEach>
@@ -535,7 +535,7 @@
 									</ul>
 									</td>
 									<td class="inside">
-									<ul>
+									<ul style="margin:0;">
 										<c:forEach var="property" items="${contact.properties}">
 											<c:if test="${property.name=='contact phone'}">
 												<li>${property.value}</li>
@@ -547,9 +547,9 @@
 							</c:forEach>
 						</tbody>
 					</table>
-					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Create new Contact</digi:trn>' onclick="saveContact('new')">
+					<center><input type="button" class="buttonx_sm btn_save" value='<digi:trn>Create new Contact</digi:trn>' onclick="saveContact('new')">
 					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Overwrite</digi:trn>' onclick="saveContact('overwrite')">
-					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Cancel</digi:trn>'  onclick="saveContact('cancel')">
+					<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Cancel</digi:trn>'  onclick="saveContact('cancel')"></center>
 				</c:when>
 				<c:otherwise>
 				<center><input type="button" class="buttonx_sm btn_save" value='<digi:trn>Save</digi:trn>' onclick="saveContact('check')"></center>

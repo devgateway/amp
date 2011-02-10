@@ -3,17 +3,11 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
-import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
-import org.apache.wicket.extensions.markup.html.tree.table.PropertyRenderableColumn;
-import org.apache.wicket.extensions.markup.html.tree.table.PropertyTreeColumn;
 import org.apache.wicket.markup.html.tree.AbstractTree;
-import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMLinkTree;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
 
 /**
  * @author dan
@@ -21,7 +15,7 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMLi
  */
 public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 
-	private LinkTree tree;
+	private BaseTree tree;
 	
 	/**
 	 * @param id
@@ -67,8 +61,9 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 //                new PropertyRenderableColumn(new ColumnLocation(Alignment.LEFT, 7, Unit.EM), "L2","userObject.property2"), };
 
         //tree = new TreeTable("tree", createTreeModel(), columns);
-        tree = new AmpPMLinkTree("tree", createTreeModel());
-        tree.getTreeState().setAllowSelectMultiple(false);
+        //tree = new AmpPMLinkTree("tree", createTreeModel());
+		tree = new AmpPMCheckBoxTree("tree", createTreeModel());
+        tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().collapseAll();
 	}

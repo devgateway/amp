@@ -256,12 +256,10 @@ public final class PermissionUtil {
     
     public static List<Permission> getAllUnDedicatedPermissions() {
 	Session session = null;
-
 	try {
 	    session = PersistenceManager.getRequestDBSession();
 	    Query query = session.createQuery(" from " + Permission.class.getName() +" p WHERE p.dedicated=false");
 	    List list = query.list();
-
 	    return list;
 	} catch (HibernateException e) {
 	    logger.error(e);

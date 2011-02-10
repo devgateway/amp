@@ -171,6 +171,10 @@
 					}
 					else{
 						var selectedContactId=$("input[name='contactIdToOverWrite']:checked").val(); 
+						if( selectedContactId==undefined){
+							alert("<digi:trn>Please select contact to overwrite</digi:trn>");
+							return false;
+						}
 						document.addressbookForm.contactId.value=selectedContactId;
 						url+="actionType=saveContact";
 						

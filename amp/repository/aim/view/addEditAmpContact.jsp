@@ -497,7 +497,8 @@
 <hr />
 			<c:choose>
 				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">
-					<table border="0" style="font-size:12px; margin-bottom:15px;" align=center width=100% class="inside">
+					<center><b style="font-size:12px;">Already Existing Contacts:</b><br /></center>
+					<table border="0" style="font-size:12px; margin-bottom:15px; margin-top:15px;" align=center width=100% class="inside">
 						<thead>
 							<tr bgcolor=#C0D6E2>
 								<td class="inside"></td>

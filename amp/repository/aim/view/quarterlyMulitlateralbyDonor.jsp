@@ -66,12 +66,13 @@
 <digi:instance property="aimMulitlateralbyDonorForm" />
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
- 
-<table width="1000" border="1" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align=center>
+
+<table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
-          <td width="750" align="left" valign="top">
+          <td width="14" class="r-dotted-lg">&nbsp;</td>
+          <td width="750" align="left" valign="top" >
 		
-		  <table width="100%"  border="0" cellpadding="0" cellspacing="0">
+		  <table width="100%"  border="0" cellpadding="5" cellspacing="0">
 			       
 			      <tr>
               <td width="9" height="33"></td>

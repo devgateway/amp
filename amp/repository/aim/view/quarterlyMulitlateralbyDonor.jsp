@@ -67,12 +67,11 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<table width="1000" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align=center>
 		<tr>
-          <td width="14" class="r-dotted-lg">&nbsp;</td>
-          <td width="750" align="left" valign="top" >
+          <td width="750" align="left" valign="top">
 		
-		  <table width="100%"  border="0" cellpadding="5" cellspacing="0">
+		  <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 			       
 			      <tr>
               <td width="9" height="33"></td>
@@ -416,8 +415,8 @@
                     <tr bgcolor="#F4F4F2">
 					<!--<td rowspan=3 align="center" height="21" width="73" > S.No	</td>-->
 					
-	<td align="center" height="21" width="12%"> &nbsp;</td>
-	<td align="center" height="21" width="12%"> &nbsp;</td>
+	<td align="center" height="21" width="12%">&nbsp; </td>
+	<td align="center" height="21" width="12%">&nbsp; </td>
 	
 	<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
 				<td colspan="16" align="center" height="21" width="21%">
@@ -616,7 +615,7 @@
 </tr>
 	
   <logic:iterate name="donors"  property="totalDonorTermAssistFund" id="totalDonorTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
-	<tr bgcolor="#F4F4F2"><td> &nbsp;</td>
+	<tr bgcolor="#F4F4F2"><td>&nbsp; </td>
 	<td align="left" height="21" width="77"> 
 			<br>Total <bean:write name="totalDonorTermAssistFund" property="termAssistName"/>
 		</td>

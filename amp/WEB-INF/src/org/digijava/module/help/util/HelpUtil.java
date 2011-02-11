@@ -9,6 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,6 +37,7 @@ import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.HelpLang;
 import org.digijava.module.help.jaxbi.ObjectFactory;
+import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -724,100 +729,209 @@ System.out.println("lang:"+lang);
 		}
 		 return topics;
 	 }
+     
+     /**
+      * fills ZipStream with image data and also builds help's export xml data
+      * @author Dare
+      * @return export data
+      */
+     public static List <AmpHelpType> getExportData ( ZipOutputStream out){
+ 		logger.info("Starting helpExport");
+        List <AmpHelpType> retVal = new ArrayList<AmpHelpType>(); 
+ 		Session session = null;
+ 		Query query = null;
+ 		ObjectFactory objFactory = new ObjectFactory();		
+ 		
+ 		try {
+ 			session = PersistenceManager.getRequestDBSession();
+ 			String queryString = "from "+ HelpTopic.class.getName();			
+ 			query = session.createQuery(queryString);
 
-	 public static Vector getAllHelpdataForExport() {
-		 //WTH is Vector ?!
-         logger.info("Starting helpExport");
+ 		    Iterator<HelpTopic> itr = query.list().iterator();
 
-		Vector vector = new Vector(); 
-		Session session = null;
-		Query query = null;
-		ObjectFactory objFactory = new ObjectFactory();
-		
-		
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
-			String queryString = "from "+ HelpTopic.class.getName();
-			
-            query = session.createQuery(queryString);
+ 			while (itr.hasNext()) {
+ 				AmpHelpType helpout=objFactory.createAmpHelpType();
+ 				
+ 				HelpTopic item = (HelpTopic) itr.next();
+ 				helpout.setTitleTrnKey(item.getTitleTrnKey());
+ 				helpout.setTopicKey(item.getTopicKey());
+ 				helpout.setKeywordsTrnKey(item.getKeywordsTrnKey());
+ 				helpout.setTopicId(item.getHelpTopicId());
+ 				helpout.setModuleInstance(item.getModuleInstance());
+ 				helpout.setEditorKey(item.getBodyEditKey());
+ 				if(item.getParent()!= null){
+ 					helpout.setParentId(item.getParent().getHelpTopicId());
+ 				}else{
+ 					helpout.setParentId(new Long(0));
+ 				}
+ 				helpout.setTopicType(item.getTopicType());
 
-		    Iterator itr = query.list().iterator();
+                 List <String> allLang = TranslatorWorker.getAllUsedLanguages();
 
-			while (itr.hasNext()) {
-				AmpHelpType helpout=objFactory.createAmpHelpType();
-				
-				HelpTopic item = (HelpTopic) itr.next();
-				helpout.setTitleTrnKey(item.getTitleTrnKey());
-				helpout.setTopicKey(item.getTopicKey());
-				helpout.setKeywordsTrnKey(item.getKeywordsTrnKey());
-				helpout.setTopicId(item.getHelpTopicId());
-				helpout.setModuleInstance(item.getModuleInstance());
-				helpout.setEditorKey(item.getBodyEditKey());
-				if(item.getParent()!= null){
-					helpout.setParentId(item.getParent().getHelpTopicId());
-				}else{
-					helpout.setParentId(new Long(0));
-				}
-				helpout.setTopicType(item.getTopicType());
+                 Iterator<String> langIter = allLang.iterator();
+                 while (langIter.hasNext()){
+                 	String lang = (String) langIter.next();
+                     if(item.getBodyEditKey() != null){                           	
+                     	Editor editor = DbUtil.getEditor(item.getBodyEditKey(), lang);
+                			if(editor != null){
+                				 HelpLang helplang = new HelpLang();
+                				 String editorBody = editor.getBody();
+                					 
+                				 String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;//<img\s.*?src\=\".*showImage\.do\?.*?activeParagraphOrder\=.*\"\s?/>;
+             				 Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
+             				 Matcher matcher = pattern.matcher(editorBody);
+                			 
+             				 while (matcher.find()){         							 
+             					 String imgTag=matcher.group(0);
+             					 //get the image and put it in zip
+             					 String paragraphOrder= imgTag.substring(imgTag.indexOf("activeParagraphOrder=")+21,imgTag.lastIndexOf("&"));
+             					 String docId = imgTag.substring(imgTag.indexOf("documentId=")+11, imgTag.indexOf("\"",imgTag.indexOf("documentId=")+11));
+             					 String imgName = item.getBodyEditKey()+"_langIs_"+lang+"_poIs_"+paragraphOrder;
+             					 SdmItem sdmItem = org.digijava.module.sdm.util.DbUtil.getSdmItem(new Long (docId), new Long (paragraphOrder));
+             					 //get image extensions
+             					 String imgType=sdmItem.getContentType();
+             					 String imgExtension = ".jpg";
+             					 if(imgType.indexOf("jpeg")==-1){
+             						 imgExtension = "." + imgType.substring(imgType.lastIndexOf("/")+1);
+             					 }
+             					 
+             					 out.putNextEntry(new ZipEntry(imgName +imgExtension));
+             					 byte[] buf =  sdmItem.getContent();
+             			         // Transfer bytes from the file to the ZIP file			 		
+             			         int len=buf.length;	           
+             				     out.write(buf, 0, len);
+             				     // Complete the entry
+             				     out.closeEntry();
+             							 
+             					 //replace editor body with new tag
+             					 String newTag = "<sdmTag " + imgTag.substring(5,imgTag.indexOf("src=")) + "imgName=\""+imgName+"\" />";
+             					 editorBody = matcher.replaceFirst(newTag);
+             					 matcher = pattern.matcher(editorBody);
+             				 }
+                					 
+                              helplang.setBody(editorBody);
+                              helplang.setTitle(HelpUtil.getTrn(item.getTopicKey(),lang,new Long(3)));
+                              helplang.setCode(lang);
+                              helpout.getLang().add(helplang);
 
-                  List <String> allLang = TranslatorWorker.getAllUsedLanguages();
+                              Calendar cal_u = Calendar.getInstance();
+                              cal_u.setTime(editor.getLastModDate());
+                              helpout.setLastModDate(cal_u);
+ 			   	        }else{
+                              HelpLang helplang = new HelpLang();
+                              helplang.setBody("");
+                              helplang.setTitle(HelpUtil.getTrn(item.getTopicKey(),lang,new Long(3)));
+                              helplang.setCode(lang);
+                              helpout.getLang().add(helplang);
 
-                        Iterator iterato = allLang.iterator();
-                             while (iterato.hasNext()){
-                             String lan = (String) iterato.next();
-
-
-                            if(item.getBodyEditKey() != null){
-
-                                List <Editor> Edit = getEditor(item.getBodyEditKey(),lan);
-				                
-				                    if(!Edit.isEmpty()){
-
-                                        Iterator iter = Edit.iterator();
-					                    while (iter.hasNext()) {
-                                            Editor help = (Editor) iter.next();
-
-                                            HelpLang helplang = new HelpLang();
-                                            helplang.setBody(help.getBody());
-                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
-                                            helplang.setCode(lan);
-
-                                            helpout.getLang().add(helplang);
-
-                                            Calendar cal_u = Calendar.getInstance();
-                                            cal_u.setTime(help.getLastModDate());
-                                            helpout.setLastModDate(cal_u);
-                                      }
-
-			   	            }else{
-
-                                            HelpLang helplang = new HelpLang();
-                                            helplang.setBody("");
-                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
-                                            helplang.setCode(lan);
-
-                                            helpout.getLang().add(helplang);
-
-                                            Calendar cal_u = Calendar.getInstance();
-                                            cal_u.setTime(new Date());
-                                            helpout.setLastModDate(cal_u);
-
-
-                                    }
-				        	
-			        }
-
+                              Calendar cal_u = Calendar.getInstance();
+                              cal_u.setTime(new Date());
+                              helpout.setLastModDate(cal_u);
+                         }				        	
+ 			        }
              }
-
-              vector.add(helpout);
+              retVal.add(helpout);
          }	
-		} catch (Exception e) {
-			logger.error("Unable to load help data");
-				
-		}
-		return vector;
-	}
+ 		} catch (Exception e) {
+ 			logger.error("Unable to load help data");
+ 				
+ 		}
+ 		return retVal;
+ 	}
+
+//	 public static Vector getAllHelpdataForExport() {
+//		 //WTH is Vector ?!
+//         logger.info("Starting helpExport");
+//
+//		Vector vector = new Vector(); 
+//		Session session = null;
+//		Query query = null;
+//		ObjectFactory objFactory = new ObjectFactory();
+//		
+//		
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+////			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
+//			String queryString = "from "+ HelpTopic.class.getName();
+//			
+//            query = session.createQuery(queryString);
+//
+//		    Iterator itr = query.list().iterator();
+//
+//			while (itr.hasNext()) {
+//				AmpHelpType helpout=objFactory.createAmpHelpType();
+//				
+//				HelpTopic item = (HelpTopic) itr.next();
+//				helpout.setTitleTrnKey(item.getTitleTrnKey());
+//				helpout.setTopicKey(item.getTopicKey());
+//				helpout.setKeywordsTrnKey(item.getKeywordsTrnKey());
+//				helpout.setTopicId(item.getHelpTopicId());
+//				helpout.setModuleInstance(item.getModuleInstance());
+//				helpout.setEditorKey(item.getBodyEditKey());
+//				if(item.getParent()!= null){
+//					helpout.setParentId(item.getParent().getHelpTopicId());
+//				}else{
+//					helpout.setParentId(new Long(0));
+//				}
+//				helpout.setTopicType(item.getTopicType());
+//
+//                  List <String> allLang = TranslatorWorker.getAllUsedLanguages();
+//
+//                        Iterator iterato = allLang.iterator();
+//                             while (iterato.hasNext()){
+//                             String lan = (String) iterato.next();
+//
+//
+//                            if(item.getBodyEditKey() != null){
+//
+//                                List <Editor> Edit = getEditor(item.getBodyEditKey(),lan);
+//				                
+//				                    if(!Edit.isEmpty()){
+//
+//                                        Iterator iter = Edit.iterator();
+//					                    while (iter.hasNext()) {
+//                                            Editor help = (Editor) iter.next();
+//
+//                                            HelpLang helplang = new HelpLang();
+//                                            helplang.setBody(help.getBody());
+//                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
+//                                            helplang.setCode(lan);
+//
+//                                            helpout.getLang().add(helplang);
+//
+//                                            Calendar cal_u = Calendar.getInstance();
+//                                            cal_u.setTime(help.getLastModDate());
+//                                            helpout.setLastModDate(cal_u);
+//                                      }
+//
+//			   	            }else{
+//
+//                                            HelpLang helplang = new HelpLang();
+//                                            helplang.setBody("");
+//                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
+//                                            helplang.setCode(lan);
+//
+//                                            helpout.getLang().add(helplang);
+//
+//                                            Calendar cal_u = Calendar.getInstance();
+//                                            cal_u.setTime(new Date());
+//                                            helpout.setLastModDate(cal_u);
+//
+//
+//                                    }
+//				        	
+//			        }
+//
+//             }
+//
+//              vector.add(helpout);
+//         }	
+//		} catch (Exception e) {
+//			logger.error("Unable to load help data");
+//				
+//		}
+//		return vector;
+//	}
 		
 	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId){
 		

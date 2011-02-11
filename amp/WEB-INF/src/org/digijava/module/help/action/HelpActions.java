@@ -1,19 +1,26 @@
 package org.digijava.module.help.action;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -45,6 +52,7 @@ import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.util.DbUtil;
 import org.xml.sax.InputSource;
 
@@ -680,23 +688,35 @@ public class HelpActions extends DispatchAction {
 
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Marshaller m = jc.createMarshaller();
-        response.setContentType("text/xml");
-		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
+        //response.setContentType("text/xml");
+        response.setContentType("application/zip");
+		response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
 		ObjectFactory objFactory = new ObjectFactory();
 		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
-		Vector rsAux;
+		List <AmpHelpType> rsAux;
         logger.info("loading helpData");
-        rsAux= HelpUtil.getAllHelpdataForExport();
+        ServletOutputStream ouputStream = response.getOutputStream();
+        ZipOutputStream out = new ZipOutputStream(ouputStream);
+        rsAux= HelpUtil.getExportData(out);
 
 
         help_out.getAmpHelp().addAll(rsAux);
-    
-        m.marshal(help_out,response.getOutputStream());
+        
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        m.marshal(help_out,bos);
+        out.putNextEntry(new ZipEntry("helpExport.xml"));
+        byte [] myArray= bos.toByteArray();
+        out.write(myArray, 0, myArray.length);
+        // Complete the entry
+        out.closeEntry();        
+        // Complete the ZIP file     
+	    out.close();
       
         return null;
 
 	}
 	
+
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 			HelpForm helpForm = (HelpForm) form;

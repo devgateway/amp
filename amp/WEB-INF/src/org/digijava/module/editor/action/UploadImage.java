@@ -35,10 +35,11 @@ public class UploadImage extends Action {
 		if(editor!=null){
 			// try to get document id 
 			String editorBody = editor.getBody();
-			String imgPart="<img\\s.*?src\\=\""+DgUtil.getCurrRootUrl(request)+"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;//<img\s.*?src\=\".*showImage\.do\?.*?activeParagraphOrder\=.*\"\s?/>;
+			String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;//<img\s.*?src\=\".*showImage\.do\?.*?activeParagraphOrder\=.*\"\s?/>;
 			Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 			Matcher matcher = pattern.matcher(editorBody);
-			if (matcher.find()){
+			
+			if (matcher.find()){				
 				String imgTag = matcher.group(0);
 				if(imgTag.contains("documentId=")){
 					docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
@@ -106,11 +107,7 @@ public class UploadImage extends Action {
 		String fileUrl="";
 		String errorMessage="";
 		
-		fileUrl=DgUtil.getCurrRootUrl(request) + "/sdm/showImage.do?activeParagraphOrder="+sdmItem.getParagraphOrder()+"&documentId="+docId;		
-//		if(helpAttachmentsHolder.getId()!=null){
-//			fileUrl+="&documentId="+helpAttachmentsHolder.getId();
-//		}
-		
+		fileUrl="/sdm/showImage.do?activeParagraphOrder="+sdmItem.getParagraphOrder()+"&documentId="+docId;		
 		
 		out.println("<script type=\"text/javascript\">");
 		out.println("window.parent.OnUploadCompleted("+retVal+",'"+fileUrl+"','"+newName+"','"+errorMessage+"');");

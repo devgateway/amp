@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.MarkupContainer;
@@ -10,7 +11,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LabelIconPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 
 /**
  * @author dan
@@ -53,9 +56,13 @@ public class AmpPMCheckBoxIconPanel extends LabelIconPanel {
 
 		add(newImageComponent("icon", tree, model));
 		
-		IModel dataModel = cbTree.newCheckBoxModel((TreeNode)model.getObject());
+//		IModel dataModel = cbTree.newCheckBoxModel((TreeNode)model.getObject());
 		MarkupContainer cb = null;
-		add( cb = cbTree.newCheckBox("checkbox", dataModel, callback) );
+//		add( cb = cbTree.newCheckBox("checkbox", dataModel, callback) );
+		DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) model.getObject();
+		AmpTreeVisibilityModelBean ampTree = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
+		IModel dataModel = new PropertyModel(ampTree,"checked"); 
+		add(cb = cbTree.newCheckBox("checkbox", dataModel, callback)); 
 		add(newContentComponent("content", tree, model));
 	}
 

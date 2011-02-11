@@ -149,6 +149,7 @@ public class AmpPMCheckBoxTree extends BaseTree {
 	 */
 	public MarkupContainer newCheckBox(String id, IModel model, final ICheckCallback callback)
 	{
+		Object o = model.getObject();
 		if (getCheckType() == CheckType.REGULAR)
 		{
 			return new CheckBox(id, model)
@@ -192,6 +193,7 @@ public class AmpPMCheckBoxTree extends BaseTree {
 			return new AjaxCheckBox(id, model)
 			{
 				private static final long serialVersionUID = 1L;
+				
 
 				/**
 				 * @see org.apache.wicket.ajax.markup.html.AjaxFallbackLink#onClick(org.apache.wicket.ajax.AjaxRequestTarget)

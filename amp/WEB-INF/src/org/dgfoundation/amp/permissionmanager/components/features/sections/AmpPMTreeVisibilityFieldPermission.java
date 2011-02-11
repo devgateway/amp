@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.util.Enumeration;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -64,7 +65,7 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		};
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
-        tree.getTreeState().collapseAll();
+        tree.getTreeState().expandAll();
 	}
 
 	protected void selectTree(BaseTree tree, TreeNode node) {
@@ -72,6 +73,9 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		while ( nodeEnum.hasMoreElements() ) {
 			TreeNode child = (TreeNode)nodeEnum.nextElement();
 			tree.getTreeState().selectNode( child, true );
+			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
+			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
+			userObject.setChecked(true);
 			selectTree( tree, child );
 		}
 		
@@ -91,6 +95,9 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		while ( nodeEnum.hasMoreElements() ) {
 			TreeNode child = (TreeNode)nodeEnum.nextElement();
 			tree.getTreeState().selectNode( child, false );
+			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
+			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
+			userObject.setChecked(false);
 			deselectTree( tree, child );
 		}
 	}

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class AmpTreeVisibilityModelBean implements Serializable
 {
-    private Boolean checked=true;
+    private Boolean checked=false;
     private String name;
     private List<Object> items;
 
@@ -49,7 +49,7 @@ public class AmpTreeVisibilityModelBean implements Serializable
      */
     public AmpTreeVisibilityModelBean(String s, List<Object> items)
     {
-        checked = true;
+        checked = false;
         this.items = items;
         this.name = s;
     }
@@ -57,9 +57,11 @@ public class AmpTreeVisibilityModelBean implements Serializable
     
     public AmpTreeVisibilityModelBean(){
     	this.items=new ArrayList();
+    	checked = false;
     }
     
     public AmpTreeVisibilityModelBean(String name){
+    	checked = false;
     	this.name = name;
     	this.items=new ArrayList();
     }

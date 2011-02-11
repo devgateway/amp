@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -18,7 +18,6 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 
 /**
  * @author dan
@@ -106,49 +105,10 @@ public abstract class AmpPMBaseTreePanel extends AmpComponentPanel {
     protected TreeModel createTreeModel(IModel<AmpTreeVisibilityModelBean> treeModel)
     {
     	AmpTreeVisibilityModelBean tree = treeModel.getObject();
-    	
-//        List<Object> l1 = new ArrayList<Object>();
-//        l1.add("test 1.1");
-//        l1.add("test 1.2");
-//        l1.add("test 1.3");
-//        List<Object> l2 = new ArrayList<Object>();
-//        l2.add("test 2.1");
-//        l2.add("test 2.2");
-//        l2.add("test 2.3");
-//        List<Object> l3 = new ArrayList<Object>();
-//        l3.add("test 3.1");
-//        l3.add("test 3.2");
-//        l3.add("test 3.3");
-//
-//        l2.add(l3);
-//
-//        l2.add("test 2.4");
-//        l2.add("test 2.5");
-//        l2.add("test 2.6");
-//
-//        l3 = new ArrayList<Object>();
-//        l3.add("test 3.1");
-//        l3.add("test 3.2");
-//        l3.add("test 3.3");
-//        l2.add(l3);
-//
-//        l1.add(l2);
-//
-//        l2 = new ArrayList<Object>();
-//        l2.add("test 2.1");
-//        l2.add("test 2.2");
-//        l2.add("test 2.3");
-//
-//        l1.add(l2);
-//
-//        l1.add("test 1.3");
-//        l1.add("test 1.4");
-//        l1.add("test 1.5");
-
-        return convertToTreeModel(tree.getItems());
+        return convertToTreeModel(tree,tree.getItems());
     }
 
-    private TreeModel convertToTreeModel(List<Object> list)
+    private TreeModel convertToTreeModel(AmpTreeVisibilityModelBean tree, List<Object> list)
     {
         TreeModel model = null;
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean("ROOT",list));
@@ -171,17 +131,6 @@ public abstract class AmpPMBaseTreePanel extends AmpComponentPanel {
               DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.toString()));
               parent.add(child);
         	}
-//            if (o instanceof List)
-//            {
-//                DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean("subtree..."));
-//                parent.add(child);
-//                add(child, (List<Object>)o);
-//            }
-//            else
-//            {
-//                DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.toString()));
-//                parent.add(child);
-//            }
         }
     }
 

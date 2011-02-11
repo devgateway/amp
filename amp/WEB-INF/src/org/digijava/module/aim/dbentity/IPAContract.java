@@ -22,12 +22,19 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class IPAContract implements Serializable, Versionable {
 
+	/**
+	 * Multiple fields marked as "transient" in order to fool the
+	 * Wicket serializer checker. Marking a field as "transient" 
+	 * shouldn't affect Hibernate which has it's own way of identifying
+	 * a transient field through the "@Transient" adnotation.
+	 */
+	
     private static final long serialVersionUID = 2485772788422409800L;
     private Long id;
     private String contractName;
     private String description;
     private String contractingOrganizationText;
-    private AmpCategoryValue activityCategory;
+    private transient AmpCategoryValue activityCategory;
     private Date startOfTendering;
     private Date signatureOfContract;
     private Date contractValidity;
@@ -45,18 +52,18 @@ public class IPAContract implements Serializable, Versionable {
     private Double totalECContribIBAmount;
     private Double totalAmount;
     private Double contractTotalValue;
-    private AmpCurrency totalAmountCurrency;
-    private AmpCurrency dibusrsementsGlobalCurrency;
+    private transient AmpCurrency totalAmountCurrency;
+    private transient AmpCurrency dibusrsementsGlobalCurrency;
     private Double totalECContribINVAmount;
     private Double totalNationalContribCentralAmount;
     private Double totalNationalContribRegionalAmount;
     private Double totalNationalContribIFIAmount;
     private Double totalPrivateContribAmount;
-    private Set disbursements;
-    private AmpActivity activity;
-    private AmpOrganisation organization;
-    private Set<AmpOrganisation> organizations;
-    private AmpCategoryValue status;
+    private transient Set disbursements;
+    private transient AmpActivity activity;
+    private transient AmpOrganisation organization;
+    private transient Set<AmpOrganisation> organizations;
+    private transient AmpCategoryValue status;
     //this disbursements and executionRate are used in Montenegro
     private Double totalDisbursements;
     private Double executionRate;
@@ -65,23 +72,23 @@ public class IPAContract implements Serializable, Versionable {
     private Double fundingTotalDisbursements;
     private Double fundingExecutionRate;
     
-    private AmpCategoryValue type;
-    private AmpCategoryValue contractType;
+    private transient AmpCategoryValue type;
+    private transient AmpCategoryValue contractType;
     
     
     /**
      * 
      */
     private Double donorContractFundinAmount;
-    private AmpCurrency donorContractFundingCurrency;
+    private transient AmpCurrency donorContractFundingCurrency;
     
     private Double totAmountDonorContractFunding;
-    private AmpCurrency totalAmountCurrencyDonor; 
+    private transient AmpCurrency totalAmountCurrencyDonor; 
     
     private Double totAmountCountryContractFunding;
-    private AmpCurrency totalAmountCurrencyCountry;  
+    private transient AmpCurrency totalAmountCurrencyCountry;  
     
-    private Set amendments;    
+    private transient Set amendments;    
     /**
      * 
      */
@@ -668,7 +675,7 @@ public class IPAContract implements Serializable, Versionable {
 		return ret;
 	}
 
-	private Comparator disbComparator = new Comparator() {
+	private transient Comparator disbComparator = new Comparator() {
 		public int compare(Object o1, Object o2) {
 			if( !(o1 instanceof IPAContractDisbursement) || !(o2 instanceof IPAContractDisbursement) ) return -1;
 			IPAContractDisbursement aux1 = (IPAContractDisbursement) o1;

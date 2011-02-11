@@ -39,8 +39,15 @@ public class AmpIndicatorValue implements Serializable{
 	private AmpCategoryValue indicatorSource;
 	
 
-
         private AmpIndicatorSubgroup subgroup;
+
+        public AmpIndicatorValue() {
+        }
+
+        
+        public AmpIndicatorValue(int valueType) {
+        	this.valueType = valueType;
+        }
 
         /*these  helper methods are used
          to set and get date object value to(from) the date input field

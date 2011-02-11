@@ -1,8 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.util.Identifiable;
 
-public class AmpIndicatorRiskRatings implements Identifiable {
+public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
 	private Long ampIndRiskRatingsId;
 	private String ratingName;
 	private String translatedRatingName;

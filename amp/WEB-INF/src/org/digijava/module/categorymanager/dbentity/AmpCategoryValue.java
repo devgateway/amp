@@ -22,7 +22,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private Integer index;
-	private Set<AmpActivity> activities;
+	private transient Set<AmpActivity> activities;
 	//private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;

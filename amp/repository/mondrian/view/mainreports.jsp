@@ -56,9 +56,9 @@
         <tr>
         	<td height=16 align="left" vAlign=center style="font-size:12px;">
           		<digi:errors/>
-          		<span class=subtitle-blue>
+          		<span class=subtitle-blue><b>
             		${pageTitle}
-            	</span>
+            	</b></span>
           	</td>
        </tr>
 		<tr>
@@ -66,7 +66,7 @@
 				<table align=center cellPadding=0 cellSpacing=0 width="100%">
 					<tr>
     					<td>
-        					<table border=0 cellPadding=0 cellSpacing=0 width="100%" class="inside">
+        					<table border=0 cellPadding=0 cellSpacing=0 width="100%" class="inside" style="margin-top:10px;">
             					<tr bgColor=#C0D6E2>
                 					<td bgColor=#C0D6E2 align="center" class="inside">
                     					<b>
@@ -160,38 +160,39 @@
 					</logic:iterate>
 					</table>
 					<c:if test="${custonflag==true}">
-					<table align=center cellPadding=0 cellSpacing=0 width="100%">
+					<table align=center cellPadding=0 cellSpacing=0 width="100%" class="inside">
 					<tr>
-						<td height=30 align="left" vAlign=center>
-							<span class=subtitle-blue>
+						<td align="left" vAlign=center class="inside">
+							<span class=subtitle-blue><b>
             					<digi:trn>Custom Multidimensional reports</digi:trn>
+								</b>
             				</span>
 						</td>
 					</tr>
-					<tr bgColor=#999999>
-                		<td bgColor=#999999 align="center" height="20">
+					<tr bgColor=#C0D6E2>
+                		<td bgColor=#C0D6E2 align="center" class="inside">
                     		<b>
                         		${titleColumn}
                         	</b>
                     	</td>
-                    	<td bgColor=#999999 align="center" height="20">
+                    	<td bgColor=#C0D6E2 align="center" class="inside">
                     		<b>
                     			<digi:trn key="aim:reportType">Type</digi:trn>
                    	 		</b>
                     	</td>
-                    	<td bgColor=#999999 align="center" height="20">
+                    	<td bgColor=#C0D6E2 align="center" class="inside">
                     		<b>
                     			<digi:trn key="aim:creationDateLogger">Creation Date</digi:trn>
                    	 		</b>
                     	</td>
-                    	<td bgColor=#999999 align="center" height="20">
+                    	<td bgColor=#999999 align="center" class="inside">
                     	</td>
-                    	<td bgColor=#999999 align="center" height="20">
+                    	<td bgColor=#999999 align="center" class="inside">
                     	</td>
                     	<logic:present name="currentMember" scope="session">
                     	<bean:define id="member" name="currentMember" scope="session" />
                         <c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-							<td bgColor=#999999 align="center" height="20">
+							<td bgColor=#999999 align="center" class="inside">
                     			<b>
                         			<digi:trn key="aim:reportAction">Action</digi:trn>
 								</b>
@@ -201,7 +202,7 @@
 						</tr>                          
                			<c:if test="${reports.size == 0}">
                 			<tr>
-                				<td colspan="4">
+                				<td colspan="4" class="inside">
                     				<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
 								</td>
                 			</tr>
@@ -210,7 +211,7 @@
 					<c:if test="${!empty report.ownerId && report.type==1 }">
 						<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onMouseOut="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
 							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
-                    		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
+                    		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD inside">
                     			<p style="max-width: 250px;white-space: normal" title="${report.name}">
 									<a href="/mondrian/showreport.do?id=${report.id}&pagename=query" title="${report.name}">
 									<digi:trn key="${report.name}">
@@ -219,16 +220,16 @@
 									</a>
 	                       		</p> 		
                      		</td>
-                         	<td align="center">
+                         	<td align="center" class="inside"c>
                                 <p style="white-space: nowrap">
                                   <li>
                                   	<digi:trn key="aim:donorType">donor</digi:trn>
 	                        	  </li>
 	                        </td>
-	                        <td width="100" align="center" title="${report.creationdate}">
+	                        <td width="100" align="center" title="${report.creationdate}" class="inside">
                             	<bean:write name="report" property="creationdate" format="dd/MM/yyyy"/>
 	                        </td>
-	                         <td width="150">  
+	                         <td width="150" class="inside">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
 	                                  <li>
 	                                  	<bean:write name="report" property="columns"/>                                      
@@ -245,7 +246,7 @@
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
 	                            </td>
-                                <td align="center">
+                                <td align="center" class="inside">
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
 	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
@@ -255,7 +256,7 @@
                              	</td>
                         	<logic:present name="currentMember" scope="session">
                             <c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-								<td align="center">
+								<td align="center" class="inside">
 									<c:if test="${report.publicreport==false}">
 									<a href="/mondrian/mainreports.do?id=${report.id}&action=public" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
 		                        		<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="middle" />

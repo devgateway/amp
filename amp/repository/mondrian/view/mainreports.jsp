@@ -280,7 +280,7 @@
  				<tr>
  				</feature:display>
  				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
-					<td align="left" vAlign=center style="font-size:12px;">
+					<td align="left" vAlign=center style="font-size:12px; padding-bottom:10px;">
 							<span class=subtitle-blue><b>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>
 								</b>

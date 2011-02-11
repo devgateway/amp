@@ -24,6 +24,34 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 
 	private BaseTree tree;
 	
+
+	/**
+	 * @param id
+	 * @param ampTreeVisibilityModel
+	 * @param string
+	 */
+	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
+		super(id, ampTreeVisibilityModel, fmName);
+		setAmpTreeVisibility(ampTreeVisibilityModel);
+		
+		tree = new AmpPMCheckBoxTree("tree", createTreeModel(ampTreeVisibilityModel));
+        tree.getTreeState().setAllowSelectMultiple(true);
+        add(tree);
+        tree.getTreeState().expandAll();
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMBaseTreePanel#getTree()
+	 */
+	@Override
+	protected AbstractTree getTree() {
+		// TODO Auto-generated method stub
+		return tree;
+	}
+	
+
 	/**
 	 * @param id
 	 * @param fmName
@@ -39,68 +67,11 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 	 * @param fmName
 	 * @param fmBehavior
 	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
-		super(id, model, fmName, fmBehavior);
+	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, AmpFMTypes fmBehavior) {
+		super(id, ampTreeVisibilityModel, fmName, fmBehavior);
 		// TODO Auto-generated constructor stub
+		setAmpTreeVisibility(ampTreeVisibilityModel);
 	}
 
-	/**
-	 * @param id
-	 * @param ampTreeVisibilityModel
-	 * @param string
-	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
-		super(id, ampTreeVisibilityModel, fmName);
-
-		tree = new AmpPMCheckBoxTree("tree", createTreeModel(ampTreeVisibilityModel)){
-			@Override
-			protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target) {
-				if (!tree.getTreeState().isNodeSelected(node)) {
-					deselectTree( tree, node );
-				}
-				else{
-					selectTree( tree, node );
-				}
-			}
-		};
-        tree.getTreeState().setAllowSelectMultiple(true);
-        add(tree);
-        tree.getTreeState().expandAll();
-	}
-
-	protected void selectTree(BaseTree tree, TreeNode node) {
-		Enumeration nodeEnum = node.children();
-		while ( nodeEnum.hasMoreElements() ) {
-			TreeNode child = (TreeNode)nodeEnum.nextElement();
-			tree.getTreeState().selectNode( child, true );
-			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
-			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
-			userObject.setChecked(true);
-			selectTree( tree, child );
-		}
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMBaseTreePanel#getTree()
-	 */
-	@Override
-	protected AbstractTree getTree() {
-		// TODO Auto-generated method stub
-		return tree;
-	}
-	
-	private void deselectTree( BaseTree tree, TreeNode node ) {
-		Enumeration nodeEnum = node.children();
-		while ( nodeEnum.hasMoreElements() ) {
-			TreeNode child = (TreeNode)nodeEnum.nextElement();
-			tree.getTreeState().selectNode( child, false );
-			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
-			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
-			userObject.setChecked(false);
-			deselectTree( tree, child );
-		}
-	}
-	
 
 }

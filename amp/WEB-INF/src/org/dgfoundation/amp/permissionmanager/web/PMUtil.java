@@ -4,14 +4,20 @@
 package org.dgfoundation.amp.permissionmanager.web;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateWrapper;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
@@ -195,6 +201,36 @@ public final class PMUtil {
 			session.flush();
 		    }
 		}
+	}
+	
+	
+	public static AmpTreeVisibilityModelBean buildAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
+		// TODO Auto-generated method stub
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean("ROOT", new ArrayList<Object>());
+		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
+				for (Iterator it = currentTemplate.getSortedAlphaAllItems().iterator(); it.hasNext();) {
+					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
+					if(module.getParent()==null) 
+						{
+							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module)));
+						}
+				}
+		return tree;
+	}
+	
+	public static List<Object> buildAmpSubTreeFMPermission(AmpObjectVisibility aov){
+		List<Object> list = new ArrayList<Object>();
+		Set itemsSet=null;
+		if(aov instanceof AmpModulesVisibility && ((AmpModulesVisibility) aov).getSortedAlphaSubModules().size()>0)
+			itemsSet = ((AmpModulesVisibility) aov).getSortedAlphaSubModules();
+		else itemsSet = aov.getSortedAlphaItems();
+		if(itemsSet!=null)
+			for (Iterator it = itemsSet.iterator(); it.hasNext();) {
+				AmpObjectVisibility item = (AmpObjectVisibility) it.next();
+				AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item));
+				list.add(iitem);
+			}
+		return list;
 	}
 
 }

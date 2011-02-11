@@ -124,11 +124,8 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
-		autoComplete.getModelParams().put(
-				AmpSectorSearchModel.PARAM.SECTOR_SCHEME,
-				sectorClassification.getClassification());
-		autoComplete.getModelParams().put(
-				AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
+		autoComplete.getModelParams().put(AmpSectorSearchModel.PARAM.SECTOR_SCHEME,	sectorClassification.getClassification());
+		autoComplete.getModelParams().put(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS, 0);
 
 		final AmpComboboxFieldPanel<AmpSector> searchSectors = new AmpComboboxFieldPanel<AmpSector>(
 				"searchSectors", "Search " + fmName, autoComplete);

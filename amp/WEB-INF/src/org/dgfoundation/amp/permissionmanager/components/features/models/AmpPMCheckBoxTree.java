@@ -4,7 +4,9 @@
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
 import java.io.Serializable;
+import java.util.Enumeration;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
@@ -75,8 +77,38 @@ public class AmpPMCheckBoxTree extends BaseTree {
 	 * @param tree
 	 * @param target
 	 */
-	protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target)
-	{
+	protected void onNodeCheckUpdated(TreeNode node, BaseTree tree, AjaxRequestTarget target) {
+		if (!tree.getTreeState().isNodeSelected(node)) {
+			deselectTree( tree, node );
+		}
+		else{
+			selectTree( tree, node );
+		}
+	}
+	
+	protected void selectTree(BaseTree tree, TreeNode node) {
+		Enumeration nodeEnum = node.children();
+		while ( nodeEnum.hasMoreElements() ) {
+			TreeNode child = (TreeNode)nodeEnum.nextElement();
+			tree.getTreeState().selectNode( child, true );
+			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
+			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
+			userObject.setChecked(true);
+			selectTree( tree, child );
+		}
+		
+	}
+	
+	private void deselectTree( BaseTree tree, TreeNode node ) {
+		Enumeration nodeEnum = node.children();
+		while ( nodeEnum.hasMoreElements() ) {
+			TreeNode child = (TreeNode)nodeEnum.nextElement();
+			tree.getTreeState().selectNode( child, false );
+			DefaultMutableTreeNode dmtn=(DefaultMutableTreeNode) child;
+			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean) dmtn.getUserObject();
+			userObject.setChecked(false);
+			deselectTree( tree, child );
+		}
 	}
 	
 	/**

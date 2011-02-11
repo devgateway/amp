@@ -151,7 +151,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public String getClusterIdentifier() { 
 		return name;
 	}
-        public String[] getImplementedActions() {
+    public String[] getImplementedActions() {
 	   return  IMPLEMENTED_ACTIONS.clone();
 	}
 	

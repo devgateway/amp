@@ -66,24 +66,24 @@
 				<table align=center cellPadding=0 cellSpacing=0 width="100%">
 					<tr>
     					<td>
-        					<table border=0 cellPadding=3 cellSpacing=3 width="100%">
-            					<tr bgColor=#999999>
-                					<td bgColor=#999999 align="center" height="20">
+        					<table border=0 cellPadding=0 cellSpacing=0 width="100%" class="inside">
+            					<tr bgColor=#C0D6E2>
+                					<td bgColor=#C0D6E2 align="center" class="inside">
                     					<b>
                         					${titleColumn}
                         				</b>
                     				</td>
-                    				<td bgColor=#999999 align="center" height="20">
+                    				<td bgColor=#C0D6E2 align="center" class="inside">
                     					<b>
                     						<digi:trn key="aim:reportType">Type</digi:trn>
                    	 					</b>
                     				</td>
-                    				<td bgColor=#999999 align="center" height="20">
+                    				<td bgColor=#C0D6E2 align="center" class="inside">
                     				</td>
                     				<logic:present name="currentMember" scope="session">
                     				<bean:define id="member" name="currentMember" scope="session" />
                             		<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-									<td bgColor=#999999 align="center" height="20">
+									<td bgColor=#999999 align="center" height="20" class="inside">
                     					<b>
                         				<digi:trn key="aim:reportAction">Action</digi:trn>
 										</b>
@@ -93,7 +93,7 @@
 								</tr>                          
                					<c:if test="${reports.size == 0}">
                 				<tr>
-                					<td colspan="4">
+                					<td colspan="4" class="inside">
                     					<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
 									</td>
                 				</tr>
@@ -162,7 +162,7 @@
 					<c:if test="${custonflag==true}">
 					<table align=center cellPadding=0 cellSpacing=0 width="100%">
 					<tr>
-						<td height=30 align="left" vAlign=center style="font-size:12px;">
+						<td height=30 align="left" vAlign=center>
 							<span class=subtitle-blue>
             					<digi:trn>Custom Multidimensional reports</digi:trn>
             				</span>
@@ -279,7 +279,7 @@
  				<tr>
  				</feature:display>
  				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
-					<td height=30 align="left" vAlign=center>
+					<td height=30 align="left" vAlign=center style="font-size:12px;">
 							<span class=subtitle-blue>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>
             				</span>

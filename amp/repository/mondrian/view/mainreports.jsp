@@ -41,9 +41,9 @@
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 	<tr>
 		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=0 cellSpacing=0 width="100%">
     			<tr>
-        			<td valign="bottom" class="crumb" >
+        			<td valign="bottom" class="crumb" style="padding-bottom:15px;">
         				<c:set var="translation">
           					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
         				</c:set>
@@ -54,7 +54,7 @@
           		</tr>
         <feature:display name="Default Reports" module="Multi-dimensional Reports">
         <tr>
-        	<td height=16 align="left" vAlign=center>
+        	<td height=16 align="left" vAlign=center style="font-size:12px;">
           		<digi:errors/>
           		<span class=subtitle-blue>
             		${pageTitle}
@@ -162,7 +162,7 @@
 					<c:if test="${custonflag==true}">
 					<table align=center cellPadding=0 cellSpacing=0 width="100%">
 					<tr>
-						<td height=30 align="left" vAlign=center>
+						<td height=30 align="left" vAlign=center style="font-size:12px;">
 							<span class=subtitle-blue>
             					<digi:trn>Custom Multidimensional reports</digi:trn>
             				</span>

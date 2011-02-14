@@ -18,7 +18,6 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -84,7 +83,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null){
 			   			        		FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
 			   			        	} else {
-			   			        		FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
+			   			        		FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel(), null);
 			   			        	}
 		                             
 		                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());

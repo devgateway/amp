@@ -28,7 +28,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 public class AmountCell extends Cell {
 	// public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
-	protected double amount;
+	public double amount;
 
 	protected double originalAmount;
 	

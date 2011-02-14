@@ -2021,9 +2021,16 @@ public class FeaturesUtil {
 
 	/**
 	 * @author dan
+	 * @param templateId - id of the template with which this field will be linked in case defaultVisible=on 
+	 * or (if defaultVisible==null and the GS "new fields visibility" is "on")
+	 * @param featureId
+	 * @param fieldName
+	 * @param hasLevel
+	 * @param defaultVisible overrides the setting "new fields visibility" in GS
+	 * @throws DgException
 	 */
 	public static void insertFieldWithFeatureVisibility(Long templateId,
-			Long featureId, String fieldName, String hasLevel) throws DgException{
+			Long featureId, String fieldName, String hasLevel, Boolean defaultVisible) throws DgException{
 		Session session = null;
 		AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
 		AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -2046,8 +2053,19 @@ public class FeaturesUtil {
 			session.save(field);
 			tx.commit();
 			
-       		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
-       		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+			
+			boolean makeVisible	= false;
+			if ( defaultVisible == null ) {
+				String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
+				if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+					makeVisible		= true;
+				}
+			}
+			else
+				makeVisible 	= defaultVisible;
+			
+       		
+       		if  ( makeVisible ){
     			tx = session.beginTransaction();
     			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
     			template.getFields().add(field);

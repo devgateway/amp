@@ -96,7 +96,9 @@ public class ComputedAmountColWorker extends ColumnWorker {
 		ret.setCurrencyCode(currencyCode);
 		ret.setToExchangeRate(1);
 		MetaInfo costMs = getCachedMetaInfo(this.getColumnName(), null);
+		MetaInfo dateMi	= getCachedMetaInfo(ArConstants.TRANSACTION_DATE, currencyDate);
 		ret.getMetaData().add(costMs);
+		ret.getMetaData().add(dateMi);
 
 		// UGLY get exchage rate if cross-rates are needed (if we need to
 		// convert from X to USD and then to Y)

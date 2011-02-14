@@ -3,23 +3,29 @@ package org.dgfoundation.amp.exprlogic;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 
 public class Values extends HashMap<String, BigDecimal> {
 
 	private Long ownerId;
 	private static final long serialVersionUID = 1L;
 	Set<Values> countValues = new HashSet<Values>();
+	
+	private List<AmpColumns> mtefCols	;
 
 	public Values(Long ownerID) {
 		this.ownerId = ownerID;
+		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
 	}
 
 	public Values() {
-
+		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
 	}
 
 	public void addValue(String key, BigDecimal value) {
@@ -68,6 +74,13 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.PROPOSED_COST, values.get(ArConstants.PROPOSED_COST));
 		this.addValue(ArConstants.COSTING_GRAND_TOTAL, values.get(ArConstants.COSTING_GRAND_TOTAL));
 		this.addValue(ArConstants.TOTAL_COMMITMENTS, values.get(ArConstants.TOTAL_COMMITMENTS));
+		
+//		this.addValue(ArConstants.MTEF_COLUMN, values.get(ArConstants.MTEF_COLUMN) );
+		if ( this.mtefCols != null )
+			for (AmpColumns col: this.mtefCols ) {
+				String mtefColName	= col.getColumnName();
+				this.addValue(mtefColName, values.get(mtefColName) );
+			}
 
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_COMMITMENT, ac);
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_DISBURSEMENT, ad);
@@ -111,6 +124,7 @@ public class Values extends HashMap<String, BigDecimal> {
 		// no filtered, affected by %
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
+		System.out.println("BEFORE LCM!!!!");
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, TokenRepository.buildColsedMonthActualDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, TokenRepository.buildPriorActualDisbursementsLogicalToken().evaluate(cell));
 
@@ -148,6 +162,15 @@ public class Values extends HashMap<String, BigDecimal> {
 		} else if (cell.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)) {
 			this.addValue(ArConstants.COSTING_GRAND_TOTAL, TokenRepository.buildCostingGrandTotalToken().evaluate(cell));
 		}
+		
+		//this.addValue(ArConstants.MTEF_COLUMN, TokenRepository.buildMtefColumnToken().evaluate(cell));
+		if ( this.mtefCols != null )
+			for (AmpColumns col: this.mtefCols ) {
+				String mtefColName	= col.getColumnName();
+				String yearStr		= mtefColName.substring(mtefColName.length()-4, mtefColName.length() );
+				Integer year		= Integer.parseInt(yearStr)-1;
+				this.addValue(col.getColumnName(), TokenRepository.buildMtefColumnToken(mtefColName, year).evaluate(cell) );
+			}
 
 	}
 

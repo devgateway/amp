@@ -92,7 +92,6 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityModel));
 				tree.refreshTree(iTreeModel);
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
-//				target.addComponent(tree);
 			}
 
 			@Override

@@ -20,7 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateWrapper;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -34,14 +34,14 @@ import org.digijava.module.gateperm.gates.UserLevelGate;
  */
 public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<Set<AmpPMGateWrapper>> gatesSetModel, String fmName, boolean hideLeadingNewLine) {
+	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<Set<AmpPMGateReadEditWrapper>> gatesSetModel, String fmName, boolean hideLeadingNewLine) {
 		super(id, gatesSetModel, fmName, hideLeadingNewLine);
-		AbstractReadOnlyModel<List<AmpPMGateWrapper>> gatesListReadOnlyModel = OnePagerUtil.getReadOnlyListModelFromSetModel(gatesSetModel);
+		AbstractReadOnlyModel<List<AmpPMGateReadEditWrapper>> gatesListReadOnlyModel = OnePagerUtil.getReadOnlyListModelFromSetModel(gatesSetModel);
 		
 				
-		list = new ListView<AmpPMGateWrapper>("permGatesList", gatesListReadOnlyModel) {
+		list = new ListView<AmpPMGateReadEditWrapper>("permGatesList", gatesListReadOnlyModel) {
 			@Override
-			protected void populateItem(final ListItem<AmpPMGateWrapper> item) {
+			protected void populateItem(final ListItem<AmpPMGateReadEditWrapper> item) {
 				item.add(new Label("gateName", item.getModelObject().getName()));
 				CheckBox read =	new CheckBox("gateReadFlag", new PropertyModel(item.getModelObject(), "readFlag"));
 				read.setOutputMarkupId(true);
@@ -49,12 +49,8 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 				CheckBox edit =	new CheckBox("gateEditFlag", new PropertyModel(item.getModelObject(), "editFlag"));
 				edit.setOutputMarkupId(true);
 				item.add(edit);
-				
-//				System.out.println("read Flag: "+ item.getModelObject().getReadFlag());
-//				System.out.println("edit Flag: "+ item.getModelObject().getEditFlag());
 			}
 		};
-		//list.setReuseItems(true);
 		list.setOutputMarkupId(true);
 		add(list);
 		

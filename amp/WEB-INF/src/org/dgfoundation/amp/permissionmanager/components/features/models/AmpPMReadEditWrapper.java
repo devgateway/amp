@@ -9,33 +9,28 @@ import java.io.Serializable;
  * @author dan
  *
  */
-public class AmpPMGateWrapper implements Serializable, Comparable{
+public class AmpPMReadEditWrapper implements Serializable, Comparable {
 
 	private Long id;
 	private String name;
 	private Boolean readFlag = Boolean.FALSE;
 	private Boolean editFlag = Boolean.FALSE;
-	private String parameter;
-	private Class gate;
-
-
-	public AmpPMGateWrapper() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public AmpPMGateWrapper(String name, Boolean readFlag, Boolean editFlag) {
+	
+	
+	
+	public AmpPMReadEditWrapper(String name, Boolean readFlag, Boolean editFlag) {
 		super();
 		this.name = name;
 		this.readFlag = readFlag;
 		this.editFlag = editFlag;
 	}
 
-	public AmpPMGateWrapper(String name) {
+	public AmpPMReadEditWrapper(String name) {
 		super();
 		this.name = name;
 	}
 
-	public AmpPMGateWrapper(Long id, String name, Boolean readFlag, Boolean editFlag) {
+	public AmpPMReadEditWrapper(Long id, String name, Boolean readFlag,	Boolean editFlag) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -50,7 +45,7 @@ public class AmpPMGateWrapper implements Serializable, Comparable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -74,38 +69,20 @@ public class AmpPMGateWrapper implements Serializable, Comparable{
 	public void setEditFlag(Boolean editFlag) {
 		this.editFlag = editFlag;
 	}
-	public String getParameter() {
-		return parameter;
-	}
 
-	public void setParameter(String parameter) {
-		this.parameter = parameter;
-	}
-	
-	public Class getGate() {
-		return gate;
-	}
-
-	public void setGate(Class gate) {
-		this.gate = gate;
-	}
-
-	public AmpPMGateWrapper(Long id, String name,String parameter, Class gate, Boolean readFlag, Boolean editFlag) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.readFlag = readFlag;
-		this.editFlag = editFlag;
-		this.parameter = parameter;
-		this.gate = gate;
+	/**
+	 * 
+	 */
+	public AmpPMReadEditWrapper() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
-		if(!(o instanceof AmpPMGateWrapper)) return -1;
-		AmpPMGateWrapper obj = (AmpPMGateWrapper)o;
+		if(!(o instanceof AmpPMReadEditWrapper)) return -1;
+		AmpPMReadEditWrapper obj = (AmpPMReadEditWrapper)o;
 		return this.getId().compareTo(obj.getId());
 	}
-
+	
 }

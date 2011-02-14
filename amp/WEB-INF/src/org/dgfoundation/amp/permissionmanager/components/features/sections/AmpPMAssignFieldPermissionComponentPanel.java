@@ -5,7 +5,10 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.tree.TreeModel;
 
@@ -20,11 +23,17 @@ import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.gateperm.core.CompositePermission;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.core.PermissionMap;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * @author dan
@@ -104,6 +113,18 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		autoComplete.add(sizeModifier);
 		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,true);
 		add(searchFields);
+		
+		
+		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(Arrays.asList(GatePermConst.availablePermissibles).get(3));
+		PermissionMap permMap =	PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
+		IModel<PermissionMap> permMapModel = new Model(permMap);
+		TreeSet<AmpPMGateReadEditWrapper> gatesSet = new TreeSet<AmpPMGateReadEditWrapper>();
+		PMUtil.generateGatesList((CompositePermission)permMapModel.getObject().getPermission(),gatesSet);
+		final IModel<Set<AmpPMGateReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
+		final AmpPMAddPermFormTableFeaturePanel permGatesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permGatesFieldsForm", gatesSetModel, "Gate Form Table", true);
+		permGatesFieldsFormTable.setTableWidth(470);
+		permGatesFieldsFormTable.setOutputMarkupId(true);
+		add(permGatesFieldsFormTable);
 		
 	}
 

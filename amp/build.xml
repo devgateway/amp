@@ -133,6 +133,10 @@
     <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi">
     	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
     </xjc>
+   	
+    <xjc destdir="${gen-src}" schema="./doc/xmlpatcher.xsd" package="org.digijava.module.xmlpatcher.jaxb">
+         	<produces dir="${gen-src}" includes="org/digijava/module/xmlpatcher/jaxb/*.java"/>
+    </xjc>
    </target>
 	  
 

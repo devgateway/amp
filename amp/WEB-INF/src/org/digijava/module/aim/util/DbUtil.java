@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -730,7 +731,7 @@ public class DbUtil {
         return o;
     }
     
-    public static Object getObject(Class c, Long id) {
+    public static Object getObject(Class<?> c, Serializable id) {
         Session session = null;
         Object o = null;
         try {

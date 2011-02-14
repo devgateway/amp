@@ -40,6 +40,6 @@
             <property name="patchesDir">patches</property>
     </service>
     
-	&commonEntities;
+-->	&commonEntities;
 	
 </digi-config>

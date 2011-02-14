@@ -39,6 +39,6 @@
             <description>Advanced Database Patcher Module</description>
             <property name="patchesDir">patches</property>
     </service>
-	&commonEntities;
+-->	&commonEntities;
 	
 </digi-config>

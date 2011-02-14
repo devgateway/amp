@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
@@ -2778,6 +2779,7 @@ public class SaveActivity extends Action {
 
 				}
 			}
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 		} else {
 			// create a new activity
 			
@@ -2823,6 +2825,8 @@ public class SaveActivity extends Action {
 			LuceneUtil.addUpdateActivity(request, false, actId);
 			//for logging the activity
 			AuditLoggerUtil.logObject(session, request, activity, "add");
+			
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 		}
 
 		//If we're adding an activity, create system/admin message
@@ -2885,6 +2889,7 @@ public class SaveActivity extends Action {
 			logger.info("returning null....");
 			return null;
 		}
+		
 		}catch (Exception e) {
 			AMPUncheckedException au = ExceptionFactory.newAMPUncheckedException(e); //we used unchecked so that code currently using this method won't be affected(no try catch)
 			au.addTag(MODULE_TAG); //tag this in concordance to the documents on Confluence
@@ -2892,6 +2897,7 @@ public class SaveActivity extends Action {
 			au.setLevel(Constants.AMP_ERROR_LEVEL_ERROR); //this should probabilly do
 			throw au; //thow
 		}
+		
 	}
 
 

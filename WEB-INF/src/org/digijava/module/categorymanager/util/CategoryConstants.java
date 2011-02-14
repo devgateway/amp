@@ -114,7 +114,7 @@ public class CategoryConstants {
 		new CategoryConstants.HardCodedCategoryValue("team_type","Bilateral", false);
 	
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PROJECTION	= 
-		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", false);
+		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", true);
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PIPELINE	= 
 		new CategoryConstants.HardCodedCategoryValue("mtef_projection","pipeline", false);
 	

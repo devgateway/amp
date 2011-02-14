@@ -16,6 +16,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -216,6 +217,9 @@ public class AMPStartupListener extends HttpServlet implements
 			initializeQuartz(sce);
 
 			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));
+			
+			logger.info("Checking if any MTEF columns need to be created...");
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());

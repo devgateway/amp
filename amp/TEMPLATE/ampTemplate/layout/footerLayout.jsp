@@ -9,7 +9,7 @@
 <!-- FOOTER START -->
 	<div class="footer">
 		<center>
-			<img src="img_2/logo_footer.gif" />AMP 1.13.42 build 08.Feb.2010 - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
+			<img src="img_2/logo_footer.gif" /> AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
 			<logic:notEmpty name="currentMember" scope="session">
 				<digi:secure actions="ADMIN">
             		<a href='<digi:site property="url"/>/admin/'>Admin</a>

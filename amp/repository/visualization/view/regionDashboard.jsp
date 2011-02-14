@@ -91,7 +91,7 @@ yuiLoadingPanel.prototype = {
 
 <!-- BREADCRUMB START -->
 <div class="centering">
-<span class="sec_name"><digi:trn>Donor Profile Dashboard</digi:trn></span><span class="breadcrump_sep">|</span><a href=# class="l_sm"><digi:trn>Dashboards</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
+<span class="sec_name"><digi:trn>Region Profile Dashboard</digi:trn></span><span class="breadcrump_sep">|</span><a href=# class="l_sm"><digi:trn>Dashboards</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Region Profile Dashboard</digi:trn></span>
 </div>
 <br/>
 <!-- BREADCRUMB END -->
@@ -103,17 +103,18 @@ yuiLoadingPanel.prototype = {
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-    <div class="dashboard_name" id="donor_name">
-    	<c:if test="${visualizationform.filter.organizationGroupId eq '-1' }">
-	    	<digi:trn>ALL DONORS</digi:trn>
+    <div class="dashboard_name" id="region_name">
+    	<!--<c:if test="${visualizationform.filter.selRegionIds eq '-1' }">
+	    	<digi:trn>ALL SECTORS</digi:trn>
     	</c:if>
-    	<c:if test="${visualizationform.filter.organizationGroupId ne '-1' }">
-			<c:forEach var="organizationGroup" items="${visualizationform.filter.orgGroups}">
-			<c:if test="${organizationGroup.ampOrgGrpId eq visualizationform.filter.organizationGroupId}">
-				${organizationGroup}
+    	<c:if test="${visualizationform.filter.selRegionIds ne '-1' }">
+			<c:forEach var="region" items="${visualizationform.filter.sectors}">
+			<c:if test="${sector.ampSectorId eq visualizationform.filter.sectorId}">
+				${region}
 			</c:if>
 			</c:forEach>
-    	</c:if>
+    	</c:if>-->
+    	<digi:trn>ALL REGIONS</digi:trn>
     </div>
     </td>
     <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
@@ -133,28 +134,6 @@ yuiLoadingPanel.prototype = {
 	<html:checkbox property="filter.workspaceOnly">Show Data from All Workspaces</html:checkbox>
 	<hr />
 	<table cellspacing="0" cellpadding="0" width=100%> 
-  <tr>
-    <td><digi:trn>Organization Group</digi:trn>:</td>
-    <td align=right>
-       <html:select property="filter.organizationGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-           <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-       </html:select>
-	</td>
-  </tr>
-   <tr>
-    <td><digi:trn>Organization</digi:trn>:</td>
-    <td align=right>
-       <html:select property="filter.orgIds" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-       </html:select>
-<!-- 
-    <select class="dropdwn_sm" style="width:145px;" name="org_dropdown_id" id="org_dropdown_id">
-		<option value="-1"><digi:trn>All</digi:trn></option>
-	</select>
- -->
-	</td>
-  </tr>
    <tr>
     <td><digi:trn>Region</digi:trn>:</td>
     <td align=right>
@@ -189,6 +168,29 @@ yuiLoadingPanel.prototype = {
        </html:select>
 	</td>
   </tr>
+  <tr>
+    <td><digi:trn>Organization Group</digi:trn>:</td>
+    <td align=right>
+       <html:select property="filter.organizationGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+           <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+       </html:select>
+	</td>
+  </tr>
+   <tr>
+    <td><digi:trn>Organization</digi:trn>:</td>
+    <td align=right>
+       <html:select property="filter.orgIds" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+       </html:select>
+<!-- 
+    <select class="dropdwn_sm" style="width:145px;" name="org_dropdown_id" id="org_dropdown_id">
+		<option value="-1"><digi:trn>All</digi:trn></option>
+	</select>
+ -->
+	</td>
+  </tr>
+  
  </table>
 
 	<center>
@@ -257,6 +259,31 @@ Web Link: <b>Not applicable</b>
 	</div>
 </fieldset>	
 	<fieldset>
+	<legend><span class=legend_label>Top Donors</span></legend>
+	<div id="divTopDonors" class="field_text">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.topDonors}" var="donorItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:showFullDonors()" style="float:right;">View Full List</a>
+	</div>
+	<div id="divFullDonors" class="field_text" style="display: none;">
+		<c:set var="index" value="0"/>
+		<c:forEach items="${visualizationform.ranksInformation.fullDonors}" var="donorItem">
+		<c:set var="index" value="${index+1}"/>
+		
+		 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			<hr />
+		</c:forEach>
+	
+		<a href="javascript:hideFullDonors()" style="float:right;">View Top List</a>
+	</div>
+</fieldset>	
+	<fieldset>
 	<legend><span class=legend_label>Top Sectors</span></legend>
 	<div id="divTopSectors" class="field_text">
 		<c:set var="index" value="0"/>
@@ -280,42 +307,8 @@ Web Link: <b>Not applicable</b>
 	
 		<a href="javascript:hideFullSectors()" style="float:right;">View Top List</a>
 	</div>
-</fieldset>	
-	<fieldset>
-	<legend><span class=legend_label>Top Regions</span></legend>
-	<div id="divTopRegions" class="field_text">
-		<c:set var="index" value="0"/>
-		<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">
-		<c:set var="index" value="${index+1}"/>
-		
-		 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
-			<hr />
-		</c:forEach>
-	
-		<a href="javascript:showFullRegions()" style="float:right;">View Full List</a>
-	</div>
-	<div id="divFullRegions" class="field_text" style="display: none;">
-		<c:set var="index" value="0"/>
-		<c:forEach items="${visualizationform.ranksInformation.fullRegions}" var="regionItem">
-		<c:set var="index" value="${index+1}"/>
-		
-		 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
-			<hr />
-		</c:forEach>
-	
-		<a href="javascript:hideFullRegions()" style="float:right;">View Top List</a>
-	</div>
-</fieldset>	
-	<fieldset>
-	<legend><span class=legend_label>Sector Working Groups</span></legend>
-	<div class="field_text">
-1. Agriculture
-<hr />
-2. Energy
-<hr />
-3. Foresty
-</div>
-</fieldset>	
+	</fieldset>	
+
 	</div>
 	</td>
 	<td width=15>&nbsp;</td>
@@ -379,7 +372,7 @@ Web Link: <b>Not applicable</b>
 				</div>
 			</div>
 		</fieldset>
-		<fieldset>
+		<!-- <fieldset>
 			<legend><span class=legend_label>Region Profile</span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'RegionProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'RegionProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'RegionProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'RegionProfile')">Data View</a></div>
 			<br />
@@ -390,7 +383,7 @@ Web Link: <b>Not applicable</b>
 					</a>
 				</div>
 			</div>
-		</fieldset>
+		</fieldset> -->
 	</div>
 	<div id="tab2">
 		Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
@@ -558,13 +551,13 @@ function refreshBoxes(o){
 	var inner = "";
 	var trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	var trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
+	var trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
 	var trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
-	var trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	var trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	var valTotalDisbs="";
 	var valNumOfProjs="";
+	var valNumOfDons="";
 	var valNumOfSecs="";
-	var valNumOfRegs="";
 	var valAvgProjSize="";
 	
 	for(var j = 0; j < results.children.length; j++){
@@ -585,6 +578,22 @@ function refreshBoxes(o){
 				var div = document.getElementById("divTopProjects");
 				div.innerHTML = inner;
 				break;
+			case "DonorsList":
+				inner = "";
+				for(var i = 0; i < child.list.length; i++){
+					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>Hide Full List</a>";
+				var div = document.getElementById("divFullDonors");
+				div.innerHTML = inner;
+				inner = "";
+				for(var i = 0; i < child.top.length; i++){
+					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
+				}
+				inner = inner + "<a href='javascript:showFullDonors()' style='float:right;'>Show Full List</a>";
+				var div = document.getElementById("divTopDonors");
+				div.innerHTML = inner;
+				break;
 			case "SectorsList":
 				inner = "";
 				for(var i = 0; i < child.list.length; i++){
@@ -601,22 +610,6 @@ function refreshBoxes(o){
 				var div = document.getElementById("divTopSectors");
 				div.innerHTML = inner;
 				break;
-			case "RegionsList":
-				inner = "";
-				for(var i = 0; i < child.list.length; i++){
-					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
-				}
-				inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>Hide Full List</a>";
-				var div = document.getElementById("divFullRegions");
-				div.innerHTML = inner;
-				inner = "";
-				for(var i = 0; i < child.top.length; i++){
-					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
-				}
-				inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>Show Full List</a>";
-				var div = document.getElementById("divTopRegions");
-				div.innerHTML = inner;
-				break;
 			case "TotalComms":
 				inner = "<b class='dashboard_total_num'>" + child.value + "</b>";
 				var div = document.getElementById("divTotalComms");
@@ -628,11 +621,11 @@ function refreshBoxes(o){
 			case "NumberOfProjs":
 				valNumOfProjs = child.value;
 				break;
+			case "NumberOfDons":
+				valNumOfDons = child.value;
+				break;
 			case "NumberOfSecs":
 				valNumOfSecs = child.value;
-				break;
-			case "NumberOfRegs":
-				valNumOfRegs = child.value;
 				break;
 			case "AvgProjSize":
 				valAvgProjSize = child.value;
@@ -641,17 +634,17 @@ function refreshBoxes(o){
 		}
 		inner = trnTotalDisbs + "<b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
 		inner = inner + trnNumOfProjs + "<b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + trnNumOfDons + "<b>" + valNumOfDons + "</b><span class='breadcrump_sep'>|</span>";
 		inner = inner + trnNumOfSecs + "<b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
-		inner = inner + trnNumOfRegs + "<b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
 		inner = inner + trnAvgProjSize + "<b>" + valAvgProjSize;
 		var div = document.getElementById("divSummaryInfo");
 		div.innerHTML = inner;
 		
-		var donorPlaceholder = document.getElementById("donor_name");
+		var regionPlaceholder = document.getElementById("region_name");
 		
-		var donorName = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
-		var donorOrganizationName = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-		donorPlaceholder.innerHTML = donorName + "<br/><span style=\"font-size:16px\">" + donorOrganizationName + "</span>";
+		var regionName = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		var zoneName = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
+		regionPlaceholder.innerHTML = regionName + "<br/><span style=\"font-size:16px\">" + zoneName + "</span>";
 		
 	}
 	
@@ -659,6 +652,7 @@ function refreshBoxes(o){
 
 
 YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("region_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
@@ -672,7 +666,7 @@ function initDashboard(){
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');
-	changeChart(null, 'bar', 'RegionProfile');
+//	changeChart(null, 'bar', 'RegionProfile');
 	callbackApplyFilter();
 }
 
@@ -726,6 +720,20 @@ function hideFullProjects(){
 	divTop.style.display = "";
 }
 
+function showFullDonors(){
+	var divFull = document.getElementById("divFullDonors");
+	var divTop = document.getElementById("divTopDonors");
+	divFull.style.display = "";
+	divTop.style.display = "none";
+}
+
+function hideFullDonors(){
+	var divFull = document.getElementById("divFullDonors");
+	var divTop = document.getElementById("divTopDonors");
+	divFull.style.display = "none";
+	divTop.style.display = "";
+}
+
 function showFullSectors(){
 	var divFull = document.getElementById("divFullSectors");
 	var divTop = document.getElementById("divTopSectors");
@@ -736,20 +744,6 @@ function showFullSectors(){
 function hideFullSectors(){
 	var divFull = document.getElementById("divFullSectors");
 	var divTop = document.getElementById("divTopSectors");
-	divFull.style.display = "none";
-	divTop.style.display = "";
-}
-
-function showFullRegions(){
-	var divFull = document.getElementById("divFullRegions");
-	var divTop = document.getElementById("divTopRegions");
-	divFull.style.display = "";
-	divTop.style.display = "none";
-}
-
-function hideFullRegions(){
-	var divFull = document.getElementById("divFullRegions");
-	var divTop = document.getElementById("divTopRegions");
 	divFull.style.display = "none";
 	divTop.style.display = "";
 }

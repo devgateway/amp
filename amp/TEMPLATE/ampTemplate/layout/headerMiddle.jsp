@@ -139,23 +139,28 @@ if("On".equals(publicView)) {
 	                    		<ul>
 	                        		<module:display name="Org Profile" >
 	                        			<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
-		                            	<li class="yuiampmenuitem">
-		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
-		                                	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
-		                                </a> 
-	                                </li>    
-                                </feature:display>
-															</module:display>
+			                            	<li class="yuiampmenuitem">
+			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
+			                                	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
+			                                </a> 
+		                                	</li>    
+                                		</feature:display>
+									</module:display>
 															
-															<module:display name="GIS DASHBOARD" >
-																<feature:display name="Show in public view" module="GIS DASHBOARD">
-		                            	<li class="yuiampmenuitem">
-		                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true"  onclick="return canExit()">
-		                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
+									<module:display name="GIS DASHBOARD" >
+										<feature:display name="Show in public view" module="GIS DASHBOARD">
+			                            	<li class="yuiampmenuitem">
+			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true"  onclick="return canExit()">
+			                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
+			                                </a> 
+		                                	</li>
+	                              		</feature:display>
+									</module:display>
+									<li class="yuiampmenuitem">
+		                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
+		                                	<digi:trn key="donorDashboard">Donor Dashboard</digi:trn>
 		                                </a> 
 	                                </li>
-                              	</feature:display>
-															</module:display>
 								</ul>
 						</div>
 						</div>                    
@@ -652,6 +657,21 @@ function adminHelp(){
                                        
                                             </li>    
                                         </module:display>
+                                        <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
+			                                	<digi:trn key="donorDashboard">Donor Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
+		                                <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=sector"  onclick="return canExit()">
+			                                	<digi:trn key="sectorDashboard">Sector Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
+		                                <li class="yuiampmenuitem_drop">
+			                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=region"  onclick="return canExit()">
+			                                	<digi:trn key="regionDashboard">Region Dashboard</digi:trn>
+			                                </a> 
+		                                </li>
                                       </ul>
                                   </div>
                               </div>                    

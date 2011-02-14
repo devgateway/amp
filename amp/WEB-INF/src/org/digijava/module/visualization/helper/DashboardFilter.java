@@ -32,11 +32,13 @@ public class DashboardFilter {
 
     private List<AmpSector>sectors;
     private List<AmpSector>sectorsSelected;
+    private Long[] selSectorIds;
     private Long[] sectorIds;
+    private Long[] subSectorIds;
     private Long sectorId; //used to fill subsectors list
 
     private List<AmpCategoryValueLocations> locationsSelected;
-    private Collection<Long> locationIds;
+    private Long[] selLocationIds;
 
     private Collection<BeanWrapperImpl> years;
     private int transactionType;
@@ -47,8 +49,8 @@ public class DashboardFilter {
     private Integer largestProjectNumber;
     private Boolean divideThousands;
     private Integer divideThousandsDecimalPlaces;
-    private Long selRegionId;
-    private Long selZoneIds[];
+    private Long[] selRegionIds;
+    private Long[] selZoneIds;
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
 
@@ -59,6 +61,7 @@ public class DashboardFilter {
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
 
+    private Long activityId;
     
 
     public Boolean getExpendituresVisible() {
@@ -93,12 +96,12 @@ public class DashboardFilter {
         this.regions = regions;
     }
 
-    public Long getSelRegionId() {
-        return selRegionId;
+    public Long[] getSelRegionIds() {
+        return selRegionIds;
     }
 
-    public void setSelRegionId(Long selRegionId) {
-        this.selRegionId = selRegionId;
+    public void setSelRegionIds(Long[] selRegionIds) {
+        this.selRegionIds = selRegionIds;
     }
 
      public Long[] getSelZoneIds() {
@@ -237,7 +240,7 @@ public class DashboardFilter {
         }
         return name;
 
-    }*/
+    }
     public String getLocationsName() throws DgException {
         String name = "";
         if (selZoneIds != null && selZoneIds.length > 0 && selZoneIds[0] != -1) {
@@ -249,14 +252,14 @@ public class DashboardFilter {
                 name = name.substring(0, name.length() - 1);
             }
         } else {
-            if (selRegionId != null && selRegionId != -1) {
+            if (selRegionIds != null && selRegionIds != -1) {
                 AmpCategoryValueLocations location = LocationUtil.getAmpCategoryValueLocationById(selRegionId);
                 name += location.getName();
             }
         }
         return name;
 
-    }
+    }*/
       public String getCurrencyCode() {
         String name = "USD";
         if (currencyId != null && currencyId != -1) {
@@ -267,7 +270,27 @@ public class DashboardFilter {
 
     }
 
-    public Boolean getDivideThousands() {
+    public Long[] getSelSectorIds() {
+		return selSectorIds;
+	}
+
+	public void setSelSectorIds(Long[] selSectorIds) {
+		this.selSectorIds = selSectorIds;
+	}
+
+	public Long[] getSubSectorIds() {
+		return subSectorIds;
+	}
+
+	public void setSubSectorIds(Long[] subSectorIds) {
+		this.subSectorIds = subSectorIds;
+	}
+
+	public Long[] getSelLocationIds() {
+		return selLocationIds;
+	}
+
+	public Boolean getDivideThousands() {
         return divideThousands;
     }
 
@@ -368,12 +391,12 @@ public class DashboardFilter {
 		return teamMember;
 	}
 	
-    public Collection<Long> getLocationIds() {
-        return locationIds;
+    public Long[] getSetLocationIds() {
+        return selLocationIds;
     }
 
-    public void setLocationIds(Collection<Long> locationIds) {
-        this.locationIds = locationIds;
+    public void setSelLocationIds(Long[] locationIds) {
+        this.selLocationIds = locationIds;
     }
 
 	public boolean isExpendituresVisible() {
@@ -387,6 +410,14 @@ public class DashboardFilter {
 
 	public Long[] getSectorIds() {
 		return sectorIds;
+	}
+
+	public Long getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
 	}
 
 }

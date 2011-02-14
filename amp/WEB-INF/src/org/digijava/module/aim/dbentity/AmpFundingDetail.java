@@ -68,6 +68,16 @@ public class AmpFundingDetail implements Serializable
             }
         }
         
+        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){
+            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            if((percent1==null||percent1==0)&&(percent2==null||percent2==0)){
+            this.transactionAmount=transactionAmount;
+            }
+            else{
+                this.transactionAmount=transactionAmount/percent1/percent2*100;
+            }
+        }
+        
         // used in org profile for indicator 4
          public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 

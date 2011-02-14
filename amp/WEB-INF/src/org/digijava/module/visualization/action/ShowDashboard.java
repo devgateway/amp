@@ -56,8 +56,20 @@ public class ShowDashboard extends Action {
 	}
 
 	private void prepareRegionDashboard(VisualizationForm visualizationForm) {
-		// TODO Auto-generated method stub
-
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		//If there's a filter but it's not of the right type, reset it.
+		if (filter != null && filter.getDashboardType() != Constants.DashboardType.REGION) {
+			filter = new DashboardFilter();
+			visualizationForm.setFilter(filter);
+			initializeFilter(filter);
+			filter.setDashboardType(Constants.DashboardType.REGION);
+		}
+		if (filter == null){
+			filter = new DashboardFilter();
+			visualizationForm.setFilter(filter);
+			initializeFilter(filter);
+		}
 	}
 
 	private void prepareDonorDashboard(VisualizationForm visualizationForm) {
@@ -68,9 +80,11 @@ public class ShowDashboard extends Action {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
-		if (filter != null
-				&& filter.getDashboardType() != Constants.DashboardType.DONOR) {
+		if (filter != null && filter.getDashboardType() != Constants.DashboardType.DONOR) {
+			filter = new DashboardFilter();
+			visualizationForm.setFilter(filter);
 			initializeFilter(filter);
+			filter.setDashboardType(Constants.DashboardType.DONOR);
 		}
 		if (filter == null){
 			filter = new DashboardFilter();
@@ -114,7 +128,7 @@ public class ShowDashboard extends Action {
 															// the public view
 		filter.setOrganizations(orgs);
 		
-		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getSectors());
+		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
 		filter.setSectors(sectors);
 
 		if (filter.getYear() == null) {
@@ -185,13 +199,13 @@ public class ShowDashboard extends Action {
 				e.printStackTrace();
 			}
 		}
-		Long regionId = filter.getSelRegionId();
+		Long[] regionId = filter.getSelRegionIds();
 		List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
-		if (regionId != null && regionId != -1) {
+		if (regionId != null && regionId.length!=0 && regionId[0] != -1) {
 			AmpCategoryValueLocations region;
 			try {
-				region = LocationUtil.getAmpCategoryValueLocationById(regionId);
+				region = LocationUtil.getAmpCategoryValueLocationById(regionId[0]);
 				if (region.getChildLocations() != null) {
 					zones.addAll(region.getChildLocations());
 
@@ -207,8 +221,20 @@ public class ShowDashboard extends Action {
 	}
 
 	private void prepareSectorDashboard(VisualizationForm visualizationForm) {
-		// TODO Auto-generated method stub
-
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		//If there's a filter but it's not of the right type, reset it.
+		if (filter != null && filter.getDashboardType() != Constants.DashboardType.SECTOR) {
+			filter = new DashboardFilter();
+			visualizationForm.setFilter(filter);
+			initializeFilter(filter);
+			filter.setDashboardType(Constants.DashboardType.SECTOR);
+		}
+		if (filter == null){
+			filter = new DashboardFilter();
+			visualizationForm.setFilter(filter);
+			initializeFilter(filter);
+		}
 	}
 
 }

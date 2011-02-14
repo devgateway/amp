@@ -54,6 +54,7 @@ public class VisualizationForm extends ActionForm {
 		private Integer numberOfProjects; 
 		private Integer numberOfSectors; 
 		private Integer numberOfRegions; 
+		private Integer numberOfDonors; 
 		private BigDecimal averageProjectSize;
 
 		public BigDecimal getTotalCommitments() {
@@ -85,6 +86,12 @@ public class VisualizationForm extends ActionForm {
 		}
 		public void setNumberOfRegions(Integer numberOfRegions) {
 			this.numberOfRegions = numberOfRegions;
+		}
+		public Integer getNumberOfDonors() {
+			return numberOfDonors;
+		}
+		public void setNumberOfDonors(Integer numberOfDonors) {
+			this.numberOfDonors = numberOfDonors;
 		}
 		public BigDecimal getAverageProjectSize() {
 			return averageProjectSize;

@@ -78,30 +78,32 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
-		for (int i = 0; i < visualizationForm.getFilter().getOrgIds().length; i++) {
+		Long[] orgsIds = visualizationForm.getFilter().getOrgIds();
+		for (int i = 0; i < orgsIds.length; i++) {
+			Long long1 = orgsIds[i];
 			//We need to have an empty collection in the organizationsSelected list so the query goes through Organization Group Id
-			if(Long.valueOf(visualizationForm.getFilter().getOrgIds()[i]) != -1){
-				orgs.add(DbUtil.getOrganisation(Long.valueOf(visualizationForm.getFilter().getOrgIds()[i])));
+			if(long1 != -1){
+				orgs.add(DbUtil.getOrganisation(long1));
 			}
 		}
 		visualizationForm.getFilter().setOrganizationsSelected(orgs);
 
-		ArrayList<AmpSector> secs = new ArrayList<AmpSector>();
-		if (visualizationForm.getFilter().getSectorIds()!=null && visualizationForm.getFilter().getSectorIds().length>0) {
-			for (int i = 0; i < visualizationForm.getFilter().getSectorIds().length; i++) {
-				//We need to have an empty collection in the organizationsSelected list so the query goes through Organization Group Id
-				if(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i]) != -1){
-					secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorIds()[i])));
-				}
-			}
+		Long[] secsIds = visualizationForm.getFilter().getSectorIds();
+		Long[] subSecsIds = visualizationForm.getFilter().getSubSectorIds();
+		if (subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) {
+			visualizationForm.getFilter().setSelSectorIds(secsIds);
 		} else {
-			if(Long.valueOf(visualizationForm.getFilter().getSectorId()) != -1){
-				secs.add(SectorUtil.getAmpSector(Long.valueOf(visualizationForm.getFilter().getSectorId())));
-			}
+			visualizationForm.getFilter().setSelSectorIds(subSecsIds);
 		}
 		
-		visualizationForm.getFilter().setSectorsSelected(secs);
-
+		Long[] regsIds = visualizationForm.getFilter().getSelRegionIds();
+		Long[] zonesIds = visualizationForm.getFilter().getSelZoneIds();
+		if (zonesIds == null || zonesIds.length == 0 || zonesIds[0] == -1) {
+			visualizationForm.getFilter().setSelLocationIds(regsIds);
+		} else {
+			visualizationForm.getFilter().setSelLocationIds(zonesIds);
+		}
+		
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm);
 		
 		JSONObject root = new JSONObject();
@@ -112,6 +114,9 @@ public class DataDispatcher extends DispatchAction {
 		JSONArray rankSectors = new JSONArray();
 		JSONArray topSectors = new JSONArray();
 		JSONObject rootSectors = new JSONObject();
+		JSONArray rankDonors = new JSONArray();
+		JSONArray topDonors = new JSONArray();
+		JSONObject rootDonors = new JSONObject();
 		JSONArray rankRegions = new JSONArray();
 		JSONArray topRegions = new JSONArray();
 		JSONObject rootRegions = new JSONObject();
@@ -121,6 +126,7 @@ public class DataDispatcher extends DispatchAction {
 		JSONObject rootNumOfProjs = new JSONObject();
 		JSONObject rootNumOfSecs = new JSONObject();
 		JSONObject rootNumOfRegs = new JSONObject();
+		JSONObject rootNumOfDons = new JSONObject();
 		JSONObject rootAvgProjs = new JSONObject();
 		
 		Map<AmpActivity, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
@@ -174,6 +180,31 @@ public class DataDispatcher extends DispatchAction {
 		rootSectors.put("top", topSectors);
 		children.add(rootSectors);
 		
+		Map<AmpOrganisation, BigDecimal> donorsList = visualizationForm.getRanksInformation().getFullDonors();
+		if (donorsList!=null) {
+			list = new LinkedList(donorsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				rankDonors.add(child);
+			}
+		}
+		donorsList = visualizationForm.getRanksInformation().getTopDonors();
+		if (donorsList!=null) {
+			list = new LinkedList(donorsList.entrySet());
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Map.Entry entry = (Map.Entry) iterator.next();
+				child.put("name", entry.getKey().toString());
+				child.put("value", entry.getValue().toString());
+				topDonors.add(child);
+			}
+		}
+		rootDonors.put("type", "DonorsList");
+		rootDonors.put("list", rankDonors);
+		rootDonors.put("top", topDonors);
+		children.add(rootDonors);
+		
 		Map<AmpCategoryValueLocations, BigDecimal> regionsList = visualizationForm.getRanksInformation().getFullRegions();
 		if (regionsList!=null) {
 			list = new LinkedList(regionsList.entrySet());
@@ -218,6 +249,10 @@ public class DataDispatcher extends DispatchAction {
 		rootNumOfRegs.put("type", "NumberOfRegs");
 		rootNumOfRegs.put("value", visualizationForm.getSummaryInformation().getNumberOfRegions().toString());
 		children.add(rootNumOfRegs);
+		
+		rootNumOfDons.put("type", "NumberOfDons");
+		rootNumOfDons.put("value", visualizationForm.getSummaryInformation().getNumberOfDonors().toString());
+		children.add(rootNumOfDons);
 		
 		rootAvgProjs.put("type", "AvgProjSize");
 		rootAvgProjs.put("value", visualizationForm.getSummaryInformation().getAverageProjectSize().toString());
@@ -290,29 +325,40 @@ public class DataDispatcher extends DispatchAction {
          *
          */
         try {
-            List<AmpCategoryValueLocations> locations = DbUtil.getLocations(filter);
+            List<AmpCategoryValueLocations> locations = DbUtil.getRegions(filter);
             Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
+            Long fiscalCalendarId = filter.getFiscalCalendarId();
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+            Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+
             while (regionIter.hasNext()) {
                 //calculating funding for each region
                 AmpCategoryValueLocations location = regionIter.next();
-                List<AmpFundingDetail> fundingDets = DbUtil.getLocationFunding(filter, location);
+                //aka poner location en filtro
+                DashboardFilter newFilter = filter;
+                Long[] oldIds = filter.getSelLocationIds();
+    			Long[] ids = {location.getId()};
+                filter.setSelLocationIds(ids);
+                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, transactionType, 0);
+                filter.setSelLocationIds(oldIds);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
-                FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(fundingDets, currCode);
-                DecimalWraper total = null;
+                
+                //FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                //cal.doCalculations(fundingDets, currCode);
+                //DecimalWraper total = null;
 
                 /*Depending on what is selected in the filter
                 we should return either actual commitments
                 or actual Disbursement */
 
-                if (transactionType == Constants.COMMITMENT) {
-                    total = cal.getTotActualComm();
-                } else {
-                    total = cal.getTotActualDisb();
-                }
+                //if (transactionType == Constants.COMMITMENT) {
+                //    total = cal.getTotActualComm();
+                //} else {
+                //    total = cal.getTotActualDisb();
+                //}
 
-                BigDecimal amount = total.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
                 BigDecimal oldvalue = BigDecimal.ZERO;
                 String keyName = "";
                 String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
@@ -346,7 +392,7 @@ public class DataDispatcher extends DispatchAction {
                 } else {
                 	dataSet.put(keyName, amount);
                 }
-                regionalTotal = regionalTotal.add(total.getValue());
+                regionalTotal = regionalTotal.add(fundingCal.getValue());
             }
             java.util.Enumeration<String> keysEnum = dataSet.keys();
             BigDecimal othersValue = BigDecimal.ZERO;
@@ -367,8 +413,8 @@ public class DataDispatcher extends DispatchAction {
                 dataSet.put(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
             }
 
-            Collection<Long> locationIds = filter.getLocationIds();
-            boolean unallocatedCondition = locationIds == null || locationIds.isEmpty();
+            Long[] locationIds = filter.getSelLocationIds();
+            boolean unallocatedCondition = locationIds == null || locationIds.length==0;
             if (unallocatedCondition) {
                 List<AmpFundingDetail> unallocatedFundings = DbUtil.getUnallocatedFunding(filter);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();

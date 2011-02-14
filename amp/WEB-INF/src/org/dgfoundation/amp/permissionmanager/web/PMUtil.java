@@ -10,6 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -206,7 +210,7 @@ public final class PMUtil {
 	
 	public static AmpTreeVisibilityModelBean buildAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
 		// TODO Auto-generated method stub
-		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean("ROOT", new ArrayList<Object>());
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>());
 		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
 				for (Iterator it = currentTemplate.getSortedAlphaAllItems().iterator(); it.hasNext();) {
 					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
@@ -214,6 +218,22 @@ public final class PMUtil {
 						{
 							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module)));
 						}
+				}
+		return tree;
+	}
+	
+	public static AmpTreeVisibilityModelBean buildTreeObjectFMPermissions(AmpObjectVisibility currentAOV) {
+		// TODO Auto-generated method stub
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentAOV.getName(), new ArrayList<Object>());
+		Set itemsSet=null;
+		if(currentAOV instanceof AmpModulesVisibility && ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules().size()>0)
+			itemsSet = ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules();
+		else itemsSet = currentAOV.getSortedAlphaItems();
+		if (itemsSet != null && itemsSet.iterator() != null)
+				for (Iterator it = itemsSet.iterator(); it.hasNext();) {
+					AmpObjectVisibility item = (AmpObjectVisibility) it.next();
+					AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item));
+					tree.getItems().add(iitem);
 				}
 		return tree;
 	}
@@ -233,4 +253,37 @@ public final class PMUtil {
 		return list;
 	}
 
+	
+    public static TreeModel createTreeModel(IModel<AmpTreeVisibilityModelBean> treeModel)
+    {
+    	AmpTreeVisibilityModelBean tree = treeModel.getObject();
+        return convertToTreeModel(tree,tree.getItems());
+    }
+
+    public static TreeModel convertToTreeModel(AmpTreeVisibilityModelBean tree, List<Object> list)
+    {
+        TreeModel model = null;
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(tree.getName(),list));
+        add(rootNode, list);
+        model = new DefaultTreeModel(rootNode);
+        return model;
+    }
+
+    public static void add(DefaultMutableTreeNode parent, List<Object> sub)
+    {
+        for (Iterator<Object> i = sub.iterator(); i.hasNext();)
+        {
+        	AmpTreeVisibilityModelBean o = (AmpTreeVisibilityModelBean)i.next();
+        	if(o.getItems().size()>0){
+              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.getName(),o.getItems()));
+              parent.add(child);
+              add(child, (List<Object>)o.getItems());
+        	}
+        	else{
+              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.toString()));
+              parent.add(child);
+        	}
+        }
+    }
+	
 }

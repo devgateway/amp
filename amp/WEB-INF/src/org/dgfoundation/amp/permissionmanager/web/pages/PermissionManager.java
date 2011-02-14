@@ -5,7 +5,6 @@ package org.dgfoundation.amp.permissionmanager.web.pages;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,11 +20,9 @@ import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPM
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageUsersSectionFeature;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageWorkspacesSectionFeature;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -91,11 +88,10 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		Session session = PersistenceManager.getRequestDBSession();
 		AmpTemplatesVisibility currentTemplate = null;
 		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
-//		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 		AmpTreeVisibilityModelBean tree	=	PMUtil.buildAmpTreeFMPermissions(currentTemplate);
+//		AmpTreeVisibilityModelBean tree	=	PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility("PROJECT MANAGEMENT"));
 		final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel =	new Model((Serializable)tree);
 		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityModel, "Manage Field Permissions", false));
-//		adminPMForm.add(new AmpPMSectionFeaturePanel("manageFieldLevelPermissions", "Manage Field Level Permissions"));
 		
 		
 		add(adminPMForm);

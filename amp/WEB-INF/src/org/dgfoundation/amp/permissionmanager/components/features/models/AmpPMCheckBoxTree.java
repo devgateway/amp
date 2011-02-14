@@ -57,6 +57,7 @@ public class AmpPMCheckBoxTree extends BaseTree {
 	 */
 	protected Component newNodeComponent(String id, IModel model)
 	{
+		Object object = model.getObject();
 		return new AmpPMCheckBoxIconPanel(id, model, AmpPMCheckBoxTree.this)
 		{
 			private static final long serialVersionUID = 1L;
@@ -84,6 +85,10 @@ public class AmpPMCheckBoxTree extends BaseTree {
 		else{
 			selectTree( tree, node );
 		}
+	}
+	
+	public void refreshTree(){
+		invalidateAll();
 	}
 	
 	protected void selectTree(BaseTree tree, TreeNode node) {

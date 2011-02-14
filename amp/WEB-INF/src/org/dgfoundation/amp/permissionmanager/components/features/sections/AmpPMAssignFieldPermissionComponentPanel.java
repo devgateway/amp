@@ -3,9 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.tree.TreeModel;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -13,9 +17,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
+import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author dan
@@ -30,7 +39,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	 * @param model
 	 * @param fmName
 	 */
-	public AmpPMAssignFieldPermissionComponentPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
+	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
 		this.showWorkspace=true;
@@ -64,9 +73,39 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permissionPriorityChoices.setSuffix("");
 		add(permissionPriorityChoices);
 		
-		
-		AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", ampTreeVisibilityModel, "FM Fields Panel");
+		TreeModel treeModel = PMUtil.createTreeModel(ampTreeVisibilityModel);
+		final IModel<TreeModel> iTreeModel = new Model((Serializable) treeModel);
+		final AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", iTreeModel, "FM Fields Panel");
+		tree.setOutputMarkupId(true);
 		add(tree);
+		
+		final AbstractAmpAutoCompleteTextField<AmpObjectVisibility> autoComplete = new AbstractAmpAutoCompleteTextField<AmpObjectVisibility>(AmpPMObjectVisibilitySearchModel.class) {
+
+			@Override
+			protected String getChoiceValue(AmpObjectVisibility choice) throws Throwable {
+				return choice.getName();
+			}
+			
+			@Override
+			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {
+				ampTreeVisibilityModel.setObject(PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility(choice.getName())));
+				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityModel));
+				tree.refreshTree(iTreeModel);
+				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+//				target.addComponent(tree);
+			}
+
+			@Override
+			public Integer getChoiceLevel(AmpObjectVisibility choice) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(43));
+		autoComplete.add(sizeModifier);
+		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,true);
+		add(searchFields);
+		
 	}
 
 	public Boolean getShowWorkspaces(){

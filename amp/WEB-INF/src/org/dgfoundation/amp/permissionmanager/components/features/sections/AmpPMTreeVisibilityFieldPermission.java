@@ -3,12 +3,8 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.Enumeration;
+import javax.swing.tree.TreeModel;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
@@ -30,17 +26,21 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 	 * @param ampTreeVisibilityModel
 	 * @param string
 	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
-		super(id, ampTreeVisibilityModel, fmName);
-		setAmpTreeVisibility(ampTreeVisibilityModel);
+	public AmpPMTreeVisibilityFieldPermission(String id, IModel<TreeModel> iTreeModel, String fmName) {
+		super(id, iTreeModel, fmName);
 		
-		tree = new AmpPMCheckBoxTree("tree", createTreeModel(ampTreeVisibilityModel));
+		tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());//PMUtil.createTreeModel(ampTreeVisibilityModel)
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().expandAll();
+       
 	}
 
 
+	public void refreshTree(IModel<TreeModel> iTreeModel){
+		tree.setModelObject(iTreeModel.getObject());
+		tree.invalidateAll();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMBaseTreePanel#getTree()
@@ -60,18 +60,5 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		super(id, fmName);
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param fmBehavior
-	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, AmpFMTypes fmBehavior) {
-		super(id, ampTreeVisibilityModel, fmName, fmBehavior);
-		// TODO Auto-generated constructor stub
-		setAmpTreeVisibility(ampTreeVisibilityModel);
-	}
-
 
 }

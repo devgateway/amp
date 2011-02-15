@@ -25,6 +25,8 @@ import org.hibernate.Session;
 public class DynamicColumnsUtil {
 	private static Logger logger = Logger.getLogger(DynamicColumnsUtil.class);
 	
+	private static ArrayList<AmpColumns> cachedMtefColumnList	= 	null;
+	
 	public static void createInexistentMtefColumns (ServletContext sCtx) {
 		List<Integer> mtefYears		= showInexistentMtefYears();
 		if ( mtefYears != null && mtefYears.size() > 0 ) {
@@ -39,6 +41,7 @@ public class DynamicColumnsUtil {
 				logger.info("Adding MTEF column for year " + year + "/" + (year+1) );
 				dynamicallyCreateNewColumn(col,"Funding Information", sCtx);
 			}
+			DynamicColumnsUtil.cachedMtefColumnList	= null;
 			MathExpressionRepository.buildMtefColumn();
 		}
 	}
@@ -57,13 +60,20 @@ public class DynamicColumnsUtil {
 	
 	public static List<AmpColumns> getMtefColumns() {
 		ArrayList<AmpColumns> retList	= new ArrayList<AmpColumns>();
-		Collection<AmpColumns> allCols	= AdvancedReportUtil.getColumnList();
-		if ( allCols != null ) {
-			for ( AmpColumns col: allCols )  {
-				if ( col.getColumnName().contains("MTEF") ) {
-					retList.add(col);
+		if ( DynamicColumnsUtil.cachedMtefColumnList != null && DynamicColumnsUtil.cachedMtefColumnList.size() > 0 ) {
+			retList.addAll(cachedMtefColumnList);
+		}
+		else {
+			Collection<AmpColumns> allCols	= AdvancedReportUtil.getColumnList();
+			if ( allCols != null ) {
+				for ( AmpColumns col: allCols )  {
+					if ( col.getColumnName().contains("MTEF") ) {
+						retList.add(col);
+					}
 				}
 			}
+			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>();
+			DynamicColumnsUtil.cachedMtefColumnList.addAll(retList);
 		}
 		return retList;
 	}

@@ -1369,13 +1369,10 @@ public class FeaturesUtil {
 	 * @param session
 	 * @throws HibernateException
 	 */
-	public static AmpTemplatesVisibility getTemplateVisibility(Long id,
-			Session session) throws HibernateException {
+	public static AmpTemplatesVisibility getTemplateVisibility(Long id,	Session session) throws HibernateException {
 		AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
 		ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, id);
-
-		List list = session.createQuery("from " +
-				AmpModulesVisibility.class.getName()).list();
+		List list = session.createQuery("from " + AmpModulesVisibility.class.getName()).list();
 		TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
 		mySet.addAll(list);
 		ft.setAllItems(mySet);

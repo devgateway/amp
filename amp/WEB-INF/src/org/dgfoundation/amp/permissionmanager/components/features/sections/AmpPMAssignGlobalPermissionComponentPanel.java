@@ -36,18 +36,6 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  */
 public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPanel {
 
-	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName, AmpFMTypes fmType) {
-		super(id, fmName, fmType);
-	}
-
-	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName) {
-		super(id, fmName);
-	}
-
-	public AmpPMAssignGlobalPermissionComponentPanel(String id, IModel model,
-			String fmName, AmpFMTypes fmBehavior) {
-		super(id, model, fmName, fmBehavior);
-	}
 
 	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName) {
 		super(id, globalPermissionsModel, fmName);
@@ -71,13 +59,9 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
 		}
 		final IModel<PermissionMap> pmAuxModel = new Model(pmAux);
-		Permission pNothing=null;
 		if(!(pmAuxModel.getObject().getPermission() instanceof CompositePermission))
-			{
-				pNothing = pmAuxModel.getObject().getPermission();
 				pmAuxModel.getObject().setPermission(PMUtil.createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
 						"This permission was created using the PM UI by admin user",false));
-			}
 		
 		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
 		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
@@ -131,6 +115,17 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		add(form);
 	}
 
+	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName, AmpFMTypes fmType) {
+		super(id, fmName, fmType);
+	}
+
+	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName) {
+		super(id, fmName);
+	}
+
+	public AmpPMAssignGlobalPermissionComponentPanel(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
+		super(id, model, fmName, fmBehavior);
+	}
 
 	
 	

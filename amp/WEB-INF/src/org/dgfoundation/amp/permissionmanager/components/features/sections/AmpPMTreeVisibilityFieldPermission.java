@@ -32,7 +32,7 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
 		tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());//PMUtil.createTreeModel(ampTreeVisibilityModel)
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
-        tree.getTreeState().expandAll();
+        tree.getTreeState().collapseAll();
        
 	}
 

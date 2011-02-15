@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -12,6 +13,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 /**
  * @author dan
@@ -44,10 +46,11 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 	 * @param id
 	 * @param model
 	 * @param fmName
+	 * @param teamsModel 
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibilityModelBean>  ampTreeVisibilityModel, String fmName, boolean hideLabel) throws Exception {
+	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibilityModelBean>  ampTreeVisibilityModel, String fmName, final IModel<Set<AmpTeam>> teamsModel, boolean hideLabel) throws Exception {
 		super(id, ampTreeVisibilityModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();
@@ -57,7 +60,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		      {
 		    	  AmpPMAddFieldPermissionPanel newGlobalPerm = null;
 		    	try {
-					newGlobalPerm = new AmpPMAddFieldPermissionPanel(panelId, ampTreeVisibilityModel, "Add Field Permission");
+					newGlobalPerm = new AmpPMAddFieldPermissionPanel(panelId, ampTreeVisibilityModel, "Add Field Permission", teamsModel);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

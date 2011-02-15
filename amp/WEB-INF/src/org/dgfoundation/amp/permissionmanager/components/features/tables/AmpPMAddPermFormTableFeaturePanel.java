@@ -3,12 +3,8 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -16,17 +12,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.GatePermission;
-import org.digijava.module.gateperm.gates.OrgRoleGate;
-import org.digijava.module.gateperm.gates.UserLevelGate;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 
 /**
  * @author dan
@@ -34,14 +23,13 @@ import org.digijava.module.gateperm.gates.UserLevelGate;
  */
 public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<Set<AmpPMGateReadEditWrapper>> gatesSetModel, String fmName, boolean hideLeadingNewLine) {
+	public AmpPMAddPermFormTableFeaturePanel(String id, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, String fmName, boolean hideLeadingNewLine) {
 		super(id, gatesSetModel, fmName, hideLeadingNewLine);
-		AbstractReadOnlyModel<List<AmpPMGateReadEditWrapper>> gatesListReadOnlyModel = OnePagerUtil.getReadOnlyListModelFromSetModel(gatesSetModel);
+		AbstractReadOnlyModel<List<AmpPMReadEditWrapper>> gatesListReadOnlyModel = OnePagerUtil.getReadOnlyListModelFromSetModel(gatesSetModel);
 		
-				
-		list = new ListView<AmpPMGateReadEditWrapper>("permGatesList", gatesListReadOnlyModel) {
+		list = new ListView<AmpPMReadEditWrapper>("permGatesList", gatesListReadOnlyModel) {
 			@Override
-			protected void populateItem(final ListItem<AmpPMGateReadEditWrapper> item) {
+			protected void populateItem(final ListItem<AmpPMReadEditWrapper> item) {
 				item.add(new Label("gateName", item.getModelObject().getName()));
 				CheckBox read =	new CheckBox("gateReadFlag", new PropertyModel(item.getModelObject(), "readFlag"));
 				read.setOutputMarkupId(true);

@@ -25,15 +25,16 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.PermissionMap;
-import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * @author dan
@@ -47,41 +48,44 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	 * @param id
 	 * @param model
 	 * @param fmName
+	 * @param teamsModel 
 	 */
-	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
+	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, IModel<Set<AmpTeam>> teamsModel) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
 		this.showWorkspace=true;
 
-		final TransparentWebMarkupContainer a = new TransparentWebMarkupContainer("workspaces");
+		final TransparentWebMarkupContainer workspaces = new TransparentWebMarkupContainer("workspaces");
+		
+		
+		workspaces.setOutputMarkupId(true);
+		add(workspaces);
+		
+		
+		List<String> permissionPriority = new ArrayList<String>();
+		permissionPriority.add(PMUtil.ROLE_PERMISSION);
+		permissionPriority.add(PMUtil.WORKSPACE_PERMISSION);
+		permissionPriority.add(PMUtil.CUMMULATIVE);
+		IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
+		
+		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
+		permissionPriorityChoices.setSuffix("");
+		add(permissionPriorityChoices);
 		
 		AjaxCheckBox showWorkspaceCheckBox =	new AjaxCheckBox("showWorkspace", new Model(this.showWorkspace)){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				// TODO Auto-generated method stub
 				setShowWorkspaces(!getShowWorkspaces());
-				a.setVisible(getShowWorkspaces());
+				workspaces.setVisible(getShowWorkspaces());
+				permissionPriorityChoices.setVisible(getShowWorkspaces());
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
 			
 		};
 		showWorkspaceCheckBox.setOutputMarkupId(true);
 		add(showWorkspaceCheckBox);
-		
-		a.setOutputMarkupId(true);
-		add(a);
-		
-		
-		List<String> permissionPriority = new ArrayList<String>();
-		permissionPriority.add(PMUtil.CUMMULATIVE);
-		permissionPriority.add(PMUtil.ROLE_PERMISSION);
-		permissionPriority.add(PMUtil.WORKSPACE_PERMISSION);
-		IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
-		
-		RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
-		permissionPriorityChoices.setSuffix("");
-		add(permissionPriorityChoices);
-		
+
 		TreeModel treeModel = PMUtil.createTreeModel(ampTreeVisibilityModel);
 		final IModel<TreeModel> iTreeModel = new Model((Serializable) treeModel);
 		final AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", iTreeModel, "FM Fields Panel");
@@ -89,12 +93,10 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		add(tree);
 		
 		final AbstractAmpAutoCompleteTextField<AmpObjectVisibility> autoComplete = new AbstractAmpAutoCompleteTextField<AmpObjectVisibility>(AmpPMObjectVisibilitySearchModel.class) {
-
 			@Override
 			protected String getChoiceValue(AmpObjectVisibility choice) throws Throwable {
 				return choice.getName();
 			}
-			
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {
 				ampTreeVisibilityModel.setObject(PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility(choice.getName())));
@@ -102,7 +104,6 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				tree.refreshTree(iTreeModel);
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
-
 			@Override
 			public Integer getChoiceLevel(AmpObjectVisibility choice) {
 				// TODO Auto-generated method stub
@@ -118,13 +119,22 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(Arrays.asList(GatePermConst.availablePermissibles).get(3));
 		PermissionMap permMap =	PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
 		IModel<PermissionMap> permMapModel = new Model(permMap);
-		TreeSet<AmpPMGateReadEditWrapper> gatesSet = new TreeSet<AmpPMGateReadEditWrapper>();
+		TreeSet<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
 		PMUtil.generateGatesList((CompositePermission)permMapModel.getObject().getPermission(),gatesSet);
-		final IModel<Set<AmpPMGateReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
+		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		final AmpPMAddPermFormTableFeaturePanel permGatesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permGatesFieldsForm", gatesSetModel, "Gate Form Table", true);
 		permGatesFieldsFormTable.setTableWidth(470);
 		permGatesFieldsFormTable.setOutputMarkupId(true);
 		add(permGatesFieldsFormTable);
+		
+		TreeSet<AmpPMReadEditWrapper> workspacesSet = new TreeSet<AmpPMReadEditWrapper>();
+		PMUtil.generateWorkspacesList(teamsModel, workspacesSet);
+		final IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel = new Model((Serializable) workspacesSet);
+		final AmpPMAddPermFormTableFeaturePanel permWorkspacesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permWorkspacesFieldsForm", workspacesSetModel, "Workspaces Form Table", true);
+		permWorkspacesFieldsFormTable.setTableWidth(470);
+		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
+		add(permWorkspacesFieldsFormTable);
+		
 		
 	}
 

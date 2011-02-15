@@ -3,10 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import java.util.Set;
+
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 /**
  * @author dan
@@ -14,14 +17,14 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTree
  */
 public class AmpPMAddFieldPermissionPanel extends AmpComponentPanel {
 
-	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName) {
+	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, IModel<Set<AmpTeam>> teamsModel) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
 		
 		super.setOutputMarkupId(true);
 		// TODO Auto-generated constructor stub
-		
-		AmpPMAssignFieldPermissionComponentPanel assignFieldPerm = new AmpPMAssignFieldPermissionComponentPanel("assignFieldPermission", ampTreeVisibilityModel,"Assign Field Permission");
+
+		AmpPMAssignFieldPermissionComponentPanel assignFieldPerm = new AmpPMAssignFieldPermissionComponentPanel("assignFieldPermission", ampTreeVisibilityModel,"Assign Field Permission", teamsModel);
 		assignFieldPerm.setOutputMarkupId(true);
 		add(assignFieldPerm);
 		

@@ -21,6 +21,7 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
@@ -65,7 +66,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		PermissionMap pmAux = null;
 		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
 
-		Set<AmpPMGateReadEditWrapper> gatesSet = new TreeSet();
+		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet();
 		if(pmAux==null){
 			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
 		}
@@ -79,7 +80,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			}
 		
 		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
-		final IModel<Set<AmpPMGateReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
+		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", true);
 		permGatesFormTable.setTableWidth(300);
@@ -91,7 +92,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				pmAuxModel.setObject(PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject()));
-				TreeSet<AmpPMGateReadEditWrapper> aa = new TreeSet<AmpPMGateReadEditWrapper>();
+				TreeSet<AmpPMReadEditWrapper> aa = new TreeSet<AmpPMReadEditWrapper>();
 
 				if(pmAuxModel.getObject()==null)
 					pmAuxModel.setObject(PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel));
@@ -122,7 +123,6 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		Button saveAndSubmit = new Button("saveGlobalPermissionButton") {
 			public void onSubmit() {
 					System.out.println("saveGlobalPermissionButton  submit pressed");
-					//PMUtil.setGlobalPermission(globalPermissionMapForPermissibleClassModel.getObject(),globalPermissionModel.getObject(), globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
 					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject());
 					System.out.println("PM global permission assigned");
 			}

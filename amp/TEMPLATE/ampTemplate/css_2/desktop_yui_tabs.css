@@ -22,6 +22,8 @@
 			margin:0pt 5px 0pt 0pt;
 			-moz-border-radius-topleft:5px;
 			-moz-border-radius-topright:5px;
+			border-top-left-radius:5px;
+			border-top-right-radius:5px;
 			/* background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top; */
 	}
 	

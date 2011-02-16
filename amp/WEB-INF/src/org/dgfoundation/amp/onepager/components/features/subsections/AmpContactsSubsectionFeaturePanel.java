@@ -147,7 +147,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 	public void renderHead(IHeaderResponse response) {
 		 for (TransparentWebMarkupContainer c: sliders) {
 		//	response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
-			System.out.println("-------"+OnePagerConst.getToggleJS(c));
+			;//System.out.println("-------"+OnePagerConst.getToggleJS(c));
 		} ;
 		 
 	}

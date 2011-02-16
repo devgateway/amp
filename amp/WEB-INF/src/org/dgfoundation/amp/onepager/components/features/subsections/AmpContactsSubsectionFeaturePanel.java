@@ -23,6 +23,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -124,7 +125,9 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 				set.add(aaContact);
 				idsList.removeAll();
 				target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-				target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+				//target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
+				
 			}
 
 			@Override
@@ -143,7 +146,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		 for (TransparentWebMarkupContainer c: sliders) {
-			response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
+		//	response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
 			System.out.println("-------"+OnePagerConst.getToggleJS(c));
 		} ;
 		 

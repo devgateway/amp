@@ -4,17 +4,22 @@
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -23,7 +28,6 @@ import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMObjectVisibilitySearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -53,25 +57,29 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, IModel<Set<AmpTeam>> teamsModel) {
 		super(id, ampTreeVisibilityModel, fmName);
 		// TODO Auto-generated constructor stub
+		
+		final Form form = new Form("ampFieldPMForm")
+		{
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				System.out.println("ampFieldPMForm submitted");
+			}
+		};
+		form.setOutputMarkupId(true);
+		
 		this.showWorkspace=true;
-
 		final TransparentWebMarkupContainer workspaces = new TransparentWebMarkupContainer("workspaces");
-		
-		
 		workspaces.setOutputMarkupId(true);
-		add(workspaces);
+		form.add(workspaces);
 		
-		
-		List<String> permissionPriority = new ArrayList<String>();
-		permissionPriority.add(PMUtil.ROLE_PERMISSION);
-		permissionPriority.add(PMUtil.WORKSPACE_PERMISSION);
-		permissionPriority.add(PMUtil.CUMMULATIVE);
+		List<String> permissionPriority = PMUtil.getPermissionPriority();
 		IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
 		
+		//permission priority radiobutton
 		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
 		permissionPriorityChoices.setSuffix("");
-		add(permissionPriorityChoices);
+		form.add(permissionPriorityChoices);
 		
+		//show workspace checkbox
 		AjaxCheckBox showWorkspaceCheckBox =	new AjaxCheckBox("showWorkspace", new Model(this.showWorkspace)){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -84,14 +92,16 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 			
 		};
 		showWorkspaceCheckBox.setOutputMarkupId(true);
-		add(showWorkspaceCheckBox);
+		form.add(showWorkspaceCheckBox);
 
+		//FM tree
 		TreeModel treeModel = PMUtil.createTreeModel(ampTreeVisibilityModel);
 		final IModel<TreeModel> iTreeModel = new Model((Serializable) treeModel);
 		final AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", iTreeModel, "FM Fields Panel");
 		tree.setOutputMarkupId(true);
-		add(tree);
+		form.add(tree);
 		
+		//search text box
 		final AbstractAmpAutoCompleteTextField<AmpObjectVisibility> autoComplete = new AbstractAmpAutoCompleteTextField<AmpObjectVisibility>(AmpPMObjectVisibilitySearchModel.class) {
 			@Override
 			protected String getChoiceValue(AmpObjectVisibility choice) throws Throwable {
@@ -113,7 +123,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(43));
 		autoComplete.add(sizeModifier);
 		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,true);
-		add(searchFields);
+		form.add(searchFields);
 		
 		
 		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(Arrays.asList(GatePermConst.availablePermissibles).get(3));
@@ -125,7 +135,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final AmpPMAddPermFormTableFeaturePanel permGatesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permGatesFieldsForm", gatesSetModel, "Gate Form Table", true);
 		permGatesFieldsFormTable.setTableWidth(470);
 		permGatesFieldsFormTable.setOutputMarkupId(true);
-		add(permGatesFieldsFormTable);
+		form.add(permGatesFieldsFormTable);
 		
 		TreeSet<AmpPMReadEditWrapper> workspacesSet = new TreeSet<AmpPMReadEditWrapper>();
 		PMUtil.generateWorkspacesList(teamsModel, workspacesSet);
@@ -133,9 +143,37 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final AmpPMAddPermFormTableFeaturePanel permWorkspacesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permWorkspacesFieldsForm", workspacesSetModel, "Workspaces Form Table", true);
 		permWorkspacesFieldsFormTable.setTableWidth(470);
 		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
-		add(permWorkspacesFieldsFormTable);
+		form.add(permWorkspacesFieldsFormTable);
 		
 		
+		
+		
+		form.add(new AjaxFallbackLink("resetFieldPermissionButton"){
+			//@Override
+			public void onClick(AjaxRequestTarget target) {
+				form.clearInput();
+				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+			}
+		});
+		
+		Button saveAndSubmit = new Button("saveFieldPermissionButton") {
+			public void onSubmit() {
+					System.out.println("saveGlobalPermissionButton  submit pressed");
+					IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel2 = ampTreeVisibilityModel;
+					IModel<TreeModel> iTreeModel2 = iTreeModel;
+					DefaultMutableTreeNode root = (DefaultMutableTreeNode)iTreeModel.getObject().getRoot();
+					AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
+					Enumeration children = root.children();
+					while ( children.hasMoreElements() ) {
+						DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
+						AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean)child.getUserObject();
+					}
+					System.out.println("PM global permission assigned");
+			}
+		};
+		form.add(saveAndSubmit);
+		
+		add(form);
 	}
 
 	public Boolean getShowWorkspaces(){

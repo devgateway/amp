@@ -1,5 +1,6 @@
 <wicket:extend>	
 <div class="perm_level">
+<form wicket:id="ampFieldPMForm">
 	<table width="952" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 
 	  	<tr><td colspan="3" bgcolor="#F4F4F4"><center><h3>Assign Field Permission</h3></center></td></tr>
@@ -41,6 +42,10 @@
 	  	</tr>
 	</table>
 	<br />
-	<center><input type="button" value="Save" class="buttonx" /> <input type="button" value="Reset" class="buttonx" /> <input type="button" value="Cancel" class="buttonx" /></center>
+	<center>
+			<input type="submit" wicket:id="saveFieldPermissionButton" value="Save" class="buttonx"/>
+			<input type="button" wicket:id="resetFieldPermissionButton" value="Reset" class="buttonx"/>
+	</center>
+</form>
 </div>
 </wicket:extend>	

@@ -214,13 +214,13 @@ public final class PMUtil {
 	
 	public static AmpTreeVisibilityModelBean buildAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
 		// TODO Auto-generated method stub
-		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>());
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>(), currentTemplate);
 		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
 				for (Iterator it = currentTemplate.getSortedAlphaAllItems().iterator(); it.hasNext();) {
 					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
 					if(module.getParent()==null) 
 						{
-							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module)));
+							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module), module));
 						}
 				}
 		return tree;
@@ -228,7 +228,7 @@ public final class PMUtil {
 	
 	public static AmpTreeVisibilityModelBean buildTreeObjectFMPermissions(AmpObjectVisibility currentAOV) {
 		// TODO Auto-generated method stub
-		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentAOV.getName(), new ArrayList<Object>());
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentAOV.getName(), new ArrayList<Object>(), currentAOV);
 		Set itemsSet=null;
 		if(currentAOV instanceof AmpModulesVisibility && ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules().size()>0)
 			itemsSet = ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules();
@@ -236,7 +236,7 @@ public final class PMUtil {
 		if (itemsSet != null && itemsSet.iterator() != null)
 				for (Iterator it = itemsSet.iterator(); it.hasNext();) {
 					AmpObjectVisibility item = (AmpObjectVisibility) it.next();
-					AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item));
+					AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item),item);
 					tree.getItems().add(iitem);
 				}
 		return tree;
@@ -251,7 +251,7 @@ public final class PMUtil {
 		if(itemsSet!=null)
 			for (Iterator it = itemsSet.iterator(); it.hasNext();) {
 				AmpObjectVisibility item = (AmpObjectVisibility) it.next();
-				AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item));
+				AmpTreeVisibilityModelBean iitem = new AmpTreeVisibilityModelBean(item.getName(),buildAmpSubTreeFMPermission(item), item);
 				list.add(iitem);
 			}
 		return list;
@@ -267,7 +267,7 @@ public final class PMUtil {
     public static TreeModel convertToTreeModel(AmpTreeVisibilityModelBean tree, List<Object> list)
     {
         TreeModel model = null;
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(tree.getName(),list));
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(tree.getName(),list, tree.getAmpObjectVisibility()));
         add(rootNode, list);
         model = new DefaultTreeModel(rootNode);
         return model;
@@ -279,12 +279,12 @@ public final class PMUtil {
         {
         	AmpTreeVisibilityModelBean o = (AmpTreeVisibilityModelBean)i.next();
         	if(o.getItems().size()>0){
-              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.getName(),o.getItems()));
+              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.getName(),o.getItems(), o.getAmpObjectVisibility()));
               parent.add(child);
               add(child, (List<Object>)o.getItems());
         	}
         	else{
-              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.toString()));
+              DefaultMutableTreeNode child = new DefaultMutableTreeNode(new AmpTreeVisibilityModelBean(o.toString(), o.getAmpObjectVisibility()));
               parent.add(child);
         	}
         }
@@ -379,6 +379,17 @@ public final class PMUtil {
 				i++;
 			}
 		}
+	}
+
+
+
+
+	public static List<String> getPermissionPriority() {
+			List<String> permissionPriority = new ArrayList<String>();
+			permissionPriority.add(PMUtil.ROLE_PERMISSION);
+			permissionPriority.add(PMUtil.WORKSPACE_PERMISSION);
+			permissionPriority.add(PMUtil.CUMMULATIVE);
+			return permissionPriority;
 	}
 	
 }

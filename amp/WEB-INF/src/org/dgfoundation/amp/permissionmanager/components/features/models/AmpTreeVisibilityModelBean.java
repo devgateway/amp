@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+
 /**
  * @author dan
  *
@@ -16,8 +19,18 @@ public class AmpTreeVisibilityModelBean implements Serializable
     private Boolean checked=false;
     private String name;
     private List<Object> items;
+    private AmpObjectVisibility ampObjectVisibility;
+    
+    
+    public AmpObjectVisibility getAmpObjectVisibility() {
+		return ampObjectVisibility;
+	}
 
-    public String getName() {
+	public void setAmpObjectVisibility(AmpObjectVisibility aov) {
+		this.ampObjectVisibility = aov;
+	}
+
+	public String getName() {
 		return name;
 	}
 
@@ -46,12 +59,14 @@ public class AmpTreeVisibilityModelBean implements Serializable
      * 
      * @param s
      *            String that will be suffix of each property.
+	 * @param ampObjectVisibility 
      */
-    public AmpTreeVisibilityModelBean(String s, List<Object> items)
+    public AmpTreeVisibilityModelBean(String s, List<Object> items, AmpObjectVisibility ampObjectVisibility)
     {
         checked = false;
         this.items = items;
         this.name = s;
+        this.ampObjectVisibility = ampObjectVisibility;
     }
 
     
@@ -60,10 +75,11 @@ public class AmpTreeVisibilityModelBean implements Serializable
     	checked = false;
     }
     
-    public AmpTreeVisibilityModelBean(String name){
+    public AmpTreeVisibilityModelBean(String name, AmpObjectVisibility ampObjectVisibility){
     	checked = false;
     	this.name = name;
     	this.items=new ArrayList();
+    	this.ampObjectVisibility = ampObjectVisibility;
     }
     /**
      * @see java.lang.Object#toString()

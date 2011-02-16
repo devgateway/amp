@@ -90,7 +90,6 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		AmpTemplatesVisibility currentTemplate = null;
 		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
 		AmpTreeVisibilityModelBean tree	=	PMUtil.buildAmpTreeFMPermissions(currentTemplate);
-//		AmpTreeVisibilityModelBean tree	=	PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility("PROJECT MANAGEMENT"));
 		final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel =	new Model((Serializable)tree);
 		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityModel, "Manage Field Permissions",teamsModel, false));
 		

@@ -11,6 +11,8 @@ import java.util.Map;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -47,6 +49,19 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 				query.setMaxResults(maxResults);
 			query.setString("name", "%" + input + "%");
 			ret = query.list();
+			
+			query = session.createQuery("from "+ AmpFeaturesVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
+			if (maxResults != null)
+				query.setMaxResults(maxResults);
+			query.setString("name", "%" + input + "%");
+			ret.addAll(query.list());
+			
+			query = session.createQuery("from "+ AmpFieldsVisibility.class.getName()+ " o WHERE o.name like :name ORDER BY o.name");
+			if (maxResults != null)
+				query.setMaxResults(maxResults);
+			query.setString("name", "%" + input + "%");
+			ret.addAll(query.list());
+			
 			session.close();
 			return ret;
 		} catch (HibernateException e) {

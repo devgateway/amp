@@ -25,7 +25,7 @@ public class AmpTreeVisibilityModelBean implements Serializable
     public AmpObjectVisibility getAmpObjectVisibility() {
 		return ampObjectVisibility;
 	}
-
+    
 	public void setAmpObjectVisibility(AmpObjectVisibility aov) {
 		this.ampObjectVisibility = aov;
 	}

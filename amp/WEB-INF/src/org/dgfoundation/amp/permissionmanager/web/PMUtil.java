@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.web;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,25 +16,31 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
+import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.gates.OrgRoleGate;
 import org.digijava.module.gateperm.gates.UserLevelGate;
+import org.digijava.module.gateperm.gates.WorkspaceGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -42,6 +49,8 @@ import org.hibernate.Session;
  */
 public final class PMUtil {
 
+	 private static Logger logger = Logger.getLogger(PMUtil.class);
+	
 	public static final String CUMMULATIVE = "Cummulative";
 	public static final String WORKSPACE_PERMISSION = "Workspace based permission";
 	public static final String ROLE_PERMISSION = "Role based permission";
@@ -189,7 +198,7 @@ public final class PMUtil {
 
 		if(pm!=null && session!=null) {
 		    Permission p=pm.getPermission();
-		    //we delete the old permissions, if they are dedicated
+		    //we delete the old permissions
 		    if (p!=null) {
 		    String name = p.getName();
 			CompositePermission cp = (CompositePermission)p;
@@ -212,7 +221,28 @@ public final class PMUtil {
 	}
 	
 	
-	public static AmpTreeVisibilityModelBean buildAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
+	public static CompositePermission createCompositePermissionForFM(Session session, String name, Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspacesSet){
+		CompositePermission cp = new CompositePermission(true);
+		cp.setDescription("This permission was created using the PM UI by admin user");
+		cp.setName(name);
+		if(gatesSet!=null && gatesSet.size()>0)
+			for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet)
+				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
+		if(workspacesSet!=null && workspacesSet.size()>0)
+			for (AmpPMReadEditWrapper ampPMGateWrapper : workspacesSet)
+				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
+
+		session.flush(); //
+		System.out.println("wow");
+		return cp;
+	}
+	
+	
+	public static AmpTreeVisibilityModelBean getAmpTreeFMPermissions() {
+		return generateAmpTreeFMPermissions(getDefaultAmpTemplateVisibility());
+	}
+	
+	public static AmpTreeVisibilityModelBean generateAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
 		// TODO Auto-generated method stub
 		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>(), currentTemplate);
 		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
@@ -225,6 +255,23 @@ public final class PMUtil {
 				}
 		return tree;
 	}
+	
+	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
+		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+		// get the default amp template!!!
+		Session session = null;
+		try {
+			session	=	PersistenceManager.getRequestDBSession();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(session == null) return null;
+		AmpTemplatesVisibility currentTemplate = null;
+		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+		return currentTemplate;
+	}
+	
 	
 	public static AmpTreeVisibilityModelBean buildTreeObjectFMPermissions(AmpObjectVisibility currentAOV) {
 		// TODO Auto-generated method stub
@@ -375,7 +422,7 @@ public final class PMUtil {
 		if(ampTeamSet!=null){
 			int i=1;
 			for (AmpTeam ampTeam : ampTeamSet) {
-				workspacesSet.add(new AmpPMReadEditWrapper(new Long(i),ampTeam.getName(), Boolean.FALSE,Boolean.FALSE));
+				workspacesSet.add(new AmpPMGateReadEditWrapper(new Long(i),ampTeam.getName(),ampTeam.getAmpTeamId().toString(),WorkspaceGate.class, Boolean.FALSE,Boolean.FALSE));
 				i++;
 			}
 		}
@@ -391,5 +438,63 @@ public final class PMUtil {
 			permissionPriority.add(PMUtil.CUMMULATIVE);
 			return permissionPriority;
 	}
+
+
+
+
+	public static void saveFieldsPermission( final Set<AmpPMReadEditWrapper> gatesSet,	final Set<AmpPMReadEditWrapper> workspacesSet,	AmpTreeVisibilityModelBean ampTreeRootObject) {
+			Session session = null;
+			try {
+				session = PersistenceManager.getRequestDBSession();
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Calendar cal = Calendar.getInstance();
+			PermissionMap permissionMap = new PermissionMap(); 
+			permissionMap.setPermissibleCategory(ampTreeRootObject.getAmpObjectVisibility().getPermissibleCategory().getSimpleName());
+			permissionMap.setObjectIdentifier(ampTreeRootObject.getAmpObjectVisibility().getId());
+			CompositePermission cp = PMUtil.createCompositePermissionForFM(session,ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission " + cal.getTimeInMillis(), gatesSet, workspacesSet);
+			session.save(cp);
+			permissionMap.setPermission(cp);
+			session.save(permissionMap);
+		
+	}
+	
+	
+    public static List<PermissionMap> getOwnPermissionMapListForPermissible(Permissible obj) {
+    	Session session = null;
+    	try {
+    	    session = PersistenceManager.getRequestDBSession();
+
+    	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+    		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier=:objectId ORDER BY p.objectIdentifier");
+    	    query.setParameter("objectId", obj.getIdentifier());
+    	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
+    	    List<PermissionMap> col = query.list();
+    	    
+    	    if (col.size() == 0) return null;
+
+    	    return col;
+    	
+    	} catch (HibernateException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("HibernateException Exception encountered", e);
+    	} catch (DgException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("DgException Exception encountered", e);
+    	} finally {
+    	    try {
+    		//PersistenceManager.releaseSession(session);
+    	    } catch (HibernateException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "HibernateException Exception encountered", e);
+
+    	    }
+    	}
+
+    }
+
+	
 	
 }

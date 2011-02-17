@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,6 @@ import java.util.TreeSet;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,11 +34,15 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTree
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.PermissionMap;
+import org.hibernate.Session;
 
 /**
  * @author dan
@@ -53,9 +57,10 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	 * @param model
 	 * @param fmName
 	 * @param teamsModel 
+	 * @param ampTreeVisibilityModel2 
 	 */
-	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel, String fmName, IModel<Set<AmpTeam>> teamsModel) {
-		super(id, ampTreeVisibilityModel, fmName);
+	public AmpPMAssignFieldPermissionComponentPanel(String id,final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel, String fmName, IModel<Set<AmpTeam>> teamsModel, final IModel<AmpTreeVisibility> ampTreeVisibilityModel) {
+		super(id, ampTreeVisibilityBeanModel, fmName);
 		// TODO Auto-generated constructor stub
 		
 		final Form form = new Form("ampFieldPMForm")
@@ -95,7 +100,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		form.add(showWorkspaceCheckBox);
 
 		//FM tree
-		TreeModel treeModel = PMUtil.createTreeModel(ampTreeVisibilityModel);
+		TreeModel treeModel = PMUtil.createTreeModel(ampTreeVisibilityBeanModel);
 		final IModel<TreeModel> iTreeModel = new Model((Serializable) treeModel);
 		final AmpPMTreeVisibilityFieldPermission tree = new AmpPMTreeVisibilityFieldPermission("fmFieldsPanel", iTreeModel, "FM Fields Panel");
 		tree.setOutputMarkupId(true);
@@ -109,8 +114,11 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 			}
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {
-				ampTreeVisibilityModel.setObject(PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility(choice.getName())));
-				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityModel));
+//				AmpTreeVisibility atv = ampTreeVisibilityModel.getObject();
+//				AmpObjectVisibility aov = atv.getModuleByNameFromRoot(moduleName)
+//				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility(choice.getName())));
+				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(choice));
+				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityBeanModel));
 				tree.refreshTree(iTreeModel);
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
@@ -158,9 +166,8 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		
 		Button saveAndSubmit = new Button("saveFieldPermissionButton") {
 			public void onSubmit() {
-					System.out.println("saveGlobalPermissionButton  submit pressed");
-					IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel2 = ampTreeVisibilityModel;
-					IModel<TreeModel> iTreeModel2 = iTreeModel;
+					System.out.println("saveFieldPermissionButton  submit pressed");
+					IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel2 = ampTreeVisibilityBeanModel;
 					DefaultMutableTreeNode root = (DefaultMutableTreeNode)iTreeModel.getObject().getRoot();
 					AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
 					Enumeration children = root.children();
@@ -168,8 +175,14 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 						DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
 						AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean)child.getUserObject();
 					}
-					System.out.println("PM global permission assigned");
+					
+					//TODO
+					List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
+
+					PMUtil.saveFieldsPermission(gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject);
+					System.out.println("PM field permission assigned");
 			}
+
 		};
 		form.add(saveAndSubmit);
 		

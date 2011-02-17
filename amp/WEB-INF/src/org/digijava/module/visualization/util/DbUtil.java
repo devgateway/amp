@@ -182,7 +182,7 @@ public class DbUtil {
         int transactionType = filter.getTransactionType();
         TeamMember tm = filter.getTeamMember();
         Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue());
+        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
         Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "select fd ";

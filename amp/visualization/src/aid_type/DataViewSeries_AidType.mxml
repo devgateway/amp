@@ -6,7 +6,7 @@
 				>
 	
 	<mx:Style source="styles/Axiis_Examples.css"/>
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getThirdGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getAidTypeGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<typeofaid>true</typeofaid>
 		</mx:request>
@@ -47,6 +47,17 @@
 			
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getAidTypeGraphData";
+				var strDomain:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strDomain = curUrl.split('/')[2];
+				}
+				service.url = "http://" + strDomain + strUrl;
 				service.send();
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
@@ -58,17 +69,6 @@
 			
 			public function refreshGraph():void
 			{
-				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getThirdGraphData";
-				var strDomain:String = "";
-				if(curUrl.indexOf("file://") > -1){
-					strDomain = "localhost:8081";
-				}
-				else
-				{
-					strDomain = curUrl.split('/')[2];
-				}
-				service.url = "http://" + strDomain + strUrl;
 				service.send();
 				start();
 			}

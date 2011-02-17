@@ -40,8 +40,10 @@
 	xmlns:utils="org.axiis.utils.*">
 
 	<mx:Style source="styles/Axiis_Examples.css"/>
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getFundingsGraphData" result="service_resultHandler(event)" >
-		
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getSectorProfileGraphData" result="service_resultHandler(event)" >
+		<mx:request>
+			<typeofaid>true</typeofaid>
+		</mx:request>
 	</mx:HTTPService>
 	
 	<mx:Script>
@@ -137,7 +139,7 @@
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getFundingsGraphData";
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getSectorProfileGraphData";
 				var strDomain:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strDomain = "localhost:8081";

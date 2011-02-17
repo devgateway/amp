@@ -47,7 +47,7 @@
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getFirstGraphData";
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getFundingsGraphData";
 				var strDomain:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strDomain = "localhost:8081";

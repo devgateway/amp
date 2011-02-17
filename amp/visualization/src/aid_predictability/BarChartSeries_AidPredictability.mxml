@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 	 Copyright (c) 2009 Team Axiis
@@ -40,7 +39,7 @@
 	creationComplete="application1_creationCompleteHandler(event);"
 >
 
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getSecondGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getAidPredictabilityGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
 		</mx:request>
@@ -107,7 +106,7 @@
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getSecondGraphData";
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getAidPredictabilityGraphData";
 				var strDomain:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strDomain = "localhost:8081";
@@ -420,3 +419,4 @@
 	</mx:Array>
 
 </mx:Application>
+

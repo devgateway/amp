@@ -34,9 +34,10 @@
 	layout="absolute"
 	creationComplete="application1_creationCompleteHandler(event);" viewSourceURL="srcview/index.html" xmlns:debug="org.axiis.debug.*" >
 
-	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getAidTypeGraphData" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getSectorProfileGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
+			<typeofaid>true</typeofaid>
 		</mx:request>
 	</mx:HTTPService>
 	<mx:Script>
@@ -57,11 +58,11 @@
 			{
 
 				//perform aggregations to create data values for our nested wedges
-				ds.aggregateData(service.lastResult, "aidtype.year", ["amount"]);
-				ds.aggregateData(service.lastResult, "aidtype", ["aggregates.year_amount_sum"]);
+				ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
+				ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
 
 				//Set our max scale value.
-				dataProvider = service.lastResult.aidtype;
+				dataProvider = service.lastResult.sector;
 
 				dc.invalidateDisplayList();
 			}
@@ -98,7 +99,7 @@
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
-				var strUrl:String ="/visualization/dataDispatcher.do?action=getAidTypeGraphData";
+				var strUrl:String ="/visualization/dataDispatcher.do?action=getSectorProfileGraphData";
 				var strDomain:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strDomain = "localhost:8081";
@@ -130,6 +131,7 @@
 				var params:Object = {};
 				params["year"] = sliderYear.value;
 				params["format"] = "xml";
+				params["typeofaid"] = "true";
 				service.send(params);
 			}
 
@@ -170,7 +172,7 @@
 				width="{dc.width}"
 				height="{dc.height}"
 				labelField="name"
-				dataField="aggregates.year_amount_sum"
+				dataField="aggregates.amount_amount_sum"
 				fill="{innerWedgeFill}"
 				fontFamily="Myriad Pro"
 				fontSize="12"

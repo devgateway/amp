@@ -31,7 +31,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.czech</ecsServerName>
+	<ecsServerName>ampdev.200.czech</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

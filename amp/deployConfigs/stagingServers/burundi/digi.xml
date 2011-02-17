@@ -31,7 +31,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.stg.burundi</ecsServerName>
+	<ecsServerName>ampdev.200.stg.burundi</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

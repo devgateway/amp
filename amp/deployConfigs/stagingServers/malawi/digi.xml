@@ -31,7 +31,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.stg.malawi</ecsServerName>
+	<ecsServerName>ampdev.200.stg.malawi</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

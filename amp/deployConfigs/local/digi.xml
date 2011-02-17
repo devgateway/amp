@@ -30,7 +30,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>developer.115.local</ecsServerName>
+	<ecsServerName>developer.200.local</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

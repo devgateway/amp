@@ -30,7 +30,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.clean</ecsServerName>
+	<ecsServerName>ampdev.200.clean</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

@@ -30,7 +30,7 @@
     
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.senegal</ecsServerName>
+	<ecsServerName>ampdev.200.senegal</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
     

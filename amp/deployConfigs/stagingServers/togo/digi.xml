@@ -30,7 +30,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.stg.togo</ecsServerName>
+	<ecsServerName>ampdev.200.stg.togo</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

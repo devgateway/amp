@@ -31,7 +31,7 @@
 
 	<!-- ECS Service -->
 	<ecsDisable>true</ecsDisable>
-	<ecsServerName>ampdev.114.local-oracle</ecsServerName>
+	<ecsServerName>ampdev.200.local-oracle</ecsServerName>
 	<!-- <propertiesFile></propertiesFile> -->
 	<!--             -->
 

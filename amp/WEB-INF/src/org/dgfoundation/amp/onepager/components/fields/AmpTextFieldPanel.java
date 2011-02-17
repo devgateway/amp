@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  * @author mpostelnicu@dgateway.org

@@ -9,9 +9,7 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -49,6 +47,8 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 
 		AbstractReadOnlyModel<List<AmpActivityInternalId>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 
+
+		
 		idsList = new ListView<AmpActivityInternalId>("listOrgs", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override

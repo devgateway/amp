@@ -10,8 +10,8 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -25,6 +25,9 @@ import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTe
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -69,6 +72,17 @@ public class AmpLocationFormTableFeature extends
 		final IModel<Set<AmpActivityLocation>> setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
 
+	
+		final AmpPercentageValidationHiddenField<AmpActivityLocation> percentageValidationField=
+			new AmpPercentageValidationHiddenField<AmpActivityLocation>("locationPercentageTotal",setModel,"locationPercentageTotal") {
+				@Override
+				public Number getPercentage(AmpActivityLocation item) {
+					return item.getLocationPercentage();
+				}
+		};
+		
+		add(percentageValidationField);
+		
 		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
 
@@ -77,9 +91,10 @@ public class AmpLocationFormTableFeature extends
 			@Override
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
 				final MarkupContainer listParent = this.getParent();
-				item.add(new TextField<String>("percentage",
-						new PropertyModel<String>(item.getModel(),
-								"locationPercentage")));
+				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"locationPercentage");
+				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",
+						percModel,"locationPercentage",percentageValidationField);				
+				item.add(percentageField);
 				item.add(new Label("locationLabel",
 						getFormattedLocationName(item.getModelObject()
 								.getLocation().getLocation())));
@@ -115,6 +130,8 @@ public class AmpLocationFormTableFeature extends
 							regionalFundingFeature.getList().removeAll();
 							target.addComponent(regionalFundingFeature);
 							target.appendJavascript(OnePagerConst.slideToggle);
+							
+							percentageValidationField.reloadValidationField(target);							
 						}
 						setModel.getObject().remove(item.getModelObject());
 						target.addComponent(listParent);

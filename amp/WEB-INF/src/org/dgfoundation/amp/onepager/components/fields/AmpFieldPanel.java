@@ -85,10 +85,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
 		this(id,null,fmName,hideLabel, hideNewLine);
 	}
-	
-	public AmpFieldPanel(String id, String fmName,IModel<T> model) {
-		this(id,model,fmName,false);
-	}
+
 	
 	/**
 	 * @param id

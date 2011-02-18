@@ -15,6 +15,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificat
 import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
@@ -86,6 +87,9 @@ public class OnePager extends OnePagerWrapper {
 			
 			AmpContractingFormSectionFeature contracts = new AmpContractingFormSectionFeature("contracts", "Contracts", am);
 			activityForm.add(contracts);
+			
+			AmpMEFormSectionFeature me = new AmpMEFormSectionFeature("me", "M&E", am);
+			activityForm.add(me);
 			
 		} catch (Exception e) {
 			logger.error(e);

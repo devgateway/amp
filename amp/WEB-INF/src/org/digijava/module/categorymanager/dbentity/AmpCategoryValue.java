@@ -17,12 +17,12 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private Integer index;
-	private transient Set<AmpActivity> activities;
+	private Set<AmpActivity> activities;
 	//private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;

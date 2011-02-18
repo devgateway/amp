@@ -3,10 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -15,20 +12,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpContract
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractDisbursementsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractFundingAllocationSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractOrganizationsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbOrdersSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbursementsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author aartimon@dginternational.org

@@ -14,7 +14,14 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class AmpIndicatorValue implements Serializable{
-
+    /*
+     * NOTICE
+     * 
+     * When adding new fields please update the clone() method {@link #clone()}
+     * so that information is not lost. 
+     * 
+     * Thanks!
+     */
 	public static final int TARGET=0;
 	public static final int ACTUAL=1;
 	public static final int BASE=2;
@@ -25,8 +32,8 @@ public class AmpIndicatorValue implements Serializable{
 	private String comment;
 	private Date valueDate;
 
-        private Date dataIntervalStart;
-        private Date dataIntervalEnd;
+    private Date dataIntervalStart;
+    private Date dataIntervalEnd;
 
 	private Double value;
 	private int valueType;
@@ -37,13 +44,18 @@ public class AmpIndicatorValue implements Serializable{
 	private AmpLocation location;
 	
 	private AmpCategoryValue indicatorSource;
-	
-
-        private AmpIndicatorSubgroup subgroup;
+    private AmpIndicatorSubgroup subgroup;
+    /*
+     * NOTICE
+     * 
+     * When adding new fields please update the clone() method {@link #clone()}
+     * so that information is not lost. 
+     * 
+     * Thanks!
+     */
 
         public AmpIndicatorValue() {
         }
-
         
         public AmpIndicatorValue(int valueType) {
         	this.valueType = valueType;
@@ -166,6 +178,29 @@ public class AmpIndicatorValue implements Serializable{
     
     public void setSource(AmpIndicatorSource source) {
 
+    }
+
+    
+    @Override
+    public AmpIndicatorValue clone() {
+    	AmpIndicatorValue r = new AmpIndicatorValue();
+    	
+    	r.setValue(value);
+    	r.setValueDate(valueDate);
+    	r.setComment(comment);
+    	r.setIndValId(indValId);
+    	r.setDataIntervalStart(dataIntervalStart);
+    	r.setDataIntervalEnd(dataIntervalEnd);
+    	r.setValueType(valueType);
+    	r.setLogFrame(logFrame);
+    	r.setRisk(risk);
+    	r.setDefaultInd(defaultInd);
+    	r.setIndicatorConnection(indicatorConnection);
+    	r.setLocation(location);
+    	r.setIndicatorSource(indicatorSource);
+    	r.setSubgroup(subgroup);
+
+    	return r;
     }
 
 }

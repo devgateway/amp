@@ -11,7 +11,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.markup.html.form.AbstractChoice;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -30,7 +32,7 @@ public abstract class AmpCategoryFieldPanel extends
 		AmpFieldPanel<AmpCategoryValue> {
 
 	private static final long serialVersionUID = 8917920670614629713L;
-	protected List<AmpCategoryValue> choices;
+	protected IModel<List<? extends AmpCategoryValue>> choices;
 	protected Boolean selectedMultiselect;
 	protected String categoryKey;
 	protected boolean ordered;
@@ -90,25 +92,11 @@ public abstract class AmpCategoryFieldPanel extends
 					.loadAmpCategoryClassByKey(categoryKey);
 			selectedMultiselect = categoryClass.isMultiselect();
 		}
-		choices = new ArrayList<AmpCategoryValue>();
-
-	}
-	
-	public AmpCategoryFieldPanel(String id, String categoryKey, String fmName,
-			boolean ordered, Boolean isMultiselect,
-			IModel<Set<AmpCategoryValue>> relatedChoicesModel) throws Exception  {
-		this(id,categoryKey,fmName,ordered,isMultiselect,relatedChoicesModel,false);
-	}
-
-	@Override
-	protected void onBeforeRender() {
-		// TODO Auto-generated method stub
-		ServletWebRequest request = (ServletWebRequest) getRequest();
-		Collection<AmpCategoryValue> collectionByKey = null;
+		
+		final Collection<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
 		try {
-			collectionByKey = CategoryManagerUtil
-					.getAmpCategoryValueCollectionByKey(categoryKey, ordered,
-							request.getHttpServletRequest());
+			collectionByKey.addAll(CategoryManagerUtil
+					.getAmpCategoryValueCollectionByKey(categoryKey));
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -128,8 +116,68 @@ public abstract class AmpCategoryFieldPanel extends
 			}
 			collectionByKey.retainAll(relatedReunion);
 		}
-		choices.clear();
-		choices.addAll(collectionByKey);
+
+		choices = new AbstractReadOnlyModel<List<? extends AmpCategoryValue>>()
+        {
+            @Override
+            public List<AmpCategoryValue> getObject()
+            {
+                ArrayList<AmpCategoryValue> list = new ArrayList<AmpCategoryValue>(collectionByKey);
+                return list;
+            }
+
+        };
+	}
+	
+	public AmpCategoryFieldPanel(String id, String categoryKey, String fmName,
+			boolean ordered, Boolean isMultiselect,
+			IModel<Set<AmpCategoryValue>> relatedChoicesModel) throws Exception  {
+		this(id,categoryKey,fmName,ordered,isMultiselect,relatedChoicesModel,false);
+	}
+
+	@Override
+	protected void onBeforeRender() {
+		/*
+		 * Section moved to the constructor
+		 */
+		/*
+		ServletWebRequest request = (ServletWebRequest) getRequest();
+		final Collection<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
+		try {
+			collectionByKey.addAll(CategoryManagerUtil
+					.getAmpCategoryValueCollectionByKey(categoryKey, ordered,
+							request.getHttpServletRequest()));
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		// create reunion of the related choices and retain only choices that
+		// are also in the related reunion collection
+		if (relatedChoicesModel != null) {
+			Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
+			Collection<AmpCategoryValue> collection = relatedChoicesModel
+					.getObject();
+			for (AmpCategoryValue ampCategoryValue : collection) {
+				relatedReunion.addAll(CategoryManagerUtil
+						.getAmpCategoryValueFromDb(ampCategoryValue.getId(),
+								true).getUsedByValues());
+			}
+			collectionByKey.retainAll(relatedReunion);
+		}
+
+		choices = new AbstractReadOnlyModel<List<? extends AmpCategoryValue>>()
+        {
+            @Override
+            public List<AmpCategoryValue> getObject()
+            {
+                ArrayList<AmpCategoryValue> list = new ArrayList<AmpCategoryValue>(collectionByKey);
+                return list;
+            }
+
+        };
+		*/
 		super.onBeforeRender();
 	}
 	

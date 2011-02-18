@@ -5,11 +5,11 @@
 
 .yui-tt{ background: LightYellow; border-color: black }
 
-.all_markup {margin:1em} 
-.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 95%}
+.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 100%}
 .all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
+.all_markup .yui-dt {width: 100%;} 
 .all_markup .yui-dt-even {background-color:#FFFFFF;} 
 .all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
 .all_markup .yui-dt-selected {background-color:#A7CC25;} /*green*/
@@ -290,10 +290,10 @@
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
-YAHOO.namespace("YAHOO.amp.table");
+var myTable = YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
-YAHOO.amp.table.enhanceMarkup = function(markupName) {
+myTable.enhanceMarkup = function(markupName) {	
 	var checkBoxToHide = document.getElementById("checkBoxToHide");
 	<%
     	String dt = request.getParameter("documentsType");		
@@ -350,34 +350,34 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 //   };
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
+ 
+	var myPaginator = new YAHOO.widget.Paginator({ 
+    	rowsPerPage:10,
+    	template : "<span class='t_sm'><b>Pages :</b><span> {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
+    	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
+    	firstPageLinkLabel : 	"<digi:trn>&lt;&lt;</digi:trn>", 
+        previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
+        nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+        lastPageLinkLabel		: '<digi:trn jsFriendly="true">&gt;&gt</digi:trn>',
+    	
+        // use custom page link labels
+        pageLabelBuilder: function (page,paginator) {
+                var curr = paginator.getCurrentPage();
+                if(curr==page){
+                	return "<span class='current-page'>"+page+"</span>|";
+                }
+                else{
+                	return page;
+                }
+                
+        }
+    })	
+    
     var oConfigs = { 
     		 // Create the Paginator	       
-	         paginator:new YAHOO.widget.Paginator({ 
-	                	rowsPerPage:10,
-	                	template : "<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>",
-	                	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
-	                	firstPageLinkLabel : 	"<digi:trn>first</digi:trn>", 
-	        	        previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
-	        	        nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-	        	        lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn>',
-	                	firstPageLinkClass : "l_sm",
-	        	        lastPageLinkClass: "l_sm",
-	        	        nextPageLinkClass: "l_sm",
-	        	        previousPageLinkClass: "l_sm",
-	        	        // use custom page link labels
-	        	        pageLabelBuilder: function (page,paginator) {
-	        	                var curr = paginator.getCurrentPage();
-	        	                if(curr==page){
-	        	                	return "<span class='current-page'>"+page+"</span>|";
-	        	                }
-	        	                else{
-	        	                	return page;
-	        	                }
-	        	                
-	        	        }
-	                }),
-	                MSG_EMPTY: "${trans_no_resources}" 
-	        		}; 
+	         paginator:myPaginator,        
+	         MSG_EMPTY: "${trans_no_resources}" 
+	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];
 	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
@@ -408,6 +408,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	}
     return dataTable;
 };
+
 function hideCategories(){
 var categories	= YAHOO.amp.actionPanels;
 	for (var categ in categories) {
@@ -840,7 +841,7 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 	callbackForOtherDocuments	= {
 		success: function(o) {
 					//alert(o.responseText);
-					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
+					containerElement.innerHTML	= "<div class='all_markup' align='left' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
 					YAHOO.amp.datatables.push( datatable );

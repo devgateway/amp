@@ -130,6 +130,22 @@ padding-left: 0px;
     padding: 2px;
     font-weight: bold;
 }
+
+
+
+.yui-skin-sam span.yui-pg-first,
+.yui-skin-sam span.yui-pg-previous,
+.yui-skin-sam span.yui-pg-next,
+.yui-skin-sam span.yui-pg-last {
+display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+margin-left: 2px;
+padding-right: 7px;
+border-right: 1px solid rgb(208, 208, 208);
+}
+
 </style>
 
 <script language="javascript">

@@ -660,8 +660,17 @@ public class GisUtil {
             XML segmentNode = null;
 
             segmentNode = new XML("segment");
-            segmentNode.addAttribute("name", gms.getSegmentName());
-            segmentNode.addAttribute("code", gms.getSegmentCode());
+            if (gms.getSegmentName() != null) {
+                segmentNode.addAttribute("name", gms.getSegmentName());
+            } else {
+                segmentNode.addAttribute("name", "Unspecified");
+            }
+
+            if (gms.getSegmentCode() != null) {
+                segmentNode.addAttribute("code", gms.getSegmentCode());
+            } else {
+                segmentNode.addAttribute("code", "Unspecified");
+            }
             if (gms.getSegmentDescription() != null) {
                 segmentNode.addAttribute("desc", gms.getSegmentDescription());
             }

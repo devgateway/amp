@@ -6,6 +6,7 @@ package org.dgfoundation.amp.permissionmanager.web;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -221,7 +222,13 @@ public final class PMUtil {
 	}
 	
 	
-	public static CompositePermission createCompositePermissionForFM(Session session, String name, Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspacesSet){
+	public static CompositePermission createCompositePermissionForFM(String name, Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspacesSet){
+		Session session = null;
+		try {
+			session	=	PersistenceManager.getRequestDBSession();
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
 		CompositePermission cp = new CompositePermission(true);
 		cp.setDescription("This permission was created using the PM UI by admin user");
 		cp.setName(name);
@@ -243,7 +250,6 @@ public final class PMUtil {
 	}
 	
 	public static AmpTreeVisibilityModelBean generateAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
-		// TODO Auto-generated method stub
 		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>(), currentTemplate);
 		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
 				for (Iterator it = currentTemplate.getSortedAlphaAllItems().iterator(); it.hasNext();) {
@@ -258,12 +264,11 @@ public final class PMUtil {
 	
 	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
 		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
-		// get the default amp template!!!
+		// get the default amp template
 		Session session = null;
 		try {
 			session	=	PersistenceManager.getRequestDBSession();
 		} catch (DgException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(session == null) return null;
@@ -274,7 +279,6 @@ public final class PMUtil {
 	
 	
 	public static AmpTreeVisibilityModelBean buildTreeObjectFMPermissions(AmpObjectVisibility currentAOV) {
-		// TODO Auto-generated method stub
 		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentAOV.getName(), new ArrayList<Object>(), currentAOV);
 		Set itemsSet=null;
 		if(currentAOV instanceof AmpModulesVisibility && ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules().size()>0)
@@ -442,19 +446,20 @@ public final class PMUtil {
 
 
 
-	public static void saveFieldsPermission( final Set<AmpPMReadEditWrapper> gatesSet,	final Set<AmpPMReadEditWrapper> workspacesSet,	AmpTreeVisibilityModelBean ampTreeRootObject) {
-			Session session = null;
-			try {
-				session = PersistenceManager.getRequestDBSession();
-			} catch (DgException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Calendar cal = Calendar.getInstance();
+	public static void savePermissionMap( Session session, final Set<AmpPMReadEditWrapper> gatesSet,	final Set<AmpPMReadEditWrapper> workspacesSet,	AmpTreeVisibilityModelBean ampTreeRootObject, CompositePermission cp) {
+//			Session session = null;
+//			try {
+//				session = PersistenceManager.getRequestDBSession();
+//			} catch (DgException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 			PermissionMap permissionMap = new PermissionMap(); 
 			permissionMap.setPermissibleCategory(ampTreeRootObject.getAmpObjectVisibility().getPermissibleCategory().getSimpleName());
 			permissionMap.setObjectIdentifier(ampTreeRootObject.getAmpObjectVisibility().getId());
-			CompositePermission cp = PMUtil.createCompositePermissionForFM(session,ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission " + cal.getTimeInMillis(), gatesSet, workspacesSet);
+//			Calendar cal = Calendar.getInstance();
+//			CompositePermission cp1 = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission " + cal.getTimeInMillis(), gatesSet, workspacesSet);
 			session.save(cp);
 			permissionMap.setPermission(cp);
 			session.save(permissionMap);
@@ -495,6 +500,42 @@ public final class PMUtil {
 
     }
 
+	public static void assignFieldsPermission(IModel<TreeModel> iTreeModel, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel) {
+		
+			Session session = null;
+			try {
+				session	=	PersistenceManager.getRequestDBSession();
+			} catch (DgException e) {
+				e.printStackTrace();
+			}
+			DefaultMutableTreeNode root = (DefaultMutableTreeNode)iTreeModel.getObject().getRoot();
+			AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
+//			List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
+			
+			Calendar cal = Calendar.getInstance();
+			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission Multiple Assigned " + cal.getTimeInMillis(), gatesSetModel.getObject(), workspacesSetModel.getObject());
+			session.save(cp);
+			PMUtil.saveFieldsPermission(session, root, gatesSetModel, workspacesSetModel,cp);
+			
+	}
+
+
+	private static void saveFieldsPermission(Session session, DefaultMutableTreeNode root, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel, CompositePermission cp) {
+		AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
+		if(ampTreeRootObject.getChecked())
+			PMUtil.savePermissionMap(session, gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject,cp);
+		Enumeration children = root.children();
+		while ( children.hasMoreElements() ) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
+			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean)child.getUserObject();
+			saveFieldsPermission(session, child, gatesSetModel, workspacesSetModel,cp);
+		}
+		return ;
+	}
 	
+	
+	
+	
+
 	
 }

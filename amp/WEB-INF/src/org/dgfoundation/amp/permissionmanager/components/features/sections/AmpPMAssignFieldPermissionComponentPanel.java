@@ -167,22 +167,9 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		Button saveAndSubmit = new Button("saveFieldPermissionButton") {
 			public void onSubmit() {
 					System.out.println("saveFieldPermissionButton  submit pressed");
-					IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityModel2 = ampTreeVisibilityBeanModel;
-					DefaultMutableTreeNode root = (DefaultMutableTreeNode)iTreeModel.getObject().getRoot();
-					AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
-					Enumeration children = root.children();
-					while ( children.hasMoreElements() ) {
-						DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
-						AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean)child.getUserObject();
-					}
-					
-					//TODO
-					List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
-
-					PMUtil.saveFieldsPermission(gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject);
+					PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, workspacesSetModel);
 					System.out.println("PM field permission assigned");
 			}
-
 		};
 		form.add(saveAndSubmit);
 		

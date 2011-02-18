@@ -1,15 +1,27 @@
 <wicket:extend>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top" align="right">
+			<input type="button" wicket:id="addOrgsToUsers" value="Add Organizations to Users" class="buttonx" />
+			<hr />
+		</td>
+	</tr>
   <tr>
     <td width=710 valign=top>
-    	<span wicket:id="users"></span>
-		<span wicket:id="assignMultiUsersMultiOrgs" />
-		<center><div wicket:id="navigator" /></center>
-	</td>
-    <td width=20>&nbsp;</td>
-	<td valign="top"><input type="button" wicket:id="addOrgsToUsers" value="Add Organizations to Users" class="buttonx" />
-		<hr />
-		<span wicket:id="searchUsers"/>
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    		<tr>
+    			<td>
+    				<span wicket:id="users"></span>
+					<center><div wicket:id="navigator" /></center>
+				</td>
+				<td valign="top">
+					<span wicket:id="searchUsers"/>
+				</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2"><span wicket:id="assignMultiUsersMultiOrgs" /></td>
+    		</tr>
+    	</table>
 	</td>
   </tr>
 </table>

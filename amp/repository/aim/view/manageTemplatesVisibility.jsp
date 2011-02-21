@@ -117,8 +117,8 @@ div.fakefile2 input{
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left border=1>	
-	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left border=1 class="inside">	
+	<tr><td bgColor=#d7eafd class="inside" height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampFeatureManager">
 		Feature Manager 
@@ -127,9 +127,9 @@ div.fakefile2 input{
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" enctype="multipart/form-data">
 	<tr>
-		<th><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
+		<th class="inside"><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
-		<th><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
+		<th class="inside"><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
 	</tr>
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>
@@ -149,7 +149,7 @@ div.fakefile2 input{
 				<digi:trn key="aim:InUse">In use</digi:trn>
 			</c:set>	
 			
-			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
+			<td width="70%" class="inside"> <digi:link href="/visibilityManager.do" name="urlParams10" 
 				title="${translation}"><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
 				
 				<%if (template.isDefault()){%>
@@ -159,7 +159,7 @@ div.fakefile2 input{
 				<%//=template.isDefault()?"'in use":""%>
 			</td>
 
-			<td width="30%" align="center">
+			<td width="30%" align="center" class="inside">
 
 			[ <digi:link href="/visibilityManager.do" name="urlParams10" 
 				title="${translation}" ><digi:trn key="aim:featureManagerEditLink">Edit</digi:trn></digi:link> ]&nbsp;&nbsp;&nbsp;
@@ -180,7 +180,7 @@ div.fakefile2 input{
 		</tr>
 	</logic:iterate>
 	<tr>
-		<td align="left" colspan="3">
+		<td align="left" colspan="3" class="inside">
 			<c:set var="translation">
 				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
 			</c:set>
@@ -189,7 +189,7 @@ div.fakefile2 input{
 		</td>
 	</tr>
 	<tr>
-		<td colspan=2>	
+		<td colspan=2 class="inside">	
 			<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 				<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 					<input id="uploadFile" name="uploadFile" type="file" class="file"/>

@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -86,18 +87,32 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		final AmpComboboxFieldPanel<User> searchContacts=new AmpComboboxFieldPanel<User>("searchUsers", "Search Users", autoComplete,true);
 		add(searchContacts);
 		
-		
-		add(new Link("addOrgsToUsers"){
+		add(new AjaxLink("addOrgsToUsers"){
+
 			@Override
-			public void onClick() {
+			public void onClick(AjaxRequestTarget target) {
+				// TODO Auto-generated method stub
 				visible = !visible;
 				usersTable.setVisible(visible);
 				paginator.setVisible(visible);
 				searchContacts.setVisible(visible);
 				usersOrgs.setVisible(!visible);
+				target.addComponent(AmpPMManageUsersSectionFeature.this);
+				target.appendJavascript(OnePagerConst.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 		});
+//		add(new Link("addOrgsToUsers"){
+//			@Override
+//			public void onClick() {
+//				visible = !visible;
+//				usersTable.setVisible(visible);
+//				paginator.setVisible(visible);
+//				searchContacts.setVisible(visible);
+//				usersOrgs.setVisible(!visible);
+//			}
+//			
+//		});
 		
 	}
 

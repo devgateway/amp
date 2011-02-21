@@ -32,7 +32,7 @@
 	<tr>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 	
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+			<table cellPadding=5 cellSpacing=0 width="100%" border=1 style="font-size:12px;">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>

@@ -190,12 +190,20 @@ div.fakefile2 input{
 	<tr>
 		<td colspan=2 class="inside">	
 			<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
-				<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-					<input id="uploadFile" name="uploadFile" type="file" style="font-size:12px; float:left;" class="file"/>
-						<c:set var="translation">
+				<div class="fileinputs">
+				<table>
+				<tr>
+				<td><input id="uploadFile" name="uploadFile" type="file" style="font-size:12px;" class="file"/></td>
+				<td><c:set var="translation">
 				<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
 			</c:set>
-			<html:submit style="dr-menu" value="${translation}" styleClass="buttonx" property="importTreeVisibility" />
+			<html:submit style="dr-menu" value="${translation}" styleClass="buttonx" property="importTreeVisibility" /></td>
+				</tr>
+				</table>
+				
+				  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+					
+						
 				</div>
 			</a>
 		

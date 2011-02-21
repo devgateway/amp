@@ -3,12 +3,37 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpContactProperty  implements Comparable, Serializable {
 	private Long id;
 	private AmpContact contact;
 	private String name;
 	private String value;
+        /*this value is not saved in db, let's hope
+         somebody will refactor phone and use this*/
+        private AmpCategoryValue categoryValue;
+
+    public String getActualValue() {
+        return actualValue;
+    }
+
+    public void setActualValue(String actualValue) {
+        this.actualValue = actualValue;
+    }
+        //dummy variable
+        private String actualValue;
+
+    public AmpCategoryValue getCategoryValue() {
+        return categoryValue;
+    }
+
+    public void setCategoryValue(AmpCategoryValue categoryValue) {
+        this.categoryValue = categoryValue;
+    }
+
+        
+
 
     public String getActualPhoneNumber() {
         return ContactInfoUtil.getActualPhoneNumber(value);
@@ -46,14 +71,40 @@ public class AmpContactProperty  implements Comparable, Serializable {
 		this.value = value;
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub		
-		if (!(o instanceof AmpContactProperty)) return -1;
-		AmpContactProperty a = (AmpContactProperty)o;
-		if(a == null || a.getId() == null) return 1;
-		if(a.getId()!=null && this.getId() == null) return 1;
-		return this.getId().compareTo(a.getId());
-	}
+    @Override
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        if (!(o instanceof AmpContactProperty)) {
+            return -1;
+        }
+        AmpContactProperty a = (AmpContactProperty) o;
+        if (a == null) {
+            return 1;
+        }
+
+        if (a.getId() == null && this.getId() == null){
+              if(this.getName().equals(a.getName())) {
+            if (this.getValue() != null && a.getValue() != null) {
+                if (this.getValue().equals(a.getValue())) {
+                    return 0;
+                }
+            } else {
+                if (this.getActualValue() != null && a.getActualValue() != null) {
+                    if (this.getActualValue().equals(this.getActualValue())) {
+                        return 0;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        }
+             
+        
+        if (a.getId() == null||(a.getId() != null && this.getId() == null)) {
+            return 1;
+        }
+        return this.getId().compareTo(a.getId());
+    }
 	
 }

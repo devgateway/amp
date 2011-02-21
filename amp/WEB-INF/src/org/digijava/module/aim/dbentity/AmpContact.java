@@ -129,11 +129,15 @@ public class AmpContact implements Comparable, Serializable {
 	}
 
 	@Override
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		AmpContact a = (AmpContact)arg0;
-		return this.getId().compareTo(a.getId());
-	}
+	 public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
+        AmpContact a = (AmpContact) arg0;
+        if (this.getId() != null && a.getId() != null) {
+            return this.getId().compareTo(a.getId());
+        } else {
+            return 1;
+        }
+    }
 	
 	public String getNameAndLastName() {
 		nameAndLastName = (name != null) ? name + " " + lastname : name;

@@ -572,29 +572,38 @@ public class ContactInfoUtil {
         }
         return retVal;
     }
-     //these methods are  workaraound on translation problem
-    public static String getPhoneCategory (String phoneNum) {
-        StringBuffer retVal = new StringBuffer();
+    //these methods are  workaraound on translation problem
+
+    public static String getPhoneCategory(String phoneNum) {
+        String retVal = null;
+        AmpCategoryValue phoneCategoryValue = getPhoneCategoryValue(phoneNum);
+        if (phoneCategoryValue != null) {
+            retVal = phoneCategoryValue.getValue();
+        } else {
+            retVal = "Incorrect phone number";
+        }
+
+
+        return retVal;
+    }
+
+    public static AmpCategoryValue getPhoneCategoryValue(String phoneNum) {
+        AmpCategoryValue phoneCategoryValue = null;
         if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
             int typeIdSeparatorPos = phoneNum.indexOf(" ");
             String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
             Long phoneTypeId = null;
             try {
                 phoneTypeId = Long.parseLong(phoneTypeIdStr);
-                AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-                if(catVal!=null){
-                	retVal.append(catVal.getValue());
-                }
-            } catch (NumberFormatException ex){
-                //Old style record processing
-                retVal.append(phoneTypeIdStr);
-            }
+                phoneCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
 
-        } else {
-            retVal.append("Incorrect phone number");
+            } catch (NumberFormatException ex) {
+                return phoneCategoryValue;
+
+            }
         }
 
-        return retVal.toString();
+        return phoneCategoryValue;
     }
 
     /*

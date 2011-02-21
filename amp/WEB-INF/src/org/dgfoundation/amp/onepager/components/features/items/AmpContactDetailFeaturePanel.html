@@ -1,13 +1,19 @@
 <wicket:extend>
-<span wicket:id="featureLabel"/>
-<table border="0" cellspacing ="0" cellpadding="1">
-	<tr>
-		<td align="right">
-			<table  border="0" cellspacing ="0" cellpadding="1">
-				<tr wicket:id="detailsList"><td><span wicket:id="detail"/></td></tr>
-			</table>
-		</td>
+    <span wicket:id="featureLabel"/>
+    <table border="0" cellspacing ="0" cellpadding="1">
+        <tr>
+            <td align="right">        
+            <table  border="0" cellspacing ="0" cellpadding="1">
+                <tr wicket:id="detailsList">
+                    <td>
+                    <span wicket:id="detailPanel"/>
+                    <wicket:fragment wicket:id="frag1"><span wicket:id="detail"/><span wicket:id="removeContact"/></wicket:fragment>
+                    <wicket:fragment wicket:id="frag2"><span wicket:id="categoryValue"/><span wicket:id="phone"/><span wicket:id="removeContact"/></wicket:fragment>
+                    </td>
+                  </tr>
+            </table> 
+        </td>
 		<td align="right" valign="top"><span wicket:id="addDetailButton"/></td>
-	</tr>
-</table>
+        </tr>
+    </table>
 </wicket:extend>

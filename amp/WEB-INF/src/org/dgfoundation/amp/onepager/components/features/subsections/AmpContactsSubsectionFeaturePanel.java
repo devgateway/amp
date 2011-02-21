@@ -1,154 +1,279 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  *
-*/
+ */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import org.apache.wicket.MarkupContainer;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpAddContactFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpContactOrganizationFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpContactFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.util.ContactInfoUtil;
 
 /**
  * @author dmihaila@dginternational.org
  * since Dec 6, 2010
  */
-public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivity> implements IHeaderContributor{
-	
-	private static final long serialVersionUID = -2114204838953838609L;
-	protected ListView<AmpActivityContact> idsList;
-	private List<TransparentWebMarkupContainer> sliders;
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param am
-	 * @throws Exception
-	 */
-	public AmpContactsSubsectionFeaturePanel(String id, String fmName, final IModel<AmpActivity> am, final String contactType) throws Exception {
-		//super(id, contactModel, fmName, true);
-		super(id,fmName, am);
-		final IModel<Set<AmpActivityContact>> setModel=new PropertyModel<Set<AmpActivityContact>>(am,"activityContacts");
-		final String specificType = contactType;
-		
-		final IModel<List<AmpActivityContact>> listModel = new AbstractReadOnlyModel<List<AmpActivityContact>>() {
-		private static final long serialVersionUID = 3706184421459839210L;
+public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivity> implements IHeaderContributor {
 
-			@Override
-			public List<AmpActivityContact> getObject() {
-				Set<AmpActivityContact> allContacts = setModel.getObject();
-				Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();  
-				Iterator<AmpActivityContact> it = allContacts.iterator();
-				while (it.hasNext()) {
-					AmpActivityContact ampActContact = (AmpActivityContact) it.next();
-					if (specificType.compareTo(ampActContact.getContactType()) == 0)
-						specificContacts.add(ampActContact);
-				}
-				return new ArrayList<AmpActivityContact>(specificContacts);
-			}
-		};
-		
-		sliders = new ArrayList<TransparentWebMarkupContainer>();
+    private static final long serialVersionUID = -2114204838953838609L;
+    protected ListView<AmpActivityContact> idsList;
 
-		idsList = new ListView<AmpActivityContact>("contactsList", listModel) {
-			
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpActivityContact> item) {
-				
-				item.add(new Label("contactName", item.getModelObject().getContact().getNameAndLastName()));
-				
-				item.add(new AmpDeleteLinkField("removeContact", "Remove Contact Link") {
+    public ListView<AmpActivityContact> getIdsList() {
+        return idsList;
+    }
+    private List<TransparentWebMarkupContainer> sliders;
+    private AmpAddContactFeaturePanel newContactDetails;
+    private AmpActivity activity;
+    /**
+     * @param id
+     * @param fmName
+     * @param am
+     * @throws Exception
+     */
+    public AmpContactsSubsectionFeaturePanel(String id, String fmName, final IModel<AmpActivity> am, final String contactType) throws Exception {
+        //super(id, contactModel, fmName, true);
+        super(id, fmName, am);
+        final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
+        final String specificType = contactType;
+        activity=am.getObject();
+        newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact",  new AmpActivityContact(),true);
+        newContactDetails.setVisible(false);
 
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-						target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
-						idsList.removeAll();
-					}
-				});
-				AmpContactDetailsSubsectionFeaturePanel contactDetails = null;
-				try {
-					contactDetails = new AmpContactDetailsSubsectionFeaturePanel("contactDetails", "Contact Details", item.getModel());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				contactDetails.setOutputMarkupId(true);
-				sliders.add(contactDetails.getSlider());
-				
-				item.add(contactDetails);
-			}
-		};
-		idsList.setReuseItems(true);
-		add(idsList);
-		
-		//search contact
-		
-		final AbstractAmpAutoCompleteTextField<AmpContact> autoComplete = new AbstractAmpAutoCompleteTextField<AmpContact>(AmpContactSearchModel.class) {
+        final IModel<List<AmpActivityContact>> listModel = new AbstractReadOnlyModel<List<AmpActivityContact>>() {
 
-			@Override
-			protected String getChoiceValue(AmpContact choice) throws Throwable {
-				return choice.getNameAndLastName();
-			}
-			
-			@Override
-			public void onSelect(AjaxRequestTarget target, AmpContact choice) {
-				AmpActivityContact aaContact = new AmpActivityContact();
-				aaContact.setActivity(am.getObject());
-				aaContact.setContact(choice);
-				aaContact.setContactType(contactType);
-				Set<AmpActivityContact> set = setModel.getObject();
-				set.add(aaContact);
-				idsList.removeAll();
-				target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-				//target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
-				
-			}
+            private static final long serialVersionUID = 3706184421459839210L;
 
-			@Override
-			public Integer getChoiceLevel(AmpContact choice) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
-		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpContact> searchContacts=new AmpComboboxFieldPanel<AmpContact>("searchContacts", "Search Contacts", autoComplete);
-		add(searchContacts);
-		
-	}
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		 for (TransparentWebMarkupContainer c: sliders) {
-		//	response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));	
-			;//System.out.println("-------"+OnePagerConst.getToggleJS(c));
-		} ;
-		 
-	}
+            @Override
+            public List<AmpActivityContact> getObject() {
+                Set<AmpActivityContact> allContacts = setModel.getObject();
+                Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();
+                Iterator<AmpActivityContact> it = allContacts.iterator();
+                while (it.hasNext()) {
+                    AmpActivityContact ampActContact = (AmpActivityContact) it.next();
+                    if (specificType.compareTo(ampActContact.getContactType()) == 0) {
+                        specificContacts.add(ampActContact);
+                    }
+                }
+                return new ArrayList<AmpActivityContact>(specificContacts);
+            }
+        };
+
+        sliders = new ArrayList<TransparentWebMarkupContainer>();
+
+        idsList = new ListView<AmpActivityContact>("contactsList", listModel) {
+
+            private static final long serialVersionUID = 7218457979728871528L;
+
+            @Override
+            protected void populateItem(final ListItem<AmpActivityContact> item) {
+
+                item.add(new Label("contactName", item.getModelObject().getContact().getNameAndLastName()));
+
+                item.add(new AmpDeleteLinkField("removeContact", "Remove Contact Link") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        setModel.getObject().remove(item.getModelObject());
+                        target.addComponent(AmpContactsSubsectionFeaturePanel.this);
+                        target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+                        idsList.removeAll();
+                    }
+                });
+                AmpContactDetailsSubsectionFeaturePanel contactDetails = null;
+                try {
+                    contactDetails = new AmpContactDetailsSubsectionFeaturePanel("contactDetails", "Contact Details", item.getModel());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                contactDetails.setOutputMarkupId(true);
+                sliders.add(contactDetails.getSlider());
+
+                item.add(contactDetails);
+            }
+        };
+        idsList.setReuseItems(true);
+        add(idsList);
+
+
+        final AmpTextFieldPanel<String> contactname = new AmpTextFieldPanel<String>("contactname", new Model<String>(), "Contact name",true,true);
+        final AmpTextFieldPanel<String> contactLast = new AmpTextFieldPanel<String>("contactlastname", new Model<String>(), "Contact lastname",true,true);
+        final AmpContactFormTableFeature contactDuplicationTable = new AmpContactFormTableFeature("duplicationTable", am, "Duplications table", null);
+        final WebMarkupContainer buttonsContainer = new WebMarkupContainer("contactButtonContainer");
+        buttonsContainer.setOutputMarkupPlaceholderTag(true);
+        buttonsContainer.setOutputMarkupId(true);
+        
+        final AmpButtonField addContact = new AmpButtonField("addContactButton", "Add Existed Contact") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
+                try {
+                    AmpActivityContact aaContact = new AmpActivityContact();
+                    AmpActivity act = am.getObject();
+                    aaContact.setActivity(act);
+                    AmpContact choice = (AmpContact) contactDuplicationTable.getContactsGroup().getDefaultModelObject();
+                    aaContact.setContact(choice);
+                    if (act.getActivityContacts() == null) {
+                        act.setActivityContacts(new HashSet<AmpActivityContact>());
+                    }
+                    aaContact.setContactType(contactType);
+                    act.getActivityContacts().add(aaContact);
+                    idsList.removeAll();
+                    form.clearInput();
+                    contactname.setDefaultModel(new Model<String>());
+                    contactname.setDefaultModelObject(null);
+                    contactLast.setDefaultModel(new Model<String>());
+                    contactLast.setDefaultModelObject(null);
+                    buttonsContainer.setVisible(false);
+                    contactDuplicationTable.setVisible(false);
+                    target.addComponent(form);
+                    target.addComponent(AmpContactsSubsectionFeaturePanel.this);
+                    //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+                    target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        final AmpButtonField createContact = new AmpButtonField("createContactButton", "Create Contact Button") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
+                try {
+
+                    AmpContact newContact = new AmpContact();
+                    TextField<String> name=contactname.getTextContainer();
+                    TextField<String> lastname=contactLast.getTextContainer();
+                    newContact.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+                    newContact.setActivityContacts(new HashSet<AmpActivityContact>());
+                    newContact.setProperties(new HashSet<AmpContactProperty>());
+                    newContact.setName(name.getDefaultModelObjectAsString());
+                    newContact.setLastname(lastname.getDefaultModelObjectAsString());
+                    AmpActivityContact activityContact=new AmpActivityContact();
+                    activityContact.setContact(newContact);
+                    activityContact.setContactType(contactType);
+                    newContact.getActivityContacts().add(activityContact);
+                    
+                    AmpAddContactFeaturePanel tempContactDetailsPanel =new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact", activityContact,true);
+                    newContactDetails.replaceWith(tempContactDetailsPanel);
+                    newContactDetails=tempContactDetailsPanel;
+
+                    name.setDefaultModel(new Model<String>());
+                    name.setDefaultModelObject(null);
+                    lastname.setDefaultModel(new Model<String>());
+                    lastname.setDefaultModelObject(null);
+                    contactDuplicationTable.getList().getList().clear();
+                    newContactDetails.setVisible(true);
+                    target.addComponent(newContactDetails);
+                    contactDuplicationTable.setVisible(false);
+                    target.addComponent(contactDuplicationTable);
+                    buttonsContainer.setVisible(false);
+                    target.addComponent(buttonsContainer);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        AmpButtonField searchContact = new AmpButtonField("searchContact", "Search Contact") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                String name =(String) contactname.getTextContainer().getDefaultModelObject();
+                String lastname = (String) contactLast.getTextContainer().getDefaultModelObject();
+                try {
+                    List<AmpContact> contacts = ContactInfoUtil.getContactsByNameLastName(name, lastname);
+                    ListView<AmpContact> list = contactDuplicationTable.getList();
+                    list.setList(contacts);
+                    if(!list.getList().isEmpty()){
+                    contactDuplicationTable.setVisible(true);
+                    target.addComponent(contactDuplicationTable);
+                    addContact.setVisible(true);
+                    }
+                    else{
+                         addContact.setVisible(false);
+                    }
+                    newContactDetails.setVisible(false);
+                    buttonsContainer.setVisible(true);
+                    target.addComponent(buttonsContainer);
+                    target.addComponent(newContactDetails);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+       
+        add(contactname);
+        add(contactLast);
+        add(searchContact);
+        contactDuplicationTable.setOutputMarkupId(true);
+        contactDuplicationTable.setOutputMarkupPlaceholderTag(true);
+        contactDuplicationTable.setVisible(false);
+        add(contactDuplicationTable);
+        buttonsContainer.setVisible(false);
+        buttonsContainer.add(addContact);
+        buttonsContainer.add(createContact);
+        add(buttonsContainer);
+        add(newContactDetails);
+     
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        for (TransparentWebMarkupContainer c : sliders) {
+            //	response.renderOnDomReadyJavascript(OnePagerConst.getToggleJS(c));
+            ;//System.out.println("-------"+OnePagerConst.getToggleJS(c));
+        }
+        ;
+
+    }
 }

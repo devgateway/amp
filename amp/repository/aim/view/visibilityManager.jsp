@@ -99,7 +99,7 @@
 				<td valign="top">
 				<!-- start  -->
 				
-				<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+				<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0 style="font-size:12px;">
 								<tr>
 									<td>
 										<!-- Other Links -->
@@ -119,9 +119,9 @@
 								</tr>
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellSpacing=1 width="100%">
+										<table cellPadding=5 cellSpacing=1 width="100%" class="inside">
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:clickToManageTemplates">Click here to Manage the Templates </digi:trn>
@@ -133,7 +133,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
 															<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
@@ -145,7 +145,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
@@ -160,7 +160,7 @@
 											
 									
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<c:set var="translation">
 														<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>

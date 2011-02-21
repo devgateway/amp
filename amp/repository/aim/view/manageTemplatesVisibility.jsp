@@ -181,10 +181,7 @@ div.fakefile2 input{
 	</logic:iterate>
 	<tr>
 		<td align="left" colspan="3" class="inside">
-			<c:set var="translation">
-				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
-			</c:set>
-			<html:submit value="${translation}" styleClass="buttonx" property="exportTreeVisibility" />
+		
 				</td>
 	</tr>
 	<tr>
@@ -193,11 +190,15 @@ div.fakefile2 input{
 				<div class="fileinputs">
 				<table>
 				<tr>
-				<td><input id="uploadFile" name="uploadFile" type="file" style="font-size:12px;" class="file"/></td>
+				<td><input id="uploadFile" name="uploadFile" type="file" style="font-size:12px; width:200px;" class="file"/></td>
 				<td><c:set var="translation">
 				<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
 			</c:set>
 			<html:submit style="dr-menu" value="${translation}" styleClass="buttonx" property="importTreeVisibility" /></td>
+				<td style="padding-left:15px;"><c:set var="translation">
+				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
+			</c:set>
+			<html:submit value="${translation}" styleClass="buttonx" property="exportTreeVisibility" /></td>
 				</tr>
 				</table>
 				

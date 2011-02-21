@@ -55,6 +55,10 @@ public final class PMUtil {
 	public static final String CUMMULATIVE = "Cummulative";
 	public static final String WORKSPACE_PERMISSION = "Workspace based permission";
 	public static final String ROLE_PERMISSION = "Role based permission";
+	public static final String WORKSPACE_MEMBER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user.gif";
+	public static final String WORKSPACE_MANAGER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user_admin.gif";
+	
+	
 	
 	public static void setGlobalPermission(Class globalPermissionMapForPermissibleClass, Permission permission,String simpleName) {
 		// TODO Auto-generated method stub
@@ -446,7 +450,7 @@ public final class PMUtil {
 
 
 
-	public static void savePermissionMap( Session session, final Set<AmpPMReadEditWrapper> gatesSet,	final Set<AmpPMReadEditWrapper> workspacesSet,	AmpTreeVisibilityModelBean ampTreeRootObject, CompositePermission cp) {
+	public static void savePermissionMap( Session session, AmpTreeVisibilityModelBean ampTreeRootObject, CompositePermission cp) {
 			PermissionMap permissionMap = new PermissionMap(); 
 			permissionMap.setPermissibleCategory(ampTreeRootObject.getAmpObjectVisibility().getPermissibleCategory().getSimpleName());
 			permissionMap.setObjectIdentifier(ampTreeRootObject.getAmpObjectVisibility().getId());
@@ -509,23 +513,23 @@ public final class PMUtil {
 			Calendar cal = Calendar.getInstance();
 			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission Multiple Assigned " + cal.getTimeInMillis(), gatesSetModel.getObject(), workspacesSetModel.getObject());
 			session.save(cp);
-			PMUtil.saveFieldsPermission(session, root, gatesSetModel, workspacesSetModel,cp);
+			PMUtil.saveFieldsPermission(session, root, cp);
 			
 	}
 
 
-	private static void saveFieldsPermission(Session session, DefaultMutableTreeNode root, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel, CompositePermission cp) {
+	private static void saveFieldsPermission(Session session, DefaultMutableTreeNode root, CompositePermission cp) {
 		AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
 		if(ampTreeRootObject.getChecked())
 			{
 				PMUtil.deletePermissionMap(ampTreeRootObject.getAmpObjectVisibility());
-				PMUtil.savePermissionMap(session, gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject,cp);
+				PMUtil.savePermissionMap(session, ampTreeRootObject,cp);
 			}
 		Enumeration children = root.children();
 		while ( children.hasMoreElements() ) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
 			AmpTreeVisibilityModelBean userObject = (AmpTreeVisibilityModelBean)child.getUserObject();
-			saveFieldsPermission(session, child, gatesSetModel, workspacesSetModel,cp);
+			saveFieldsPermission(session, child, cp);
 		}
 		return ;
 	}

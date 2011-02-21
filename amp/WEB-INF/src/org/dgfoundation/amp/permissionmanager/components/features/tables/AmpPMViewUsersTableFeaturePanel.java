@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -16,7 +17,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
+import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
@@ -59,6 +62,14 @@ public class AmpPMViewUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
 			@Override
 			protected void populateItem(final ListItem<TeamMember> item) {
 				final MarkupContainer listParent=this.getParent();
+				TransparentWebMarkupContainer userImgSrc = new TransparentWebMarkupContainer("userImgSrc");
+				userImgSrc.setOutputMarkupId(true);
+				AttributeModifier srcModifier = null;
+				TeamMember t = item.getModelObject();
+				if(item.getModelObject().getTeamHead()) 
+					userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MANAGER_IMG_SRC)));
+				else userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MEMBER_IMG_SRC)));
+				item.add(userImgSrc);
 				item.add(new Label("userLabel", item.getModelObject().getMemberName()));
 				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
 				item.add(new Label("userRole", item.getModelObject().getRoleName()));

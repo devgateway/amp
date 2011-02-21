@@ -77,7 +77,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		form.add(workspaces);
 		
 		List<String> permissionPriority = PMUtil.getPermissionPriority();
-		IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
+		final IModel<String> permissionChoiceModel = new Model(permissionPriority.get(0));
 		
 		//permission priority radiobutton
 		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
@@ -114,9 +114,6 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 			}
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {
-//				AmpTreeVisibility atv = ampTreeVisibilityModel.getObject();
-//				AmpObjectVisibility aov = atv.getModuleByNameFromRoot(moduleName)
-//				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(FeaturesUtil.getModuleVisibility(choice.getName())));
 				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(choice));
 				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityBeanModel));
 				tree.refreshTree(iTreeModel);
@@ -153,9 +150,6 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
 		form.add(permWorkspacesFieldsFormTable);
 		
-		
-		
-		
 		form.add(new AjaxFallbackLink("resetFieldPermissionButton"){
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -167,7 +161,13 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		Button saveAndSubmit = new Button("saveFieldPermissionButton") {
 			public void onSubmit() {
 					System.out.println("saveFieldPermissionButton  submit pressed");
-					PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, workspacesSetModel);
+					if(PMUtil.ROLE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0)
+						PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, null);
+					if(PMUtil.CUMMULATIVE.compareTo(permissionChoiceModel.getObject()) == 0)
+						PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, workspacesSetModel);
+					if(PMUtil.WORKSPACE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0)
+						PMUtil.assignFieldsPermission(iTreeModel, null, workspacesSetModel);
+					
 					System.out.println("PM field permission assigned");
 			}
 		};

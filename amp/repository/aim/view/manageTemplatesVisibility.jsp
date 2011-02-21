@@ -180,13 +180,6 @@ div.fakefile2 input{
 		</tr>
 	</logic:iterate>
 	<tr>
-		<td>
-			<br/>
-			<br/>
-			<br/>
-		</td>
-	</tr>
-	<tr>
 		<td align="left" colspan="3">
 			<c:set var="translation">
 				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
@@ -196,7 +189,7 @@ div.fakefile2 input{
 		</td>
 	</tr>
 	<tr>
-		<td>	
+		<td colspan=2>	
 			<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 				<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 					<input id="uploadFile" name="uploadFile" type="file" class="file"/>

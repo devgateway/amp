@@ -51,12 +51,13 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571 colspan=2>
+					<td height=16 vAlign=center width=571 colspan=2 align=center>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:featureManager">
-							Feature Manager
+							<b>Feature Manager</b>
 						</digi:trn>
 						</span>
+						<hr />
 					</td>
 				</tr>
 				<tr>

@@ -30,13 +30,12 @@
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 	
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>

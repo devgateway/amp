@@ -127,7 +127,7 @@ div.fakefile2 input{
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" enctype="multipart/form-data">
 	<tr>
-		<th class="inside"><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
+		<th class="inside" height=32><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
 		<th class="inside"><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
 	</tr>
@@ -179,11 +179,6 @@ div.fakefile2 input{
 			</td>
 		</tr>
 	</logic:iterate>
-	<tr>
-		<td align="left" colspan="3" class="inside">
-		
-				</td>
-	</tr>
 	<tr>
 		<td colspan=2 class="inside">	
 			<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">

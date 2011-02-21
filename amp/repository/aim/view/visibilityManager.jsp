@@ -51,7 +51,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 vAlign=center width=571 colspan=2>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:featureManager">
 							Feature Manager
@@ -60,7 +60,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 vAlign=center width=571 colspan=2>
 				 		<font color="red">
 					 		<logic:iterate id="element" name="aimVisibilityManagerForm" property="errors">
 								<digi:trn key="${element.key}">

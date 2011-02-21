@@ -127,9 +127,9 @@ div.fakefile2 input{
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" enctype="multipart/form-data">
 	<tr>
-		<th class="inside" height=32 bgcolor=3 bgcolor=#f5f5f5><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
+		<th class="inside" height=32 bgcolor=#F5F5F5><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
-		<th class="inside" bgcolor=#f5f5f5><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
+		<th class="inside" bgcolor=#F5F5F5><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
 	</tr>
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>

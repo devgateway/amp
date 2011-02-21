@@ -447,14 +447,6 @@ public final class PMUtil {
 
 
 	public static void savePermissionMap( Session session, final Set<AmpPMReadEditWrapper> gatesSet,	final Set<AmpPMReadEditWrapper> workspacesSet,	AmpTreeVisibilityModelBean ampTreeRootObject, CompositePermission cp) {
-//			Session session = null;
-//			try {
-//				session = PersistenceManager.getRequestDBSession();
-//			} catch (DgException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-
 			PermissionMap permissionMap = new PermissionMap(); 
 			permissionMap.setPermissibleCategory(ampTreeRootObject.getAmpObjectVisibility().getPermissibleCategory().getSimpleName());
 			permissionMap.setObjectIdentifier(ampTreeRootObject.getAmpObjectVisibility().getId());
@@ -500,6 +492,8 @@ public final class PMUtil {
 
     }
 
+    
+    
 	public static void assignFieldsPermission(IModel<TreeModel> iTreeModel, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel) {
 		
 			Session session = null;
@@ -523,7 +517,10 @@ public final class PMUtil {
 	private static void saveFieldsPermission(Session session, DefaultMutableTreeNode root, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel, CompositePermission cp) {
 		AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
 		if(ampTreeRootObject.getChecked())
-			PMUtil.savePermissionMap(session, gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject,cp);
+			{
+				PMUtil.deletePermissionMap(ampTreeRootObject.getAmpObjectVisibility());
+				PMUtil.savePermissionMap(session, gatesSetModel.getObject(), workspacesSetModel.getObject(),ampTreeRootObject,cp);
+			}
 		Enumeration children = root.children();
 		while ( children.hasMoreElements() ) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode)children.nextElement();
@@ -531,6 +528,41 @@ public final class PMUtil {
 			saveFieldsPermission(session, child, gatesSetModel, workspacesSetModel,cp);
 		}
 		return ;
+	}
+
+
+
+
+	private static void deletePermissionMap(AmpObjectVisibility ampObjectVisibility) {
+		// TODO Auto-generated method stub
+		Session session = null;
+		try {
+			session	=	PersistenceManager.getRequestDBSession();
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
+		List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampObjectVisibility);
+		for (PermissionMap permissionMap : pmList) {
+			if(permissionMap!=null) {
+			    Permission p=permissionMap.getPermission();
+			    //we delete the old permissions, if they are dedicated
+			    List<PermissionMap> pMapList=null;
+				try {
+					pMapList = PermissionUtil.getAllPermissionMapsForPermission(p.getId());
+				} catch (HibernateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DgException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    if (p!=null && p.isDedicated() && pMapList!=null && pMapList.size() == 1) {
+				CompositePermission cp = (CompositePermission)p;
+				PMUtil.deleteCompositePermission(cp, session);
+			    }
+			}
+		}
+		
 	}
 	
 	

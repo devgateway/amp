@@ -118,7 +118,7 @@ div.fakefile2 input{
 
 <digi:instance property="aimVisibilityManagerForm" />
 <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left border=1 class="inside">	
-	<tr><td bgColor=#d7eafd class="inside" height="20" align="center" colspan="3">
+	<tr><td bgColor=#C7D4DB class="inside" height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampFeatureManager">
 		Feature Manager 
@@ -184,7 +184,7 @@ div.fakefile2 input{
 			<c:set var="translation">
 				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
 			</c:set>
-			<html:submit style="dr-menu" value="${translation}" property="exportTreeVisibility" />
+			<html:submit style="dr-menu" value="${translation}" property="exportTreeVisibility" className="buttonx" />
 			<hr>
 		</td>
 	</tr>

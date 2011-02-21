@@ -65,7 +65,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		super(id, orgsModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		AmpPMVerifiedOrganizationsTableFeaturePanel searchVerifiedOrgs = new AmpPMVerifiedOrganizationsTableFeaturePanel("verifiedOrgs", orgsModel, "Verified Organizations", true);
-		searchVerifiedOrgs.setTableWidth(410);
+		searchVerifiedOrgs.setTableWidth(480);
 		add(searchVerifiedOrgs);
 		add(new PagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList()));
 		idOrgsList = searchVerifiedOrgs.getList();
@@ -100,7 +100,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 
 
 		AmpPMVerifiedUsersTableFeaturePanel searchVerifiedUsers = new AmpPMVerifiedUsersTableFeaturePanel("verifiedUsers", usersModel, "Verified Organizations", true);
-		searchVerifiedUsers.setTableWidth(410);
+		searchVerifiedUsers.setTableWidth(480);
 		add(searchVerifiedUsers);
 		idUsersList = searchVerifiedUsers.getList();
 		add(new PagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedOrgs.getList()));

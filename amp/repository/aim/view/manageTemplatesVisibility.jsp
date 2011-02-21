@@ -184,7 +184,7 @@ div.fakefile2 input{
 			<c:set var="translation">
 				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
 			</c:set>
-			<html:submit value="${translation}" style-class="buttonx" property="exportTreeVisibility" />
+			<html:submit value="${translation}" styleClass="buttonx" property="exportTreeVisibility" />
 			<hr>
 		</td>
 	</tr>

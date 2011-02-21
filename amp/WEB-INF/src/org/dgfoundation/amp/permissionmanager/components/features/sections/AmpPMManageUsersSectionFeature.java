@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -54,7 +55,13 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		add(usersTable);
-		final PagingNavigator paginator = new PagingNavigator("navigator", (PageableListView)usersTable.getList());
+		final AjaxPagingNavigator paginator = new AjaxPagingNavigator("navigator", (PageableListView)usersTable.getList()) {
+			@Override
+			protected void onAjaxEvent(AjaxRequestTarget target) {
+				target.addComponent(AmpPMManageUsersSectionFeature.this);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageUsersSectionFeature.this));
+			}
+		};
 		add(paginator);
 		idsList = usersTable.getList();
 		
@@ -78,7 +85,6 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 
 			@Override
 			public Integer getChoiceLevel(User choice) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		};
@@ -91,7 +97,6 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 				visible = !visible;
 				usersTable.setVisible(visible);
 				paginator.setVisible(visible);
@@ -102,17 +107,6 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 			}
 			
 		});
-//		add(new Link("addOrgsToUsers"){
-//			@Override
-//			public void onClick() {
-//				visible = !visible;
-//				usersTable.setVisible(visible);
-//				paginator.setVisible(visible);
-//				searchContacts.setVisible(visible);
-//				usersOrgs.setVisible(!visible);
-//			}
-//			
-//		});
 		
 	}
 

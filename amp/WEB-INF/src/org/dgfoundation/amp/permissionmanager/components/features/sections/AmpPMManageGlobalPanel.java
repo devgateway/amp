@@ -6,9 +6,12 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.util.Set;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMViewGlobalPermsTableFeaturePanel;
 import org.digijava.module.gateperm.core.Permission;
@@ -33,7 +36,14 @@ public class AmpPMManageGlobalPanel extends AmpComponentPanel {
 		AmpPMViewGlobalPermsTableFeaturePanel globalPermsTable = new AmpPMViewGlobalPermsTableFeaturePanel("viewGlobalPerms", globalPermissionsModel, "View Existing Global Permissions", true);
 		globalPermsTable.setOutputMarkupId(true);
 		add(globalPermsTable);
-		add(new PagingNavigator("globalPermsNavigator", (PageableListView)globalPermsTable.getList()));
+		AjaxPagingNavigator pager = new AjaxPagingNavigator("globalPermsNavigator", (PageableListView)globalPermsTable.getList()) {
+			@Override
+			protected void onAjaxEvent(AjaxRequestTarget target) {
+				target.addComponent(AmpPMManageGlobalPanel.this);
+				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
+			}
+		};
+		add(pager);
 		
 	}
 

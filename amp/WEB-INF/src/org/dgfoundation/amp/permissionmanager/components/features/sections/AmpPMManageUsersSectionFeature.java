@@ -10,16 +10,14 @@ import java.util.TreeSet;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
+import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMManageUsersTableFeaturePanel;
 import org.digijava.kernel.user.User;
@@ -55,13 +53,14 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		add(usersTable);
-		final AjaxPagingNavigator paginator = new AjaxPagingNavigator("navigator", (PageableListView)usersTable.getList()) {
-			@Override
-			protected void onAjaxEvent(AjaxRequestTarget target) {
-				target.addComponent(AmpPMManageUsersSectionFeature.this);
-				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageUsersSectionFeature.this));
-			}
-		};
+		final AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("navigator", (PageableListView)usersTable.getList()); 
+//		{
+//			@Override
+//			protected void onAjaxEvent(AjaxRequestTarget target) {
+//				target.addComponent(AmpPMManageUsersSectionFeature.this);
+//				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageUsersSectionFeature.this));
+//			}
+//		};
 		add(paginator);
 		idsList = usersTable.getList();
 		

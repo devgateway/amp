@@ -7,19 +7,17 @@ import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContactsSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAjaxPagingNavigator;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVerifiedOrganizationsTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVerifiedUsersTableFeaturePanel;
@@ -77,7 +75,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 //				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 //			}
 //		};
-		PagingNavigator pager = new PagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList());
+		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList());
 		add(pager);
 		idOrgsList = searchVerifiedOrgs.getList();
 
@@ -124,7 +122,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 //				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 //			}
 //		};
-		PagingNavigator paginator = new PagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedUsers.getList());
+		AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedUsers.getList());
 		add(paginator);
 		
 		final AbstractAmpAutoCompleteTextField<User> autoCompleteUser = new AbstractAmpAutoCompleteTextField<User>(AmpPMUserSearchModel.class) {

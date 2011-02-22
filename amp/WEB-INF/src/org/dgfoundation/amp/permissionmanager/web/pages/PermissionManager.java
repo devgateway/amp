@@ -76,13 +76,10 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		AmpPMManageWorkspacesSectionFeature workspaceSection = new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false);
 		adminPMForm.add(workspaceSection);
 		
-		
-		//Set<Permission> permissonsSet = new TreeSet<Permission>(PermissionUtil.getAllUnDedicatedPermissions());
 		Set<Permission> permissonsSet = new TreeSet<Permission>();
 		
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
 		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
-		
 		
 		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 		ampTreeVisibility.buildAmpTreeVisibility(PMUtil.getDefaultAmpTemplateVisibility());
@@ -91,8 +88,6 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		AmpTreeVisibilityModelBean tree	=	PMUtil.getAmpTreeFMPermissions();
 		final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel =	new Model((Serializable)tree);
 		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityBeanModel, "Manage Field Permissions",teamsModel, false, ampTreeVisibilityModel));
-		
-		
 		add(adminPMForm);
 	}
 

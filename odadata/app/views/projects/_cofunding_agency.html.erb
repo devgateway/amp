@@ -4,7 +4,7 @@
   <%= f.collection_select :donor_id, Agency.ordered, :id, :name, 
           { :prompt => t('.prompt'), :label => t('.label') }, :class => 'large agencies' %>
 
-  <%= f.text_field :amount, :size => 20, :value => f.object.amount.to_s(false) %>
+  <%= f.text_field :amount, :size => 20, :value => number_with_delimiter(f.object.amount.to_i) %>
   <%# Alex C. wanted us to remove this.. Still not sure about whether it actually looks better without %>
   <%# f.label :currency, Cofunding.human_attribute_name('in'), :class => "fluid" %>
   <%= f.select :currency, ExchangeRate.available_currencies_for_select, :label => false %>

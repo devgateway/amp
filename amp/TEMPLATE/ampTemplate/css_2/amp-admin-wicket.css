@@ -289,7 +289,7 @@ div.wicket-aa ul li.selected { background-color: #486577; color:#ffffff; padding
 /* Tabs */
 div.tabpanel div.tab-row ul {
 	background:url("/TEMPLATE/ampTemplate/img_2/tab_bottom.gif") repeat-x scroll center bottom transparent;
-	height:18px;
+	height:23px;
 	margin:0;
 	padding-left:5px;
 	width: 360px;
@@ -325,10 +325,11 @@ div.tabpanel div.tab-row li.selected a:link, div.tabpanel div.tab-row a.active:v
 	border-bottom:1px solid #FFFFFF;
 	color:#FF6000;
 	margin-top:1px;
-	font-size:11px;
+	font-size:12px;
 	font-weight:bold;
 	padding-left:10px;
 	padding-right:10px;
+	padding-top:7px;
 
 }
 div.tabpanel div.tab-row a:hover {

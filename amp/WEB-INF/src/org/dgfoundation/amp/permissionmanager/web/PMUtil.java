@@ -407,12 +407,12 @@ public final class PMUtil {
 		gatesSet.add(new AmpPMGateReadEditWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 	}
 	
-	public static PermissionMap createPermissionMap(final IModel<Class> globalPermissionMapForPermissibleClassModel) {
+	public static PermissionMap createPermissionMap(Class globalPermissionMapForPermissibleClass) {
 		PermissionMap pmAux;
 		pmAux = new PermissionMap();
-		pmAux.setPermissibleCategory(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName());
+		pmAux.setPermissibleCategory(globalPermissionMapForPermissibleClass.getSimpleName());
 		pmAux.setObjectIdentifier(null);
-		pmAux.setPermission(createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+		pmAux.setPermission(createCompositePermission(globalPermissionMapForPermissibleClass.getSimpleName() + " - Composite Permission",
 				"This permission was created using the PM UI by admin user",false));
 		return pmAux;
 	}

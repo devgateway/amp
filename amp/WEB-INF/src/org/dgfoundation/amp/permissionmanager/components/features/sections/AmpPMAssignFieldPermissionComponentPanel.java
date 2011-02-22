@@ -37,6 +37,7 @@ import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
@@ -131,8 +132,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		form.add(searchFields);
 		
 		
-		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(Arrays.asList(GatePermConst.availablePermissibles).get(3));
-		PermissionMap permMap =	PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
+		PermissionMap permMap =	PMUtil.createPermissionMap(AmpFieldsVisibility.class);
 		IModel<PermissionMap> permMapModel = new Model(permMap);
 		TreeSet<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
 		PMUtil.generateGatesList((CompositePermission)permMapModel.getObject().getPermission(),gatesSet);

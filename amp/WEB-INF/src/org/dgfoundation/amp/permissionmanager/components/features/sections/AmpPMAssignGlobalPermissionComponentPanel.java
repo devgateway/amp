@@ -51,19 +51,15 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.setOutputMarkupId(true);
 
-		PermissionMap pmAux = null;
-		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
+		final IModel<PermissionMap> pmAuxModel = new Model(null);
 
-		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet();
-		if(pmAux==null){
-			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel);
+		Set<AmpPMReadEditWrapper> gatesSet = null;
+		try {
+			gatesSet =	populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		final IModel<PermissionMap> pmAuxModel = new Model(pmAux);
-		if(!(pmAuxModel.getObject().getPermission() instanceof CompositePermission))
-				pmAuxModel.getObject().setPermission(PMUtil.createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
-						"This permission was created using the PM UI by admin user",false));
-		
-		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
 		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", true);
@@ -75,21 +71,13 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				Class object = globalPermissionMapForPermissibleClassModel.getObject();
-				System.out.println("on update: "+object);
-				PermissionMap pmAux1 =	PermissionUtil.getGlobalPermissionMapForPermissibleClass(object);
-				pmAuxModel.setObject(pmAux1);
-				TreeSet<AmpPMReadEditWrapper> aa = new TreeSet<AmpPMReadEditWrapper>();
-
-				if(pmAuxModel.getObject()==null)
-					pmAuxModel.setObject(PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel));
-				
-				if(!(pmAuxModel.getObject().getPermission() instanceof CompositePermission))
-					{
-						pmAuxModel.getObject().setPermission(PMUtil.createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
-							"This permission was created using the PM UI by admin user",false));
-					}
-				PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),aa);
+				Set<AmpPMReadEditWrapper> aa = null;
+				try {
+					aa = populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				gatesSetModel.setObject(aa);
 				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
@@ -116,6 +104,19 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.add(saveAndSubmit);
 		add(form);
+	}
+
+	private Set<AmpPMReadEditWrapper> populateGatesSet(final IModel<Class> globalPermissionMapForPermissibleClassModel,final IModel<PermissionMap> pmAuxModel) throws Exception{
+		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
+		System.out.println("on update: "+globalPermissionMapForPermissibleClassModel.getObject());
+		PermissionMap pmAux = null;
+		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
+		if(pmAux==null || !(pmAux.getPermission() instanceof CompositePermission)){
+			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel.getObject());
+		}
+		pmAuxModel.setObject(pmAux);
+		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);
+		return gatesSet;
 	}
 
 	public AmpPMAssignGlobalPermissionComponentPanel(String id, String fmName, AmpFMTypes fmType) {

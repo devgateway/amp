@@ -4,20 +4,17 @@
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -35,15 +32,10 @@ import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAd
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.PermissionMap;
-import org.hibernate.Session;
 
 /**
  * @author dan
@@ -85,6 +77,9 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permissionPriorityChoices.setSuffix("");
 		form.add(permissionPriorityChoices);
 		
+		final Label permPriorityLabel = new Label("permPriorityLabel", "Permission Priority:");
+		form.add(permPriorityLabel);
+		
 		//show workspace checkbox
 		AjaxCheckBox showWorkspaceCheckBox =	new AjaxCheckBox("showWorkspace", new Model(this.showWorkspace)){
 			@Override
@@ -92,6 +87,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				// TODO Auto-generated method stub
 				setShowWorkspaces(!getShowWorkspaces());
 				workspaces.setVisible(getShowWorkspaces());
+				permPriorityLabel.setVisible(getShowWorkspaces());
 				permissionPriorityChoices.setVisible(getShowWorkspaces());
 				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
 			}

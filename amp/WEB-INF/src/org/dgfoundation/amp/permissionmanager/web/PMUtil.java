@@ -244,7 +244,6 @@ public final class PMUtil {
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
 
 		session.flush(); //
-		System.out.println("wow");
 		return cp;
 	}
 	

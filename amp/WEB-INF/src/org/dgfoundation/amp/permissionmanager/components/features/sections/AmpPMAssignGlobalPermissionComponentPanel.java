@@ -75,7 +75,10 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				pmAuxModel.setObject(PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject()));
+				Class object = globalPermissionMapForPermissibleClassModel.getObject();
+				System.out.println("on update: "+object);
+				PermissionMap pmAux1 =	PermissionUtil.getGlobalPermissionMapForPermissibleClass(object);
+				pmAuxModel.setObject(pmAux1);
 				TreeSet<AmpPMReadEditWrapper> aa = new TreeSet<AmpPMReadEditWrapper>();
 
 				if(pmAuxModel.getObject()==null)

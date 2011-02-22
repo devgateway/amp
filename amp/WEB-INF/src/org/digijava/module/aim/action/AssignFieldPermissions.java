@@ -77,7 +77,7 @@ public class AssignFieldPermissions extends Action {
 		    if (p!=null && p.isDedicated()) {
 			CompositePermission cp = (CompositePermission)p;
 			
-			PMUtil.deleteCompositePermission(cp, session);
+			PMUtil.deleteCompositePermission(cp, session,true);
 
 //			moved to PMUtil.java
 //			Iterator<Permission> i = cp.getPermissions().iterator();

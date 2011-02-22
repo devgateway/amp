@@ -128,7 +128,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		form.add(searchFields);
 		
 		
-		PermissionMap permMap =	PMUtil.createPermissionMap(AmpFieldsVisibility.class);
+		PermissionMap permMap =	PMUtil.createPermissionMap(AmpFieldsVisibility.class, true);
 		IModel<PermissionMap> permMapModel = new Model(permMap);
 		TreeSet<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
 		PMUtil.generateGatesList((CompositePermission)permMapModel.getObject().getPermission(),gatesSet);

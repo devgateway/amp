@@ -174,7 +174,7 @@ public final class PMUtil {
 
 
 
-	public static void deleteCompositePermission(CompositePermission cp, Session session) {
+	public static void deleteCompositePermission(CompositePermission cp, Session session, boolean delCompositePermission) {
 		// TODO Auto-generated method stub
 		session.flush();	
 		Iterator<Permission> i = cp.getPermissions().iterator();
@@ -183,15 +183,17 @@ public final class PMUtil {
 		    Object object = session.load(Permission.class, element.getId());
 		    session.delete(object);
 		}
-		Object object = session.load(Permission.class, cp.getId());
-		session.delete(object);
-	    session.flush();		
+		if(delCompositePermission){
+			Object object = session.load(Permission.class, cp.getId());
+			session.delete(object);
+			session.flush();		
+		}
 	}
 
 
 
 
-	public static void assignGlobalPermission(PermissionMap pm, Set<AmpPMReadEditWrapper> gatesSet) {
+	public static void assignGlobalPermission(PermissionMap pm, Set<AmpPMReadEditWrapper> gatesSet, Class globalPermissionMapForPermissibleClass) {
 		// TODO Auto-generated method stub
 		Session session = null;
 			try {
@@ -200,17 +202,30 @@ public final class PMUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+		String permCategory = pm.getPermissibleCategory();
 		if(pm!=null && session!=null) {
 		    Permission p=pm.getPermission();
 		    //we delete the old permissions
-		    if (p!=null) {
+//		    if (p!=null) {
 		    String name = p.getName();
-			CompositePermission cp = (CompositePermission)p;
-			if(cp.getId()!=null) 
-				PMUtil.deleteCompositePermission(cp, session);
-			
-			cp=new CompositePermission(false);
+//			if(cp.getId()!=null  && p.isDedicated()) 
+//				{
+//					CompositePermission cp = (CompositePermission)p;
+//					PMUtil.deleteCompositePermission(cp, session,true);
+//					cp=new CompositePermission(false);
+//				}
+		    
+		    if (p!=null && p.isDedicated()) {
+				CompositePermission cp = (CompositePermission)p;
+				PMUtil.deleteCompositePermission(cp, session,true);
+				//PMUtil.deletePermissionMap(ampObjectVisibility)
+		    }
+		    
+//		    pm=new PermissionMap(); 
+		    pm.setObjectIdentifier(null);
+		    pm.setPermissibleCategory(permCategory);
+
+		    CompositePermission cp=new CompositePermission(true);
 			cp.setDescription("This permission was created using the PM UI by admin user");
 			cp.setName(name);
 			
@@ -218,10 +233,11 @@ public final class PMUtil {
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
 			}
 			session.save(cp);
-			pm.setPermission(cp);
+			//session.flush();
+			pm.setPermission(cp);	
 			session.save(pm);
-			session.flush();
-		    }
+			//session.flush();
+			
 		}
 	}
 	
@@ -407,12 +423,13 @@ public final class PMUtil {
 		gatesSet.add(new AmpPMGateReadEditWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 	}
 	
-	public static PermissionMap createPermissionMap(Class globalPermissionMapForPermissibleClass) {
+	public static PermissionMap createPermissionMap(Class globalPermissionMapForPermissibleClass, boolean newCompPerm) {
 		PermissionMap pmAux;
 		pmAux = new PermissionMap();
 		pmAux.setPermissibleCategory(globalPermissionMapForPermissibleClass.getSimpleName());
 		pmAux.setObjectIdentifier(null);
-		pmAux.setPermission(createCompositePermission(globalPermissionMapForPermissibleClass.getSimpleName() + " - Composite Permission",
+		if(newCompPerm)
+			pmAux.setPermission(createCompositePermission(globalPermissionMapForPermissibleClass.getSimpleName() + " - Composite Permission",
 				"This permission was created using the PM UI by admin user",false));
 		return pmAux;
 	}
@@ -561,14 +578,42 @@ public final class PMUtil {
 				}
 			    if (p!=null && p.isDedicated() && pMapList!=null && pMapList.size() == 1) {
 				CompositePermission cp = (CompositePermission)p;
-				PMUtil.deleteCompositePermission(cp, session);
+				PMUtil.deleteCompositePermission(cp, session,true);
 			    }
 			}
 		}
 		
 	}
 	
-	
+    public static List<PermissionMap> getGlobalPermissionMapListForPermissibleClass(Class permClass) {
+    	Session session = null;
+    	  try {
+    	    session = PersistenceManager.getRequestDBSession();
+    	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+    		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
+    	    query.setParameter("categoryName", permClass.getSimpleName());
+    	    List col = query.list();
+//    	    if(col.size()==0) return null;
+//    	    PermissionMap pm= (PermissionMap) col.get(0);	  
+    	    return col;
+    	} catch (HibernateException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException( "HibernateException Exception encountered", e);
+    	} catch (DgException e) {
+    		  logger.error(e);
+    		   throw new RuntimeException( "DgException Exception encountered", e);
+    	} finally { 
+    	    try {
+    		//PersistenceManager.releaseSession(session);
+    	    } catch (HibernateException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "HibernateException Exception encountered", e);
+
+    	    }
+    	   }
+    	  
+        }
+
 	
 	
 

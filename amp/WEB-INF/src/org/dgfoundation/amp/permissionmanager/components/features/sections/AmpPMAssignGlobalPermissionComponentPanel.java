@@ -98,7 +98,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		Button saveAndSubmit = new Button("saveGlobalPermissionButton") {
 			public void onSubmit() {
 					System.out.println("saveGlobalPermissionButton  submit pressed");
-					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject());
+					PMUtil.assignGlobalPermission(pmAuxModel.getObject(),gatesSetModel.getObject(), globalPermissionMapForPermissibleClassModel.getObject());
 					System.out.println("PM global permission assigned");
 			}
 		};
@@ -111,8 +111,12 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		System.out.println("on update: "+globalPermissionMapForPermissibleClassModel.getObject());
 		PermissionMap pmAux = null;
 		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
-		if(pmAux==null || !(pmAux.getPermission() instanceof CompositePermission)){
-			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel.getObject());
+		if(pmAux==null || pmAux.getPermission()==null){
+			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel.getObject(), true);
+		}
+		if(!(pmAux.getPermission() instanceof CompositePermission)){
+			pmAux.setPermission(PMUtil.createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
+					"This permission was created using the PM UI by admin user",false));
 		}
 		pmAuxModel.setObject(pmAux);
 		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);

@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -20,7 +21,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
@@ -43,6 +43,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
 		final IModel<Class> globalPermissionMapForPermissibleClassModel=new Model(availablePermissibleCategories.get(0));
 		
+		
 		final Form form = new Form("ampGlobalPMForm")
 		{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -51,11 +52,17 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		};
 		form.setOutputMarkupId(true);
 
+		final IModel<String> infoGlobalPermModel = new Model(" ");
+		Label infoGlobalPermLabel = new Label("infoGlobalPerm",infoGlobalPermModel);
+		infoGlobalPermLabel.setOutputMarkupId(true);
+		form.add(infoGlobalPermLabel);
+		
+		
 		final IModel<PermissionMap> pmAuxModel = new Model(null);
 
 		Set<AmpPMReadEditWrapper> gatesSet = null;
 		try {
-			gatesSet =	populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel);
+			gatesSet =	populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel, infoGlobalPermModel);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -73,7 +80,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			protected void onUpdate(AjaxRequestTarget target) {
 				Set<AmpPMReadEditWrapper> aa = null;
 				try {
-					aa = populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel);
+					aa = populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel, infoGlobalPermModel);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -106,17 +113,26 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		add(form);
 	}
 
-	private Set<AmpPMReadEditWrapper> populateGatesSet(final IModel<Class> globalPermissionMapForPermissibleClassModel,final IModel<PermissionMap> pmAuxModel) throws Exception{
+	private Set<AmpPMReadEditWrapper> populateGatesSet(final IModel<Class> globalPermissionMapForPermissibleClassModel,final IModel<PermissionMap> pmAuxModel, IModel<String> infoGlobalPermModel) throws Exception{
 		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
 		System.out.println("on update: "+globalPermissionMapForPermissibleClassModel.getObject());
 		PermissionMap pmAux = null;
 		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
+		//0 is ok, 1 permission map doesn't exist, 2 permission map contains a GatePermission or other type different to CompositePermission
+		int flag = 0; 
 		if(pmAux==null || pmAux.getPermission()==null){
 			pmAux = PMUtil.createPermissionMap(globalPermissionMapForPermissibleClassModel.getObject(), true);
+			flag =	1;
 		}
 		if(!(pmAux.getPermission() instanceof CompositePermission)){
 			pmAux.setPermission(PMUtil.createCompositePermission(globalPermissionMapForPermissibleClassModel.getObject().getSimpleName() + " - Composite Permission",
 					"This permission was created using the PM UI by admin user",false));
+			flag =	2;
+		}
+		switch (flag) {
+		case 0:	infoGlobalPermModel.setObject(" ");break;
+		case 1:	infoGlobalPermModel.setObject("There is no permission assigned to this category");break;
+		case 2:	infoGlobalPermModel.setObject("Permission assigned can not be displayed in this form. Please use advanced Permission Manager to view it");break;
 		}
 		pmAuxModel.setObject(pmAux);
 		PMUtil.generateGatesList((CompositePermission)pmAuxModel.getObject().getPermission(),gatesSet);

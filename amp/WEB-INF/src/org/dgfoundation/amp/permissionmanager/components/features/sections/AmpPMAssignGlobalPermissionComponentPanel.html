@@ -2,16 +2,28 @@
 	<center>
 	<br/><br/>
 	    <form wicket:id="ampGlobalPMForm">
-			<table border="0" cellspacing="4" cellpadding="4">
+			<table border="0" cellspacing="4" cellpadding="4" width="100%">
 	  			<tr>
-	    			<td align=right><div class="txt_sm_b">Permissible Category:</div></td>
-	    			<td align=left><select wicket:id="globalPermCategories" class="dropdwn_sm"></select></td>
+	    			<td align="center" width="65%">
+	    				<table border="0" cellspacing="4" cellpadding="4">
+	  						<tr>
+	    						<td align="right"><div class="txt_sm_b">Permissible Category:</div></td>
+	    						<td align=left><select wicket:id="globalPermCategories" class="dropdwn_sm"></select></td>
+	  						</tr>
+						</table>
+	    			</td>
+	    			<td align="right" valign="top">&nbsp;</td>
+	  			</tr>
+	  			<tr>
+	    			<td align="center" width="65%"><span wicket:id="gatePermForm" /></td>
+	    			<td align="center" valign="top"><span class="red" wicket:id="infoGlobalPerm"/></td>
+	  			</tr>
+	  			<tr>
+	    			<td align="center" width="65%"><input type="submit" wicket:id="saveGlobalPermissionButton" value="Save" class="buttonx"/><input type="button" wicket:id="resetGlobalPermissionButton" value="Reset" class="buttonx"/></td>
+	    			<td align="right" valign="top">&nbsp;</td>
 	  			</tr>
 			</table>
-			<span wicket:id="gatePermForm" />
 			<br/>
-			<input type="submit" wicket:id="saveGlobalPermissionButton" value="Save" class="buttonx"/>
-			<input type="button" wicket:id="resetGlobalPermissionButton" value="Reset" class="buttonx"/>
 		</form>
 		<br/>
 	</center>

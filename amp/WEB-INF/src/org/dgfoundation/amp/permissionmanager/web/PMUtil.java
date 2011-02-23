@@ -194,12 +194,10 @@ public final class PMUtil {
 
 
 	public static void assignGlobalPermission(PermissionMap pm, Set<AmpPMReadEditWrapper> gatesSet, Class globalPermissionMapForPermissibleClass) {
-		// TODO Auto-generated method stub
 		Session session = null;
 			try {
 				session = PersistenceManager.getRequestDBSession();
 			} catch (DgException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		String permCategory = pm.getPermissibleCategory();
@@ -237,7 +235,6 @@ public final class PMUtil {
 			pm.setPermission(cp);	
 			session.save(pm);
 			//session.flush();
-			
 		}
 	}
 	
@@ -259,7 +256,7 @@ public final class PMUtil {
 			for (AmpPMReadEditWrapper ampPMGateWrapper : workspacesSet)
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
 
-		session.flush(); //
+		session.flush(); 
 		return cp;
 	}
 	

@@ -54,13 +54,6 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		add(usersTable);
 		final AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("navigator", (PageableListView)usersTable.getList()); 
-//		{
-//			@Override
-//			protected void onAjaxEvent(AjaxRequestTarget target) {
-//				target.addComponent(AmpPMManageUsersSectionFeature.this);
-//				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMManageUsersSectionFeature.this));
-//			}
-//		};
 		add(paginator);
 		idsList = usersTable.getList();
 		

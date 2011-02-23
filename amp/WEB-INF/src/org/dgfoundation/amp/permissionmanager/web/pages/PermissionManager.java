@@ -44,8 +44,6 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		// TODO Auto-generated constructor stub
 		super();
 		
-		//final IModel<Set<User>> usersModel = new AmpPMUserModel();
-		
 		Form adminPMForm = new Form("adminPMForm");
 		
 		//managing users

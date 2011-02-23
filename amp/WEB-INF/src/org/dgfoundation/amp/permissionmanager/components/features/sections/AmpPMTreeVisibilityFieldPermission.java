@@ -5,6 +5,8 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
 import javax.swing.tree.TreeModel;
 
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
@@ -16,10 +18,14 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTree
  * @author dan
  *
  */
-public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
+public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel implements IAjaxIndicatorAware  {
 
 	private BaseTree tree;
+	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 	
+	public String getAjaxIndicatorMarkupId() {
+		return indicatorAppender.getMarkupId();
+	}
 
 	/**
 	 * @param id
@@ -33,6 +39,7 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel {
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().collapseAll();
+        add(indicatorAppender);
        
 	}
 

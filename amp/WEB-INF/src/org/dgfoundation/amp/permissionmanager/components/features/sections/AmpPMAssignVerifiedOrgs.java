@@ -68,13 +68,6 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		AmpPMVerifiedOrganizationsTableFeaturePanel searchVerifiedOrgs = new AmpPMVerifiedOrganizationsTableFeaturePanel("verifiedOrgs", orgsModel, "Verified Organizations", true);
 		searchVerifiedOrgs.setTableWidth(480);
 		add(searchVerifiedOrgs);
-//		AjaxPagingNavigator pager = new AjaxPagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList()) {
-//			@Override
-//			protected void onAjaxEvent(AjaxRequestTarget target) {
-//				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-//				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
-//			}
-//		};
 		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList());
 		add(pager);
 		idOrgsList = searchVerifiedOrgs.getList();

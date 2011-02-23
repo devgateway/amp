@@ -895,6 +895,11 @@ public class GetFoundingDetails extends Action {
 
                     indicators.output(sos);
                 }
+            } else if (action.equalsIgnoreCase("getSectorTree")) {
+                response.setContentType("text/xml");
+                XMLDocument tree = DbUtil.getAllSectorsAsHierarchyXML();
+                tree.output(sos);
+
             } else if (map == null) {
             	response.setContentType("image/png");
             	BufferedImage graph = new BufferedImage(canvasWidth,

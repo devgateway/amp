@@ -10,22 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.ecs.xml.XML;
+import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.IndicatorConnection;
-import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.hibernate.Hibernate;
@@ -1019,4 +1009,42 @@ public class DbUtil {
            return result;
        }
    }
+
+    public static XMLDocument getAllSectorsAsHierarchyXML() {
+        Collection <AmpSectorScheme> schemes = SectorUtil.getAllSectorSchemes();
+        XMLDocument xmlDoc = new XMLDocument();
+        XML root = new XML("sector-tree");
+        xmlDoc.addElement(root);
+
+        for (AmpSectorScheme scheme : schemes) {
+            XML schemeNode = new XML("scheme");
+            schemeNode.addAttribute("name", scheme.getSecSchemeName());
+            schemeNode.addAttribute("code", scheme.getSecSchemeCode());
+            schemeNode.addAttribute("id", scheme.getAmpSecSchemeId());
+            Collection <AmpSector> sectors =
+                    SectorUtil.getSectorLevel1(Integer.valueOf(scheme.getAmpSecSchemeId().intValue()));
+            if (sectors != null && !sectors.isEmpty()) {
+                populateSectorTree (sectors, schemeNode);
+            }
+
+            root.addElement(schemeNode);
+        }
+        return xmlDoc;
+    }
+
+    private static void populateSectorTree (Collection <AmpSector> sectors, XML parentNode) {
+        for (AmpSector sector : sectors) {
+            XML sectorTag = new XML("sector");
+            sectorTag.addAttribute("name", sector.getName());
+            sectorTag.addAttribute("id", sector.getAmpSectorId());
+
+            //Better to have lazy collections for child sectors IMHO
+            Collection<AmpSector> childSecs = SectorUtil.getAllChildSectors(sector.getAmpSectorId());
+            if (childSecs != null && !childSecs.isEmpty()) {
+                populateSectorTree(childSecs, sectorTag);
+            }
+            parentNode.addElement(sectorTag);
+        }
+    }
+
 }

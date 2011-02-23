@@ -180,12 +180,6 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 			}
 		});
 
-		add(new Link("cancelOrgsToUsersButton"){
-			@Override
-			public void onClick() {
-			}
-			
-		});
 
 		
 	}

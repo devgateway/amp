@@ -37,7 +37,7 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel imple
 	public AmpPMTreeVisibilityFieldPermission(String id, IModel<TreeModel> iTreeModel, String fmName) {
 		super(id, iTreeModel, fmName);
 		
-		tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());//PMUtil.createTreeModel(ampTreeVisibilityModel)
+		tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().collapseAll();
@@ -46,9 +46,6 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel imple
         loadingIcon.setOutputMarkupId(true);
         loadingIcon.add(indicatorAppender);
         add(loadingIcon);
-        
-        //add(indicatorAppender);
-       
 	}
 
 

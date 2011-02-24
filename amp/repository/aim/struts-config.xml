@@ -1116,7 +1116,7 @@
     <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityHistory" />
     </action>
-    <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions">
+    <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions" parameter="method">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />
     	<forward name="reload"  path="/aim/viewChannelOverview.do?tabIndex=0" />
     </action>

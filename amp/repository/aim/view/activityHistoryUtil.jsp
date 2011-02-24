@@ -95,6 +95,7 @@
 	}
 	function submitCompare() {
 		document.getElementById("action").value = "compare";
+		document.getElementById("method").value = "compare";
 		var checkboxes = document.getElementsByName("compareCheckboxes");
 		var selectedVersions = [];
 		for(var i = 0; i < checkboxes.length; i++) {
@@ -103,6 +104,7 @@
 		if(selectedVersions.length = 2){
 			document.getElementById("activityOneId").value = selectedVersions[0].value;
 			document.getElementById("activityTwoId").value = selectedVersions[1].value;
+			document.getElementById('showMergeColumn').value = "false";
 			document.aimCompareActivityVersionsForm.submit();
 		}
 	}

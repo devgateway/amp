@@ -17,6 +17,10 @@ public class CompareActivityVersionsForm extends ActionForm {
 	private AmpActivity activityOne;
 
 	private AmpActivity activityTwo;
+	
+	private boolean showMergeColumn;
+	
+	private String method;
 
 	public Long getActivityOneId() {
 		return activityOneId;
@@ -56,5 +60,21 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	public void setOutputCollection(List<CompareOutput> outputCollection) {
 		this.outputCollection = outputCollection;
+	}
+
+	public boolean isShowMergeColumn() {
+		return showMergeColumn;
+	}
+
+	public void setShowMergeColumn(boolean showMergeColumn) {
+		this.showMergeColumn = showMergeColumn;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 }

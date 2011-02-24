@@ -36,12 +36,14 @@
 .notHovered {
 	background-color: #FFFFFF;
 }
-	
 </style>
 
 
 <digi:instance property="aimCompareActivityVersionsForm" />
-<digi:form action="/compareActivityVersions.do" method="post">
+<digi:form action="/compareActivityVersions.do" method="post" styleId="compareForm">
+	<html:hidden property="showMergeColumn" styleId="showMergeColumn"/>
+	<html:hidden property="method" styleId="method"/>
+	
 	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 			<ul id="MyTabs" class="yui-nav">
@@ -58,45 +60,83 @@
 	                		<strong><digi:trn>Value name</digi:trn></strong>
 	            		</div>
 	        		</td>
-					<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+					<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
 	            		<div align="center">
 	                		<strong><digi:trn>First version (Older)</digi:trn></strong>
 	            		</div>
 	        		</td>
-	        		<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	        		<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
+	        			<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+		            		<div align="center">
+		                		&nbsp;
+		            		</div>
+		        		</td>
+		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+		            		<div align="center">
+		                		<strong><digi:trn>Merge</digi:trn></strong>
+		            		</div>
+		        		</td>
+		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+		            		<div align="center">
+		                		&nbsp;
+		            		</div>
+		        		</td>
+	        		</logic:equal>
+	        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
 	            		<div align="center">
 	                		<strong><digi:trn>Second version (Newer)</digi:trn></strong>
 	            		</div>
 	        		</td>
-	        		<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; visibility: hidden">
-	            		<div align="center">
-	                		<strong><digi:trn>Merge</digi:trn></strong>
-	            		</div>
-	        		</td>
 				</tr>
-				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm">
+				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
 					<tr>
-						<td align="left" valign="center" style="padding-left: 5px;" width="8%">
+						<td align="left" valign="center" style="padding-left: 5px;" width="8%" class="inside">
 							<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
 						</td>
-						<td align="left" valign="top" style="padding-left: 5px;" width="46%">
-							<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
-							<bean:write name="iter" property="stringOutput[1]" filter="false"/>
+						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+							<div>
+								<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
+								<bean:write name="iter" property="stringOutput[1]" filter="false"/>
+							</div>
 						</td>
-						<td align="left" valign="top" style="padding-left: 5px;" width="46%">
-							<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
-							<bean:write name="iter" property="stringOutput[0]" filter="false"/>
+						<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
+							<td align="center" valign="middle" class="inside">
+								<button type="button" onClick="" style="border: none; background-color: transparent">
+									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+								</button>	
+							</td>
+							<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+								<div id="${index}">&nbsp;</div>	
+							</td>
+							<td align="center" valign="middle" class="inside">
+								<button type="button" onClick="" style="border: none; background-color: transparent">
+									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+								</button>	
+							</td>
+						</logic:equal>
+						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+							<div>
+								<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
+								<bean:write name="iter" property="stringOutput[0]" filter="false"/>
+							</div>
 						</td>
 					</tr>
 				</logic:iterate>
 			</table>
 			<br/>
 			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="history.back()" />
+			<input type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
 		</div>	
 	</div>
 </digi:form>
 
 <script language="Javascript">
+function enableMerge() {
+	document.getElementById('showMergeColumn').value = "true";
+	document.getElementById('method').value = "enableMerge";
+	document.getElementById('compareForm').submit();
+}
+
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
 	rows = tableElement.getElementsByTagName('tr');
@@ -108,10 +148,10 @@ function setStripsTable(tableId, classOdd, classEven) {
 	}
 	rows = null;
 }
-function setHoveredTable(tableId, hasHeaders) {
 
+function setHoveredTable(tableId, hasHeaders) {
 	var tableElement = document.getElementById(tableId);
-	if(tableElement){
+	if(tableElement) {
     	var className = 'Hovered',
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
         rows      = tableElement.getElementsByTagName('tr');
@@ -122,18 +162,15 @@ function setHoveredTable(tableId, hasHeaders) {
 			};
 			rows[i].onmouseout = function() {
 				this.className = this.className.replace(pattern, ' ');
-
 			};
 		}
 		rows = null;
 	}
 }
 
-
 function setHoveredRow(rowId) {
-
 	var rowElement = document.getElementById(rowId);
-	if(rowElement){
+	if(rowElement) {
     	var className = 'Hovered',
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
         cells      = rowElement.getElementsByTagName('td');
@@ -144,16 +181,14 @@ function setHoveredRow(rowId) {
 			};
 			cells[i].onmouseout = function() {
 				this.className = this.className.replace(pattern, ' ');
-
 			};
 		}
 		cells = null;
 	}
 }
 
-
-	setStripsTable("dataTable", "tableEven", "tableOdd");
-	setHoveredTable("dataTable", true);
-	setHoveredRow("rowHighlight");
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", true);
+setHoveredRow("rowHighlight");
 </script>
 		

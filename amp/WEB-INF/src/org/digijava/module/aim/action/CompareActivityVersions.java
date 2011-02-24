@@ -18,6 +18,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
@@ -35,35 +36,36 @@ import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class CompareActivityVersions extends Action {
+public class CompareActivityVersions extends DispatchAction {
 
 	private ServletContext ampContext = null;
 
 	private static Logger logger = Logger.getLogger(EditActivity.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward compare(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = session.beginTransaction();
 
-		if (request.getParameter("action").equals("setVersion") && request.getParameter("activityCurrentVersion") != null)
-		{
+		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
+				&& request.getParameter("activityCurrentVersion") != null) {
 			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
 			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 			AmpActivityGroup group = activity.getAmpActivityGroup();
 			tx.begin();
-			
-			//Update the modified date of the selected activity to send it last to the list
+
+			// Update the modified date of the selected activity to send it last
+			// to the list
 			activity.setModifiedDate(Calendar.getInstance().getTime());
 			group.setAmpActivityLastVersion(activity);
 			session.save(group);
 			tx.commit();
-			
+
 			return new ActionForward(mapping.findForward("reload").getPath() + "&ampActivityId=" + activityId);
 		}
-		
+
 		vForm.setOutputCollection(new ArrayList<CompareOutput>());
 		// Load the activities.
 		vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
@@ -106,6 +108,7 @@ public class CompareActivityVersions extends Action {
 
 						logger.warn(fields[i].getName() + ": " + auxResult1 + "-" + auxResult2);
 						output.setDescriptionOutput(auxAnnotation.fieldTitle());
+						output.setFieldOutput(fields[i]);
 
 						// Differentiate Wrappers from Classes that
 						// implements
@@ -123,6 +126,7 @@ public class CompareActivityVersions extends Action {
 								|| auxReturnType.getName().equals("java.math.BigDecimal")) {
 							output.setStringOutput(new String[] { auxResult1 != null ? auxResult1.toString() : "",
 									auxResult2 != null ? auxResult2.toString() : "" });
+							output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
 						} else if (ActivityVersionUtil.implementsVersionable(auxReturnType.getInterfaces())) {
 							Versionable auxVersionable1 = Versionable.class.cast(auxMethod.invoke(vForm
 									.getActivityOne(), null));
@@ -134,6 +138,7 @@ public class CompareActivityVersions extends Action {
 							String output2 = (auxVersionable2 != null) ? ActivityVersionUtil.generateFormattedOutput(
 									request, auxVersionable2.getOutput()) : null;
 							output.setStringOutput(new String[] { output1, output2 });
+							output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
 						} else {
 							output.setStringOutput(new String[] { auxResult1 != null ? auxResult1.toString() : "",
 									auxResult2 != null ? auxResult2.toString() : "" });
@@ -219,7 +224,8 @@ public class CompareActivityVersions extends Action {
 					Iterator iter1 = auxCollection1.iterator();
 					while (iter1.hasNext()) {
 						int coincidence = 0;
-						String auxValue1 = (String) iter1.next();
+						Object auxObject1 = iter1.next();
+						String auxValue1 = auxObject1.toString();
 						Iterator iter2 = auxCollection2.iterator();
 						while (iter2.hasNext()) {
 							if (auxValue1.equals((String) iter2.next())) {
@@ -228,14 +234,15 @@ public class CompareActivityVersions extends Action {
 						}
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
-									auxValue1, "" });
+									auxValue1, "" }, fields[i], new Object[] { auxObject1, null });
 							vForm.getOutputCollection().add(auxOutput);
 						}
 					}
 					iter1 = auxCollection2.iterator();
 					while (iter1.hasNext()) {
 						int coincidence = 0;
-						String auxValue2 = (String) iter1.next();
+						Object auxObject2 = iter1.next();
+						String auxValue2 = auxObject2.toString();
 						Iterator iter2 = auxCollection1.iterator();
 						while (iter2.hasNext()) {
 							if (auxValue2.equals((String) iter2.next())) {
@@ -244,7 +251,7 @@ public class CompareActivityVersions extends Action {
 						}
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] { "",
-									auxValue2 });
+									auxValue2 }, fields[i], new Object[] { null, auxObject2 });
 							vForm.getOutputCollection().add(auxOutput);
 						}
 					}
@@ -253,10 +260,12 @@ public class CompareActivityVersions extends Action {
 					Iterator iter1 = auxCollection1.iterator();
 					while (iter1.hasNext()) {
 						int coincidence = 0;
-						Versionable auxVersionable1 = (Versionable) iter1.next();
+						Object auxObject1 = iter1.next();
+						Versionable auxVersionable1 = (Versionable) auxObject1;
 						Iterator iter2 = auxCollection2.iterator();
 						while (iter2.hasNext()) {
-							Versionable auxVersionable2 = (Versionable) iter2.next();
+							Object auxObject2 = iter2.next();
+							Versionable auxVersionable2 = (Versionable) auxObject2;
 							if (auxVersionable1.equalsForVersioning(auxVersionable2)) {
 								coincidence++;
 								Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
@@ -267,7 +276,8 @@ public class CompareActivityVersions extends Action {
 													ActivityVersionUtil.generateFormattedOutput(request,
 															auxVersionable1.getOutput()),
 													ActivityVersionUtil.generateFormattedOutput(request,
-															auxVersionable2.getOutput()) });
+															auxVersionable2.getOutput()) }, fields[i], new Object[] {
+													auxObject1, auxObject2 });
 
 									vForm.getOutputCollection().add(auxOutput);
 									auxList.add(auxVersionable1);
@@ -278,7 +288,7 @@ public class CompareActivityVersions extends Action {
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
 									ActivityVersionUtil.generateFormattedOutput(request, auxVersionable1.getOutput()),
-									"" });
+									"" }, fields[i], new Object[] { auxObject1, null });
 							vForm.getOutputCollection().add(auxOutput);
 							auxList.add(auxVersionable1);
 						}
@@ -286,10 +296,12 @@ public class CompareActivityVersions extends Action {
 					iter1 = auxCollection2.iterator();
 					while (iter1.hasNext()) {
 						int coincidence = 0;
-						Versionable auxVersionable2 = (Versionable) iter1.next();
+						Object auxObject2 = iter1.next();
+						Versionable auxVersionable2 = (Versionable) auxObject2;
 						Iterator iter2 = auxCollection1.iterator();
 						while (iter2.hasNext()) {
-							Versionable auxVersionable1 = (Versionable) iter2.next();
+							Object auxObject1 = iter2.next();
+							Versionable auxVersionable1 = (Versionable) auxObject1;
 							if (auxVersionable2.equalsForVersioning(auxVersionable1)) {
 								coincidence++;
 								Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
@@ -303,7 +315,8 @@ public class CompareActivityVersions extends Action {
 														ActivityVersionUtil.generateFormattedOutput(request,
 																auxVersionable1.getOutput()),
 														ActivityVersionUtil.generateFormattedOutput(request,
-																auxVersionable2.getOutput()) });
+																auxVersionable2.getOutput()) }, fields[i],
+												new Object[] { auxObject1, auxObject2 });
 										vForm.getOutputCollection().add(auxOutput);
 									}
 								}
@@ -316,7 +329,7 @@ public class CompareActivityVersions extends Action {
 								CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
 										"",
 										ActivityVersionUtil.generateFormattedOutput(request, auxVersionable2
-												.getOutput()) });
+												.getOutput()) }, fields[i], new Object[] { null, auxObject2 });
 								vForm.getOutputCollection().add(auxOutput);
 							}
 						}

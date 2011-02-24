@@ -19,8 +19,14 @@ public @interface VersionableFieldSimple {
 	String fieldTitle() default "Empty String";
 
 	/**
-	 * If true, this field will not be changed in the comparison window for
+	 * If true, then this field will not be changed in the comparison window for
 	 * another´s version value.
 	 */
 	boolean blockSingleChange() default false;
+
+	/**
+	 * If true, then this field will have to have a value when merging two
+	 * versions.
+	 */
+	boolean mandatoryForSingleChange() default false;
 }

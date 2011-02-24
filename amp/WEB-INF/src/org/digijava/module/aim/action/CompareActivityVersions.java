@@ -345,4 +345,13 @@ public class CompareActivityVersions extends DispatchAction {
 
 		return mapping.findForward("forward");
 	}
+
+	public ActionForward enableMerge(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+		// TODO: Hidde from output list values that cant be used for single
+		// changes and mark mandatory values.
+		return mapping.findForward("forward");
+	}
 }

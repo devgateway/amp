@@ -20,7 +20,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-	@VersionableFieldSimple(fieldTitle = "Created By")
+	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	private AmpTeamMember createdBy;
 
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
@@ -49,9 +49,13 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private String govAgreementNumber;
 	@VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
     private String budgetCodeProjectID;
+	@VersionableFieldSimple(fieldTitle = "Budget Sector")
     private Long budgetsector;
+	@VersionableFieldSimple(fieldTitle = "Budget Organization")
     private Long budgetorganization;
+	@VersionableFieldSimple(fieldTitle = "Budget Department")
     private Long budgetdepartment;
+	@VersionableFieldSimple(fieldTitle = "Budget Program")
     private Long budgetprogram;
     
     //private String govAgreementNumber;
@@ -61,11 +65,11 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     private Long ampActivityId ;
 
-    @VersionableFieldSimple(fieldTitle = "AMP Id")
+    @VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	private String ampId ;
 
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
-	@VersionableFieldSimple(fieldTitle = "Name")
+	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
 	private String name ;
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	private String description ;
@@ -243,6 +247,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private AmpTeamMember activityCreator;
 	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	private Date createdDate;
+	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	private Date updatedDate;
 	
 	private AmpTeamMember approvedBy;
@@ -254,16 +259,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	private Set regionalFundings;
 
+	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	private String approvalStatus;
 
 	// Aid Harmonization Survey Set
 	@VersionableCollection(fieldTitle = "Surveys")
 	private Set survey;
 
+	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	private Integer lineMinRank;
+	@VersionableFieldSimple(fieldTitle = "Plan Ministry Rank")
 	private Integer planMinRank;
 	private Collection actRankColl;
 	
+	@VersionableFieldSimple(fieldTitle = "Archived?")
 	private Boolean archived;
 	
 	
@@ -294,13 +303,15 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	private String FY;
 
+	@VersionableFieldSimple(fieldTitle = "Vote")
 	private String vote;
-
+	@VersionableFieldSimple(fieldTitle = "Sub Vote")
 	private String subVote;
-
+	@VersionableFieldSimple(fieldTitle = "Sub Program")
 	private String subProgram;
-
+	@VersionableFieldSimple(fieldTitle = "Project Code")
 	private String projectCode;
+	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	private String crisNumber;
 
 	private Long gbsSbs;

@@ -294,7 +294,7 @@ public class DEImportBuilder {
 	//fundings, regional fundings
 	private void processStep3(AmpActivity activity, ActivityType actType, Boolean update){
 		if(isFieldSelected("activity.funding"))
-			processFunding(activity,actType);
+			processFunding(activity,actType, update);
 		if(isFieldSelected("activity.location"))
 			processLocation(activity,actType);
 
@@ -304,7 +304,6 @@ public class DEImportBuilder {
 	//process step 4 
 	//related organizations
 	private void processStep4(AmpActivity activity, ActivityType actType, Boolean update) {
-		// TODO Auto-generated method stub
 		if(isFieldSelected("activity.relatedOrgs"))
 			processRelatedOrgs(activity, actType);
 	}
@@ -640,17 +639,16 @@ public class DEImportBuilder {
  */
 	
 	//fundings
-	private void processFunding(AmpActivity activity, ActivityType actType) {
+	private void processFunding(AmpActivity activity, ActivityType actType, Boolean update) {
 		if(actType.getFunding() != null && actType.getFunding().size() > 0){
 			Set fundings = new HashSet();
-			fundings = (HashSet) getFundingXMLtoAMP(activity, actType);
+			fundings = (HashSet) getFundingXMLtoAMP(activity, actType, update);
 			
 			if(activity.getFunding() == null) 
 				activity.setFunding(new HashSet());
 			else
 				activity.getFunding().clear();
 			activity.getFunding().addAll(fundings);
-//			activity.setFunding(fundings);
 		}
 	}
 	
@@ -1488,7 +1486,7 @@ public class DEImportBuilder {
 		
 	}
 	
-	private Set getFundingXMLtoAMP(AmpActivity activity, ActivityType actType){
+	private Set getFundingXMLtoAMP(AmpActivity activity, ActivityType actType, Boolean update){
 		Set<AmpFunding> fundings= null;
 		Set orgRole = new HashSet();
 		if(activity.getOrgrole() !=null && actType.getFunding() != null)
@@ -1505,19 +1503,19 @@ public class DEImportBuilder {
 			AmpFunding ampFunding = new AmpFunding();
 			ampFunding.setActive(true);
 			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
-			Set<AmpFundingDetail> fundDetails = new HashSet<AmpFundingDetail>();
+			Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
 
 			
 			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
-			addFundingDetailsToSet(funding.getCommitments(), fundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT);
-			addFundingDetailsToSet(funding.getDisbursements(), fundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
-			addFundingDetailsToSet(funding.getExpenditures(), fundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE);
+			addFundingDetailsToSet(funding.getCommitments(), ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT);
+			addFundingDetailsToSet(funding.getDisbursements(), ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
+			addFundingDetailsToSet(funding.getExpenditures(), ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE);
 			
 			if(ampFunding.getFundingDetails() == null ) ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
-			if(fundDetails != null) ampFunding.getFundingDetails().addAll(fundDetails);
+			if(ampFundDetails != null) ampFunding.getFundingDetails().addAll(ampFundDetails);
 			if(funding.getAssistanceType() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				ampFunding.setTypeOfAssistance(acv);
@@ -1527,13 +1525,32 @@ public class DEImportBuilder {
 				ampFunding.setFinancingInstrument(acv);
 			}
 			if(activity !=null ) ampFunding.setAmpActivityId(activity);
-			if(activity.getFunding() ==  null) activity.setFunding(new HashSet<AmpFunding>());
+//			if(activity.getFunding() ==  null) activity.setFunding(new HashSet<AmpFunding>());
+			
+			//populate the funding with the existing data in AMP DB
+			
+			Set<AmpFunding> ampFundings = activity.getFunding();
+			for (AmpFunding af : ampFundings) {
+				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
+					ampFunding.setFinancingId(af.getFinancingId());
+					ampFunding.setModeOfPayment(af.getModeOfPayment());
+					ampFunding.setFundingStatus(af.getFundingStatus());
+					ampFunding.setActualStartDate(af.getActualStartDate());
+					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+					ampFunding.setConditions(af.getConditions());
+					ampFunding.setDonorObjective(af.getDonorObjective());
+					break;
+				}
+			}
 			
 			if(fundings == null) fundings=new HashSet<AmpFunding>();
 			
 			//conditions
 			//TODO: the language - lang attribute
-			if(funding.getConditions() != null) ampFunding.setConditions(funding.getConditions().getValue());
+			if(isValidFreeTextType(funding.getConditions())) ampFunding.setConditions(funding.getConditions().getValue());
+			
 			fundings.add(ampFunding);
 			AmpOrgRole ampOrgRole = new AmpOrgRole();
 			ampOrgRole.setActivity(activity);
@@ -1939,7 +1956,6 @@ public class DEImportBuilder {
 	}
 
 	private void checkCurrencyFunding(List<FundingDetailType> funding, DEActivityLog logger) {
-		// TODO Auto-generated method stub
 		for (Iterator it = funding.iterator(); it.hasNext();) {
 			FundingDetailType fdt = (FundingDetailType) it.next();
 			
@@ -1955,7 +1971,6 @@ public class DEImportBuilder {
 	}
 	
 	private void checkRegionalFundingCurrency(Location location, DEActivityLog logger) {
-		// TODO Auto-generated method stub
 		Set regFundings = new HashSet();
 		for (Iterator<LocationFundingType> it = location.getLocationFunding().iterator(); it.hasNext();) {
 			LocationFundingType funding = (LocationFundingType) it.next();
@@ -1964,8 +1979,6 @@ public class DEImportBuilder {
 			checkCurrencyFunding(funding.getExpenditures(), logger);
 			
 		}
-		//getRegionalFundingXMLToAmp(location.getLocationFunding(),regFundings);
-		
 	}
 
 	private void checkFunding(ActivityType actType, DEActivityLog logger) {
@@ -1984,18 +1997,16 @@ public class DEImportBuilder {
 			
 			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
 			
-			//type of assitance
+			//type of assistance
 			if(funding.getAssistanceType() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				if(acv == null)
-					//errors.add(toStringCVT(funding.getAssistanceType()));
 					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
 			}
 			//financing instrument
 			if(funding.getFinancingInstrument() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
 				if(acv == null)
-					//errors.add(toStringCVT(funding.getFinancingInstrument()));
 					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
 			}
 			
@@ -2013,7 +2024,6 @@ public class DEImportBuilder {
 						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
 						if(acv==null)
 							logger.getItems().add(new DEMTEFMissingLog(cvt));
-							//errors.add(toStringCVT(cvt));
 					}
 				}
 			}

@@ -73,7 +73,7 @@ public class AddContact extends BodyTagSupport {
 				html.append("\""+styleClass+"\"");
 			}
 	
-			html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=create~");
+			html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=checkDuplicationContacts~");
 			if (!"".equalsIgnoreCase(collection)) {
 
 				html.append(PARAM_COLLECTION_NAME);

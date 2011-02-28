@@ -9,7 +9,7 @@ import org.digijava.module.aim.helper.ContactPropertyHelper;
 public class AddContactComponentForm extends ActionForm {
 
     private static final long serialVersionUID = 1L;
-    private Long[] selContactIds;
+    private Long selContactIds;
     private List<AmpContact> contacts;
     private String firstName;
     private String lastname;
@@ -42,11 +42,11 @@ public class AddContactComponentForm extends ActionForm {
 	private String[] contPhoneNumber;
 	private String[] contFaxes;
 	
-	private String activityContactType; // Donor contact, Mofed contact, e.t.c.
+
 	
 	private String actOrOrgTempId;
-	private String addOrgButtonState; // hidden/visible
-	private List<AmpOrganisation> orgsToShowOnPage; //org that will appear in popin
+
+
 
 
     public String[] getContPhoneTypeIds() {
@@ -150,11 +150,11 @@ public class AddContactComponentForm extends ActionForm {
         this.organisationName = organisationName;
     }
 
-    public Long[] getSelContactIds() {
+    public Long getSelContactIds() {
         return selContactIds;
     }
 
-    public void setSelContactIds(Long[] selContactIds) {
+    public void setSelContactIds(Long selContactIds) {
         this.selContactIds = selContactIds;
     }
 
@@ -260,13 +260,7 @@ public class AddContactComponentForm extends ActionForm {
         return phones[index];
     }
 
-	public String getActivityContactType() {
-		return activityContactType;
-	}
 
-	public void setActivityContactType(String activityContactType) {
-		this.activityContactType = activityContactType;
-	}
 
 	public String getActOrOrgTempId() {
 		return actOrOrgTempId;
@@ -276,19 +270,6 @@ public class AddContactComponentForm extends ActionForm {
 		this.actOrOrgTempId = actOrOrgTempId;
 	}
 
-	public String getAddOrgButtonState() {
-		return addOrgButtonState;
-	}
-
-	public void setAddOrgButtonState(String addOrgButtonState) {
-		this.addOrgButtonState = addOrgButtonState;
-	}
-
-	public List<AmpOrganisation> getOrgsToShowOnPage() {
-		return orgsToShowOnPage;
-	}
-
-	public void setOrgsToShowOnPage(List<AmpOrganisation> orgsToShowOnPage) {
-		this.orgsToShowOnPage = orgsToShowOnPage;
-	}	
+	
+	
 }

@@ -352,11 +352,12 @@ YAHOO.namespace("YAHOO.amp");
         function searchContact(){
             var flg=checkEmptyKeywordContact();
             if(flg){
-                var keyword=document.getElementById('keyword').value;
-    			<digi:context name="searchCont" property="context/addAmpContactInfo.do?action=search" />
-                var url = "${searchCont}&keyword="+keyword;
-             	var parameters = getContactParams();                
-                YAHOO.util.Connect.asyncRequest("POST", url, callback1, parameters);
+    			<digi:context name="searchCont" property="context/addAmpContactInfo.do" />
+    			var name=document.getElementById('name').value;
+                var lastname=document.getElementById('lastname').value;
+                var params="&action=search&firstName="+name+"&lastname="+lastname;
+                var url = "${searchCont}";              
+                YAHOO.util.Connect.asyncRequest("POST", url, callback1, params);
                 return true;
             }
             return false;
@@ -364,20 +365,29 @@ YAHOO.namespace("YAHOO.amp");
 
         function checkEmptyKeywordContact() {
             var flag=true;
-            var keyword=document.getElementById('keyword');
-            if(trim(keyword.value) == "")
-            {
-                alert('<digi:trn jsFriendly="true">Please Enter a Keyword....</digi:trn>');
+            var name=document.getElementById('name').value;
+            var lastname=document.getElementById('lastname').value;
+            if(trim(name) == ""&&trim(lastname)){
+                alert('<digi:trn jsFriendly="true">Please Enter first/last name....</digi:trn>');
                 flag=false;
             }
             return flag;
         }
 
         function addSelectedContacts() {
-            <digi:context name="addSelCont" property="context/addAmpContactInfo.do?action=addSelectedConts"/>;
+            <digi:context name="addSelCont" property="context/addAmpContactInfo.do"/>;
             checkAndCloseContact=true;
-            var url="${addSelCont}"+"&"+getSelectedContactsParams();
-			YAHOO.util.Connect.asyncRequest("POST", url, addContactCallBack);
+            var url="${addSelCont}";
+            params="&action=addSelectedConts"+getSelectedContactsParams();
+			YAHOO.util.Connect.asyncRequest("POST", url, addContactCallBack,params);
+        }
+        function createNewContact(){
+        	 <digi:context name="addSelCont" property="context/addAmpContactInfo.do"/>;
+             checkAndCloseContact=false;
+             var url="${addSelCont}";
+             params="&action=create";
+             YAHOO.util.Connect.asyncRequest("POST", url, callback1, params);
+        	
         }
 
         function getContactParams(){
@@ -389,7 +399,6 @@ YAHOO.namespace("YAHOO.amp");
                 "&title="+titleId+
                 "&function="+document.getElementById('function').value+
                 "&officeaddress="+document.getElementById('officeaddress').value+
-                "&organisationName="+document.getElementById('organisationName').value+
                 "&temporaryId="+document.getElementById('temporaryId').value;
 
             var emails=$("input[id^='email_']");

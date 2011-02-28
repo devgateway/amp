@@ -71,40 +71,38 @@ public class AmpContactProperty  implements Comparable, Serializable {
 		this.value = value;
 	}
 
-    @Override
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        if (!(o instanceof AmpContactProperty)) {
-            return -1;
-        }
-        AmpContactProperty a = (AmpContactProperty) o;
-        if (a == null) {
-            return 1;
-        }
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if (!(o instanceof AmpContactProperty)) {
+			return -1;
+		}
+		AmpContactProperty a = (AmpContactProperty) o;
 
-        if (a.getId() == null && this.getId() == null){
-              if(this.getName().equals(a.getName())) {
-            if (this.getValue() != null && a.getValue() != null) {
-                if (this.getValue().equals(a.getValue())) {
-                    return 0;
-                }
-            } else {
-                if (this.getActualValue() != null && a.getActualValue() != null) {
-                    if (this.getActualValue().equals(this.getActualValue())) {
-                        return 0;
-                    }
-                }
-            }
-            return 0;
-        }
+		if (a.getId() == null && this.getId() == null) {
+			if (this.getName().equals(a.getName())) {
+				if (this.getValue() != null && a.getValue() != null) {
+					if (this.getValue().equals(a.getValue())) {
+						return 0;
+					}
+				} else {
+					if (this.getActualValue() != null
+							&& a.getActualValue() != null) {
+						if (this.getActualValue().equals(this.getActualValue())) {
+							return 0;
+						} 
+					}
+				}
+				
+			}
+			return 1;
 
-        }
-             
-        
-        if (a.getId() == null||(a.getId() != null && this.getId() == null)) {
-            return 1;
-        }
-        return this.getId().compareTo(a.getId());
-    }
+		}
+
+		if (a.getId() == null || (a.getId() != null && this.getId() == null)) {
+			return 1;
+		}
+		return this.getId().compareTo(a.getId());
+	}
 	
 }

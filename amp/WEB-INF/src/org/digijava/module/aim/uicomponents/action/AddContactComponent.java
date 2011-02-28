@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,33 +45,26 @@ public class AddContactComponent extends DispatchAction{
 
     @Override
      protected  ActionForward unspecified(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return create(mapping, form, request, response);
+        return checkDuplicationContacts(mapping, form, request, response);
     }
+    public  ActionForward checkDuplicationContacts(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+        AddContactComponentForm createForm = (AddContactComponentForm) form;
+        HttpSession session = request.getSession();
+        clearForm(createForm);
+        Object targetForm = session.getAttribute(AddContact.PARAM_ADD_CONTACT_FORM_NAME);
+        createForm.setTargetForm(targetForm);
+        String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
+        createForm.setTargetCollection(collection);
+        return mapping.findForward("forward");
+   }
 
      public  ActionForward create(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
          AddContactComponentForm createForm = (AddContactComponentForm) form;
-         HttpSession session = request.getSession();
-         clearForm(createForm);
-         Object targetForm = session.getAttribute(AddContact.PARAM_ADD_CONTACT_FORM_NAME);
-         createForm.setTargetForm(targetForm);
-         String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
-         createForm.setTargetCollection(collection);
+
          createForm.setAction("add");
          if (createForm.getEmails() != null) {
              createForm.setEmailsSize(createForm.getEmails().length);
-         }
-		 //if we are creating contact from activity's contact step
-		 String activityContactType=request.getParameter(AddContact.PARAM_CONTACT_TYPE);
-		 if(activityContactType!=null && !activityContactType.equals("")){
-			 createForm.setActivityContactType(activityContactType);
-		 }
-		 // on org.manager side add/remove organization buttons should be hidden
-		 String orgButtonsState=request.getParameter(AddContact.ADD_ORG_BUTTON);
-	        if(orgButtonsState!=null && orgButtonsState.equals("hidden")){
-	        	createForm.setAddOrgButtonState("hidden");
-	        }else{
-	        	createForm.setAddOrgButtonState("visible");
-	        }
+         }		
          return mapping.findForward("forward");
     }
 
@@ -97,29 +91,9 @@ public class AddContactComponent extends DispatchAction{
          createForm.setContPhoneType(null);
          createForm.setContPhoneNumber(null);
          createForm.setContFaxes(null);
-         createForm.setActivityContactType(null);
          createForm.setActOrOrgTempId(null);
-         createForm.setOrgsToShowOnPage(null);
 	}
 
-      public  ActionForward addOrganizations(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-         AddContactComponentForm createForm = (AddContactComponentForm) form;
-         fillContactProperties(createForm);
-         return setAction(createForm, mapping);
-    }
-
-     public  ActionForward removeOrganizations(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-         AddContactComponentForm createForm = (AddContactComponentForm) form;
-         Long[] ids=createForm.getSelContactOrgs();
-         if(ids!=null){
-             for(Long id :ids){
-                 AmpOrganisation organization=DbUtil.getOrganisation(id);
-                 createForm.getOrganizations().remove(organization);
-             }
-         }
-         fillContactProperties(createForm);
-         return setAction(createForm, mapping);
-    }
 
      public ActionForward edit(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
@@ -134,50 +108,32 @@ public class AddContactComponent extends DispatchAction{
         createForm.setTargetCollection(collection);
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        String orgButtonsState=request.getParameter(EditContactLink.ADD_ORG_BUTTON);
-        if(orgButtonsState!=null && orgButtonsState.equals("hidden")){
-        	createForm.setAddOrgButtonState("hidden");
-        }else{
-        	createForm.setAddOrgButtonState("visible");
-        }
         
-  		String activityContactType=request.getParameter(EditContactLink.PARAM_CONTACT_TYPE);
-  		if(activityContactType!=null && !activityContactType.equals("")){//if we are creating contact from activity's contact step
-  			createForm.setActivityContactType(activityContactType);
-  			 
-  			Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
-  	        Iterator<AmpActivityContact> actContIter = targetCollecion.iterator();
-  	        while (actContIter.hasNext()) {
-  	        	AmpActivityContact activityContact = actContIter.next();
-  	        	AmpContact contact=activityContact.getContact();
-  	        	fillFormFromContact(createForm, contId, contact);
-  	        }    
-  		}else{
-  			Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
-  	        Iterator<AmpOrganisationContact> contcatIter = targetCollecion.iterator();
-  	        while (contcatIter.hasNext()) {
-  	        	AmpOrganisationContact orgContact=contcatIter.next();
-  	            AmpContact contact = orgContact.getContact();
-  	            fillFormFromContact(createForm, contId, contact);
-  	        }
-  		}
+      
+		Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target
+				.get(createForm.getTargetForm());
+		Iterator<AmpOrganisationContact> contcatIter = targetCollecion
+				.iterator();
+		while (contcatIter.hasNext()) {
+			AmpOrganisationContact orgContact = contcatIter.next();
+			AmpContact contact = orgContact.getContact();
+			fillFormFromContact(createForm, contId, contact);
+		}
+
         return mapping.findForward("forward");
     }
 
       
     public ActionForward search(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
-        String keyword = createForm.getKeyword();
-
-        if (keyword != null) {
-            List<AmpContact> foundContacts = ContactInfoUtil.searchContacts(keyword);
+        String name = createForm.getFirstName();
+        String lastname = createForm.getLastname();
+        if (name != null&&lastname!=null) {
+            List<AmpContact> foundContacts = ContactInfoUtil.getContactsByNameLastName(name, lastname);
             createForm.setContacts(foundContacts);
+            
         }
-        
-        fillContactProperties(createForm);
-        
         return mapping.findForward("forward");
-
     }
     
     public ActionForward checkDulicateEmail(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -230,43 +186,19 @@ public class AddContactComponent extends DispatchAction{
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        Long[] contIds = createForm.getSelContactIds();
-        String redirectWhere=null;
-        if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
-        	Collection<AmpActivityContact> targetCollecion = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
-       	 	if (contIds != null && contIds.length > 0) {
-                for (int i = 0; i < contIds.length; i++) {
-                    AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
-                    contact.setTemporaryId("_"+new Date().getTime());
-                    AmpActivityContact actContact=new AmpActivityContact();
-            		actContact.setContact(contact);
-            		actContact.setContactType(createForm.getActivityContactType());
-                    targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
-                }
-            }
-       	 	target.set(createForm.getTargetForm(), targetCollecion);
-       	 	redirectWhere="step8";
-       	 	
-       	 String sessId = request.getSession().getId();
-       	 ServletContext ampContext = getServlet().getServletContext();
-         ArrayList sessList = (ArrayList) ampContext.getAttribute(
-             org.digijava.module.aim.helper.Constants.SESSION_LIST);
-         sessList.remove(sessId);
-       	 	
-        }else{
+        Long contId = createForm.getSelContactIds();
+        String redirectWhere="editOrg";
         	 Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
-        	 if (contIds != null && contIds.length > 0) { 
-                 for (int i = 0; i < contIds.length; i++) {
-                     AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
+        	 if (contId != null ) { 
+                     AmpContact contact = ContactInfoUtil.getContact(contId);
                      AmpOrganisationContact orgContact=new AmpOrganisationContact();
                      orgContact.setContact(contact);
                      orgContact.setPrimaryContact(false); //it becomes true only from edit organization form by checking check-box 
                      targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, orgContact, new ContactsComponentHelper.AmpOrganisationContactCompareByContact());                  
-                 }
+                 
              }
         	 target.set(createForm.getTargetForm(), targetCollecion);
-        	 redirectWhere="editOrg";
-        }
+        	 
         return mapping.findForward(redirectWhere);
 
     }
@@ -290,11 +222,7 @@ public class AddContactComponent extends DispatchAction{
         if(createForm.getTitle()!=null&&createForm.getTitle()!=-1){
         	contact.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(createForm.getTitle()));
         }		
-		if(createForm.getOrganisationName()!=null){
-			contact.setOrganisationName(createForm.getOrganisationName().trim());
-		}else{
-			contact.setOrganisationName(null);
-		}
+		
 		if(createForm.getFunction()!=null){
 			contact.setFunction(createForm.getFunction().trim());
 		}else{
@@ -305,7 +233,7 @@ public class AddContactComponent extends DispatchAction{
 		}else{
 			contact.setOfficeaddress(null);
 		}
-				
+		
 		if(contact.getOrganizationContacts()==null){
 			contact.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
 		}
@@ -317,8 +245,10 @@ public class AddContactComponent extends DispatchAction{
 				contact.getOrganizationContacts().add(orgContact);
 			}
 		}
-        
-        Set<AmpContactProperty> contactProperties=new HashSet<AmpContactProperty>();
+
+				
+		 
+        Set<AmpContactProperty> contactProperties=new TreeSet<AmpContactProperty>();
         createForm.setEmails(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_EMAIL,createForm.getContEmail(),null));
         createForm.setPhones(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_PHONE,createForm.getContPhoneNumber(),createForm.getContPhoneTypeIds()));
         createForm.setFaxes(buildContactProperties(Constants.CONTACT_PROPERTY_NAME_FAX,createForm.getContFaxes(),null));
@@ -340,40 +270,11 @@ public class AddContactComponent extends DispatchAction{
 //         }
 		
 		contact.setProperties(contactProperties);
+		
+
 
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
-        //activity form side
-        if(createForm.getActivityContactType()!=null && !createForm.getActivityContactType().equals("")){
-        	Collection<AmpActivityContact> targetCollection = (Collection<AmpActivityContact>) target.get(createForm.getTargetForm());
-        	AmpActivityContact actContact=null;
-        	 boolean newActContact=true;
-             if(createForm.getActOrOrgTempId()!=null && ! createForm.getActOrOrgTempId().equals("")){
-             	if(targetCollection!=null && targetCollection.size()>0){
-             		for (AmpActivityContact ampActContact : targetCollection) {
-             			String contId=ampActContact.getContact().getId()!=null? ampActContact.getContact().getId().toString() : ampActContact.getContact().getTemporaryId();
- 						if(contId.equalsIgnoreCase(createForm.getActOrOrgTempId()) || contId.equalsIgnoreCase(createForm.getActOrOrgTempId())){
- 							actContact=ampActContact;
- 							actContact.setPrimaryContact(ampActContact.getPrimaryContact());
- 							newActContact=false;
- 							break;							
- 						}
- 					}
-             	}
-             }    
-             if(newActContact){
-            	 actContact=new AmpActivityContact();
-            	 actContact.setPrimaryContact(false);
-             }
-        	//put this contact in session for add amp activity code processing
-            request.getSession().setAttribute("contactToBeReplaced", contact);
-    		actContact.setContact(contact);
-    		actContact.setContactType(createForm.getActivityContactType());
-    		targetCollection=ContactsComponentHelper.insertItemIntoCollection(targetCollection, actContact, new ContactsComponentHelper.AmpActivityContactCompareByContact());
-    		target.set(createForm.getTargetForm(), targetCollection);
-    	        
-    	    return mapping.findForward("step8");
-        }else{ //organization manager side
             Collection<AmpOrganisationContact> targetCollecion = (Collection<AmpOrganisationContact>) target.get(createForm.getTargetForm());
             AmpOrganisationContact orgContact=null;
             boolean newOrgContact=true;
@@ -397,7 +298,7 @@ public class AddContactComponent extends DispatchAction{
             orgContact.setContact(contact);            
             targetCollecion=ContactsComponentHelper.insertItemIntoCollection(targetCollecion, orgContact, new ContactsComponentHelper.AmpOrganisationContactCompareByContact());
             target.set(createForm.getTargetForm(), targetCollecion);
-        }
+        
         
         
         return mapping.findForward("editOrg");
@@ -596,22 +497,7 @@ public class AddContactComponent extends DispatchAction{
 		        createForm.setTitle(contact.getTitle().getId());
 		    }
 		    
-		    if(createForm.getActivityContactType()!=null && ! createForm.getActivityContactType().equals("")){
-			    createForm.setOrganizations(new ArrayList<AmpOrganisation>());
-			    if(contact.getOrganizationContacts()!=null){		    	
-			    	for (AmpOrganisationContact orgCont : contact.getOrganizationContacts()) {
-						createForm.getOrganizations().add(orgCont.getOrganisation());
-					}
-			    }
-		    }
-		    
-		    createForm.setOrgsToShowOnPage(new ArrayList<AmpOrganisation>());
-		    if(contact.getId()!=null){
-		    	List<AmpOrganisationContact> orgConts=ContactInfoUtil.getContactOrganizations(contact.getId());
-		    	for (AmpOrganisationContact orgCont : orgConts) {
-					createForm.getOrgsToShowOnPage().add(orgCont.getOrganisation());
-				}
-		    }
+		   
 		    
 		    createForm.setFunction(contact.getFunction());
 		    createForm.setOfficeaddress(contact.getOfficeaddress());

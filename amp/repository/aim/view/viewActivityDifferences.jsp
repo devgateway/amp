@@ -125,7 +125,8 @@
 			</table>
 			<br/>
 			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="history.back()" />
-			<input type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
+			<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
+			<input id="saveButton" type="button" value="<digi:trn>Save New Activity</digi:trn>" onclick="javascript:save();" />
 		</div>	
 	</div>
 </digi:form>
@@ -134,6 +135,12 @@
 function enableMerge() {
 	document.getElementById('showMergeColumn').value = "true";
 	document.getElementById('method').value = "enableMerge";
+	document.getElementById('compareForm').submit();
+}
+
+function save() {
+	document.getElementById('showMergeColumn').value = "false";
+	document.getElementById('method').value = "saveNewActivity";
 	document.getElementById('compareForm').submit();
 }
 
@@ -190,5 +197,13 @@ function setHoveredRow(rowId) {
 setStripsTable("dataTable", "tableEven", "tableOdd");
 setHoveredTable("dataTable", true);
 setHoveredRow("rowHighlight");
+
+if(document.getElementById('method').value == "enableMerge") {
+	document.getElementById('mergeButton').disabled = "disabled";
+	document.getElementById('saveButton').disabled = "";
+} else {
+	document.getElementById('saveButton').disabled = "disabled";
+}
+
 </script>
 		

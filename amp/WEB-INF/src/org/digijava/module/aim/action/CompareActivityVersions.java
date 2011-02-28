@@ -110,6 +110,13 @@ public class CompareActivityVersions extends DispatchAction {
 						output.setDescriptionOutput(auxAnnotation.fieldTitle());
 						output.setFieldOutput(fields[i]);
 
+						// Identity "read-value" and "mandatory" fields.
+						// TODO: If needed do the same for
+						// @VersionableFieldTextEditor and
+						// @VersionableCollection.
+						output.setBlockSingleChangeOutput(auxAnnotation.blockSingleChange());
+						output.setMandatoryForSingleChangeOutput(auxAnnotation.mandatoryForSingleChange());
+
 						// Differentiate Wrappers from Classes that
 						// implements
 						// Versionable.
@@ -234,7 +241,7 @@ public class CompareActivityVersions extends DispatchAction {
 						}
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
-									auxValue1, "" }, fields[i], new Object[] { auxObject1, null });
+									auxValue1, "" }, fields[i], new Object[] { auxObject1, null }, false, false);
 							vForm.getOutputCollection().add(auxOutput);
 						}
 					}
@@ -251,7 +258,7 @@ public class CompareActivityVersions extends DispatchAction {
 						}
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] { "",
-									auxValue2 }, fields[i], new Object[] { null, auxObject2 });
+									auxValue2 }, fields[i], new Object[] { null, auxObject2 }, false, false);
 							vForm.getOutputCollection().add(auxOutput);
 						}
 					}
@@ -277,7 +284,7 @@ public class CompareActivityVersions extends DispatchAction {
 															auxVersionable1.getOutput()),
 													ActivityVersionUtil.generateFormattedOutput(request,
 															auxVersionable2.getOutput()) }, fields[i], new Object[] {
-													auxObject1, auxObject2 });
+													auxObject1, auxObject2 }, false, false);
 
 									vForm.getOutputCollection().add(auxOutput);
 									auxList.add(auxVersionable1);
@@ -288,7 +295,7 @@ public class CompareActivityVersions extends DispatchAction {
 						if (coincidence == 0) {
 							CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
 									ActivityVersionUtil.generateFormattedOutput(request, auxVersionable1.getOutput()),
-									"" }, fields[i], new Object[] { auxObject1, null });
+									"" }, fields[i], new Object[] { auxObject1, null }, false, false);
 							vForm.getOutputCollection().add(auxOutput);
 							auxList.add(auxVersionable1);
 						}
@@ -316,7 +323,7 @@ public class CompareActivityVersions extends DispatchAction {
 																auxVersionable1.getOutput()),
 														ActivityVersionUtil.generateFormattedOutput(request,
 																auxVersionable2.getOutput()) }, fields[i],
-												new Object[] { auxObject1, auxObject2 });
+												new Object[] { auxObject1, auxObject2 }, false, false);
 										vForm.getOutputCollection().add(auxOutput);
 									}
 								}
@@ -329,7 +336,8 @@ public class CompareActivityVersions extends DispatchAction {
 								CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
 										"",
 										ActivityVersionUtil.generateFormattedOutput(request, auxVersionable2
-												.getOutput()) }, fields[i], new Object[] { null, auxObject2 });
+												.getOutput()) }, fields[i], new Object[] { null, auxObject2 }, false,
+										false);
 								vForm.getOutputCollection().add(auxOutput);
 							}
 						}
@@ -350,8 +358,43 @@ public class CompareActivityVersions extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-		// TODO: Hidde from output list values that cant be used for single
+		// TODO: Hide from output list values that can't be used for single
 		// changes and mark mandatory values.
 		return mapping.findForward("forward");
+	}
+
+	public ActionForward saveNewActivity(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+		List<CompareOutput> auxData = generateRandomMergedData(vForm.getOutputCollection());
+
+		
+		
+		return mapping.findForward("forward");
+	}
+
+	// TODO: Note: ONLY FOR DEVELOPMENT PURPOSES. Delete this method when the
+	// jsp is ready for merging data.
+	private List<CompareOutput> generateRandomMergedData(List<CompareOutput> input) {
+		List<CompareOutput> output = new ArrayList<CompareOutput>();
+		Iterator<CompareOutput> iter = input.iterator();
+		while (iter.hasNext()) {
+			CompareOutput auxOutput = iter.next();
+			CompareOutput newOutput = new CompareOutput();
+			double rnd1 = Math.random();
+			double rnd2 = Math.random();
+			if (auxOutput.getBlockSingleChangeOutput() == false) {
+				newOutput.setFieldOutput(auxOutput.getFieldOutput());
+				newOutput.setMandatoryForSingleChangeOutput(auxOutput.getMandatoryForSingleChangeOutput());
+				if (rnd1 >= rnd2) {
+					newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[0], null });
+				} else {
+					newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1], null });
+				}
+				output.add(newOutput);
+			}
+		}
+		return output;
 	}
 }

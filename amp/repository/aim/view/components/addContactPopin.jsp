@@ -47,7 +47,7 @@
 			<c:if test="${not empty aimAddContactForm.contacts}">
 				<hr />
 				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
-				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:7px;">
+				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:7px;" class="inside">
 				<tr>
 				<td class="inside_header">&nbsp;</td>
 				<td class="inside_header"><digi:trn>FirstName</digi:trn></td>
@@ -63,7 +63,7 @@
 							</td>
 							<td class="inside">${contact.name}</td>
 							<td class="inside">${contact.lastname}</td>
-							<td>
+							<td class="inside">
 							<ul>
 							<c:forEach var="email" items="${contact.properties}">
 									<c:if test="${email.name=='contact email'}">

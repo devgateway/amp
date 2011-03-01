@@ -439,7 +439,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">
+                                  <div class="bd bd_drop">
                                       <ul>
 <!--
  										<li class="yuiampmenuitem">
@@ -509,7 +509,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
@@ -599,7 +599,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">
+                                  <div class="bd bd_drop">
                                       <ul>
                                         <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
@@ -633,7 +633,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-                                  <div class="bd_drop">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem_drop">
@@ -712,7 +712,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
                                         <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
@@ -740,7 +740,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li class="yuiampmenuitem_drop">
@@ -803,7 +803,7 @@ function adminHelp(){
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd_drop">                    
+                                  <div class="bd bd_drop">                    
                                       <ul>
 										<feature:display name="User Help" module="HELP">
                                         <li class="yuiampmenuitem_drop">

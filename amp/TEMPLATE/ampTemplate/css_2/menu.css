@@ -240,4 +240,4 @@
 
 
 .yuiampmenuitem_drop {border-bottom:1px solid #CCCCCC;}
-.bd_drop  {border-left:1px solid #CCCCCC; border-right:1px solid #CCCCCC; background-color:#FFFFFF; margin-top:5px;}
+.bd_drop  {border:0px 1px 1px 1px solid #CCCCCC; background-color:#FFFFFF; margin-top:5px;}

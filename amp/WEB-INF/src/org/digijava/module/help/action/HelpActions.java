@@ -3,7 +3,6 @@ package org.digijava.module.help.action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -53,7 +52,6 @@ import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
-import org.digijava.module.sdm.util.DbUtil;
 import org.xml.sax.InputSource;
 
 
@@ -102,12 +100,7 @@ public class HelpActions extends DispatchAction {
 	            out.println("<b>"+encodedArticle+"</b>");
 	            List editor = HelpUtil.getEditor(bodyKey, lang);
 	            helpForm.setTopicKey(bodyKey);
-	
-//	            if(key.getImgsHolder()!=null){
-//					//Sdm doc= DbUtil.getDocument(topic.getImgsHolder().getId())
-//					 request.getSession().setAttribute("document", key.getImgsHolder());
-//				}
-				
+
 	            
 	            if(!editor.isEmpty()){
 	               Iterator iter = editor.iterator();
@@ -474,10 +467,6 @@ public class HelpActions extends DispatchAction {
 			form.setParentId(null);
 		}
 		form.setTopicKey(topic.getTopicKey());
-//		if(topic.getImgsHolder()!=null){
-//			//Sdm doc= DbUtil.getDocument(topic.getImgsHolder().getId())
-//			 request.getSession().setAttribute("document", topic.getImgsHolder());
-//		}
 	}
 
 	/**
@@ -638,17 +627,6 @@ public class HelpActions extends DispatchAction {
 		}
 		helpTopic.setSiteId(siteId);
 		
-		//save attached files
-//		if(request.getSession().getAttribute("document")!=null){
-//			Sdm document=(Sdm)request.getSession().getAttribute("document");
-//	    	Sdm doc=null;
-//	    	if(document!=null){
-//	    		document.setName(helpTopic.getTopicKey());
-//	    		doc=DbUtil.saveOrUpdateDocument(document);
-//	    		helpTopic.setImgsHolder(doc);
-//	    	}
-//		}
-		
 		HelpUtil.saveOrUpdateHelpTopic(helpTopic);		
 		
 		// cleaning form
@@ -685,7 +663,6 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
-
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Marshaller m = jc.createMarshaller();
         //response.setContentType("text/xml");
@@ -703,6 +680,7 @@ public class HelpActions extends DispatchAction {
         help_out.getAmpHelp().addAll(rsAux);
         
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        
         m.marshal(help_out,bos);
         out.putNextEntry(new ZipEntry("helpExport.xml"));
         byte [] myArray= bos.toByteArray();
@@ -715,49 +693,153 @@ public class HelpActions extends DispatchAction {
         return null;
 
 	}
+
 	
-
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
-			HelpForm helpForm = (HelpForm) form;
-			String siteId=RequestUtils.getSite(request).getSiteId();
-            Long Id =RequestUtils.getSite(request).getId();
-            String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
-			
-		FormFile myFile = helpForm.getFileUploaded();
-        byte[] fileData    = myFile.getFileData();
-
-
-        InputStream inputStream= new ByteArrayInputStream(fileData);
+		HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
+		HelpForm helpForm = (HelpForm) form;
+		String siteId=RequestUtils.getSite(request).getSiteId();
+        Long Id =RequestUtils.getSite(request).getId();
+        String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
         
+		FormFile myFile = helpForm.getFileUploaded();
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
-        Unmarshaller m = jc.createUnmarshaller();
+        ZipInputStream zis = new ZipInputStream(myFile.getInputStream());
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipEntry entry;
+        //Sdm mySdm=null;
+        byte[] xmlContent=null;
+        HashMap <String,Set<SdmItem>> imgsHolder =new HashMap <String,Set<SdmItem>> (); 
+        HashMap <String,Long> topicAttachmentHolder =new HashMap <String,Long> (); 
         AmpHelpRoot help_in;
         
-            help_in = (AmpHelpRoot) m.unmarshal(inputStream);
-            //remove all existing help topics           
-            List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
-            
-            for (HelpTopic helpTopic : firstLevelTopics) {
-				removeLastLevelTopic(helpTopic);
+        Sdm kuku=new Sdm();
+        kuku.setItems(new HashSet<SdmItem>());
+        
+        while ((entry = zis.getNextEntry()) != null) {        	
+        	if(entry.getName().endsWith(".xml")){
+        		
+        		int size = 0;
+    	        byte[] buffer = new byte[1*1024*1024];
+    	        int realZize = 0;
+    	        byte[] largeBuffer = new byte[10*1024*1024];  // 10 MB size
+    	        
+    	        while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
+    	        	System.arraycopy(buffer, 0, largeBuffer, realZize, buffer.length);    	        	
+    	        	realZize+=size;
+    	        }
+    	        
+    	        xmlContent = Arrays.copyOfRange(largeBuffer, 0, realZize);
+        	}else{
+        		int size = 0;
+    	        byte[] buffer = new byte[1*1024*1024];
+    	        int realZize = 0;
+    	        byte[] largeBuffer = new byte[5*1024*1024];  // 5 MB size
+    	        
+    	        while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
+    	        	System.arraycopy(buffer, 0, largeBuffer, realZize, buffer.length);    	        	
+    	        	realZize+=size;
+    	        }
+    	        byte[] content = Arrays.copyOfRange(largeBuffer, 0, realZize);
+    	
+    	        SdmItem sdmItem = new SdmItem();
+    	        sdmItem.setContentType("image/jpeg");
+    	        sdmItem.setRealType(SdmItem.TYPE_IMG);
+    	        sdmItem.setContent(content);
+    	        sdmItem.setContentText(entry.getName());
+    	        sdmItem.setContentTitle(entry.getName());
+    	        //paragraph order
+    	        String parOrd = entry.getName().substring(entry.getName().lastIndexOf("_")+1,entry.getName().indexOf("."));
+    	        sdmItem.setParagraphOrder(new Long(parOrd));
+    	        
+    	        //get parent help topic
+    	        String topicEditKey = entry.getName().substring(0,entry.getName().indexOf("_poIs")); 
+    	        Set<SdmItem> items =imgsHolder.get(topicEditKey);
+    	        if(items==null) {
+    	        	items=new HashSet<SdmItem>();
+    	        }
+    	        items.add(sdmItem);
+    	        imgsHolder.put(topicEditKey, items); 
+        	}
+        }       
+        
+        
+	    //xml import
+	    JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
+        Unmarshaller m = jc.createUnmarshaller();
+        help_in = (AmpHelpRoot) m.unmarshal(new ByteArrayInputStream(xmlContent));
+        //remove all existing help topics           
+        List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
+      
+        for (HelpTopic helpTopic : firstLevelTopics) {
+			removeLastLevelTopic(helpTopic);
+		}
+        
+        for (String  helpTopicEditKey : imgsHolder.keySet()) { //store which topic has reference for what Sdm doc
+        	Sdm helpAttachmentsHolder = new Sdm();
+        	helpAttachmentsHolder.setName(helpTopicEditKey);
+        	helpAttachmentsHolder.setItems(imgsHolder.get(helpTopicEditKey));
+        	helpAttachmentsHolder = org.digijava.module.sdm.util.DbUtil.saveOrUpdateDocument(helpAttachmentsHolder);
+
+        	topicAttachmentHolder.put(helpTopicEditKey, helpAttachmentsHolder.getId());
+		}
+        
+        if (help_in.getAmpHelp()!= null) {
+        	logger.info("Starting Help Import");
+        	Iterator it = help_in.getAmpHelp().iterator();
+        	while(it.hasNext()) {
+				AmpHelpType element  = (AmpHelpType) it.next();
+	            HelpUtil.updateNewEditHelpData(element,storeMap,Id,topicAttachmentHolder);
 			}
-            
-            if (help_in.getAmpHelp()!= null) {
-            	logger.info("Starting Help Import");
-				Iterator it = help_in.getAmpHelp().iterator();
-				while(it.hasNext())
-				{
-					AmpHelpType element  = (AmpHelpType) it.next();
-                    HelpUtil.updateNewEditHelpData(element,storeMap,Id);
-				}
-			}
-            logger.info("Finished Help Import");
-			helpForm.getTopicTree().clear();
-			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
-			return mapping.findForward("admin");
+		}
+	    logger.info("Finished Help Import");
+		helpForm.getTopicTree().clear();
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
+		return mapping.findForward("admin");
 	}
+	
+//	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+//		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
+//			HelpForm helpForm = (HelpForm) form;
+//			String siteId=RequestUtils.getSite(request).getSiteId();
+//            Long Id =RequestUtils.getSite(request).getId();
+//            String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+//			
+//		FormFile myFile = helpForm.getFileUploaded();
+//        byte[] fileData    = myFile.getFileData();
+//
+//
+//        InputStream inputStream= new ByteArrayInputStream(fileData);
+//        
+//
+//        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
+//        Unmarshaller m = jc.createUnmarshaller();
+//        AmpHelpRoot help_in;
+//        
+//            help_in = (AmpHelpRoot) m.unmarshal(inputStream);
+//            //remove all existing help topics           
+//            List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
+//            
+//            for (HelpTopic helpTopic : firstLevelTopics) {
+//				removeLastLevelTopic(helpTopic);
+//			}
+//            
+//            if (help_in.getAmpHelp()!= null) {
+//            	logger.info("Starting Help Import");
+//				Iterator it = help_in.getAmpHelp().iterator();
+//				while(it.hasNext())
+//				{
+//					AmpHelpType element  = (AmpHelpType) it.next();
+//                    HelpUtil.updateNewEditHelpData(element,storeMap,Id);
+//				}
+//			}
+//            logger.info("Finished Help Import");
+//			helpForm.getTopicTree().clear();
+//			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+//			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
+//			return mapping.findForward("admin");
+//	}
 	
 	/**
 	 * recurrent function. If topic is last level,then it is deleted.  If not,function calls itself until it finds last level child topic and

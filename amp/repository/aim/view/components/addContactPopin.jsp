@@ -22,7 +22,7 @@
 	<c:choose>
 		<c:when test="${aimAddContactForm.action=='search'||aimAddContactForm.action=='checkDuplicationContacts'}">
 		<digi:trn><div style="font-size:12px; margin-bottom:5px;">Please search a contact before adding a new one to avoid contact duplications in databse</div></digi:trn>
-			<table>
+			<table style="margin-bottom:10px;">
 				<tr>
 					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong><font
 						color="red">*</font></td>
@@ -43,8 +43,8 @@
 					</html:button></td>
 				</tr>
 			</table>
-			<c:if test="${aimAddContactForm.action=='search'}">
-			<c:if test="${not empty aimAddContactForm.contacts}">
+			<center><c:if test="${aimAddContactForm.action=='search'}">
+			<c:if test="${not empty aimAddContactForm.contacts}"></center>
 				<hr />
 				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
 				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:10px; margin-bottom:10px;" class="inside">

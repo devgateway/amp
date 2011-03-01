@@ -47,14 +47,14 @@
 			<c:if test="${not empty aimAddContactForm.contacts}">
 				<hr />
 				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
-				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:7px;" class="inside">
+				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:10px; margin-bottom:10px;" class="inside">
 				<tr>
 				<td class="inside_header">&nbsp;</td>
-				<td class="inside_header"><digi:trn>FirstName</digi:trn></td>
-				<td class="inside_header"><digi:trn>LastName</digi:trn></td>
-				<td class="inside_header"><digi:trn>Email</digi:trn></td>
-				<td class="inside_header"><digi:trn>Organization</digi:trn></td>
-				<td class="inside_header"><digi:trn>phone</digi:trn></td>
+				<td class="inside_header"><digi:trn><b>FirstName</b></digi:trn></td>
+				<td class="inside_header"><digi:trn><b>LastName</b></digi:trn></td>
+				<td class="inside_header"><digi:trn><b>Email</b></digi:trn></td>
+				<td class="inside_header"><digi:trn><b>Organization</b></digi:trn></td>
+				<td class="inside_header"><digi:trn><b>Phone</b></digi:trn></td>
 				</tr>
 					<c:forEach var="contact" items="${aimAddContactForm.contacts}">
 						<tr>
@@ -93,6 +93,7 @@
 						</tr>
 					</c:forEach>
 				</table>
+				<center>
 				<html:button styleClass="dr-menu" property="addButton"
 					onclick="addSelectedContacts()">
 					<digi:trn>Add</digi:trn>
@@ -107,7 +108,7 @@
 					onclick="myPanelContact.hide()">
 					<digi:trn>Cancel</digi:trn>
 				</html:button>
-				
+				</center>
 			</c:if>
 	
 		</c:when>

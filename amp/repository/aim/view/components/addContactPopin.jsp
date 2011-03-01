@@ -47,22 +47,22 @@
 			<c:if test="${not empty aimAddContactForm.contacts}">
 				<hr />
 				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
-				<table width="100%" cellPadding="3" cellspacing="0" border="1" style="margin-top:7px;">
+				<table width="100%" cellPadding="0" cellspacing="0" border="0" style="margin-top:7px;">
 				<tr>
-				<td>&nbsp;</td>
-				<td><digi:trn>FirstName</digi:trn></td>
-				<td><digi:trn>LastName</digi:trn></td>
-				<td><digi:trn>Email</digi:trn></td>
-				<td><digi:trn>Organization</digi:trn></td>
-				<td><digi:trn>phone</digi:trn></td>
+				<td class="inside_header">&nbsp;</td>
+				<td class="inside_header"><digi:trn>FirstName</digi:trn></td>
+				<td class="inside_header"><digi:trn>LastName</digi:trn></td>
+				<td class="inside_header"><digi:trn>Email</digi:trn></td>
+				<td class="inside_header"><digi:trn>Organization</digi:trn></td>
+				<td class="inside_header"><digi:trn>phone</digi:trn></td>
 				</tr>
 					<c:forEach var="contact" items="${aimAddContactForm.contacts}">
 						<tr>
-							<td>
+							<td class="inside">
 							<html:radio property="selContactIds" value="${contact.id}"></html:radio>
 							</td>
-							<td>${contact.name}</td>
-							<td>${contact.lastname}</td>
+							<td class="inside">${contact.name}</td>
+							<td class="inside">${contact.lastname}</td>
 							<td>
 							<ul>
 							<c:forEach var="email" items="${contact.properties}">
@@ -72,7 +72,7 @@
 							</c:forEach>
 							</ul>
 							</td>
-							<td>
+							<td class="inside">
 							<ul>
 							 <c:if
 								test="${not empty contact.organisationName}">:<li>${contact.organisationName}</li></c:if>
@@ -81,7 +81,7 @@
 							</c:forEach>
 							</ul>
 							</td>
-							<td>
+							<td class="inside">
 							<ul>
 							<c:forEach var="phone" items="${contact.properties}">
 									<c:if test="${phone.name=='contact phone'}">

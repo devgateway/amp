@@ -31,4 +31,6 @@ public class Constants {
     public static final String MOVE_DOWN = "down";
 
     public static final String TAG_BODY_CACHE = "org.digijava.module.editor.tag_bodies";
+    
+    public static final int IMG_MAX_SIZE=2*1024*1024; //max limit is 2Mb
 }

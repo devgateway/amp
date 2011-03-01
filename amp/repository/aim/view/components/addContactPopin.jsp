@@ -45,10 +45,11 @@
 			</table>
 			<c:if test="${aimAddContactForm.action=='search'}">
 			<c:if test="${not empty aimAddContactForm.contacts}">
-				<digi:trn>Contact with same First/Last Names</digi:trn>
+				<hr />
+				<digi:trn><center><b style="font-size:12px;">Contact with same First/Last Names</b></center></digi:trn>
 				<table width="100%" cellPadding="3" cellspacing="0" border="1">
 				<tr>
-				<td/>
+				<td>&nbsp;<td/>
 				<td><digi:trn>FirstName</digi:trn></td>
 				<td><digi:trn>LastName</digi:trn></td>
 				<td><digi:trn>Email</digi:trn></td>

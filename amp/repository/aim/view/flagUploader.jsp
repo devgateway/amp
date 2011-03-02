@@ -430,10 +430,12 @@ function deleteFlag(id) {
           </digi:form>
 
         </tr>
-
+<tr>
+<td><hr /></td>
+</tr>
         <tr>
 
-          <td>
+          <td align=center style="font-size:12px;">
 
             <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
 
@@ -445,7 +447,7 @@ function deleteFlag(id) {
 
         <tr>
 
-          <td>
+          <td align=center style="font-size:12px;">
 
             <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
 

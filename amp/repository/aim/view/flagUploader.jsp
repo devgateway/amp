@@ -302,7 +302,7 @@ function deleteFlag(id) {
 
                   <td align="center">
 
-                    <table width="100%" cellpadding="2" cellspacing="1">
+                    <table cellpadding="2" cellspacing="1" style="font-size:12px;">
 
                       <tr>
 

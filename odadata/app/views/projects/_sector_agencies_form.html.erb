@@ -120,6 +120,8 @@
             });
           </script>
         </li>
+        <li><%= f.select :public_sector, Project::PUBLIC_SECTOR_OPTIONS,
+				 :include_blank => t('.prompt'), :translate => true %></li>
 
         <li><%= f.select :private_support, Project::PRIVATE_SUPPORT_OPTIONS,
 				 :include_blank => t('.prompt'), :translate => true %></li>

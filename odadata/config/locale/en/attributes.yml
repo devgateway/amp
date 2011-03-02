@@ -148,6 +148,15 @@ en:
           label: Fonte de Recurso
           description: |
             The Fonte de Recurso field will be created automatically from the information entered in ODAmoz. This code will be only created for projects ON Budget.
+        public_sector:
+          label: Ambito de apoio
+          description: Apoio ao sector privado
+          options:
+            central_local: Central e Local
+            autarquia: Autarquía
+            empresa_publica: Empresa Publica
+            private_sector: Sector Privado
+            ngo: ONG
         private_support:
           label: Private Sector Support
           description: |

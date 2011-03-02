@@ -208,7 +208,7 @@ function deleteFlag(id) {
 
           <td height=16 vAlign=center width=571>
 
-            <span class=subtitle-blue style="font-size:12px; font-weight:bold;">
+            <span class=subtitle-blue style="font-size:12px; font-weight:bold">
 
               <digi:trn key="aim:flagUploaderSelector">
 
@@ -228,16 +228,11 @@ function deleteFlag(id) {
           <digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
             <td noWrap width=100% vAlign="top">
 
-              <table width=730 cellpadding=1 cellSpacing=1 border=0>
+              <table width=100% cellpadding=1 cellSpacing=1 border=0>
 
                 <tr><td noWrap vAlign="top">
 
-                  
-
-            </td>
-
-            <td noWrap vAlign="top">
-<table cellPadding=4 cellSpacing=1 width="200" valign="top">
+                  <table cellPadding=4 cellSpacing=1 width="200" valign="top">
 
                     <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 
@@ -284,6 +279,11 @@ function deleteFlag(id) {
                     </logic:iterate>
 
                   </table>
+
+            </td>
+
+            <td noWrap vAlign="top">
+
               <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 
                 <tr bgcolor="#aaaaaa">

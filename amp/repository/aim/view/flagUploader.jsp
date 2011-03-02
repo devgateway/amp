@@ -318,7 +318,7 @@ function deleteFlag(id) {
 
                         <td>
 
-                          <digi:trn key="aim:country">Country</digi:trn>
+                          <digi:trn key="aim:country"><b>Country</b></digi:trn>
 
                         </td>
 
@@ -350,7 +350,7 @@ function deleteFlag(id) {
 
                         <td>
 
-                          <digi:trn key="aim:flag">Flag</digi:trn>
+                          <digi:trn key="aim:flag"><b>Flag</b></digi:trn>
 
                         </td>
 
@@ -387,7 +387,7 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()">
+                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()" class="buttonx">
 
                               </td>
 
@@ -399,7 +399,7 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="reset" value="${trnClearBtn}" class="dr-menu">
+                                <input type="reset" value="${trnClearBtn}" class="dr-menu" class="buttonx">
 
                               </td>
 

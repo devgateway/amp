@@ -208,11 +208,11 @@ function deleteFlag(id) {
 
           <td height=16 vAlign=center width=571>
 
-            <span class=subtitle-blue>
+            <span class=subtitle-blue style="font-size:12px; font-weight:bold;">
 
               <digi:trn key="aim:flagUploaderSelector">
 
-              Flag uploader/selector
+             <center> Flag uploader/selector</center>
 			<hr />
 
               </digi:trn>

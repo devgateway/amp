@@ -25,12 +25,12 @@ es:
           label: 'Número do Projeto do Doador'
           description: 'Digite o número, ou uma combinação de letras e números utilizadas pela agência doadora para identificar a actividade.'
         government_counterparts:
-          label: Contraparte do Governo
+          label: 'Código da Instituçao Beneficiária dos Fundos (UGB)'
         oecd_number:
           label: 'Número OECD'
           description: 'Número Único do Projecto atribuído pela OCDE CAD no primeiro relato do projecto à OCDE. De 10 dígitos: YYYYxxxxxx'
         recipient_country_budget_nr:
-          label: 'Número do Projecto Moçambique'
+          label: 'Código do Projecto Moçambique'
           description: |
             O Código Orçametal Moçambicano será automaticamente criado a partir das informações introduzidas na ODAmoz. 
             Os Códigos serão criados apenas para projectos INSCRITOS no OE. 
@@ -91,7 +91,7 @@ es:
         planned_start_end:
           label: 'Início - Conclusão Planificado'
         date_of_signing:
-          label: Data da Assinatura do MoU/contracto
+          label: Data da Assinatura do MdE/contrato de financiamento
           description: |
              Data da assinatura do memorando ou do contracto.
         implementing_agencies:
@@ -145,7 +145,7 @@ es:
             on_treasury: 'Na CUT'
             off_treasury: 'Fora da CUT'
         on_off_budget:
-          label: 'No/Fora Orçamento de Estado'
+          label: 'Inscrito no OE/Fora do OE'
           description: |
             Inscrito no OE: Financiamento externo, incluindo financiamento de programas e projectos e a sua utilização prevista é relatada na documentação orçamental. 
             Na ODAmoz um projecto diz-se Inscrito no Orçamento caso tiver um Beneficiário Moçambicano (UGB). Neste caso será criado um Código Orçamental Moçambicano. 
@@ -154,7 +154,7 @@ es:
             on_budget: 'No Orçamento do Estado'
             off_budget: 'Fora Orçamento do Estado'
         government_project_code:
-          label: 'Fonte de Recursos'
+          label: 'Código da Fonte de Recursos (FR)'
           description: |
             O Fonte de Recursos será automaticamente criado a partir das informações introduzidas na ODAmoz. Os Códigos serão criados apenas para projectos INSCRITOS no OE.
         public_sector:
@@ -266,7 +266,7 @@ es:
             significant: Significant
             principal_objective: Principal Objective
         sector_relevances:
-          label: Sectores
+          label: Sector DAC
           description: |
             É possível a selecção de mais do que um sector. 
             Quando seleccionar mais do que um sector, por favor identifique a percentagem deste projecto que será canalizada para cada sector.
@@ -278,7 +278,7 @@ es:
             Caso não for seleccionado nenhuma província, o projecto será automaticamente introduzido como um projecto nacional.
           report_heading: 'Província'
         sectors:
-          label: Sectores
+          label: Sector DAC
         updated_at:
           label: 'Data da última actualização'
         total_commitments:

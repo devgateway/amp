@@ -122,6 +122,10 @@
         	<%= Project.human_attribute_name('private_support') %>
         </li>
         <li>
+        	<%= check_box_tag "report[fields][]", "public_sector" %>
+        	<%= Project.human_attribute_name('public_sector') %>
+        </li>
+        <li>
         	<%= check_box_tag "report[fields][]", "government_counterparts" %>
         	<%= Project.human_attribute_name('government_counterparts') %>
         </li>
@@ -308,7 +312,7 @@
             <% end %>
             
             <% if column == 3 %>
-              <li><%= check_box_tag "provinces[]", "national" %><strong><%= t('.national') %></strong></a>
+              <li><%= check_box_tag "provinces[]", "national" %><strong><%= t('.national') %></strong></li>
             <% end %>  
           </ul>
         <% end %>

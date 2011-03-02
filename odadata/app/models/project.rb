@@ -17,6 +17,7 @@ class Project < ActiveRecord::Base
   
   MARKER_OPTIONS            = [['not_relevant', 0], ['significant', 1], ['principal_objective', 2]]
   PRIVATE_SUPPORT_OPTIONS   = [['does_not_apply', 0], ['do_not_know', 1], ['direct_support', 2], ['indirect_support_private_sector', 3], ['indirect_support_public_sector', 4]]
+  PUBLIC_SECTOR_OPTIONS     = [['central_local', 1], ['autarquia', 2], ['empresa_publica', 3], ['private_sector', 4], ['ngo', 5]]
   AVAILABLE_MARKERS         = [['gender_policy', 'gender_policy'], ['environment_policy', 'environment_policy'], 
                               ['biodiversity', 'biodiversity'], ['climate_change', 'climate_change'], 
                               ['desertification', 'desertification']]

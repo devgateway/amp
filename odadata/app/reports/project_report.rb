@@ -98,7 +98,7 @@ module Reports
         r.map { |sr| "#{sr.sector.name_with_code} (#{number_to_percentage(sr.amount, :precision => 1)})" }.join('<br />')
       end
       format_column(:cofundings) do |r|
-        r.map { |sr| "#{sr.donor.name}: #{number_to_percentage(sr.amount, :precision => 1)}" }.join('<br />')
+        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join('<br />')
       end
       
       build :table_header do

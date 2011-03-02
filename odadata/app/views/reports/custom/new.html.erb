@@ -240,6 +240,10 @@
           	<%= check_box_tag "report[fields][]", "undisbursed", true %>
           	<%= Project.human_attribute_name('undisbursed') %>
           </li>
+<li>
+	<%= check_box_tag "report[fields][]", "cofundings" %>
+	<%= Project.human_attribute_name('cofundings') %>
+</li>
        </ul>
      </td>
     </tr>

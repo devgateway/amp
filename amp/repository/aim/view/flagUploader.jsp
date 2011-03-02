@@ -195,8 +195,7 @@ function deleteFlag(id) {
 
             <digi:trn key="aim:flagUploader">
 
-            <center><b>Flag uploader</b></center>
-			<hr />
+            Flag uploader
             </digi:trn>
 
           </td>
@@ -214,6 +213,7 @@ function deleteFlag(id) {
               <digi:trn key="aim:flagUploaderSelector">
 
               Flag uploader/selector
+			<hr />
 
               </digi:trn>
 

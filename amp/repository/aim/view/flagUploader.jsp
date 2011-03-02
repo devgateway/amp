@@ -232,7 +232,7 @@ function deleteFlag(id) {
 
                 <tr><td noWrap vAlign="top" width=200>
 
-                  <table cellPadding=4 cellSpacing=1 width="200" valign="top" style="border:1px solid #CCCCCC; height:115px;">
+                  <table cellPadding=4 cellSpacing=1 width="200" valign="top" style="border:1px solid #CCCCCC; height:128px;">
 
                     <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 

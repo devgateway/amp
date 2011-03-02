@@ -59,6 +59,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 */
 		 getSecuritySettings().setAuthorizationStrategy(new MetaDataRoleAuthorizationStrategy(this));
 		 MetaDataRoleAuthorizationStrategy.authorize(OnePager.class, "ROLE_AUTHENTICATED");
+		 MetaDataRoleAuthorizationStrategy.authorize(PermissionManager.class, "ROLE_AUTHENTICATED");
 		 
 		 getPageSettings().addComponentResolver(new AmpComponentResolver());
 		 mountBookmarkablePage("onepager", OnePager.class);

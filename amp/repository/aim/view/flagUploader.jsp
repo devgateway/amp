@@ -230,9 +230,9 @@ function deleteFlag(id) {
 
               <table width=100% cellpadding=1 cellSpacing=1 border=0>
 
-                <tr><td noWrap vAlign="top">
+                <tr><td noWrap vAlign="top" width=200>
 
-                  <table cellPadding=4 cellSpacing=1 width="200" valign="top">
+                  <table cellPadding=4 cellSpacing=1 width="200" valign="top" style="border:1px solid #CCCCCC; height:115px;">
 
                     <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 
@@ -281,7 +281,7 @@ function deleteFlag(id) {
                   </table>
 
             </td>
-
+<td width=20>&nbsp;</td>
             <td noWrap vAlign="top">
 
               <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>

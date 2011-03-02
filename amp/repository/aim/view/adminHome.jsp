@@ -77,21 +77,36 @@
                             </td>
                           </tr>
                           </module:display>
-                          <tr>
                           <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"> 
+                          <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="gatePermLink">
                                 <digi:trn key="aim:gatePermLinkTitle">Click here to manage gate permissions and assignments</digi:trn>
                               </c:set>
-                              <html:link href="/gateperm/managePermMap.do" title="${gatePermLinkTitle}">
-                                <digi:trn key="aim:globalPermissionManager">
-                                	Global Permission Manager
+                              <html:link href="/gateperm/managePermMap.do" title="${gatePermLink}">
+                                <digi:trn key="aim:advancedPermissionManager">
+                                	Advanced Permission Manager
                                 </digi:trn>
                               </html:link>
                             </td>
-                           </module:display>
                           </tr>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="permManagerLink">
+                                <digi:trn key="aim:permManagerLinkTitle">Click here to manage permissions</digi:trn>
+                              </c:set>
+                              <html:link href="/wicket/permmanager/" title="${permManagerLink}">
+                                <digi:trn key="aim:permissionManager">
+                                	Permission Manager
+                                </digi:trn>
+                              </html:link>
+                            </td>
+                          </tr>
+                          
+                           </module:display>
+                           
                           
                           <module:display name="Global Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>

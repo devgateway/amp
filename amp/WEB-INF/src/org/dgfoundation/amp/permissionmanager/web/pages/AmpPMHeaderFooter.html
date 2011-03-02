@@ -15,8 +15,12 @@
 <!-- HEADER START -->
 <div class="header">
 <div class="centering">
-<div class="top_nav"><a href="#">AMP USER</a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">HELP <a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0/></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">English <a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0 /></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep"><a href="#">LOGOUT</a></div>
-<div class="logo"><img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left><div class="amp_label"> &nbsp;AMP 1.14</div></div>
+<div class="top_nav">
+	<a href="#">AMP Admin</a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">HELP 
+	<a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0/></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">English 
+	<a href="#"><img src="/TEMPLATE/ampTemplate/img_2/arr_dwn.gif" border=0 /></a><img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">
+	<a href="/aim/j_acegi_logout">LOGOUT</a></div>
+<div class="logo"><img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left><div class="amp_label"> &nbsp;Aid Management Platform 2.0</div></div>
 </div>
 </div>
 <!-- HEADER END -->
@@ -24,9 +28,17 @@
 
 <!-- MAIN MENUSTART -->
 <div class="main_menu">
-<div class="centering">
-<div class="menu_item"><div class="menu_item_cont"><a href="#">HOME</a></div></div><div class="menu_item"><div class="menu_item_cont"><a href=3>Administrative</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href="#">data fields</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href="#">program monitoring</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item"><div class="menu_item_cont"><a href="#">projects/activities</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div></div><div class="menu_item_sel"><div class="menu_item_cont_sel">permissions</div></div>
-</div>
+	<div class="centering">
+		<div class="menu_item">
+			<div class="menu_item_cont"><a href="/admin.do">Admin Tools</a></div>
+		</div>
+		<div class="menu_item">
+			<div class="menu_item_cont"><a href=#">TOOLS</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div>
+		</div>
+		<div class="menu_item">
+			<div class="menu_item_cont"><a href="#">HELP</a><a href="#"><img src="/TEMPLATE/ampTemplate/img_2/menu_arr_dwn.gif" class="menu_arr" border=0 /></a></div>
+		</div>
+	</div>
 </div>
 <!-- MAIN MENU END -->
 
@@ -44,8 +56,22 @@
 <wicket:child/>
 <!-- MAIN CONTENT PART END -->
 
-<!-- FOOTER START -->
+<!-- FOOTER START 
 <div class="footer"><center><img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP 1.13.42 build 08.Feb.2010 - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</center></div>
+-->
+	<div class="footer">
+		<center>
+			<img src="/TEMPLATE/ampTemplate/img_2/logo_footer.gif" /> AMP <b>2.0</b> build <b>ALPHA</b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
+			
+				
+            		<a href='/admin/'>Admin</a>
+            		<a href='/admin/switchDevelopmentMode.do'>User/Dev Mode</a>
+
+       			
+			
+		</center>
+	 </div>
+
 <!-- FOOTER END  -->
 
 </body>

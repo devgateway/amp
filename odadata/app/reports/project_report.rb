@@ -147,7 +147,7 @@ module Reports
         r.map { |sr| "#{sr.sector.name_with_code} (#{number_to_percentage(sr.amount, :precision => 1)}%)" }.join(', ')
       end
       format_column(:cofundings) do |r|
-        r.map { |sr| "#{sr.donor.name}: #{number_to_percentage(sr.amount, :precision => 1)}" }.join("\n")
+        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join("\n")
       end
       format_column(:geo_relevances) do |r| 
         if r.empty?

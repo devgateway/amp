@@ -163,7 +163,7 @@ function deleteFlag(id) {
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center border=1>
 
   <tr>
 

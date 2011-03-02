@@ -288,11 +288,11 @@ function deleteFlag(id) {
 
                 <tr bgcolor="#aaaaaa">
 
-                  <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+                  <td vAlign="center" width="100%" align="center" class="textalb" height="20" bgcolor="#c7d4db">
 
                     <digi:trn key="aim:uploadFlag">
 
-                      Upload Flag</digi:trn>
+                      <b style="font-size:12px;">Upload Flag</b></digi:trn>
 
                   </td>
 
@@ -302,7 +302,7 @@ function deleteFlag(id) {
 
                   <td align="center">
 
-                    <table cellpadding="2" cellspacing="1" style="font-size:12px;">
+                    <table cellpadding="3" cellspacing="3" style="font-size:12px;">
 
                       <tr>
 
@@ -387,7 +387,7 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()" class="buttonx">
+                                <input type="submit" value="${trnUploadBtn}" onclick="return upload()" class="buttonx">
 
                               </td>
 
@@ -399,7 +399,7 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="reset" value="${trnClearBtn}" class="dr-menu" class="buttonx">
+                                <input type="reset" value="${trnClearBtn}" class="buttonx">
 
                               </td>
 

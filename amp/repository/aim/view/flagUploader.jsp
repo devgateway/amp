@@ -163,7 +163,7 @@ function deleteFlag(id) {
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center border=1>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center border=0>
 
   <tr>
 
@@ -175,7 +175,7 @@ function deleteFlag(id) {
 
           <!-- Start Navigation -->
 
-          <td height=33 bgcoolor=#F2F2F2><span class=crumb>
+          <td height=33 bgcolor=#F2F2F2><span class=crumb>
 
             <c:set var="trnViewAdmin">
 
@@ -195,8 +195,8 @@ function deleteFlag(id) {
 
             <digi:trn key="aim:flagUploader">
 
-            Flag uploader
-
+            <center><b>Flag uploader</b></center>
+			<hr />
             </digi:trn>
 
           </td>

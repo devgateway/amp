@@ -52,7 +52,7 @@ function submitForm(mode) {
 			</tr>
 				<tr>
 					<td align="right" class="inside"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
-					<td class="inside"><html:select property="permissibleCategory"
+					<td class="inside"><html:select styleClass="inputx" property="permissibleCategory"
 						onchange="submitForm('permissibleCategoryPicked')">
 						<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
 						<html:optionsCollection property="_availablePermissibleCategories"
@@ -65,11 +65,11 @@ function submitForm(mode) {
 					<tr>
 						<td align="right" class="inside">Assign a global permission to the
 						entire class:</td>
-						<td class="inside"><html:select property="permissionId">
+						<td class="inside"><html:select property="permissionId" styleClass="inputx">
 							<html:option value="0">--None--</html:option>
 							<html:optionsCollection property="_availablePermissions"
 								value="id" label="name" />
-						</html:select> <html:button property="saveGlobal"
+						</html:select> <html:button styleClass="buttonx" property="saveGlobal"
 							onclick="submitForm('saveGlobal')">Assign Global</html:button> <digi:link
 							href="/managePerm.do?list" title="EDIT PERMISSIONS">
 							<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions</digi:link></td>

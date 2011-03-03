@@ -39,7 +39,12 @@ function submitForm(mode) {
 				</tr>
 			</table>
 			<hr />
-			<h2><digi:trn key="aim:globalperms"></digi:trn></h2>
+			
+			
+			
+			<table border=1>
+			<tr>
+			<td><h2><digi:trn key="aim:globalperms"></digi:trn></h2>
 			
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
@@ -50,7 +55,9 @@ function submitForm(mode) {
 		
 			<p/>
 			<hr/>
-			<h3><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h3>
+</td>
+			<td>
+						<h3><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h3>
 			<table>
 				<tr>
 					<td align="right"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
@@ -82,3 +89,12 @@ function submitForm(mode) {
 						
 	</table>
 </digi:form>
+
+			
+			</td>
+			</tr>
+			</table>
+			
+			
+			
+			

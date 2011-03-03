@@ -51,10 +51,10 @@
 				</tr>
 			</table>
 			<hr />
-			<h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2>
+			<center><h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2>
 			<input type=button value="Check All" onClick="this.value=check()"/ class="buttonx">
-			<html:submit property="exportPerform" styleClass="buttonx">Export</html:submit>			
-			<p/>
+			<html:submit property="exportPerform" styleClass="buttonx">Export</html:submit></center>			
+			<hr />
 			<table width="100%" align="center" class="inside">
 				<thead>
 					<tr>

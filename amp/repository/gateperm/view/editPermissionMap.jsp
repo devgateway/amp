@@ -45,11 +45,14 @@ function submitForm(mode) {
 			<table border=0 style="font-size:12px;" cellpadding="0" cellspacing="0">
 			<tr>
 						<td valign=top>
-						<div><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></div>
-			<table>
+			<table class="inside">
+			<tr>
+			<td colspan="2" class="inside_header">						<div><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></div>
+</td>
+			</tr>
 				<tr>
-					<td align="right"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
-					<td><html:select property="permissibleCategory"
+					<td align="right" class="inside"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
+					<td class="inside"><html:select property="permissibleCategory"
 						onchange="submitForm('permissibleCategoryPicked')">
 						<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
 						<html:optionsCollection property="_availablePermissibleCategories"
@@ -60,9 +63,9 @@ function submitForm(mode) {
 					property="permissibleCategory">
 					
 					<tr>
-						<td align="right"><b>Assign a global permission to the
+						<td align="right" class="inside"><b>Assign a global permission to the
 						entire class:</b></td>
-						<td><html:select property="permissionId">
+						<td class="inside"><html:select property="permissionId">
 							<html:option value="0">--None--</html:option>
 							<html:optionsCollection property="_availablePermissions"
 								value="id" label="name" />

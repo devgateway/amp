@@ -58,10 +58,10 @@
 			<table width="100%" align="center" class="inside">
 				<thead>
 					<tr>
-						<td bgcolor="#006699" align="center" class="inside_header">Select</td>
-						<td bgcolor="#006699" align="center" class="inside_header">Name</td>
-						<td bgcolor="#006699" align="center" class="inside_header">Description</td>
-						<td bgcolor="#006699" align="center" class="inside_header">Details</td>
+						<td bgcolor="#006699" align="center" class="inside_header"><b>Select</b></td>
+						<td bgcolor="#006699" align="center" class="inside_header"><b>Name</b></td>
+						<td bgcolor="#006699" align="center" class="inside_header"><b>Description</b></td>
+						<td bgcolor="#006699" align="center" class="inside_header"><b>Details</b></td>
 					</tr>
 				</thead>
 				<logic:iterate id="perm" name="allPermissions" scope="request">

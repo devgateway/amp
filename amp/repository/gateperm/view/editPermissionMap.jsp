@@ -42,10 +42,10 @@ function submitForm(mode) {
 			
 			
 			
-			<table border=0 style="font-size:12px;" cellpadding="0" cellspacing="0">
+			<table border=0 style="font-size:12px;" cellpadding="0" cellspacing="0" width=1000>
 			<tr>
 						<td valign=top>
-			<table class="inside">
+			<table class="inside" width=100%>
 			<tr>
 			<td colspan="2" class="inside_header" align=center><div><b><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></div>
 </td>
@@ -81,13 +81,13 @@ function submitForm(mode) {
 			
 			</td>
 
-			<td valign=top width=150><div><b><digi:trn key="aim:globalperms"></digi:trn></b></div>
+			<td valign=top width=200><div><b><digi:trn key="aim:globalperms"></digi:trn></b></div>
 			<hr />
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
-			<input type="button" name="export" class="inputx" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
+			<input type="button" name="export" class="buttonx" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
 			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
-			type="button" name="import" class="inputx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
+			type="button" name="import" class="buttonx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
 			onclick="javascript:window.location.href='<%=importperm%>'" />
 		
 			<p/>

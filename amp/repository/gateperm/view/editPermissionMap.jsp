@@ -77,7 +77,7 @@ function submitForm(mode) {
 						
 	</table>
 </digi:form>
-
+<td width=15>&nbsp;</td>
 			
 			</td>
 

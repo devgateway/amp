@@ -63,6 +63,20 @@ public class DashboardFilter {
 
     private Long activityId;
     
+    public DashboardFilter getCopyFilterForFunding(){
+    	DashboardFilter newFilter = new DashboardFilter();
+    	
+    	newFilter.setCurrencyId(this.getCurrencyId());
+    	newFilter.setOrgIds(this.getOrgIds());
+    	newFilter.setOrganizationGroupId(this.getOrganizationGroupId());
+    	newFilter.setTeamMember(this.getTeamMember());
+    	newFilter.setSelLocationIds(this.getSelLocationIds());
+    	newFilter.setSelSectorIds(this.getSelSectorIds());
+    	newFilter.setActivityId(this.getActivityId());
+    	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
+    	newFilter.setFromPublicView(this.getFromPublicView());
+    	return newFilter;
+    }
 
     public Boolean getExpendituresVisible() {
         return expendituresVisible;

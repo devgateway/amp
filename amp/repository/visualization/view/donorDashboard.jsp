@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css_2/visualization.css" type="text/css" />
 <link rel="stylesheet" type="text/css" href="js_2/yui/tabview/assets/skins/sam/tabview.css">
 <digi:ref href="css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
+
 <style>
 	.flashcontent {
 		border: solid 1px #000;
@@ -25,6 +26,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
 
 <script language="javascript">
@@ -85,6 +88,44 @@ yuiLoadingPanel.prototype = {
         this.loadingPanel.hide();
     }
 };
+
+YAHOO.namespace("YAHOO.amp");
+
+var myPanel = new YAHOO.widget.Panel("newmySectors", {
+	width:"750px",
+	fixedcenter: true,
+    constraintoviewport: false,
+    underlay:"none",
+    close:true,
+    visible:false,
+    modal:true,
+    draggable:true,
+    context: ["showbtn", "tl", "bl"]
+    });
+var panelStart=0;
+
+function initPanel() {
+	
+    var msg='\n<digi:trn>Advanced Filters</digi:trn>';
+	myPanel.setHeader(msg);
+	myPanel.setBody("");
+	myPanel.beforeHideEvent.subscribe(function() {
+		panelStart=1;
+	}); 
+	
+	myPanel.render(document.body);
+}
+
+function showPopin() {
+	var element = document.getElementById("dialog2");
+	element.style.display 	= "inline";
+	myPanel.setBody(element);
+	myPanel.show();
+}
+function hidePopin() {
+	myPanel.hide();
+}
+
 -->
 </script>
 
@@ -95,9 +136,163 @@ yuiLoadingPanel.prototype = {
 </div>
 <br/>
 <!-- BREADCRUMB END -->
+
+<!-- POPUPS START -->
+<div id="dialog2" class="dialog" title="Advanced Filters">
+<div id="popinContent" class="content">
+	<div id="selectDiv" class="yui-navset">
+		<table class="inside" width=100% height=400 cellpadding="0" cellspacing="0">
+			<tr>
+				<td width=40% height=25 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">Grouping Selector</b></td>
+				<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside align=center><b class="ins_header">Grouping Details</b></td>
+			</tr>
+			<tr>
+			    <td class=inside style="background-color:#F9F9F9;" valign=top>
+			    <ul class="yui-nav" style="width: 70%; position: static;">
+					<div class="selector_type_sel"><div class="selector_type_cont">General</div></div>
+					<div class="selector_type"><div class="selector_type_cont"><a href="#divOrganizationsFilter">Organizations</a></div></div>
+					<div class="selector_type"><div class="selector_type_cont"><a href="#divRegionsFilter">Regions</a></div></div>
+					<div class="selector_type"><div class="selector_type_cont"><a href="#divSectorsFilter">Sectors</a></div></div>
+				</ul>
+				</td>
+				<td class=inside valign=top style="background-color:#F9F9F9;">
+					<div id="divGeneralFilter">
+						<div class="selector_content_org_prof" style="line-height:25px;">
+						
+						<input name="" type="checkbox" value="" /> <b>Show Data From All Workspaces</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;<input name="" type="checkbox" value="" /> <b>Show Decimals</b>
+						<hr />
+						<b>For Time Series Comparison, what data do you want to show?</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						<input name="" type="checkbox" value="" />Commitements &nbsp;&nbsp;<input name="" type="checkbox" value="" />Distributements&nbsp;&nbsp;<input name="" type="checkbox" value="" />Expenditures&nbsp;&nbsp;<input name="" type="checkbox" value="" />Pledges<br />
+						<b>What data should the dashboard show? </b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+						<input name="" type="radio" value="" />Commitements&nbsp;&nbsp;<input name="" type="radio" value="" />Distributements&nbsp;&nbsp;<input name="" type="radio" value="" />Expenditures&nbsp;&nbsp;<input name="" type="radio" value="" />Pledges
+						<hr />
+							<table border="0" cellspacing="0" cellpadding="0">
+								<tr>
+								  	<td><b>Currency Type:</b></td>
+								  	<td>	
+									  	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
+									 		<option value="Na">US Dollar</option>
+										</select>
+									</td>
+								   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
+								</tr>
+							    <tr>
+								    <td><b>Fiscal Calendar:</b></td>
+								    <td>
+								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
+							  				<option value="Na">Gregorian Calendar</option>
+										</select>
+									</td>
+							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
+							 	</tr>
+							    <tr>
+							    	<td><b>Fiscal Year Start:</b></td>
+							    	<td>
+							    		<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
+							  				<option value="Na">Gregorian Calendar</option>
+										</select>
+									</td>
+							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
+							  	</tr>
+				      			<tr>
+								    <td><b>Time Scale:</b></td>
+								    <td>
+								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
+								 			<option value="Na">Gregorian Calendar</option>
+										</select>
+									</td>
+								    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<!-- 
+					<div id="divOrganizationsFilter">
+						<div class="selector_content_org_prof" style="line-height:25px;">
+						<b>Organization Group:</b><br />
+							<select name="select" class=dropdwn_sm style="width:200px;">
+		  						<option value="Na">China</option>
+							</select> 
+							<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
+							<hr />
+						<b>Organization:</b><br />
+							<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;">
+		  						<option value="Na">Organization 1</option>
+		  						<option value="Na">Organization 2</option>
+		   						<option value="Na">Organization 3</option>
+							</select>		
+						</div>
+					</div>
+					<div id="divRegionsFilter">
+					    <td class=inside valign=top style="background-color:#F9F9F9;">
+							<div class="selector_content_org_prof" style="line-height:25px;">
+								<b>Region:</b> <img src="images/ico_quest.gif" /><br />
+									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+					  					<option value="Na">Region 1</option>
+					  					<option value="Na">Region  2</option>
+					   					<option value="Na">Region 3</option>
+									</select>		
+								<hr />
+								<b>Zone:</b><br />
+									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+						  				<option value="Na">Zone 1</option>
+						  				<option value="Na">Zone 2</option>
+						   				<option value="Na">Zone 3</option>
+									</select>		
+								<hr />
+								<b>District:</b><br />
+									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+										  <option value="Na">District 1</option>
+										  <option value="Na">District 2</option>
+										  <option value="Na">District 3</option>
+									</select>
+							</div>
+						</td>
+					</div>
+					<div id="divSectorsFilter">
+						<td class=inside valign=top style="background-color:#F9F9F9;">
+							<div class="selector_content_org_prof" style="line-height:25px;">
+								<b>Sector:</b> <img src="images/ico_quest.gif" /><br />
+									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+									  	<option value="Na">Sector 1</option>
+									  	<option value="Na">Sector  2</option>
+									  	<option value="Na">Sector 3</option>
+									</select>		
+								<hr />
+								<b>Sub-Sectors:</b><br />
+									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+					  					<option value="Na">Sub Sector 1</option>
+					  					<option value="Na">Sub Sector 2</option>
+					   					<option value="Na">Sub Sector 3</option>
+									</select>		
+								<hr />
+								<b>Sub-Sub-Sectors:</b><br />
+								<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
+					  				<option value="Na">Sub sub Sector 1</option>
+					  				<option value="Na">Sub sub Sector 2</option>
+					   				<option value="Na">Sub sub Sector 3</option>
+								</select>
+							</div>
+						</td>
+					</div>
+					 -->
+				</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+<center><input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;"><input type="button" value="Reset to defaults" class="buttonx" style="margin-top:10px;"></center>
+
+</div>
+
+
+<!-- POPUPS END -->
+
 <!-- MAIN CONTENT PART START -->
-<div class="dashboard_header">
 <digi:form action="/filters.do">
+<html:hidden property="filter.year" styleId="currentYear"/>
+<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
+<div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -193,10 +388,13 @@ yuiLoadingPanel.prototype = {
 
 	<center>
 	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
+	<hr />
+<!--	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>-->
 	</center>
 	</fieldset>
-	<fieldset>
-<!-- 	
+	
+	
+<!--<fieldset>
 	<legend><span class=legend_label>Dashboard Info</span></legend>
 	<div class="field_text">This is a <b>Sector</b> dashboard which presents 
 statistics and aggregates related to the Sector 
@@ -677,6 +875,7 @@ YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("sector_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.onDOMReady(initDashboard);
+window.onload=initPanel;
 
 function initDashboard(){
 	//Initialize First Chart
@@ -700,7 +899,12 @@ function changeChart(e, chartType, container){
 	    }
 	    caller.className = "sel_sm_b";
 	}
-    var flashvars = {};
+	var currentYear = document.getElementById("currentYear").value;
+	var yearsInRange = document.getElementById("yearsInRange").value;
+	var minSlider =  "" + (currentYear - yearsInRange + 1);
+	var maxSlider =  "" + currentYear;
+	var flashvars = { minSlider: minSlider, maxSlider: maxSlider};
+	//var flashvars = {};
 	var params = {};
 	var attributes = {};
 	attributes.id = container;
@@ -720,6 +924,8 @@ function changeChart(e, chartType, container){
 	}
 	return false;
 }
+//var mySelec = new YAHOO.widget.TabView("selectDiv");
+//mySelec.selectTab(0);
 
 var myTabs = new YAHOO.widget.TabView("demo");
 myTabs.selectTab(0);

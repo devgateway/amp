@@ -54,11 +54,12 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpOrganisation> iterator = donorList.iterator(); iterator.hasNext();) {
 			AmpOrganisation ampOrg = (AmpOrganisation) iterator.next();
-			Long[] oldIds = filter.getOrgIds();
+			//Long[] oldIds = filter.getOrgIds();
 			Long[] ids = {ampOrg.getAmpOrgId()};
-            filter.setOrgIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-            filter.setOrgIds(oldIds);
+            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setOrgIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+            //filter.setOrgIds(oldIds);
             BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
 	        map.put(ampOrg, total);
 		}
@@ -76,10 +77,11 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpActivity> iterator = actList.iterator(); iterator.hasNext();) {
 			AmpActivity ampActivity = (AmpActivity) iterator.next();
-			Long oldActivityId = filter.getActivityId();
-            filter.setActivityId(ampActivity.getAmpActivityId());
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-            filter.setActivityId(oldActivityId);
+			//Long oldActivityId = filter.getActivityId();
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setActivityId(ampActivity.getAmpActivityId());
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+            //filter.setActivityId(oldActivityId);
             BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
 	        map.put(ampActivity, total);
 		}
@@ -97,11 +99,12 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpCategoryValueLocations> iterator = regionsList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
-			Long[] oldIds = filter.getSelLocationIds();
+			//Long[] oldIds = filter.getSelLocationIds();
 			Long[] ids = {location.getId()};
-            filter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-            filter.setSelLocationIds(oldIds);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelLocationIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+            //filter.setSelLocationIds(oldIds);
             BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
 	        map.put(location, total);
 		}
@@ -119,11 +122,12 @@ public class DashboardUtil {
         }
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
-			Long[] oldIds = filter.getSectorIds();
+			//Long[] oldIds = filter.getSectorIds();
 			Long[] ids = {sector.getAmpSectorId()};
-            filter.setSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-            filter.setSectorIds(oldIds);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelSectorIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+            //filter.setSectorIds(oldIds);
 	        BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
 	        map.put(sector, total);
 		}

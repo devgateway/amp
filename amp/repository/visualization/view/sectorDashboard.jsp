@@ -96,8 +96,10 @@ yuiLoadingPanel.prototype = {
 <br/>
 <!-- BREADCRUMB END -->
 <!-- MAIN CONTENT PART START -->
-<div class="dashboard_header">
 <digi:form action="/filters.do">
+<html:hidden property="filter.year" styleId="currentYear"/>
+<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
+<div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -693,7 +695,12 @@ function changeChart(e, chartType, container){
 	    }
 	    caller.className = "sel_sm_b";
 	}
-    var flashvars = {};
+	var currentYear = document.getElementById("currentYear").value;
+	var yearsInRange = document.getElementById("yearsInRange").value;
+	var minSlider =  "" + (currentYear - yearsInRange + 1);
+	var maxSlider =  "" + currentYear;
+	var flashvars = { minSlider: minSlider, maxSlider: maxSlider};
+	//var flashvars = {};
 	var params = {};
 	var attributes = {};
 	attributes.id = container;

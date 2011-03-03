@@ -284,7 +284,7 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
-		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
@@ -293,7 +293,13 @@ public class DataDispatcher extends DispatchAction {
             divideByMillionDenominator = new BigDecimal(1000);
         }
         BigDecimal sectorTotal = BigDecimal.ZERO;
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+        String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} else {
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+		}
         int transactionType = filter.getTransactionType();
         
         java.util.Hashtable<String,BigDecimal> dataSet = new java.util.Hashtable<String,BigDecimal> ();
@@ -309,56 +315,29 @@ public class DataDispatcher extends DispatchAction {
             List<AmpSector> sectors = DbUtil.getSectors(filter);
             Iterator<AmpSector> sectorIter = sectors.iterator();
             Long fiscalCalendarId = filter.getFiscalCalendarId();
-            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-
+            Date startDate = null;
+            Date endDate = null;
+            if (selectedYear!=null) {
+            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+			} else {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+            
             while (sectorIter.hasNext()) {
                 //calculating funding for each region
                 AmpSector sector = sectorIter.next();
-                Long[] oldIds = filter.getSelSectorIds();
     			Long[] ids = {sector.getAmpSectorId()};
-                filter.setSelSectorIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, transactionType, 0);
-                filter.setSelSectorIds(oldIds);
+    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelSectorIds(ids);
+                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
                 
                 BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
                 String keyName = sector.getName();
-                /*
-                BigDecimal oldvalue = BigDecimal.ZERO;
-                String keyName = "";
-                String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
-                if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                    keyName = nationalTitle;
-                } else {
-                    Long zoneIds[] = filter.getSelZoneIds();
-                    if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-                        implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
-                        if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                            keyName = regionalTitle;
-                        } else {
-                            AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                            keyName = parent.getName();
-                        }
-                    } else {
-                        AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                        keyName = parent.getName();
-                    }
-
-
-                }
-                try {
-                    oldvalue = (BigDecimal) dataSet.get(keyName);
-                } catch (UnknownKeyException ex) {
-                    oldvalue = BigDecimal.ZERO;
-                }
-                if (oldvalue != null) {
-                    BigDecimal newValue = oldvalue.add(amount);
-                    dataSet.put(keyName, newValue);
-                } else {
-                	dataSet.put(keyName, amount);
-                }*/
+               
                 sectorTotal = sectorTotal.add(fundingCal.getValue());
                 dataSet.put(keyName, amount);
             }
@@ -384,28 +363,7 @@ public class DataDispatcher extends DispatchAction {
             if (!othersValue.equals(BigDecimal.ZERO)) {
                 dataSet.put(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
             }
-            /*
-            Long[] locationIds = filter.getSelLocationIds();
-            boolean unallocatedCondition = locationIds == null || locationIds.length==0;
-            if (unallocatedCondition) {
-                List<AmpFundingDetail> unallocatedFundings = DbUtil.getUnallocatedFunding(filter);
-                FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(unallocatedFundings, currCode);
-                DecimalWraper total = null;
-
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement *
-
-                if (transactionType == Constants.COMMITMENT) {
-                    total = cal.getTotActualComm();
-                } else {
-                    total = cal.getTotActualDisb();
-                }
-                if (total != null && total.doubleValue() != 0) {
-                    dataSet.put(unallocatedTitle, BigDecimal.valueOf(total.doubleValue() / divideByMillionDenominator.doubleValue()));
-                }
-            }*/
+           
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);
@@ -472,7 +430,7 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
-		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
 		String othersTitle = "Other";
@@ -480,8 +438,15 @@ public class DataDispatcher extends DispatchAction {
 		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-        BigDecimal donorTotal = BigDecimal.ZERO;
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		BigDecimal donorTotal = BigDecimal.ZERO;
+		String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} else {
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+		}
+        
         int transactionType = filter.getTransactionType();
         
         java.util.Hashtable<String,BigDecimal> dataSet = new java.util.Hashtable<String,BigDecimal> ();
@@ -497,56 +462,28 @@ public class DataDispatcher extends DispatchAction {
             List<AmpOrganisation> donors = DbUtil.getDonors(filter);
             Iterator<AmpOrganisation> donorIter = donors.iterator();
             Long fiscalCalendarId = filter.getFiscalCalendarId();
-            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-
+            Date startDate = null;
+            Date endDate = null;
+            if (selectedYear!=null) {
+            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+			} else {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+            
             while (donorIter.hasNext()) {
                 //calculating funding for each region
                 AmpOrganisation donor = donorIter.next();
-                Long[] oldIds = filter.getOrgIds();
     			Long[] ids = {donor.getAmpOrgId()};
-                filter.setOrgIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, transactionType, 0);
-                filter.setOrgIds(oldIds);
+    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setOrgIds(ids);
+                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
                 
                 BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
                 String keyName = donor.getName();
-                /*
-                BigDecimal oldvalue = BigDecimal.ZERO;
-                String keyName = "";
-                String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
-                if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                    keyName = nationalTitle;
-                } else {
-                    Long zoneIds[] = filter.getSelZoneIds();
-                    if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-                        implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
-                        if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-                            keyName = regionalTitle;
-                        } else {
-                            AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                            keyName = parent.getName();
-                        }
-                    } else {
-                        AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-                        keyName = parent.getName();
-                    }
-
-
-                }
-                try {
-                    oldvalue = (BigDecimal) dataSet.get(keyName);
-                } catch (UnknownKeyException ex) {
-                    oldvalue = BigDecimal.ZERO;
-                }
-                if (oldvalue != null) {
-                    BigDecimal newValue = oldvalue.add(amount);
-                    dataSet.put(keyName, newValue);
-                } else {
-                	dataSet.put(keyName, amount);
-                }*/
                 donorTotal = donorTotal.add(fundingCal.getValue());
                 dataSet.put(keyName, amount);
             }
@@ -572,28 +509,7 @@ public class DataDispatcher extends DispatchAction {
             if (!othersValue.equals(BigDecimal.ZERO)) {
                 dataSet.put(othersTitle, othersValue.setScale(10, RoundingMode.HALF_UP));
             }
-            /*
-            Long[] locationIds = filter.getSelLocationIds();
-            boolean unallocatedCondition = locationIds == null || locationIds.length==0;
-            if (unallocatedCondition) {
-                List<AmpFundingDetail> unallocatedFundings = DbUtil.getUnallocatedFunding(filter);
-                FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(unallocatedFundings, currCode);
-                DecimalWraper total = null;
-
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement *
-
-                if (transactionType == Constants.COMMITMENT) {
-                    total = cal.getTotActualComm();
-                } else {
-                    total = cal.getTotActualDisb();
-                }
-                if (total != null && total.doubleValue() != 0) {
-                    dataSet.put(unallocatedTitle, BigDecimal.valueOf(total.doubleValue() / divideByMillionDenominator.doubleValue()));
-                }
-            }*/
+            
         } catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load sector fundings by donors from db", e);
@@ -673,7 +589,7 @@ public class DataDispatcher extends DispatchAction {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		String format = request.getParameter("format");
-		Long selectedYear = request.getParameter("year") != null ? Long.parseLong(request.getParameter("year")) : null;
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
 
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         String othersTitle = "Other";
@@ -688,7 +604,14 @@ public class DataDispatcher extends DispatchAction {
             divideByMillionDenominator = new BigDecimal(1000);
         }
         BigDecimal regionalTotal = BigDecimal.ZERO;
-        String currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+        String currCode = "USD";
+        if (filter.getCurrencyId()!=null) {
+        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
+		} else {
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+		}
+        
         int transactionType = filter.getTransactionType();
         
         java.util.Hashtable<String,BigDecimal> dataSet = new java.util.Hashtable<String,BigDecimal> ();
@@ -704,18 +627,25 @@ public class DataDispatcher extends DispatchAction {
             List<AmpCategoryValueLocations> locations = DbUtil.getRegions(filter);
             Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
             Long fiscalCalendarId = filter.getFiscalCalendarId();
-            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-
+            Date startDate = null;
+            Date endDate = null;
+            if (selectedYear!=null) {
+            	startDate = DashboardUtil.getStartDate(fiscalCalendarId, selectedYear);
+                endDate = DashboardUtil.getEndDate(fiscalCalendarId, selectedYear);
+			} else {
+				startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+			}
+            
             while (regionIter.hasNext()) {
                 //calculating funding for each region
                 AmpCategoryValueLocations location = regionIter.next();
-                //aka poner location en filtro
-                Long[] oldIds = filter.getSelLocationIds();
+                //Long[] oldIds = filter.getSelLocationIds();
     			Long[] ids = {location.getId()};
-                filter.setSelLocationIds(ids);
-                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, transactionType, 0);
-                filter.setSelLocationIds(oldIds);
+    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelLocationIds(ids);
+                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+                //filter.setSelLocationIds(oldIds);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
                 

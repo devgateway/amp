@@ -44,19 +44,7 @@ function submitForm(mode) {
 			
 			<table border=1>
 			<tr>
-			<td><h2><digi:trn key="aim:globalperms"></digi:trn></h2>
-			
-			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
-			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
-			<input type="button" name="export" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
-			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
-			type="button" name="import" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
-			onclick="javascript:window.location.href='<%=importperm%>'" />
-		
-			<p/>
-			<hr/>
-</td>
-			<td>
+						<td>
 						<h3><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h3>
 			<table>
 				<tr>
@@ -92,6 +80,19 @@ function submitForm(mode) {
 
 			
 			</td>
+
+			<td><h2><digi:trn key="aim:globalperms"></digi:trn></h2>
+			
+			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
+			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
+			<input type="button" name="export" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
+			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
+			type="button" name="import" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
+			onclick="javascript:window.location.href='<%=importperm%>'" />
+		
+			<p/>
+			<hr/>
+</td>
 			</tr>
 			</table>
 			

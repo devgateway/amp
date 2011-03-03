@@ -15,14 +15,13 @@ function submitForm(mode) {
 </script>
 	<html:hidden property="mode" />
 	<digi:errors />
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 		<tr>
-			<td class=r-dotted-lg width=14>&nbsp;</td>
 			<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb> <c:set var="translation">
+					<td height=33 bgcolor=#F2F2f2><span class=crumb> <c:set var="translation">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set> <a href="/aim/admin.do" styleClass="comment"
 						title="${translation}">
@@ -39,6 +38,7 @@ function submitForm(mode) {
 						<!-- End navigation -->
 				</tr>
 			</table>
+			<hr />
 			<h2><digi:trn key="aim:globalperms"></digi:trn></h2>
 			
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />

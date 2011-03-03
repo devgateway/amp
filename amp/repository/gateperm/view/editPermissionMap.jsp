@@ -47,7 +47,7 @@ function submitForm(mode) {
 						<td valign=top>
 			<table class="inside">
 			<tr>
-			<td colspan="2" class="inside_header">						<div><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></div>
+			<td colspan="2" class="inside_header" align=center><div><b><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></div>
 </td>
 			</tr>
 				<tr>
@@ -63,8 +63,8 @@ function submitForm(mode) {
 					property="permissibleCategory">
 					
 					<tr>
-						<td align="right" class="inside"><b>Assign a global permission to the
-						entire class:</b></td>
+						<td align="right" class="inside">Assign a global permission to the
+						entire class:</td>
 						<td class="inside"><html:select property="permissionId">
 							<html:option value="0">--None--</html:option>
 							<html:optionsCollection property="_availablePermissions"
@@ -75,9 +75,6 @@ function submitForm(mode) {
 							<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions</digi:link></td>
 					
 				</logic:notEmpty>
-				<tr>
-						<td align="right">&nbsp;</td>
-						
 	</table>
 </digi:form>
 <td width=15>&nbsp;</td>

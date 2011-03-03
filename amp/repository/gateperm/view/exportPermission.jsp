@@ -34,7 +34,7 @@
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb> <c:set
+					<td height=33 bgcolor=#F2F2F2><span class=crumb> <c:set
 						var="translation">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set> <a href="/aim/admin.do" styleClass="comment"
@@ -50,27 +50,28 @@
 					<!-- End navigation -->
 				</tr>
 			</table>
+			<hr />
 			<h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2>
 			<input type=button value="Check All" onClick="this.value=check()"/ class="buttonx">
 			<html:submit property="exportPerform" styleClass="buttonx">Export</html:submit>			
 			<p/>
-			<table border="1px" width="95%" align="center">
+			<table width="100%" align="center" class="inside">
 				<thead>
 					<tr>
-						<td bgcolor="#006699" class="textalb" align="center">Select</td>
-						<td bgcolor="#006699" class="textalb" align="center">Name</td>
-						<td bgcolor="#006699" class="textalb" align="center">Description</td>
-						<td bgcolor="#006699" class="textalb" align="center">Details</td>
+						<td bgcolor="#006699" align="center" class="inside_header">Select</td>
+						<td bgcolor="#006699" align="center" class="inside_header">Name</td>
+						<td bgcolor="#006699" align="center" class="inside_header">Description</td>
+						<td bgcolor="#006699" align="center" class="inside_header">Details</td>
 					</tr>
 				</thead>
 				<logic:iterate id="perm" name="allPermissions" scope="request">
 					<tr>
-						<td><html:multibox property="permissions">
+						<td class="inside"><html:multibox property="permissions">
 							<bean:write name="perm" property="id" />
 						</html:multibox></td>
-						<td><bean:write name="perm" property="name" /></td>
-						<td><bean:write name="perm" property="description" />&nbsp;</td>
-						<td>
+						<td class="inside"><bean:write name="perm" property="name" /></td>
+						<td class="inside"><bean:write name="perm" property="description" />&nbsp;</td>
+						<td class="inside">
 						<div style='position: relative; display: none;'
 							id='detailsPerm-<bean:write name="perm" property="id"/>'><logic:equal
 							name="perm" property="class.simpleName" value="GatePermission">

@@ -158,8 +158,8 @@ es:
           description: |
             O Fonte de Recursos será automaticamente criado a partir das informações introduzidas na ODAmoz. Os Códigos serão criados apenas para projectos INSCRITOS no OE.
         public_sector:
-          label: Ambito de apoio
-          description: Apoio ao sector privado
+          label: 'Âmbito do apoio'
+          description: 'Âmbito do apoio'
           options:
             central_local: Central e Local
             autarquia: Autarquía

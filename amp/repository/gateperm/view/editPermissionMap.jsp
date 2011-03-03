@@ -81,13 +81,13 @@ function submitForm(mode) {
 			
 			</td>
 
-			<td valign=top width=150><div><digi:trn key="aim:globalperms"></digi:trn></div>
-			
+			<td valign=top width=150><div><b><digi:trn key="aim:globalperms"></digi:trn></b></div>
+			<hr />
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
-			<input type="button" name="export" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
+			<input type="button" name="export" class="inputx" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
 			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
-			type="button" name="import" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
+			type="button" name="import" class="inputx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
 			onclick="javascript:window.location.href='<%=importperm%>'" />
 		
 			<p/>

@@ -50,14 +50,14 @@
 					<!-- End navigation -->
 				</tr>
 			</table>
-			<center><h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2></center>
+			<center><h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2>
 			
-			<digi:trn key="aim:permissionUploadFile">Exported Permission XML File</digi:trn>:
+			<digi:trn key="aim:permissionUploadFile"><b style="font-size:12px;">Exported Permission XML File</b></digi:trn>:
 			<digi:form action="/exchangePermission.do" enctype="multipart/form-data" method="POST">
 			<html:file property="fileUploaded"/>
 			<p/>
-			<html:submit property="importPerform">Import</html:submit>
-			</digi:form>
+			<html:submit property="importPerform" styleClass="buttonx">Import</html:submit>
+			</digi:form></center>
 			</td>
 		</tr>
 	</table>

@@ -258,7 +258,7 @@ div.fakefile2 input{
 					<logic:notEmpty name="importExportForm" property="languages">
 					<digi:form action="/importexport.do" method="post" >
 							<tr>
-								<td>
+								<td align=center>
 									<digi:trn key="aim:translationManagerLangFoundMsg">
 									The following languages where found on this site:
 									</digi:trn>
@@ -266,7 +266,7 @@ div.fakefile2 input{
 							</tr>
 						<c:forEach items="${importExportForm.languages}" var="lang">
 							<tr>
-								<td>
+								<td align=center>
 									<html:checkbox property="selectedLanguages" value="${lang}"/>
                                     <digi:trn key="aim:TranslationManagerLangiage${lang}">
                                     ${lang}

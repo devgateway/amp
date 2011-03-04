@@ -241,7 +241,7 @@ div.fakefile2 input{
 				</tr>
 				<tr>
 					<td height="16" vAlign="middle" width="571" align=center>
-                      <span style="font-size:12px;">
+                      <span style="font-size:12px; color:#000000;">
                         <digi:trn><b>Translation Manager</b></digi:trn>
                       </span>
 					</td>
@@ -253,7 +253,7 @@ div.fakefile2 input{
 				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+					<table width="50%" cellspacing=1 cellSpacing=1 border=0 align=center>
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
 					<digi:form action="/importexport.do" method="post" >

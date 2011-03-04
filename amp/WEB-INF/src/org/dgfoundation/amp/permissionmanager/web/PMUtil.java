@@ -26,7 +26,9 @@ import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -613,6 +615,20 @@ public final class PMUtil {
 
 	
 	
+	public static void addOrganizationsToUser(User user, Set<AmpOrganisation> orgsSet) {
+		TreeSet<AmpOrganisation> orgs = new TreeSet<AmpOrganisation>();
+		orgs.addAll(orgsSet);
+		orgs.addAll(user.getAssignedOrgs());
+		user.setAssignedOrgs(orgs);
+	}
+
+	public static boolean addOrganizationToUser(User user, AmpOrganisation org) {
+		TreeSet<AmpOrganisation> orgs = new TreeSet<AmpOrganisation>();
+		orgs.addAll(user.getAssignedOrgs());
+		boolean existOrg = orgs.add(org);
+		user.setAssignedOrgs(orgs);
+		return existOrg;
+	}
 
 	
 }

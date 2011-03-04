@@ -21,6 +21,7 @@ import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAj
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMUserSearchModel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVerifiedOrganizationsTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMVerifiedUsersTableFeaturePanel;
+import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -96,7 +97,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				return null;
 			}
 		};
-		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
+		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(30));
 		autoComplete.add(sizeModifier);
 		final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchVerifiedOrgs", "Search Verified Organizations", autoComplete);
 		searchOrgs.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
@@ -108,13 +109,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		add(searchVerifiedUsers);
 		idUsersList = searchVerifiedUsers.getList();
 		
-//		AjaxPagingNavigator paginator = new AjaxPagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedOrgs.getList()) {
-//			@Override
-//			protected void onAjaxEvent(AjaxRequestTarget target) {
-//				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-//				target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
-//			}
-//		};
+
 		AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("verifiedUsersNavigator", (PageableListView)searchVerifiedUsers.getList());
 		add(paginator);
 		
@@ -140,7 +135,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				return null;
 			}
 		};
-		AttributeModifier sizeModifierUser = new AttributeModifier("size",new Model(25));
+		AttributeModifier sizeModifierUser = new AttributeModifier("size",new Model(30));
 		autoCompleteUser.add(sizeModifierUser);
 		final AmpComboboxFieldPanel<User> searchUsers=new AmpComboboxFieldPanel<User>("searchVerifiedUsers", "Search Users", autoCompleteUser);
 		searchUsers.getTitleLabel().add(new AttributeModifier("class",new Model("perm_search")));
@@ -152,8 +147,8 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 			public void onClick() {
 				try {
 					for (User user : usersModel.getObject()) {
-						user.getAssignedOrgs().clear();
-						user.getAssignedOrgs().addAll(orgsModel.getObject());
+						//user.getAssignedOrgs().clear();
+						PMUtil.addOrganizationsToUser(user, orgsModel.getObject());
 						DbUtil.updateUser(user);
 					}
 					
@@ -161,6 +156,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 					e.printStackTrace();
 				}
 			}
+
 		});
 
 		add(new Link("resetOrgsToUsersButton"){

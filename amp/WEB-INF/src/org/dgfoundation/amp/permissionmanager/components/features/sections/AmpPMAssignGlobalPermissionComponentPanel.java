@@ -14,13 +14,13 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMPermissibleCategoryChoiceRenderer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
@@ -73,7 +73,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		permGatesFormTable.setOutputMarkupId(true);
 		form.add(permGatesFormTable);
 		
-		DropDownChoice dropDownPermCategories = new DropDownChoice("globalPermCategories", globalPermissionMapForPermissibleClassModel ,availablePermissibleCategories, new ChoiceRenderer("simpleName"));
+		DropDownChoice dropDownPermCategories = new DropDownChoice("globalPermCategories", globalPermissionMapForPermissibleClassModel ,availablePermissibleCategories, new AmpPMPermissibleCategoryChoiceRenderer("simpleName"));
 		dropDownPermCategories.add(new OnChangeAjaxBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {

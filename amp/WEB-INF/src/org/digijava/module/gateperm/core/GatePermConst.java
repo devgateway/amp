@@ -28,7 +28,10 @@ public final class GatePermConst {
 	 * through reflection is not supported by Java, we need a list with them
 	 * All Permissibles must extend the Permissible class
 	 */
-	public static final Class[] availablePermissibles = new Class[] {AmpActivity.class,AmpModulesVisibility.class,AmpFeaturesVisibility.class, AmpFieldsVisibility.class };
+	public static final Class[] availablePermissibles = new Class[] {AmpActivity.class,
+		//AmpModulesVisibility.class,
+		AmpFeaturesVisibility.class, 
+		AmpFieldsVisibility.class };
 
 	public static Hashtable<String,Class> availablePermissiblesBySimpleNames = null;
 	

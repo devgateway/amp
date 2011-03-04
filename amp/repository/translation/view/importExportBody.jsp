@@ -228,7 +228,7 @@ div.fakefile2 input{
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2D2><span class=crumb style="color:#376091;">
+					<td height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -240,9 +240,9 @@ div.fakefile2 input{
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" width="571">
-                      <span class=subtitle-blue>
-                        <digi:trn>Translation Manager</digi:trn>
+					<td height="16" vAlign="middle" width="571" align=center>
+                      <span style="font-size:12px;">
+                        <digi:trn><b>Translation Manager</b></digi:trn>
                       </span>
 					</td>
 				</tr>

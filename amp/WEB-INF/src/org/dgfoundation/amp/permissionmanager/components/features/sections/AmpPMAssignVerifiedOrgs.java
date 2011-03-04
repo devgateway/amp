@@ -104,7 +104,7 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		add(searchOrgs);
 
 
-		AmpPMVerifiedUsersTableFeaturePanel searchVerifiedUsers = new AmpPMVerifiedUsersTableFeaturePanel("verifiedUsers", usersModel, "Verified Organizations", true);
+		AmpPMVerifiedUsersTableFeaturePanel searchVerifiedUsers = new AmpPMVerifiedUsersTableFeaturePanel("verifiedUsers", usersModel, "Users", true);
 		searchVerifiedUsers.setTableWidth(480);
 		add(searchVerifiedUsers);
 		idUsersList = searchVerifiedUsers.getList();

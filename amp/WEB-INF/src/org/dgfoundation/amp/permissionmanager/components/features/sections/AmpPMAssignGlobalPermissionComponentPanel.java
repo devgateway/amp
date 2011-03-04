@@ -59,7 +59,6 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		
 		
 		final IModel<PermissionMap> pmAuxModel = new Model(null);
-
 		Set<AmpPMReadEditWrapper> gatesSet = null;
 		try {
 			gatesSet =	populateGatesSet(globalPermissionMapForPermissibleClassModel, pmAuxModel, infoGlobalPermModel);
@@ -67,8 +66,8 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		
+		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		final AmpPMAddPermFormTableFeaturePanel permGatesFormTable = new AmpPMAddPermFormTableFeaturePanel("gatePermForm", gatesSetModel, "Permission Form Table", true);
 		permGatesFormTable.setTableWidth(300);
 		permGatesFormTable.setOutputMarkupId(true);

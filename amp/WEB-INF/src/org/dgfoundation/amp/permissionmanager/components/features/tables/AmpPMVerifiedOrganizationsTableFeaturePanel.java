@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -15,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -27,10 +29,10 @@ public class AmpPMVerifiedOrganizationsTableFeaturePanel extends AmpFormTableFea
 
 
 
-	public AmpPMVerifiedOrganizationsTableFeaturePanel(String id, IModel<Set<AmpOrganisation>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, model, fmName, hideLeadingNewLine);
+	public AmpPMVerifiedOrganizationsTableFeaturePanel(String id,final IModel<Set<AmpOrganisation>> orgsSetmodel, String fmName, boolean hideLeadingNewLine) throws Exception {
+		super(id, orgsSetmodel, fmName, hideLeadingNewLine);
 		
-		final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
+		final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgsSetmodel);
 		
 		list = new PageableListView<AmpOrganisation>("verifiedOrgsList", listModel, 5) {
 			private static final long serialVersionUID = 7218457979728871528L;
@@ -39,6 +41,18 @@ public class AmpPMVerifiedOrganizationsTableFeaturePanel extends AmpFormTableFea
 				final MarkupContainer listParent=this.getParent();
 				item.add(new Label("orgName", item.getModelObject().getName()));
 				item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
+				
+                final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeSelectedOrganization", "Remove Selected Organization Link") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                    	orgsSetmodel.getObject().remove(item.getModelObject());
+                        list.removeAll();
+                        target.addComponent(AmpPMVerifiedOrganizationsTableFeaturePanel.this.getParent());
+                    }
+                };
+                item.add(propertyDeleteLink);
+				
 			}
 		};
 		list.setReuseItems(true);

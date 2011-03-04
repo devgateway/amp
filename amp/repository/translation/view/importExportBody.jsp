@@ -285,7 +285,7 @@ div.fakefile2 input{
 							 </tr>
 							 <td align=center>
 									<br/>
-									<digi:trn>Please select the languages you want to export</digi:trn><hr />
+									<hr />
 							</td>
 					 </digi:form>
 					</logic:notEmpty>
@@ -319,7 +319,8 @@ div.fakefile2 input{
 							<tr>
 								<td colspan="2">
 									<digi:trn key="aim:translationManagerLangFoundImportMsg">
-									The following languages where found in the file you imported:
+									The following languages where found in the file you imported.<br />
+									<digi:trn>Please select the languages you want to export</digi:trn>
 									</digi:trn>
 									<br/>
 								</td>
@@ -360,11 +361,13 @@ div.fakefile2 input{
 							 
 							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 							 <tr>
+							 <td align="center">
 								<c:set var="translation">
 									<digi:trn key="btn:translationManagerImport">
 								 		Import
 								 	</digi:trn>
 								</c:set>
+								</td>
 								<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang" onclick="return markAllKeywords()"/></td>
 							 </tr>
 							 <tr>

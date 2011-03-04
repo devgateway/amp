@@ -235,14 +235,14 @@ div.fakefile2 input{
 						<digi:link href="/admin.do" title="${translation}" module="aim">
 						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:translationManager">Translation Manager</digi:trn>
+						<digi:trn key="aim:translationManager"><span style="color:#000000">Translation Manager</span></digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
 					<td height="16" vAlign="middle" width="571" align=center>
                       <span style="font-size:12px; color:#000000;">
-                        <digi:trn><b>Translation Manager</b></digi:trn>
+                        <digi:trn><b>Translation Manager</b><hr /></digi:trn>
                       </span>
 					</td>
 				</tr>

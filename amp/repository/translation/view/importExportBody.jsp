@@ -260,7 +260,7 @@ div.fakefile2 input{
 							<tr>
 								<td align=center>
 									<digi:trn key="aim:translationManagerLangFoundMsg">
-									The following languages where found on this site:
+									<b>The following languages where found on this site:</b><br />
 									</digi:trn>
 								</td>
 							</tr>
@@ -276,16 +276,16 @@ div.fakefile2 input{
 	 						</tr>
 						 </c:forEach>
 							 <tr>
-							 	<td>
+							 	<td align=center>
                                   <c:set var="translation">
                                     <digi:trn>Export</digi:trn>
                                   </c:set>
                                   <html:submit style="dr-menu" value="${translation}" property="export"/>
                                 </td>
 							 </tr>
-							 <td>
+							 <td align=center>
 									<br/>
-									<digi:trn>Please select the languages you want to export</digi:trn>
+									<digi:trn>Please select the languages you want to export</digi:trn><hr />
 							</td>
 					 </digi:form>
 					</logic:notEmpty>
@@ -296,7 +296,7 @@ div.fakefile2 input{
 
 					<digi:form action="/importexport.do" method="post" enctype="multipart/form-data">
 						<tr>
-							<td>
+							<td align=center>
 								<!-- <html:file property="fileUploaded"></html:file> -->
 								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 									<!-- CSS content must be put in a separated file and a class must be generated -->

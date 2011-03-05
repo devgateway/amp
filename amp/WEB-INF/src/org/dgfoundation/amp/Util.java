@@ -371,7 +371,7 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		String query = "SELECT getExchange(?,?) from dual";
+		String query = "SELECT getExchange(?,?)";
 		PreparedStatement ps;
 		try {
 			ps = conn.prepareStatement(query);

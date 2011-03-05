@@ -89,6 +89,7 @@ public class ConfigLoaderListener
     			if(c<'0' || c>'9') break;
     			bugFixingVersionString+=c;
     		}
+    	if(bugFixingVersionString.length()==0) return 0;
     	return Integer.parseInt(bugFixingVersionString);
     }
    
@@ -209,9 +210,11 @@ public class ConfigLoaderListener
 		File compatFile=new File(propertiesFileName);
 		compat.load(new FileInputStream(compatFile));
 		
+		String prefix=null;
+		if(metaData.getDatabaseProductName().equals("PostgreSQL")) prefix="postgresql";else
+		prefix =(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
 		
-		String prefix=(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
-	
+		logger.info("AMP Running on "+metaData.getDatabaseProductName()+" "+metaData.getDatabaseProductVersion());
 		
 		int dbMajorVersion=Integer.parseInt((String)compat.get(prefix+".version.major"));
 		int dbMinorVersion=Integer.parseInt((String)compat.get(prefix+".version.minor"));

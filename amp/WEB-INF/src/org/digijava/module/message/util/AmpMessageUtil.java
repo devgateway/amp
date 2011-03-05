@@ -270,12 +270,12 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
+			queryString="select count(msg) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=:hidden";
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
-			queryString+=" order by msg.creationDate desc";
+			//queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);

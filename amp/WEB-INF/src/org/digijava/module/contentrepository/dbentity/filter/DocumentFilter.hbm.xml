@@ -47,7 +47,7 @@
 			<list-index column="index_column" />
 			<element column="filter_owners" type="java.lang.String" />
 		</list>
-		<many-to-one name="user" column="user" 
+		<many-to-one name="user" column="user_" 
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 	</class>
 </hibernate-mapping>

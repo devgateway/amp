@@ -30,33 +30,35 @@
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
+	<property name="jdbc.driverClassName" value="org.postgresql.Driver"/>
+	
 	
 	<condition property="external-lib" value="${jboss-lib}"> 
 		<isset property="jboss-lib"/>
 	</condition>
 	
 	<!-- amp_clean specific -->
-	<condition property="mysql.password" value="">
+	<condition property="jdbc.password" value="">
 	 	<not>
-	 		<isset property="mysql.password"/>                              
+	 		<isset property="jdbc.password"/>                              
 	 	</not>
 	 </condition>
 
-	<condition property="mysql.user" value="root">
+	<condition property="jdbc.user" value="root">
 	 	<not>
-	 		<isset property="mysql.user"/>                              
+	 		<isset property="jdbc.user"/>                              
 	 	</not>
 	 </condition>
 	
-	<condition property="mysql.port" value="3306">
+	<condition property="jdbc.port" value="5432">
 	 	<not>
-	 		<isset property="mysql.port"/>                              
+	 		<isset property="jdbc.port"/>                              
 	 	</not>
 	 </condition>
-	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
+	<fail unless="jdbc.db" message="jdbc.db parameter is missing. This is required to build the DBCP datasource"/>
 
-	<property name="mysql.url" value="jdbc:mysql://localhost"/>
-	<property name="mysql.params" value="useUnicode=true&amp;characterEncoding=UTF-8"/>
+	<property name="jdbc.url" value="jdbc:mysql://localhost"/>
+	<property name="jdbc.params" value="useUnicode=true&amp;characterEncoding=UTF-8"/>
 	<property name="clean.db" value="amp_clean"/>
 	
     <!-- Path settings -->
@@ -385,7 +387,7 @@
 		<fail unless="clean.source" message="clean.source parameter must be supplied! This is the source database to produce ${clean.db} from."/>
 		<fail unless="clean.host" message="clean.host parameter must be supplied! This is the dg_site_domain host that you want to use with it."/>
 		<echo message="Dropping former ${clean.db} and creating new ${clean.db} database..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql?${mysql.params}" userid="${mysql.user}" print="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${mysql.params}" userid="${jdbc.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>DROP DATABASE IF EXISTS ${clean.db}</transaction>	
 			<transaction>CREATE DATABASE ${clean.db} character set utf8 collate utf8_general_ci</transaction>		
@@ -395,12 +397,12 @@
 		<antcall target="database"/>
 	
 		<echo message="Exporting stored functions from ${clean.source}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/mysql?${mysql.params}" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/mysql?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql">
 			<classpath refid="compile.classpath"/>
 			<transaction>SELECT concat('CREATE ',type,' ',name,' (',param_list,')',if(returns!='',' RETURNS ',''),returns,' ',body, ';;') FROM proc WHERE db='${clean.source}';</transaction>
 		</sql>
 		<echo message="Exporting views from ${clean.source}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/information_schema?${mysql.params}" userid="${mysql.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/information_schema?${jdbc.params}" userid="${jdbc.user}" print="true" showheaders="false" showtrailers="false" output="tmp_${clean.db}_ddl_copy.sql" append="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>SELECT concat('CREATE OR REPLACE VIEW ',table_name,' AS ',view_definition,';;') FROM views WHERE table_schema='${clean.source}'</transaction>
 		</sql>
@@ -409,7 +411,7 @@
 	
 
 		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
-		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}?${mysql.params}" userid="${mysql.user}" print="true">
+		<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true">
 			<classpath refid="compile.classpath"/>
 			<transaction>INSERT IGNORE AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
 			<transaction>INSERT IGNORE amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
@@ -506,7 +508,7 @@
 		</sql>
 		
 		<echo message="Importing functions and views into ${clean.db}..."/>
-			<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}?${mysql.params}" userid="${mysql.user}" print="true" delimiter=";;">
+			<sql driver="com.mysql.jdbc.Driver" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.params}" userid="${jdbc.user}" print="true" delimiter=";;">
 				<classpath refid="compile.classpath"/>	
 				<transaction src="tmp_${clean.db}_ddl_copy.sql"/> 
 			</sql>
@@ -523,11 +525,13 @@
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
 		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>	
 		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">
-		          <param name="mysql.user" expression="${mysql.user}"/>
-				  <param name="mysql.password" expression="${mysql.password}"/>
-		      	  <param name="mysql.db" expression="${mysql.db}"/>
+		          <param name="jdbc.user" expression="${jdbc.user}"/>
+				  <param name="jdbc.password" expression="${jdbc.password}"/>
+		      	  <param name="jdbc.db" expression="${jdbc.db}"/>
 		  	  	  <param name="serverName" expression="${serverName}"/>
-		  	  	  <param name="mysql.port" expression="${mysql.port}"/>
+		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>
+				  <param name="dbName" expression="${dbName}"/>
+				  <param name="jdbc.driverClassName" expression="${jdbc.driverClassName}"/>
 		</xslt>
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
@@ -535,7 +539,7 @@
 	</target>
 	
 	<target name="copyForAnySQL">
-		<condition property="dbName" value="mysql">
+		<condition property="dbName" value="postgresql">
 		 	<not>
 		 		<isset property="dbName"/>                              
 		 	</not>

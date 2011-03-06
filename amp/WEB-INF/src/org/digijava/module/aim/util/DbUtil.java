@@ -5257,7 +5257,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpField.class.getName()
                 + " o " + "where (o.fieldName=:com)";
             qry = session.createQuery(queryString);
-            qry.setParameter("com", com, Hibernate.STRING);
+            qry.setParameter("com", com);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 comments = (AmpField) itr.next();

@@ -96,7 +96,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 				"Final Date for Disbursements");
 		add(finalDateForDisbursements);
 				
-		AmpCommentSimpleWrapper acsw = new AmpCommentSimpleWrapper("finalDateDisbTabs", "Final Date For Disbursements", actModel);
+		AmpCommentSimpleWrapper acsw = new AmpCommentSimpleWrapper("finalDateDisbTabs", "Final Date for Disbursements", actModel);
 		acsw.setOutputMarkupId(true);
 		add(acsw);
 

@@ -761,7 +761,7 @@ System.out.println("lang:"+lang);
  		
  		try {
  			session = PersistenceManager.getRequestDBSession();
- 			String queryString = "from "+ HelpTopic.class.getName();			
+ 			String queryString = "from "+ HelpTopic.class.getName();
  			query = session.createQuery(queryString);
 
  		    Iterator<HelpTopic> itr = query.list().iterator();
@@ -835,15 +835,15 @@ System.out.println("lang:"+lang);
                               cal_u.setTime(editor.getLastModDate());
                               helpout.setLastModDate(cal_u);
  			   	        }else{
-                              HelpLang helplang = new HelpLang();
-                              helplang.setBody("");
-                              helplang.setTitle(HelpUtil.getTrn(item.getTopicKey(),lang,new Long(3)));
-                              helplang.setCode(lang);
-                              helpout.getLang().add(helplang);
-
-                              Calendar cal_u = Calendar.getInstance();
-                              cal_u.setTime(new Date());
-                              helpout.setLastModDate(cal_u);
+//                              HelpLang helplang = new HelpLang();
+//                              helplang.setBody("");
+//                              helplang.setTitle(HelpUtil.getTrn(item.getTopicKey(),lang,new Long(3)));
+//                              helplang.setCode(lang);
+//                              helpout.getLang().add(helplang);
+//
+//                              Calendar cal_u = Calendar.getInstance();
+//                              cal_u.setTime(new Date());
+//                              helpout.setLastModDate(cal_u);
                          }				        	
  			        }
              }

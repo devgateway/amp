@@ -492,9 +492,11 @@ function setHoveredTable(tableId, hasHeaders) {
 							        	</button>
 								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
+											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
+											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    </td>								    
 								</tr>

@@ -66,7 +66,7 @@ FCKConfig.DocType = '' ;
 
 
 
-FCKConfig.BaseHref = 'http://amp.ge:8080' ;
+FCKConfig.BaseHref = '' ;
 
 
 

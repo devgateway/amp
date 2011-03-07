@@ -396,7 +396,8 @@ public class HelpUtil {
 		String queryString=null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null and topic.topicType=NULL";
+			//queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null and topic.topicType=NULL";
+			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null ";
 			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
 			helpTopics = query.list();

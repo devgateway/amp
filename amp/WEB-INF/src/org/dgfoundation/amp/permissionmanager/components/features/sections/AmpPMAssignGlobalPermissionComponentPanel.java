@@ -114,7 +114,6 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 
 	private Set<AmpPMReadEditWrapper> populateGatesSet(final IModel<Class> globalPermissionMapForPermissibleClassModel,final IModel<PermissionMap> pmAuxModel, IModel<String> infoGlobalPermModel) throws Exception{
 		Set<AmpPMReadEditWrapper> gatesSet = new TreeSet<AmpPMReadEditWrapper>();
-		System.out.println("on update: "+globalPermissionMapForPermissibleClassModel.getObject());
 		PermissionMap pmAux = null;
 		pmAux	=	PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissionMapForPermissibleClassModel.getObject());
 		//0 is ok, 1 permission map doesn't exist, 2 permission map contains a GatePermission or other type different to CompositePermission

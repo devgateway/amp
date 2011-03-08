@@ -12,10 +12,9 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -77,6 +76,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		
 		//permission priority radiobutton
 		final RadioChoice permissionPriorityChoices = new RadioChoice("permissionPriorityChoices", permissionChoiceModel,	permissionPriority);
+
 		permissionPriorityChoices.setSuffix("");
 		form.add(permissionPriorityChoices);
 		
@@ -148,6 +148,19 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permWorkspacesFieldsFormTable.setTableWidth(470);
 		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
 		form.add(permWorkspacesFieldsFormTable);
+		
+		PMUtil.setPermissionPriorityVisibility(permissionChoiceModel, permGatesFieldsFormTable, permWorkspacesFieldsFormTable);
+		
+		
+		permissionPriorityChoices.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+	        @Override
+	        protected void onUpdate(AjaxRequestTarget target) {
+	          target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+	          PMUtil.setPermissionPriorityVisibility(permissionChoiceModel, permGatesFieldsFormTable, permWorkspacesFieldsFormTable);
+	        }
+
+	      }); 
+		
 		
 		form.add(new AjaxFallbackLink("resetFieldPermissionButton"){
 			//@Override

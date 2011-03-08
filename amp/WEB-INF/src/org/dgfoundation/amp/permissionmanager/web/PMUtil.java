@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
@@ -630,5 +631,20 @@ public final class PMUtil {
 		return existOrg;
 	}
 
+	
+	public static void setPermissionPriorityVisibility(final IModel<String> permissionChoiceModel,final AmpPMAddPermFormTableFeaturePanel permGatesFieldsFormTable,final AmpPMAddPermFormTableFeaturePanel permWorkspacesFieldsFormTable) {
+		if(PMUtil.ROLE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0){
+			  permWorkspacesFieldsFormTable.setEnabled(false);
+			  permGatesFieldsFormTable.setEnabled(true);
+		  }
+		  if(PMUtil.WORKSPACE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0){
+			  permWorkspacesFieldsFormTable.setEnabled(true);
+			  permGatesFieldsFormTable.setEnabled(false);
+		  }
+		  if(PMUtil.CUMMULATIVE.compareTo(permissionChoiceModel.getObject()) == 0){
+			  permWorkspacesFieldsFormTable.setEnabled(true);
+			  permGatesFieldsFormTable.setEnabled(true);
+		  }
+	}
 	
 }

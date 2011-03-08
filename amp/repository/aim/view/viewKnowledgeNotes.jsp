@@ -45,11 +45,11 @@ method="post">
 					</TD></tr>
 	<tr>
 	<tr>
-		<td><table width="80%" align=center height="100%">
+		<td><table width="80%" align="center" height="100%">
 	<tr>
 		<td>
 
-		<h5 align=center>Description</h5>	</td>
+		<h5 align="center">Description</h5>	</td>
 	</tr>
 	<tr>
 		<td><br />

@@ -948,7 +948,7 @@ function showFilter(){
 		var lastTR = document.createElement('TR');
 
 		var lastTD = document.createElement('TD');
-		lastTD.colSpan=4;
+		lastTD.colspan="4";
 		lastTD.align='right';
 		lastTD.innerHTML='<strong>'+strTotal+' </strong>';
 		lastTR.appendChild(lastTD);
@@ -1119,7 +1119,7 @@ function showFilter(){
 			if (donorList !=null && donorList.length>0){
 				var donorTable = document.createElement('table');
                                 var donorTableBD = document.createElement('TBODY');
-				donorTable.cellSpacing=0;
+				donorTable.cellspacing="0";
 				for (var i=0; i<donorList.length; i++){
 					var donorTr = document.createElement('tr');
 					var donorTd = document.createElement('td');

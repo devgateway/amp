@@ -435,7 +435,7 @@ padding-left: 0px;
 															<div style="width:100%;">
 																<table width="100%">
 																	<tr>
-																		<td class="t_mid" style="padding-right:10px;" width=95 valign=top>
+																		<td class="t_mid" style="padding-right:10px;" width=95 valign="top">
 																			<digi:trn>Search Contacts</digi:trn>:
 																		</td>
 																		<td align="left" width=300 style="padding-right:10px;">
@@ -445,12 +445,12 @@ padding-left: 0px;
 																		    	<html:hidden property="keyword" styleId="myHidden"/>																			   																			    	
 																		   	</div>
 																		</td>
-																		<td align="left" valign=top width=50>
+																		<td align="left" valign="top" width=50>
 																			<c:set var="trn">
 																				<digi:trn>find</digi:trn>
 																			</c:set>
 																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>
-													</td><td class="t_mid" valign=top>						
+													</td><td class="t_mid" valign="top">						
 																			<digi:trn>Go To : </digi:trn>
 																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="clearKeyword()" styleId="alphaDropdown">
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">

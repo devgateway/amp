@@ -96,12 +96,12 @@ function countryChanged() {
 <digi:form action="/selectLocationForIndicatorValue.do" method="post">
   <html:hidden property="action" styleId="indAction" value=""/>
   <html:hidden property="fill" />
-  <table width="100%" vAlign="top" border=0>
+  <table width="100%" vAlign="top" border="0">
 	<tr><td vAlign="top" width="100%">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr width="100%">
-				<td align=left vAlign=top width="100%">
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top" width="100%">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:selectLocation">

@@ -26,12 +26,12 @@ method="post">
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 <TR>
 	<TD vAlign="top" align="center">
 		<!-- contents -->
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
@@ -56,7 +56,7 @@ method="post">
 				</TR>
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="center" width="100%">
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+						<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%" bgcolor="#F4F4F2" height="20">
 									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="20" width="100%" align="center">

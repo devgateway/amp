@@ -250,11 +250,11 @@ div.fakefile2 input{
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -281,8 +281,8 @@ div.fakefile2 input{
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1" border="0">
 					<logic:empty name="aimTranslatorManagerForm" property="importedLanguages">
 					<logic:notEmpty name="aimTranslatorManagerForm" property="languages">
 					<digi:form action="/translationManager.do" method="post" >

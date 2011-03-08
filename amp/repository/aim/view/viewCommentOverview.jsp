@@ -28,8 +28,8 @@
 
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:commentList">List of Comments</digi:trn>
@@ -37,7 +37,7 @@
 						</tr>
 						<logic:empty name="aimEditActivityForm" property="comments.commentsCol">
 							<tr>
-								<td align=left vAlign=top><b><font color="#FF0000">
+								<td align=left valign="top"><b><font color="#FF0000">
 									<digi:trn key="aim:noCommentPresent">No comments found for this activity.</digi:trn></font></b>
 								</td>
 							</tr>

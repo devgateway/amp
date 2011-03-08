@@ -33,7 +33,7 @@
 									</td></tr>
 
 									<tr><td align="left">
-										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
+										<table width="100%" cellSpacing=5 cellpadding="0" border="0" class="box-border-nopadding">
 
 											<logic:notEmpty name="aimEditActivityForm" property="components.selectedComponents">
 																	<tr><td>
@@ -103,7 +103,7 @@
 											id="selComponents" type="org.digijava.module.aim.helper.Components">
 
 												<tr><td align="center">
-													<table width="98%" cellSpacing=1 cellPadding=4 vAlign="top" align="center" border=0
+													<table width="98%" cellspacing="1" cellPadding=4 vAlign="top" align="center" border="0"
 													class="box-border-nopadding">
 														<tr>
 															<td>
@@ -139,7 +139,7 @@
 
 																<tr><td>
 																<!-- Component funding details -->
-																	<table width="100%" cellSpacing=1 cellPadding=3 border=0
+																	<table width="100%" cellspacing="1" cellPadding=3 border="0"
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
 																		<tr><td>
@@ -149,7 +149,7 @@
 																		</field:display>
 																		</b></td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
+																			<table width="100%" cellspacing="1" cellPadding=3 border="0"
 																			bgcolor="#eeeeee">
 																				<tr>
 																					<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
@@ -189,7 +189,7 @@
 																	</field:display>
 																	</td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
+																			<table width="100%" cellspacing="1" cellPadding=3 border="0"
 																			bgcolor="#eeeeee">
 																				<tr>
 
@@ -230,7 +230,7 @@
 																	</b>
 																		</td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
+																			<table width="100%" cellspacing="1" cellPadding=3 border="0"
 																			bgcolor="#eeeeee">
 																				<tr>
 																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
@@ -284,7 +284,7 @@
 													<feature:display name="Physical Progress" module="Components">
 													<tr>
 														<td colspan="2">
-															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0
+															<table width="100%" cellpadding="1" cellspacing="1" vAlign="top" border="0"
 															class="box-border-nopadding">
 															<tr><td width="100%" bgcolor="#dddddd" height="15">
 																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a
@@ -305,7 +305,7 @@
 															<c:if test="${!empty selComponents.phyProgress}">
 															<c:forEach var="phyProg" items="${selComponents.phyProgress}">
 																<tr><td>
-																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																	<table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
 																		<tr>
 																		<field:display name="Add Physical Progress Link" feature="Physical Progress">
 																		<td vAlign="center" align="left" width="95%">
@@ -376,7 +376,7 @@
 									
 									<logic:empty name="aimEditActivityForm" property="components.selectedComponents">
 									<field:display name="Add Components Button" feature="Activity - Component Step">
-										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+										<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 											<tr><td>
 												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()" title="${trnAddComponents}">
 														<digi:trn key="btn:addComponents">Add Components</digi:trn>

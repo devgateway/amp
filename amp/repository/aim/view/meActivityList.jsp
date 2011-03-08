@@ -25,7 +25,7 @@
 
 
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 
 <tr><td width="100%" valign="top" align="left">
 
@@ -36,7 +36,7 @@
 									<c:set var="selectedTab" value="6" scope="request"/>
 
 
-									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
 												<div class="breadcrump_cont">
@@ -48,19 +48,19 @@
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 													</digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 													</c:set>
 													<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 													<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<span class="bread_sel"><digi:trn key="aim:activityList">Activity List</digi:trn></span>
 												</div>
 											</td>
 										</tr>
 										<tr>
-											<td valign=top>
+											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 													
 													
@@ -70,9 +70,9 @@
 							
 							
 							
-							<table class="inside" width=100% cellpadding="0" cellspacing="0">
+							<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 								<tr>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:activityList">Activity List</digi:trn>
 							    	</b>

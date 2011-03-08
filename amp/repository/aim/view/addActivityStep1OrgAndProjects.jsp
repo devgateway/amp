@@ -34,7 +34,7 @@
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<table  class="box-border" cellSpacing=1 cellPadding=1 border=0 width="500">
+												<table  class="box-border" cellspacing="1" cellpadding="1" border="0" width="500">
 												<logic:empty name="identification" property="selectedOrganizations">
 													<tr>
 														<td>

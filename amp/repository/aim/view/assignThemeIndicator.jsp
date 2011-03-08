@@ -33,7 +33,7 @@
 <digi:instance property="aimThemeForm" />
 <digi:form action="/assignThemeIndicator.do" method="post">
 <digi:context name="digiContext" property="context"/>
-		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
+		<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" align="center" border="0">
 				<tr bgColor=#dddddb width="150">
 				<td bgColor=#dddddb height="15" align="center"><h4>
 						Assign the Indicator to a different Program </h4>

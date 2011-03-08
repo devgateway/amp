@@ -100,7 +100,7 @@ function saveEditedReport(){
 
 								<tr width="100%" valign="top">
 									<td height="20">
-										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
+										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellpadding="0" cellspacing="1" height="20">
 											<tr>
 												<td noWrap align=left> 
 													<c:set var="translation">
@@ -229,8 +229,8 @@ function saveEditedReport(){
 									</td>
 								</tr>
 								<TR>
-									<td noWrap valign=top align=left>
-									 <table cellpadding=0 cellspacing=1 valign=top align=left>	<tr>	
+									<td noWrap valign="top" align=left>
+									 <table cellpadding="0" cellspacing="1" valign="top" align=left>	<tr>	
 									 <td noWrap align=left> 
 										<c:set var="translation">
 											<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>

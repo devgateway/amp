@@ -33,7 +33,7 @@
 
 
 
-            <td valign=top width=160 class="background">
+            <td valign="top" width=160 class="background">
 
 				<tiles:insert attribute="leftmenu" flush="true"/>
 

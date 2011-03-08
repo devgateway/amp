@@ -22,11 +22,11 @@ function load()
 <html:hidden property="ampActivityId" />
 <html:hidden property="tabIndex" />
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%" bgcolor="#ffffff">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%" bgcolor="#ffffff">
 	<!--<TR>
 		<TD vAlign="top" align="center">
 			<!-- contents
-			<TABLE width="65%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="65%" cellspacing="0" cellpadding="0" vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
 				<TR>
 					<TD bgcolor="#f4f4f4">
 						<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="3">
@@ -37,7 +37,7 @@ function load()
 							</TR>-->
 							<TR bgcolor="#ffffff" width="95%">
 								<TD vAlign="top" align="center" width="750">
-									<TABLE width="95%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" bgColor=#ffffff>
+									<TABLE width="95%" cellpadding="0" cellspacing="0" vAlign="top" align="left" bgColor=#ffffff>
 										<TR>
 											<TD width="750" bgcolor="#ffffff" height="17">
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff" height="17">

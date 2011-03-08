@@ -99,11 +99,11 @@ body {
 		</tr>
 		<tr>
 			<td>
-			<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0
-				width="100%" border=0>
+			<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0"
+				width="100%" border="0">
 				<tr>
 					<td bgColor=#ffffff class=box-border>
-					<table border=0 cellPadding=1 cellSpacing=1 class=box-border
+					<table border="0" cellpadding="1" cellspacing="1" class=box-border
 						width="100%">
 						<tr bgColor=#dddddb>
 							<!-- header -->
@@ -113,7 +113,7 @@ body {
 						<!-- Page Logic -->
 						<tr>
 							<td width="100%">
-							<table width="100%" border=0 bgColor=#f4f4f2>
+							<table width="100%" border="0" bgColor=#f4f4f2>
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
 									<td width="35%" height="22" align="right"><font color=red>*</font> <digi:trn

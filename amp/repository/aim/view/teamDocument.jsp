@@ -14,13 +14,13 @@
 
 <digi:instance property="aimRelatedLinksForm" />
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
 
-			<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 			
 							<tr>
 								<td vAlign="top" width="100%">

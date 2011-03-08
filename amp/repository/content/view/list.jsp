@@ -94,10 +94,10 @@ $(document).ready(function(){
 });
 
 </script>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
   <tr>
     <td width=14>&nbsp;</td>
-    <td align=left vAlign=top width=750><table cellPadding=5 cellSpacing=0 width="100%">
+    <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="100%">
         <tr>
           <td height=33 colspan="2">
           	<span class=crumb>
@@ -113,7 +113,7 @@ $(document).ready(function(){
           </td>
         </tr>
         <tr>
-          <td height=16 vAlign=center colspan="2"><span class=subtitle-blue>
+          <td height=16 valign="center" colspan="2"><span class=subtitle-blue>
             <digi:trn>List of Public View Content</digi:trn>
             </span> </td>
         </tr>
@@ -181,10 +181,10 @@ $(document).ready(function(){
                 </td>
               </tr>
             </table></td>
-          <td noWrap width=180 vAlign="top"><table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+          <td noWrap width=180 vAlign="top"><table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
               <tr>
                 <td><!-- Other Links -->
-                  <table cellPadding=0 cellSpacing=0 width=100>
+                  <table cellpadding="0" cellspacing="0" width="10"0>
                     <tr>
                       <td bgColor=#c9c9c7 class=box-title><digi:trn key="aim:otherLinks"> Other links </digi:trn>
                       </td>
@@ -193,7 +193,7 @@ $(document).ready(function(){
                   </table></td>
               </tr>
               <tr>
-                <td bgColor=#ffffff class=box-border><table cellPadding=5 cellSpacing=1 width="100%">
+                <td bgColor=#ffffff class=box-border><table cellPadding=5 cellspacing="1" width="100%">
                     <tr>
                       <td><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                       </td>

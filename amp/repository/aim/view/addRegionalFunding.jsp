@@ -76,7 +76,7 @@
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<tr>
     	<td width="100%" vAlign="top">
-			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff" class="box-border-nopadding">
+			<table width="100%" cellpadding="1" cellspacing="0" bgcolor="#ffffff" class="box-border-nopadding">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 						<digi:trn key="aim:fundingItemEditor">
@@ -86,7 +86,7 @@
 				</tr>
 				<tr>
 					<td vAlign="top" align="center" width="100%">
-						<table width="100%" cellspacing=1 cellpadding=5 valign=top align=left>
+						<table width="100%" cellspacing="1" cellpadding=5 valign="top" align=left>
 							<tr>
 								<td align="right" width="50">
 									<digi:trn key="aim:region">Region</digi:trn>
@@ -206,7 +206,7 @@
 												<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 												</a>
 												&nbsp;
 												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
@@ -282,7 +282,7 @@
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 												</a>
 												&nbsp;
 												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
@@ -356,7 +356,7 @@
 												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 												</a>
 												&nbsp;
 												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
@@ -463,7 +463,7 @@ function addCommitments() {
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
-	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border="0"></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
 	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeCommitment('" + divname + "')>"+
@@ -510,7 +510,7 @@ function addDisbursement() {
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
-	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border="0"></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
 	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeDisbursement('" + divname + "')>"+
@@ -557,7 +557,7 @@ function addExpenditure() {
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text' readonly='true'>&nbsp;";
-	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border="0"></a>&nbsp;";
 	
 	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
 	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeExpenditure('" + divname + "')>"+

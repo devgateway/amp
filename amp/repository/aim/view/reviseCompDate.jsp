@@ -35,8 +35,8 @@
 <input type="hidden" name="edit" value="true">
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
-		<td align=left vAlign=top>
-			<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+		<td align=left valign="top">
+			<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 				<tr bgcolor="#006699">
 					<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 						<digi:trn key="aim:reviseCompletionDate">Revise Completion Date</digi:trn>
@@ -50,7 +50,7 @@
 									</digi:trn>
 								</td>								
 								<td align="left" valign="middle">
-									<table cellPadding=0 cellSpacing=0>
+									<table cellpadding="0" cellspacing="0">
 										<tr>
 											<td>
 												<html:text name="aimEditActivityForm" property="revisedCompDate" 
@@ -58,7 +58,7 @@
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 												<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.revisedCompDate)'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 												</a>
 											</td>
 										</tr>

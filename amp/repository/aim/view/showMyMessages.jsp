@@ -6,19 +6,19 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />			
 </td>
 </tr>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772 height="201">
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772 height="201">
 	<tr>
 		<td class=r-dotted-lg width=4>&nbsp;
 		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=600><br>
+		<td align=left class=r-dotted-lg valign="top" width=600><br>
 			
-			<table border=0 cellPadding=5 cellSpacing=3 width="100%">
+			<table border="0" cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 colspan="7" width="867"><span class=crumb>

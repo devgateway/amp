@@ -84,7 +84,7 @@
                                 		<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimEditActivityForm.contactInformation}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                     </c:when>
                                     <c:otherwise>
-                                    	<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+                                    	<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
                                         	<c:forEach var="organization" items="${contactForm.organizations}">
                                             	<tr>
                                                 	<td width="3px">

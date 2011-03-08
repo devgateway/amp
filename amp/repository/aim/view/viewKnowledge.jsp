@@ -108,8 +108,8 @@ function preview(id)
 	<digi:form action="/viewKnowledge.do" name="aimKnowledgeForm"
 		type="org.digijava.module.aim.form.KnowledgeForm" method="post">
 
-		<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top"
-			border=0 width="100%">
+		<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top"
+			border="0" width="100%">
 
 			<TR>
 
@@ -117,7 +117,7 @@ function preview(id)
 
 
 
-				<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top"
+				<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top"
 					align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 
 					<TR>
@@ -191,7 +191,7 @@ function preview(id)
 
 									<TD vAlign="top" align="center" width="100%">
 
-									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
+									<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top"
 										align="center" bgColor=#f4f4f2>
 
 										<TR>

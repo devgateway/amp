@@ -40,12 +40,12 @@
 <html:hidden styleId="parentLocId" property="location.parentLocId" />
 
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:selectLocation">

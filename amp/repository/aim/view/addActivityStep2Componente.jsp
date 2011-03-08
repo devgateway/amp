@@ -50,7 +50,7 @@
                                             </digi:trn>
                                           </b>
                                           <a href="javascript:popupwin()">
-                                            <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
+                                            <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0"/>
                                           </a>
                                         </td>
                                       </tr>
@@ -68,7 +68,7 @@
                                       </tr>
                                       <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
 											<tr>
                                               <td align="left">
                                                 <b>
@@ -80,7 +80,7 @@
 											</tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <c:if test="${empty aimEditActivityForm.components.activityComponentes}">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
@@ -93,11 +93,11 @@
                                                   <c:if test="${!empty aimEditActivityForm.components.activityComponentes}">
                                                     <tr>
                                                       <td>
-                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                        <table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                           <c:forEach var="activitySectors" items="${aimEditActivityForm.components.activityComponentes}">
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
                                                                   <tr>
                                                                     <td width="3%" vAlign="center">
 																	<bean:define id="components" name="aimEditActivityForm" property="components"></bean:define>

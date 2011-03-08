@@ -11,13 +11,13 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 --%>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
-					<td height=16 vAlign=center width=650><span class=subtitle-blue>
+					<td height=16 valign="center" width=650><span class=subtitle-blue>
 						<bean:write name="aimChannelOverviewForm" property="name"/>
 						</span>
 					</td>
@@ -50,17 +50,17 @@
 				</tr>					
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
 								<td>&nbsp;
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="95%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="95%">	
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
-												<table cellPadding=0 cellSpacing=0 width=100%>
+												<table cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title align="center" height="20">
 																<digi:trn key="aim:activityDetails">
@@ -93,7 +93,7 @@
 															</table>														
 														</td>
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
-															<table width="100%" border=0>
+															<table width="100%" border="0">
 																<tr>
 																	<td><b>
 																		<digi:trn key="aim:fundingAgency">
@@ -119,7 +119,7 @@
 															</table>														
 														</td>
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
-															<table width="100%" border=0>
+															<table width="100%" border="0">
 																<tr>
 																	<td><b>
 																		<digi:trn key="aim:implementingAgency">
@@ -132,7 +132,7 @@
 														</td>
 														<%--
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
-															<table width="100%" border=0>
+															<table width="100%" border="0">
 																<tr>
 																	<td><b>
 																		<digi:trn key="aim:reportingAgency">
@@ -160,7 +160,7 @@
 															</table>														
 														</td>
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
-															<table width="100%" border=0>
+															<table width="100%" border="0">
 																<tr>
 																	<td><b>
 																		<digi:trn key="aim:implementingAgency">
@@ -193,7 +193,7 @@
 															</table>														
 														</td>
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
-															<table width="100%" border=0>
+															<table width="100%" border="0">
 																<tr>
 																	<td><b>
 																		<digi:trn key="aim:typeOfAssistance">

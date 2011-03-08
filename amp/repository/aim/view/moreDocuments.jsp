@@ -9,7 +9,7 @@
 <digi:instance property="aimRelatedLinksForm" />
 <digi:context name="digiContext" property="context" />
 
-<table width="100%" cellPadding=0 cellSpacing=0 border=0>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td valign="top" align="left" width="100%">
 		<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -17,11 +17,11 @@
 </tr>
 <tr>
 	<td>
-		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+		<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 			<tr>
 				<td class=r-dotted-lg width=14>&nbsp;</td>
-				<td align=left class=r-dotted-lg vAlign=top width=750>
-					<table cellPadding=5 cellSpacing=0 width="100%">
+				<td align=left class=r-dotted-lg valign="top" width=750>
+					<table cellPadding=5 cellspacing="0" width="100%">
 						<tr>
 							<td height=33><span class=crumb>
 								<c:set var="translation">
@@ -39,7 +39,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td height=16 vAlign=center width=650><span class=subtitle-blue>
+							<td height=16 valign="center" width=650><span class=subtitle-blue>
 								<digi:trn key="aim:relatedDocumentsAndLinks">
 									Related Documents and Links
 								</digi:trn></span>
@@ -47,10 +47,10 @@
 						</tr>
 						<tr>
 							<td noWrap width=650 vAlign="top">
-									<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+									<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2 height="20">
-												<table border="0" cellPadding=0 cellSpacing=0 width="100%" height="20">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%" height="20">
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title width="100%" height="20" align="center">
 															<digi:trn key="aim:relatedDocumentsAndLinks">
@@ -63,7 +63,7 @@
 										</tr>
 										<tr>
 											<td bgColor=#ffffff class=box-border valign="top">
-												<table border=0 cellPadding=0 cellSpacing=0 width="100%">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
 														<td valign="left" align="left" width="50%">
 															<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">

@@ -75,12 +75,12 @@
 
 </div>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 >
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" >
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top>
+		<td align=left class=r-dotted-lg valign="top">
 
-<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+<table cellPadding=5 cellspacing="0" width="100%" border="0">
 			<tr>
 				<!-- Start Navigation -->
 				<td height=33>

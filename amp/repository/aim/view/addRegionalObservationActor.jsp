@@ -60,12 +60,12 @@
 <input type="hidden" name="edit" value="true">
 <html:hidden property="editAct"/>
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellSpacing=2 cellPadding=2>

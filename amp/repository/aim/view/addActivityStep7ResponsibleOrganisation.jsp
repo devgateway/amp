@@ -25,7 +25,7 @@
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 										<tr>
 											<td>
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations" 
 												id="repOrganisation" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
@@ -78,7 +78,7 @@
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
 											<tr>
 												<td>
-													<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+													<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 														<tr>
 															<td bgcolor="#ffffff">
 																<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>

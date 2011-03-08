@@ -28,11 +28,11 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 	
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0 style="font-size:12px;">
+			<table cellPadding=5 cellspacing="0" width="100%" border="0" style="font-size:12px;">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 colspan=2 bgcolor=#F2F2F2><span class=crumb>
@@ -51,7 +51,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571 colspan=2 align=center>
+					<td height=16 valign="center" width=571 colspan=2 align="center">
 						<span class=subtitle-blue>
 						<digi:trn key="aim:featureManager">
 							<b>Feature Manager</b>
@@ -61,7 +61,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571 colspan=2>
+					<td height=16 valign="center" width=571 colspan=2>
 				 		<font color="red">
 					 		<logic:iterate id="element" name="aimVisibilityManagerForm" property="errors">
 								<digi:trn key="${element.key}">
@@ -100,11 +100,11 @@
 				<td valign="top">
 				<!-- start  -->
 				
-				<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0 style="font-size:12px;">
+				<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0" style="font-size:12px;">
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellPadding=0 cellSpacing=0 width=100>
+										<table cellpadding="0" cellspacing="0" width="10"0>
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title style="font-size:12px;">
 													<digi:trn key="aim:otherLinks">
@@ -118,7 +118,7 @@
 								</tr>
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellSpacing=1 width="100%" class="inside">
+										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>

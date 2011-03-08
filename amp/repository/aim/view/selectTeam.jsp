@@ -17,9 +17,9 @@
 	</div>
 <!-- BREADCRUMP END -->
 <!-- SELECT TEAM -->
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
-    <td valign=top>
+    <td valign="top">
     <div class="welcome_title">
 		<digi:trn key="aim:selectTheTeam">Select the team you want to use in this current session</digi:trn>
 	</div>

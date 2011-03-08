@@ -28,10 +28,10 @@
 
 %>
 
-<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border="0">
 	<tr>
 		<td width="100%" colspan="2">
-			<img src="<%= actPerfChartUrl %>" width=600 height=450 border=0 usemap="#<%= actPerfChartFileName %>">
+			<img src="<%= actPerfChartUrl %>" width=600 height=450 border="0" usemap="#<%= actPerfChartFileName %>">
 		</td>
 	</tr>
 	<logic:notEmpty name="aimPortfolioDashboardForm" property="pageList">

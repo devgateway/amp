@@ -69,7 +69,7 @@ function openCalendar(month,year) {
 	str += ' <\/SCRIPT>	\n';
 	
 	str += '</HEAD><BODY BGCOLOR="#FFFFFF"><CENTER>\n';
-	str += '<FORM NAME="Cal"><TABLE BGCOLOR="#FFFFFF" BORDER=0><TR><TD ALIGN=LEFT WIDTH=100%>\n';
+	str += '<FORM NAME="Cal"><TABLE BGCOLOR="#FFFFFF" border="0"><TR><TD ALIGN=LEFT width="100%">\n';
 
 	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE=+1>' + names[Month] + ' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>\n';
 	str += '<SELECT NAME="Month" onChange="changeMonth();">';
@@ -90,7 +90,7 @@ function openCalendar(month,year) {
 			str += '<OPTION VALUE="' + t_year + '">'          + t_year + '<\/OPTION>\n';
 	}
 
-	str += '<\/SELECT><\/TD><\/TR><TR><TD ALIGN=CENTER COLSPAN=2>\n';
+	str += '<\/SELECT><\/TD><\/TR><TR><TD align="center" COLSPAN=2>\n';
 	
 	firstDay = new Date(Year,Month,1);
 	startDay = firstDay.getDay();
@@ -100,12 +100,12 @@ function openCalendar(month,year) {
 	else
 		days[1] = 28;
 
-	str += '<TABLE CALLSPACING=0 CELLPADDING=0 BORDER=1 BORDERCOLORDARK="#FFFFFF" BORDERCOLORLIGHT="#C0C0C0"><TR>\n';
+	str += '<TABLE CALLSPACING=0 cellpadding="0" border="1" BORDERCOLORDARK="#FFFFFF" BORDERCOLORLIGHT="#C0C0C0"><TR>\n';
 
 	for (i=0; i<7; i++)
-		str += '<TD WIDTH=50 ALIGN=CENTER VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B> ' + dow[i]+ '<\/B><\/FONT><\/TD>\n';
+		str += '<TD WIDTH=50 align="center" VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B> ' + dow[i]+ '<\/B><\/FONT><\/TD>\n';
 
-	str += '<\/TR><TR ALIGN=CENTER VALIGN=MIDDLE>';
+	str += '<\/TR><TR align="center" VALIGN=MIDDLE>';
 
 	var column = 0;
 	var lastMonth = Month - 1;
@@ -118,7 +118,7 @@ function openCalendar(month,year) {
 		str += '<TD WIDTH=50 HEIGHT=30>' + '<A HREF="javascript:changeDay(' + i + ')"><FONT SIZE=-1 FACE="ARIAL" COLOR="#0000FF">' + i + '<\/FONT><\/A>' +'<\/TD>\n';
 						 
 		if (column == 6) {
-			str += '<\/TR><TR ALIGN=CENTER VALIGN=MIDDLE>\n';
+			str += '<\/TR><TR align="center" VALIGN=MIDDLE>\n';
 			column = -1;
 		}
 	}

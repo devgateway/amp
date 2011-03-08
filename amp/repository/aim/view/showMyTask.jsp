@@ -14,7 +14,7 @@
 
 
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 
 <tr><td width="100%" valign="top" align="left">
 
@@ -26,7 +26,7 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772 height="201">
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772 height="201">
 
 	<tr>
 
@@ -34,11 +34,11 @@
 
 		</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=600><br>
+		<td align=left class=r-dotted-lg valign="top" width=600><br>
 
 			
 
-			<table border=0 cellPadding=5 cellSpacing=3 width="100%">
+			<table border="0" cellPadding=5 cellSpacing=3 width="100%">
 
 				<tr>
 

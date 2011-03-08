@@ -235,17 +235,17 @@
 
 
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
+<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border="0">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -348,7 +348,7 @@
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=16 valign="center" width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
@@ -364,12 +364,12 @@
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
-						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+						<table cellpadding="0" cellspacing="0" width="100%" border="0">
 							<tr>
 								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>

@@ -119,23 +119,23 @@ yuiLoadingPanel.prototype = {
     	<digi:trn>ALL REGIONS</digi:trn>
     </div>
     </td>
-    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
+    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export Options</a></div></div></td>
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
-    <td width=296 bgcolor="#F4F4F4" valign=top>
+    <td width=296 bgcolor="#F4F4F4" valign="top">
 	<div style="background-color:#FFFFFF; height:7px;">&nbsp;</div>
 	<div class="dash_left">
 	<fieldset>
 	<legend><span class=legend_label>Quick Filter</span></legend>
 	<html:checkbox property="filter.workspaceOnly">Show Data from All Workspaces</html:checkbox>
 	<hr />
-	<table cellspacing="0" cellpadding="0" width=100%> 
+	<table cellspacing="0" cellpadding="0" width="100%"> 
    <tr>
     <td><digi:trn>Region</digi:trn>:</td>
     <td align=right>
@@ -314,10 +314,10 @@ Web Link: <b>Not applicable</b>
 	</div>
 	</td>
 	<td width=15>&nbsp;</td>
-    <td width=689 valign=top>
-	<table width="689" border="0" cellspacing="0" cellpadding="0" align=center>
+    <td width=689 valign="top">
+	<table width="689" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td valign=top>
+<td valign="top">
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
 		<li><a href="#tab1"><div>Visualization</div></a></li>

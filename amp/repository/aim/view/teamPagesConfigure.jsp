@@ -12,16 +12,16 @@
 
 <digi:instance property="aimTeamPagesForm" />
 
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -46,12 +46,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%"
 						valign="top" align="left">
 							<tr>
 								<td vAlign="top" width="100%">
@@ -65,10 +65,10 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%">
 										<tr>
 											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=3 cellSpacing=1 class=box-border width="100%" >
+												<table border="0" cellPadding=3 cellspacing="1" class=box-border width="100%" >
 													<tr bgColor=#dddddb>
 														<td bgColor=#dddddb align="center" height="20">
 															<b>

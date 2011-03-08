@@ -108,7 +108,7 @@ function validation(){
 <digi:form action="/addEditData.do" method="post">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
-<table  width=572 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
+<table  width=572 cellPadding=4 cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0">
   <tr>
     <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
     <digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn>: ${aimThemeForm.indicatorName}
@@ -146,7 +146,7 @@ function validation(){
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">
             <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
 			<a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
-				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"> 
 			</a> 
 
           </td>

@@ -79,7 +79,7 @@ function updateChild(action) {
 	<bean:parameter id="subtabId" name="subtab" />
 </logic:present>
 
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 	<tr>
 		<td width="100%">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -103,7 +103,7 @@ function updateChild(action) {
 			<c:set var="teamAccessTypeLocal" scope="session"><bean:write name="aimUpdateWorkspaceForm" property="teamAccessType"/>
 			</c:set>
 			
-			<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 				<tr>
 					<td height=33>
 						<c:set var="translation">
@@ -118,26 +118,26 @@ function updateChild(action) {
 							<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
+							<span class="breadcrump_sep"><b>ï¿½</b></span>
 							<span class="bread_sel"><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td valign=top>
+					<td valign="top">
 						<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 
 								<c:if test="${subtabId == 0 }">
-									<table class="inside" width=100% cellpadding="0" cellspacing="0">
+									<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Team name</b></td>
-										    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Team Description</b></td>
-										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Workspace Type</b></td>
+										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Team name</b></td>
+										    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Team Description</b></td>
+										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Workspace Type</b></td>
 										</tr>
 										<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
 										<tr>
-											<td class=inside colspan="3" align="center">
+											<td class="inside" colspan="3" align="center">
 												<font color="blue"><b>
 													<digi:trn key="aim:updateToAMPComplete">
 														Update to AMP Complete
@@ -147,13 +147,13 @@ function updateChild(action) {
 										</tr>
 										</logic:equal>
 										<tr>
-										    <td class=inside valign=top>
+										    <td class="inside" valign="top">
 										    	<html:text property="teamName" size="50" styleClass="inputx insidex" />
 										    </td>
-										    <td class=inside valign=top>
+										    <td class="inside" valign="top">
 										    	<html:textarea property="description" rows="3" cols="50" styleClass="inputx insidex"/>
 										    </td>
-										    <td class=inside valign=top>
+										    <td class="inside" valign="top">
 										    	<html:select property="workspaceType" styleClass="inputx insidex" disabled="true">
 														<html:option value="">-- <digi:trn key="aim:selectType">Select Type</digi:trn> --</html:option>
 														<html:option value="Donor"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
@@ -164,7 +164,7 @@ function updateChild(action) {
 										</tr>
 										<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
 											<tr>
-												<td class=inside colspan="3">
+												<td class="inside" colspan="3">
 													<digi:trn key="aim:relatedTeam">
 													Related Team
 													</digi:trn>
@@ -173,7 +173,7 @@ function updateChild(action) {
 											</tr>
 										</logic:notEmpty>
 										<tr>
-											<td class=inside colspan="3">
+											<td class="inside" colspan="3">
 												<digi:errors/>
 											</td>	
 										</tr>
@@ -189,14 +189,14 @@ function updateChild(action) {
 								<c:if test="${subtabId == 2 }">
 									<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
 									<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
-									<table class="inside" width=100% cellpadding="0" cellspacing="0">
+									<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 										<tr>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 												<b class="ins_title">
 													<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
 												</b>
 											</td>
-											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside width="50" align="center">
+											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width="50" align="center">
 												<c:set var="translation">
 													<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
 												</c:set>
@@ -205,14 +205,14 @@ function updateChild(action) {
 										</tr>
 										<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
 										<tr>
-											<td class=inside colspan="2">
+											<td class="inside" colspan="2">
 												<table width="100%" class="inside normal" cellpadding="2" cellspacing="0">
 													<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
 														<tr>
-															<td class=inside align="left">&nbsp;
+															<td class="inside" align="left">&nbsp;
 																<c:out value="${workspaces.name}"/>
 															</td>
-															<td class=inside align="right" width="10" valign="center">
+															<td class="inside" align="right" width="10" valign="center">
 																<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																	<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
 																		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Remove this child workspace"/>
@@ -228,7 +228,7 @@ function updateChild(action) {
 										<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
 											<tr>
 												<td colspan="2" align="center">
-													<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" class="box-border-nopadding">
+													<table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center" class="box-border-nopadding">
 														<tr>
 															<td align="left">
 																<digi:trn key="aim:noChildTeams">No child teams</digi:trn>

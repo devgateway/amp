@@ -38,10 +38,10 @@
 
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=0 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=750>
+			<table cellpadding="0" cellspacing="0" width="100%">
     			<tr>
         			<td valign="bottom" class="crumb" style="padding-bottom:15px;">
         				<c:set var="translation">
@@ -54,7 +54,7 @@
           		</tr>
         <feature:display name="Default Reports" module="Multi-dimensional Reports">
         <tr>
-        	<td height=16 align="left" vAlign=center style="font-size:12px;">
+        	<td height=16 align="left" valign="center" style="font-size:12px;">
           		<digi:errors/>
           		<span class=subtitle-blue><b>
             		${pageTitle}
@@ -63,10 +63,10 @@
        </tr>
 		<tr>
 			<td>
-				<table align=center cellPadding=0 cellSpacing=0 width="100%">
+				<table align="center" cellpadding="0" cellspacing="0" width="100%">
 					<tr>
     					<td>
-        					<table border=0 cellPadding=0 cellSpacing=0 width="100%" class="inside" style="margin-top:10px;">
+        					<table border="0" cellpadding="0" cellspacing="0" width="100%" class="inside" style="margin-top:10px;">
             					<tr bgColor=#C0D6E2>
                 					<td bgColor=#C0D6E2 align="center" class="inside">
                     					<b>
@@ -160,9 +160,9 @@
 					</logic:iterate>
 					</table>
 					<c:if test="${custonflag==true}">
-					<table align=center cellPadding=0 cellSpacing=0 width="100%" class="inside">
+					<table align="center" cellpadding="0" cellspacing="0" width="100%" class="inside">
 					<tr>
-						<td align="left" vAlign=center class="inside">
+						<td align="left" valign="center" class="inside">
 							<span class=subtitle-blue><b>
             					<digi:trn>Custom Multidimensional reports</digi:trn>
 								</b>
@@ -280,7 +280,7 @@
  				<tr>
  				</feature:display>
  				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
-					<td align="left" vAlign=center style="font-size:12px; padding-bottom:10px;">
+					<td align="left" valign="center" style="font-size:12px; padding-bottom:10px;">
 							<span class=subtitle-blue><b>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>
 								</b>
@@ -288,7 +288,7 @@
 						</td>
 					</tr>
 				 				
- 				<table align=center cellPadding=0 cellSpacing=0 width="100%">
+ 				<table align="center" cellpadding="0" cellspacing="0" width="100%">
 					<tr bgColor=#C0D6E2>
                 		<td bgColor=#C0D6E2 align="center" class="inside">
                     		<b>
@@ -392,9 +392,9 @@
 					</logic:iterate>
  				</table>
  				<c:if test="${custonflagpledge==true}">
- 					<table align=center cellPadding=0 cellSpacing=0 width="100%">
+ 					<table align="center" cellpadding="0" cellspacing="0" width="100%">
 						<tr>
-							<td height=30 align="left" vAlign=center>
+							<td height=30 align="left" valign="center">
 								<span class=subtitle-blue>
             						<digi:trn>Custom Pledges Reports</digi:trn>
             					</span>

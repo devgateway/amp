@@ -22,7 +22,7 @@
 
 <table width="98%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td align=center>
+        <td align="center">
 			<digi:insert attribute="flatLangSwitch" >
 			   <tiles:put name="redirectToRoot" value="True" />
 			</digi:insert>

@@ -20,7 +20,7 @@
 									</td></tr>									
 									<tr><td>
 										<field:display name="Add Web Resource Button" feature="Web Resources">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 

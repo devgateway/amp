@@ -19,19 +19,19 @@
 
 <html:javascript formName="aimLoginForm"/>
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="header.jsp" flush="true" />
 </td>
 </tr>
 <tr><td width="100%" valign="top" align="left">
 <digi:form action="/login.do" method="post" onsubmit="return validateAimLoginForm(this);">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=757>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=757>
 	<tr>
 		<td class=r-dotted-lg width=5>&nbsp;
 		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=520><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td colspan="2">
@@ -113,18 +113,18 @@
 				</tr>
 			</table>
 		</td>
-		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top>
-	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
+		<td bgColor=#f7f7f4 class=r-dotted-lg valign="top">
+	      <table align="center" border="0" cellPadding=3 cellspacing="0" width="90%">
       		 <tr>
-		          <td class=r-dotted-lg-buttom vAlign=top><br>
+		          <td class=r-dotted-lg-buttom valign="top"><br>
 		          	&nbsp;
       	     	</td>
         		</tr>
         		<tr>
-		          <td vAlign=top>&nbsp;</td>
+		          <td valign="top">&nbsp;</td>
         		</tr>
         		<tr>
-	          	<td class=r-dotted-lg-buttom vAlign=top>
+	          	<td class=r-dotted-lg-buttom valign="top">
 						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
 						 <digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for        
@@ -137,7 +137,7 @@
           		</td>
   				</tr> 
         		<tr>
-          		<td vAlign=top>&nbsp;</td>
+          		<td valign="top">&nbsp;</td>
   				</tr>
 	      </table>
 		</td>

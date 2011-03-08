@@ -23,7 +23,7 @@
 									</td></tr>									
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documents.managedDocumentList">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding" id="team_table">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding" id="team_table">
 												<logic:iterate name="aimEditActivityForm" property="documents.managedDocumentList"
 												id="selManagedDocuments">
 												<tr>
@@ -74,7 +74,7 @@
 										</logic:notEmpty>
 										
 										<logic:empty name="aimEditActivityForm" property="documents.managedDocumentList">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="addManagedDocuments()">

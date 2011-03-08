@@ -43,11 +43,11 @@ function cancel() {
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="780" vAlign="top" align="left" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="780" vAlign="top" align="left" border="0">
 	<tr>
 		<td class=r-dotted-lg width="10" align="left" vAlign="top">&nbsp;</td>
-		<td class=r-dotted-lg align=left vAlign=top>
-			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
+		<td class=r-dotted-lg align=left valign="top">
+			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border="0">
 					<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>

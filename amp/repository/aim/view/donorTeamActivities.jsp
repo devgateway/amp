@@ -186,7 +186,7 @@
 
 
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 
 <tr><td width="100%" valign="top" align="left">
 
@@ -196,17 +196,17 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 
 	<tr>
 
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 
 
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellspacing="0" width="100%">
 
 				<tr>
 
@@ -248,7 +248,7 @@
 
 				<tr>
 
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 
 					</td>
 
@@ -258,7 +258,7 @@
 
 					<td noWrap width=571 vAlign="top">
 
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 
 							<tr bgColor=#3754a1>
 
@@ -282,7 +282,7 @@
 
 								<td valign="top">
 
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="98%">	
 
 										<tr><td>
 
@@ -294,7 +294,7 @@
 
 											<td bgColor=#f4f4f2>
 
-												<table border="0" cellPadding=3 cellSpacing=0 width="100%">
+												<table border="0" cellPadding=3 cellspacing="0" width="100%">
 
 													<tr bgColor=#f4f4f2>
 
@@ -322,13 +322,13 @@
 
 											<td bgColor=#ffffff class=box-border valign="top">
 
-												<table border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
+												<table border="0" cellpadding="0" cellspacing="1" class=box-border-nopadding width="100%">
 
 													<tr>
 
 														<td align="left" width="100%" valign="center">
 
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellspacing="1" cellPadding=2 vAlign="top" align="left"
 
 															bgcolor="#ffffff">
 
@@ -421,7 +421,7 @@
 
 														<td align="left" width="100%" valign="center">
 
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellspacing="1" cellPadding=2 vAlign="top" align="left"
 
 															bgcolor="#dddddd">
 

@@ -18,7 +18,7 @@
 			<digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn> </a>
 			</td>
 			<td valign="top" align="left">
-			<table cellPadding=0 cellSpacing=0>
+			<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td><digi:edit key="${largeTextKey}" /></td>
 				</tr>

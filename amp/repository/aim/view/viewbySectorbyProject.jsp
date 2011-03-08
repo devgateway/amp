@@ -109,7 +109,7 @@
 		<tr>	
 			<logic:greaterThan name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="3">
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -120,7 +120,7 @@
             </logic:greaterThan>    
 			<logic:lessEqual name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="3">
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -133,7 +133,7 @@
 				<tr>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border="0">	
 								<c:set var="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 								</c:set>
@@ -151,7 +151,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;	
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -383,7 +383,7 @@
  <tr bgcolor="#FFFFFF"><td valign="top" colspan="30">
  
 	 <logic:empty name="aimMulitlateralbyDonorForm" property="multiReport"> 
-	 <table cellspacing="1" cellPading=0 width="100%" border=0  bgcolor="#8B8B83" >
+	 <table cellspacing="1" cellPading=0 width="100%" border="0"  bgcolor="#8B8B83" >
 
 			    <tr bgcolor="#F4F4F2">
 				<td rowspan=3 align="center" height="21" width="73" ><strong>
@@ -403,7 +403,7 @@
 			</tr>
 			<tr bgcolor="#f4f4f2">
 				<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
-					<td colspan=4 align="center" height="21" width="77">
+					<td colspan="4" align="center" height="21" width="77">
 						<strong><%=fiscalYearRange%></strong> 
 					</td>
 				</logic:iterate>
@@ -427,7 +427,7 @@
 
 	<logic:notEmpty name="aimMulitlateralbyDonorForm"  property="multiReport">	
 	<logic:iterate name="aimMulitlateralbyDonorForm"  property="multiReport" id="multiReport" type="org.digijava.module.aim.helper.multiReport">
-		<table cellspacing="1" cellPadding=0 width="100%" border=0  bgcolor="#8B8B83" >
+		<table cellspacing="1" cellpadding="0" width="100%" border="0"  bgcolor="#8B8B83" >
 			<tr bgcolor="#F4F4F2">
 				<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
 				<td colspan=100 align="left" height="21" >
@@ -457,7 +457,7 @@
 			</tr>
 			<tr bgcolor="#f4f4f2">
 				<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
-					<td colspan=4 align="center" height="21" width="77">
+					<td colspan="4" align="center" height="21" width="77">
 						<strong><%=fiscalYearRange%></strong>
 					</td>
 				</logic:iterate>

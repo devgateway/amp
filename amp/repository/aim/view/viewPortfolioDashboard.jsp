@@ -150,15 +150,15 @@
 	</div>
 <div class="yui-content" style="background-color:#ffffff;border:1px solid #CCCCCC;height:auto;">
         <feature:display name="Portfolio Dashboard" module="M & E">
-		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 			<TR><TD align=left>
-				<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+				<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 
 					<TR>
 
 						<TD vAlign="top" align="center">
 
-							<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center">
+							<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center">
                                  <TR>
                                        <TD>&nbsp;
                                      
@@ -179,7 +179,7 @@
                                      </TD>
                                 </TR>
 
-								<TR><TD class="highlight" align=center>
+								<TR><TD class="highlight" align="center">
 
 									<digi:trn key="aim:overallPortfolioRisk">Overall Risk</digi:trn>:
 
@@ -198,7 +198,7 @@
 
 								<TR><TD>
 
-									<TABLE cellspacing="2" cellpadding="2" valign="top" align="center" border=0>
+									<TABLE cellspacing="2" cellpadding="2" valign="top" align="center" border="0">
 
 										<TR>
 
@@ -226,7 +226,7 @@
 
 												<% if (actPerfChartUrl != null) { %>
 
-													<img src="<%= actPerfChartUrl %>" width=400 height=500 border=0 usemap="#<%= actPerfChartFileName %>">
+													<img src="<%= actPerfChartUrl %>" width=400 height=500 border="0" usemap="#<%= actPerfChartFileName %>">
 
 													<br><br>
 
@@ -275,7 +275,7 @@
 
 												<% if (actRiskChartUrl != null) { %>
 
-													<img src="<%= actRiskChartUrl %>" width=370 height=400 border=0 usemap="#<%= actRiskChartFileName %>">
+													<img src="<%= actRiskChartUrl %>" width=370 height=400 border="0" usemap="#<%= actRiskChartFileName %>">
 
 													<br><br>
 

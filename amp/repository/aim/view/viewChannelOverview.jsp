@@ -93,18 +93,18 @@ function commentWin(val, commentId) {
 	<logic:equal name="aimChannelOverviewForm" property="validLogin"
 		value="true">
         <c:if test="${not empty aimChannelOverviewForm.activity}">
-		<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0
-			width=100%>
+		<TABLE cellspacing="0" cellpadding="0" align="left" vAlign="top" border="0"
+			width="100%">
 			<TR>
 				<TD vAlign="top" align="center"><!-- contents -->
 
-				<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top"
+				<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top"
 					align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 					<TR>
 						<TD bgcolor="#f4f4f4"><c:set var="activity"
 							value="${aimChannelOverviewForm.activity}" />
 
-						<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top"
+						<TABLE width="100%" cellspacing="1" cellPadding=3 vAlign="top"
 							align="center" bgcolor="#f4f4f4">
 							<TR bgColor=#f4f4f2>
 								<TD align=left>
@@ -291,7 +291,7 @@ function commentWin(val, commentId) {
 							</TR>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%">
-								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
+								<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top"
 									align="center" bgColor=#f4f4f2>
 
 									<TR>
@@ -309,7 +309,7 @@ function commentWin(val, commentId) {
 															module="Project ID and Planning">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=2 cellSpacing=1
+																<TABLE width="100%" cellPadding=2 cellspacing="1"
 																	vAlign="top" align="center" bgcolor="#FFFFFF">
 																	<field:display name="AMP ID" feature="Identification">
 																	<TR>
@@ -356,7 +356,7 @@ function commentWin(val, commentId) {
 															<field:display name="Status" feature="Identification">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="top" bgcolor="#FFFFFF">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -381,7 +381,7 @@ function commentWin(val, commentId) {
 														<feature:display name="Budget" module="Project ID and Planning">
 															<TR>
 																<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -553,7 +553,7 @@ function commentWin(val, commentId) {
 															<field:display feature="Sectors" name="Level 1 Sectors List">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -642,7 +642,7 @@ function commentWin(val, commentId) {
 															name="Location">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=2 cellSpacing=1
+																<TABLE width="100%" cellPadding=2 cellspacing="1"
 																	vAlign="top" align="left" bgcolor="#aaaaaa">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -816,7 +816,7 @@ function commentWin(val, commentId) {
 
 													<TR>
 														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
+														<TABLE width="100%" cellPadding=3 cellspacing="1"
 															vAlign="top" align="left" bgcolor="#aaaaaa">
 															<module:display name="National Planning Dashboard"
 																parentModule="NATIONAL PLAN DASHBOARD">
@@ -1494,7 +1494,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty accessionInstrument}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1519,7 +1519,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty acChapter}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1539,7 +1539,7 @@ function commentWin(val, commentId) {
 													<field:display name="Cris Number" feature="Identification">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1562,7 +1562,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty procurementSystem}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1588,7 +1588,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty reportingSystem}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1614,7 +1614,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty auditSystem}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1640,7 +1640,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty institutions}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1664,7 +1664,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty aimChannelOverviewForm.projectCategory}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1688,7 +1688,7 @@ function commentWin(val, commentId) {
 													<c:if test="${!empty aimChannelOverviewForm.govAgreementNumber}">
 														<TR>
 															<TD>
-															<TABLE width="100%" cellPadding=3 cellSpacing=1
+															<TABLE width="100%" cellPadding=3 cellspacing="1"
 																vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR>
 																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -1716,7 +1716,7 @@ function commentWin(val, commentId) {
 													vAlign="top" align="left">
 													<TR>
 														<TD>
-														<TABLE width="100%" cellPadding=0 cellSpacing=1
+														<TABLE width="100%" cellpadding="0" cellspacing="1"
 															vAlign="top" align="left" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2011,7 +2011,7 @@ function commentWin(val, commentId) {
 															name="Planning">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding=2 cellSpacing=1
+																<TABLE width="100%" cellPadding=2 cellspacing="1"
 																	vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2088,12 +2088,12 @@ function commentWin(val, commentId) {
 																		<field:display name="Closing Dates" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff">
-																				<TABLE width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+																				<TABLE width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
 																					<TR>
-																						<TD width="170" valign=top><digi:trn
+																						<TD width="170" valign="top"><digi:trn
 																							key="aim:proposedClosingDates">Closing Dates </digi:trn> :</TD>
 																						<TD>
-																				<TABLE cellPadding=0 cellSpacing=0>
+																				<TABLE cellpadding="0" cellspacing="0">
 																					<c:forEach var="closeDate" items="${aimChannelOverviewForm.closingDates}">
 																					<TR>
 																						<TD><aim:formatDate value="${closeDate}" /></TD>
@@ -2120,7 +2120,7 @@ function commentWin(val, commentId) {
 																name="Type Of Assistance">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="left" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2153,7 +2153,7 @@ function commentWin(val, commentId) {
 															<field:display name="Financing Instrument" feature="Funding Information">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="left" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2188,7 +2188,7 @@ function commentWin(val, commentId) {
 															<field:display name="Funding Status" feature="Funding Information">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="left" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2215,7 +2215,7 @@ function commentWin(val, commentId) {
 															<field:display name="Mode of Payment" feature="Funding Information">
 																<TR>
 																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	<TABLE width="100%" cellPadding=2 cellspacing="1"
 																		vAlign="top" align="left" bgcolor="#aaaaaa">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
@@ -2244,7 +2244,7 @@ function commentWin(val, commentId) {
 
 													<TR>
 														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
+														<TABLE width="100%" cellPadding=3 cellspacing="1"
 															vAlign="top" align="top" bgcolor="#aaaaaa">
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG

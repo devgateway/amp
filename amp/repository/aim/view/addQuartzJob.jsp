@@ -280,7 +280,7 @@ function typeChanged(value){
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
 	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtStartDateTime"),"clear1")'>
-		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>      
+		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">	</a>      
                	 
                	                               </td>
                 </tr>
@@ -331,7 +331,7 @@ function typeChanged(value){
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
 	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtEndDateTime"),"clear1")'>
-		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>	</a>    
+		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">	</a>    
                                             </td>
                 </tr>
                 <tr>

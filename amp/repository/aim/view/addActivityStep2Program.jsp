@@ -59,7 +59,7 @@
                                       
                                       <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%" bgcolor="#d7eafd">
                                             <tr>
                                               <td align="left">
                                                 <b>
@@ -69,7 +69,7 @@
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <tr>
                                                     <td bgcolor="#ffffff">
                                                     </td>
@@ -77,7 +77,7 @@
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                      <table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                      <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
                                   							<c:if test="${!empty aimEditActivityForm.programs.nationalSetting}">
                                   							${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name}
@@ -88,7 +88,7 @@
                                                           <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
                                                                       <html:multibox property="programs.selectedNPOPrograms" value="${program.ampThemeId}"/>
@@ -146,7 +146,7 @@
 									 <field:display name="Primary Program" feature="NPD Programs">
                                        <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%" bgcolor="#d7eafd">
                                             <tr>
                                               <td align="left">
                                                 <b>
@@ -156,7 +156,7 @@
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <tr>
                                                     <td bgcolor="#ffffff">
                                                     </td>
@@ -164,7 +164,7 @@
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                      <table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                      <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
                                                       <c:if test="${!empty aimEditActivityForm.programs.primarySetting}">
                                                       	${aimEditActivityForm.programs.primarySetting.defaultHierarchy.name}
@@ -175,7 +175,7 @@
                                                                 <c:set var="program" value="${primaryPrograms.program}"/>
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
                                                                       <html:multibox property="programs.selectedPPrograms" value="${program.ampThemeId}"/>
@@ -225,7 +225,7 @@
 									  <field:display name="Secondary Program" feature="NPD Programs">
                                        <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%" bgcolor="#d7eafd">
                                             <tr>
                                               <td align="left">
                                                 <b>
@@ -237,7 +237,7 @@
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <tr>
                                                     <td bgcolor="#ffffff">
                                                     </td>
@@ -245,7 +245,7 @@
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                      <table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                        <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
                                                       <c:if test="${!empty aimEditActivityForm.programs.secondarySetting}">
                                                        ${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.name}
@@ -256,7 +256,7 @@
                                                            <c:set var="program" value="${secondaryPrograms.program}"/>
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
                                                                       <html:multibox property="programs.selectedSPrograms" value="${program.ampThemeId}"/>

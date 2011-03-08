@@ -83,14 +83,14 @@
                 <td width="2">&nbsp;</td>
              </tr>
 	<tr>
-				<td colspan=3 class=subtitle-blue align=center>
+				<td colspan=3 class=subtitle-blue align="center">
 					<digi:trn key="aim:ViewProjectsTitle">
 					<bean:write name="aimCommitmentbyDonorForm" property="reportName" />
 					</digi:trn>
 				</td>
 			</tr>
 			<tr>
-				<td colspan=3 class=box-title align=center>
+				<td colspan=3 class=box-title align="center">
 					<bean:write name="aimCommitmentbyDonorForm" property="workspaceType" />&nbsp; <bean:write name="aimCommitmentbyDonorForm" property="workspaceName" />&nbsp; 
 			<!--		<digi:trn key="aim:team">Team</digi:trn>		-->
 				</td>
@@ -112,7 +112,7 @@
 <logic:notEmpty name="aimCommitmentbyDonorForm"  property="report">
 		<tr>	
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -123,7 +123,7 @@
            </tr>
 			<tr>
 				<td valign="bottom" class="crumb" >
-				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
+				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border="0">
 				<c:set var="translation">
 					<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 				</c:set>
@@ -137,7 +137,7 @@
 			<tr>
 				
 			        <td valign="bottom" class="crumb" >
-					&nbsp;&nbsp;<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					&nbsp;&nbsp;<img src="../ampTemplate/images/icon_csv.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -424,7 +424,7 @@
 					<digi:trn key="aim:unDisbursedhere">Undisbursed </digi:trn>
 					</a></strong></div>
 					</td>
-					<td colspan=4 align="center" height="21" width="240" ><div align="center"><strong>
+					<td colspan="4" align="center" height="21" width="240" ><div align="center"><strong>
 					<a title="<digi:trn key="aim:PlannedDisbursementofFund">Expected disbursements</digi:trn>">
 					<digi:trn key="aim:plannedDisbursements">Planned Disbursed </digi:trn>
 					</a></strong></div>

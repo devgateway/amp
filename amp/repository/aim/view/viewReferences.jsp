@@ -111,11 +111,11 @@ function login()
 <digi:form action="/viewReferences.do" 	name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" method="post">
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 	<TR>
 		<TD vAlign="top" align="center">
 			<!-- contents -->
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" border="0" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" border="0" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 				<TR>
 					<TD bgcolor="#f4f4f4">
 						<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="0">
@@ -148,7 +148,7 @@ function login()
 							</TR>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%">
-								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
+								<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top"
 									align="center" bgColor=#f4f4f2 id="dataTable">
 										<tr bgcolor="#ffffff">
 												<td width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">

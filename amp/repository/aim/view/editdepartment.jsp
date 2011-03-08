@@ -44,8 +44,8 @@ function closePopup() {
 <digi:form action="/editdepartment.do">
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr>
-      <td align=left vAlign=top>
-        <table bgcolor=#aaaaaa cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+      <td align=left valign="top">
+        <table bgcolor=#aaaaaa cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
           <tr bgcolor="#aaaaaa">
             <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
               <digi:trn>Deparments Editor</digi:trn>

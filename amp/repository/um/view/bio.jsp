@@ -13,32 +13,32 @@
 <table height="100%" width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td valign="top" align="center">
-<table cellpadding=2 cellspacing=2 border=0>
+<table cellpadding=2 cellspacing=2 border="0">
 <digi:form action="/userBio.do" enctype="multipart/form-data" onsubmit="return validateUserBioForm(this);">
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 	<td colspan=2 align=left class="Title"><c:out value="${userBioForm.name}"/>
     <digi:trn key="um:portraitBio">Portrait and Bio</digi:trn></td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </td>
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 	<td colspan=2 align=left class="text"><digi:trn key="um:howWorldSeesYou">How would you like the world to see you</digi:trn></td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </td>
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 	<td colspan=2 align=left class="text">
 	<digi:trn key="um:uploadInfoText">
 		Upload your portrait, a scanned JPEG or GIF, from your desktop computer system (note that you can't refer to an image elsewhere on the Internet, this image must be on your computer's hard drive).</digi:trn>
 	</td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </td>
 </tr>
-<tr><td><img src="images/trans.gif" height=10 width=1 border=0></td></tr>
+<tr><td><img src="images/trans.gif" height=10 width=1 border="0"></td></tr>
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
-	<td valign=top class=text>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
+	<td valign="top" class=text>
 	<digi:errors/>
 		<digi:trn key="um:fileName">Filename:</digi:trn><br>
 		<html:file property="photoFile" size="30"/>
@@ -46,29 +46,29 @@
 		Use the 'Browse...' button to locate your file, then click 'Update'.</digi:trn></small><br><digi:img src="module/common/images/arrow.gif" border="0" />
 		<digi:link href="/userBio.do?clear=image" styleClass="text"><digi:trn key="um:clickYoErase">Click here if you want to erase it.</digi:trn></digi:link>
 	</td>
-	<td rowspan=3 align=center>
+	<td rowspan=3 align="center">
 		<digi:context name="showImage" property="context/showImage.do" />
 		<img src="<%=showImage%>" height="106" />
 		<br><small>September 21, 2003</small>
 	</td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </tr>
-<tr><td><img src="images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 	<td colspan=2 class=text align=left>
 		<digi:trn key="um:biography">Biography:</digi:trn><br>
 		<html:textarea property="bioText" cols="45" rows="6"/>
 		<br><small><digi:trn key="um:maxLengthIs">Maximum length is</digi:trn> 2000<digi:trn key="um:characters"> characters</digi:trn></small>
 	</td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </tr>
 <tr>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 	<td colspan=2 align=right class="comment"><html:submit />
 	<br><small><digi:trn key="um:refreshWindow">After updating please refresh the window to view updated information.</digi:trn></small>
 </td>
-	<td><img src="images/trans.gif" height=1 width=20 border=0></td>
+	<td><img src="images/trans.gif" height=1 width="20" border="0"></td>
 </tr></digi:form>
 </table>
 

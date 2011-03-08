@@ -12,11 +12,11 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
   <tr>
     <td class=r-dotted-lg width=14>&nbsp;</td>
-    <td align=left class=r-dotted-lg vAlign=top width=750>
-      <table cellPadding=5 cellSpacing=0 width="100%">
+    <td align=left class=r-dotted-lg valign="top" width=750>
+      <table cellPadding=5 cellspacing="0" width="100%">
         <tr>
           <td valign="bottom" class="crumb" >
             <c:set var="translation">
@@ -41,16 +41,16 @@
         </tr>
         <tr>
           <td noWrap width=650 vAlign="top">
-            <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+            <table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
               <tr bgColor=#f4f4f2>
                 <td>&nbsp;</td>
               </tr>
               <tr bgColor=#f4f4f2>
                 <td valign="top">
-                  <table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
+                  <table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%">
                     <tr>
                       <td bgColor=#ffffff class=box-border>
-                        <table border=0 cellPadding=3 cellSpacing=5 class=box-border width="100%" >
+                        <table border="0" cellPadding=3 cellSpacing=5 class=box-border width="100%" >
                           <tr bgColor=#dddddb>
                             <td bgColor=#dddddb align="center" height="20">
                               <b>
@@ -76,7 +76,7 @@
                               <c:if test="${report.indicatorCode != '4' && report.indicatorCode != '5aii' && report.indicatorCode != '5bii' && report.indicatorCode != '9'&& report.indicatorCode != '10a' && report.indicatorCode != '10b'}">
                                 <tr>
                                   <td>
-                                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10 />
+                                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width="10" />
                                     <strong>[${report.indicatorCode}]</strong>
                                     <c:set var="translation">
                                       <digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>

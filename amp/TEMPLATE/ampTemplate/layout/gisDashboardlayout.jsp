@@ -168,7 +168,7 @@ else {
 	</HEAD>
 	
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">    	
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
+		<TABLE cellspacing="0" cellpadding="0" width="100%" height="100%" border="0" valign="top" align="left">
 			<TBODY>
                 <TR>
                     <TD>
@@ -185,10 +185,10 @@ else {
 
 <h2 style="padding-left:10px;font-size:15pt; text-align:center;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
+					<TABLE bgColor=#ffffff cellpadding="0" cellspacing="0" width="99%" vAlign="top" align="left" border="0">
 						<TR>
 							<TD  width="10">&nbsp;</td>
-							<TD align=center vAlign=top>
+							<TD align="center" valign="top">
 								<TABLE width="100%" cellPadding="5" cellSpacing="0" vAlign="top" align="left" border="0">
 									<tr>
 										<TD vAlign="top" align="left" height="100%" rowspan="3" style="width: 527px;max-width: 527px;">

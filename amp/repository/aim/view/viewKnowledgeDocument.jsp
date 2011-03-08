@@ -44,7 +44,7 @@ method="post">
 						&gt; Document &gt; <bean:write name="aimKnowledgeForm" property="aimRelatedLinksForm"/> Perspective
 					</TD></tr>
 	<tr>
-							<td height=16 vAlign=center width=650><span class=subtitle-blue>
+							<td height=16 valign="center" width=650><span class=subtitle-blue>
 								<digi:trn key="aim:documentDetails">
 									Document Details
 								</digi:trn></span>

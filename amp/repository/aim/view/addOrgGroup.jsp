@@ -70,7 +70,7 @@
 <html:hidden property="ampOrgGrpId" />
 <html:hidden property="ampOrgId" />
 
-					<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="612">
+					<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="612">
 								<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="610">
                                         &nbsp;<digi:errors/>
@@ -78,10 +78,10 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top" width="610">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
+													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<b><digi:trn key="aim:addOrgGroup">Add
@@ -92,7 +92,7 @@
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%">
-																<table width="100%" border=0	 bgColor=#f4f4f2>
+																<table width="100%" border="0"	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
 																		<digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>

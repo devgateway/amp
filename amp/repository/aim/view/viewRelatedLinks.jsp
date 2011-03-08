@@ -29,7 +29,7 @@
 	<bean:parameter id="subtabId" name="subtab" />
 </logic:present>
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td width="100%" valign="top" align="left">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -43,7 +43,7 @@
 					</c:set>	
 					
 					
-					<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+					<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 						<tr>
 							<td>
 								
@@ -56,13 +56,13 @@
 									<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>
-									<span class="breadcrump_sep"><b>»</b></span>
+									<span class="breadcrump_sep"><b>ï¿½</b></span>
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 									</c:set>
 									<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 									<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-									<span class="breadcrump_sep"><b>»</b></span>
+									<span class="breadcrump_sep"><b>ï¿½</b></span>
 									<span class="bread_sel">
 										<c:choose>
 											<c:when test="${subtabId == 0 }">
@@ -77,20 +77,20 @@
 							</td>
 						</tr>
 						<tr>
-							<td valign=top>
+							<td valign="top">
 								<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 
 
 
-						<table class="inside" width=100% cellpadding="0" cellspacing="0">
+						<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 							<tr>
-							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:doctitle">Title</digi:trn>
 							    	</b>
 							    </td>
-							    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<c:if test="${subtabId == 0 }">
 							    			<digi:trn key="fm:documentfilename">Filename</digi:trn>
@@ -100,7 +100,7 @@
 							    		</c:if>
 							    	</b>
 							    </td>
-							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<digi:trn key="aim:activityName">Activity</digi:trn>
 							    	</b>
@@ -113,7 +113,7 @@
 										<c:if test="${relatedLink.isFile == true}">
 											<tr>	
 												
-													<td class=inside>
+													<td class="inside">
 														<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
                             <c:set target="${docParams}" property="uuid">
 															<c:out value="${relatedLink.uuid}"/>
@@ -133,7 +133,7 @@
                               </digi:link>
                             </c:if>
                           </td>
-                          <td class=inside>
+                          <td class="inside">
                           	<logic:notEmpty name="relatedLink" property="fileName">
                                 <bean:define name="relatedLink" property="fileName" id="fileName"/>
                             </logic:notEmpty>
@@ -147,7 +147,7 @@
                             </a>
                           </td>
                         
-                          <td class=inside title="<c:out value="${relatedLink.activityName}" />">
+                          <td class="inside" title="<c:out value="${relatedLink.activityName}" />">
 														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams2}" property="ampActivityId">
 															<bean:write name="relatedLink" property="activityId" />
@@ -179,7 +179,7 @@
 									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.module.aim.helper.Documents">
 										<c:if test="${relatedLink.isFile == false}">
 											<tr>
-                      	<td class=inside>
+                      	<td class="inside">
                         	<jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
                           <c:set target="${docPars}" property="uuid">
                           	<c:out value="${relatedLink.uuid}"/>
@@ -199,14 +199,14 @@
                             </digi:link>
                           </c:if>
                         </td>
-                        <td class=inside>
+                        <td class="inside">
                         	<c:if test="${relatedLink.isFile == false}">
                           	<a target="_blank" href="<bean:write name="relatedLink" property="url" />" class="l_sm">
                             	<bean:write name="relatedLink" property="url" />
                             </a>
                           </c:if>
                         </td>
-                        <td title="<c:out value="${relatedLink.activityName}" />" class=inside>
+                        <td title="<c:out value="${relatedLink.activityName}" />" class="inside">
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams}" property="ampActivityId">
 														<bean:write name="relatedLink" property="activityId" />

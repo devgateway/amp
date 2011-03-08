@@ -43,7 +43,7 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 <tr>
 	<!-- Start Navigation -->
 	<td height=33><span class=crumb>
@@ -64,7 +64,7 @@
 
 
 <tr>
-<td height=16 vAlign=center width=571>
+<td height=16 valign="center" width=571>
 
 <span class=subtitle-blue style="padding-top:0px;padding-bottom:0px">
 						<digi:trn key="aim:adminconfigurationsettings">Configuration Settings
@@ -73,7 +73,7 @@
 					</td>
 </tr>
 <tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
 				</tr>

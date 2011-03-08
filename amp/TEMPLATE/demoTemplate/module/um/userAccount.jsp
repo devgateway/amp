@@ -9,7 +9,7 @@
 
 <table border="0" cellpadding="2" cellspacing="0" align="center" width="500px">
 <tr><td nowrap class="PageTitle"><digi:trn key="um:myAccount">My Account</digi:trn></td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:accountInfo">Account Information</digi:trn></td></tr>
 <tr><td>
       <table border="0" cellpadding="2" cellspacing="1" width="100%" >
@@ -35,7 +35,7 @@
       </table>
 </td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:mySubscrNotices">My subscription and notices</digi:trn></td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:myInterests">My Interests</digi:trn></td></tr>
 </table>
 

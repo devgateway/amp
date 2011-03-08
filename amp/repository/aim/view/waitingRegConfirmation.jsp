@@ -9,14 +9,14 @@
 <html:javascript formName="aimUserRegisterForm"/>
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td width=14>&nbsp;
 		</td>
-		<td align=left vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=520><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
@@ -41,7 +41,7 @@
 				</tr>
 			</table>
 		</td>
-		<td bgColor=#f7f7f4 vAlign=top>
+		<td bgColor=#f7f7f4 valign="top">
 
 		</td>
 	</tr>

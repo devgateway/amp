@@ -394,7 +394,7 @@
 <td colspan="2">&nbsp;</td>
 <td  colspan="2" align="center">
 <c:if test="${not empty addressbookForm.organizations}">
-<table width="100%" cellSpacing=1 cellPadding=5 class="added_org_nc">
+<table width="100%" cellspacing="1" cellPadding=5 class="added_org_nc">
 <c:forEach var="organization" items="${addressbookForm.organizations}">
 <tr>
 <td width="3px">
@@ -498,7 +498,7 @@
 			<c:choose>
 				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">
 					<center><b style="font-size:12px;">Already Existing Contacts:</b><br /></center>
-					<table border="0" style="font-size:12px; margin-bottom:15px; margin-top:15px;" align=center width=100% class="inside">
+					<table border="0" style="font-size:12px; margin-bottom:15px; margin-top:15px;" align="center" width="100%" class="inside">
 						<thead>
 							<tr bgcolor=#C0D6E2>
 								<td class="inside"></td>

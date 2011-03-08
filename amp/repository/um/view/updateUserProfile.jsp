@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <digi:errors/>            
-      <TABLE width="650px" align=center>
+      <TABLE width="650px" align="center">
       <digi:form action="/userUpdateBlank.do" method="post" >
         <TR>
           <TD class=PageTitle colSpan=2><digi:trn key="um:editYourInfo">Edit your information</digi:trn></TD></TR>
@@ -20,7 +20,7 @@
             color=red><B><BIG>*</BIG></B></FONT> are required.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2 td>
-            <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
+            <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="um:firstName">First Name</digi:trn></TD>
@@ -58,12 +58,12 @@
             <TD class=text noWrap align=left>&nbsp;<digi:trn key="um:website">Website</digi:trn></TD>
             <TD class=text noWrap align=left><html:text  property="webSite" size="50" /></TD>
           </TR>
-          <TR><TD><img src="/images/trans.gif" height=15 width=1 border=0></TD></TR>
+          <TR><TD><img src="/images/trans.gif" height=15 width=1 border="0"></TD></TR>
 	  <TR class="bgwhite">
 		  <TD align=left noWrap><span class="redbold">*</span><digi:trn key="display_my_profile">Display my member profile</digi:trn><html:radio  property ="membersProfile" value="true"/><digi:trn key="yes">Yes</digi:trn><html:radio  property ="membersProfile" value="false"/><digi:trn key="no">No</digi:trn></TD>
 		  <TD align=left noWrap>&nbsp;</TD>
 	  </TR>
-          <TR><TD><img src="/images/trans.gif" height=15 width=1 border=0></TD></TR>
+          <TR><TD><img src="/images/trans.gif" height=15 width=1 border="0"></TD></TR>
           <TR>
             <TD align=left noWrap class="title"><digi:trn key="um:yourLangSettings">Your language settings</digi:trn></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
@@ -85,7 +85,7 @@
         </TABLE >
             </td>
 <TR>
-<TD colspan=2 align=center>
+<TD colspan=2 align="center">
 <html:submit property="submit" value="UPDATE"/>
 </TD>
 </TR>

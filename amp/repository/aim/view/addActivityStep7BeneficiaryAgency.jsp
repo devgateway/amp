@@ -24,7 +24,7 @@
 									<tr><td>
 								<field:display name="Beneficiary Agency" feature="Beneficiary Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 												id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
@@ -50,7 +50,7 @@
 												</td></tr>
 												</logic:iterate>
 												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
+													<table cellspacing="1" cellpadding="1">
 														<tr>
 															<td>
 															<field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency">
@@ -82,7 +82,7 @@
 										</field:display>
 										<field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency">
 										<logic:empty name="aimEditActivityForm" property="agencies.benAgencies">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  refreshParentDocument="false" collection="benAgencies" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>

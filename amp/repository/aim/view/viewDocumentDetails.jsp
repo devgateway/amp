@@ -47,7 +47,7 @@
 <html:hidden property="pageId" />
 <html:hidden property="valuesSet" value="false"/>
 
-<table class="inside" width=100% cellpadding="0" cellspacing="0">
+<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="inside">
 			<digi:trn key="aim:nameOfActivity">Activity</digi:trn>

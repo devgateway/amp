@@ -60,7 +60,7 @@ function selectCalendarType(view, type) {
 																		 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 																				</a>
 									                                    		<a id="date1" href='javascript:pickDateWithClear("date1",document.calendarViewForm.customViewStartDate,"clear1")' style="text-decoration:none">
-																					<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border=0>
+																					<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border="0">
 																				</a>
 									                                   		</td>
 									                                   	</tr>
@@ -115,7 +115,7 @@ function selectCalendarType(view, type) {
 																		 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 																				</a>
 									                                    		<a id="date2" href='javascript:pickDateWithClear("date2",document.calendarViewForm.customViewEndDate,"clear2")' style="text-decoration:none">
-																					<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border=0>
+																					<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border="0">
 																				</a>
 																			</td>
 																		</tr>

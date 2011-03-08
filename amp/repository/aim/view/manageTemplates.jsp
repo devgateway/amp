@@ -45,7 +45,7 @@
 
 <digi:instance property="aimFeatureManagerForm" />
 
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampTemplatesManager">

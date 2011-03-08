@@ -1,14 +1,14 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<table cellpadding="0" cellspacing="0" width="100%" background="module/aim/images/bg-home.jpg" border=0 >
+<table cellpadding="0" cellspacing="0" width="100%" background="module/aim/images/bg-home.jpg" border="0" >
 	<tr>
 		<td valign="top">
-			<table height=95 cellSpacing=0 cellPadding=0 width=757 
-			background="module/aim/images/bg-home.jpg" valign="top" border=0 class=r-dotted>
+			<table height=95 cellspacing="0" cellpadding="0" width=757 
+			background="module/aim/images/bg-home.jpg" valign="top" border="0" class=r-dotted>
 				<tr>
 					<td>
-						<table cellSpacing=0 cellPadding=0 width=100%>
+						<table cellspacing="0" cellpadding="0" width="100%">
 							<tr>
 								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>	
 								<td class=home-bg-header rowSpan=2 width="100%" valign="top">

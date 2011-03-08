@@ -222,10 +222,10 @@ div.fakefile2 input{
 <!--  AMP Admin Logo -->
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
@@ -240,7 +240,7 @@ div.fakefile2 input{
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" width="571" align=center>
+					<td height="16" vAlign="middle" width="571" align="center">
                       <span style="font-size:12px; color:#000000;">
                         <digi:trn><b>Translation Manager</b><hr /></digi:trn>
                       </span>
@@ -252,13 +252,13 @@ div.fakefile2 input{
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="50%" cellspacing=1 cellSpacing=1 border=0 align=center>
+					<td noWrap width="100%" vAlign="top">
+					<table width="50%" cellspacing="1" cellspacing="1" border="0" align="center">
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
 					<digi:form action="/importexport.do" method="post" >
 							<tr>
-								<td align=center>
+								<td align="center">
 									<digi:trn key="aim:translationManagerLangFoundMsg">
 									<b>The following languages where found on this site:</b><br />
 									</digi:trn>
@@ -266,7 +266,7 @@ div.fakefile2 input{
 							</tr>
 						<c:forEach items="${importExportForm.languages}" var="lang">
 							<tr>
-								<td align=center>
+								<td align="center">
 									<html:checkbox property="selectedLanguages" value="${lang}"/>
                                     <digi:trn key="aim:TranslationManagerLangiage${lang}">
                                     ${lang}
@@ -276,14 +276,14 @@ div.fakefile2 input{
 	 						</tr>
 						 </c:forEach>
 							 <tr>
-							 	<td align=center>
+							 	<td align="center">
                                   <c:set var="translation">
                                     <digi:trn>Export</digi:trn>
                                   </c:set>
                                   <html:submit style="dr-menu" value="${translation}" property="export"/>
                                 </td>
 							 </tr>
-							 <td align=center>
+							 <td align="center">
 									<br/>
 									<hr />
 							</td>
@@ -296,7 +296,7 @@ div.fakefile2 input{
 
 					<digi:form action="/importexport.do" method="post" enctype="multipart/form-data">
 						<tr>
-							<td align=center>
+							<td align="center">
 								<!-- <html:file property="fileUploaded"></html:file> -->
 								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 									<!-- CSS content must be put in a separated file and a class must be generated -->

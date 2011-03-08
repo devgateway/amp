@@ -223,11 +223,11 @@ function setIndex(index){
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760px>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=760px>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750px>
-		<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750px>
+		<table cellPadding=5 cellspacing="0" width="100%" border="0">
 			<tr>
 				<td height=33>
 					<span class=crumb> 
@@ -244,7 +244,7 @@ function setIndex(index){
 			</tr>
 				
 			<tr>
-          		<td height=16 vAlign=center>
+          		<td height=16 valign="center">
 			            <div id="demo" class="yui-navset" style="width:800px">
 			                <ul class="yui-nav">
 								<c:set var="indexTab" value="0"/>

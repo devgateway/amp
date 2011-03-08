@@ -8,7 +8,7 @@
 <digi:errors/>
 <html:javascript formName="userRegisterForm" />
 
-      <TABLE width="500px" align=center>
+      <TABLE width="500px" align="center">
       <digi:form action="/userRegisterGateway.do" method="post" onsubmit="return validateUserRegisterForm(this);" >
         <TR>
           <TD class=PageTitle colSpan=2>Register MyGateway</TD></TR>
@@ -26,7 +26,7 @@
             valid e-mail address.</TD></TR>
         <TR>
           <TD colSpan=2 td>
-            <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
+            <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT>First Name</TD>
@@ -89,10 +89,10 @@
             <TD class=text noWrap align=left>&nbsp;Website</TD>
             <TD class=text noWrap align=left><html:text  property="webSite" size="60" maxlength="50" /></TD>
           </TR>
-          <tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+          <tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
           <TR >
             <TD class=text noWrap align=left colspan=2>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
              <tr><td nowrap class="text">How did you hear about the Development Gateway?</td></tr>
              <tr><td>
               <html:select property="howDidyouSelect">
@@ -104,13 +104,13 @@
              </table>
             </TD>
           </TR>
-          <tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+          <tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
           <TR >
             <TD class=text noWrap align=left colspan=2>
              <table border="0" cellspacing="1" cellpadding="0" width="100%">
           <TR bgcolor="#D5D5D5">
             <TD align=left noWrap class="title">Topics</TD>
-            <TD align=center noWrap class="title">Join</TD>
+            <TD align="center" noWrap class="title">Join</TD>
           </TR>
           <logic:present name="userRegisterForm" property="topicitems">
            <logic:iterate  name="userRegisterForm" id="item" property="topicitems">
@@ -132,7 +132,7 @@
               <html:radio  property ="newsLetterRadio" value="false"/>No</TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>
-          <tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+          <tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
           <TR >
             <TD align=left noWrap class=title>YOUR USER PROFILE</TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
@@ -150,7 +150,7 @@
               <html:radio  property ="membersProfile" value="false"/>No</TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>
-          <tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+          <tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
           <TR>
             <TD align=left noWrap class="title">Your language settings</TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
@@ -174,7 +174,7 @@
           </TR>
           <TR>
             <TD align=left noWrap class=text>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
 		  	 <logic:iterate name="userRegisterForm" id="item" property="contentLanguages">
              <tr><td>
              <html:multibox property="contentSelectedLanguages"><bean:write name="item" property="code"/></html:multibox>
@@ -189,7 +189,7 @@
             </td>
 
 <TR>
-<TD colspan=2 align=center>
+<TD colspan=2 align="center">
 <html:submit property="submit" value="SUBMIT" />
 </TD>
 </TR>

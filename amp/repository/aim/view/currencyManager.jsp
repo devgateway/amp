@@ -92,17 +92,17 @@ function submitPages(){
 
 
 
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td>
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -120,7 +120,7 @@ function submitPages(){
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td colspan="2" height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td colspan="2" height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:currencyManager">
 							Currency Manager
 						</digi:trn></span>
@@ -150,11 +150,11 @@ function submitPages(){
 										<td><!-- Filters to be put here -->
 
 
-										<table cellPadding=1 cellSpacing=1 align="left"
+										<table cellpadding="1" cellspacing="1" align="left"
 											bgcolor="#dddddd" width="330">
 											<tr>
 												<td bgcolor="#f4f4f2">
-												<table cellPadding=0 cellSpacing=2 align="left" border=0
+												<table cellpadding="0" cellSpacing=2 align="left" border="0"
 													width="330">
 													<tr>
 														<td bgcolor="#f4f4f2" align="left" width="100"><b><digi:trn
@@ -184,7 +184,7 @@ function submitPages(){
 											</tr>
 											<tr>
 												<td bgcolor="#f4f4f2">
-												<table cellPadding=0 cellSpacing=2 align="left" border=0
+												<table cellpadding="0" cellSpacing=2 align="left" border="0"
 													vAlign="center">
 													<tr>
 														<td bgcolor="#f4f4f2" vAlign="center" width="170"
@@ -466,11 +466,11 @@ function submitPages(){
 								</table>
 								</td>
 								<td valign="top">
-								<table align=center cellPadding=0 cellSpacing=0 width="90%"
-									border=0>
+								<table align="center" cellpadding="0" cellspacing="0" width="90%"
+									border="0">
 									<tr>
 										<td><!-- Other Links -->
-										<table cellPadding=0 cellSpacing=0 width=100>
+										<table cellpadding="0" cellspacing="0" width="10"0>
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title><digi:trn
 													key="aim:otherLinks">
@@ -484,7 +484,7 @@ function submitPages(){
 									</tr>
 									<tr>
 										<td bgColor="#ffffff" class="box-border">
-										<table cellPadding=5 cellSpacing=1 width="100%">
+										<table cellPadding=5 cellspacing="1" width="100%">
 											<tr>
 												<td><digi:img src="module/aim/images/arrow-014E86.gif"
 													width="15" height="10" /> <c:set var="translation">

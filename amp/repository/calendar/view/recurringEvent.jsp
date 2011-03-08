@@ -236,7 +236,7 @@ function disableInputs(){
 </script>
 
 
-<table border="0" cellPadding=2 cellSpacing=0 width="100%" >
+<table border="0" cellPadding=2 cellspacing="0" width="100%" >
 
 
 <tr>
@@ -487,7 +487,7 @@ function disableInputs(){
 		                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 		                                                  </a>
 		                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("recurrSelectedStartDate"),"clear1")'>
-		                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+		                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 		                                                  </a>
 		                                               </td>
 		                                          </tr>
@@ -518,7 +518,7 @@ function disableInputs(){
                                              </td>
                                              <td>
                                                <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("recurrSelectedEndDate"),"clear2")'>
-                                                 <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                 <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
                                                </a>
                                              </td>
                                            </tr>

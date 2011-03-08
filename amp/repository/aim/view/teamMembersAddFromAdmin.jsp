@@ -28,11 +28,11 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home" >
@@ -62,16 +62,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<bean:write name="aimTeamMemberForm" property="teamName" />
 					</span></td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
 					<td noWrap width=600 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td valign="top">
 									<jsp:include page="addTeamMember.jsp" flush="true"/>
@@ -79,11 +79,11 @@
 							</tr>
 						</table>
 					</td>
-					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
 							<tr>
 								<td>
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellpadding="0" cellspacing="0" width="10"0>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -99,7 +99,7 @@
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellSpacing=1 width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

@@ -167,7 +167,7 @@
 <html:hidden property="prgLevel"/>
 
 
- 				<table width="100%" align="center" cellPadding=3 cellSpacing=0>
+ 				<table width="100%" align="center" cellPadding=3 cellspacing="0">
 			  <tr bgColor=#dddddb>
 				<td height="10" colspan="3" align="center" valign="middle" bgColor=#dddddb>
 						            <strong>

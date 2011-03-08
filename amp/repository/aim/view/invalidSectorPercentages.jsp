@@ -55,11 +55,11 @@ a.itr:hover {
 </script>
 
 <digi:form action="/invalidSectorPercentages.do">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=800 border="0">
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=800>
-        <table cellPadding=5 cellSpacing=0 width="100%" border=0>
+      <td align=left class=r-dotted-lg valign="top" width=800>
+        <table cellPadding=5 cellspacing="0" width="100%" border="0">
           <tr>
             <td height=33><span class=crumb>
               <c:set var="translation">
@@ -84,11 +84,11 @@ a.itr:hover {
             <td noWrap width="100%" vAlign="top">
               <table width="100%" cellspacing="0" cellSpacing="0" border="0">
                 <tr>
-                  <td noWrap width=100% vAlign="top">
-                    <table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+                  <td noWrap width="100%" vAlign="top">
+                    <table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">
-                          <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left" border="0">
+                          <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
                             <tr>
                               <td>
                                 <table style="font-family:verdana;font-size:11px;" border="0" width="100%">                                 

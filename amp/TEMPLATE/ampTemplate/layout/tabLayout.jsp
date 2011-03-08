@@ -52,7 +52,7 @@
 
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
+		<TABLE cellspacing="0" cellpadding="0" width="100%" border="0" valign="top" align="left">
 
 			<TBODY>
 
@@ -69,7 +69,7 @@
 			<TR height="15">
 
 				<TD width="100%" align="center" bgcolor="#376091">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%">
+					<TABLE cellspacing="0" cellpadding="0" width="98%">
 
 						<TBODY>
 
@@ -112,15 +112,15 @@
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="770" vAlign="top" align="left" border=0>
+					<TABLE bgColor=#ffffff cellpadding="0" cellspacing="0" width="770" vAlign="top" align="left" border="0">
 
 						<TR>
 
 							<TD width="10">&nbsp;</td>
 
-							<TD align=center vAlign=top width="900">
+							<TD align="center" valign="top" width="900">
 
-								<TABLE width="900" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
+								<TABLE width="900" cellpadding="0" cellspacing="0" vAlign="top" align="left" border="0">
 
 									<TR><TD vAlign="bottom" align="center" width="900">
 

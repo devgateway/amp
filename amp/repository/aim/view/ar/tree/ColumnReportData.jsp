@@ -17,7 +17,7 @@
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>
-<table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
+<table class=clsInnerTable cellspacing="0" cellpadding="0" width="100%" border="0">
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="reportHeadings.jsp"/>

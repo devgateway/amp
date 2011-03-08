@@ -68,7 +68,7 @@
 
 <digi:instance property="aimTeamActivitiesForm" />
 
-<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
 <tr><td>
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -77,11 +77,11 @@
 <tr><td>
 <digi:form action="/removeTeamActivity.do" method="post">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=872 border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=872 border="0">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=850>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=850>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33>
@@ -110,18 +110,18 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<bean:write name="aimTeamActivitiesForm" property="teamName" />
 					</span></td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr><td noWrap width=700 vAlign="top">
-						<table cellPadding=0 cellSpacing=1 width="100%" bgcolor="#d7eafd">
+						<table cellpadding="0" cellspacing="1" width="100%" bgcolor="#d7eafd">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 										<tr>
 											<td width=3 bgcolor="#d7eafd">
 												<input type="checkbox" name="checkAll" onclick="checkall()">
@@ -134,7 +134,7 @@
 											</td>
 										</tr>
 										<tr><td colspan="2">
-											<table width="100%" cellspacing=1 cellpadding=2 valign=top align=left bgcolor="#d7eafd" border=0>
+											<table width="100%" cellspacing="1" cellpadding=2 valign="top" align=left bgcolor="#d7eafd" border="0">
 													<logic:empty name="aimTeamActivitiesForm" property="activities">
 													<tr bgcolor="#ffffff">
 														<td colspan="2" align="center"><b>
@@ -206,12 +206,12 @@
 							</tr>
 						</table>
 					</td>
-					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellpadding="0" cellspacing="0" width="10"0>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -227,7 +227,7 @@
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellSpacing=1 width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td>
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

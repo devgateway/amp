@@ -69,10 +69,10 @@
 		</div>
 	</div>
 	<!-- BREADCRUMP END -->
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>
 			<tr>
-				<td width=900px valign=top>
+				<td width=900px valign="top">
 					<digi:insert attribute="body"/>
 				</td>
 				</tr>

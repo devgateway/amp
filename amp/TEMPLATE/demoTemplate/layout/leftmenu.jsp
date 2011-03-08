@@ -1,5 +1,5 @@
 
- <TABLE cellSpacing=0 width="100%" cellPadding="0" border="0">
+ <TABLE cellspacing="0" width="100%" cellPadding="0" border="0">
 
                   <!-- if 0 eq 1 //-->
 
@@ -9,7 +9,7 @@
      <table cellSpacing="0" cellPadding="0" width="100%" border="0">
        <tr>
          <td>
-           <table cellspacing=0 cellpadding=0 width="100%">
+           <table cellspacing="0" cellpadding="0" width="100%">
              <tr><td class="tab" style="border-bottom: 0px">&nbsp;Welcome</td>
                <td align="center" class="tab" nowrap style="border-bottom: 0px; font-size: 10pt; border-left: 3px solid #FFFFFF; background-color: #D8D8D8"><b><a target="_self" class="headerNav" href="/user-man/register/logout?return_url=http://dev.dgmarket.com/dacon/" style="font-size: 10pt">
                log out</a></b></td></tr>
@@ -40,7 +40,7 @@
  		            <tr><td align="center"><IMG height="1" src="jsp/eproc/images/blue.gif" width="100%" border="0"></td></tr>
  		         <tr>
  		              <td class="border" align="left">
- 		    	         <table cellspacing=2 cellpadding=0 width="100%">
+ 		    	         <table cellspacing=2 cellpadding="0" width="100%">
                  <tr><td class="smallfont" style="border-bottom: 0px; border-left: 0px">Keyword:<br>
                  <input class="monospace" id="keywords" size="21" name="keywords" value="">
                  <input type="hidden" name="data_type" value="NCPV">

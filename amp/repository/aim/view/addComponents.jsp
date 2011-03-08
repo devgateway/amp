@@ -78,14 +78,14 @@ function closeWindow()
 <digi:instance property="aimUpdateComponentsForm" />
 <digi:form action="/updateComponents.do" method="post">
   <html:hidden styleId="check" property="check"/>
-  <table bgColor=#ffffff cellPadding=0 cellSpacing=0>
+  <table bgColor=#ffffff cellpadding="0" cellspacing="0">
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=750>
-        <table cellPadding=5 cellSpacing=0 width="100%">
+      <td align=left class=r-dotted-lg valign="top" width=750>
+        <table cellPadding=5 cellspacing="0" width="100%">
           <tr>
 
-            <td height=16 vAlign=center width=571><span class=subtitle-blue>
+            <td height=16 valign="center" width=571><span class=subtitle-blue>
               <digi:trn key="aim:addNewComponent">
               Add A New Component
               </digi:trn>
@@ -93,11 +93,11 @@ function closeWindow()
             </td>
           </tr>
           <tr>
-            <td noWrap width=100% vAlign="top">
-              <digi:errors/>					<table width="100%" cellspacing=1 cellSpacing=1>
+            <td noWrap width="100%" vAlign="top">
+              <digi:errors/>					<table width="100%" cellspacing="1" cellspacing="1">
                 <tr>
                   <td noWrap width=600 vAlign="top">
-                    <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+                    <table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
                       <tr bgColor=#f4f4f2>
                         <td vAlign="top" width="100%">&nbsp;
                         
@@ -105,10 +105,10 @@ function closeWindow()
                       </tr>
                       <tr bgColor=#f4f4f2>
                         <td valign="top">
-                          <table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+                          <table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
                             <tr>
                               <td bgColor=#ffffff class=box-border>
-                                <table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
+                                <table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
                                   <tr bgColor=#dddddb>
                                     <!-- header -->
                                     <td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
@@ -118,7 +118,7 @@ function closeWindow()
                                   <!-- Page Logic -->
                                   <tr>
                                     <td width="100%">
-                                      <table width="100%" border=0	 bgColor=#f4f4f2>
+                                      <table width="100%" border="0"	 bgColor=#f4f4f2>
 										<field:display name="Admin - Component Title" feature="Admin - Component">
 	                                        <tr>
 	                                            <td width="30%" align="right"><font color=red>*</font>
@@ -204,7 +204,7 @@ function closeWindow()
                 </tr>
                     </table>
             </td>
-            <td noWrap width=100% vAlign="top">
+            <td noWrap width="100%" vAlign="top">
             </td>
           </tr>
         </table>

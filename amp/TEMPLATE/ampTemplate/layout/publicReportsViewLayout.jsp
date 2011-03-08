@@ -61,7 +61,7 @@
 
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
+		<TABLE cellspacing="0" cellpadding="0" width="100%" border="0" valign="top" align="left">
 
 			<TBODY>
 
@@ -79,15 +79,15 @@
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
+					<TABLE bgColor=#ffffff cellpadding="0" cellspacing="0" width="99%" vAlign="top" align="left" border="0">
 
 						<TR>
 
 							<TD class=r-dotted-lg width="10">&nbsp;</td>
 
-							<TD align=center vAlign=top>
+							<TD align="center" valign="top">
 
-								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
+								<TABLE width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left" border="0">
 
 									<TR>
 
@@ -99,7 +99,7 @@
 
 										<TD vAlign="top" align="left" width="25%" class=r-dotted-lg bgcolor="#f4f4f2">
 
-											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
+											<TABLE width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left" border="0">
 
 												<TR><TD vAlign="top" align="left">
 

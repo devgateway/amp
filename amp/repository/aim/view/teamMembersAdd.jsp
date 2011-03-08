@@ -36,17 +36,17 @@
 
 <digi:instance property="aimTeamMemberForm" />
  
-<table cellspacing=0 cellpadding=0 width="100%" valign="top" align="left">
+<table cellspacing="0" cellpadding="0" width="100%" valign="top" align="left">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
 	<tr>
 		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
+		<td align=left valign="top" width=750>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -79,12 +79,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="1" scope="request"/>

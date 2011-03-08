@@ -10,7 +10,7 @@
 
 <table border="0" cellpadding="2" cellspacing="0" align="center" width="500px">
 <tr><td nowrap class="PageTitle"><digi:trn key="um:myGateway">My Gateway</digi:trn></td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:accountInformation">Account Information</digi:trn></td></tr>
 <tr><td>
       <table border="0" cellpadding="2" cellspacing="1" width="100%" >
@@ -54,7 +54,7 @@
        <tr><td><digi:link href="/showUpdateForm.do" styleClass="text"><digi:trn key="um:changeMyPassword">Change my password</digi:trn></digi:link></td></tr>
       </table>
 </td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:myInterests">My Interests</digi:trn></td></tr>
 <tr><td>
       <table border="0" cellpadding="2" cellspacing="1" width="100%" >
@@ -82,7 +82,7 @@
        <tr><td><digi:link href="/showUserProfile.do" styleClass="text"><digi:trn key="um:editThisInfo">Edit this information</digi:trn></digi:link></td></tr>
       </table>
 </td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:myUserProfile">My user profile</digi:trn></td></tr>
 <tr><td align="left" nowrap class="text" bgcolor="#F0F0F0"><digi:trn key="um:displMyProfile">Display my profile:</digi:trn><b>
       <c:if test="${userAccountForm.displayMyProfile}"><digi:trn key="um:yes">Yes</digi:trn></c:if>
@@ -93,7 +93,7 @@
 <tr><td><digi:link href="/viewProfileAction.do" styleClass="text"><digi:trn key="um:viewMyUserProfile">View my user profile</digi:trn></digi:link></td></tr>
 <tr><td><digi:link href="/showUserUpdate.do" styleClass="text"><digi:trn key="um:editThisInfo">Edit this information</digi:trn></digi:link></td></tr>
 
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td nowrap class="title"><digi:trn key="um:myLangPreferences">My language preferences</digi:trn></td></tr>
 <tr><td align="left" nowrap class="text" bgcolor="#F0F0F0"><digi:trn key="um:defNavLanguage">Default Navigation language:</digi:trn>&nbsp;<b><c:out value="${userAccountForm.navigationLanguage.name}" /></b></td></tr>
 <tr><td align="left" nowrap class="text" bgcolor="#F0F0F0"><digi:trn key="um:contentLanguage">Content languages:</digi:trn>&nbsp;
@@ -103,7 +103,7 @@
 </td></tr>
 <tr><td><digi:link href="/showUserProfile.do" styleClass="text"><digi:trn key="um:editMyLangSettings">Edit my language settings</digi:trn></digi:link></td></tr>
 
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 <tr><td><digi:link href="/unsubscribeAction.do" styleClass="text"><digi:trn key="um:unsubscrTempOrPerm">Unsubscribe temporarily or permanently</digi:trn></digi:link></td></tr>
-<tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+<tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
 </table>

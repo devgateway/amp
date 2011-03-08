@@ -82,11 +82,11 @@
 <%--  AMP Admin Logo --%>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 		<tr>
 			<td class=r-dotted-lg width=14>&nbsp;</td>
-			<td align=left class=r-dotted-lg vAlign=top width=750>
-				<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+			<td align=left class=r-dotted-lg valign="top" width=750>
+				<table cellPadding=5 cellspacing="0" width="100%" border="0">
 					<tr><%-- Start Navigation --%>
 						<td height=33><span class=crumb>
 						<c:set var="clickToViewAdmin">
@@ -103,7 +103,7 @@
 						</td>
 				</tr><%-- End navigation --%>
 					<tr>
-						<td height=16 vAlign=center width=571>
+						<td height=16 valign="center" width=571>
 							<span class=subtitle-blue> 
 						<digi:trn key="aim:ProgramIndicatorManager">
                   					Program Indicator Manager
@@ -112,20 +112,20 @@
 						</td>
 					</tr>
 					<tr>
-						<td height=16 vAlign=center width=571>
+						<td height=16 valign="center" width=571>
 							<digi:errors />
 						</td>
 					</tr>
 					<tr>
-						<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=0 cellSpacing=0 border=0>
+						<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="0" cellspacing="0" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+						<table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
 											<tr bgColor=#ffffff>
 												<td vAlign="top" width="100%">
-													<table width="100%" cellspacing=0 cellpadding=0 valign=top	align=left>
+													<table width="100%" cellspacing="0" cellpadding="0" valign="top"	align=left>
 														<tr><td>
-																<table cellspacing=0 cellpadding=0>
+																<table cellspacing="0" cellpadding="0">
 																	<tr>
 																		<td noWrap height=17>
 																		<c:set var="viewIndicators">
@@ -199,7 +199,7 @@
 											</tr>
 											<tr>
 												<td>
-													<table width="100%" cellspacing=1 cellpadding=4 valign=top
+													<table width="100%" cellspacing="1" cellpadding=4 valign="top"
 														align=left bgcolor="#ffffff" border="0" bordercolor="BLACK">
 														<tr>
 															<td bgColor=#d7eafd class=box-title height="20"	align="center">
@@ -210,16 +210,16 @@
 														</tr>
 														<tr>
 															<td >
-															<table  cellPadding=3 cellSpacing=1>
+															<table  cellPadding=3 cellspacing="1">
 			<tr>
-			<td><img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, </td>
-			<td>	<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, </td>
-			<td>	<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, </td>
-			<td>	<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, </td>
-			<td>	<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, </td>
-			<td>	<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, </td>
-			<td>	<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, </td>
-			<td>	<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8. </td>
+			<td><img src= "../ampTemplate/images/arrow_right.gif" border="0">  Level 1, </td>
+			<td>	<img src= "../ampTemplate/images/square1.gif" border="0">  Level 2, </td>
+			<td>	<img src= "../ampTemplate/images/square2.gif" border="0">  Level 3, </td>
+			<td>	<img src= "../ampTemplate/images/square3.gif" border="0">  Level 4, </td>
+			<td>	<img src= "../ampTemplate/images/square4.gif" border="0">  Level 5, </td>
+			<td>	<img src= "../ampTemplate/images/square5.gif" border="0">  Level 6, </td>
+			<td>	<img src= "../ampTemplate/images/square6.gif" border="0">  Level 7, </td>
+			<td>	<img src= "../ampTemplate/images/square7.gif" border="0">  Level 8. </td>
 			</tr>
 			</table>	
 															</td>
@@ -228,11 +228,11 @@
 															<logic:iterate name="aimAllIndicatorForm"	property="prgIndicators" id="prgIndicators"	type="org.digijava.module.aim.helper.AllThemes">
 														<tr>
 															<td align="left">
-																		<table width="100%" align="right" cellspacing=1 cellpadding=0 bgcolor="#d7eafd" border=0 >
+																		<table width="100%" align="right" cellspacing="1" cellpadding="0" bgcolor="#d7eafd" border="0" >
 																											
 																			<tr bgcolor="#FFFFFF">
 																				<td align="left" width=85%>
-																					<img src= "../ampTemplate/images/arrow-014E86.gif" border=0>&nbsp;<b>
+																					<img src= "../ampTemplate/images/arrow-014E86.gif" border="0">&nbsp;<b>
 																						<bean:write name="prgIndicators" property="programName"/></b>
 																				</td>
 																						<c:if test="${aimAllIndicatorForm.programId!=prgIndicators.programId or aimAllIndicatorForm.indicatorFlag==false}">
@@ -254,11 +254,11 @@
 																					<logic:notEmpty name="prgIndicators" property="allPrgIndicators">
 																			<tr>
 																				<td colspan=3>
-																						<table align="right" width="99%" cellspacing=1 cellpadding=0 bgcolor="#00FFFF" border="0">
+																						<table align="right" width="99%" cellspacing="1" cellpadding="0" bgcolor="#00FFFF" border="0">
 																							<logic:iterate name="prgIndicators"	property="allPrgIndicators" id="ampPrgIndicator" type="org.digijava.module.aim.helper.AllPrgIndicators">
 																							<tr bgcolor="#ffffff">
 																								<td width="9">
-																									<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																									<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																								</td>
 																								<td width=160>
 																									<jsp:useBean id="urlParams11" type="java.util.Map"	class="java.util.HashMap" />
@@ -287,7 +287,7 @@
 																											<digi:link href="/editAllIndicator.do"
 																													name="urlParams11" title="${clickToDeleteIndicator}"
 																																onclick="return deletePrgIndicator()">
-																													<img src="../ampTemplate/images/trash_12.gif" border=0>
+																													<img src="../ampTemplate/images/trash_12.gif" border="0">
 																											</digi:link>
 																								</td>
 																							</tr>
@@ -300,7 +300,7 @@
 																					<logic:empty name="prgIndicators"	property="allPrgIndicators">
 																			<tr>
 																				<td colspan=3>
-																					<table align="right" width="97%" cellspacing=1 cellpadding=3	bgcolor="#d7eafd" border="0" bordercolor="FF0000">
+																					<table align="right" width="97%" cellspacing="1" cellpadding=3	bgcolor="#d7eafd" border="0" bordercolor="FF0000">
 																						<tr bgcolor="#FFFFFF" align="left" bordercolor="FF0000">
 																							<td>
 																								<font color=red><digi:trn  key="aim:Noind">No Indicator present in the Program</digi:trn></font>
@@ -318,18 +318,18 @@
 																						<logic:iterate name="aimAllIndicatorForm" property="map" id="maps">
 																						<c:if test="${maps.key==prgIndicators.programId}">
 																						<c:if test="${prgIndicators.programId==aimAllIndicatorForm.programId}">
- 																							<table bgColor=#FFFFFF cellPadding=1 cellSpacing=1 width="100%" valign="top" border=0>
+ 																							<table bgColor=#FFFFFF cellpadding="1" cellspacing="1" width="100%" valign="top" border="0">
 																								<logic:iterate name="maps" property="value" id="subPrograms">
 																								<%------- level 1 starts ------------%>
 																		<logic:equal name="subPrograms" property="indlevel" value="1">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="right" bgColor="#d7eafd" cellPadding=1 cellSpacing=1 border="0">
+																						<table width="100%" align="right" bgColor="#d7eafd" cellpadding="1" cellspacing="1" border="0">
 																											<tr>
 																												<td width=2%>
 																													<img
 																														src="../ampTemplate/images/arrow_right.gif"
-																														border=0>
+																														border="0">
 																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -343,10 +343,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="97%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="97%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -374,7 +374,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams1" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -386,7 +386,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="97%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="97%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -409,10 +409,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="2">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="3%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square1.gif" border=0>
+																													<img src= "../ampTemplate/images/square1.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -426,10 +426,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="95%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="95%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -457,7 +457,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams2" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -469,7 +469,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="95%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="95%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -492,10 +492,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="3">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="4%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square2.gif" border=0>
+																													<img src= "../ampTemplate/images/square2.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -509,10 +509,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="93%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="93%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -540,7 +540,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams3" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -552,7 +552,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="93%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="93%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -575,10 +575,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="4">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="5%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square3.gif" border=0>
+																													<img src= "../ampTemplate/images/square3.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -592,10 +592,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="91%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="91%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -623,7 +623,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams4" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -635,7 +635,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="91%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="91%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -658,10 +658,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="5">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="6%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square4.gif" border=0>
+																													<img src= "../ampTemplate/images/square4.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -675,10 +675,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="89%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="89%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -706,7 +706,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams5" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -718,7 +718,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="89%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="89%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -741,10 +741,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="6">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="7%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square5.gif" border=0>
+																													<img src= "../ampTemplate/images/square5.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -758,10 +758,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="87%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="87%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -789,7 +789,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams6" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -801,7 +801,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="87%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="87%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -824,10 +824,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="7">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="8%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square6.gif" border=0>
+																													<img src= "../ampTemplate/images/square6.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -841,10 +841,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="85%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="85%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -872,7 +872,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams7" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -884,7 +884,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="85%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="85%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -907,10 +907,10 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="8">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="rigth" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="rigth" bgColor="#d7eafd" cellpadding="1" cellspacing="1">
 																											<tr>
 																												<td width="9%" align="right" height="15" bgcolor="#f4f4f2">
-																													<img src= "../ampTemplate/images/square7.gif" border=0>
+																													<img src= "../ampTemplate/images/square7.gif" border="0">
 																												</td>	
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
@@ -924,10 +924,10 @@
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
 																								<tr>	
 																									<td colspan=2>
-																										<table width="83%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
+																										<table width="83%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
 																												<td width="9">
-																													<img src="../ampTemplate/images/link_out_bot.gif" border=0>
+																													<img src="../ampTemplate/images/link_out_bot.gif" border="0">
 																												</td>
 																												<td>
 																													<bean:write name="indi" property="name" />
@@ -955,7 +955,7 @@
 																															<digi:link href="/editAllIndicator.do"
 																																name="urlParams8" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
-																															<img src="../ampTemplate/images/trash_12.gif" border=0>
+																															<img src="../ampTemplate/images/trash_12.gif" border="0">
 																															</digi:link>
 																												</td>
 																											</tr>
@@ -967,7 +967,7 @@
 																														<logic:empty name="themeIndiId" property="value">
 																								<tr>
 																									<td colspan=2>
-																										<table width="83%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
+																										<table width="83%" align="right" cellspacing="1" cellpadding="0"	bgcolor="#FF0000" border="0">
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
@@ -1025,7 +1025,7 @@
 																<tr>
 																	<td align="left">
 																		<img src="../ampTemplate/images/arrow-014E86.gif"
-																			border=0>
+																			border="0">
 																		&nbsp;
 																		<b> <bean:write name="projIndicators"
 																				property="activityName" /> </b>
@@ -1035,7 +1035,7 @@
 																	property="allMEIndicators">
 																	<tr>
 																		<td>
-																			<table width="100%" cellspacing=1 cellpadding=3
+																			<table width="100%" cellspacing="1" cellpadding=3
 																				bgcolor="#d7eafd" border="0">
 																				<logic:iterate name="projIndicators"
 																					property="allMEIndicators" id="allMEIndicators"
@@ -1045,12 +1045,12 @@
 																							<c:if
 																								test="${allMEIndicators.defaultInd == true}">
 																								<img src="../ampTemplate/images/bullet_red.gif"
-																									border=0>
+																									border="0">
 																							</c:if>
 																							<c:if
 																								test="${allMEIndicators.defaultInd == false}">
 																								<img src="../ampTemplate/images/bullet_grey.gif"
-																									border=0>
+																									border="0">
 																							</c:if>
 																						</td>
 																						<td>
@@ -1086,7 +1086,7 @@
 																								name="urlParams22" title="${clickToDeleteIndicator}"
 																								onclick="return deleteProjIndicator()">
 																								<img src="../ampTemplate/images/trash_12.gif"
-																									border=0>
+																									border="0">
 																							</digi:link>
 																						</td>
 																					</tr>
@@ -1099,7 +1099,7 @@
 																	property="allMEIndicators">
 																	<tr>
 																		<td>
-																			<table width="100%" cellspacing=1 cellpadding=3
+																			<table width="100%" cellspacing="1" cellpadding=3
 																				bgcolor="#d7eafd" border="0">
 																				<tr bgcolor="#ffffff" align="center">
 																					<td>
@@ -1133,17 +1133,17 @@
 					</tr>
 					<tr>
 						<td>
-							<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff"
-								border=1>
+							<table width="100%" cellspacing="1" cellpadding=3 bgcolor="ffffff"
+								border="1">
 								<tr bgcolor="#ffffff">
 									<td width="9">
-										<img src="../ampTemplate/images/bullet_red.gif" border=0>
+										<img src="../ampTemplate/images/bullet_red.gif" border="0">
 									</td>
 									<td width="100">
 										<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
 									</td>
 									<td width="9">
-										<img src="../ampTemplate/images/bullet_grey.gif" border=0>
+										<img src="../ampTemplate/images/bullet_grey.gif" border="0">
 									</td>
 									<td>
 										<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>

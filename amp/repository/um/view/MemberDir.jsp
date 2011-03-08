@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/digijava.tld" prefix="digi"%>
 
-<table width=200 cellpadding=0 cellspacing=0 border=0>
+<table width="20"0 cellpadding="0" cellspacing="0" border="0">
 <tr>
 		<td width="12"><IMG height="1" alt="" src="images/trans.gif" width="12" border="0"></td>
 			<td width="100%"><a href="/fdi/dg-directory/index" class="titletopic"><digi:trn key="um:memberDirectory">Member directory (3401)</digi:trn></a></td>

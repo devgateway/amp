@@ -47,10 +47,10 @@
 					<tr>
 						<td>
 							<logic:notEmpty name="aimEditActivityForm" property="observations.issues">
-								<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
+								<table width="100%" cellspacing="1" cellPadding=4 class="box-border-nopadding">
 									<tr>
 										<td align="center">
-											<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
+											<table width="98%" cellspacing="1" cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
 											<%	int i = 1;
 												String rowClass = "";
 											%>
@@ -90,7 +90,7 @@
 															<field:display feature="Regional Observations" name="Measures Taken">
 															<tr class="<%=rowClass%>">
 																<td vAlign="center" align="left">
-																	<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top" border=0
+																	<table width="100%" cellPadding=2 cellspacing="1" vAlign="top" border="0"
 																	bgcolor="#dddddd">
 																		<logic:notEmpty name="observations" property="measures">
 																		<logic:iterate name="observations" property="measures" id="measure"
@@ -121,7 +121,7 @@
 																			</td>
 																			<td vAlign="center" align="left" >
 																			  <field:display name="Actors" feature="Regional Observations">
-																				<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
+																				<table width="100%" cellPadding=4 cellspacing="1" vAlign="top" border="0"
 																				bgcolor="#dddddd">
 																					<logic:notEmpty name="measure" property="actors">
 																						<logic:iterate name="measure" property="actors" id="actor" type="org.digijava.module.aim.dbentity.AmpActor">
@@ -168,7 +168,7 @@
 										</logic:notEmpty>
 										<logic:empty name="aimEditActivityForm" property="observations.issues">
 											<field:display name="Add Observations Button" feature="Regional Observations">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<tr><td>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="addObservations()" title="${trnAddObservations}">
 															<digi:trn key="btn:addObservations">Add Observations</digi:trn>

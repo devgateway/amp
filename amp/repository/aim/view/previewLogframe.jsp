@@ -41,18 +41,18 @@
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td valign="top" width="100%" vAlign="top" align="left">
 <bean:define id="defaultCurrency" name="currentMember" property="appSettings.currencyId" type="java.lang.Long" scope="session" toScope="page"/> 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="99%" vAlign="top" align="left" border="0">
 	<tr>
 		<td valign="top" class=r-dotted-lg width="10" align="left" vAlign="top">&nbsp;</td>
-		<td valign="top" class=r-dotted-lg align=left vAlign=top>
-			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
+		<td valign="top" class=r-dotted-lg align=left valign="top">
+			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border="0">
 				<tr><td valign="top">
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td valign="top" width="100%" vAlign="top">
-						<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
+						<table width="100%" cellspacing="0" cellpadding="0" vAlign="top" align="left">
 							<tr>
 								<td valign="top" width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
 											<td valign="top" width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>

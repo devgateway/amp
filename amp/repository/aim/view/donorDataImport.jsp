@@ -13,7 +13,7 @@
 <digi:context name="digiContext" property="context"/>
 
 <digi:form action="/donorDataImport.do" method="post">
-<TABLE width="80%" height="200" cellPadding=0 cellSpacing=0 valign="top" align="left">
+<TABLE width="80%" height="200" cellpadding="0" cellspacing="0" valign="top" align="left">
 <TR><TD width="100%" >
 <table width="80%" align="center">
   <tr>

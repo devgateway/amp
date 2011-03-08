@@ -373,11 +373,11 @@ ${aimMainProjectDetailsForm.activityExists}
 			<TABLE width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
 				<TR>
 					<TD>
-						<TABLE cellpadding=0 cellspacing=0 valign=top align=left width="100%"> 
+						<TABLE cellpadding="0" cellspacing="0" valign="top" align=left width="100%"> 
 							<TR>
 							<feature:display module="Project ID and Planning" name="Identification">
 							<field:display  feature="Identification" name="Project Title">
-								<TD vAlign=center><span class="subtitle-blue-1">
+								<TD valign="center"><span class="subtitle-blue-1">
 									&nbsp;<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 								</TD>
 							</field:display>						
@@ -391,7 +391,7 @@ ${aimMainProjectDetailsForm.activityExists}
 	</TR>
 	<TR>
 		<TD width="100%" nowrap align="left" vAlign="bottom" height="20">
-			<TABLE width="100%" cellspacing="1" cellpadding=0 border="0">
+			<TABLE width="100%" cellspacing="1" cellpadding="0" border="0">
 			  	<TR><TD>
                 <br />
 				<div style="padding-left:5px;width:900px;">

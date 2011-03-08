@@ -154,7 +154,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 <input type="hidden" name="event" value="save">
 
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td width="100%" valign="top" align="left">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -162,7 +162,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 	</tr>
 	<tr>
 		<td width="100%" valign="top" align="left">
-			<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 				<tr>
 					<td height=33><span class=crumb>
 						
@@ -175,13 +175,13 @@ document.aimUpdateIndicatorValuesForm.submit();
 							<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 							</digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
+							<span class="breadcrump_sep"><b>ï¿½</b></span>
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 							</c:set>
 							<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-							<span class="breadcrump_sep"><b>»</b></span>
+							<span class="breadcrump_sep"><b>ï¿½</b></span>
 							<span class="bread_sel"><digi:trn key="aim:activityList">Activity List</digi:trn></span>
 						</div>
 						
@@ -209,10 +209,10 @@ document.aimUpdateIndicatorValuesForm.submit();
 											<td class="inside">
                         <div>
                         	&nbsp;
-                          <img src= "../ampTemplate/images/bullet_red.gif" border=0>
+                          <img src= "../ampTemplate/images/bullet_red.gif" border="0">
                           <digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
                           &nbsp;
-                          <img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+                          <img src= "../ampTemplate/images/bullet_grey.gif" border="0">
                           <digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
                         </div>
 											</td>
@@ -238,7 +238,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																<td class="inside" width="9">
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId==indicator.indicatorId}">
-																		<digi:link href="/collapseIndicator.do"><img src= "../ampTemplate/images/arrow_down.gif" border=0></digi:link>
+																		<digi:link href="/collapseIndicator.do"><img src= "../ampTemplate/images/arrow_down.gif" border="0"></digi:link>
 																	</c:if>
 																	<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId!=indicator.indicatorId}">
 																		<c:set target="${urlParams}" property="indValId">
@@ -247,15 +247,15 @@ document.aimUpdateIndicatorValuesForm.submit();
 																		<c:set target="${urlParams}" property="activityId">
 																			<bean:write name="aimUpdateIndicatorValuesForm" property="activityId"/>
 																		</c:set>
-																		<digi:link href="/expandIndicator.do" name="urlParams"><img src= "../ampTemplate/images/arrow_right.gif" border=0></digi:link>
+																		<digi:link href="/expandIndicator.do" name="urlParams"><img src= "../ampTemplate/images/arrow_right.gif" border="0"></digi:link>
 																	</c:if>
 																</td>
 																<td width="9" class="inside">
 																	<c:if test="${indicator.defaultInd == true}">
-																		<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																		<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 																	</c:if>
 																	<c:if test="${indicator.defaultInd == false}">
-																		<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																		<img src= "../ampTemplate/images/bullet_grey.gif" border="0">
 																	</c:if>
 																</td>
 																<td class="inside">
@@ -276,7 +276,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																		</c:set>
 			
 																		<digi:link href="/deleteIndicatorValue.do" name="urlParams1" onclick="return confirmDelete()">
-																			<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																			<img src= "../ampTemplate/images/trash_12.gif" border="0">
 																		</digi:link>
 																	</c:if>
 																</td>
@@ -303,7 +303,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																				</td>
 																				<td align="left" vAlign="center" class="inside">
 																					<a id="date1" href='javascript:pickDate("date1",document.aimUpdateIndicatorValuesForm.baseValDate)'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																					</a>
 																				</td>
 																			</tr>
@@ -351,7 +351,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																					</td>
 																					<td align="left" vAlign="center" class="inside">
 																						<a id="date2" href='javascript:pickDate("date2",document.aimUpdateIndicatorValuesForm.targetValDate)'>
-																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																						</a>
 																					</td>
 																				</c:if>
@@ -384,7 +384,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																					</td class="inside">
 																					<td align="left" vAlign="center" class="inside">
 																						<a id="date3" href='javascript:pickDate("date3",document.aimUpdateIndicatorValuesForm.revisedTargetValDate)'>
-																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																						</a>
 																					</td>
 																				</tr>

@@ -56,7 +56,7 @@
 			<html:hidden property="description" />
 			<html:hidden property="objectives" />		
 		<TD width="100%" nowrap align="center" vAlign="bottom" height="20"  bgcolor="#f7f9e3">
-			<TABLE width="98%" cellspacing="0" cellpadding=0 border=0  bgcolor="#f7f9e3">
+			<TABLE width="98%" cellspacing="0" cellpadding="0" border="0"  bgcolor="#f7f9e3">
 			  	<TR><TD bgcolor="#f7f9e3" >
 				<DIV id="leftNav">
 				

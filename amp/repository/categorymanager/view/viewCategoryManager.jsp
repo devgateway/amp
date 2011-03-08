@@ -23,11 +23,11 @@ function confirmDelete() {
 }
 </script>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="90%" class="box-border-nopadding">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="90%" class="box-border-nopadding">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -48,7 +48,7 @@ function confirmDelete() {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 							<digi:trn key="aim:categoryManager">
 								Category Manager
@@ -63,7 +63,7 @@ function confirmDelete() {
 							page="/repository/aim/view/exportTable.jsp" /></td>
 					</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
 				</tr>
@@ -139,10 +139,10 @@ function confirmDelete() {
 							</td>
 							<td align="left">
 								<% if (category.isMultiselect()) {%>
-									<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+									<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 								<% }
 									else { %>
-									<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+									<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 								<%} %>
 								&nbsp;
 								<digi:trn key='aim:categoryIsMultiselect'>
@@ -150,10 +150,10 @@ function confirmDelete() {
 								</digi:trn>
 								<br />
 								<% if (category.isOrdered()) {%>
-									<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+									<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 								<% }
 									else { %>
-									<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+									<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 								<%} %>
 								&nbsp;
 								<digi:trn key='aim:categoryIsOrdered'>

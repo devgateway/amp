@@ -36,7 +36,7 @@
 
 	function deleteEUActivity(indexId) {
 		if (confirm("<digi:trn jsFriendly='true'>Are you sure you want to delete the activity?</digi:trn>")) {
-			popupPointer=window.open('about:blank','popper','width=10,height=10,top=5000,left=5000,scrollbars=no,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=no');
+			popupPointer=window.open('about:blank','popper','width="10",height=10,top=5000,left=5000,scrollbars=no,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=no');
 			<digi:context name="editEUActivity" property="context/module/moduleinstance/editEUActivity.do?deleteEU&indexId=" />
 			document.aimEditActivityForm.action = "<%=editEUActivity%>"+indexId;
 			document.aimEditActivityForm.target = popupPointer.name;
@@ -95,10 +95,10 @@
 	</tr>
 	<tr>
 		<td width="100%" vAlign="top" align="left">
-			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+			<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 				<tr>
 					<td class=r-dotted-lg width="10">&nbsp;</td>
-					<td align=left vAlign=top class=r-dotted-lg>
+					<td align=left valign="top" class=r-dotted-lg>
 						<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 							<tr><td>
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -235,7 +235,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td>
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 									<tr>
-										<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+										<td height=16 valign="center" width="100%"><span class=subtitle-blue>
 											<c:if test="${aimEditActivityForm.editAct == false}">
 												<digi:trn key="aim:addNewActivity">
 													Add New Activity
@@ -257,10 +257,10 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td>
 								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 									<tr><td width="75%" vAlign="top">
-										<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top" >
+										<table cellpadding="0" cellspacing="0" width="100%" vAlign="top" >
 											<tr>
 												<td width="100%">
-													<table cellPadding=0 cellSpacing=0 width="100%">
+													<table cellpadding="0" cellspacing="0" width="100%">
 														<tr>
 															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
 															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
@@ -318,7 +318,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																	<tr>
 																		<td align="left">
-																			<table width="100%" cellSpacing=5 cellPadding=0 border=0
+																			<table width="100%" cellSpacing=5 cellpadding="0" border="0"
 																			class="box-border-nopadding">
 
 <!--

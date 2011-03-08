@@ -10,20 +10,20 @@
 <digi:errors/>
 <digi:instance property="aimChannelOverviewDescriptionForm" />
 
-<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="left" vAlign="top" border="0" width="100%">
 <TR><TD>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </TD></TR>
 <TR><TD>
 
-<TABLE cellSpacing=5 cellPadding=0 align="left" vAlign="top" border=0 width="100%">
+<TABLE cellSpacing=5 cellpadding="0" align="left" vAlign="top" border="0" width="100%">
 <TR>
 	<TD class=r-dotted-lg width=9>&nbsp;
 	</TD>
 	<TD class=r-dotted-lg vAlign="top" align="left">
 		<!-- contents -->
 
-			<TABLE width="760" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="760" cellspacing="0" cellpadding="0" vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
 			<TABLE width="760" cellSpacing=3 cellPadding=3 vAlign="top" align="left" bgcolor="#f4f4f4">
@@ -34,7 +34,7 @@
 				</TR>
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="center" width="100%">
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" bgColor=#f4f4f2>
+						<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top" align="left" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%" bgcolor="#F4F4F2" height="17">
 									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">

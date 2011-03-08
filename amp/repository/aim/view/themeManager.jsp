@@ -154,11 +154,11 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <%-- End of Logo--%>
 
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="1">
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 border="1">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750 border="0">
-			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
+		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -175,7 +175,7 @@
 					</td>
 				</tr><%-- End navigation --%>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:multiprogramanmanager">
 							Multi Program Manage
@@ -184,29 +184,29 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
 				</tr>
 			
 				<tr>
-					<td noWrap width=100% vAlign="top">
+					<td noWrap width="100%" vAlign="top">
 					
-					<table width="100%" cellspacing=0 cellSpacing=0 border="0">
+					<table width="100%" cellspacing="0" cellspacing="0" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+						<table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+									<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
 										<!-- AMP-1655 -->
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border="0" class="r-dotted-lg">
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1" border="0" class="r-dotted-lg">
 					<tr><td noWrap width=600 vAlign="top">
-							<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
-										<table align=left valign=top cellPadding=1 cellSpacing=1 width="100%">
+										<table align=left valign="top" cellpadding="1" cellspacing="1" width="100%">
 												<tr><td>
 													<digi:errors/>
 												</td></tr>
@@ -284,14 +284,14 @@
 											<tr>
 											
 												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
-												<img src= "../ampTemplate/images/tree_plus.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
-												<img src= "../ampTemplate/images/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
-												<img src= "../ampTemplate/images/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
-												<img src= "../ampTemplate/images/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
-												<img src= "../ampTemplate/images/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
-												<img src= "../ampTemplate/images/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
-												<img src= "../ampTemplate/images/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
-												<img src= "../ampTemplate/images/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
+												<img src= "../ampTemplate/images/tree_plus.gif" border="0"><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
+												<img src= "../ampTemplate/images/square1.gif" border="0"><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
+												<img src= "../ampTemplate/images/square2.gif" border="0"><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
+												<img src= "../ampTemplate/images/square3.gif" border="0"><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
+												<img src= "../ampTemplate/images/square4.gif" border="0"><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
+												<img src= "../ampTemplate/images/square5.gif" border="0"><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
+												<img src= "../ampTemplate/images/square6.gif" border="0"><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
+												<img src= "../ampTemplate/images/square7.gif" border="0"><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
 												</td>
 											</tr>
 														<logic:empty name="aimThemeForm" property="themes">

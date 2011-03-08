@@ -107,17 +107,17 @@ function toggleDiv(num){
 
 <input type="hidden" name="selectedDate" value="">
 <html:hidden property="reset" />
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
+<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border="0">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -198,12 +198,12 @@ ${fn:replace(message,quote,escapedQuote)}
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
-						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+						<table cellpadding="0" cellspacing="0" width="100%" border="0">
 							<tr>
 								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
@@ -224,7 +224,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>

@@ -256,11 +256,11 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 vAlign="top" align="left">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 vAlign="top" align="left">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment">
@@ -288,7 +288,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr bgColor=#f4f4f2>
@@ -297,10 +297,10 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
 								<td vAlign="top" width="100%">
 									&nbsp;
@@ -308,10 +308,10 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title height="20" align="center">
 															<!-- Table title -->
@@ -335,7 +335,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 										</tr>
 										<tr>
 											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=3 cellSpacing=1 width="100%" bgcolor="#dddddd">
+												<table border="0" cellPadding=3 cellspacing="1" width="100%" bgcolor="#dddddd">
 													<tr>
 														<td width="150" align="right" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
@@ -567,7 +567,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+															<table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center"
 															class="box-border-nopadding">
 															<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
 																<tr>
@@ -611,7 +611,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+															<table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center"
 															class="box-border-nopadding">
 															<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
 																<tr>
@@ -684,11 +684,11 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 							</td></tr>
 						</table>
 					</td>
-					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
 								<td>
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellpadding="0" cellspacing="0" width="10"0>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -704,7 +704,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellSpacing=1 width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

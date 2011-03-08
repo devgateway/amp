@@ -26,16 +26,16 @@ function myclearDate(editBox, clearLink, checkboxId){
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<table width="100%" bgcolor="#ffffff" cellSpacing=1 cellPadding=5>
+										<table width="100%" bgcolor="#ffffff" cellspacing="1" cellPadding=5>
 										<field:display name="Line Ministry Rank" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">&nbsp;
 													<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
@@ -61,13 +61,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 										</field:display>
 										<field:display name="Ministry of Planning Rank" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">&nbsp;
 													<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
@@ -98,7 +98,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 											<field:display name="Overall Cost" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallCost">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:OverallCost">Overall Cost</digi:trn>">&nbsp;
 													<digi:trn key="aim:OverallCost2">Overall Cost</digi:trn>
 													</a>
@@ -115,7 +115,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 											<field:display name="Overall Contribution" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallContribution">											
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:OverallContribution">Overall Contribution</digi:trn>">&nbsp;
 													<digi:trn key="aim:OverallContribution2">Overall Contribution</digi:trn>
 													</a>
@@ -131,13 +131,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											
 											<field:display name="Proposed Approval Date" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
 													<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
@@ -150,7 +150,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 														</tr>
@@ -161,13 +161,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											
 											<field:display name="Actual Approval Date" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
 												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn>
 												</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
@@ -180,7 +180,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -197,13 +197,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 
 											<field:display name="Proposed Start Date" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">&nbsp;
    												<digi:trn key="aim:proposedStartDate">Proposed Start Date</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">
@@ -216,7 +216,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 														</tr>
@@ -227,13 +227,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											
 											<field:display name="Actual Start Date" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;
 													<digi:trn key="aim:actualStartDate">Actual Start Date </digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
@@ -246,7 +246,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.revisedStartDate,"clear4")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -263,13 +263,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											
 											<field:display name="Final Date for Contracting" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ContractingDateofProject">Final Date (dd/mm/yy) for Contracting</digi:trn>">&nbsp;
 													<digi:trn key="aim:contractiongDate">Final Date for Contracting</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ContractingDateofProject">Final Date (dd/mm/yy) for Contracting</digi:trn>">
@@ -282,7 +282,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date5" href='javascript:pickDateWithClear("date5",document.aimEditActivityForm.contractingDate,"clear5")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 														</tr>
@@ -296,13 +296,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 													<digi:trn>Final Date for Disbursements</digi:trn>
 												</c:set>
 												<tr>
-													<td width=200 bgcolor="#ffffff">
+													<td width="20"0 bgcolor="#ffffff">
 														<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">&nbsp;
 															${trn}
 														</a>
 													</td>
 													<td bgcolor="#ffffff">
-														<table cellPadding=0 cellSpacing=0>
+														<table cellpadding="0" cellspacing="0">
 															<tr>
 																<td>
 																	<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">
@@ -315,7 +315,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																	</a>
 																	<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																	</a>
 																</td>
 																<td>&nbsp;
@@ -329,13 +329,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 											
 											<field:display name="Proposed Completion Date" feature="Planning">
 											<tr>
-												<td width=200 bgcolor="#ffffff">
+												<td width="20"0 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;
 													<digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
-													<table cellPadding=0 cellSpacing=0>
+													<table cellpadding="0" cellspacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed</digi:trn>">
@@ -348,7 +348,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.proposedCompDate,"clear7")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 														</tr>
@@ -362,13 +362,13 @@ function myclearDate(editBox, clearLink, checkboxId){
 													<digi:trn>Current Completion Date</digi:trn>
 												</c:set>
 												<tr>
-													<td width=200 bgcolor="#ffffff">&nbsp;
+													<td width="20"0 bgcolor="#ffffff">&nbsp;
 													<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
 														${trn}
 													</a>
 													</td>
 													<td bgcolor="#ffffff">
-														<table cellPadding=0 cellSpacing=0>
+														<table cellpadding="0" cellspacing="0">
 															<tr>
 																<td>
 																	<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
@@ -381,7 +381,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																	</a>
 																	<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																	</a>
 																</td>
 																<td>&nbsp;

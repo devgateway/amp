@@ -22,14 +22,14 @@
 	<META http-equiv=Content-Type content="text/html; charset=utf-8">
 </HEAD>
 <BODY>
-<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 bordercolor="red">
+<TABLE cellspacing="0" cellpadding="0" width="100%" border="0" bordercolor="red">
 	<TBODY>
   	<TR bgColor=#323232>
     <TD>
 			<digi:insert attribute="headerTop" />
 	 </TD>
     <TD align=right>
-		<TABLE cellSpacing=0 cellPadding=0 border=0 bordercolor="black">
+		<TABLE cellspacing="0" cellpadding="0" border="0" bordercolor="black">
      		<TBODY>
         	<TR>
          	<TD height=35></TD>
@@ -41,7 +41,7 @@
 	</TR>
 	</TBODY>
 </TABLE>
-<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 bordercolor="green">
+<TABLE cellspacing="0" cellpadding="0" width="100%" border="0" bordercolor="green">
 	<TBODY>
   	<TR bgColor=#5a5a58>
    	<TD>
@@ -74,7 +74,7 @@
 				</TR>
 			</TABLE>
 		</TD>
-		<TD class=r-dotted-lg vAlign=top>&nbsp;</TD>
+		<TD class=r-dotted-lg valign="top">&nbsp;</TD>
 	</TR>
 </TABLE>
 <digi:insert attribute="footer" />

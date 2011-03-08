@@ -191,7 +191,7 @@
 	</script>
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="65%">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="65%">
 	<tr>
 		<td valign="bottom">
 				

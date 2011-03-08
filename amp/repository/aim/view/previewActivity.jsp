@@ -204,11 +204,11 @@ function collapseAll() {
 </logic:present>
 <tr><td width="100%" vAlign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="780" vAlign="top" align="left" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="780" vAlign="top" align="left" border="0">
 	<tr>
 		<td width="10" align="left" vAlign="top">&nbsp;</td>
-		<td align=left vAlign=top>
-			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
+		<td align=left valign="top">
+			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border="0">
 					<tr><td>
 					<logic:present name="currentMember" scope="session">
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -331,7 +331,7 @@ function collapseAll() {
 							</td>
 							<logic:present name="currentMember" scope="session">
 							<td width="50%" align="right">
-								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
+								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border="0">
 								
 									<tr>
 										<td>
@@ -359,7 +359,7 @@ function collapseAll() {
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="100%" vAlign="top">
-						<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
+						<table width="100%" cellspacing="0" cellpadding="0" vAlign="top" align="left">
 							<tr>
 								<td width="100%" style="border-bottom:2px solid #222E5D;">
 									<table width="100" cellpadding="0" cellspacing="0" style="background: #222E5D;">
@@ -872,7 +872,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">											<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs											</digi:trn>										</td>
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 											<c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
-												<table cellSpacing=2 cellPadding=2 border=0>
+												<table cellSpacing=2 cellPadding=2 border="0">
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.identification.selectedOrganizations}" >
 														<c:if test="${not empty selectedOrganizations}">
 															<tr><td>
@@ -910,7 +910,7 @@ function collapseAll() {
 											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 											<div id="group_planning_dots">...</div>
 											<div id="act_group_planning" style="display: none;">
-											<table width="100%" cellSpacing=2 cellPadding=1>
+											<table width="100%" cellSpacing=2 cellpadding="1">
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
@@ -1010,11 +1010,11 @@ function collapseAll() {
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
-													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
+													<td width="32%" valign="top"><digi:trn key="aim:proposedCompletionDates">
 													Proposed Completion Dates</digi:trn></td>
-													<td width="1" valign=top>:</td>
-													<td align="left" valign=top>
-														<table cellPadding=0 cellSpacing=0>
+													<td width="1" valign="top">:</td>
+													<td align="left" valign="top">
+														<table cellpadding="0" cellspacing="0">
 															<c:forEach var="closeDate" items="${aimEditActivityForm.planning.activityCloseDates}">
 															<tr>
 																<td>
@@ -1110,7 +1110,7 @@ function collapseAll() {
 												                              	
 												                              	<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 												                              		<a href="javascript:showZoomedMap(true)">
-												                              			<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+												                              			<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width="20"0&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 												                              		</a>
 												                              		<div id="zoomMapContainer" style="display:none; border:1px solid black; position:absolute; left:0px; top:0px;" z-index="9999">
 												                              			<a href="javascript:showZoomedMap(false)"><img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>
@@ -2261,7 +2261,7 @@ function collapseAll() {
 											<digi:trn key="aim:proposedPrjectCost"> Proposed Project Cost</digi:trn>										</td>
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
-                                                  <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
+                                                  <table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#f0f0f0">
 															<td><digi:trn key="aim:cost">Cost</digi:trn></td>
                                                         <td bgcolor="#f0f0f0" align="left" >

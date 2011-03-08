@@ -8,17 +8,17 @@
 
 <digi:context name="digiContext" property="context" />
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
+<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border="0">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -41,7 +41,7 @@
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
-					<table width="700" cellPadding=4 cellSpacing=1 bgcolor="#aaaaaa">
+					<table width="700" cellPadding=4 cellspacing="1" bgcolor="#aaaaaa">
 						<tr>
 							<td align="center" class="textalb">
 								<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
@@ -55,7 +55,7 @@
 								</c:if>
 								<c:if test="${linksCount > 0}">
 
-									<table width="100%" cellPadding=5 cellSpacing=1 bgcolor="#aaaaaa">
+									<table width="100%" cellPadding=5 cellspacing="1" bgcolor="#aaaaaa">
 
 									<c:forEach var="document" items="${myLinks}" varStatus="status">
 										<tr bgcolor="#f4f4f2">

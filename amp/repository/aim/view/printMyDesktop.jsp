@@ -16,10 +16,10 @@
 <TABLE width="99%" cellspacing="1" cellpadding="4" valign="top" align="center">
 	<TR>
       <TD>
-		<TABLE border=0 cellPadding=0 cellSpacing=0 width="580" align=center>
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="580" align="center">
           <TR>
             <TD>
-              <TABLE border=0 cellPadding=0 cellSpacing=0 >
+              <TABLE border="0" cellpadding="0" cellspacing="0" >
                 <TR>
                   <TD bgColor=#c9c9c7 class=box-title>
                     &nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -33,8 +33,8 @@
               </TABLE>
 </TD></TR>
 
-			<TR><TD bgColor=#ffffff class=box-border align=center>
-				<TABLE border=0 cellPadding=4 cellSpacing=1 width="580" >
+			<TR><TD bgColor=#ffffff class=box-border align="center">
+				<TABLE border="0" cellPadding=4 cellspacing="1" width="580" >
                   <tr>
                     <td style="width:150pt;">
                       <b>
@@ -85,10 +85,10 @@
 								<digi:trn key="aim:project">Project</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 1}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 									</c:if>
 								</c:if>
 							</TD>
@@ -99,10 +99,10 @@
 								<digi:trn key="aim:ampId">AMP ID</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 2}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 									</c:if>
 								</c:if>
 							</TD>
@@ -113,10 +113,10 @@
 								<digi:trn key="aim:donor">Donor(s)</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 3}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 									</c:if>
 								</c:if>
 							</TD>
@@ -128,10 +128,10 @@
 								<digi:trn key="aim:totalCommitments">Total Commitments</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 4}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 									</c:if>
 									<c:if test="${aimDesktopForm.srtAsc == false}">
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 									</c:if>
 								</c:if>
 							</TD>
@@ -167,7 +167,7 @@
 									</TD>
 									<TD>
 										<c:if test="${!empty project.donor}">
-											<TABLE cellspacing=1 cellpadding=1>
+											<TABLE cellspacing="1" cellpadding="1">
 												<c:forEach var="dnr" items="${project.donor}">
 													<TR><TD>
 														<c:out value="${dnr.donorName}" />

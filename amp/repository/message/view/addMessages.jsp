@@ -847,7 +847,7 @@ span.extContactDropdownEmail {
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width=200 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b>
+	    <td width="20"0 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b>
 	    	<br/>
 	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
 	    	<div class="charcounter-progress-container">
@@ -951,7 +951,7 @@ span.extContactDropdownEmail {
   
   
   <tr>
-    <td colspan="2" align=center>
+    <td colspan="2" align="center">
 			<hr class="hr_3">
 			<field:display name="Save button" feature="Create Message Form">
 				<input type="button" value="<digi:trn>Save</digi:trn>" onclick="save('draft');" class="buttonx">

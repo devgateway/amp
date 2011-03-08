@@ -188,7 +188,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 
 <TR>
 
@@ -198,13 +198,13 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 
 			<TR><TD bgcolor="#f4f4f4">
 
 
 
-			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
+			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="0">
 
 				<TR><TD>
 
@@ -354,13 +354,13 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
+						<TABLE cellspacing="0" cellpadding="0" width="100%" align="center" bgColor="#f4f4f2" border="0">
 
 							<TR bgcolor="#ffffff">
 
 								<TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
 
-             					<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left"
+             					<TABLE cellSpacing=2 cellpadding="0" border="0" bgColor="#ffffff" width="100%" vAlign="top" align="left"
 
 									bgColor="#ffffff">
 
@@ -370,7 +370,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-											<TABLE cellSpacing=1 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
+											<TABLE cellspacing="1" cellpadding="0" border="0" bgColor=#ffffff vAlign="top" align="left">
 
    		              				<TR>
 
@@ -378,7 +378,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
       	    	       					<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>
+													<TABLE cellSpacing=2 cellpadding="0">
 
 														<TR>
 
@@ -408,7 +408,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>
+													<TABLE cellSpacing=2 cellpadding="0">
 
 														<TR>
 
@@ -438,7 +438,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>
+													<TABLE cellSpacing=2 cellpadding="0">
 
 														<TR>
 
@@ -496,7 +496,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 										<TR><TD>
 
-						            	<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
+						            	<TABLE cellspacing="0" cellpadding="0" border="0" bgColor=#ffffff width="100%" vAlign="top" align="left">
 
 												<TR><TD>
 

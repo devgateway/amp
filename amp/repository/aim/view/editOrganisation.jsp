@@ -861,8 +861,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
         <tr>
             <td class="r-dotted-lg" width="1%">&nbsp;</td>
-            <td align=left class=r-dotted-lg vAlign=top width="99%">
-                <table bgcolor="#ffffff" cellPadding=5 cellSpacing=0 width="100%">
+            <td align=left class=r-dotted-lg valign="top" width="99%">
+                <table bgcolor="#ffffff" cellPadding=5 cellspacing="0" width="100%">
                     <tr>
                         <!-- Start Navigation -->
                         <td height="33px">
@@ -886,7 +886,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         <!-- End navigation -->
                     </tr>
                     <tr>
-                        <td height="16px" vAlign=center width="700px">
+                        <td height="16px" valign="center" width="700px">
                             <span class="subtitle-blue"> <digi:trn>Organization Manager </digi:trn> </span> <br/>
                         </td>
                     </tr>
@@ -908,7 +908,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     </tr>
                     <tr>
                         <td>
-                            <table border=0 bgColor=#f4f4f2>
+                            <table border="0" bgColor=#f4f4f2>
                                  <tr>
                                     <td  align="right" colspan="2">
                                         &nbsp;
@@ -1055,7 +1055,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                             <digi:img src="/TEMPLATE/ampTemplate/images/trash_16.gif" border="0" alt="Delete this "/>
                                                                         </a>
                                                                         <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("minPlanRegDate"),"clear1")'>
-                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -1067,7 +1067,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                             <digi:img src="/TEMPLATE/ampTemplate/images/trash_16.gif" border="0" alt="Delete this "/>
                                                                         </a>
                                                                         <a id="dateOperFunc" href='javascript:pickDateWithClear("dateOperFunc",document.getElementById("operFuncApprDate"),"clearOperFunc")'>
-                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -1217,7 +1217,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                             <digi:img src="/TEMPLATE/ampTemplate/images/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                                         </a>
                                                                         <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("legalPersonRegDate"),"clear2")'>
-                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -1235,7 +1235,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                             <digi:img src="/TEMPLATE/ampTemplate/images/trash_16.gif" border="0" alt="Delete this transaction"/>
                                                                         </a>
                                                                         <a id="dateLineMin" href='javascript:pickDateWithClear("dateLineMin",document.getElementById("lineMinRegDate"),"clearLineMin")'>
-                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                            <img src="/TEMPLATE/ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -1246,7 +1246,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                     <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
                                                                 </c:if>
                                                                 <c:if test="${not empty aimAddOrgForm.recipients}">
-                                                                    <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding" id="recipientTbl">
+                                                                    <table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding" id="recipientTbl">
                                                                         <c:forEach var="recipients" items="${aimAddOrgForm.recipients}">
                                                                             <tr>
 
@@ -1815,7 +1815,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                         label="currencyName" />
                                             </html:select></td>
                                         <td vAlign="bottom" class="tdClass">
-                                            <table cellPadding=0 cellSpacing=0>
+                                            <table cellpadding="0" cellspacing="0">
                                                 <tr>
                                                     <td valign="bottom">
                                                         <%
@@ -1830,7 +1830,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                             href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
                                                             <img
                                                                 src="/TEMPLATE/ampTemplate/images/show-calendar.gif"
-                                                                alt="Click to View Calendar" border=0> </a></td>
+                                                                alt="Click to View Calendar" border="0"> </a></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -2032,7 +2032,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
             <td colspan="2">
-				<table width="600px" cellSpacing=0 cellPadding=0 border="0" bgcolor="white" align="left">
+				<table width="600px" cellspacing="0" cellpadding="0" border="0" bgcolor="white" align="left">
 					<tr>									
 						<td>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />

@@ -8,13 +8,13 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+<TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 <!--<feature:display name="My Tasks" module="Desktop Sections">-->
 <!--	<TR>-->
-<!--		<TD class=r-dotted-lg-buttom vAlign=top>-->
-<!--			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >-->
+<!--		<TD class=r-dotted-lg-buttom valign="top">-->
+<!--			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >-->
 <!--        		<TR><TD>-->
-<!--              	<TABLE border=0 cellPadding=0 cellSpacing=0 >-->
+<!--              	<TABLE border="0" cellpadding="0" cellspacing="0" >-->
 <!--              		<TR bgColor=#f4f4f2>-->
 <!--                 		<TD bgColor=#c9c9c7 class=box-title-->
 <!--							title='<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>'>-->
@@ -60,10 +60,10 @@
 <!--</feature:display>-->
 <!--<feature:display name="My Messages" module="Desktop Sections">-->
 <!--	<TR>-->
-<!--		<TD class=r-dotted-lg-buttom vAlign=top>-->
-<!--			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >-->
+<!--		<TD class=r-dotted-lg-buttom valign="top">-->
+<!--			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >-->
 <!--        		<TR><TD>-->
-<!--              	<TABLE border=0 cellPadding=0 cellSpacing=0 >-->
+<!--              	<TABLE border="0" cellpadding="0" cellspacing="0" >-->
 <!--              		<TR bgColor=#f4f4f2>-->
 <!--                 		<TD bgColor=#c9c9c7 class=box-title-->
 <!--							title='<digi:trn key="aim:myMessageListOfTeamLeader">List of activities to be closed</digi:trn>'>-->

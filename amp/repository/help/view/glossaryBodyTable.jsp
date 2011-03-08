@@ -62,7 +62,7 @@
 
 <digi:form action="/glossary.do">
 
-	<table border="0" width="1000" align=center>
+	<table border="0" width="1000" align="center">
 		<tr>
 			<td class="subtitle-blue">
 				<digi:trn>Glossary</digi:trn>	
@@ -139,7 +139,7 @@
 							
 							
 						</td>
-						<td align="right" valign="top" style="padding-left:15px;" width=20%>
+						<td align="right" valign="top" style="padding-left:15px;" width="20%">
 						
 							<table border="0">
 								<tr>

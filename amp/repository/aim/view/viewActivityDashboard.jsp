@@ -154,16 +154,16 @@ method="post">
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 	<TR>
 
 		<TD vAlign="top" align="center">
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" class="box-border-nopadding">
 
 				<TR><TD>
 
-					<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+					<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border="0">
 
 						<TR><TD class="highlight" colspan="2">
 
@@ -201,7 +201,7 @@ method="post">
 								<% if (actPerfChartUrl != null) { %>
                                                                 
 
-								<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+								<img src="<%= actPerfChartUrl %>" width=370 height=450 border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
                                                                 
 
 								<div align="center">
@@ -250,7 +250,7 @@ method="post">
 
 
 
-								<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
+								<img src="<%= actRiskChartUrl %>" width=370 height=350 border="0" usemap="#<%= actRiskChartFileName %>">
 
 								<br><br>
                     <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard">

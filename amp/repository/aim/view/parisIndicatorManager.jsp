@@ -65,15 +65,15 @@
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=800 border="0">
 
 	<tr>
 
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=788>
+		<td align=left class=r-dotted-lg valign="top" width=788>
 
-				<table cellPadding=5 cellSpacing=0 width="100%" >
+				<table cellPadding=5 cellspacing="0" width="100%" >
 
 					<tr>
 
@@ -109,7 +109,7 @@
 
 					<tr>
 
-						<td height=16 vAlign=center align=center><span class=subtitle-blue>Paris Indicators Manager</span>
+						<td height=16 valign="center" align="center"><span class=subtitle-blue>Paris Indicators Manager</span>
 
 						</td>
 
@@ -127,19 +127,19 @@
 
 								<tr bgColor=#d7eafd>
 
-									<td class=f-names align=center vAlign=center>
+									<td class=f-names align="center" valign="center">
 
 										Indicator Code:
 
 									</td>
 
-									<td class=f-names align=center vAlign=center>
+									<td class=f-names align="center" valign="center">
 
 											Indicator Text
 
 									</td>
 
-									<!--<td class=f-names align=center vAlign=center>
+									<!--<td class=f-names align="center" valign="center">
 
 											Indicator Id
 
@@ -169,7 +169,7 @@
 
 
 
-									<td class=f-names noWrap align=center valign=center>
+									<td class=f-names noWrap align="center" valign="center">
 
 															<%--<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>--%>
 
@@ -189,7 +189,7 @@
 
 									</td>
 
-									<td class=f-names  vAlign=center>
+									<td class=f-names  valign="center">
 
 																<bean:write name="parisIndicatorName" property="name"/>
 
@@ -199,7 +199,7 @@
 
 									</td>
 
-									<%--<td class=f-names align=center vAlign=center>
+									<%--<td class=f-names align="center" valign="center">
 
 														<bean:write name="parisIndicatorName" property="ampIndicatorId"/>						
 
@@ -207,7 +207,7 @@
 
 									</td>--%>
 
-									<td align=center vAlign=center noWrap>
+									<td align="center" valign="center" noWrap>
 
 											
 
@@ -265,7 +265,7 @@
 
 						<td>
 
-								<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+								<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
 
 							<tr>
 
@@ -273,7 +273,7 @@
 
 									<!-- Other Links -->
 
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellpadding="0" cellspacing="0" width="10"0>
 
 										<tr>
 
@@ -301,17 +301,17 @@
 
 							</tr>
 
-							<tr align=top vAlign=top>
+							<tr align=top valign="top">
 
-								<td bgColor=#ffffff class=box-border align=top vAlign=top height="100%">
+								<td bgColor=#ffffff class=box-border align=top valign="top" height="100%">
 
-									<table cellPadding=5 cellSpacing=1 width="100%" align=top vAlign=top>
+									<table cellPadding=5 cellspacing="1" width="100%" align=top valign="top">
 
 										
 
-										<tr align=top vAlign=top>
+										<tr align=top valign="top">
 
-											<td align=top vAlign=top>
+											<td align=top valign="top">
 
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
@@ -335,9 +335,9 @@
 
 										</tr>
 
-										<tr align=top vAlign=top>
+										<tr align=top valign="top">
 
-											<td align=top vAlign=top>
+											<td align=top valign="top">
 
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 

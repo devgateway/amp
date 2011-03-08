@@ -182,17 +182,17 @@ function fnSubmit() {
 <html:hidden property="ratesFile"/>
 <input type="hidden" name="currUrl" value="">
 
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td>
 <!-- AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -208,7 +208,7 @@ function fnSubmit() {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td colspan="2" height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td colspan="2" height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn>
 							Exchange Rates
 						</digi:trn>
@@ -221,9 +221,9 @@ function fnSubmit() {
 							<tr><td>
 								<!-- Filters -->
 
-								<table cellPadding=1 cellSpacing=1 align="left" bgcolor="#dddddd" width="600">
+								<table cellpadding="1" cellspacing="1" align="left" bgcolor="#dddddd" width="600">
 								<tr><td bgcolor="#f4f4f2">
-								<table cellPadding=0 cellSpacing=2 align="left" width="600" border=0>
+								<table cellpadding="0" cellSpacing=2 align="left" width="600" border="0">
 									<tr>
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
@@ -247,7 +247,7 @@ function fnSubmit() {
 										</td>
 										--%>
 										<td bgcolor="#f4f4f2" vAlign="center">
-											<table cellPadding=0 cellSpacing=0>
+											<table cellpadding="0" cellspacing="0">
 												<tr>
 													<td>
 														<html:text property="filterByDateFrom" size="10" readonly="true"
@@ -255,7 +255,7 @@ function fnSubmit() {
 													</td>
 													<td align="left" vAlign="center">&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.aimCurrencyRateForm.filterByDateFrom)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 														</a>
 													</td>
 												</tr>
@@ -284,7 +284,7 @@ function fnSubmit() {
 								</table>
 								</td></tr>
 								<tr><td bgcolor="#f4f4f2">
-								<table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center">
 									<tr>
 										<td bgcolor="#f4f4f2" vAlign="left" width="170" align="center">
 											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
@@ -305,7 +305,7 @@ function fnSubmit() {
 
                                 <tr>
                                   <td bgcolor="#f4f4f2">
-                                    <table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
+                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center">
                                       <tr>
                                         <td bgcolor="#f4f4f2" vAlign="left" align="center">
                                           <FONT color=red>*</FONT>
@@ -526,11 +526,11 @@ function fnSubmit() {
 					</td>
 					
 					<td valign="top">
-									<table align=center cellPadding=0 cellSpacing=0 width="90%"
-												border=0>
+									<table align="center" cellpadding="0" cellspacing="0" width="90%"
+												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellPadding=0 cellSpacing=0 width=100>
+													<table cellpadding="0" cellspacing="0" width="10"0>
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">
@@ -544,7 +544,7 @@ function fnSubmit() {
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellSpacing=1 width="100%">
+													<table cellPadding=5 cellspacing="1" width="100%">
 														<tr>
 															<td><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">

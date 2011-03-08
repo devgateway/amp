@@ -9,7 +9,7 @@
 <digi:errors/>
 <html:javascript formName="userRegisterForm" />
 
-      <TABLE width="500px" align=center>
+      <TABLE width="500px" align="center">
       <digi:form action="/userRegisterBlank.do" method="post" onsubmit="return validateUserRegisterForm(this);" >
         <TR>
           <TD class=PageTitle colSpan=2><digi:trn key="um:registerGeneric">Register Generic</digi:trn></TD></TR>
@@ -26,7 +26,7 @@
             valid e-mail address.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2 td>
-            <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
+            <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="um:firstName">First Name</digi:trn></TD>
@@ -80,7 +80,7 @@
             <TD class=text noWrap align=left>&nbsp;<digi:trn key="um:website">Website</digi:trn></TD>
             <TD class=text noWrap align=left><html:text  property="webSite" size="60" /></TD>
           </TR>
-          <tr><td><img src="/images/trans.gif" height=15 width=1 border=0></td></tr>
+          <tr><td><img src="/images/trans.gif" height=15 width=1 border="0"></td></tr>
           <TR>
             <TD align=left noWrap class="title"><digi:trn key="um:yourLangSettings">Your language settings</digi:trn></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
@@ -102,7 +102,7 @@
             </td>
 
 <TR>
-<TD colspan=2 align=center>
+<TD colspan=2 align="center">
 <html:submit property="submit" value="SUBMIT"/>
 </TD>
 </TR>

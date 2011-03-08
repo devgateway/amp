@@ -230,7 +230,7 @@ function selectOrganisation1() {
 		<td>
 			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
 				<a onClick="pickDate(this,document.aimEUActivityForm.dueDate)">
-				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 				</a>
 		</td>
 	</tr>	

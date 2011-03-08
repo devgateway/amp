@@ -82,7 +82,7 @@
 										
 										<a style="cursor:pointer; text-decoration:underline; color: blue"
 										onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
-										title="${translation }"><img src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
+										title="${translation }"><img src= "/repository/contentrepository/view/images/check_out.gif" border="0"></a>
 									</c:when>
 									<c:otherwise>
 										<c:set var="translation">
@@ -90,7 +90,7 @@
 										</c:set> 
 										<a style="cursor:pointer; text-decoration:underline; color: blue"
 										onclick="window.open('${documentData.webLink}')" onmouseout="UnTip()"
-										onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border=0></a>
+										onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border="0"></a>
 									</c:otherwise>
 								</c:choose>
 								

@@ -139,11 +139,11 @@ function toggleSettings(){
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <digi:form action="/auditLoggerManager.do" method="post">
-<table cellPadding=0 cellSpacing=0 width=1000px>
+<table cellpadding="0" cellspacing="0" width="1000"px>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750px>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left valign="top" width=750px>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -162,7 +162,7 @@ function toggleSettings(){
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=758>
+					<td height=16 valign="center" width=758>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:AuditLoggerManager">
 							Audit Logger Manager						
@@ -227,12 +227,12 @@ function toggleSettings(){
                                 </div>                        
                             	</div>
                           		<br>
-				<table width="100%" height="100%" cellPadding=0 cellSpacing=0 bgColor=#ffffff>
+				<table width="100%" height="100%" cellpadding="0" cellspacing="0" bgColor=#ffffff>
 				<tr>
 						<td colspan="2" valign="top">
 						<div>
 						<div align="center">
-						<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0  id="dataTable">
+						<table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0"  id="dataTable">
 							<tr>
 								<td width="280" height="22" align="center" valign="center" bgcolor="#999999" style="color: black">
 								<c:if 

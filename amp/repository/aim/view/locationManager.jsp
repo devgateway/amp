@@ -103,11 +103,11 @@ function delet1(val1, val2) {
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<!--<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=636>
+<!--<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=636>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>-->
-			<table cellPadding=5 cellSpacing=0 width="912">
+		<td align=left class=r-dotted-lg valign="top" width=750>-->
+			<table cellPadding=5 cellspacing="0" width="912">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 width="900"><span class=crumb>
@@ -126,17 +126,17 @@ function delet1(val1, val2) {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=1157 ><span class=subtitle-blue>
+					<td height=16 valign="center" width=1157 ><span class=subtitle-blue>
 						<digi:trn key="aim:regionManager">Region Manager</digi:trn>
                       </span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=900 vAlign="top">
-					<table width="965" cellspacing=1 cellSpacing=1>
+					<table width="965" cellspacing="1" cellspacing="1">
 					<tr>
 						<td noWrap width=663 vAlign="top">
-							<!--<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="773">
+							<!--<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="773">
 								<!--<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="771">
 										&nbsp;
@@ -144,10 +144,10 @@ function delet1(val1, val2) {
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top" width="771">-->
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="626" border=0>
+										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="626" border="0">
 											<tr>
 												<td bgColor=#ffffff class=box-border width="624">
-													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="784">
+													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="784">
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#ffffff height="20" align="center" colspan="2" width="776"><B>

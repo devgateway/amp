@@ -25,11 +25,11 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -48,7 +48,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:sectorManager">Sector Manager</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:sectorManager">Sector Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
@@ -58,19 +58,19 @@
 							page="/repository/aim/view/exportTable.jsp" /></td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+						<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%" class="report">
 
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
 									<thead>
 										<tr><td colspan="3" bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
@@ -166,12 +166,12 @@
 						</table>
 					</td>
 
-					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=200>
+									<table cellpadding="0" cellspacing="0" width="20"0>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -187,7 +187,7 @@
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellSpacing=1 width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%">
 										<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
 											<td>

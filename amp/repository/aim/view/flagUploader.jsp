@@ -163,13 +163,13 @@ function deleteFlag(id) {
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center" border="0">
 
   <tr>
 
-    <td align=left class=r-dotted-lg vAlign=top width=750>
+    <td align=left class=r-dotted-lg valign="top" width=750>
 
-      <table cellPadding=5 cellSpacing=0 width="100%" border=0>
+      <table cellPadding=5 cellspacing="0" width="100%" border="0">
 
         <tr>
 
@@ -206,7 +206,7 @@ function deleteFlag(id) {
 
         <tr>
 
-          <td height=16 vAlign=center width=571>
+          <td height=16 valign="center" width=571>
 
             <span class=subtitle-blue style="font-size:12px; font-weight:bold">
 
@@ -226,13 +226,13 @@ function deleteFlag(id) {
         <tr>
 
           <digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
-            <td noWrap width=100% vAlign="top">
+            <td noWrap width="100%" vAlign="top">
 
-              <table width=100% cellpadding=1 cellSpacing=1 border=0>
+              <table width="100%" cellpadding="1" cellspacing="1" border="0">
 
-                <tr><td noWrap vAlign="top" width=200>
+                <tr><td noWrap vAlign="top" width="20"0>
 
-                  <table cellPadding=4 cellSpacing=1 width="200" valign="top" style="border:1px solid #CCCCCC; height:128px;">
+                  <table cellPadding=4 cellspacing="1" width="200" valign="top" style="border:1px solid #CCCCCC; height:128px;">
 
                     <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 
@@ -281,10 +281,10 @@ function deleteFlag(id) {
                   </table>
 
             </td>
-<td width=20>&nbsp;</td>
+<td width="20">&nbsp;</td>
             <td noWrap vAlign="top">
 
-              <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+              <table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 
                 <tr bgcolor="#aaaaaa">
 
@@ -435,7 +435,7 @@ function deleteFlag(id) {
 </tr>
         <tr>
 
-          <td align=center style="font-size:12px;">
+          <td align="center" style="font-size:12px;">
 
             <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
 
@@ -447,7 +447,7 @@ function deleteFlag(id) {
 
         <tr>
 
-          <td align=center style="font-size:12px;">
+          <td align="center" style="font-size:12px;">
 
             <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
 

@@ -117,7 +117,7 @@ function loadShareRules(){
 	<%@include file="reportDescriptionSheet.jsp"%>
 <!-- END include of reportDescriptionSheet.jsp  -->
 
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 	<tr>
 		<td width="100%">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -127,7 +127,7 @@ function loadShareRules(){
 		<td noWrap vAlign="top">
 			<c:set var="selectedTab" value="0" scope="request"/>
 			<c:set var="selectedSubTab" value="1" scope="request"/>
-			<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 				<tr>
 				<td>
 					<div class="breadcrump_cont">
@@ -139,26 +139,26 @@ function loadShareRules(){
 						<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 							<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 						</digi:link>
-						<span class="breadcrump_sep"><b>»</b></span>
+						<span class="breadcrump_sep"><b>ï¿½</b></span>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 						</c:set>
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 						<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-						<span class="breadcrump_sep"><b>»</b></span>
+						<span class="breadcrump_sep"><b>ï¿½</b></span>
 						<span class="bread_sel"><digi:trn key="aim:customizeTeamSettings">Customize Team Settings</digi:trn></span>
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td valign=top>
+				<td valign="top">
 					<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 						<jsp:include page="teamSetupMenu.jsp" flush="true" />
 										
-						<table class="inside" width=100% cellpadding="0" cellspacing="0">
+						<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 							<logic:equal name="aimUpdateAppSettingsForm" property="updated" value="true">
 								<tr>
-									<td class=inside colspan="2">
+									<td class="inside" colspan="2">
 										<digi:trn key="aim:updateToAMPComplete">
 											Update to AMP Complete
 										</digi:trn>
@@ -167,7 +167,7 @@ function loadShareRules(){
 							</logic:equal>
 							<logic:equal name="aimUpdateAppSettingsForm" property="errors" value="true">
 								<tr>
-									<td class=inside colspan="2">
+									<td class="inside" colspan="2">
 										<digi:trn key="aim:wrongNumberOfActivitiesProjectsPerPage">
 														Wrong number of Activities/Projects per page. The number should be greater than 1.
 										</digi:trn>
@@ -175,32 +175,32 @@ function loadShareRules(){
 								</tr>
 							</logic:equal>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn>
                 </td>
-                <td class=inside>
+                <td class="inside">
 									<html:text property="defRecsPerPage" size="5"  styleClass="inputx insidex" styleId="defRecsPerPage"/>
 									<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
-										<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+										<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0">
                   </a>
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:text property="defReportsPerPage" size="5"  styleClass="inputx insidex" styleId="repsPerPage"/>
 										<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
-											<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+											<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0">
                     </a>
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:defLanguage">Language</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="language" styleClass="inputx insidex">
 								  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
 								    <html:options collection="languages" property="code" labelProperty="name" />
@@ -208,10 +208,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:defCurrency">Currency</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="currencyId" styleClass="inputx insidex">
 										<html:option value="">------ <digi:trn key="aim:selDefCurrency">Select Currency</digi:trn> ------</html:option>
 										<html:optionsCollection name="aimUpdateAppSettingsForm" property="currencies" value="ampCurrencyId" label="currencyCode" />
@@ -219,10 +219,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:defValidation">Validation</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<bean:define id="newOnly" value=""/>
 									<bean:define id="allEdits" value=""/>
 									<c:if test="${aimUpdateAppSettingsForm.validation=='newOnly'}">
@@ -242,26 +242,26 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:text property="reportStartYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:text property="reportEndYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="fisCalendarId" styleClass="inputx insidex">
 										<html:option value="">------ <digi:trn key="aim:selFisCalendar">Select Fiscal Calendar</digi:trn> ------</html:option>
 										<html:optionsCollection name="aimUpdateAppSettingsForm" property="fisCalendars" value="ampFiscalCalId" label="name" />
@@ -269,10 +269,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="defaultReportForTeamId" styleClass="inputx insidex" onchange="changePanel()" styleId="defaultReport">
 										<html:option value="0">
 											------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
@@ -291,10 +291,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn>Rights for Team Resources</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="allowAddTeamRes" styleClass="inputx insidex" onchange="return loadShareRules()" styleId="allowAddTeamRes">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.possibleValsAddTR}">
 											<c:set var="trn">
@@ -308,10 +308,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="allowShareAccrossWRK" styleClass="inputx insidex">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.shareResAmongWorkspacesPossibleVals}">
 											<c:set var="trn">
@@ -325,10 +325,10 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class=inside>
+								<td class="inside">
 									<digi:trn>Rights For Publishing Resources</digi:trn>
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<html:select property="allowPublishingResources" styleClass="inputx insidex" onchange="publishingRigthsChanged()" styleId="publResRights">
 										<c:forEach var="element" items="${aimUpdateAppSettingsForm.publishResourcesPossibleVals}">
 											<c:set var="trn">
@@ -348,12 +348,12 @@ function loadShareRules(){
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
 									<c:set var="displayDiv"></c:set>
 								</c:if>
-								<td class=inside>
+								<td class="inside">
 									<div style="${displayDiv}"  id="memDiv">
 										<digi:trn>Members</digi:trn>
 									</div>															
 								</td>
-								<td class=inside>
+								<td class="inside">
 									<div style="${displayDiv}"  id="membersDiv">																	
 										<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px" styleClass="inputx insidex">
 											<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">

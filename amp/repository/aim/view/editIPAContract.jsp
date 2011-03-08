@@ -546,7 +546,7 @@ window.onload=autosum;
 			<td align="left">
 				<html:text readonly="true" size="9" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
 				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","startOfTendering",-250,-230)'>
-					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 				</a>
 			</td>
 		</field:display>
@@ -558,7 +558,7 @@ window.onload=autosum;
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
 				<a id="contractValidityDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractValidity",-250,-230)'>
-					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 				</a>
 			</td>
 		</field:display>
@@ -582,7 +582,7 @@ window.onload=autosum;
 			<td align="left">
 				<html:text readonly="true" size="9" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
 				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","signatureOfContract",-250,-230)'>
-					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 				</a>
 			</td>
 		</field:display>
@@ -593,7 +593,7 @@ window.onload=autosum;
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
 				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractCompletion",-250,-230)'>
-					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 				</a>
 			</td>
 		</field:display>
@@ -761,7 +761,7 @@ window.onload=autosum;
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate1" property="totalECContribIBAmountDate"/>
 					<a id="fimage1" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate1",-250,-230)'>
-						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 					</a>
 				</td>
 		    </field:display>
@@ -776,7 +776,7 @@ window.onload=autosum;
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate2" property="totalECContribINVAmountDate"/>
 					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate2",-250,-230)'>
-						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 					</a>
 				</td>
 			</field:display>
@@ -799,7 +799,7 @@ window.onload=autosum;
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate3" property="totalNationalContribCentralAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate3",-250,-230)'>
-							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 						</a>
 					</td>
  				</field:display>
@@ -814,7 +814,7 @@ window.onload=autosum;
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate4" property="totalNationalContribIFIAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate4",-250,-230)'>
-							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 						</a>
 					</td>
 				</field:display>
@@ -831,7 +831,7 @@ window.onload=autosum;
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate5" property="totalNationalContribRegionalAmountDate"/>
 						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate5",-250,-230)'>
-							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 						</a>
 					</td>
 				</field:display>
@@ -854,7 +854,7 @@ window.onload=autosum;
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate6" property="totalPrivateContribAmountDate"/>
 					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate6",-250,-230)'>
-						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 					</a>
 				</td>
 			</tr>
@@ -979,7 +979,7 @@ window.onload=autosum;
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
 							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 						</td>
 						</tr>
@@ -1031,7 +1031,7 @@ window.onload=autosum;
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
 							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							&nbsp;
 							<digi:trn>Reference:</digi:trn>&nbsp;<html:text size="12" indexed="true" name="contractAmendment" property="reference" styleClass="inp-text" />							

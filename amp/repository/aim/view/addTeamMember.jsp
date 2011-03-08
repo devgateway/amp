@@ -87,7 +87,7 @@ function clearForms()
 </td></tr>
 <tr><td>
 </c:if>
-<table cellSpacing=1 cellPadding=4 align="center" onload="load()" border="0" width="100%">
+<table cellspacing="1" cellPadding=4 align="center" onload="load()" border="0" width="100%">
 <c:if test="${aimTeamMemberForm.fromPage == 1}">
 	<tr>
 		<td align="center" colspan="2" bgcolor="#eeeeee"><b>

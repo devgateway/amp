@@ -205,7 +205,7 @@
 	    var cp_contents = "";
 	    var windowRef = "";
 	   
-	    cp_contents += "<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0>";
+	    cp_contents += "<TABLE border="1" cellspacing="0" cellpadding="0">";
 	    var use_highlight = (document.getElementById || document.all) ? true : false;
 	    for(var i = 0; i < total; i++){
 	        if((i % width) == 0) {

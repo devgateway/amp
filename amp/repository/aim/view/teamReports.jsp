@@ -80,7 +80,7 @@
 <digi:form action="/updateTeamReports.do" method="post">
 <html:hidden property="addReport"/>
 <html:hidden property="showReportList"/>
-<table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
+<table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
@@ -93,7 +93,7 @@
 									</c:if>									
 									<c:set var="selectedSubTab" value="0" scope="request"/>
 										
-										<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+										<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 											<tr>
 											<td>
 												<div class="breadcrump_cont">
@@ -105,13 +105,13 @@
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 													</digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 													</c:set>
 													<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 													<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<span class="bread_sel">
 														<c:if test="${aimTeamReportsForm.showReportList == true}">
 															<digi:trn key="aim:reportList">Report List</digi:trn>
@@ -124,7 +124,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td valign=top>
+											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 										
 										
@@ -162,12 +162,12 @@
 										<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>
 									</div>
 						
-									<table class="inside normal" width=100% cellpadding="0" cellspacing="0">
+									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
 										<tr>
-									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
-									    <td width=25% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width=25% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
@@ -177,25 +177,25 @@
 													</c:if>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:reportType">Type</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width=15% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:hierarchies">Hierarchies</digi:trn>
 									    	</b>
 									    </td>
-									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	&nbsp;
 									    </td>
-									     <td width=7% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									     <td width=7% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<digi:trn key="aim:visibility">Visibility</digi:trn>
 									    	</b>
@@ -203,7 +203,7 @@
 										</tr>
 										<logic:empty name="aimTeamReportsForm" property="reports">
 											<tr>
-												<td class=inside>
+												<td class="inside">
 													<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
 													</c:if>
@@ -217,20 +217,20 @@
 											<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" type="org.digijava.module.aim.helper.ReportsCollection">
 												<bean:define id="ampReports" name="reports" property="report" type="org.digijava.module.aim.dbentity.AmpReports" />
 													<tr>
-														<td width="5" align="center" class=inside>
+														<td width="5" align="center" class="inside">
 															<html:multibox property="selReports" >
 																<bean:write name="ampReports" property="ampReportId" />
 															</html:multibox>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															<digi:trn key="aim:reportMemberSpecificName:${ampReports.name}"><bean:write name="ampReports" property="name" /></digi:trn>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															<logic:present name="ampReports" property="ownerId">
                               	<bean:write name="ampReports" property="ownerId.user.name" />
                               </logic:present>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															<li>
                                   <%
                                     if (ampReports.getType()!=null && ampReports.getType().equals(new Long(1))) {
@@ -284,7 +284,7 @@
                                 </li>
                               </logic:equal>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															<logic:iterate name="ampReports" property="hierarchies" id="hierarchy" >
                                 <li>
                                 	<digi:trn key="aim:report:${hierarchy.column.columnName}">
@@ -293,7 +293,7 @@
                                 </li>
                               </logic:iterate>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															<div style='position:relative;display:none;' id='report-<bean:write name="ampReports" property="ampReportId"/>'> 
                                 <logic:iterate name="ampReports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
@@ -325,7 +325,7 @@
                               <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="ampReports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
                               </span>
 														</td>
-														<td class=inside>
+														<td class="inside">
 															
 															
 															<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -364,7 +364,7 @@
 																	</c:if>	
 
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border="0">
 																	</digi:link>
 															</logic:equal>
 															

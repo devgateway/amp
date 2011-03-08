@@ -42,7 +42,7 @@ var myDate = new Date(date)
 
 if(view!= null)
      {
- 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width=1010,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+ 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width="10"10,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
 	}
 }
 

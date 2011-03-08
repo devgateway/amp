@@ -34,12 +34,12 @@
 <html:hidden property="phisycalProgress.phyProgId"/>
 <html:hidden property="components.componentId"/>
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:addPhysicalProgress">
@@ -80,7 +80,7 @@
 											<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></div>
 										</td>
 										<td>
-											<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+											<table cellspacing="0" cellpadding="0" vAlign="top" align="left" border="0">
 												<tr>
 													<td>
 														<html:text property="phisycalProgress.phyProgRepDate" readonly="true" size="10" styleClass="inp-text"
@@ -89,7 +89,7 @@
 													<td>
 														&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.getElementById("phyProgRepDate"))'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 														</a>
 													</td>
 												</tr>

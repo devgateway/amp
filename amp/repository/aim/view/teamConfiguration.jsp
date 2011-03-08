@@ -10,7 +10,7 @@
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
-<table width="100%" cellPadding=0 cellSpacing=0 border=0>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td valign="top" align="left" width="100%">
 		<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -18,11 +18,11 @@
 </tr>
 <tr>
 	<td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -39,7 +39,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=650><span class=subtitle-blue>
+					<td height=16 valign="center" width=650><span class=subtitle-blue>
 						<digi:trn key="aim:configureTeam">
 						Configure Team
 						</digi:trn>
@@ -48,17 +48,17 @@
 				</tr>
 				<tr>
 					<td noWrap width=650 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
 								<td>&nbsp;
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%">	
 										<tr>
 											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=7 cellSpacing=7 width="100%" >
+												<table border="0" cellPadding=7 cellSpacing=7 width="100%" >
 													<tr><td>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here view Team Workspace Setup</digi:trn>

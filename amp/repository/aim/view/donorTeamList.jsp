@@ -37,7 +37,7 @@
 
 
 
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 
 <tr><td width="100%">
 
@@ -47,15 +47,15 @@
 
 <tr><td>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
 
 	<tr>
 
 		<td width=14>&nbsp;</td>
 
-		<td align=left vAlign=top width=750>
+		<td align=left valign="top" width=750>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellspacing="0" width="100%">
 
 				<tr>
 
@@ -101,7 +101,7 @@
 
 				<tr>
 
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 
 						<span class=subtitle-blue>
 
@@ -121,7 +121,7 @@
 
 					<td noWrap width=571 vAlign="top">
 
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" 
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" 
 
 						valign="top" align="left">
 
@@ -141,12 +141,12 @@
 								<td valign="top">
                                 	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
 									<div align="center">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="98%">	
 										<tr>
 
 											<td bgColor=#ffffff >
 
-												<table border=0 cellPadding=3 cellSpacing=0  width="100%">
+												<table border="0" cellPadding=3 cellspacing="0"  width="100%">
 
 													<tr bgColor=#dddddb>
 

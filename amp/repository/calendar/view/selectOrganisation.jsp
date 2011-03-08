@@ -47,13 +47,13 @@ function closeWindow() {
 
 <digi:instance property="calendarEventForm" />
 <digi:form action="/selectOrganization.do" method="post">
-  <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+  <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
     <tr>
       <td vAlign="top">
         <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
           <tr>
-            <td align=left vAlign=top>
-              <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+            <td align=left valign="top">
+              <table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
                 <tr bgcolor="#006699">
                   <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
                     <digi:trn key="calendar:searchOrganization">
@@ -105,8 +105,8 @@ function closeWindow() {
             </td>
           </tr>
           <tr>
-            <td align=left vAlign=top>
-              <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+            <td align=left valign="top">
+              <table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
                 <tr bgcolor="#006699">
                   <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
                     <digi:trn key="aim:organizationList">
@@ -114,7 +114,7 @@ function closeWindow() {
                   </td>
                 </tr>
                 <tr>
-                  <td align=left vAlign=top>
+                  <td align=left valign="top">
                     <table width="100%" cellPadding=3>
                       <c:forEach items="${calendarEventForm.organisations}" var="org" varStatus="cn" >
                         <tr>

@@ -33,11 +33,11 @@
 			</b> <br />
 			<div id="act_group_funding"
 				style="display: none; position: relative; left: 10px;">
-			<table width="95%" cellSpacing=1 cellPadding=0 border=0
+			<table width="95%" cellspacing="1" cellpadding="0" border="0"
 				align="center">
 				<tr>
 					<td>
-					<table width="100%" border=0 align="right" cellPadding=0
+					<table width="100%" border="0" align="right" cellpadding="0"
 						cellSpacing=8 class="">
 						<logic:notEmpty name="aimEditActivityForm"
 							property="funding.fundingOrganizations">
@@ -51,10 +51,10 @@
 										type="org.digijava.module.aim.helper.Funding">
 										<tr>
 											<td>
-											<table cellSpacing=1 cellPadding=0 border="0" width="100%">
+											<table cellspacing="1" cellpadding="0" border="0" width="100%">
 												<tr>
 													<td>
-													<table cellSpacing=1 cellPadding=0 border="0" width="100%">
+													<table cellspacing="1" cellpadding="0" border="0" width="100%">
 														<tr>
 															<td>
 															<table width="100%" border="0" cellpadding="0"
@@ -219,7 +219,7 @@
                         
                     <tr>
                         <td>
-                        <table cellSpacing=1 cellPadding=0 border="0" bordercolor="#FF0000" width="100%">
+                        <table cellspacing="1" cellpadding="0" border="0" bordercolor="#FF0000" width="100%">
                         <feature:display name="Planned Commitments" module="Measures">
 	                        <tr>
 	                            <td bgcolor="#eeeeee"

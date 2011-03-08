@@ -25,12 +25,12 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<table width="100%" bgcolor="#ffffff" cellSpacing=1 cellPadding=5>
+										<table width="100%" bgcolor="#ffffff" cellspacing="1" cellPadding=5>
 										    <logic:notEmpty name="step" property="customFields">
 											<logic:iterate name="step" property="customFields" id="customField" indexId="index">
 											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
 												<tr>
-													<td width=200 bgcolor="#ffffff">
+													<td width="20"0 bgcolor="#ffffff">
 														<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">&nbsp;
 														<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>
 														</a>
@@ -53,7 +53,7 @@
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="customField_date${index}" href='javascript:pickDateWithClear("customField_date${index}",document.aimEditActivityForm.customField${index}_input_text,"customField_clear${index}")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:when>
 															<c:when test="<%=customField instanceof RadioOptionCustomField%>">

@@ -47,17 +47,17 @@
 
 
 
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td>
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -83,7 +83,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
+					<td noWrap width="100%" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr>
 								<td valign="top">
@@ -146,11 +146,11 @@
 										<button type="button" onclick="return addFilteredRate();" class="buton" > <digi:trn>Add</digi:trn> </button>
 								</td>
 								<td valign="top">
-											<table align=center cellPadding=0 cellSpacing=0 width="90%"
-												border=0>
+											<table align="center" cellpadding="0" cellspacing="0" width="90%"
+												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellPadding=0 cellSpacing=0 width=100>
+													<table cellpadding="0" cellspacing="0" width="10"0>
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">
@@ -164,7 +164,7 @@
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellSpacing=1 width="100%">
+													<table cellPadding=5 cellspacing="1" width="100%">
 														<tr>
 															<td><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">

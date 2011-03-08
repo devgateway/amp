@@ -31,28 +31,28 @@ function submitForm(mode) {
 	</div>
 	
 	
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 	  <tr>
 		    <td class="main_side_1">
 				<div class="wht">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		  				<tr>
-		    				<td valign=top width="712">
+		    				<td valign="top" width="712">
 								<table class="inside" width="712" cellpadding="0" cellspacing="0" border="1">
-									<tr><td colspan=4 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header"><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></td></tr>
+									<tr><td colspan="4" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header"><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></td></tr>
 									<tr>
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;">Assign a global permission to the entire class</b>
 	    								</td>
 	    							</tr>
 	    							<tr>
-	    								<td class="inside" align=center>
+	    								<td class="inside" align="center">
 	    									<html:select styleClass="dropdwn_sm" property="permissibleCategory" onchange="submitForm('permissibleCategoryPicked')">
 												<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
 												<html:optionsCollection property="_availablePermissibleCategories" value="simpleName" label="simpleName" />
 											</html:select>
 	    								</td>
-	    								<td class="inside" align=center>
+	    								<td class="inside" align="center">
 		    								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
 			    								<html:select property="permissionId" styleClass="dropdwn_sm">
 													<html:option value="0">--None--</html:option>
@@ -67,8 +67,8 @@ function submitForm(mode) {
 									<center><html:button styleClass="buttonx" property="saveGlobal" onclick="submitForm('saveGlobal')">Assign Global</html:button></center>
 								</logic:notEmpty>
 							</td>
-							<td width=20>&nbsp;</td>
-		    				<td valign="top" width=220>
+							<td width="20">&nbsp;</td>
+		    				<td valign="top" width="220">
 								<b>Key</b>:
 								<div class="perm_legend"><hr />
 									<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />

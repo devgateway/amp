@@ -68,7 +68,7 @@
 <html:hidden styleId="errorFlag" property="errorFlag"/>
 <html:hidden styleId="indId" property="indId"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" align="center" border="0">
 	<tr bgColor="blue"><td height="1" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="15" align="center" colspan="2"><h4>

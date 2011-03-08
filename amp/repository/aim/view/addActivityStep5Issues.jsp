@@ -55,9 +55,9 @@
 									</td></tr>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="issues.issues">
-											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=4 class="box-border-nopadding">
 												<tr><td align="center">
-													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
+													<table width="98%" cellspacing="1" cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
 														<%--<tr bgcolor="#d7eafd">--%>
 														<% int i = 1;
 															String rowClass = "";
@@ -101,7 +101,7 @@
 														<field:display feature="Issues" name="Measures Taken">
 														<tr class="<%=rowClass%>">
 															<td vAlign="center" align="left">
-																<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top" border=0
+																<table width="100%" cellPadding=2 cellspacing="1" vAlign="top" border="0"
 																bgcolor="#dddddd">
 																	<logic:notEmpty name="issues" property="measures">
 																	<logic:iterate name="issues" property="measures" id="measure"
@@ -132,7 +132,7 @@
 																		</td>
 																		<td vAlign="center" align="left" >
 																		  <field:display name="Actors" feature="Issues">
-																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
+																			<table width="100%" cellPadding=4 cellspacing="1" vAlign="top" border="0"
 																			bgcolor="#dddddd">
 																				<logic:notEmpty name="measure" property="actors">
 																				<logic:iterate name="measure" property="actors" id="actor"
@@ -182,7 +182,7 @@
 										</logic:notEmpty>
 										<logic:empty name="aimEditActivityForm" property="issues.issues">
 											<field:display name="Add Issues Button" feature="Issues">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<tr><td>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()" title="${trnAddIssues}">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn>

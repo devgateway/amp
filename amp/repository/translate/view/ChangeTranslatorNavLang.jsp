@@ -56,7 +56,7 @@
 </table>
 <br>
 
-<table width="600" cellspacing=0 cellpadding="5"><html:form action="TranslatorLocaleUpdate.do" method="GET">
+<table width="600" cellspacing="0" cellpadding="5"><html:form action="TranslatorLocaleUpdate.do" method="GET">
 <tr>
 	<td><IMG height="1" alt="" src="/images/trans.gif" width="5" border="0"></td>
  	<td align="left" class="title" nowrap><dgcs:trn key="choose_lang:choose"> </dgcs:trn></td>
@@ -64,7 +64,7 @@
 </tr>
 <tr>
 	<td><IMG height="1" alt="" src="/images/trans.gif" width="5" border="0"></td>
-	<td align="left" valign=top>
+	<td align="left" valign="top">
 		<ul>
 
 
@@ -106,7 +106,7 @@
 
         	</ul>
 	</td>
-	<td align="left" valign=top>
+	<td align="left" valign="top">
 		<ul>
 
 				<input type='checkbox' name='checkbox_locale' value='zhs' checked> Chinese</br>

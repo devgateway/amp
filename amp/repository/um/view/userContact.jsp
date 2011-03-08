@@ -29,7 +29,7 @@
 		<td width="10"><img src="images/trans.gif" width="10" height="1" alt=""></td>
 		<td align="right" valign="top" height="45" width="100%">
 				<a href="javascript:window.close()" class="navtop4"><digi:trn key="um:closeThisWindow">Close this window</digi:trn></a>
-        			<table border=0 width="100%"  height="45" cellspacing="0" cellpadding="0" background="images/devgate.gif">
+        			<table border="0" width="100%"  height="45" cellspacing="0" cellpadding="0" background="images/devgate.gif">
 	 	 			<tr><td>&nbsp;</td></tr>
 				</table>
 		</td>

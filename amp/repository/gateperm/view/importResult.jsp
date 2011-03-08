@@ -11,11 +11,11 @@
 	property="context/module/moduleinstance/exchangePermission.do?import" />
 	
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-		<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+		<table cellPadding=5 cellspacing="0" width="100%" border="0">
 			<tr>
 				<!-- Start Navigation -->
 				<td height=33><span class=crumb> <c:set

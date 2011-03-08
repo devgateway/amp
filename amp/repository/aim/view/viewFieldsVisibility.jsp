@@ -26,7 +26,7 @@
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 
 		<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
@@ -38,7 +38,7 @@
 
 	<tr><td>
 	
-	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
+	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="1px" >
 		<tr>
 			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
 			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
@@ -78,7 +78,7 @@
 
 	<tr><td>
 	
-	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
+	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="1px" >
 		<tr>
 			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>
 			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
@@ -131,7 +131,7 @@
 	<digi:form action="/visibilityManager.do" method="post" >
 	<tr><td>
 	
-	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
+	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="1px" >
 		<tr>
 			<th><digi:trn key="aim:ampField">Field</digi:trn></th>
 			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>

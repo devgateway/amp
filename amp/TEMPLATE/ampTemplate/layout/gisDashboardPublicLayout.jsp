@@ -81,7 +81,7 @@ else {
 <%--
 <h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 --%>
-<TABLE cellSpacing=0 cellPadding=0  width="100%"  border=0 valign="top" align="left">
+<TABLE cellspacing="0" cellpadding="0"  width="100%"  border="0" valign="top" align="left">
   <TBODY>
     <TR>
         <TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
@@ -90,7 +90,7 @@ else {
     </TR>
     <TR>
         <TD width="100%" align="center" vAlign="top" bgcolor="#376091">
-            <TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#376091">
+            <TABLE cellspacing="0" cellpadding="0" width="98%" border="0" vAlign="center" bgcolor="#376091">
                 <TBODY>
                     <TR bgColor=#376091 height="15">
                         <TD align="left" vAlign="center" height="15">

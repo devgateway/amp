@@ -47,17 +47,17 @@
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 
 	<tr>
 
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 
 	
 
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 
 				<tr>
 
@@ -95,7 +95,7 @@
 
 				<tr>
 
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 
 						<span class=subtitle-blue>
 
@@ -113,19 +113,19 @@
 
 				<tr>
 
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 
 						<digi:errors />
 					</td>
 
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
+					<td noWrap width="100%" vAlign="top">
 						<jsp:include page="manageTemplates.jsp" />
 					</td>
 				</tr>			
 				<tr>
-					<td noWrap width=100% vAlign="top">
+					<td noWrap width="100%" vAlign="top">
 						<% 
 						if(session.getAttribute("newEditTemplate")==null)
 						{%>

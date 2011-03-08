@@ -213,17 +213,17 @@ function closeWindow()
 <html:hidden property="alpha" />
 
  
-  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=750>
-        <table cellPadding=5 cellSpacing=0 width="100%" border=0>
-            <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+      <td align=left class=r-dotted-lg valign="top" width=750>
+        <table cellPadding=5 cellspacing="0" width="100%" border="0">
+            <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:searchind">
@@ -291,13 +291,13 @@ function closeWindow()
 							</td>
 						</tr>
 					</table>
-              <table width="100%" cellspacing=0 cellSpacing=0 border="0">
+              <table width="100%" cellspacing="0" cellspacing="0" border="0">
                 <tr>
                   <td noWrap  vAlign="top">
-                    <table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+                    <table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">
-                          <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+                          <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
                             <tr>
                               <td>
                                 <table style="font-family:verdana;font-size:11px;" width="100%">

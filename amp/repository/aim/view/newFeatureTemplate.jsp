@@ -18,7 +18,7 @@
 
 
 <digi:instance property="aimFeatureManagerForm" />
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampNewTemplateFeatures">
@@ -32,7 +32,7 @@
 		<tr bgcolor="#ffffff">
 			<html:hidden property="ampFeatures" value="<%=feature.getNameTrimmed() %>" />
 			<td width="9">
-					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 			</td>																	
 			<td width="100%"> <bean:write name="feature" property="name"/> </td>
 			<td>

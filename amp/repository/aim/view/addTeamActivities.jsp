@@ -82,7 +82,7 @@ function checkSelActivities() {
 <html:hidden property="sortOrder" />
 <html:hidden property="page" />
 
-<table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
+<table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 	<tr>
 		<td>
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -92,7 +92,7 @@ function checkSelActivities() {
 									<c:set var="selectedTab" value="2" scope="request"/>
 									<c:set var="selectedSubTab" value="2" scope="request"/>
 										
-									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
 												<div class="breadcrump_cont">
@@ -104,27 +104,27 @@ function checkSelActivities() {
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 													</digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<c:set var="translation">
 													<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
 													</c:set>
 													<digi:link href="/configureTeam.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
 													</digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<c:set var="translation">
 													<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
 													</c:set>
 													<digi:link href="/teamActivityList.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:activityList">Activity List</digi:trn>
 													</digi:link>
-													<span class="breadcrump_sep"><b>»</b></span>
+													<span class="breadcrump_sep"><b>ï¿½</b></span>
 													<span class="bread_sel"><digi:trn key="aim:addActivity">Add Activity</digi:trn></span>
 												</div>
 											</td>
 										</tr>
 										<tr>
-											<td valign=top>
+											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
 										
 										
@@ -132,22 +132,22 @@ function checkSelActivities() {
 										
 										
 										
-									<table class="inside normal" width=100% cellpadding="0" cellspacing="0">
+									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
 										<tr>
-									  	<td width="5" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									  	<td width="5" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
-									    <td width=20% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title"><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 									    </td>
-									    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:unassignedActivityList">List of unassigned activities</digi:trn></b>
 													</a>
 									    	</b>
 									    </td>
-									    <td width=20% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
@@ -157,7 +157,7 @@ function checkSelActivities() {
 										</tr>
 										<logic:empty name="aimTeamActivitiesForm" property="activities">
 											<tr>
-												<td class=inside align="center" colspan="4">
+												<td class="inside" align="center" colspan="4">
 													<digi:trn key="aim:noActivitiesPresent">
 														No activities present
 													</digi:trn>
@@ -167,15 +167,15 @@ function checkSelActivities() {
 										<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 											<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities">
 												<tr>
-													<td class=inside>
+													<td class="inside">
 														<html:multibox property="selActivities">
 															<bean:write name="activities" property="ampActivityId" />
 														</html:multibox>
 													</td>
-													<td class=inside>
+													<td class="inside">
 														<bean:write name="activities" property="ampId"/>
 													</td>
-													<td class=inside>
+													<td class="inside">
 														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="ampActivityId">
 																<bean:write name="activities" property="ampActivityId" />
@@ -190,7 +190,7 @@ function checkSelActivities() {
 																<bean:write name="activities" property="name" />
 															</digi:link>
 													</td>
-													<td class=inside>
+													<td class="inside">
 														<bean:write name="activities" property="donors" />
 													</td>
 												</tr>

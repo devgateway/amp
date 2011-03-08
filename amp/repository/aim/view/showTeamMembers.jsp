@@ -23,11 +23,11 @@ function showUserProfile(id){
 </script>
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33>
@@ -56,19 +56,19 @@ function showUserProfile(id){
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<bean:write name="aimTeamMemberForm" property="teamName" />
 					</span></td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr><td noWrap width=600 vAlign="top">
-						<table  bgcolor="#d7eafd" cellPadding=0 cellSpacing=1 width="100%" border=0>
+						<table  bgcolor="#d7eafd" cellpadding="0" cellspacing="1" width="100%" border="0">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
 								
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:membersFor">Members for </digi:trn>
@@ -76,7 +76,7 @@ function showUserProfile(id){
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#d7eafd">
 													<digi:errors/>
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 														<tr bgcolor="#ffffff">
@@ -141,12 +141,12 @@ function showUserProfile(id){
 							</tr>
 						</table>
 					</td>
-					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="100%" border=0>	
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">	
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellpadding="0" cellspacing="0" width="10"0>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -162,7 +162,7 @@ function showUserProfile(id){
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellSpacing=1 width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%">
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

@@ -24,13 +24,13 @@
 <digi:instance property="aimViewOrgForm" />
 <digi:context name="digiContext" property="context"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="600">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" class="box-border-nopadding" width="600">
 	<tr bgColor=#f4f4f2>
 		<td valign="top">
-			<table align=left bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="562" border=0>	
+			<table align=left bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="562" border="0">	
 				<tr>
 					<td bgColor=#ffffff class=box-border width="560">
-						<table border=0 cellPadding=1 cellSpacing=1 class="box-border" width="100%">
+						<table border="0" cellpadding="1" cellspacing="1" class="box-border" width="100%">
 								<tr bgColor=#dddddb>
 									<td bgColor=#dddddb height="20" align="center" colspan="5">
 										<b><digi:trn key="aim:organizationDetail">Organization Details</digi:trn></b>	
@@ -39,7 +39,7 @@
 								<!-- Page Logic -->
 								<tr>
 									<td width="100%">	
-										<table width="590" border=0	 bgColor=#f4f4f2 height="363">
+										<table width="590" border="0"	 bgColor=#f4f4f2 height="363">
 											<logic:iterate name="aimViewOrgForm" property="org"  id="org" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																	<tr>
 																		<td width="169" align="right" height="30">

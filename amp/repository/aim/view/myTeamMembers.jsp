@@ -28,12 +28,12 @@
 	}
 </script>
 
-<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+<TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
-		<TD class=r-dotted-lg-buttom vAlign=top>
-			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+		<TD class=r-dotted-lg-buttom valign="top">
+			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
         		<TR><TD>
-              	<TABLE border=0 cellPadding=0 cellSpacing=0 >
+              	<TABLE border="0" cellpadding="0" cellspacing="0" >
               		<TR bgColor=#f4f4f2>
                  		<TD bgColor=#c9c9c7 class=box-title
 							title='<digi:trn key="aim:WorkspaceMemberListAssocWithTeam">List of Workspace Members associated with Workspace</digi:trn>'>
@@ -49,11 +49,11 @@
 				</c:set>
 				<logic:notEmpty name="myTeamMembers" scope="session">
 				<TR><TD bgColor=#ffffff class=box-border align=left>
-					<TABLE border=0 cellPadding=1 cellSpacing=1 width="100%" >
+					<TABLE border="0" cellpadding="1" cellspacing="1" width="100%" >
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
 					type="org.digijava.module.aim.helper.TeamMember"> 
 						<TR><TD title="${trnclickToViewMemberDetails}">
-							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
+							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width="10">
 							<A href="javascript:showUserProfile(<c:out value="${tm.memberId}"/>)">
 								<bean:write name="tm" property="memberName" />
 							</A>

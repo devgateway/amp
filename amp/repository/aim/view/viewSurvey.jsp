@@ -63,7 +63,7 @@ function fnEditProject(id)
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 
 	<TR>
 
@@ -71,7 +71,7 @@ function fnEditProject(id)
 
 			<!-- contents -->
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 
 				<TR>
 
@@ -143,7 +143,7 @@ function fnEditProject(id)
 
 								<TD vAlign="top" align="center" width="750">
 
-									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 border="0">
+									<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top" align="center" bgColor=#f4f4f2 border="0">
 
 										<TR>
 

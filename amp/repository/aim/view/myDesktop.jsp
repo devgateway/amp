@@ -104,11 +104,11 @@
 
 	<TR><TD>
 
-		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+		<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 
       	<TR><TD>
 
-           	<TABLE border=0 cellPadding=0 cellSpacing=0 >
+           	<TABLE border="0" cellpadding="0" cellspacing="0" >
 
            		<TR>
 
@@ -130,7 +130,7 @@
 
 			<TR><TD bgColor=#ffffff class=box-border align=left>
 
-				<TABLE border=0 cellPadding=4 cellSpacing=1 width="100%" >
+				<TABLE border="0" cellPadding=4 cellspacing="1" width="100%" >
 
 				<c:if test="${aimDesktopForm.filtersPresent == true}">
 
@@ -352,13 +352,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 
 									</c:if>
 
@@ -380,13 +380,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 
 									</c:if>
 
@@ -408,13 +408,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 
 									</c:if>
 
@@ -438,13 +438,13 @@
 
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 
-										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/down.gif" align=absmiddle border="0">
 
 									</c:if>
 
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 
-										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
+										<img src= "../ampTemplate/images/up.gif" align=absmiddle border="0">
 
 									</c:if>
 
@@ -518,7 +518,7 @@
 
 										<c:if test="${!empty project.donor}">
 
-											<TABLE cellspacing=1 cellpadding=1>
+											<TABLE cellspacing="1" cellpadding="1">
 
 												<c:forEach var="dnr" items="${project.donor}">
 
@@ -704,7 +704,7 @@
 
 	<TR><TD>
 
-		<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="left">
+		<TABLE width="100%" cellPadding=2 cellspacing="0" vAlign="top" align="left">
 
 			<TR>
 
@@ -772,7 +772,7 @@
 
 	<TR><TD>
 
-		<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="left">
+		<TABLE width="100%" cellPadding=2 cellspacing="0" vAlign="top" align="left">
 
 			<TR>
 

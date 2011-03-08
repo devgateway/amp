@@ -90,8 +90,8 @@ function closePopup() {
 
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
-		<td align=left vAlign=top>
-			<table bgcolor=#aaaaaa cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+		<td align=left valign="top">
+			<table bgcolor=#aaaaaa cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 				<tr bgcolor="#aaaaaa">
 					<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 						<digi:trn key="aim:currencyRateEditor">Currency Rate Editor</digi:trn>
@@ -117,14 +117,14 @@ function closePopup() {
 									<digi:trn key="aim:exchangeRateDate">Exchange rate date</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
-									<table cellPadding=0 cellSpacing=0>
+									<table cellpadding="0" cellspacing="0">
 										<tr>
 											<td>
 												<html:text property="updateCRateDate" size="10" styleClass="inp-text" readonly="true" styleId="updateCRateDate"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateFormPop.updateCRateDate)'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 												</a>
 											</td>
 										</tr>
@@ -137,7 +137,7 @@ function closePopup() {
 									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> in selected currency)</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
-								<table cellPadding=0 cellSpacing=0>
+								<table cellpadding="0" cellspacing="0">
 								<tr>
 								<td>
 								<c:set var="formatTip">

@@ -60,7 +60,7 @@ function addTeamMember(id) {
 <html:hidden property="action" />
 --%>
 
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td width="100%">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -68,7 +68,7 @@ function addTeamMember(id) {
 	</tr>
 									<c:set var="selectedTab" value="1" scope="request"/>
 										
-									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 										<td height=33>
 											<div class="breadcrump_cont">
@@ -80,19 +80,19 @@ function addTeamMember(id) {
 												<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 													<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 												</digi:link>
-												<span class="breadcrump_sep"><b>»</b></span>
+												<span class="breadcrump_sep"><b>ï¿½</b></span>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 												</c:set>
 												<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 												<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
-												<span class="breadcrump_sep"><b>»</b></span>
+												<span class="breadcrump_sep"><b>ï¿½</b></span>
 												<span class="bread_sel"><digi:trn key="aim:members">Members</digi:trn></span>
 											</div>
 										</td>
 									</tr>
 										<tr>
-											<td valign=top>
+											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 										
 													<jsp:include page="teamSetupMenu.jsp" flush="true" />
@@ -142,13 +142,13 @@ function addTeamMember(id) {
 											</div>
 
 										
-										<table class="inside members normal" width=100% cellpadding="0" cellspacing="0">
+										<table class="inside members normal" width="100%" cellpadding="0" cellspacing="0">
 											<tr>
-											  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>&nbsp;</td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Name</b></td>
-											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">User ID </b></td>
+											  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;</td>
+											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Name</b></td>
+											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">User ID </b></td>
 											    <%--
-											    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside><b class="ins_title">Role</b></td>
+											    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">Role</b></td>
 											    --%>
 											</tr>
 											<logic:empty name="aimTeamMemberForm" property="teamMembers">
@@ -161,11 +161,11 @@ function addTeamMember(id) {
 											<logic:notEmpty name="aimTeamMemberForm" property="teamMembers">
 												<%--
 											<tr>
-											  <td class=inside valign=top><input type="checkbox" name="checkbox" value="checkbox" /></td>
-											    <td class=inside valign=top><span class="desktop_project_name normal">aaa aaa</span></td>
-											    <td class=inside valign=top><span class="desktop_project_name normal">aaa@aaa.org</span></td>
+											  <td class="inside" valign="top"><input type="checkbox" name="checkbox" value="checkbox" /></td>
+											    <td class="inside" valign="top"><span class="desktop_project_name normal">aaa aaa</span></td>
+											    <td class="inside" valign="top"><span class="desktop_project_name normal">aaa@aaa.org</span></td>
 											    
-											    <td class=inside valign=top><select name="" class="inputx insidex"/><option value="1">Workspace Member</option></select><input name="role" type="submit" id="role" value="Change Role" /></td>
+											    <td class="inside" valign="top"><select name="" class="inputx insidex"/><option value="1">Workspace Member</option></select><input name="role" type="submit" id="role" value="Change Role" /></td>
 											    
 											</tr>
 											--%>
@@ -173,12 +173,12 @@ function addTeamMember(id) {
 													<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
 														<c:if test="${mem.teamHead == false}">
 															<tr>
-																<td class=inside valign=top>
+																<td class="inside" valign="top">
 																	<html:multibox property="selMembers" >
 																	<c:out value="${mem.memberId}"/>
 																	</html:multibox>																
 																</td>
-																<td class=inside valign=top>
+																<td class="inside" valign="top">
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams}" property="id">
 																	<c:out value="${mem.memberId}"/>
@@ -191,7 +191,7 @@ function addTeamMember(id) {
 																	<c:out value="${mem.memberName}"/>
 																	</digi:link>
 																</td>
-																<td class=inside valign=top>
+																<td class="inside" valign="top">
 																	<c:out value="${mem.email}"/>
 																</td>																	
 															</tr>

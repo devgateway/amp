@@ -141,13 +141,13 @@ function hidePopin() {
 <div id="dialog2" class="dialog" title="Advanced Filters">
 <div id="popinContent" class="content">
 	<div id="selectDiv" class="yui-navset">
-		<table class="inside" width=100% height=400 cellpadding="0" cellspacing="0">
+		<table class="inside" width="100%" height=400 cellpadding="0" cellspacing="0">
 			<tr>
-				<td width=40% height=25 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside><b class="ins_header">Grouping Selector</b></td>
-				<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside align=center><b class="ins_header">Grouping Details</b></td>
+				<td width=40% height=25 align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header">Grouping Selector</b></td>
+				<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside" align="center"><b class="ins_header">Grouping Details</b></td>
 			</tr>
 			<tr>
-			    <td class=inside style="background-color:#F9F9F9;" valign=top>
+			    <td class="inside" style="background-color:#F9F9F9;" valign="top">
 			    <ul class="yui-nav" style="width: 70%; position: static;">
 					<div class="selector_type_sel"><div class="selector_type_cont">General</div></div>
 					<div class="selector_type"><div class="selector_type_cont"><a href="#divOrganizationsFilter">Organizations</a></div></div>
@@ -155,7 +155,7 @@ function hidePopin() {
 					<div class="selector_type"><div class="selector_type_cont"><a href="#divSectorsFilter">Sectors</a></div></div>
 				</ul>
 				</td>
-				<td class=inside valign=top style="background-color:#F9F9F9;">
+				<td class="inside" valign="top" style="background-color:#F9F9F9;">
 					<div id="divGeneralFilter">
 						<div class="selector_content_org_prof" style="line-height:25px;">
 						
@@ -224,7 +224,7 @@ function hidePopin() {
 						</div>
 					</div>
 					<div id="divRegionsFilter">
-					    <td class=inside valign=top style="background-color:#F9F9F9;">
+					    <td class="inside" valign="top" style="background-color:#F9F9F9;">
 							<div class="selector_content_org_prof" style="line-height:25px;">
 								<b>Region:</b> <img src="images/ico_quest.gif" /><br />
 									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
@@ -250,7 +250,7 @@ function hidePopin() {
 						</td>
 					</div>
 					<div id="divSectorsFilter">
-						<td class=inside valign=top style="background-color:#F9F9F9;">
+						<td class="inside" valign="top" style="background-color:#F9F9F9;">
 							<div class="selector_content_org_prof" style="line-height:25px;">
 								<b>Sector:</b> <img src="images/ico_quest.gif" /><br />
 									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
@@ -311,23 +311,23 @@ function hidePopin() {
     	</c:if>
     </div>
     </td>
-    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class=l_sm>Export Options</a></div></div></td>
+    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export Options</a></div></div></td>
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
-    <td width=296 bgcolor="#F4F4F4" valign=top>
+    <td width=296 bgcolor="#F4F4F4" valign="top">
 	<div style="background-color:#FFFFFF; height:7px;">&nbsp;</div>
 	<div class="dash_left">
 	<fieldset>
 	<legend><span class=legend_label>Quick Filter</span></legend>
 	<html:checkbox property="filter.workspaceOnly">Show Data from All Workspaces</html:checkbox>
 	<hr />
-	<table cellspacing="0" cellpadding="0" width=100%> 
+	<table cellspacing="0" cellpadding="0" width="100%"> 
   <tr>
     <td><digi:trn>Organization Group</digi:trn>:</td>
     <td align=right>
@@ -517,10 +517,10 @@ Web Link: <b>Not applicable</b>
 	</div>
 	</td>
 	<td width=15>&nbsp;</td>
-    <td width=689 valign=top>
-	<table width="689" border="0" cellspacing="0" cellpadding="0" align=center>
+    <td width=689 valign="top">
+	<table width="689" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td valign=top>
+<td valign="top">
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
 		<li><a href="#tab1"><div>Visualization</div></a></li>

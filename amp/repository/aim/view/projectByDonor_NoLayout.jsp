@@ -20,7 +20,7 @@
 
 <digi:instance property="aimMulitlateralbyDonorForm" />
 
-<table width="650" cellspacing=1 cellpadding=1 valign=top align=left>
+<table width="650" cellspacing="1" cellpadding="1" valign="top" align=left>
 
   <!-- Report Name -->
   <tr>
@@ -42,7 +42,7 @@
   <!-- Report data -->
   <tr>
    <td>
-	<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left >
+	<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left >
 	  <tr><td align="left"><b>
 		<digi:trn key="aim:ProjectbyDonor">Commitment Disbursement by Project by Donor</digi:trn>
 		</b>    
@@ -51,7 +51,7 @@
 
 	  <!--  Displays the Who -->
 
-	    <table cellspacing=0 cellpadding=0 valign=top align=left border=1
+	    <table cellspacing="0" cellpadding="0" valign="top" align=left border="1"
 		style="border-collapse: collapse">
 		 <tr>
 		   <td width=30>
@@ -92,26 +92,26 @@
 				&nbsp;
 			   </td>
 			   <td width=540>
-			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+			     <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 				   <tr>
-				     <td width=51 align=center>
+				     <td width=51 align="center">
 					    Year
 					 </td>
-					 <td width=78 align=center>
+					 <td width=78 align="center">
 						 <digi:trn key="aim:commitments">Commitment</digi:trn>
 					  </td>
 
-				     <td width=78 align=center>
+				     <td width=78 align="center">
 
 						<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
 					 </td>
-				     <td width=75 align=center>
+				     <td width=75 align="center">
 						<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 					 </td>
-				     <td width=76 align=center>
+				     <td width=76 align="center">
 						<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 					 </td>
-					 <td width=77 align=center>
+					 <td width=77 align="center">
 					 		<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
 					</td>
 				   </tr>
@@ -150,7 +150,7 @@
 				<td>
 				 <% temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 	  				<logic:iterate name="project"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
 					  <tr>
   						<td width=30>
@@ -267,7 +267,7 @@
 				<td>
 				   <%  temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 					<logic:iterate name="termAssist"  property="termAssistFund" id="termAssistFund" type="org.digijava.module.aim.helper.AmpFund">
 					<tr>
 				     <td width=30>
@@ -384,7 +384,7 @@
 				<td>
 				   <%  temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 					<logic:iterate name="totalDonorTermAssistFund"  property="termFundTotal" id="termFundTotal" type="org.digijava.module.aim.helper.TermFundTotal">
 					<tr>
 				     <td width=30>
@@ -497,7 +497,7 @@
 				<td>
 				   <%  temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 					<logic:iterate name="donors"  property="totalDonorFund" id="totalDonorFund" type="org.digijava.module.aim.helper.FundTotal">
 					<tr>
 				     <td width=30>
@@ -605,7 +605,7 @@
 				<td>
 				   <%  temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 					<logic:iterate name="totalTeamTermAssistFund"  property="termFundTotal" id="termFundTotal" type="org.digijava.module.aim.helper.TermFundTotal">
 					<tr>
 				     <td width=30>
@@ -715,7 +715,7 @@
 				<td>
 				   <%  temp = stYr; %>
 
-				  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+				  <table cellpadding=2 cellspacing="1" border="1" style="border-collapse: collapse">
 					<logic:iterate name="multiReport"  property="totalTeamFund" id="totalTeamFund" type="org.digijava.module.aim.helper.FundTotal">
 					<tr>
 				     <td width=30>

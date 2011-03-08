@@ -121,16 +121,16 @@ function addTeamMember(id) {
 <html:hidden property="action" />
 --%>
 
-<table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
 	<tr>
 		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33>
                     	<span class=crumb>
@@ -149,21 +149,21 @@ function addTeamMember(id) {
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceInfo">Team Workspace Info</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceInfo">Team Workspace Info</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 							
 							<tr>
 								<td valign="top">
 									<br />
                                 	<div class="contentbox_border" style="padding: 20px 0px 20px 0px;">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%">	
 										<tr>
 											<td valign="top" align="center">
-												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
+												<table border="0" cellPadding=3 cellspacing="0" width="100%">
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 													<tr>
 														<td>
@@ -186,7 +186,7 @@ function addTeamMember(id) {
 
 													<tr>
 														<td>
-															<table width="100%" cellPadding=3 cellSpacing=0 vAlign="top" align="left" 
+															<table width="100%" cellPadding=3 cellspacing="0" vAlign="top" align="left" 
 															bgcolor="#dddddd">
 																<tr>	
 																	<td bgcolor="#f4f4f2" width="100">
@@ -233,7 +233,7 @@ function addTeamMember(id) {
 
 													<tr>
 														<td align="center">
-															<table width="98%" cellPadding=3 cellSpacing=0 vAlign="top" 
+															<table width="98%" cellPadding=3 cellspacing="0" vAlign="top" 
 															 id="dataTable">
 																<tr>
 																	<td bgcolor="#999999" style="color:black">

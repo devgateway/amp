@@ -38,7 +38,7 @@
 <digi:errors/>
       <digi:form action="/editSite.do" method="post" >
       <input type="hidden" name="referrer" value="editSite" />
-      <TABLE width="500px" align=center>
+      <TABLE width="500px" align="center">
         <TR>
           <TD class=text align=left colSpan=2><digi:trn key="admin:createNewSite">To create a new site, please complete the form below.</digi:trn></TD></TR>
         <TR>
@@ -51,7 +51,7 @@
             color=red><B><BIG>*</BIG></B></FONT> are required.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2 td>
-            <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
+            <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="admin:siteName">Site Name</digi:trn></TD>
@@ -155,7 +155,7 @@
           </TR>		  
           <TR>
             <TD align=left noWrap class=text>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
 
              <tr><td>&nbsp;</td><td><digi:trn key="admin:domain">Domain</digi:trn></td><td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td><td>&nbsp;<digi:trn key="admin:language">Language</digi:trn></td><td>&nbsp;<digi:trn key="admin:enableSecurity">Security</digi:trn></td></tr>
     	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.module.admin.form.SiteForm.SiteDomainInfo">
@@ -267,7 +267,7 @@
           </TR>
           <TR>
             <TD align=left noWrap class=text>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
 		  	 <c:forEach items="${siteForm.languages}" var="item">
              <tr><td>
              <html:multibox property="userLanguages" ><c:out value="${item.code}"/></html:multibox>
@@ -284,7 +284,7 @@
           </TR>
           <TR>
             <TD align=left noWrap class=text>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
 		  	 <c:forEach items="${siteForm.languages}" var="item">
              <tr><td>
              <html:multibox property="transLanguages" ><c:out value="${item.code}"/></html:multibox>
@@ -307,7 +307,7 @@
           </TR>
           
 <TR>
-<TD colspan=2 align=center>
+<TD colspan=2 align="center">
 <html:submit/>
 
 </TD>

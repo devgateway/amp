@@ -131,11 +131,11 @@ function setHoveredRow(rowId) {
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="960" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="960" vAlign="top" align="center" border="0">
 	
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -164,11 +164,11 @@ function setHoveredRow(rowId) {
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr>
 							<td width="75%" vAlign="middle" height="40">
 								<feature:display name="Add Pledge Button" module="Pledges">
-								<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+								<table cellpadding="0" cellspacing="0" width="100%" border="0">
 									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">
 	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
 									</html:button>
@@ -239,7 +239,7 @@ function setHoveredRow(rowId) {
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
 									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/application_edit.png" border=0>
+	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">
 									</a>
 								</td>
 								<td width="3%" align="center">
@@ -250,7 +250,7 @@ function setHoveredRow(rowId) {
 										<bean:write name="allFundingPledges" property="value" />
 									</c:set>
 									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/trash_12.gif" border=0>
+	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">
 									</a>
 								</td>
 							</tr>

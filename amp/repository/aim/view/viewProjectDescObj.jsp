@@ -17,7 +17,7 @@
 
 <digi:instance property="aimMainProjectDetailsForm" />
 
-<table width="100%" height="100%" cellpadding=5 cellspacing=0 valign=top align=left bgcolor="#006699">
+<table width="100%" height="100%" cellpadding=5 cellspacing="0" valign="top" align=left bgcolor="#006699">
 	<c:if test="${aimMainProjectDetailsForm.type == 'ProjCom'}">
 		<tr height="20">
 			<td class="textalb" align="center">

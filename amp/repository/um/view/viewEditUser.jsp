@@ -87,7 +87,7 @@ function isInvalid(field){
   <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705">
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=752>
+		<td align=left class=r-dotted-lg valign="top" width=752>
 			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -128,7 +128,7 @@ function isInvalid(field){
 			      </td>
 			    </tr>
     			<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
+					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:errors/>
 					        &nbsp;
 					        <br/>

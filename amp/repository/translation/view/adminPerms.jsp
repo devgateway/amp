@@ -84,7 +84,7 @@
    <digi:context name="indexUrl" property="context" />
     <tr><td>&nbsp;</td></tr>
     <tr>
-     <td colspan=4 align="left">
+     <td colspan="4" align="left">
      <digi:trn key="translation:goTo">Go to</digi:trn> 
       <a href="<%= indexUrl%>">
        <b><digi:trn key="translation:indexPage">Index Page</digi:trn></b>

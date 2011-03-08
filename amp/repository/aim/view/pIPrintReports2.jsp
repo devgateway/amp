@@ -56,7 +56,7 @@
 					
 				</tr>
 				<tr>
-					<td colspan=3 class=subtitle-blue align=center>
+					<td colspan=3 class=subtitle-blue align="center">
 						<digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
 						<c:out value="${aimParisIndicatorReportForm.indicatorCode}" />&nbsp;
 						<digi:trn key="aim:report">Report</digi:trn>
@@ -64,7 +64,7 @@
 				</tr>
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode == 6}">
 					<tr>
-						<td colspan=3 class=subtitle-blue-2 align=center>
+						<td colspan=3 class=subtitle-blue-2 align="center">
 							[<digi:trn key="aim:numParallelPIU">Number Of Parallel PIUs</digi:trn>]&nbsp;
 						</td>
 					</tr>

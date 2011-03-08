@@ -293,7 +293,7 @@ function closeWindow() {
                 </tr>
                 <tr> 
                  <td colspan="10" nowrap="nowrap" align="center" bgcolor="#f4f4f2">
-                   <table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" class="box-border-nopadding">
+                   <table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center" class="box-border-nopadding">
 						<c:if test="${!empty aimNewIndicatorForm.selectedActivities}">
 	            		   <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
 			                   <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">

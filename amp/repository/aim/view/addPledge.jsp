@@ -529,11 +529,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 <html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="900" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="900" vAlign="top" align="center" border="0">
 	
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -565,12 +565,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 				</td></tr>
 				<tr><td>
 					<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
-						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+						<table cellpadding="0" cellspacing="0" width="100%" border="0">
 							<tr>
 								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
@@ -587,7 +587,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
@@ -596,7 +596,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">
 													<FONT color=red>*</FONT>
@@ -638,7 +638,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
@@ -647,7 +647,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">
 													<FONT color=red>*</FONT>
@@ -706,7 +706,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 								</table>
 								<feature:display name="Pledge Contact 1" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
 										<b><digi:trn key="aim:pointContactDonorsConferenceMarch31st">Point of Contact at Donors Conference on March 31st</digi:trn></b>
@@ -715,7 +715,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">			
 												<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1">								
 													<td valign="middle" align="left" width="15%">
@@ -830,7 +830,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<field:display name="Pledge Contact 1 - Alternate Contact" feature="Pledge Contact 1">
 										<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
 										<tr><td>
-										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
 														<a>
@@ -881,7 +881,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
 										<b><digi:trn key="aim:pointContactFollowUp">Point of Contact for Follow Up</digi:trn></b>
@@ -890,7 +890,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr>
 												<td valign="middle" align="left" width="15%" colspan="2">
 													<a>
@@ -1013,7 +1013,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2">
 										<tr><td><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b></td></tr>
 										<tr><td>
-										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
 														<a>
@@ -1064,7 +1064,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								</feature:display>
 								<feature:display name="Pledge Sector and Location" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border=0>
+									<table width="95%" bgcolor="#f4f4f2" border="0">
 										<tr>
 										    <td>
 										        <!-- contents -->
@@ -1077,7 +1077,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
 							                    	<tr>
 							                            <td align="left">
 							                                <b>
@@ -1092,7 +1092,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										<tr>
 											<td>
-										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 	                                             	<tr><td>
 														<c:forEach var="pledgeSectors" items="${pledgeForm.pledgeSectors}" varStatus="index">
 	                                                            <tr> 
@@ -1151,7 +1151,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
 							                    	<tr>
 							                            <td align="left">
 							                                <b>
@@ -1166,7 +1166,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										<tr>
 											<td>
-										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 	                                             	<tr><td>
 													<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
 	                                                  <tr>
@@ -1216,7 +1216,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									</table>
 								</feature:display>
 								<feature:display name="Pledge Funding" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border=0>
+									<table width="95%" bgcolor="#f4f4f2" border="0">
 										<tr>
 										    <td>
 										        <!-- contents -->
@@ -1229,7 +1229,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr>
 							                <td>
 							                    <div id="fundTitle" style="display:block;">
-												<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+												<table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
 							                    	<tr>
 														<td align="center" valign="bottom" width="20" />
 														<td align="center" width="160">
@@ -1261,7 +1261,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										<tr>
 											<td>
-												<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+												<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 													<tr>
 														<td>
 			                                             	<div id="fundingDiv">
@@ -1279,7 +1279,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															 String field6 = tNameBase + "6";
 															 String field7 = tNameBase + "7"; %>
 															 <div id="<%=divName%>" >
-																<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1>
+																<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellspacing="1">
 																<tr>
 										                            <td align="center" valign="bottom" width="30" >
 																		<input name="<%=field0%>" type="hidden" id="<%=field0%>" value='${fundingPledgesDetails.id}'/>
@@ -1344,7 +1344,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																				</td>
 																				<td align="left" vAlign="bottom">&nbsp;
 																					<a id="date1<%=field6%>" href='javascript:pickDateById("date1<%=field6%>","<%=field6%>")'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																					</a>
 																				</td>														
 																			</tr>
@@ -1408,7 +1408,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									</table>
 								</feature:display>
 								<feature:display name="Pledge Additional Information" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:additionalInformation">Additional Information</digi:trn></b>
@@ -1417,7 +1417,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									
 									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="90%">
 													<a>
@@ -1482,7 +1482,7 @@ function addFunding() {
 	var divname = "fund_" + numFund;
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
-	var s = "<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1> <tr> <td align='center' valign='bottom' width='30' >";
+	var s = "<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellspacing="1"> <tr> <td align='center' valign='bottom' width='30' >";
 	s += "<input name='fund_"+ numFund +"_0' type='hidden' id='fund_"+ numFund +"_0' value=''/> <input type='checkbox' id='fund_"+ numFund +"_1'/></td>";
 
 	s += "<td align='center' valign='bottom' width='170'> <select name='fund_"+ numFund +"_2' class='inp-text' style='max-width: 150px;'>";
@@ -1532,7 +1532,7 @@ function addFunding() {
 	s += "<td align='center' valign='bottom' width='150'> <table cellPadding='0' cellSpacing='0'>";
 		s += "<tr> <td align='left' vAlign='bottom'> <input type='text' name='fund_"+ numFund +"_6' id='fund_"+ numFund +"_6' readonly='true' size='10' style='width:80px' class='inp-text' />	</td>";
 		s += "<td align='left' vAlign='bottom'>&nbsp; <a id='date1fund_"+ numFund +"_6' href='javascript:pickDateById(\"date1fund_"+ numFund +"_6\",\"fund_"+ numFund +"_6\")'>";
-		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0> </a> </td> </tr> </table> </td>";
+		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border="0"> </a> </td> </tr> </table> </td>";
 
 	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_7' class='inp-text' style='max-width: 150px;'>";

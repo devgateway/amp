@@ -25,7 +25,7 @@
 									
 									<tr><td>
 										<field:display name="Add Documents Button" feature="Related Documents">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 													 

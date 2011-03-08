@@ -244,10 +244,10 @@
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
@@ -365,7 +365,7 @@ ${fn:replace(message,quote,escapedQuote)}
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=16 valign="center" width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn>
 										Add New Activity
@@ -384,10 +384,10 @@ ${fn:replace(message,quote,escapedQuote)}
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
-						<table cellPadding=0 cellSpacing=0 width="100%">
+						<table cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr>
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
@@ -408,7 +408,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn>Monitoring and Evaluation - Indicators</digi:trn>">
@@ -416,7 +416,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</a>
 									</td></tr>
 									<tr><td>
-										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
+										<table width="100%" cellSpacing=2 cellPadding=2 valign="top" align=left class="box-border-nopadding" border="0">
 											<tr>
 												<td width="32%" align="center" colspan="6"><b>
 													<digi:trn>Indicators</digi:trn>
@@ -438,7 +438,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
-															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_down.gif" border="0">
 														</digi:link>
 													</c:if>
 													<c:if test="${aimEditActivityForm.indicator.expIndicatorId!=indicator.indicatorId}">
@@ -450,7 +450,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:set>
 														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
-															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+															<img src= "../ampTemplate/images/arrow_right.gif" border="0">
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;
 													<field:display name="Indicator Name" feature="Activity">
@@ -519,7 +519,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</a>
 																
 																	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtBaseValDate"),"clear1")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																	</a>
 																
 																</td>
@@ -560,7 +560,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</a>
 																	
 																	<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("txtTargetValDate"),"clear2")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																	</a>
 															
 																</td>
@@ -618,7 +618,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("txtRevisedTargetValDate"),"clear3")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																	</a>
 																</td>
 															</tr>
@@ -641,7 +641,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															id="priorValues" type="org.digijava.module.aim.helper.PriorCurrentValues">
 																<tr bgColor=#f4f4f2>
 																	<td align="center">
-																		<img src= "../ampTemplate/images/arrow_dark.gif" border=0>
+																		<img src= "../ampTemplate/images/arrow_dark.gif" border="0">
 																	</td>
 																	<td>
 																		<bean:write name="priorValues" property="currValue" />
@@ -690,7 +690,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date4" href='javascript:pickDateWithClear("date4",document.getElementById("txtCurrValDate"),"clear4")'>
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																	</a>
 																</td>																
 															</tr>

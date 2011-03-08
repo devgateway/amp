@@ -8,9 +8,9 @@
 <digi:errors/>
 <digi:form action="/createPhysicalProgress.do" method="post">
 <table width="100%" align="center">
-<tr><td><h2 align=center><digi:trn key="aim:physicalProgressDetails">Physical Progress Details</digi:trn></h2></td></tr>
+<tr><td><h2 align="center"><digi:trn key="aim:physicalProgressDetails">Physical Progress Details</digi:trn></h2></td></tr>
 <tr><td>
-<table width=80% align=center>
+<table width=80% align="center">
 <tr><td><digi:trn key="aim:title">Title : </digi:trn></td>
 <td> <html:text property="title"/></td></tr>
 <tr><td><digi:trn key="aim:reportingDate">Reporting Date : </digi:trn></td><td>

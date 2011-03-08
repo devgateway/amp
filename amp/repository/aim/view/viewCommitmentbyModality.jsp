@@ -89,14 +89,14 @@
 				<td width="2">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan=3 class=subtitle-blue align=center>
+				<td colspan=3 class=subtitle-blue align="center">
 					<digi:trn key="aim:TrendAnalysisTitle">
 					<bean:write name="aimCommitmentbyDonorForm" property="reportName" />
 					</digi:trn>
 				</td>
 			</tr>
 			<tr>			<td width="14" class="r-dotted-lg">&nbsp;</td>
-				<td colspan=3 class=box-title align=center>
+				<td colspan=3 class=box-title align="center">
 					<bean:write name="aimCommitmentbyDonorForm" property="workspaceType" />&nbsp; <bean:write name="aimCommitmentbyDonorForm" property="workspaceName" />&nbsp; 
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
@@ -109,7 +109,7 @@
 			<logic:greaterThan name="aimCommitmentbyDonorForm" property="yrCount" value="3">
 				<td valign="bottom" class="crumb">
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</c:set>
@@ -123,7 +123,7 @@
 			<logic:lessEqual name="aimCommitmentbyDonorForm" property="yrCount" value="3">
 				<td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">&nbsp;&nbsp;
-					<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					<img src="../ampTemplate/images/pdf_icon.gif" border="0">				
 						<a href="javascript:popup_pdf()">
 						<digi:trn key="aim:Pdf">Create Report in Pdf.</digi:trn>
 						</a>
@@ -158,7 +158,7 @@
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+							&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">	
 							<c:set var="translation">
 								<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 							</c:set>
@@ -173,7 +173,7 @@
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border="0">	
 							<c:set var="translation">
 								<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 							</c:set>
@@ -192,7 +192,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
 							&nbsp;
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
 					</c:set>

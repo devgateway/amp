@@ -38,7 +38,7 @@
 					<digi:trn key="aim:sector">Sector</digi:trn>
 				</b>
                     <a href="javascript:popupwin()">
-                        <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
+                        <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height=10 border="0"/>
                     </a>
                 </td>
             </tr>
@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <td>
-                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
                     	<tr>
                             <td align="left">
                                 <b>

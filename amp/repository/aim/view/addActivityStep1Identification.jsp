@@ -347,7 +347,7 @@ target.style.cursor = "default"
 												<FONT color=red>*</FONT>&nbsp;
 												<digi:trn key="aim:status">Status</digi:trn>												  
 												<a href="javascript:popupwin('activity_status')">
-												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
+												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width="10" height=10 border="0"></a>
 												</td>
 												<td bgcolor="#ffffff">
 													<c:set var="translation">
@@ -406,7 +406,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 														<td>
 															<bean:define id="objKey">
@@ -450,7 +450,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 														<td>
 															<bean:define id="descKey">
@@ -484,7 +484,7 @@ target.style.cursor = "default"
 											</td>
 											
 											<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 												
 													<tr>
 														<td>
@@ -530,7 +530,7 @@ target.style.cursor = "default"
 											</td>
 
 											<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 														<td>
 															<bean:define id="resKey">
@@ -588,7 +588,7 @@ target.style.cursor = "default"
 									            
 												</td>
 												<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 														<td><digi:edit key="${largeTextKey}" /></td>
 													</tr>
@@ -751,7 +751,7 @@ target.style.cursor = "default"
 											</td>
 											
 											<td>
-											<table id="budgetTable" class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
+											<table id="budgetTable" class="box-border" cellspacing="1" cellpadding="1" border="0" width="350">
 											<field:display name="Imputation" feature="Budget">
 											<tr valign="top" id="Imputation" align="left"  >
 												<td>
@@ -884,7 +884,7 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-													<table class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
+													<table class="box-border" cellspacing="1" cellpadding="1" border="0" width="350">
                                                   		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
                                                   			<td width="75">

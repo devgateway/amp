@@ -99,7 +99,7 @@
 
 
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
+<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border="0">
 
 <tr><td width="100%" vAlign="top" align="left">
 
@@ -113,13 +113,13 @@
 
 <tr><td width="100%" vAlign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 
 	<tr>
 
 		<td class=r-dotted-lg width="10">&nbsp;</td>
 
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 
@@ -179,7 +179,7 @@
 
 						<tr>
 
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=16 valign="center" width="100%"><span class=subtitle-blue>
 
 								<c:if test="${aimEditActivityForm.editAct == false}">
 
@@ -209,17 +209,17 @@
 
 				<tr><td>
 
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 
 						<tr><td width="75%" vAlign="top">
 
-						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+						<table cellpadding="0" cellspacing="0" width="100%" border="0">
 
 							<tr>
 
 								<td width="100%">
 
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 
 										<tr>
 
@@ -261,7 +261,7 @@
 
 
 
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 
 									<tr><td>
 

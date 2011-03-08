@@ -51,20 +51,20 @@
 
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="650" vAlign="top" align="left" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="650" vAlign="top" align="left" border="0">
 	<tr>
-		<td align=left vAlign=top>
-			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" border=0>
+		<td align=left valign="top">
+			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" border="0">
           <tr>
             <td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                 <tr>
                   <td width="100%" vAlign="top">
-						<table width="100%" cellSpacing=1 cellPadding="2" vAlign="top" align="left" border=0>
+						<table width="100%" cellspacing="1" cellPadding="2" vAlign="top" align="left" border="0">
 
                       <tr>
                         <td width="100%">
-								<table width="98%" cellSpacing=1 cellPadding="2">
+								<table width="98%" cellspacing="1" cellPadding="2">
 								<field:display feature="Identification" name="Project Title">
 									<tr>
 										<td class="head2-name" width="100%" align="left" bgcolor="#ffffff">
@@ -80,7 +80,7 @@
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
                               <td align="center" vAlign="top">
-								<table width="98%" cellSpacing=0 cellpadding=4 style="border-collapse: collapse" border=1>
+								<table width="98%" cellspacing="0" cellpadding=4 style="border-collapse: collapse" border="1">
 									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2">
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>										
@@ -442,7 +442,7 @@
 												  </b>												</td>
 										  <td width="73%" bgcolor="#ffffff">
 <c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
-														<table cellSpacing="2" cellPadding="2" border=0>
+														<table cellSpacing="2" cellPadding="2" border="0">
 															<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.identification.selectedOrganizations}" >
 																<c:if test="${not empty selectedOrganizations}">
 																	<tr><td>
@@ -562,11 +562,11 @@
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
-													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
+													<td width="32%" valign="top"><digi:trn key="aim:proposedCompletionDates">
 													Proposed Completion Dates</digi:trn></td>
-													<td width="1" valign=top>:</td>
-													<td align="left" valign=top>
-														<table cellPadding=0 cellSpacing=0>
+													<td width="1" valign="top">:</td>
+													<td align="left" valign="top">
+														<table cellpadding="0" cellspacing="0">
 															<c:forEach var="closeDate" items="${aimEditActivityForm.planning.activityCloseDates}">
 															<tr>
 																<td>
@@ -835,10 +835,10 @@
 </b>
 									  </td>
 										<td bgcolor="#ffffff">
-										    <table width="100%" cellSpacing=1 cellPadding=0 border=0 align="center">
+										    <table width="100%" cellspacing="1" cellpadding="0" border="0" align="center">
                                               <tr>
                                                 <td>
-                                                  <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
+                                                  <table cellSpacing=8 cellpadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
                                                       <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 
@@ -846,10 +846,10 @@
                                                           <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
                                                               <td>
-                                                                <table cellSpacing=1 cellPadding=0 border="0" width="100%" class="box-border-nopadding">
+                                                                <table cellspacing="1" cellpadding="0" border="0" width="100%" class="box-border-nopadding">
                                                                   <tr>
                                                                     <td>
-                                                                      <table cellSpacing=1 cellPadding=0 border="0" width="100%">
+                                                                      <table cellspacing="1" cellpadding="0" border="0" width="100%">
                                                                         <tr>
                                                                           <td>
                                                                             <table width="100%" border="0" cellpadding="1" bgcolor="#dddddd" cellspacing="1">
@@ -1021,7 +1021,7 @@
 																<tr><td>
                                                                
 
-                        <table cellSpacing=1 cellPadding=0 border="0" bordercolor="#FF0000" width="100%">
+                        <table cellspacing="1" cellpadding="0" border="0" bordercolor="#FF0000" width="100%">
                         <feature:display name="Planned Commitments" module="Measures">
 	                        <tr>
 	                            <td bgcolor="#eeeeee"
@@ -2065,7 +2065,7 @@
 									  </td>
 									<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
-                                                  <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
+                                                  <table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
 															<td>
 															<digi:trn key="aim:cost">Cost</digi:trn> 

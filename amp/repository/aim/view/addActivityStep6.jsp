@@ -322,13 +322,13 @@ function removeSelLinks() {
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" vAlign="top" align="center" border="0">
 
 	<tr>
 
 		<td class=r-dotted-lg width="10">&nbsp;</td>
 
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td align=left valign="top" class=r-dotted-lg>
 
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 
@@ -484,7 +484,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 						<tr>
 
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
+							<td height=16 valign="center" width="100%"><span class=subtitle-blue>
 
 								<c:if test="${aimEditActivityForm.editAct == false}">
 
@@ -522,13 +522,13 @@ ${fn:replace(message,quote,escapedQuote)}
 
 						<tr><td width="75%" vAlign="top">
 
-						<table cellPadding=0 cellSpacing=0 width="100%">
+						<table cellpadding="0" cellspacing="0" width="100%">
 
 							<tr>
 
 								<td width="100%">
 
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+									<table cellpadding="0" cellspacing="0" width="100%" border="0">
 
 										<tr>
 
@@ -587,7 +587,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td>
-										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
+										<table width="100%" cellspacing="1" cellPadding=5 border="0" bgcolor="white">
 										<tr>
 											<td>
 												<bean:define toScope="request" id="showRemoveButton" value="true" />

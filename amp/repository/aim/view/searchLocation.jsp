@@ -180,12 +180,12 @@ function checkNumeric(objName,comma,period,hyphen)
 <html:hidden property="fill" />
 
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:searchLocations">
@@ -228,8 +228,8 @@ function checkNumeric(objName,comma,period,hyphen)
 				</td>
 			</tr>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:locationList">
@@ -240,8 +240,8 @@ function checkNumeric(objName,comma,period,hyphen)
 						</tr>
 						<logic:notEmpty name="aimEditActivityForm" property="pagedCol">
 						<tr>
-							<td align=left vAlign=top>						
-							<table width="100%" cellPadding=3 cellspacing=0>
+							<td align=left valign="top">						
+							<table width="100%" cellPadding=3 cellspacing="0">
 							<logic:iterate name="aimEditActivityForm" id="searchLocs" property="pagedCol" 
 									type="org.digijava.module.aim.helper.Location">
 										<tr>

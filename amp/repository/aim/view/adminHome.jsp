@@ -11,7 +11,7 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <jsp:include page="allVisibilityTags.jsp" />
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000 align="center">
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align="center">
   <tr>
    <td align="left" class="r-dotted-lg" vAlign="top" width="750px">
       <table cellPadding="5" cellSpacing="0" width="100%">

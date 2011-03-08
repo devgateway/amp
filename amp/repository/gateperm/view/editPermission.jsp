@@ -37,23 +37,23 @@ function submitForm(mode) {
 	<tr>
 	    <td class="main_side_1">
 			<div class="wht">
-				<table class="inside" width=100% cellpadding="0" cellspacing="0" border=1>
+				<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="1">
 					<tr>
-					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Name</b></td>
-					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Description</b></td>
-					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Permission Type</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Name</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Description</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Permission Type</b></td>
 					   	<logic:equal name="permissionForm" property="type" value="Composite">
-					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Permissions</b></td>
+					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Permissions</b></td>
 					    </logic:equal>
 					    <logic:equal name="permissionForm" property="type" value="Gate">
-					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Actions</b></td>
-						    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Gate Init</b></td>
+					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Actions</b></td>
+						    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center" width="20%"><b class="ins_header" style="font-size:11px;">Gate Init</b></td>
 					    </logic:equal>
 				    </tr>
 				    <tr>
 				        <td class="inside" align="center" valign="top"><html:text property="name" styleClass="inputx"/></td>
-					    <td class=inside align="center"  valign="top"><html:textarea property="description" styleClass="inputx"/></td>
-					    <td class=inside align="center"  valign="top">
+					    <td class="inside" align="center"  valign="top"><html:textarea property="description" styleClass="inputx"/></td>
+					    <td class="inside" align="center"  valign="top">
 					    	<logic:equal name="permissionForm" property="id" value="0">
 								<html:select property="type" onchange="submitForm('type')" styleClass="dropdwn_sm" >
 									<html:option value="Gate">Gate</html:option>

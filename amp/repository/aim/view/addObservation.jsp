@@ -8,7 +8,7 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 									
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<digi:instance property="aimEditActivityForm" />
 	<digi:form name="addObservationForm" type="aimEditActivityForm"  styleId="addObservationForm"  action="/addObservation.do" method="post"  onsubmit="return validate()">
 		<script language="JavaScript">
@@ -44,8 +44,8 @@
 			<td vAlign="top">
 				<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 					<tr>
-						<td align=left vAlign=top>
-							<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+						<td align=left valign="top">
+							<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 								<tr>
 									<td align="center" bgcolor=#ECF3FD>
 										<table cellSpacing=2 cellPadding=2>
@@ -69,7 +69,7 @@
 			 	    									<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 													</a>
 													<a id="date1" href='javascript:pickDateWithClear("date1", document.getElementById("observationDate"),"clear1")'>
-														<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+														<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 													</a>
 												</td>
 										  	</tr>

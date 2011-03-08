@@ -274,12 +274,12 @@ div.fakefile2 input {
 <digi:form action="/documentSelected.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
 <html:hidden property="docFileOrLink" />
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+				<td align=left valign="top">
+					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<logic:equal name="aimEditActivityForm" property="docFileOrLink" value="file">
@@ -344,7 +344,7 @@ div.fakefile2 input {
 											</a>
 										</td>
 										<td>
-											<table cellPadding=0 cellSpacing=0>
+											<table cellpadding="0" cellspacing="0">
 												<tr>
 													<td>
 														<a title="<digi:trn key="aim:selectDocumentDate">Date (dd/mm/yy)</digi:trn>">
@@ -354,7 +354,7 @@ div.fakefile2 input {
 													</td>
 													<td align="left" vAlign="center">&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.docDate)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 														</a>
 													</td>
 												</tr>

@@ -12,14 +12,14 @@
 
 <digi:form action="/changePassword.do" method="post" onsubmit="return validateAimChangePasswordForm(this);">
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=100%>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
-		<td align=left vAlign=top width="60%"><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width="60%"><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td vAlign=left>
@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td class=subtitle-blue vAlign=top>
+					<td class=subtitle-blue valign="top">
 						<digi:trn key="aim:changePassword">
 						Change Password
 						</digi:trn>
@@ -110,13 +110,13 @@
 		</td>
 		<td width="5%">&nbsp;
 		</td>
-		<td bgcolor="#dbe5f1" vAlign=top width="30%">
-	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
+		<td bgcolor="#dbe5f1" valign="top" width="30%">
+	      <table align="center" border="0" cellPadding=3 cellspacing="0" width="90%">
         		<tr>
-		          <td vAlign=top>&nbsp;</td>
+		          <td valign="top">&nbsp;</td>
         		</tr>
         		<tr>
-	          	<td vAlign=top>
+	          	<td valign="top">
                 <strong>
 						<digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for
@@ -130,7 +130,7 @@
           		</td>
   				</tr>
         		<tr>
-          		<td vAlign=top>&nbsp;</td>
+          		<td valign="top">&nbsp;</td>
   				</tr>
 	      </table>
 		</td>

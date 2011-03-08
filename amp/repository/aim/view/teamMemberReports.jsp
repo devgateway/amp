@@ -78,12 +78,12 @@
 <html:hidden property="memberId" />
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -116,12 +116,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
@@ -133,7 +133,7 @@
 									<c:set target="${urlParams}" property="id">
 										<bean:write name="aimMemberReportsForm" property="memberId" />
 									</c:set>
-									<table bgColor=#f4f4f2 align="center" valign="top" cellPadding=0 cellspacing=1>
+									<table bgColor=#f4f4f2 align="center" valign="top" cellpadding="0" cellspacing="1">
 										<tr>
 											<td bgColor=#222e5d noWrap>
 												&nbsp;
@@ -172,10 +172,10 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%">	
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=167>
+												<table border="0" cellpadding="0" cellspacing="0" width=167>
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title width=150>
 															<digi:trn key="aim:reportListManager">
@@ -192,10 +192,10 @@
 
 										<tr>
 											<td bgColor=#ffffff class=box-border valign="top">
-												<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
+												<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
 													<tr bgColor=#dddddb>
 														<td bgColor=#dddddb align="center">
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellspacing="1" cellPadding=2 vAlign="top" align="left"
 															bgcolor="#ffffff">
 																<tr><td width=3 bgcolor="#dddddd">
 																	<c:if test="${!empty aimMemberReportsForm.reports}">	
@@ -232,7 +232,7 @@
 													<logic:notEmpty name="aimMemberReportsForm" property="reports">
 													<tr>
 														<td align="left" width="100%" valign="center">
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellspacing="1" cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
 															<logic:iterate name="aimMemberReportsForm" property="reports" id="reports" 
 															type="org.digijava.module.aim.dbentity.AmpReports">

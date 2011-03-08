@@ -22,11 +22,11 @@
 
 
 
-<table width="750" cellPadding=0 cellSpacing=1 align="left" valign="top">
+<table width="750" cellpadding="0" cellspacing="1" align="left" valign="top">
 
 	<tr><td height="20">
 
-		<table bgColor=#ffffff align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
+		<table bgColor=#ffffff align="left" valign="bottom" cellpadding="0" cellspacing="1" height="20">
 
 			<tr height="20">
 
@@ -124,7 +124,7 @@
 
 	<tr><td>
 
-		<table bgcolor="#f4f4f2" align="left" valign="top" cellPadding=0 cellspacing=1>
+		<table bgcolor="#f4f4f2" align="left" valign="top" cellpadding="0" cellspacing="1">
 
 			<tr>
 

@@ -20,18 +20,18 @@
 
 <digi:form action="/login.do" method="post" name="aimLoginForm" type="org.digijava.module.aim.form.LoginForm" onsubmit="return validateAimLoginForm(this);">
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="header.jsp" flush="true" />			
 </td>
 </tr>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;
 		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=520><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td colspan="2">

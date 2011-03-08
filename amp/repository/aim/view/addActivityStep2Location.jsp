@@ -126,7 +126,7 @@
                                       
                                       <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
                                             <tr>
                                               <td align="left">
                                                 <b>
@@ -138,7 +138,7 @@
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <logic:empty name="aimEditActivityForm" property="location.selectedLocs">
                                                   <field:display name="Add Location" feature="Location">
                                                     <tr>

@@ -122,7 +122,7 @@ function fnGetSurvey() {
 
 <html:hidden property="approvalStatus" />
 
-<table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+<table width="209" cellspacing="0" cellpadding="0" vAlign="top" align="left" border="0">
 
 <tr><td width="209" height="10" background="module/aim/images/top.gif">
 
@@ -166,7 +166,7 @@ bgcolor="#006699">
 
 		<td>
 
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+			<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 
 				<tr>
 
@@ -226,7 +226,7 @@ bgcolor="#006699">
 
 		<td>
 
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+			<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 
 				<tr>
 

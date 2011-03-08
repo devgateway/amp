@@ -11,13 +11,13 @@
 	<table width="100%">
 	<tr>
 		<td>	
-			 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+			 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 				<tr>
 					<td class=r-dotted-lg width=14>&nbsp;</td>
-					<td align=left class=r-dotted-lg vAlign=top width=750>
-						<table cellPadding=5 cellSpacing=0 width="100%">
+					<td align=left class=r-dotted-lg valign="top" width=750>
+						<table cellPadding=5 cellspacing="0" width="100%">
 							<tr>
-								<td height=16 align="center" vAlign=center>
+								<td height=16 align="center" valign="center">
 									<span class=subtitle-blue>
 										<digi:trn key="help:searchResults">Search results</digi:trn>
 									</span>
@@ -87,12 +87,12 @@
 			</table>
 		</td>
 		<td>
-			<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+			<TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 				<TR>
-					<TD class=r-dotted-lg-buttom vAlign=top>
-						<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+					<TD class=r-dotted-lg-buttom valign="top">
+						<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 			        		<TR><TD>
-			              		<TABLE border=0 cellPadding=0 cellSpacing=0 >
+			              		<TABLE border="0" cellpadding="0" cellspacing="0" >
 			              			<TR bgColor=#f4f4f2>
 			                 			<TD bgColor=#c9c9c7 class=box-title>
 			                 				<digi:trn key="help:search">Search</digi:trn>

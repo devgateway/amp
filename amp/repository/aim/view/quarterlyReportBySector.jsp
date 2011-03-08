@@ -103,7 +103,7 @@
 	<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 		<tr align="left">	
 				<td valign="bottom" class="crumb">
-					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
+					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border="0">				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf</digi:trn>
 					</c:set>
@@ -115,7 +115,7 @@
            </tr>
 			<tr>
 				<td valign="bottom" class="crumb" >
-				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
+				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
 					</c:set>
@@ -130,7 +130,7 @@
 
 			        <td valign="bottom" class="crumb" >
 					&nbsp;	
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
 					</c:set>
@@ -361,7 +361,7 @@
 </tr>
  <tr bgcolor="#FFFFFF"><td valign="top" colspan="30">
  <logic:empty name="aimMulitlateralbyDonorForm" property="multiReport"> 
- <table cellspacing="1" cellPadding=0 width="100%" border=0  bgcolor="#8B8B83" >
+ <table cellspacing="1" cellpadding="0" width="100%" border="0"  bgcolor="#8B8B83" >
 				<tr bgcolor="#F4F4F2">
 				<td align="center" height="21" width="4%" > &nbsp;	</td>
 	<td align="center" height="21" width="12%"> &nbsp;</td>
@@ -427,7 +427,7 @@
 		
 			<logic:notEmpty name="aimMulitlateralbyDonorForm"  property="multiReport">
 	<logic:iterate name="aimMulitlateralbyDonorForm"  property="multiReport" id="multiReport" type="org.digijava.module.aim.helper.multiReport">
-		<table cellspacing="1" cellPadding=0 width="100%" border=0  bgcolor="#8B8B83" >
+		<table cellspacing="1" cellpadding="0" width="100%" border="0"  bgcolor="#8B8B83" >
 			<tr bgcolor="#F4F4F2">
 				<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
 				<td colspan="100" align="left" height="21" >

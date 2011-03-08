@@ -47,7 +47,7 @@ function edit(key,fieldName) {
                                       
                                       <tr>
                                         <td>
-                                          <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+                                          <table cellPadding=5 cellspacing="1" border="0" width="100%" bgcolor="#d7eafd">
                                             <tr>
                                               <td align="left">
                                                 <b>
@@ -59,7 +59,7 @@ function edit(key,fieldName) {
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=5 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellSpacing=5 border="0"	bgcolor="#ffffff" width="100%">
                                                   <tr>
                                                     <td bgcolor="#ffffff">
                                                     </td>

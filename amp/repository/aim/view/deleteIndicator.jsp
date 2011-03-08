@@ -33,14 +33,14 @@
 <digi:instance property="aimIndicatorForm" />
 <digi:form action="/deleteIndicator.do" method="post">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%" align="center" border="0">
 	<tr bgColor="blue"><td height="1" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="15" align="center" valign="center" colspan="2"><h4>
 			Monitoring and Evaluation : Deleting an Indicator</h4>
 		</td>
 	</tr>
-		<table width="100%" cellspacing=0 cellpadding=1 valign=top align=left>
+		<table width="100%" cellspacing="0" cellpadding="1" valign="top" align=left>
 			<tr bgColor=#f4f4f4><td height="1"></td></tr>
 			<tr><td bgColor=#d7eafd class=box-title height="20" align="center"><b>
 				<bean:write name="aimIndicatorForm" property="indicatorName"/></b>
@@ -48,9 +48,9 @@
 			<tr bgColor=#f4f4f4><td height="1"></td></tr>
 			<tr bgColor=#ffffff><td height="10"></td></tr>	
 			<tr><td>
-				<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
+				<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#ffffff">
 					<tr><td>
-						<table width="100%" cellspacing=1 cellpadding=1 bgcolor="#d7eafd">
+						<table width="100%" cellspacing="1" cellpadding="1" bgcolor="#d7eafd">
 							<logic:notEmpty name="aimIndicatorForm" property="meIndActList">
 							<tr bgColor="red"><td height="1" colspan="3"></td></tr>
 							<tr bgColor=#ffffff>

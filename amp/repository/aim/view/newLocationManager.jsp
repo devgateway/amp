@@ -98,7 +98,7 @@
     <html:hidden property="parentCatValId" />
     <html:hidden property="editedId" />
     <html:hidden property="event" />
-    <table cellPadding=5 cellSpacing=0 width="912">
+    <table cellPadding=5 cellspacing="0" width="912">
         <tr>
             <!-- Start Navigation -->
             <td height=33 width="900"><span class=crumb>
@@ -117,21 +117,21 @@
             <!-- End navigation -->
         </tr>
         <tr>
-            <td height=16 vAlign=center width=1157 ><span class=subtitle-blue>
+            <td height=16 valign="center" width=1157 ><span class=subtitle-blue>
                     <digi:trn key="aim:regionManager">Region Manager</digi:trn>
                 </span>
             </td>
         </tr>
         <tr>
             <td noWrap width=900 vAlign="top">
-                <table width="965" cellspacing=1 cellSpacing=1>
+                <table width="965" cellspacing="1" cellspacing="1">
                     <tr>
                         <td noWrap width=663 vAlign="top">
                             
-                            <table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="626" border=0>
+                            <table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="626" border="0">
                                 <tr>
                                     <td bgColor=#ffffff class=box-border width="624">
-                                        <table border=0 cellPadding=1 cellSpacing=1 class=box-border width="784">
+                                        <table border="0" cellpadding="1" cellspacing="1" class=box-border width="784">
                                             <tr bgColor=#dddddb>
                                                 <!-- header -->
                                                 <td bgColor=#ffffff height="20" align="center" colspan="2" width="776"><B>

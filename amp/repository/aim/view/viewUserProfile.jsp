@@ -28,56 +28,56 @@ function unload() {
 <digi:errors/>
 
 
-					<table class="inside" width=100% cellpadding="0" cellspacing="0" border="1">
+					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="1">
 						<tr>
-							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:userProfile">User Profile</digi:trn>
 							</td>
 						</tr>
 						<tr>
-							<td class=inside>
+							<td class="inside">
 								<digi:trn key="aim:firstName">First Name</digi:trn>
 							</td>
-							<td class=inside>
+							<td class="inside">
 								 <bean:write name="aimUserDetailForm" property="firstNames" />
 							</td>
 						</tr>
 						<tr>
-							<td class=inside>
+							<td class="inside">
 								<digi:trn key="aim:lastName" >Last Name</digi:trn>
 							</td>
-							<td class=inside>
+							<td class="inside">
 								<bean:write name="aimUserDetailForm" property="lastName" />
 							</td>
 						</tr>
 						<tr>
-							<td class=inside>
+							<td class="inside">
 								<digi:trn key="aim:mailingAddress" >Mailing Address	</digi:trn>
 							</td>
-							<td class=inside>
+							<td class="inside">
 								<bean:write name="aimUserDetailForm"
 								property="mailingAddress" />
 							</td>
 						</tr>
 						<tr>
-							<td class=inside>
+							<td class="inside">
 								<digi:trn key="aim:address" >Address</digi:trn>
 							</td>
-							<td class=inside>
+							<td class="inside">
 								<bean:write name="aimUserDetailForm" property="address" />
 							</td>
 						</tr>
 						<tr>
-							<td class=inside>
+							<td class="inside">
 								<digi:trn key="aim:organizationName">Organization Name</digi:trn>
 							</td>
-							<td class=inside>
+							<td class="inside">
 								<bean:write name="aimUserDetailForm" property="organizationName" />
 							</td>
 						</tr>
 						<tr>
-							<td class=inside><digi:trn key="aim:autologinlink">Autologin Link</digi:trn></td>
-							<td class=inside>
+							<td class="inside"><digi:trn key="aim:autologinlink">Autologin Link</digi:trn></td>
+							<td class="inside">
 								<%
 								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
 								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
@@ -92,21 +92,21 @@ function unload() {
 							</td>
 						</tr>
 						<tr>
-							<td class=inside colspan="2" align="center">
+							<td class="inside" colspan="2" align="center">
 								&nbsp;
 							</td>
 						</tr>
 						<tr>
-							<td class=inside colspan="2" align="center">
+							<td class="inside" colspan="2" align="center">
 								<digi:trn key="aim:teamsAssociatedWith" >Teams Associated with</digi:trn>
 							</td>
 						</tr>
 						<% int i = 0; %>
 						<tr>
-							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:teamName">Team Name</digi:trn>
 							</td>
-							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 								<digi:trn key="aim:role">Role</digi:trn>
 							</td>
 						</tr>
@@ -114,7 +114,7 @@ function unload() {
 							<% if ((i%2) == 0) { %>
 								<tr>
 							<% } %>
-							<td class=inside>
+							<td class="inside">
 								<c:out value="${info}"/>
 							</td>
 							

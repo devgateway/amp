@@ -17,11 +17,11 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="75%"
 	class="box-border-nopadding">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top>
+		<td align=left class=r-dotted-lg valign="top">
 
 			<br />
 			<div id="otherDocumentsDiv"></div>

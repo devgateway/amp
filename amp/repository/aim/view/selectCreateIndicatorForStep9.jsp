@@ -121,17 +121,17 @@
     <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
     <c:set target="${bcparams}" property="tId" value="-1"/>
     <c:set target="${bcparams}" property="dest" value="teamLead"/>
-    <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+    <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
         <tr>
             <td class=r-dotted-lg width=14>&nbsp;</td>
-            <td align=left class=r-dotted-lg vAlign=top width=750>
-                <table cellPadding=5 cellSpacing=0 width="100%" border=0>            
+            <td align=left class=r-dotted-lg valign="top" width=750>
+                <table cellPadding=5 cellspacing="0" width="100%" border="0">            
                     <tr>
                         <td vAlign="top">
                             <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
                                 <tr>
-                                    <td align=left vAlign=top>
-                                        <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+                                    <td align=left valign="top">
+                                        <table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
                                             <tr bgcolor="#006699">
                                                 <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
                                                     <digi:trn key="aim:searchind">Search Indicators</digi:trn>
@@ -178,7 +178,7 @@
                                 </tr>
                                 <tr>
                                 <td>
-                                <table width="100%" cellspacing=0 cellSpacing=0 border="0">
+                                <table width="100%" cellspacing="0" cellspacing="0" border="0">
                                     <tr bgcolor="#006699">
                                         <td vAlign="center" width="100%" align ="center" class="textalb" height="20" colspan="2">
                                             <b><digi:trn key="aim:PickfromList"> Pick from the List</digi:trn></b>

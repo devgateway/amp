@@ -27,7 +27,7 @@ function showUser(email){
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
 <digi:instance property="aimTeamAuditListForm" />
 <digi:form action="/teamAuditList.do" method="post">
-<table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
+<table width="100%" cellpadding="0" cellspacing="0" vAlign="top" align="left">
 	<tr>
 		<td width="100%" vAlign="top" align="left">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -37,7 +37,7 @@ function showUser(email){
 									<c:set var="selectedTab" value="7" scope="request"/>
 									<c:set var="selectedSubTab" value="0" scope="request"/>
 										
-									<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
 												<div class="breadcrump_cont">
@@ -61,15 +61,15 @@ function showUser(email){
 											</td>
 										</tr>
 										<tr>
-											<td valign=top>
+											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
 										
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 										
 
-							<table class="inside" width=100% cellpadding="0" cellspacing="0">
+							<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 								<tr>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 							    		<c:if test="${aimTeamAuditListForm.sortBy!='nameasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=nameasc" styleClass="l_sm">
@@ -83,7 +83,7 @@ function showUser(email){
 							  			</c:if>
 							  		</b>
 							  	</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='typeasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typeasc" styleClass="l_sm">
@@ -97,7 +97,7 @@ function showUser(email){
 											</c:if>
 										</b>
 							    </td>
-							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
 								    	<c:if test="${aimTeamAuditListForm.sortBy!='teamasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamasc" styleClass="l_sm">
@@ -111,7 +111,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='authorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authorasc" styleClass="l_sm">
@@ -125,7 +125,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='creationdateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdateasc" styleClass="l_sm">
@@ -139,7 +139,7 @@ function showUser(email){
 								  		</c:if>
 							  		</b>
 							  	</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='editorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editorasc" styleClass="l_sm">
@@ -153,7 +153,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='changedateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedateasc" styleClass="l_sm">
@@ -167,7 +167,7 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
-									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 										<b class="ins_title">
 											<c:if test="${aimTeamAuditListForm.sortBy!='actionasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actionasc" styleClass="l_sm">
@@ -186,7 +186,7 @@ function showUser(email){
 								
 								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 									<tr>
-										<td width="280" class=inside title="${log.objectName}">
+										<td width="280" class="inside" title="${log.objectName}">
 											<c:if test="${fn:length(log.objectName) > 30}" >
 												<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
 											</c:if>
@@ -194,10 +194,10 @@ function showUser(email){
 												<bean:write name="log" property="objectName"/>
 											</c:if>
 										</td>
-										<td class=inside width="150" title="${log.objectTypeTrimmed}">
+										<td class="inside" width="150" title="${log.objectTypeTrimmed}">
 											<bean:write name="log" property="objectTypeTrimmed"/>									
 										</td>
-										<td class=inside width="100" title="${log.teamName}">
+										<td class="inside" width="100" title="${log.teamName}">
 											<c:if test="${fn:length(log.objectName) > 10}" >
 												<c:out value="${fn:substring(log.teamName, 0, 10)}" />...
 											</c:if>
@@ -205,7 +205,7 @@ function showUser(email){
 												<bean:write name="log" property="teamName"/>
 											</c:if>									
 										</td>
-										<td class=inside width="150">
+										<td class="inside" width="150">
 											<a href="javascript:showUser('<bean:write name="log" property="authorEmail"/>')" style="text-decoration: none" title="${log.authorName}" class="l_sm">
 												<c:if test="${fn:length(log.objectName) > 8}" >
 													<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
@@ -215,17 +215,17 @@ function showUser(email){
 												</c:if>
 											</a>								  
 										</td>
-										<td width="100" class=inside title="${log.loggedDate}">
+										<td width="100" class="inside" title="${log.loggedDate}">
 											<bean:write name="log" property="sloggeddate"/>
 										</td>
 										
-										<td width="100" class=inside title="${log.editorName}">
+										<td width="100" class="inside" title="${log.editorName}">
 											<bean:write name="log" property="editorName" />								  
 										</td>
-										<td width="150" class=inside title="${log.modifyDate}">
+										<td width="150" class="inside" title="${log.modifyDate}">
 											<bean:write name="log" property="smodifydate"/>								  
 										</td>
-										<td width="100" class=inside>
+										<td width="100" class="inside">
 											<logic:equal value="delete" property="action" name="log">
 												<digi:trn key="admin:delete">Delete</digi:trn>
 											</logic:equal>

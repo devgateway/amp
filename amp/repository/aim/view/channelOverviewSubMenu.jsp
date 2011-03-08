@@ -52,7 +52,7 @@
 			<html:hidden property="description" />
 			<html:hidden property="objectives" />		
 		<TD width="100%" nowrap align="center" vAlign="bottom" height="20"  bgcolor="#f7f9e3">
-			<TABLE width="98%" cellspacing="0" cellpadding=0 border=0  bgcolor="#f7f9e3">
+			<TABLE width="98%" cellspacing="0" cellpadding="0" border="0"  bgcolor="#f7f9e3">
 			  	<TR><TD bgcolor="#f7f9e3" >
 				<DIV id="leftNav">
 				
@@ -216,12 +216,12 @@
 <c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 <TR>
 	<TD vAlign="top" align="center">
 		<!-- contents -->
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">

@@ -58,13 +58,13 @@ method="post">
 method="post">
 <logic:equal name="aimPhysicalProgressForm" property="validLogin" value="true">
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 	<TR><TD vAlign="top" align="center">
 		<!-- contents -->
-		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4"
+		<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4"
 		class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
-				<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
+				<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="0">
 					<TR bgColor=#f4f4f2><TD align=left >
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 							<TR>

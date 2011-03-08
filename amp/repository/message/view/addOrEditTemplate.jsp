@@ -165,7 +165,7 @@
 												<!-- End navigation -->
 											</tr>											
 											<tr>
-								               <td height=16 vAlign=center width=571>
+								               <td height=16 valign="center" width=571>
 									              <span class=subtitle-blue>							
 											        <digi:trn>Add/Edit Template Wizard</digi:trn>						
 									              </span>

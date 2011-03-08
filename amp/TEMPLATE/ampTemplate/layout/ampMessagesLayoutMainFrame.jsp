@@ -18,9 +18,9 @@
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
 		
 		
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
-			<td width=768  valign=top>
+			<td width=768  valign="top">
 				<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 					<ul style="height:29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 						<feature:display name="Message tab" module="Messages">
@@ -78,8 +78,8 @@
 					
 					<digi:insert attribute="body"/>
 				</td>
-				<td width=10 align=center valign=top></td>
-				<td width="222" valign=top>
+				<td width="10" align="center" valign="top"></td>
+				<td width="222" valign="top">
 						<div class="right_menu">
 						<div class="right_menu_header">
 							<div class="right_menu_header_cont"><digi:trn>Information</digi:trn></div>

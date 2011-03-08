@@ -160,13 +160,13 @@ YAHOO.util.Event.on(window, "load", afterPageLoad);
 		</td>
 	</tr>
 	<tr>
-		<td align=left vAlign=top>
+		<td align=left valign="top">
 			<div id="menuContainerDiv"></div>	
 			<span class="subtitle-blue"> &nbsp;&nbsp; 
 				<digi:trn>Public Documents</digi:trn> 
 			</span> 
 			<br />
-			<table border="0" cellPadding=5 cellSpacing=0 width="95%" style="position: relative; left: 10px;">
+			<table border="0" cellPadding=5 cellspacing="0" width="95%" style="position: relative; left: 10px;">
 			<tr><td>
 			<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">

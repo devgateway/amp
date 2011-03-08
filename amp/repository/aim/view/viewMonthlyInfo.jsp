@@ -203,7 +203,7 @@ function setHoveredTable(tableId, hasHeaders) {
     
     
     
-    <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+    <TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
         
         <TR>
             
@@ -213,13 +213,13 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 
-                <TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+                <TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
                     
                     <TR><TD bgcolor="#f4f4f4">
                             
                             
                             
-                            <TABLE width="100%" border=0 align="center" cellPadding=3 cellSpacing=3 bgcolor="#f4f4f4" vAlign="top">
+                            <TABLE width="100%" border="0" align="center" cellPadding=3 cellSpacing=3 bgcolor="#f4f4f4" vAlign="top">
                                 
                               <TR height="20"><TD height="20">
 				<div id="subtabsFinancial">
@@ -459,13 +459,13 @@ function setHoveredTable(tableId, hasHeaders) {
                                     
                                   <TD vAlign="top" align="center" bgColor="#f4f4f2">
                                         
-                              <TABLE width="100%" border=0 align=center cellPadding=0 cellSpacing=0 bgColor="#f4f4f2">
+                              <TABLE width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgColor="#f4f4f2">
                                             
                   <TR bgcolor="#ffffff">
                                                 
                                                 <TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
                                                     
-                                                    <TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left"
+                                                    <TABLE cellSpacing=2 cellpadding="0" border="0" bgColor="#ffffff" width="100%" vAlign="top" align="left"
                                                            
                                                          >
                                                         
@@ -475,7 +475,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                 
                                                                 
                                                                 
-                                                                    <TABLE cellSpacing=1 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
+                                                                    <TABLE cellspacing="1" cellpadding="0" border="0" bgColor=#ffffff vAlign="top" align="left">
                                                                         
                                                                         <TR>
                                                                             
@@ -483,7 +483,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                             
                                                                                 <TD>
                                                                                     
-                                                                                    <TABLE cellSpacing=2 cellPadding=0>
+                                                                                    <TABLE cellSpacing=2 cellpadding="0">
                                                                                         
                                                                                         <TR>
                                                                                             
@@ -514,7 +514,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                             
                                                                                 <TD>
                                                                                     
-                                                                                    <TABLE cellSpacing=2 cellPadding=0>
+                                                                                    <TABLE cellSpacing=2 cellpadding="0">
                                                                                         
                                                                                         <TR>
                                                                                             
@@ -573,7 +573,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                         <TR>
 <TD>
                                                                 
-                                                                <TABLE width="100%" border=0 align="left" cellPadding=0 cellSpacing=0 bgColor=#ffffff vAlign="top">
+                                                                <TABLE width="100%" border="0" align="left" cellpadding="0" cellspacing="0" bgColor=#ffffff vAlign="top">
                                                                     
                                                                   <TR>
                                                                     <TD>

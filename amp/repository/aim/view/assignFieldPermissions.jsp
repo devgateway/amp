@@ -11,7 +11,7 @@
 
 <digi:form action="/assignFieldPermissions.do">
 	<html:hidden property="fieldId"  />
-			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
+			<table width="100%" cellpadding="1" cellspacing="0" bgcolor="#ffffff">
 				<tr>
 					<td colspan="3" width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 						<digi:trn key="aim:gateperm:editFieldPermissionsTitle">Edit Field Permissions</digi:trn>

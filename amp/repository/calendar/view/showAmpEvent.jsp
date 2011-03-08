@@ -605,10 +605,10 @@ function submitForm(thisform){
     <html:hidden name="calendarEventForm" property="recurrSelectedEndTime" styleId="recurrSelectedEndTime"/>
     <html:hidden name="calendarEventForm" property="recurrSelectedStartTime" styleId="recurrSelectedStartTime"/>
 	
-    <table width=1000 align=center>
+    <table width="1000" align="center">
     	 <tr>
-			<td align=left vAlign=top width=750>
-				<table cellPadding=5 cellSpacing=0 width="100%">
+			<td align=left valign="top" width=750>
+				<table cellPadding=5 cellspacing="0" width="100%">
 					<tr>
 			<td height=33>
 				<span class=crumb> &nbsp;
@@ -644,7 +644,7 @@ function submitForm(thisform){
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table cellpadding="3" cellspacing="3" class="t_mid" align=center>
+			                    <table cellpadding="3" cellspacing="3" class="t_mid" align="center">
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
@@ -656,7 +656,7 @@ function submitForm(thisform){
 			                    		</td>
 			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
-			                    			<td rowspan="2" style="text-align: center;" valign=top>
+			                    			<td rowspan="2" style="text-align: center;" valign="top">
 				                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>
 				                    		</td>
 				                    		<td width="2px">&nbsp;</td>
@@ -761,7 +761,7 @@ function submitForm(thisform){
 			                                                </td> -->
 			                                                <td>
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
-			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 			                                                  </a>
 			                                                </td>
 			                                                <td>&nbsp;&nbsp;</td>
@@ -894,7 +894,7 @@ function submitForm(thisform){
 			                                                </td>-->
 			                                                <td>
 			                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
-			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 			                                                  </a>
 			                                                </td>
 			                                                <td>

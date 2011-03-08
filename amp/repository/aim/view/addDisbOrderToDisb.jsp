@@ -19,7 +19,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addDisbOrderToDisb.do" method="post">
-<table width="100%" cellpadding=1 cellspacing=3 bgcolor="#ffffff">
+<table width="100%" cellpadding="1" cellspacing=3 bgcolor="#ffffff">
 <tr>
 <td colspan="2" width="100%" bgcolor="#006699" class="textalb" height="20" align="center">Select Disbursement Order</td>
 </tr>

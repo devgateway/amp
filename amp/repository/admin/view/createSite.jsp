@@ -40,7 +40,7 @@
 <html:messages id="null" message="true" />
 
 
-      <TABLE align=center>
+      <TABLE align="center">
 		<digi:form action="/createSite.do" method="post">
 		<input type="hidden" name="referrer" value="createSite" />
 		<c:if test="${ !empty siteForm.parentId}" >
@@ -69,7 +69,7 @@
             color=red><B><BIG>*</BIG></B></FONT> are required.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2>
-            <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
+            <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="admin:siteName">Site Name</digi:trn></TD>
@@ -92,7 +92,7 @@
           </TR>
           <TR>
             <TD align=left noWrap class=text>
-          	<table cellpadding=0 cellspacing=0 border=0>
+          	<table cellpadding="0" cellspacing="0" border="0">
 
              <tr><td>&nbsp;</td><td><digi:trn key="admin:domain">Domain</digi:trn></td>
 			 <td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td>
@@ -147,7 +147,7 @@
         </td>
 
 <TR>
-<TD colspan=2 align=center>
+<TD colspan=2 align="center">
 <html:submit />
 </TD>
 </TR>

@@ -200,14 +200,14 @@ var draftStatus=document.getElementById("draftFlag");
 <!-- To avoid step numbering bug in the future please change getSteps() method
 of ActivityUtil class also when change step visibility module/feature name -->
 
-<table border=0 width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+<table border="0" width="300" cellspacing="0" cellpadding="0" vAlign="top" align="left" border="0">
 	<tr>
 		<td width="300" height="10" background="module/aim/images/top.gif" >
 		</td>
 	</tr>
 	<tr>
 		<td>			
-			<table border=0 width="300" cellSpacing=4 cellPadding=2 vAlign="top" align="left" bgcolor="#006699">				
+			<table border="0" width="300" cellSpacing=4 cellPadding=2 vAlign="top" align="left" bgcolor="#006699">				
 				<feature:display name="Identification" module="Project ID and Planning">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 1}">
@@ -224,7 +224,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 1}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -259,7 +259,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 1}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -327,7 +327,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -362,7 +362,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -397,7 +397,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 2}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -433,7 +433,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 3}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -468,7 +468,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 4}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -503,7 +503,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 5}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -538,7 +538,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 5}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -573,7 +573,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 6}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -608,7 +608,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 7}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -643,7 +643,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 8}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -678,7 +678,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 			        
 			        <c:if test="${aimEditActivityForm.step == 17}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -714,7 +714,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 			
 					<c:if test="${aimEditActivityForm.step == 10}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -751,7 +751,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 11}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -787,7 +787,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 13}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>
@@ -821,7 +821,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 					<c:if test="${aimEditActivityForm.step == 14}">
 					<td nowrap="nowrap">
-						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0">
 							<tr>
 								<td width="10" height="19" background="module/aim/images/left-arc.gif">
 								</td>

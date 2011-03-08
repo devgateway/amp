@@ -12,7 +12,7 @@
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampEditModuleVisibility">
@@ -27,7 +27,7 @@
 		<logic:equal name="visibility" property="visible" value="true">
 		<tr bgcolor="#ffffff">
 			<td width="9">
-					<img src= "../ampTemplate/images/bullet_green.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 			</td>																	
 			<td width="100%"> <bean:write name="visibility" property="name"/> </td>
 			<td>
@@ -46,7 +46,7 @@
 		<logic:equal name="visibility" property="visible" value="false">
 		<tr bgcolor="#ffffff">
 			<td width="9">
-					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 			</td>																	
 			<td width="100%"> <bean:write name="visibility" property="name"/> </td>
 			<td>

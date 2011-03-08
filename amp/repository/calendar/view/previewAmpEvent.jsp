@@ -85,8 +85,8 @@ function valid(value){
   <table width="530">
   	 <tr>
 		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 		<td height=33>
 			<span class=crumb>&nbsp;

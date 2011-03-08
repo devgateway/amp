@@ -5,14 +5,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=520><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
-					<td align=center class=f-names noWrap width="31%">
+					<td align="center" class=f-names noWrap width="31%">
 							<digi:trn key="aim:sessionExpired">
 							Your user session has expired !
 							</digi:trn>
@@ -20,7 +20,7 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>				
-					<td align=center>
+					<td align="center">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToGoBackToHomePageAndRe-Login">Click here to go back to the Home Page and re-login</digi:trn>
 					</c:set>

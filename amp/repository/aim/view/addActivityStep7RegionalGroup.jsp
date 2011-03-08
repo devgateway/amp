@@ -23,7 +23,7 @@
 									</td></tr>
 									<tr><td><field:display name="Regional Group" feature="Regional Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 												id="regGroups" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
@@ -48,7 +48,7 @@
 												</td></tr>
 												</logic:iterate>
 												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
+													<table cellspacing="1" cellpadding="1">
 														<tr>
 															<td>
 																<field:display name="Regional Group Add Button"  feature="Regional Group">

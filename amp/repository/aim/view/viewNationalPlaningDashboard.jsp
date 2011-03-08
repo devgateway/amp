@@ -585,7 +585,7 @@ function doFilter() {
                           </td>
                           <td>
 								<c:if test="${!empty activity.funding}">
-											<TABLE cellspacing=1 cellpadding=1>
+											<TABLE cellspacing="1" cellpadding="1">
 												<c:forEach var="dnr" items="${activity.funding}">
 													<TR><TD>
 														<a href="javascript:newWin('${dnr.ampDonorOrgId.ampOrgId}')">

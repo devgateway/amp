@@ -298,7 +298,7 @@
 	</script>
 
 
-<table bgColor=#ffffff cellPadding=10 cellSpacing=0 width="900px">
+<table bgColor=#ffffff cellpadding="1"0 cellspacing="0" width="900px">
 	<tr>
 		<td valign="bottom">
 				

@@ -447,7 +447,7 @@ function setHoveredTable(tableId, hasHeaders) {
 <table border="0" cellspacing="0" cellpadding="0" width="1000" align="center">	
 	<tbody>
 		<tr>
-		<td align=left vAlign=top>
+		<td align=left valign="top">
 			<div style="width:1000px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
@@ -609,7 +609,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
 				        <div id="public_res"  class="resource_popin" style="border: none;">				        	       
-							<table border="0" cellPadding=1 cellSpacing=0 width="100%" style="position: relative; left: 0px" >
+							<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >
 								<tr>
 									<td>										
 										<div id="public_markup" align="left" class="all_markup">

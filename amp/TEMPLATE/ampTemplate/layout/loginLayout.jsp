@@ -21,13 +21,13 @@
 </script>
 
 <%-- 
-<table width="100%" height="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
+<table width="100%" height="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
 <form action="/j_acegi_security_check" method="post"">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=757>
+<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=757>
 	<tr>
-		<td align=left vAlign=top width=520><br>
-			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=520><br>
+			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>
 					<td colspan="2">
@@ -37,7 +37,7 @@
 					String logoutMessage = (String)session.getAttribute("showLogoutMessage");
 					if(logoutMessage != null && !logoutMessage.equals("")){
 					%>
-<div align=center class=f-names noWrap>
+<div align="center" class=f-names noWrap>
                     <digi:trn key="aim:ampLogout">
                    		You have been logged out
                     </digi:trn>
@@ -151,15 +151,15 @@
 				</tr>
 			</table>
 		</td>
-		<td bgcolor="#dbe5f1" vAlign=top>
-	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
+		<td bgcolor="#dbe5f1" valign="top">
+	      <table align="center" border="0" cellPadding=3 cellspacing="0" width="90%">
       		 <tr>
-		          <td vAlign=top><br>
+		          <td valign="top"><br>
 		          	&nbsp;
       	     	</td>
         		</tr>
         		<tr>
-	          	<td vAlign=top >
+	          	<td valign="top" >
 <strong>                        <digi:trn key="aim:loginWarning1">
                         AMP is used to report and manage aid flows from donors.<br> 
                         This site is accessible to registered users only. 
@@ -173,7 +173,7 @@
           		</td>
   				</tr>
         		<tr>
-          		<td vAlign=top>&nbsp;</td>
+          		<td valign="top">&nbsp;</td>
   				</tr>
 	      </table>
 		</td>

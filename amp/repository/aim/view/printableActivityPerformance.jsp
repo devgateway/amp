@@ -32,10 +32,10 @@
 
 %>
 
-<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border=0>
+<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border="0">
 	<tr>
 		<td colspan="2">
-			<img src="<%= actPerfChartUrl %>" width="600" height="450" border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+			<img src="<%= actPerfChartUrl %>" width="600" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
 		</td>
 	</tr>
 

@@ -12,16 +12,16 @@
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellspacing="0" cellpadding="0" vAlign="top" align="left" width="100%">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -38,7 +38,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 							<digi:trn key="aim:cutsomizePersonalSettings">
 								Customize Personal Settings
@@ -48,7 +48,7 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%" 
+						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%" 
 						valign="top" align="left">
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
@@ -58,10 +58,10 @@
 							</td></tr>						
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="97%">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="97%">	
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
-												<table cellPadding=0 cellSpacing=0 width=100%>
+												<table cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title align="center" height="20">
 															<digi:trn key="aim:customizeDefaultSettingsFor">

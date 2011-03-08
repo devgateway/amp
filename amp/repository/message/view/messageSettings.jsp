@@ -88,10 +88,10 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 </script>
 
 
-	<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+	<TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 		<TR>
-			<TD class=r-dotted-lg-buttom vAlign=top>
-				<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+			<TD class=r-dotted-lg-buttom valign="top">
+				<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 						<TR><TD bgColor="#ffffff" class="box-border" align="left">
 							<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%">
 								<tr><%-- Start Navigation --%>
@@ -184,11 +184,11 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									</TD>
 									<TD>&nbsp;</TD>
 									<td  vAlign="top">
-										<table align=center cellPadding=0 cellSpacing=0 width="70%" border=0>
+										<table align="center" cellpadding="0" cellspacing="0" width="70%" border="0">
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellPadding=0 cellSpacing=0 width=100>
+													<table cellpadding="0" cellspacing="0" width="10"0>
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																<digi:trn>
@@ -204,7 +204,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=3 cellSpacing=1 width="100%">
+													<table cellPadding=3 cellspacing="1" width="100%">
 														<tr>
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

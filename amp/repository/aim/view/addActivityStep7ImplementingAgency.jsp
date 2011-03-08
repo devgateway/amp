@@ -23,7 +23,7 @@
 									</td></tr>
 									<tr><td><field:display name="Implementing Agency" feature="Implementing Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
 												id="impAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
@@ -48,7 +48,7 @@
 												</td></tr>
 												</logic:iterate>
 												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
+													<table cellspacing="1" cellpadding="1">
 														<tr>
 															<td>
 																<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
@@ -80,7 +80,7 @@
 										</field:display>
 										<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 										<logic:empty name="aimEditActivityForm" property="agencies.impAgencies">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+											<table width="100%" bgcolor="#cccccc" cellspacing="1" cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>

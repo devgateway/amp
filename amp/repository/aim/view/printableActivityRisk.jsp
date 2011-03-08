@@ -27,10 +27,10 @@
 
 %>
 
-<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border=0>
+<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border="0">
 	<tr>
 		<td colspan="2">
-			<img src="<%= actRiskChartUrl %>" width=600 height=400 border=0 usemap="#<%= actRiskChartFileName %>"><br><br>
+			<img src="<%= actRiskChartUrl %>" width=600 height=400 border="0" usemap="#<%= actRiskChartFileName %>"><br><br>
 		</td>
 	</tr>
 	<tr>

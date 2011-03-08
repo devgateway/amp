@@ -113,11 +113,11 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -136,7 +136,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:activityManager">
 							Activity Manager
@@ -153,16 +153,16 @@
 			<digi:instance property="aimActivityForm" />
 			<digi:form action="/activityManager.do" method="post">
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellspacing="1" border="0">
 						<tr>
 							<td noWrap width=600 vAlign="top">
-							<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%"
+							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%"
 								valign="top">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
 
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top"
 										align=left>
 										<tr>
 											<td>
@@ -205,7 +205,7 @@
 										<tr>
 										
 											<td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top
+											<table width="100%" cellspacing="1" cellpadding=4 valign="top"
 												align=left bgcolor="#ffffff">
 												
 												<logic:notEmpty name="aimActivityForm"
@@ -213,7 +213,7 @@
 													<tr>
 													<!--  to export table we are adding class "report" to its container -->
 														<td class="report">
-														<table width="100%" cellspacing=1 cellpadding=3
+														<table width="100%" cellspacing="1" cellpadding=3
 															bgcolor="#d7eafd">
 															<thead>
 															<tr bgcolor="#ffffff">
@@ -262,12 +262,12 @@
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
 																		<td width="9" height="15"><img
-																			src="../ampTemplate/images/arrow_right.gif" border=0>
+																			src="../ampTemplate/images/arrow_right.gif" border="0">
 																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
 																		<td width="9" height="15"><img
-																			src="../ampTemplate/images/start_button.gif" border=0>
+																			src="../ampTemplate/images/start_button.gif" border="0">
 																		</td>
 																	</logic:empty>
 																	<td><bean:write name="activities" property="name" />
@@ -302,7 +302,7 @@
 										</tr>
 										<tr>
 											<td bgColor=#ffffff height="20" align="left"><img
-												src="../ampTemplate/images/start_button.gif" border=0>
+												src="../ampTemplate/images/start_button.gif" border="0">
 											- <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
 											</td>
 										</tr>

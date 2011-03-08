@@ -158,7 +158,7 @@
                                 <td  height="10" align="center" nowrap="nowrap">
                                     <html:text name="values" property="valueDateString" indexed="true" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
                                     <a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
-                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"> 
                                     </a> 
                                     
                                 </td>

@@ -37,7 +37,7 @@ function load() {
 <html:hidden property="id" />
 <html:hidden property="action"/>
 
-<TABLE bgcolor="#dddddd" width="400" border=1>
+<TABLE bgcolor="#dddddd" width="400" border="1">
   <TR>
     <TD width="90" class="label">
     <digi:trn key="aim:linkName">Link Name</digi:trn>

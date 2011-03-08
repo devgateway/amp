@@ -125,10 +125,10 @@
 	YAHOOAmp.util.Event.addListener(window, "load", createDataTablePerExecution );
 </script>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="90%" class="box-border-nopadding">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="90%" class="box-border-nopadding">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg valign="top" width=750>
 		
 		<div style="">
 			<c:set var="translation">

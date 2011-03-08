@@ -17,10 +17,10 @@
 </script>
 
  <digi:instance property="aimNewIndicatorForm" />
-                                   <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                                   <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
 											<tr>
                                               <td bgcolor="#ECF3FD" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellpadding="1" cellspacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                                   <c:if test="${empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
                                                       <td bgcolor="#ECF3FD">
@@ -31,11 +31,11 @@
                                                   <c:if test="${!empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
                                                       <td>
-                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                        <table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                           <c:forEach var="activitySectors" items="${aimNewIndicatorForm.activitySectors}">
                                                             <tr>
                                                               <td>
-                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                <table width="100%" cellspacing="1" cellpadding="1" vAlign="top" align="left">
                                                                   <tr bgcolor="#ECF3FD">
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySector">

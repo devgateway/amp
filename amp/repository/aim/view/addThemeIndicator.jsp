@@ -291,11 +291,11 @@ function closeWindow(){
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <body >
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 border="0">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750 border="0">
-			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
+		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr><%-- Start Navigation --%>
 
 					<td height=33><span class=crumb>
@@ -318,7 +318,7 @@ function closeWindow(){
 					</td>
 				</tr><%-- End navigation --%>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height=16 valign="center" width=571>
 						<span class="subtitle-blue">
 							<digi:trn key="aim:manageindicators">
 										Manage Indicators
@@ -332,7 +332,7 @@ function closeWindow(){
 					</td>
 				</tr>
 	
-		<table  width=772 cellPadding=1 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
+		<table  width=772 cellpadding="1" cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0">
 				<tr>
 					 <td bgColor="#d7eafd" class="box-title" height="10" align="center">
 						<digi:trn key="aim:manageindicators">Manage Indicators</digi:trn>: ${aimThemeForm.themeName}
@@ -353,7 +353,7 @@ function closeWindow(){
 				<logic:notEmpty name="aimThemeForm" property="programIndicators">
 				<tr>
 					<td>
-						<table  bgColor="#d7eafd" cellPadding=5 cellSpacing=1 border="0" align="center" width=772>
+						<table  bgColor="#d7eafd" cellPadding=5 cellspacing="1" border="0" align="center" width=772>
 						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.programIndicators}">
 								<tr>
 									<td width="1" bgcolor="white" colspan="7">

@@ -143,11 +143,11 @@
 
 <input type="hidden" name="actionFlag" value="">
 <input type="hidden" name="teamMemberId" />
-  <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
+  <table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705>
 	<tr>
 		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=752>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td align=left valign="top" width=752>
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -210,13 +210,13 @@
 					   <tr>
 						  <td valign="top" bgcolor="#f4f4f2" align="center">
 					
-							<table border=0 cellPadding=0 cellSpacing=0 width=772>
+							<table border="0" cellpadding="0" cellspacing="0" width=772>
 								<tr>
 									<td width=14>&nbsp;
 									</td>
-									<td align=left vAlign=top width=520>
+									<td align=left valign="top" width=520>
 									
-										<table border=0 cellPadding=5 cellSpacing=0 width="100%">
+										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=left class=title noWrap colspan="2">
@@ -343,8 +343,8 @@
 								<tr>
 									<td width=14>&nbsp;
 									</td>
-									<td align=center vAlign=top width=520><br>
-		             					<table border=0 cellPadding=5 cellSpacing=0 width="80%">
+									<td align="center" valign="top" width=520><br>
+		             					<table border="0" cellPadding=5 cellspacing="0" width="80%">
 										<c:if test="${!empty umAddUserForm.assignedWorkspaces && umAddUserForm.assignedWorkspaces != null}">
 										<tr bgColor=#999999>
 										<td bgColor=#999999 align="center" height="20">
@@ -367,7 +367,7 @@
 										<c:out value="${assignedWS.ampMemberRole.description}"/>
 										</td>
 										<td align="center">
-										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>
+										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border="0" hspace="2"/></a>
 										</td>
 										</tr>
 										</logic:iterate>

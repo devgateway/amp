@@ -47,13 +47,13 @@ function confirmDeletion(message)
 	</div>
 	
 <!-- FFerreyra: This is to contain the widget that allows a sortable table to avoid freeze on IE7 -->
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
     <td class="main_side_1">
 	<div class="wht">
 			<digi:link href="/managePerm.do?new" title="NEW"><digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission</digi:link><br /><br />
 			<div id="permissionContainer">
-				<table id="permissionsList" class="inside" width=100% cellpadding="0" cellspacing="0" border=1>
+				<table id="permissionsList" class="inside" width="100%" cellpadding="0" cellspacing="0" border="1">
 					<thead>
 						<tr><td>Name</td><td>Permissibles</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
 					</thead>
@@ -79,13 +79,6 @@ function confirmDeletion(message)
 							</logic:equal>
 						</td>
 						<td><bean:write name="perm" property="compositeLinkedPermissions"/></td>
-			
-			<%--
-			<td> 
-			<bean:define id="listable" name="perm" scope="page" toScope="request"/>
-			<jsp:include page="${listable.jspFile}"/>
-			</td>
-			 --%>
 						<td>
 							<digi:link href="/managePerm.do?edit" paramId="permissionId" paramName="perm" paramProperty="id" title="EDIT">
 								<digi:img src="module/gateperm/images/edit.gif" border="0" />

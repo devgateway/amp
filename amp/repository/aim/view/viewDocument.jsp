@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
-<table width="100%" cellPadding=0 cellSpacing=0 border=0>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 	<td valign="top" align="left" width="100%">
 		<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -15,11 +15,11 @@
 </tr>
 <tr>
 	<td>
-		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+		<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 			<tr>
 				<td class=r-dotted-lg width=14>&nbsp;</td>
-				<td align=left class=r-dotted-lg vAlign=top width=750>
-					<table cellPadding=5 cellSpacing=0 width="100%">
+				<td align=left class=r-dotted-lg valign="top" width=750>
+					<table cellPadding=5 cellspacing="0" width="100%">
 						<tr>
 							<td height=33><span class=crumb>
 								<c:set var="translation">
@@ -45,7 +45,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td height=16 vAlign=center width=650><span class=subtitle-blue>
+							<td height=16 valign="center" width=650><span class=subtitle-blue>
 								<digi:trn key="aim:documentDetails">
 									Document Details
 								</digi:trn></span>

@@ -53,11 +53,11 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+		<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 				<tr>
 						<td class=r-dotted-lg width=14>&nbsp;</td>
-						<td align=left class=r-dotted-lg vAlign=top width=750>
-								<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+						<td align=left class=r-dotted-lg valign="top" width=750>
+								<table cellPadding=5 cellspacing="0" width="100%" border="0">
 										<tr><%-- Start Navigation --%>
 												<td height=33><span class=crumb>
 							<c:set var="ToViewAdmin">
@@ -74,22 +74,22 @@
 												</td>
 										</tr><%-- End navigation --%>
 										<tr>
-												<td height=16 vAlign=center width=571><span class=subtitle-blue>
+												<td height=16 valign="center" width=571><span class=subtitle-blue>
 														<digi:trn key="aim:projectIndicatorManager">
 																Project Indicator Manager
 														</digi:trn></span>
 												</td>
 										</tr>
-										<tr><td height=16 vAlign=center width=571><digi:errors /></td></tr>
+										<tr><td height=16 valign="center" width=571><digi:errors /></td></tr>
 										<tr>
-												<td noWrap width=100% vAlign="top">
-														<table width="100%" cellspacing=0 cellSpacing=0 border=0>
+												<td noWrap width="100%" vAlign="top">
+														<table width="100%" cellspacing="0" cellspacing="0" border="0">
 																<tr><td noWrap width=600 vAlign="top">
-																		<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+																		<table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
 																				<tr bgColor=#ffffff><td vAlign="top" width="100%">
-																						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+																						<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
 																								<tr><td>
-																										<table cellspacing=0 cellpadding=0>
+																										<table cellspacing="0" cellpadding="0">
 																												<tr>
 																														<td noWrap height=17>
 																														<c:set var="iewIndicators">
@@ -135,13 +135,13 @@
 																										</table>
 																								</tr>
 																								<tr>
-																										<td noWrap width=100% vAlign="top">
-																												<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+																										<td noWrap width="100%" vAlign="top">
+																												<table width="100%" cellspacing="1" cellspacing="1" border="0">
 																														<tr><td noWrap width=600 vAlign="top">
-																																<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+																																<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
 																																		<tr bgColor=#ffffff>
 																																				<td vAlign="top" width="100%">
-																																						<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+																																						<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
 																																								<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 																																									<digi:trn key="aim:projectIndicatorList">
@@ -150,11 +150,11 @@
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
+											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#ffffff">
 
 													<logic:notEmpty name="aimIndicatorForm" property="indicators">
 														<tr><td>
-															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
+															<table width="100%" cellspacing="1" cellpadding=3 bgcolor="#d7eafd">
 
 																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
 																type="org.digijava.module.aim.helper.AmpMEIndicatorList">
@@ -162,10 +162,10 @@
 																	<tr bgcolor="#ffffff">
 																	<td width="9">
 																		<c:if test="${indicators.defaultInd == true}">
-																			<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																			<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 																		</c:if>
 																		<c:if test="${indicators.defaultInd == false}">
-																			<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																			<img src= "../ampTemplate/images/bullet_grey.gif" border="0">
 																		</c:if>
 																	</td>
 																	<td>
@@ -192,7 +192,7 @@
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</c:set>
 																		<a href="javascript:deleteIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
-																			<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																			<img src= "../ampTemplate/images/trash_12.gif" border="0">
 																		</a>
 																	</td>
 																	</tr>
@@ -229,16 +229,16 @@
 		</td>
 	</tr>
 	<tr><td>
-		<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
+		<table width="100%" cellspacing="1" cellpadding=3 bgcolor="ffffff" border="0">
 			<tr bgcolor="#ffffff">
 				<td width="9">
-					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_red.gif" border="0">
 				</td>
 				<td width="100">
 					<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
 				</td>
 				<td width="9">
-					<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+					<img src= "../ampTemplate/images/bullet_grey.gif" border="0">
 				</td>
 				<td>
 					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>

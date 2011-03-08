@@ -46,10 +46,10 @@
 <input type="hidden" name="event">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=757>
 	<tr>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="ToViewAdmin">
@@ -74,26 +74,26 @@
 					</td>
 				</tr>
 			</table>
-			<tr><td noWrap width=100% vAlign="top">
-				<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+			<tr><td noWrap width="100%" vAlign="top">
+				<table width="100%" cellspacing="1" cellspacing="1" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+						<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
 							<tr bgColor=#ffffff><td vAlign="top" width="100%">
-								<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+								<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
 									<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 										<digi:trn key="aim:componentIndicatorList">
 											Component Indicator List
 										</digi:trn>
 									</td></tr>
 									<tr><td>
-										<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
+										<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#ffffff">
 											<logic:notEmpty name="aimComponentsForm" property="compIndicators">
 												<tr><td>
-													<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
+													<table width="100%" cellspacing="1" cellpadding=3 bgcolor="#d7eafd">
 														<logic:iterate name="aimComponentsForm" property="compIndicators" id="indicators" type="org.digijava.module.aim.dbentity.AmpComponentsIndicators">
 															<tr bgcolor="#ffffff">
 																<td width="9">
-																	<img src= "../ampTemplate/images/arrow_right.gif" border=0>	
+																	<img src= "../ampTemplate/images/arrow_right.gif" border="0">	
 																</td>
 																<td>
 																<a href="javascript:editIndicator(<bean:write name="indicators" property="ampCompIndId"/>)">
@@ -108,7 +108,7 @@
 																		<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																	</bean:define>
 																	<a href="javascript:deleteIndicator(<bean:write name="indicators" property="ampCompIndId" />)" onclick="return onDelete()">
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																		<img src= "../ampTemplate/images/trash_12.gif" border="0">
 																	</a>
 																</td>
 															</tr>

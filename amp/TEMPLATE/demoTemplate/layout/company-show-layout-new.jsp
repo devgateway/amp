@@ -19,7 +19,7 @@ var OK_to_leave = "yes";
 </head>
 
 <body text="#000000" vLink="#bb7700" aLink="#bb7700" link="#bb7700" bgColor="#ffffff" leftMargin="0" background="/eproc/images/onedot.gif" topMargin="0" MARGINHEIGHT="0" MARGINWIDTH="0"  onload=init() onBeforeUnload='if(OK_to_leave=="no") {return "All changes made by you on this page will be lost!"}'>
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
 
 
 

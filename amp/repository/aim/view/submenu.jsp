@@ -44,7 +44,7 @@
 <c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 <TR>
 <TD vAlign="top" align="left">
 		<!-- contents -->

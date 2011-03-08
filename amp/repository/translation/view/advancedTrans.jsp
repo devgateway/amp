@@ -412,7 +412,7 @@ table.trnrow {
   </tr>
   <c:if test="${advancedTranslationForm.globalTranslation}">
    <tr>
-	 <td colspan=4 align="left">
+	 <td colspan="4" align="left">
 
 	 <digi:trn key="translation:goTo">Go to</digi:trn>
       <a href='<digi:site property="url" />'>

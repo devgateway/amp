@@ -20,7 +20,7 @@
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 
 <TR>
 
@@ -30,13 +30,13 @@
 
 
 
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 
 			<TR><TD bgcolor="#f4f4f4">
 
 
 
-			<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
+			<TABLE width="100%" cellspacing="1" cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 
 				<TR bgColor=#f4f4f2>
 
@@ -92,7 +92,7 @@
 
 					<TD vAlign="top" align="center" width="100%">
 
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+						<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top" align="center" bgColor=#f4f4f2>
 
 							<TR>
 
@@ -126,7 +126,7 @@
 
 
 
-					<TABLE border=0 cellPadding=0 cellSpacing=0 width="510" class="box-border-nopadding">
+					<TABLE border="0" cellpadding="0" cellspacing="0" width="510" class="box-border-nopadding">
 
 						<logic:notEmpty name="aimViewIndicatorForm" property="indicators">
 
@@ -136,7 +136,7 @@
 
 								<TR><TD>
 
-									<TABLE cellPadding=5 cellSpacing=1 border=0>
+									<TABLE cellPadding=5 cellspacing="1" border="0">
 
 										<TR bgcolor="#c9c9c7">
 

@@ -53,13 +53,13 @@ method="post">
 
 <logic:equal name="aimPhysicalProgressForm" property="validLogin" value="true">
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
 	<TR><TD vAlign="top" align="center">
 		<!-- contents -->
-		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" 
+		<TABLE width="99%" cellspacing="0" cellpadding="0" vAlign="top" align="center" bgcolor="#f4f4f4" 
 		class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
-				<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
+				<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="0">
 					<TR bgColor=#f4f4f2><TD align=left>
 						<SPAN class=crumb>					
 							<jsp:useBean id="urlPhysicalProgress" type="java.util.Map" class="java.util.HashMap"/>
@@ -80,9 +80,9 @@ method="post">
 						</SPAN>
 					</TD></TR>
 					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+						<TABLE width="98%" cellpadding="0" cellspacing="0" vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
-                                 <TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
+                                 <TABLE cellspacing="0" cellpadding="0" bgColor=#f4f4f2 border="0">
                                     <TR bgColor=#f4f4f2>
                                         <TD width="7" height="17">
                                         <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
@@ -127,10 +127,10 @@ method="post">
 											</TR>											
 											<TR bgcolor="#f4f4f2">
 												<TD>
-													<TABLE width="100%" cellpadding=2 cellspacing=1>
+													<TABLE width="100%" cellpadding=2 cellspacing="1">
 														<TR>
 															<TD>
-																<TABLE width="470" cellpadding=2 cellspacing=1 bgcolor="#999999">
+																<TABLE width="470" cellpadding=2 cellspacing="1" bgcolor="#999999">
 																	<TR>
 																		<TD colspan="5" class="textalb"> 
 																			<digi:trn key="aim:commitments">Commitments</digi:trn>
@@ -161,7 +161,7 @@ method="post">
 														</TR>
 														<TR>
 															<TD>
-																<TABLE width="470" cellpadding=2 cellspacing=1 bgcolor="#999999">
+																<TABLE width="470" cellpadding=2 cellspacing="1" bgcolor="#999999">
 																	<TR>
 																		<TD colspan="5" class="textalb">
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn>
@@ -193,7 +193,7 @@ method="post">
 														</TR>
 														<TR>
 															<TD>
-																<TABLE width="470" cellpadding=2 cellspacing=1 bgcolor="#999999">
+																<TABLE width="470" cellpadding=2 cellspacing="1" bgcolor="#999999">
 																	<TR>
 																		<TD colspan="5" class="textalb">
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn>
@@ -245,7 +245,7 @@ method="post">
 											</TR>
 											<TR bgcolor="#f4f4f2">
 												<TD>	
-													<TABLE width="100%" cellpadding=2 cellspacing=1 bgcolor="#f4f4f2">
+													<TABLE width="100%" cellpadding=2 cellspacing="1" bgcolor="#f4f4f2">
 														<logic:iterate name="component" id="pp" property="phyProgress">
 														<TR>
 															<TD bgcolor="#fffffc">

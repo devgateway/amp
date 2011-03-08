@@ -149,10 +149,10 @@ div.fakefile2 input {
 </script>
 <digi:instance property="contentForm" />
 <digi:form action="/contentManager.do?action=save" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-<table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=1000>
+<table bgColor=#ffffff cellPadding=5 cellspacing="1" width="1000">
   <tr>
     <td width=14>&nbsp;</td>
-    <td align=left vAlign=top width=1000><table cellPadding=5 cellSpacing=0 width="100%">
+    <td align=left valign="top" width="1000"><table cellPadding=5 cellspacing="0" width="100%">
         <tr>
           <!-- Start Navigation -->
           <td height=33><span class=crumb>
@@ -190,11 +190,11 @@ div.fakefile2 input {
                   </table></td>
               </tr>
               <tr>
-                <td valign="top" bgcolor="#f4f4f2" align="center"><table border=0 cellPadding=0 cellSpacing=0 width=772>
+                <td valign="top" bgcolor="#f4f4f2" align="center"><table border="0" cellpadding="0" cellspacing="0" width=772>
                     <tr>
                       <td width=14>&nbsp;</td>
-                      <td align=left vAlign=top width=520>
-                        <table border=0 cellPadding=5 cellSpacing=0 width="100%">
+                      <td align=left valign="top" width=520>
+                        <table border="0" cellPadding=5 cellspacing="0" width="100%">
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left class=title noWrap colspan="2">

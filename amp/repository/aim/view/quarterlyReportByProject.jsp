@@ -91,14 +91,14 @@
               <td width="2">&nbsp;</td>
             </tr>
 			<tr>
-				<td colspan=3 class=subtitle-blue align=center>
+				<td colspan=3 class=subtitle-blue align="center">
 					<digi:trn key="aim:QuarterlyReportbyProjectTitle">
 					<bean:write name="aimMulitlateralbyDonorForm" property="reportName" />
 					</digi:trn>
 				</td>
 			</tr>
 			<tr>
-				<td colspan=3 class=box-title align=center>
+				<td colspan=3 class=box-title align="center">
 					<bean:write name="aimMulitlateralbyDonorForm" property="workspaceType" />&nbsp; <bean:write name="aimMulitlateralbyDonorForm" property="workspaceName" />&nbsp; 
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
@@ -122,7 +122,7 @@
 				<td valign="bottom" class="crumb">
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 						&nbsp;&nbsp;
-						<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+						<img src="../ampTemplate/images/pdf_icon.gif" border="0">	
 						<c:set var="translation">
 							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</c:set>
@@ -138,7 +138,7 @@
 				<td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;&nbsp;
-					<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
+					<img src="../ampTemplate/images/pdf_icon.gif" border="0">	
 						<c:set var="translation">
 							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</c:set>
@@ -152,7 +152,7 @@
 				<tr>
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
-							&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border="0">	
 								<c:set var="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
 								</c:set>
@@ -168,7 +168,7 @@
 			        <td valign="bottom" class="crumb" >
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;&nbsp;	
-					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<img src="../ampTemplate/images/icon_csv.gif" border="0">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
 					</c:set>

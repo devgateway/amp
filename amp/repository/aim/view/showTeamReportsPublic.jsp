@@ -74,9 +74,9 @@ function popup(mylink, windowname)
 
 <hr />
 <!-- MAIN CONTENT PART START -->
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 	<tr>
-    	<td width="740" valign=top>	
+    	<td width="740" valign="top">	
     		<div class="wlcm_txt_menu">
     			<a href="/reportsPublicView.do" style="text-decoration: underline;cursor: pointer;">
     				<digi:trn>
@@ -119,7 +119,7 @@ function popup(mylink, windowname)
     					</digi:trn>		
     				</a>
     		</div>
-		<table class="inside" width=100% cellpadding="0" cellspacing="0">
+		<table class="inside" width="100%" cellpadding="0" cellspacing="0">
    			<tr>
      			<td>
 				<%
@@ -229,28 +229,28 @@ function popup(mylink, windowname)
   </tr>
   <tr>
     <td valign="top">
-    	<table class="inside" width=100% cellpadding="0" cellspacing="0">
+    	<table class="inside" width="100%" cellpadding="0" cellspacing="0">
     		<thead>
 	              <tr>
-	              	<td background="img_2/ins_bg.gif" class=inside width="450px">
+	              	<td background="img_2/ins_bg.gif" class="inside" width="450px">
 	              		<b class="ins_title">${titleColumn}</b>
 	              	</td>
-	                <td background="img_2/ins_bg.gif" class=inside align=center>
+	                <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                 	<b class="ins_title"><digi:trn>Type</digi:trn></b>
 	                 </td>
-	                <td background="img_2/ins_bg.gif" class=inside align=center>
+	                <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                	<b class="ins_title"><digi:trn>Filtered</digi:trn></b> 
 	                </td>
-	                <td background="img_2/ins_bg.gif" class=inside align=center>
+	                <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                	<b class="ins_title"><digi:trn>Hierarchies</digi:trn></b> 
 	                </td>
-	                 <td background="img_2/ins_bg.gif" class=inside align=center>
+	                 <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                	<b class="ins_title"><digi:trn>Columns</digi:trn></b> 
 	                </td>
-	                 <td background="img_2/ins_bg.gif" class=inside align=center>
+	                 <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                	<b class="ins_title"><digi:trn>Measures</digi:trn></b> 
 	                </td>
-	                 <td background="img_2/ins_bg.gif" class=inside align=center>
+	                 <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                	<b class="ins_title">Export Options</b>
 	                </td>
 	              </tr>

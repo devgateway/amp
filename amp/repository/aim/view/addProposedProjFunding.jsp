@@ -86,10 +86,10 @@
 
     <tr>
       <td width="100%" vAlign="top">
-        <table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+        <table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
           <tr>
             <td>
-              <table width="100%" cellpadding=0 cellspacing=0>
+              <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
                     <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
@@ -130,7 +130,7 @@
                         </td>
                         <td valign="center" align="center">
             				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
                         </td>
             
@@ -146,7 +146,7 @@
     </tr>
     <tr>
     <td width="100%" vAlign="top">
-      <table width="100%" cellpadding=0 cellspacing=0>
+      <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td align="center">
             <table cellPadding=3>

@@ -101,8 +101,8 @@ function unload() {
 
   <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr>
-      <td align=left vAlign=top>
-        <table bgcolor=#aaaaaa cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+      <td align=left valign="top">
+        <table bgcolor=#aaaaaa cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
           <tr bgcolor="#aaaaaa">
             <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
               <digi:trn key="aim:currencyRateEditor">Currency Editor</digi:trn>
@@ -166,7 +166,7 @@ function unload() {
                           <digi:trn key="aim:exchangeRateDate">Exchange rate date</digi:trn>&nbsp;
                         </td>
                         <td align="left" valign="middle">
-                          <table cellPadding=0 cellSpacing=0>
+                          <table cellpadding="0" cellspacing="0">
                             <tr>
                               <td>
                                 <html:text property="exchangeRateDate" size="10"
@@ -174,7 +174,7 @@ function unload() {
                               </td>
                               <td align="left" vAlign="center">&nbsp;
                                 <a href="javascript:calendar('exchangeRateDate')">
-                                  <img src="../ampTemplate/images/show-calendar.gif" border=0></a>
+                                  <img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
                               </td>
                             </tr>
                           </table>

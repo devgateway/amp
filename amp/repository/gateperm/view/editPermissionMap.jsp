@@ -15,86 +15,80 @@ function submitForm(mode) {
 </script>
 	<html:hidden property="mode" />
 	<digi:errors />
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
-		<tr>
-			<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
-				<tr>
-					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2f2><span class=crumb> <c:set var="translation">
-						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set> <a href="/aim/admin.do" styleClass="comment"
-						title="${translation}">
-						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToGlobalPerm">Click here to goto Global Permission Manager</digi:trn>
-						</c:set>
-					</a>&nbsp;&gt;&nbsp; <digi:link href="/managePermMap.do"
-						styleClass="comment" title="${translation}">
-						<digi:trn key="aim:globalperms">Global Permission Manager</digi:trn>
-						</digi:link>
-						</span>
-						</td>
-						<!-- End navigation -->
-				</tr>
-			</table>
-			<hr />
-			
-			
-			
-			<table border=0 style="font-size:12px;" cellpadding="0" cellspacing="0" width=1000>
-			<tr>
-						<td valign=top>
-			<table class="inside" width=100%>
-			<tr>
-			<td colspan="2" class="inside_header" align=center><div><b><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></div>
-</td>
-			</tr>
-				<tr>
-					<td align="right" class="inside"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
-					<td class="inside"><html:select styleClass="inputx" property="permissibleCategory"
-						onchange="submitForm('permissibleCategoryPicked')">
-						<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
-						<html:optionsCollection property="_availablePermissibleCategories"
-							value="simpleName" label="simpleName" />
-					</html:select></td>
-				</tr>
-				<logic:notEmpty name="permissionMapForm"
-					property="permissibleCategory">
-					
-					<tr>
-						<td align="right" class="inside">Assign a global permission to the
-						entire class:</td>
-						<td class="inside"><html:select property="permissionId" styleClass="inputx">
-							<html:option value="0">--None--</html:option>
-							<html:optionsCollection property="_availablePermissions"
-								value="id" label="name" />
-						</html:select> <html:button styleClass="buttonx" property="saveGlobal"
-							onclick="submitForm('saveGlobal')">Assign Global</html:button> <digi:link
-							href="/managePerm.do?list" title="EDIT PERMISSIONS">
-							<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions</digi:link></td>
-					
-				</logic:notEmpty>
+	<div class="breadcrump">
+		<div class="centering">
+			<div class="breadcrump_cont">
+				<span class="sec_name">Global Permission Manager</span>
+				<span class="breadcrump_sep">|</span>
+				<c:set var="translation"><digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn></c:set> 
+				<a href="/aim/admin.do" class="l_sm" title="${translation}"><digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+					<c:set var="translation"><digi:trn key="aim:clickToGlobalPerm">Click here to goto Global Permission Manager</digi:trn></c:set>
+				</a>
+				<span class="breadcrump_sep"><b>»</b></span>
+				<span class="bread_sel"><digi:trn key="aim:globalperms">Global Permission Manager</digi:trn></span>
+			</div>
+		</div>
+	</div>
+	
+	
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+	  <tr>
+		    <td class="main_side_1">
+				<div class="wht">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  				<tr>
+		    				<td valign=top width="712">
+								<table class="inside" width="712" cellpadding="0" cellspacing="0" border="1">
+									<tr><td colspan=4 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header"><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></b></td></tr>
+									<tr>
+	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></b></td>
+	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;">Assign a global permission to the entire class</b>
+	    								</td>
+	    							</tr>
+	    							<tr>
+	    								<td class="inside" align=center>
+	    									<html:select styleClass="dropdwn_sm" property="permissibleCategory" onchange="submitForm('permissibleCategoryPicked')">
+												<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
+												<html:optionsCollection property="_availablePermissibleCategories" value="simpleName" label="simpleName" />
+											</html:select>
+	    								</td>
+	    								<td class="inside" align=center>
+		    								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
+			    								<html:select property="permissionId" styleClass="dropdwn_sm">
+													<html:option value="0">--None--</html:option>
+													<html:optionsCollection property="_availablePermissions" value="id" label="name" />
+												</html:select>
+											</logic:notEmpty>
+	    								</td>
+									</tr>
+	    						</table>
+	    						<br />
+	    						<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
+									<center><html:button styleClass="buttonx" property="saveGlobal" onclick="submitForm('saveGlobal')">Assign Global</html:button></center>
+								</logic:notEmpty>
+							</td>
+							<td width=20>&nbsp;</td>
+		    				<td valign="top" width=220>
+								<b>Key</b>:
+								<div class="perm_legend"><hr />
+									<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
+									<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
+									<input type="button" name="export" class="buttonx" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>' onclick="javascript:window.location.href='<%=exportperm%>'" /> 
+									<input type="button" name="import" class="buttonx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>' onclick="javascript:window.location.href='<%=importperm%>'" />
+									<hr />
+								</div>
+								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
+									<b>Permissions</b><br>
+									&nbsp;&nbsp; <digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS">Edit Permissions</digi:link>
+								</logic:notEmpty>
+							</td>
+	  						</tr>
+						</table>
+					</div>
+				</td>
+  		</tr>
 	</table>
-</digi:form>
-<td width=15>&nbsp;</td>
-			
-			</td>
-
-			<td valign=top width=200><div><b><digi:trn key="aim:globalperms"></digi:trn></b></div>
-			<hr />
-			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
-			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
-			<input type="button" name="export" class="buttonx" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
-			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
-			type="button" name="import" class="buttonx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
-			onclick="javascript:window.location.href='<%=importperm%>'" />
-		
-			<p/>
-			<hr/>
-</td>
-			</tr>
-			</table>
+ </digi:form>   							
 			
 			
 			

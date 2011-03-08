@@ -33,88 +33,83 @@ function submitForm(mode) {
 	</div>
 </div>
 
-
-<table>
-	<tr><td align="right">Name: </td><td><html:text property="name"/></td></tr>
-	<tr><td align="right">Description: </td><td><html:textarea property="description"/></td></tr>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 	<tr>
-		<td align="right">Permission Type: </td>
-		<td>
-			<logic:equal name="permissionForm" property="id" value="0">
-				<html:select property="type" onchange="submitForm('type')">
-					<html:option value="Gate">Gate</html:option>
-					<html:option value="Composite">Composite</html:option>
-				</html:select>
-			</logic:equal>
-			<logic:notEqual name="permissionForm" property="id" value="0">
-				<html:select property="type" disabled="true">
-					<html:option value="Gate">Gate</html:option>
-					<html:option value="Composite">Composite</html:option>
-				</html:select>
-			</logic:notEqual>
-		</td>
-	</tr>
-	
-	<html:hidden property="mode"/>
-	<html:hidden property="id"/>
-	
-	<logic:equal name="permissionForm" property="type" value="Gate">
-		<tr>
-			<td align="right">Actions:</td>
-			<td>
-				<html:select property="actions" multiple="true">
-					<html:optionsCollection property="_availableActions" value="wrappedInstance" label="wrappedInstance"/>
-				</html:select>
-			</td>
-		</tr>
-		<tr>
-			<td align="right">Gate Init:</td>
-			<td>
-				<html:select property="gateTypeName" onchange="submitForm('gate')">
-				<html:option value="unselected">--Select--</html:option>
-				<html:optionsCollection property="_availableGateTypes" value="name" label="simpleName"/>
-				</html:select>
-			</td>
-		</tr>
-		<tr><td align="right"></td><td></td></tr>
-	</logic:equal>
-	
-	<logic:equal name="permissionForm" property="type" value="Composite">	
-		<tr>
-			<td align="right">Permissions:</td>
-			<td>
-				<html:select property="permissions" multiple="true">
-				<html:optionsCollection property="_availablePermissions" value="id" label="name"/>
-				</html:select>
-			</td>
-		</tr>	
-	</logic:equal>
-	
-	<logic:notEmpty name="permissionForm" property="gateParameters">
-		<tr>
-			<td align="right">Parameters:</td>
-			<td>
-				<table>
-					<logic:iterate id="gateParameter" name="permissionForm" property="gateParameters">
-					<tr><td align="right">
-						<bean:write name="gateParameter" property="category"/> :</td><td>
-						<html:textarea indexed="true" name="gateParameter" property="value.value"/>
-						<i><bean:write name="gateParameter" property="value.category"/></i>
-					</td></tr>
-					</logic:iterate>
+	    <td class="main_side_1">
+			<div class="wht">
+				<table class="inside" width=100% cellpadding="0" cellspacing="0" border=1>
+					<tr>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Name</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Description</b></td>
+					    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Permission Type</b></td>
+					   	<logic:equal name="permissionForm" property="type" value="Composite">
+					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Permissions</b></td>
+					    </logic:equal>
+					    <logic:equal name="permissionForm" property="type" value="Gate">
+					    	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Actions</b></td>
+						    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside align="center" width=20%><b class="ins_header" style="font-size:11px;">Gate Init</b></td>
+					    </logic:equal>
+				    </tr>
+				    <tr>
+				        <td class="inside" align="center" valign="top"><html:text property="name" styleClass="inputx"/></td>
+					    <td class=inside align="center"  valign="top"><html:textarea property="description" styleClass="inputx"/></td>
+					    <td class=inside align="center"  valign="top">
+					    	<logic:equal name="permissionForm" property="id" value="0">
+								<html:select property="type" onchange="submitForm('type')" styleClass="dropdwn_sm" >
+									<html:option value="Gate">Gate</html:option>
+									<html:option value="Composite">Composite</html:option>
+								</html:select>
+							</logic:equal>
+							<logic:notEqual name="permissionForm" property="id" value="0">
+								<html:select property="type" disabled="true" styleClass="dropdwn_sm">
+									<html:option value="Gate">Gate</html:option>
+									<html:option value="Composite">Composite</html:option>
+								</html:select>
+							</logic:notEqual>
+						</td>
+						<logic:equal name="permissionForm" property="type" value="Composite">	
+							<td class="inside" align="center"  valign="top">
+											<html:select property="permissions" multiple="true" styleClass="dropdwn_sm">
+											<html:optionsCollection property="_availablePermissions" value="id" label="name"/>
+											</html:select>
+							</td>
+						</logic:equal>						
+						<logic:equal name="permissionForm" property="type" value="Gate">
+							<td class="inside" align="center"  valign="top">
+								<html:select property="actions" multiple="true" styleClass="dropdwn_sm">
+									<html:optionsCollection property="_availableActions" value="wrappedInstance" label="wrappedInstance"/>
+								</html:select>
+							</td>
+							<td class="inside" align="center"  valign="top">
+								<html:select property="gateTypeName" onchange="submitForm('gate')" styleClass="dropdwn_sm">
+									<html:option value="unselected">--Select--</html:option>
+									<html:optionsCollection property="_availableGateTypes" value="name" label="simpleName"/>
+								</html:select>
+								
+									<logic:notEmpty name="permissionForm" property="gateParameters"><br/><br/>
+										<table width="100%" border="0" cellpadding="0" cellspacing="0">
+											<logic:iterate id="gateParameter" name="permissionForm" property="gateParameters">
+												<tr>
+													<td class="inside1" align="left"><bean:write name="gateParameter" property="category"/>:</td>
+													<td class="inside1" align="right">
+														<html:textarea indexed="true" name="gateParameter" property="value.value" styleClass="inputx"/>
+														<i><bean:write name="gateParameter" property="value.category"/></i>
+													</td>
+												</tr>
+											</logic:iterate>
+										</table>
+									</logic:notEmpty>
+							</td>
+						</logic:equal>						
+				    </tr>
 				</table>
-			</td>
-		</tr>	
-	</logic:notEmpty>
-		
-		
-	<tr>
-		<td align="right"></td>
-		<td>
-			<html:button property="save" onclick="submitForm('save')">Save</html:button>
-			<html:cancel property="list">Cancel</html:cancel>
+				<br/>
+				<center>
+				<html:button property="save" onclick="submitForm('save')" styleClass="buttonx">Save</html:button>
+				<html:cancel property="list" styleClass="buttonx">Cancel</html:cancel></center>
+			</div>
 		</td>
-	</tr>
-</table>
-
+ 	</tr>
+ </table>
+    
 </digi:form>

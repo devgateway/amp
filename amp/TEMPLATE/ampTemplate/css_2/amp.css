@@ -30,6 +30,7 @@ legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bol
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
 table.inside, td.inside {border-color: #CCC; border-style: solid; font-size:12px;}
+table.inside1, td.inside1 {border: 0; font-size:12px;}
 table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}

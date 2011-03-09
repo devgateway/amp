@@ -593,4 +593,10 @@ public class AmpFunding implements Serializable, Versionable {
 	public void setGroupVersionedFunding(Long previousVersionedFunding) {
 		this.groupVersionedFunding = previousVersionedFunding;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.ampActivityId = newActivity;
+		return this;
+	}
 }

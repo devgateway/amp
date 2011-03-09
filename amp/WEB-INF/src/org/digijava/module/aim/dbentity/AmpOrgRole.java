@@ -126,4 +126,10 @@ public class AmpOrgRole implements Serializable, Versionable
 	public Object getValue() {
 		return "" + this.percentage;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }	

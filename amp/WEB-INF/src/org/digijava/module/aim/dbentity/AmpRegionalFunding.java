@@ -237,4 +237,10 @@ public class AmpRegionalFunding implements Versionable, Serializable {
 		return "" + this.transactionType + this.transactionDate + this.transactionAmount + this.reportingDate
 				+ this.currency + this.expenditureCategory + this.adjustmentType + this.reportingOrganization;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

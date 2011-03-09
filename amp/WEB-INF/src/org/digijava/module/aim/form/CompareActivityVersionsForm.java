@@ -17,10 +17,14 @@ public class CompareActivityVersionsForm extends ActionForm {
 	private AmpActivity activityOne;
 
 	private AmpActivity activityTwo;
-	
+
 	private boolean showMergeColumn;
-	
+
 	private String method;
+
+	private AmpActivity oldActivity;
+
+	private String[] mergedValues = new String[] {};
 
 	public Long getActivityOneId() {
 		return activityOneId;
@@ -76,5 +80,21 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public AmpActivity getOldActivity() {
+		return oldActivity;
+	}
+
+	public void setOldActivity(AmpActivity oldActivity) {
+		this.oldActivity = oldActivity;
+	}
+
+	public void setMergedValues(String[] mergedValues) {
+		this.mergedValues = mergedValues;
+	}
+
+	public String[] getMergedValues() {
+		return mergedValues;
 	}
 }

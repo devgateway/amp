@@ -16,7 +16,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
-public class IPAContractDisbursement implements Serializable {
+public class IPAContractDisbursement implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4688757182074104911L;
 	private Long id;
 	private Integer adjustmentType;
@@ -93,5 +93,11 @@ public class IPAContractDisbursement implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

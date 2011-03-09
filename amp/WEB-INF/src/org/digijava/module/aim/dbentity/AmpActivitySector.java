@@ -100,4 +100,10 @@ public class AmpActivitySector implements Versionable, Serializable {
 		out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
 		return out;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activityId = newActivity;
+		return this;
+	}
 }

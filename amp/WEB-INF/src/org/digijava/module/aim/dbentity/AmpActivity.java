@@ -16,7 +16,7 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
 public class AmpActivity extends Permissible implements Comparable<AmpActivity>, Serializable,
-		LoggerIdentifiable {
+		LoggerIdentifiable, Cloneable {
 
 	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
@@ -1947,6 +1947,12 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.contactName = contactName;
 	}
 
-
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		try {
+			return (AmpActivity) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
+	}
 }

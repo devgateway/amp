@@ -90,4 +90,9 @@ public class AmpAhsurveyResponse implements Versionable {
 		}
 		return out;
 	}
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		// TODO Auto-generated method stub
+		return this;
+	}
 }

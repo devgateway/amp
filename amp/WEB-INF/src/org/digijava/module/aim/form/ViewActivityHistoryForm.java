@@ -1,6 +1,7 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
@@ -10,7 +11,7 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 
 	private Long activityId;
 
-	private Set<AmpActivity> activities;
+	private List<AmpActivity> activities;
 
 	public Long getActivityId() {
 		return activityId;
@@ -20,11 +21,11 @@ public class ViewActivityHistoryForm extends ActionForm implements Serializable 
 		this.activityId = activityId;
 	}
 
-	public Set<AmpActivity> getActivities() {
+	public List<AmpActivity> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(Set<AmpActivity> activities) {
+	public void setActivities(List<AmpActivity> activities) {
 		this.activities = activities;
 	}
 }

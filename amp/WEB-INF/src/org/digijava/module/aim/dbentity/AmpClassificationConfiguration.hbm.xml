@@ -15,7 +15,7 @@
 		<property name="primary" column="is_primary_sector" type="boolean" />
 
 		<many-to-one name="classification" column="classification_id"
-			class="org.digijava.module.aim.dbentity.AmpSectorScheme" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpSectorScheme" cascade="none" lazy="false"/>
 
 	</class>
 </hibernate-mapping>

@@ -20,7 +20,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
-public class IPAContract implements Serializable, Versionable {
+public class IPAContract implements Serializable, Versionable, Cloneable {
 
 	/**
 	 * Multiple fields marked as "transient" in order to fool the
@@ -640,6 +640,17 @@ public class IPAContract implements Serializable, Versionable {
 								" - ", auxDisb.getCurrency(), " - ", auxDisb.getDate() }));
 			}
 		}
+		if (this.amendments != null) {
+			List auxAmendList = new ArrayList(this.amendments);
+			Collections.sort(auxAmendList, amendComparator);
+			Iterator<IPAContractAmendment> iterAmend = auxAmendList.iterator();
+			while (iterAmend.hasNext()) {
+				IPAContractAmendment auxAmend = iterAmend.next();
+				out.getOutputs().add(
+						new Output(null, new String[] { "<br />", "Amendments:&nbsp;" }, new Object[] {
+								auxAmend.getAmount(), " - ", auxAmend.getCurrency(), " - ", auxAmend.getDate() }));
+			}
+		}
 		return out;
 	}
 
@@ -672,6 +683,15 @@ public class IPAContract implements Serializable, Versionable {
 						+ auxDisb.getDate();
 			}
 		}
+		if (this.amendments != null) {
+			List auxAmendList = new ArrayList(this.amendments);
+			Collections.sort(auxAmendList, amendComparator);
+			Iterator<IPAContractAmendment> iterDisb = auxAmendList.iterator();
+			while (iterDisb.hasNext()) {
+				IPAContractAmendment auxAmend = iterDisb.next();
+				ret = ret + auxAmend.getAmount() + "-" + auxAmend.getCurrency() + "-" + auxAmend.getDate();
+			}
+		}
 		return ret;
 	}
 
@@ -690,5 +710,62 @@ public class IPAContract implements Serializable, Versionable {
 				return aux1.getAdjustmentType().compareTo(aux2.getAdjustmentType());
 			}
 		}
-	};		
+	};
+	
+	private transient Comparator amendComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			if( !(o1 instanceof IPAContractAmendment) || !(o2 instanceof IPAContractAmendment) ) return -1;
+			IPAContractAmendment aux1 = (IPAContractAmendment) o1;
+			IPAContractAmendment aux2 = (IPAContractAmendment) o2;
+			if (aux1.getReference().equals(aux2.getReference())) {
+				if (aux1.getAmount().equals(aux2.getAmount())) {
+					return aux1.getDate().compareTo(aux2.getDate());
+				} else {
+					return aux1.getAmount().compareTo(aux2.getAmount());
+				}
+			} else {
+				return aux1.getReference().compareTo(aux2.getReference());
+			}
+		}
+	};
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		IPAContract newIPA = null;
+		try {
+			newIPA = (IPAContract) clone();
+
+			newIPA.activity = newActivity;
+			newIPA.id = null;
+			
+			if (this.getDisbursements() != null) {
+				Iterator<IPAContractDisbursement> iterDisb = this.getDisbursements().iterator();
+				while (iterDisb.hasNext()) {
+					IPAContractDisbursement auxDisb = iterDisb.next();
+					IPAContractDisbursement newIPADisb = (IPAContractDisbursement) auxDisb.clone();
+					newIPADisb.setId(null);
+					newIPADisb.setContract(newIPA);
+				}
+			}
+			if (this.getAmendments() != null) {
+				Iterator<IPAContractAmendment> iterAmend = this.getAmendments().iterator();
+				while (iterAmend.hasNext()) {
+					IPAContractAmendment auxAmend = iterAmend.next();
+					IPAContractAmendment newIPAAmend = (IPAContractAmendment) auxAmend.clone();
+					newIPAAmend.setId(null);
+					newIPAAmend.setContract(newIPA);
+				}
+			}
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newIPA;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
 }

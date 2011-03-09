@@ -7,6 +7,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -161,4 +162,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 		return value;
 	}
 	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activities = new HashSet();
+		this.activities.add(newActivity);
+		return this;
+	}
 }

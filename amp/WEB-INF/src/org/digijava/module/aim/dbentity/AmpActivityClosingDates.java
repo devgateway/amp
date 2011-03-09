@@ -98,4 +98,9 @@ public class AmpActivityClosingDates implements Serializable, Versionable {
 	public Object getValue() {
 		return this.type.toString()+this.closingDate;
 	}
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.ampActivityId = newActivity;	
+		return this;
+	}
 }

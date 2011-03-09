@@ -70,4 +70,10 @@ public class AmpActivityInternalId implements Serializable, Versionable {
 	public Object getValue() {
 		return "" + this.internalId;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.ampActivity = newActivity;
+		return this;
+	}
 }

@@ -177,7 +177,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
 		</set>
 
-		<set name="contracts" cascade="all-delete-orphan">
+		<set name="contracts" cascade="none">
 			<cache usage="read-write" />
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />

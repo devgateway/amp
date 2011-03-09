@@ -40,6 +40,7 @@
 
 
 <digi:instance property="aimCompareActivityVersionsForm" />
+<digi:errors/>
 <digi:form action="/compareActivityVersions.do" method="post" styleId="compareForm">
 	<html:hidden property="showMergeColumn" styleId="showMergeColumn"/>
 	<html:hidden property="method" styleId="method"/>
@@ -94,28 +95,29 @@
 							<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
 						</td>
 						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-							<div>
+							<div id="left${index}">
 								<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
 								<bean:write name="iter" property="stringOutput[1]" filter="false"/>
 							</div>
 						</td>
 						<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
 							<td align="center" valign="middle" class="inside">
-								<button type="button" onClick="" style="border: none; background-color: transparent">
+								<button type="button" onClick="javascript:left(${index});" style="border: none; background-color: transparent">
 									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
 								</button>	
 							</td>
 							<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-								<div id="${index}">&nbsp;</div>	
+								<div id="merge${index}">&nbsp;</div>
 							</td>
 							<td align="center" valign="middle" class="inside">
-								<button type="button" onClick="" style="border: none; background-color: transparent">
+								<button type="button" onClick="javascript:right(${index});" style="border: none; background-color: transparent">
 									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 								</button>	
 							</td>
+							<input type="hidden" id='mergedValues[${index}]' value="" name="mergedValues[${index}]"/>
 						</logic:equal>
 						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-							<div>
+							<div id="right${index}">
 								<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
 								<bean:write name="iter" property="stringOutput[0]" filter="false"/>
 							</div>
@@ -124,7 +126,7 @@
 				</logic:iterate>
 			</table>
 			<br/>
-			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="history.back()" />
+			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
 			<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
 			<input id="saveButton" type="button" value="<digi:trn>Save New Activity</digi:trn>" onclick="javascript:save();" />
 		</div>	
@@ -132,6 +134,11 @@
 </digi:form>
 
 <script language="Javascript">
+function back() {
+	document.getElementById("method").value = "cancel";
+	document.getElementById('compareForm').submit();
+}
+
 function enableMerge() {
 	document.getElementById('showMergeColumn').value = "true";
 	document.getElementById('method').value = "enableMerge";
@@ -142,6 +149,16 @@ function save() {
 	document.getElementById('showMergeColumn').value = "false";
 	document.getElementById('method').value = "saveNewActivity";
 	document.getElementById('compareForm').submit();
+}
+
+function right(id) {
+	document.getElementById("merge"+id).innerHTML = document.getElementById("right"+id).innerHTML;
+	document.getElementById("mergedValues["+id+"]").value = "R";
+}
+
+function left(id) {
+	document.getElementById("merge"+id).innerHTML = document.getElementById("left"+id).innerHTML;
+	document.getElementById("mergedValues["+id+"]").value = "L";
 }
 
 function setStripsTable(tableId, classOdd, classEven) {

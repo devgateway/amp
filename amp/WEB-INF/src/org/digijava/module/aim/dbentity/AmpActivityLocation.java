@@ -64,4 +64,10 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	public Object getValue() {
 		return this.locationPercentage != null ? this.locationPercentage : new Float(0);
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

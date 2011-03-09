@@ -20,6 +20,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class ViewActivityHistory extends Action {
@@ -35,37 +36,53 @@ public class ViewActivityHistory extends Action {
 			public int compare(Object o1, Object o2) {
 				AmpActivityVersion a1 = (AmpActivityVersion) o1;
 				AmpActivityVersion a2 = (AmpActivityVersion) o2;
-				//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId() * -1);
-				if (a1.getCreatedDate() == null && a2.getCreatedDate() == null) {
-					return 0;
-				} else if (a1.getCreatedDate() == null) {
-					return -1;
-				} else if (a2.getCreatedDate() == null) {
-					return 1;
+				// return a1.getAmpActivityId().compareTo(a2.getAmpActivityId()
+				// * -1);
+
+				/*
+				 * if (a1.getCreatedDate() == null && a2.getCreatedDate() ==
+				 * null) { return 0; } else if (a1.getCreatedDate() == null) {
+				 * return -1; } else if (a2.getCreatedDate() == null) { return
+				 * 1; }
+				 */
+				Long i1 = Long.valueOf(a1.getCreatedDate().getTime());
+				if (a1.getModifiedDate() != null) {
+					i1 = Long.valueOf(a1.getModifiedDate().getTime());
 				}
-				return a1.getCreatedDate().compareTo(a2.getCreatedDate()) * -1;
+				Long i2 = Long.valueOf(a2.getCreatedDate().getTime());
+				if (a2.getModifiedDate() != null) {
+					i2 = Long.valueOf(a2.getModifiedDate().getTime());
+				}
+				return (i1.compareTo(i2)) * -1;
 			}
 		};
 
 		ViewActivityHistoryForm hForm = (ViewActivityHistoryForm) form;
 		// Load current activity, get group and retrieve past versions.
 		Session session = PersistenceManager.getRequestDBSession();
-		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm.getActivityId());
-		hForm.setActivities(new TreeSet<AmpActivity>(compareVersions));
-		
+		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm
+				.getActivityId());
+		hForm.setActivities(new ArrayList<AmpActivity>());
+
 		// AMP-7706: Filter last 5 versions.
-		List<AmpActivity> auxList = new ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
+		// List<AmpActivity> auxList = new
+		// ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
+		List<AmpActivity> auxList = null;
+		Query qry = session
+				.createQuery("select ag.activities from org.digijava.module.aim.dbentity.AmpActivityGroup ag where ag.ampActivityGroupId = ?");
+		qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
+		auxList = qry.list();
 		Collections.sort(auxList, compareVersions);
 		Iterator<AmpActivity> iter = auxList.iterator();
-		int i = 15;
-		while(iter.hasNext()) {
+		int i = 5;
+		while (iter.hasNext()) {
 			AmpActivity auxActivity = iter.next();
-			if(i > 0) {
+			if (i > 0) {
 				hForm.getActivities().add(auxActivity);
 			}
 			i--;
 		}
-		//hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
+		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
 
 		return mapping.findForward("forward");
 	}

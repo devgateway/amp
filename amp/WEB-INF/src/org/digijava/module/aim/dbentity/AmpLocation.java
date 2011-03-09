@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
@@ -324,5 +325,12 @@ public class AmpLocation implements Serializable, Versionable
 		return this.iso3Code + "-" + this.name + "-" + this.description + "-" + this.gisCoordinates + "-"
 				+ this.language + "-" + this.version + "-" + this.country + "-" + this.region + "-" + this.zone + "-"
 				+ this.woreda + (this.location != null ? this.location.getName() : "");
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activities = new HashSet();
+		this.activities.add(newActivity);
+		return this;
 	}
 }	

@@ -6,6 +6,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
@@ -271,5 +272,12 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		return this.equals(obj);
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activityList = new HashSet<AmpActivity>();
+		this.activityList.add(newActivity);
+		return this;
 	}
 }

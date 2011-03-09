@@ -89,4 +89,10 @@ public class AmpIssues  implements Serializable, Versionable
 		// TODO add measures.
 		return this.issueDate != null ? this.issueDate : "";
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

@@ -1,26 +1,28 @@
 package org.digijava.module.aim.action;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
@@ -29,10 +31,14 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSi
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.editor.util.DbUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -47,10 +53,11 @@ public class CompareActivityVersions extends DispatchAction {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
 		Session session = PersistenceManager.getRequestDBSession();
-		Transaction tx = session.beginTransaction();
 
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
+			Transaction tx = session.beginTransaction();
+
 			Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
 			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 			AmpActivityGroup group = activity.getAmpActivityGroup();
@@ -69,16 +76,22 @@ public class CompareActivityVersions extends DispatchAction {
 		vForm.setOutputCollection(new ArrayList<CompareOutput>());
 		// Load the activities.
 		vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
+		Hibernate.initialize(vForm.getActivityOne());
 		vForm.setActivityTwo((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityTwoId()));
+		Hibernate.initialize(vForm.getActivityTwo());
+
+		vForm.setOldActivity(vForm.getActivityOne());
 
 		// Retrieve annotated for versioning fields.
 		Field[] fields = AmpActivity.class.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
+			logger.warn(fields[i]);
 			CompareOutput output = new CompareOutput();
 
 			if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class);
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+						"get");
 
 				// Compare values from 2 versions.
 				Object auxResult1 = auxMethod.invoke(vForm.getActivityOne(), null);
@@ -156,7 +169,8 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 			if (fields[i].isAnnotationPresent(VersionableFieldTextEditor.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class);
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+						"get");
 
 				// Compare values from 2 versions.
 				String auxResult1 = (String) auxMethod.invoke(vForm.getActivityOne(), null);
@@ -188,21 +202,30 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 			if (fields[i].isAnnotationPresent(VersionableCollection.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class);
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+						"get");
 				// Get values from 2 versions.
+				// Sometimes I have a problem with lazy collections and
+				// apparently closed session.
+				// Delete these lines if there are problems when saving: two
+				// sessions problem.
+				session = PersistenceManager.getRequestDBSession();
 				Object auxResult1 = auxMethod.invoke(vForm.getActivityOne(), null);
+				Hibernate.initialize(auxResult1);
 				Object auxResult2 = auxMethod.invoke(vForm.getActivityTwo(), null);
+				Hibernate.initialize(auxResult2);
 				// Obtain annotation object.
 				VersionableCollection auxAnnotation = (VersionableCollection) fields[i]
 						.getAnnotation(VersionableCollection.class);
 				// Create list of differences.
 				List<CompareOutput> differences = new ArrayList<CompareOutput>();
+				Collection auxCollection1 = (Collection) auxResult1;
+				Collection auxCollection2 = (Collection) auxResult2;
+
 				// Evaluate the type of objects stored in the collection.
 				// TODO: Assuming everything is a Collection, later to implement
 				// other types.
-				Collection auxCollection1 = (Collection) auxResult1;
-				Collection auxCollection2 = (Collection) auxResult2;
-				if ((auxCollection1 == null && auxResult2 == null)
+				if ((auxCollection1 == null && auxCollection2 == null)
 						|| (auxCollection1 == null && auxCollection2.size() == 0)
 						|| (auxCollection1.size() == 0 && auxCollection2 == null)
 						|| (auxCollection1.size() == 0 && auxCollection2.size() == 0)) {
@@ -358,20 +381,143 @@ public class CompareActivityVersions extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-		// TODO: Hide from output list values that can't be used for single
-		// changes and mark mandatory values.
+		List<CompareOutput> filteredList = new ArrayList<CompareOutput>();
+		Iterator<CompareOutput> iter = vForm.getOutputCollection().iterator();
+		while (iter.hasNext()) {
+			CompareOutput auxCompare = iter.next();
+			if (!auxCompare.getBlockSingleChangeOutput()) {
+				filteredList.add(auxCompare);
+			}
+		}
+		vForm.setOutputCollection(filteredList);
+		vForm.setMergedValues(new String[vForm.getOutputCollection().size()]);
 		return mapping.findForward("forward");
+	}
+
+	public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		return mapping.findForward("reload");
 	}
 
 	public ActionForward saveNewActivity(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-		List<CompareOutput> auxData = generateRandomMergedData(vForm.getOutputCollection());
+		// Get data from jsp.
+		ActionErrors errors = new ActionErrors();
+		boolean hasErrors = false;
+		List<CompareOutput> auxData = new ArrayList<CompareOutput>();
+		for (int i = 0; i < vForm.getMergedValues().length; i++) {
+			CompareOutput auxOutput = vForm.getOutputCollection().get(i);
+			CompareOutput newOutput = new CompareOutput();
+			newOutput.setFieldOutput(auxOutput.getFieldOutput());
+			newOutput.setMandatoryForSingleChangeOutput(auxOutput.getMandatoryForSingleChangeOutput());
+			if (vForm.getMergedValues()[i].equals("L")) {
+				newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1], null });
+			} else if (vForm.getMergedValues()[i].equals("R")) {
+				newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[0], null });
+			} else {
+				// The user didn't select a value, then is empty (this is
+				// important because the merged activity is a copy of one of the
+				// compared versions).
+				newOutput.setOriginalValueOutput(new Object[] { null, null });
 
-		
-		
-		return mapping.findForward("forward");
+				// Raise error if mandatory fields have no values.
+				if (newOutput.getMandatoryForSingleChangeOutput()) {
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+							"error.aim.versioning.missingMandatoryValue", auxOutput.getDescriptionOutput()));
+					hasErrors = true;
+				}
+			}
+			auxData.add(newOutput);
+		}
+		if (hasErrors) {
+			saveErrors(request, errors);
+			vForm.setShowMergeColumn(true);
+			return mapping.findForward("forward");
+		}
+
+		// The main idea is: once we have the collection with fields selected by
+		// the user we need to COPY one of the AmpActivity objects and call the
+		// getters from these fields and push those values into the matching
+		// fields
+		// in the new activity. Some values will have to be auto calculated like
+		// some ids, dates, etc.
+		// Others are more complex like collections or our objects that
+		// implement Versionable, in those cases we need to call a specific
+		// method to get the value of the field in a right format for inserting
+		// into a new activity, ie: set the activityid property, etc.
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			session.connection().setAutoCommit(false);
+			tx = session.beginTransaction();
+
+			TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
+			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
+
+			AmpActivity oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
+					.getOldActivity().getAmpActivityId());
+			AmpActivity auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
+			auxActivity.setAmpActivityId(null);
+			session.save(auxActivity);
+			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
+			auxActivity.setAmpId(ampId);
+			session.update(auxActivity);
+
+			// Code related to versioning.
+			AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, vForm
+					.getOldActivity().getAmpActivityGroup().getAmpActivityGroupId());
+			auxActivityGroup.setAmpActivityLastVersion(auxActivity);
+			session.save(auxActivityGroup);
+			auxActivity.setAmpActivityGroup(auxActivityGroup);
+			auxActivity.setModifiedDate(Calendar.getInstance().getTime());
+			auxActivity.setModifiedBy(member);
+			auxActivity.setAmpActivityPreviousVersion(vForm.getOldActivity());
+			session.update(auxActivity);
+
+			// Insert fields selected by user into AmpActity properties.
+			Iterator<CompareOutput> iter = auxData.iterator();
+			while (iter.hasNext()) {
+				CompareOutput co = iter.next();
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
+						AmpActivity.class, "set");
+				// Get value as object.
+				Object auxOriginalValueObject = co.getOriginalValueOutput()[0];
+				// Check if implements Versionable and call prepareMerge.
+				if (auxOriginalValueObject != null) {
+					if (ActivityVersionUtil.implementsVersionable(auxOriginalValueObject.getClass().getInterfaces())) {
+						Versionable auxVersionableValueObject = (Versionable) auxOriginalValueObject;
+						auxOriginalValueObject = auxVersionableValueObject.prepareMerge(auxActivity);
+					}
+					Class[] params = auxMethod.getParameterTypes();
+					if (params != null && params[0].getName().contains("java.util.Set")) {
+						Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
+								AmpActivity.class, "get");
+						Set auxSet = (Set) auxGetMethod.invoke(auxActivity);
+						if (auxSet == null) {
+							auxSet = new HashSet();
+						}
+						auxSet.add(auxOriginalValueObject);
+						auxMethod.invoke(auxActivity, auxSet);
+					} else {
+						auxMethod.invoke(auxActivity, auxOriginalValueObject);
+					}
+					session.update(auxActivity);
+				}
+			}
+
+			session.save(auxActivity);
+			session.flush();
+			tx.commit();
+			logger.warn("Activity Saved.");
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			tx.rollback();
+		}
+		return mapping.findForward("index");
 	}
 
 	// TODO: Note: ONLY FOR DEVELOPMENT PURPOSES. Delete this method when the

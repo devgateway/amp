@@ -76,4 +76,10 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		AmpActivityContact aac = (AmpActivityContact)o;
 		return this.getContact().compareTo(aac.getContact());
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

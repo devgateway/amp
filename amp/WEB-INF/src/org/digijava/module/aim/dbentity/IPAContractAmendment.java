@@ -9,7 +9,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class IPAContractAmendment implements Serializable {
+public class IPAContractAmendment implements Serializable, Cloneable {
 
 	/**
 	 * 
@@ -107,5 +107,11 @@ public class IPAContractAmendment implements Serializable {
 
 	public void setReference(String reference) {
 		this.reference = reference;
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

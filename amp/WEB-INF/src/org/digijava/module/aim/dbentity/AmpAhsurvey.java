@@ -182,4 +182,10 @@ public class AmpAhsurvey implements Versionable, Serializable {
 		}
 		return out;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.ampActivityId = newActivity;
+		return this;
+	}
 }

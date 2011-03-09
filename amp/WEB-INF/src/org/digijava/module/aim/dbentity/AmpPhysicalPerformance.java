@@ -199,4 +199,10 @@ public class AmpPhysicalPerformance implements Serializable, Versionable
 	public Object getValue() {
 		return this.description;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.ampActivityId = newActivity;
+		return this;
+	}
 }

@@ -85,4 +85,10 @@ public class AmpActivityProgram implements Versionable, Serializable {
 		ret = "" + this.programPercentage;
 		return ret;
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

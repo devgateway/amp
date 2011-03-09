@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
@@ -24,6 +25,8 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.hibernate.HibernateException;
@@ -38,9 +41,17 @@ public class ActivityVersionUtil {
 
 	public static final String GLOBAL_SETTINGS_VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
 
-	public static Method getMethodFromFieldName(String fieldName, Class auxClass) throws Exception {
+	public static Method getMethodFromFieldName(String fieldName, Class auxClass, String prefix) throws Exception {
 		String methodName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-		return auxClass.getMethod("get" + methodName, null);
+		methodName = prefix + methodName;
+		if (prefix.equals("set")) {
+			for (int i = 0; i < auxClass.getDeclaredMethods().length; i++) {
+				if (auxClass.getDeclaredMethods()[i].toString().contains(methodName)) {
+					return auxClass.getDeclaredMethods()[i];
+				}
+			}
+		}
+		return auxClass.getMethod(methodName, null);
 	}
 
 	public static boolean implementsVersionable(Class[] array) {
@@ -154,7 +165,7 @@ public class ActivityVersionUtil {
 
 	public static int numberOfVersions() throws Exception {
 		int ret = 0;
-		int aux = 5; //Default value after apply patch if no redeployed.
+		int aux = 5; // Default value after apply patch if no redeployed.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(ActivityVersionUtil.GLOBAL_SETTINGS_VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
 			aux = Integer.valueOf(gsValue).intValue();
@@ -173,7 +184,7 @@ public class ActivityVersionUtil {
 	}
 
 	public static void updateActivityView() {
-		logger.info("Updating amp_activity view." );
+		logger.info("Updating amp_activity view.");
 		try {
 			Session session = PersistenceManager.getSession();
 			String query = "CREATE OR REPLACE VIEW `amp_activity` AS  "
@@ -185,7 +196,66 @@ public class ActivityVersionUtil {
 			logger.error("Error updating amp_activity view.", e);
 			e.printStackTrace(System.out);
 		}
-		logger.info("Updated amp_activity view." );
+		logger.info("Updated amp_activity view.");
+	}
+
+	public static AmpActivity cloneActivity(AmpActivity in, AmpTeamMember member) throws CloneNotSupportedException {
+		AmpActivity out = (AmpActivityVersion) in.clone();
+		out.setActivityContacts(null);
+		out.setActivityCreator(member);
+		out.setActivityDocuments(null);
+		out.setActivityPrograms(null);
+		out.setActPrograms(null);
+		out.setActRankColl(null);
+		out.setAmpActivityGroup(null);
+		out.setAmpActivityPreviousVersion(null);
+		// out.setApprovedBy(null);
+		out.setAuthor(null);
+		out.setCategories(null);
+		out.setChapter(null);
+		out.setClosingDates(null);
+		out.setComponentes(null);
+		out.setComponentFundings(null);
+		out.setComponentProgress(null);
+		out.setComponents(null);
+		out.setContracts(null);
+		out.setCosts(null);
+		// out.setCreatedBy(null);
+		out.setDocuments(null);
+		out.setFunding(null);
+		out.setIndicators(null);
+		out.setInternalIds(null);
+		out.setIssues(null);
+		out.setLocations(null);
+		out.setMember(null);
+		out.setModality(null);
+		out.setModifiedBy(member);
+		out.setNotes(null);
+		out.setOrgrole(null);
+		out.setProgress(null);
+		out.setReferenceDocs(null);
+		out.setRegionalFundings(null);
+		out.setRegionalObservations(null);
+		out.setSectors(null);
+		out.setSurvey(null);
+		out.setTeam(member.getAmpTeam());
+		out.setThemeId(null);
 		
+		/*AmpActivity out = new AmpActivityVersion();
+		out.setActivityApprovalDate(in.getApprovalDate());
+		out.setActivityCloseDate(in.getActivityCloseDate());
+		//out.setActivityCreator(in.getActivityCreator());
+		out.setActivityLevel(in.getActivityLevel());
+		out.setActivityStartDate(in.getActivityStartDate());
+		out.setActivitySummary(in.getActivitySummary());
+		out.setActualApprovalDate(in.getActivityApprovalDate());*/
+
+		return out;
+	}
+
+	public static IPAContract cloneIPAContract() {
+		IPAContract out = new IPAContract();
+		
+		return out;
 	}
 }

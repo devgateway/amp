@@ -7,6 +7,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
@@ -176,5 +177,12 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	public Output getOutput() {
 		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activities = new HashSet<AmpActivity>();
+		this.activities.add(newActivity);
+		return this;
 	}
 }

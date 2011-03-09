@@ -233,4 +233,10 @@ public class AmpComponentFunding implements Versionable {
 				+ this.adjustmentType + this.reportingDate + this.reportingOrganization + this.expenditureCategory
 				+ this.component.getAmpComponentId() + this.exchangeRate.floatValue();
 	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		return this;
+	}
 }

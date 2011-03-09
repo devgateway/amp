@@ -3,6 +3,7 @@ package org.digijava.module.categorymanager.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -156,5 +157,12 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 				new Output(null, new String[] { "Class:&nbsp;" }, new Object[] { this.ampCategoryClass.getName() }));
 		out.getOutputs().add(new Output(null, new String[] { " Value:&nbsp;" }, new Object[] { this.value }));
 		return out;
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activities = new HashSet<AmpActivity>();
+		this.activities.add(newActivity);
+		return this;
 	}
 }

@@ -14,6 +14,7 @@ import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -26,6 +27,7 @@ public class DynamicColumnsUtil {
 	private static Logger logger = Logger.getLogger(DynamicColumnsUtil.class);
 	
 	private static ArrayList<AmpColumns> cachedMtefColumnList	= 	null;
+	private static ArrayList<AmpMeasures> cachedMtefMeasureList	= 	null;
 	
 	public static void createInexistentMtefColumns (ServletContext sCtx) {
 		List<Integer> mtefYears		= showInexistentMtefYears();
@@ -74,6 +76,26 @@ public class DynamicColumnsUtil {
 			}
 			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>();
 			DynamicColumnsUtil.cachedMtefColumnList.addAll(retList);
+		}
+		return retList;
+	}
+	
+	public static List<AmpMeasures> getMtefMeasures() {
+		ArrayList<AmpMeasures> retList	= new ArrayList<AmpMeasures>();
+		if ( DynamicColumnsUtil.cachedMtefMeasureList != null && DynamicColumnsUtil.cachedMtefMeasureList.size() > 0 ) {
+			retList.addAll(cachedMtefMeasureList);
+		}
+		else {
+			Collection<AmpMeasures> allCols	= AdvancedReportUtil.getMeasureList();
+			if ( allCols != null ) {
+				for ( AmpMeasures mes: allCols )  {
+					if ( mes.getMeasureName().contains("MTEF") ) {
+						retList.add(mes);
+					}
+				}
+			}
+			DynamicColumnsUtil.cachedMtefMeasureList	= new ArrayList<AmpMeasures>();
+			DynamicColumnsUtil.cachedMtefMeasureList.addAll(retList);
 		}
 		return retList;
 	}

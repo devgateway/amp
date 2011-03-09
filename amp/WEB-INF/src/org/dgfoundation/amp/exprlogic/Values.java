@@ -10,6 +10,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 
 public class Values extends HashMap<String, BigDecimal> {
 
@@ -18,14 +19,17 @@ public class Values extends HashMap<String, BigDecimal> {
 	Set<Values> countValues = new HashSet<Values>();
 	
 	private List<AmpColumns> mtefCols	;
+	private List<AmpMeasures> mtefMeas	;
 
 	public Values(Long ownerID) {
 		this.ownerId = ownerID;
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
+		this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
 	public Values() {
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
+		this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
 	public void addValue(String key, BigDecimal value) {
@@ -81,6 +85,11 @@ public class Values extends HashMap<String, BigDecimal> {
 				String mtefColName	= col.getColumnName();
 				this.addValue(mtefColName, values.get(mtefColName) );
 			}
+		if ( this.mtefMeas != null )
+			for (AmpMeasures meas: this.mtefMeas ) {
+				String mtefMeasName	= meas.getMeasureName();
+				this.addValue(mtefMeasName, values.get(mtefMeasName) );
+			}
 
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_COMMITMENT, ac);
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_DISBURSEMENT, ad);
@@ -124,7 +133,6 @@ public class Values extends HashMap<String, BigDecimal> {
 		// no filtered, affected by %
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
-		System.out.println("BEFORE LCM!!!!");
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, TokenRepository.buildColsedMonthActualDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, TokenRepository.buildPriorActualDisbursementsLogicalToken().evaluate(cell));
 
@@ -169,7 +177,18 @@ public class Values extends HashMap<String, BigDecimal> {
 				String mtefColName	= col.getColumnName();
 				String yearStr		= mtefColName.substring(mtefColName.length()-4, mtefColName.length() );
 				Integer year		= Integer.parseInt(yearStr)-1;
-				this.addValue(col.getColumnName(), TokenRepository.buildMtefColumnToken(mtefColName, year).evaluate(cell) );
+				double evalResult 	= TokenRepository.buildMtefColumnToken(mtefColName, year).evaluate(cell);
+				
+				this.addValue(col.getColumnName(), evalResult );
+			}
+		if ( this.mtefMeas != null )
+			for (AmpMeasures meas: this.mtefMeas ) {
+				String mtefExprName	= meas.getExpression();
+				mtefExprName		= mtefExprName.replace("Measure ", "");
+				String yearStr		= mtefExprName.substring(mtefExprName.length()-4, mtefExprName.length() );
+				Integer year		= Integer.parseInt(yearStr)-1;
+				double evalResult	= TokenRepository.buildMtefColumnToken(mtefExprName, year).evaluate(cell);
+				this.addValue(meas.getMeasureName(), evalResult );
 			}
 
 	}
@@ -200,6 +219,19 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, values.get(ArConstants.PLANNED_DISBURSEMENT_FILTERED));
 		this.addValue(ArConstants.PROPOSED_COST, values.get(ArConstants.PROPOSED_COST));
 		this.addValue(ArConstants.COSTING_GRAND_TOTAL, values.get(ArConstants.COSTING_GRAND_TOTAL));
+		
+		if ( this.mtefCols != null )
+			for (AmpColumns col: this.mtefCols ) {
+				String mtefColName	= col.getColumnName();
+				this.addValue(mtefColName, values.get(mtefColName) );
+			}
+		
+		if ( this.mtefMeas != null )
+			for (AmpMeasures meas: this.mtefMeas ) {
+				String mtefMeasName	= meas.getMeasureName();
+				this.addValue(mtefMeasName, values.get(mtefMeasName) );
+			}
+		
 	}
 
 	/**

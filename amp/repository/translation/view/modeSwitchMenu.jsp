@@ -19,20 +19,20 @@
 	<html:hidden property="backUrl"/>
 	</digi:form>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="false">
-				<li>
+				<li class="yuiampmenuitem_drop">
                     <a class="yuiampmenuitemlabel" onclick="return canExit()" href="javascript:switchTranslation(true)">
                         <digi:trn key="trn:transview1">Translator View</digi:trn>
                     </a>
 				</li>
             </logic:equal>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="true">
-				<li>
+				<li class="yuiampmenuitem_drop">
                 	<a class="yuiampmenuitemlabel"  onclick="return canExit()" href="javascript:switchTranslation(false)">
                     	<i><digi:trn key="trn:nontrans1">Non-translator View</digi:trn></i>
                     </a>
 				</li>
             </logic:equal>
-            <li>
+            <li class="yuiampmenuitem_drop">
 				<a class="yuiampmenuitemlabel" onclick="return canExit()" href="/translation/showAdvancedTranslation.do">
 		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn>
                 </a>

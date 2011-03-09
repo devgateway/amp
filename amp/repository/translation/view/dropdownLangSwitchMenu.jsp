@@ -21,13 +21,13 @@
 				<bean:define id="langReferUrl" name="languages" property="referUrl" type="java.lang.String"/>
                 <c:choose>
                   <c:when test="${translationForm.referUrl == langReferUrl}">
-                    <li class="yuiampmenuitem yuiampmenuitem-checked first-of-type">
+                    <li class="yuiampmenuitem_drop">
                   </c:when>
                   <c:otherwise>
-                    <li class="yuiampmenuitem">
+                    <li class="yuiampmenuitem_drop">
                   </c:otherwise>
                 </c:choose>                
-				<a href="#" onclick="SwitchLanguageMenu('<%= langReferUrl %>')">
+				<a class="yuiampmenuitemlabel"  href="#" onclick="SwitchLanguageMenu('<%= langReferUrl %>')">
 					<digi:trn key="aim:${languages.langName}"><bean:write name="languages" property="langName"/></digi:trn>
 				</a>
                 </li>

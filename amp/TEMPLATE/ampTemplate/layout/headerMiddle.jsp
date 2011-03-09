@@ -59,23 +59,21 @@ if("On".equals(publicView)) {
 </style>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
-      <div class="bd">
-          <ul class="first-of-typeamp">
+      <div class="bd bd_drop">   
+      	 <ul class="first-of-type">
             <li class="yuiampmenuitem">
                 <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
-                <digi:trn>
-                Home Page
-                </digi:trn>
+                	<digi:trn>Home Page</digi:trn>
 	            </a>
             </li>
             
             <module:display name="Public Site" parentModule="PUBLIC VIEW">
-                   <li class="yuiampmenuitem" style="float:left;">
+               <li class="yuiampmenuitem" style="float:left;">
                 <c:set var="message">
                 <digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
                 <a class="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
-                <digi:trn>PUBLIC SITE</digi:trn>
+                	<digi:trn>PUBLIC SITE</digi:trn>
                 </a>
             </li> 
             </module:display>
@@ -83,25 +81,30 @@ if("On".equals(publicView)) {
             <module:display name="Public Documents" parentModule="PUBLIC VIEW">
             <li class="yuiampmenuitem" style="float:left;">
                 <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">			
-                <digi:trn>Public Documents</digi:trn></a>
+                	<digi:trn>Public Documents</digi:trn>
+                </a>
             </li>
             </module:display>
             
-            
-           	<module:display name="Public Reports" parentModule="PUBLIC VIEW">
+            <module:display name="Public Reports" parentModule="PUBLIC VIEW">
 			<li class="yuiampmenuitem" style="float:left;">
-				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;"  onclick="return canExit()">
-                    <digi:trn>Public Reports</digi:trn>
+				<a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;">
+                    <digi:trn>Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a onclick="arrowClicked = true" style="margin-left:-1px;position:relative;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<a  style="margin-left:-1px;position:relative;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                 		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
-	                	<div class="bd">                    
-	                		<ul>
-	           					<li class="yuiampmenuitem" style="float:left;">
-	               					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
+	                	<div class="bd bd_drop">
+	                		<ul class="first-of-type"> 
+	                			<li class="yuiampmenuitem_drop">
+	           						<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false"  onclick="return canExit()">
+                   						 <digi:trn>Public Reports</digi:trn>
+                					</a>
+	               				</li>                   
+	                			<li class="yuiampmenuitem_drop">
+	           						<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
 	                   					<digi:trn>Multi-dimensional Reports</digi:trn>
 	                   				</digi:link>
 	               				</li>
@@ -131,15 +134,15 @@ if("On".equals(publicView)) {
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
 	                    </span>
-	                    <a onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                    <a  style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br/>
 	                    </a>
-	                    <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-	                    	<div class="bd">                    
-	                    		<ul>
+	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
+	                    	<div class="bd bd_drop">                    
+	                    		<ul class="first-of-type"> 
 	                        		<module:display name="Org Profile" >
 	                        			<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
-			                            	<li class="yuiampmenuitem">
+			                            	<li class="yuiampmenuitem_drop">
 			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
 			                                	<digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
 			                                </a> 
@@ -149,14 +152,14 @@ if("On".equals(publicView)) {
 															
 									<module:display name="GIS DASHBOARD" >
 										<feature:display name="Show in public view" module="GIS DASHBOARD">
-			                            	<li class="yuiampmenuitem">
+			                            	<li class="yuiampmenuitem_drop">
 			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true"  onclick="return canExit()">
 			                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
 			                                </a> 
 		                                	</li>
 	                              		</feature:display>
 									</module:display>
-									<li class="yuiampmenuitem">
+									<li class="yuiampmenuitem_drop">
 		                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
 		                                	<digi:trn key="donorDashboard">Donor Dashboard</digi:trn>
 		                                </a> 
@@ -172,17 +175,17 @@ if("On".equals(publicView)) {
           --%> 	
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
-		            <li style="float:left;" class="yuiampmenuitem">
+		              <li class="yuiampmenuitem" style="float:left;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
-		                <digi:trn>Language</digi:trn>
+		                	<digi:trn>Language</digi:trn>
 		                </span>
-		                 <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                 <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
-		                <div id="reports2" class="yuiampmenu">
-		                    <div class="bd">                    
-		                        <ul>
-		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                <div id="language" class="yuiampmenu">
+		                    <div class="bd bd_drop">                    
+	                    		<ul class="first-of-type"> 
+		                    		<digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                        </ul>
 		                    </div>
 		                </div>                              
@@ -225,7 +228,7 @@ else  //In case the public view aren't activated
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
-		                <a  onclick="arrowClicked = true" style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                <a   style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
@@ -261,20 +264,20 @@ function adminHelp(){
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">
-                    		  <li class="yuiampmenuitem">
-                                          <c:set var="message">
-                       							<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-                 						  </c:set>
-					                    <a class="yuiampmenuitemlabel"  href="/admin.do" module="aim" >
-					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
-					                    </a>
-                                        </li>
-                          <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
+                    	<li class="yuiampmenuitem">
+                        	<c:set var="message">
+                 				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+           					</c:set>
+                   			<a class="yuiampmenuitemlabel"  href="/admin.do" module="aim" >
+                       			<digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
+                   			</a>
+                        </li>
+                    <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem">
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a   style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -282,9 +285,9 @@ function adminHelp(){
                                       <ul>
                                        <feature:display name="Language Option" module="Tools">
 		                                        <li style="_width:240px">
-		                                        <a class="yuiampmenuitemlabel" href="#">
-		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-		                                        </a>
+		                                        	<a class="yuiampmenuitemlabel" href="#">
+		                                        		<digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                       		</a>
 		                                          <div id="reports2" class="yuiampmenu">
 		                                              <div class="bd">                    
 		                                                  <ul>
@@ -296,7 +299,7 @@ function adminHelp(){
 		                                   </feature:display>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
-                                                    <digi:insert flush="false" attribute="transmode"/>
+                                                 <digi:insert flush="false" attribute="transmode"/>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
                                       </ul>
@@ -309,40 +312,40 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a  onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a   style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
 										<feature:display name="Admin Help" module="HELP">
-                                        <li>
-                                        <a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
-                                        <digi:trn>AMP Admin Help</digi:trn>
-                                        </a>
+                                        <li class="yuiampmenuitem_drop">
+                                        	<a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
+                                        		<digi:trn>AMP Admin Help</digi:trn>
+                                       		 </a>
                                         </li>
 										</feature:display>
 										<feature:display name="User Help" module="HELP">
-                                        <li>
-                                        <a class="yuiampmenuitemlabel" href="#" onClick="help();">
-                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-                                        </a>
+                                        	<li class="yuiampmenuitem_drop">
+                                        		<a class="yuiampmenuitemlabel" href="#" onClick="help();">
+                                        			<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        	</a>
                                         </li>
 										</feature:display>
 
 										<feature:display name="Glossary" module="HELP">
-                                        <li>	
-                                        <a class="yuiampmenuitemlabel" href="/help/glossary.do">
-                                        <digi:trn>Glossary</digi:trn>
-                                        </a>
+                                        <li class="yuiampmenuitem_drop">	
+                                        	<a class="yuiampmenuitemlabel" href="/help/glossary.do">
+                                        		<digi:trn>Glossary</digi:trn>
+                                        	</a>
                                         </li>
 										</feature:display>
 
 										<feature:display name="Support Request Form" module="HELP">
-                                        <li>	
-                                        <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
-                                        <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
-                                        </a>
+                                        <li class="yuiampmenuitem_drop">	
+                                        	<a class="yuiampmenuitemlabel" href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
+                                        		<digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
+                                        	</a>
                                         </li>
 										</feature:display>
 										<feature:display name="About AMP" module="HELP">
@@ -428,35 +431,34 @@ function adminHelp(){
    --> 
              <div class="yuiamp-skin-amp" style="clear: both; width: 940px;">
               <div id="mainmenuHeader" class="yuiampmenu">
-                  <div class="bd">
+                  <div class="bd bd_drop">   
                       <ul class="first-of-type">
                       	<module:display name="My Desktop" parentModule="PROJECT MANAGEMENT">
                     	 <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
-                                 <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
+                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
+                                 <digi:trn>Desktop</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">
                                       <ul>
-<!--
- 										<li class="yuiampmenuitem">
+                                  		<li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/showDesktop.do">
-                                            <digi:trn key="aim:ampdesktop">AMP Desktop</digi:trn>
+                                            	<digi:trn>My Desktop</digi:trn>
                                             </a>
-                                        </li>
--->
-<c:if test="${not empty sessionScope.currentMember}">
-<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+                                       	</li>
+
+									<c:if test="${not empty sessionScope.currentMember}">
+									<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 												<field:display name="Add Activity Button" feature="Edit Activity">
 		                                        <li class="yuiampmenuitem_drop">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
                                                     <a class="yuiampmenuitemlabel" href="javascript:newAddActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
-                                                    <digi:trn key="btn:addActivity">(New) Add Activity</digi:trn>
+                                                    	<digi:trn>(New) Add Activity</digi:trn>
                                                     </a>
 												</li>
 		                                        <li class="yuiampmenuitem_drop">
@@ -464,11 +466,12 @@ function adminHelp(){
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
                                                     <a class="yuiampmenuitemlabel" href="javascript:addActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
-                                                    <digi:trn key="btn:addActivity">Add Activity</digi:trn>
+                                                    	<digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
 												</field:display>
-</c:if></c:if>
+												</c:if>
+											</c:if>
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>
@@ -502,15 +505,20 @@ function adminHelp(){
                           </module:display>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
-                                      <ul>
+                                      <ul class="first-of-type">  
+                                      	<li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false"  onclick="return canExit()">
+                                                <b><digi:trn>Report List</digi:trn></b>
+                                            </a>
+                                    	</li>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true"  onclick="return canExit()">
@@ -545,12 +553,27 @@ function adminHelp(){
                           </li>
                           </module:display>
 						  <feature:display name="Content Repository" module="Document Management">
-                          <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="cursor:pointer;"  onclick="return canExit()">
+                          	<li class="yuiampmenuitem" style="float:left;">
+                                <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
-                          </li>
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                          	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                          </a>
+                             <div id="Resources" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
+                           	 	<div class="bd bd_drop"
+                                	<ul class="first-of-type">
+                                		<li class="yuiampmenuitem_drop">
+                              				<a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="cursor:pointer;"  onclick="return canExit()">
+                                 				<digi:trn>View Resources</digi:trn>
+                              				</a>
+                              			</li>
+                                	</u>
+                                </div>
+                              </div>  
+                         	</li>
                           </feature:display>
+                          
 						  <module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 						  	<!-- On which view calendar link should redirect. depends on FM -->
 							  <c:set var="linkYearly">
@@ -582,35 +605,39 @@ function adminHelp(){
 							  		<c:when test="${not empty linkDaily}">${linkDaily}</c:when>
 							  	</c:choose>
 							  </c:set>
-							  
-                          <li class="yuiampmenuitem" style="float:left;">
-                          	<c:if test="${not empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="${link}" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
-                                 <digi:trn key="aim:calendar">Calendar</digi:trn>
-                              </a>
-                          	</c:if>
-                          	<c:if test="${empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
-                                 <digi:trn key="aim:calendar">Calendar</digi:trn>
-                              </a>
-                          	</c:if>
-                          	<feature:display name="Create Event" module="Calendar">
-                          		<a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-                              </a>
-                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd bd_drop">
-                                      <ul>
-                                        <li class="yuiampmenuitem_drop">
-                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
-                                            	<digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
-                                            </a>
-                                        </li>
+							  <li class="yuiampmenuitem" style="float:left;">
+	                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+	                                  <digi:trn>Calendar</digi:trn>
+	                              </a>
+	                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                              </a>
+						  		 <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
+                            	   <div class="bd bd_drop"
+                                		<ul class="first-of-type">  
+                          					<li class="yuiampmenuitem_drop">
+					                          	<c:if test="${not empty link}">
+					                          		<a class="yuiampmenuitemlabel"  href="${link}" onclick="return canExit()">
+					                                 	<digi:trn>View Calendar</digi:trn>
+					                              `	</a>
+					                          	</c:if>
+					                          	<c:if test="${empty link}">
+					                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" onclick="return canExit()">
+					                                 	<digi:trn>View Calendar</digi:trn>
+					                              	</a>
+					                          	</c:if>
+                          					</li>
+                        					<feature:display name="Create Event" module="Calendar">
+	                        				<li class="yuiampmenuitem_drop">
+	                                          	<a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
+	                                          		<digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
+	                                          	</a>
+	                                      	</li>
+                                      	</feature:display>
                                       </ul>
                                   </div>
-                              </div>
-                          	</feature:display>
-                          </li>
+                              	</div>
+                          	</li>
                           </module:display>
 						<%	
 							boolean showDashboard = false;
@@ -629,12 +656,12 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd bd_drop">                    
-                                      <ul>
+                                     <ul class="first-of-type">  
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
@@ -686,57 +713,51 @@ function adminHelp(){
                           </c:set>
 						  <module:display name="Messages" parentModule="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <c:choose>
-                                  <c:when test="${fn:contains(tabIndex, '1')}">
-                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                                  </c:when>
-                                   <c:when test="${fn:contains(tabIndex, '2')}">
-                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                                  </c:when>
-                                  <c:when test="${fn:contains(tabIndex, '3')}">
-                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                                  </c:when>
-                                  <c:when test="${fn:contains(tabIndex, '4')}">
-                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                                  </c:when>
-                                  <c:otherwise>
-                                       <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=5&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
-                                  </c:otherwise>
-                              </c:choose>
-
-
-
-                                 <digi:trn key="fm:messages">Messages</digi:trn>
-                              </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-                              </a>
-                              <div id="messages" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd bd_drop">                    
-                                      <ul>
-                                        <li class="yuiampmenuitem_drop">
-                                        <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
-                                        	<digi:trn key="aim:createmessage">Create Message</digi:trn>
-                                        </a>
-                                        </li>
-<!-- 
-                                        <li class="yuiampmenuitem">
-                                        <a class="yuiampmenuitemlabel"  href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
-                                        	<digi:trn key="aim:messagemanager">Message Manager</digi:trn>
-                                        </a>
-                                        </li>
- -->
-                                       </ul>
-                                  </div>
-                              </div>                    
-                          </li>
+                          		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          			<digi:trn key="fm:messages">Messages</digi:trn>
+                              	</a> 
+                          		<a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              	</a>
+                             <div id="messages" class="yuiampmenu" style="opacity:0.9;">
+	                             <div class="bd bd_drop">                    
+	                           	<ul class="first-of-type">  
+	                           		<li class="yuiampmenuitem_drop">
+		                           	<c:choose>
+		                                  <c:when test="${fn:contains(tabIndex, '1')}">
+		                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">
+		                                  </c:when>
+		                                   <c:when test="${fn:contains(tabIndex, '2')}">
+		                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">
+		                                  </c:when>
+		                                  <c:when test="${fn:contains(tabIndex, '3')}">
+		                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&childTab=inbox">
+		                                  </c:when>
+		                                  <c:when test="${fn:contains(tabIndex, '4')}">
+		                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&childTab=inbox">
+		                                  </c:when>
+		                                  <c:otherwise>
+		                                       <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=5&childTab=inbox">
+		                                  </c:otherwise>
+		                              	</c:choose>
+										<digi:trn>View Messages</digi:trn></a>
+									</li>
+	                               	<li class="yuiampmenuitem_drop">
+	                                   	<a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
+	                                       	<digi:trn key="aim:createmessage">Create Message</digi:trn>
+	                                    </a>
+	                                </li>
+	                               </ul>
+	                           </div>
+	                         </div>                    
+	                      </li>
                           </module:display>
                           <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem" style="float:left;">
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -744,28 +765,14 @@ function adminHelp(){
                                       <ul>
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li class="yuiampmenuitem_drop">
-                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
-                                        <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
-                                        </a>
+	                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
+	                                        	<digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
+	                                        </a>
                                         </li>
                                         </feature:display>
-                                        <feature:display name="Language Option" module="Tools">
-		                                        <li class="yuiampmenuitem_drop">
-		                                        <a class="yuiampmenuitemlabel" href="#">
-		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
-		                                        </a>
-		                                          <div id="reports2" class="yuiampmenu">
-		                                              <div class="bd">                    
-		                                                  <ul>
-		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
-		                                                  </ul>
-		                                              </div>
-		                                          </div>                              
-		                                        </li>
-                                        </feature:display>
-                                        <logic:notEmpty name="currentMember" scope="session">
+                                       	<logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
-                                                    <digi:insert flush="false" attribute="transmode"/>
+                                            	<digi:insert flush="false" attribute="transmode"/>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
                                         <logic:notEmpty name="currentMember" scope="session">
@@ -778,9 +785,9 @@ function adminHelp(){
                                             </digi:secure>
                                         </logic:notEmpty>                                        
                                         <li class="yuiampmenuitem_drop">
-                                        <a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
-                                        <digi:trn key="aim:search">Search</digi:trn>
-                                        </a>
+                                        	<a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
+                                        		<digi:trn key="aim:search">Search</digi:trn>
+                                       		 </a>
                                         </li>
                                         
                                         <li class="yuiampmenuitem_drop">
@@ -799,7 +806,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
@@ -857,53 +864,11 @@ function adminHelp(){
 
 <script language="javascript">
 
-var arrowClicked = false;
-//Run initialization for menu
-var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
-constraintoviewport:false
- });
-
-for(var i = 0; i < oMenuBar.getItems().length; i++){
-	oMenuBar.getItem(i).cfg.setProperty("onclick", { fn: onMenuItemClick });
-}
-
-oMenuBar.render();
-
-oMenuBar.subscribe("show", function () {
-
-	if (YAHOOAmp.env.ua.ie === 7 && this.parent) {
-		this.align();
-		this.align();
-	}
-
+YAHOO.util.Event.onDOMReady(function () {
+	var oMenuBar = new YAHOO.widget.MenuBar("mainmenuHeader");
+	lazyload: true;
+	oMenuBar.render();
 });
-
-
-function onMenuItemClick(p_sType, p_aArgs, p_oValue) { 
-	if(arrowClicked){
-//		alert(oMenuBar.activeItem);
-		oSubmenu = this.cfg.getProperty("submenu");
-		if(oSubmenu.cfg.getProperty("visible"));
-		if(oSubmenu)
-		{
-			if(oSubmenu.cfg.getProperty("visible"))
-			{
-				oSubmenu.hide();
-			}
-			else
-			{
-				oSubmenu.show();
-			}
-				
-		}
-		arrowClicked = false;
-	}
-	else
-	{
-		oSubmenu.hide();		
-	}
-}
-
 
 
 </script>

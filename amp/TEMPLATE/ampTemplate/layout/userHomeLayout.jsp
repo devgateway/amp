@@ -85,11 +85,7 @@
 			</feature:display>
 			</logic:notEmpty>
 			</div>
-				<%if (arf.isPublicView()==false){%>
-					<span class="sec_name">My Desktop</span>
-				<%}%>
-			
-			<%if (arf.isPublicView()==true){%>
+				<%if (arf.isPublicView()==true){%>
 				<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 					<tr>
     					<td width="740" valign="top">	

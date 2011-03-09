@@ -1,30 +1,36 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 
+<!-- Individual YUI CSS files -->
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+
 <style type="text/css">
 
 .yui-tt{ background: LightYellow; border-color: black }
+.yui-skin-sam .yui-dt th{background:#C7D4DB}
 
 .all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 100%}
-.all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px;}
+.all_markup th {padding:.25em;background-color:#000000; font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
-.all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
+.all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
 .all_markup .yui-dt {width: 100%;} 
-.all_markup .yui-dt-even {background-color:#FFFFFF;} 
-.all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
-.all_markup .yui-dt-selected {background-color:#A7CC25;} /*green*/
+.all_markup .yui-dt-even td {background-color:#FFFFFF;} 
+.all_markup .yui-dt-odd td {background-color:#DBE5F1;} /* blue*/
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
-.all_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
-.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
-.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
-.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
+.all_markup .yui-dt-headcontainer {background-color: #C7D4DB; color: black;}
+.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer td{color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
+.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer td{color: black;background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
+.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc td{background-color: rgb(153, 153, 153); color: black;}
+
 
 .versions_markup {margin:1em; overflow: auto; } 
 .versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
 .versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
-.versions_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
+.versions_markup .yui-dt-odd td {background-color:#A7CC25;} /* a light blue color -- this doesn't apply (?)' */ 
 .versions_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .versions_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
 .versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
@@ -58,9 +64,6 @@
 </style>
 
 
-<!-- Individual YUI CSS files -->
-<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
@@ -218,36 +221,36 @@
 </c:set>
 
 <c:set var="trans_headerType">
-	 <digi:trn>Type</digi:trn>  
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Type</digi:trn>  </b></span>
 </c:set>
 <c:set var="trans_headerFileName">
-	 <digi:trn>Resource Name</digi:trn>  
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Resource Name</digi:trn> </b></span> 
 </c:set>
 <c:set var="trans_headerSelect">
-	 <digi:trn>Select</digi:trn>  
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Select</digi:trn> </b></span> 
 </c:set>
 <c:set var="trans_headerResourceTitle">
-	 <digi:trn>Title</digi:trn>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Title</digi:trn></b></span>  
 </c:set>
 <c:set var="trans_headerDate">
-	 <digi:trn>Date</digi:trn>
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b> <digi:trn>Date</digi:trn></b></span>
 </c:set>
 <c:set var="trans_fileSize">
-	 <digi:trn>Size (MB)</digi:trn>
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Size (MB)</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerContentType">
-	<digi:trn>Content Type</digi:trn>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Content Type</digi:trn></b></span>  
 </c:set>
 <c:set var="trans_cmDocType">
-	<digi:trn>Document Type</digi:trn>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Document Type</digi:trn></b></span>  
 </c:set>
 
 <c:set var="trans_headerLabels">
-	 <digi:trn>Labels</digi:trn>
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Labels</digi:trn></b></span>
 </c:set>
 
 <c:set var="trans_headerActions">
-	<digi:trn>Actions</digi:trn>
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Actions</digi:trn></b></span>
 </c:set>
 
 
@@ -280,7 +283,7 @@
 </c:set>
 
 <c:set var="trans_headerYearofPubl">
-	<digi:trn>Publ. Year</digi:trn>
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Publ. Year</digi:trn></b></span>
 </c:set>
 
 <c:set var="trans_wait">
@@ -394,7 +397,7 @@ myTable.enhanceMarkup = function(markupName) {
 		                           		     	] 
 	                           		     	};
     
-	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
 	
 	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 	//dataTable.width='100%';
@@ -402,6 +405,8 @@ myTable.enhanceMarkup = function(markupName) {
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 	dataTable.subscribe("paginateEvent",hideCategories);
+	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
+	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
 		dataTable.showEmptyMessage();

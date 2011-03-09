@@ -153,7 +153,6 @@ border-right: 1px solid rgb(208, 208, 208);
  var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
  var createFromTemplate="<digi:trn jsFriendly='true'>Create From Template</digi:trn>";
 function setHoveredTable(tableId, hasHeaders) {
-
 	var tableElement = document.getElementById(tableId);
 	if(tableElement){
     var className = 'Hovered',
@@ -648,4 +647,3 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 	
 <%@include file="documentManagerDivHelper.jsp" %>
-

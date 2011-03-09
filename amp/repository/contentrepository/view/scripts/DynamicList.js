@@ -31,7 +31,7 @@ function FilterWrapper() {
 }
 FilterWrapper.prototype.labelsToHTML	= function() {
 	var ret	= "";
-	ret += "<b>Labels:</b> ";
+	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>Labels:</b><span> "; 
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
@@ -40,14 +40,14 @@ FilterWrapper.prototype.labelsToHTML	= function() {
 		}
 	}
 	else
-		ret += "none";
+		ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'>none<span>";
 	
 	//ret += "<a style='cursor:pointer; text-decoration:none; color: blue'> Add Label </a>";
 	return ret;	
 }
 
 FilterWrapper.prototype.fToHTML	= function() {
-	var ret	= "<b>Filters:</b> ";
+	var ret	= "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>Filters:</b><span> ";
 	if ( this.filterDocTypeIds.length > 0 ) {
 		var docType		= this.filterDocTypeIds[0];
 		if ( docType.key != "0" ) {

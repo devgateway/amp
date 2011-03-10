@@ -8,7 +8,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
-public class AmpFundingDetail implements Serializable
+public class AmpFundingDetail implements Serializable, Cloneable
 {
 	private Long ampFundDetailId ;
 	private Integer fiscalYear ;
@@ -406,8 +406,11 @@ public class AmpFundingDetail implements Serializable
 			this.fixedRateBaseCurrency = fixedRateBaseCurrency;
 		}
 
+
+		@Override
+		public Object clone() throws CloneNotSupportedException {
+			// TODO Auto-generated method stub
+			return super.clone();
+		}
+
 }
-
-
-
-

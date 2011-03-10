@@ -5,7 +5,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpFundingMTEFProjection {
+public class AmpFundingMTEFProjection implements Cloneable {
 
 		private Long ampFundingMTEFProjectionId ;
 		private AmpCategoryValue projected; 
@@ -51,7 +51,9 @@ public class AmpFundingMTEFProjection {
 		public void setProjectionDate(Date projectionDate) {
 			this.projectionDate = projectionDate;
 		}
-		
-		
-
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			// TODO Auto-generated method stub
+			return super.clone();
+		}
 }

@@ -3,7 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AmpClosingDateHistory	implements Serializable {
+public class AmpClosingDateHistory	implements Serializable, Cloneable {
 		
 	private Long ampClosingDteHstryId;
 	private AmpFunding ampFundingId;
@@ -64,6 +64,12 @@ public class AmpClosingDateHistory	implements Serializable {
 	 */
 	public void setAmpFundingId(AmpFunding funding) {
 		ampFundingId = funding;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 
 }	

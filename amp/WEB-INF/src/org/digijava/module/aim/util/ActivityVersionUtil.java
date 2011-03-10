@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -9,6 +10,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -17,14 +19,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.DateConversion;
@@ -199,9 +205,35 @@ public class ActivityVersionUtil {
 		logger.info("Updated amp_activity view.");
 	}
 
+	/**
+	 * Create a copy of the {@link AmpActivity} with all Collections linked with
+	 * it and ready to save.
+	 * 
+	 * @param in
+	 * @param member
+	 * @return
+	 * @throws CloneNotSupportedException
+	 */
 	public static AmpActivity cloneActivity(AmpActivity in, AmpTeamMember member) throws CloneNotSupportedException {
 		AmpActivity out = (AmpActivityVersion) in.clone();
-		out.setActivityContacts(null);
+
+		if (out.getActivityContacts() != null && out.getActivityContacts().size() > 0) {
+			Set<AmpActivityContact> setAmpCont = new HashSet<AmpActivityContact>();
+			Iterator<AmpActivityContact> iActCont = out.getActivityContacts().iterator();
+			while (iActCont.hasNext()) {
+				AmpActivityContact auxAmpCont = iActCont.next();
+				AmpActivityContact newAmpCont = (AmpActivityContact) auxAmpCont.clone();
+				newAmpCont.prepareMerge(out);
+				setAmpCont.add(newAmpCont);
+			}
+			out.setActivityContacts(setAmpCont);
+		} else {
+			// Delete this apparently redundant line of code and u will get
+			// "org.hibernate.HibernateException: Found shared references to a collection"
+			// when the PersistentSet is initialized but with 0 elements :(
+			out.setActivityContacts(null);
+		}
+
 		out.setActivityCreator(member);
 		out.setActivityDocuments(null);
 		out.setActivityPrograms(null);
@@ -222,7 +254,22 @@ public class ActivityVersionUtil {
 		out.setCosts(null);
 		// out.setCreatedBy(null);
 		out.setDocuments(null);
-		out.setFunding(null);
+
+		// Fundings.
+		if (out.getFunding() != null && out.getFunding().size() > 0) {
+			Set<AmpFunding> setAmpFunding = new HashSet<AmpFunding>();
+			Iterator<AmpFunding> iActFunding = out.getFunding().iterator();
+			while (iActFunding.hasNext()) {
+				AmpFunding auxAmpFunding = iActFunding.next();
+				AmpFunding newAmpFunding = (AmpFunding) auxAmpFunding.clone();
+				newAmpFunding.prepareMerge(out);
+				setAmpFunding.add(newAmpFunding);
+			}
+			out.setFunding(setAmpFunding);
+		} else {
+			out.setFunding(null);
+		}
+
 		out.setIndicators(null);
 		out.setInternalIds(null);
 		out.setIssues(null);
@@ -236,26 +283,74 @@ public class ActivityVersionUtil {
 		out.setReferenceDocs(null);
 		out.setRegionalFundings(null);
 		out.setRegionalObservations(null);
-		out.setSectors(null);
+
+		// Sectors.
+		if (out.getSectors() != null && out.getSectors().size() > 0) {
+			Set<AmpActivitySector> setAmpSect = new HashSet<AmpActivitySector>();
+			Iterator<AmpActivitySector> iActSect = out.getSectors().iterator();
+			while (iActSect.hasNext()) {
+				AmpActivitySector auxAmpSect = iActSect.next();
+				AmpActivitySector newAmpSect = (AmpActivitySector) auxAmpSect.clone();
+				newAmpSect.prepareMerge(out);
+				setAmpSect.add(newAmpSect);
+			}
+			out.setSectors(setAmpSect);
+		} else {
+			out.setSectors(null);
+		}
+
 		out.setSurvey(null);
 		out.setTeam(member.getAmpTeam());
 		out.setThemeId(null);
-		
-		/*AmpActivity out = new AmpActivityVersion();
-		out.setActivityApprovalDate(in.getApprovalDate());
-		out.setActivityCloseDate(in.getActivityCloseDate());
-		//out.setActivityCreator(in.getActivityCreator());
-		out.setActivityLevel(in.getActivityLevel());
-		out.setActivityStartDate(in.getActivityStartDate());
-		out.setActivitySummary(in.getActivitySummary());
-		out.setActualApprovalDate(in.getActivityApprovalDate());*/
 
 		return out;
 	}
 
 	public static IPAContract cloneIPAContract() {
 		IPAContract out = new IPAContract();
-		
+
 		return out;
+	}
+
+	/**
+	 * Initialize all collections (up to level 2) for an {@link AmpActivity}
+	 * object. Use it to prevent exceptions with lazy collections.
+	 * 
+	 * @param act
+	 * @return
+	 * @throws DgException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	public static AmpActivity initializeActivity(AmpActivity act) throws DgException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Method[] methods = AmpActivity.class.getDeclaredMethods();
+		for (int i = 0; i < methods.length; i++) {
+			if (methods[i].getName().contains("get") && methods[i].getReturnType().getName().contains("java.util.Set")) {
+				Object methodValue = methods[i].invoke(act, null);
+				Collection auxColl = (Collection) methodValue;
+				if (auxColl != null) {
+					auxColl.size();
+					Iterator iInner = auxColl.iterator();
+					while (iInner.hasNext()) {
+						Object auxInnerObject = iInner.next();
+						Method[] innerMethods = auxInnerObject.getClass().getDeclaredMethods();
+						for (int j = 0; j < innerMethods.length; j++) {
+							if (innerMethods[j].getName().contains("get")
+									&& innerMethods[j].getReturnType().getName().contains("java.util.Set")) {
+								Object innerMethodValue = innerMethods[j].invoke(auxInnerObject, null);
+								Collection auxInnerColl = (Collection) innerMethodValue;
+								if (auxInnerColl != null) {
+									auxInnerColl.size();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return act;
 	}
 }

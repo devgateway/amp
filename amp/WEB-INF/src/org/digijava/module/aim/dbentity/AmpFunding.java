@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.util.Output;
 
-public class AmpFunding implements Serializable, Versionable {
+public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Long ampFundingId;
 	private AmpOrganisation ampDonorOrgId;
 	private AmpActivity ampActivityId;
@@ -595,8 +596,60 @@ public class AmpFunding implements Serializable, Versionable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
 		this.ampActivityId = newActivity;
+		this.ampFundingId = null;
+		if (this.fundingDetails != null && this.fundingDetails.size() > 0) {
+			Set<AmpFundingDetail> auxSetFD = new HashSet<AmpFundingDetail>();
+			Iterator<AmpFundingDetail> iF = this.fundingDetails.iterator();
+			while (iF.hasNext()) {
+				AmpFundingDetail auxFD = iF.next();
+				AmpFundingDetail newFD = (AmpFundingDetail) auxFD.clone();
+				newFD.setAmpFundDetailId(null);
+				newFD.setAmpFundingId(this);
+				auxSetFD.add(newFD);
+			}
+			this.fundingDetails = auxSetFD;
+		} else {
+			this.fundingDetails = null;
+		}
+		
+		if (this.mtefProjections != null && this.mtefProjections.size() > 0) {
+			Set<AmpFundingMTEFProjection> auxSetMTEF = new HashSet<AmpFundingMTEFProjection>();
+			Iterator<AmpFundingMTEFProjection> iMTEF = this.mtefProjections.iterator();
+			while (iMTEF.hasNext()) {
+				AmpFundingMTEFProjection auxMTEF = iMTEF.next();
+				AmpFundingMTEFProjection newMTEF = (AmpFundingMTEFProjection) auxMTEF.clone();
+				newMTEF.setAmpFundingMTEFProjectionId(null);
+				newMTEF.setAmpFunding(this);
+				auxSetMTEF.add(newMTEF);
+			}
+			this.mtefProjections = auxSetMTEF;
+		} else {
+			this.mtefProjections = null;
+		}
+		
+		if (this.closingDateHistory != null && this.closingDateHistory.size() > 0) {
+			Set<AmpClosingDateHistory> auxSetDH = new HashSet<AmpClosingDateHistory>();
+			Iterator<AmpClosingDateHistory> iDH = this.closingDateHistory.iterator();
+			while (iDH.hasNext()) {
+				AmpClosingDateHistory auxDH = iDH.next();
+				AmpClosingDateHistory newDH = (AmpClosingDateHistory) auxDH.clone();
+				newDH.setAmpClosingDteHstryId(null);
+				newDH.setAmpFundingId(this);
+				auxSetDH.add(newDH);
+			}
+			this.closingDateHistory = auxSetDH;
+		} else {
+			this.closingDateHistory = null;
+		}
+		
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

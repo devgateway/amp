@@ -10,5 +10,5 @@ public interface Versionable {
 
 	public abstract Output getOutput();
 
-	public abstract Object prepareMerge(AmpActivity newActivity);
+	public abstract Object prepareMerge(AmpActivity newActivity) throws Exception;
 }

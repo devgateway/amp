@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Identifiable;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
 
-public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable, AmpComboboxDisplayable
+public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable, AmpComboboxDisplayable, Cloneable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -287,7 +287,9 @@ public void setAmpOrgId(AmpOrganisation org) {
 		return getChildren();
 	}
 
-	
-
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}	
 }

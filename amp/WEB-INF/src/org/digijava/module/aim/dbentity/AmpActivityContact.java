@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityContact implements Versionable, Comparable, Serializable {
+public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
 	
 	private Long id;
 	private AmpActivity activity;
@@ -78,8 +78,17 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
 		this.activity = newActivity;
+		this.id = null;
+		//this.contact = (AmpContact) this.contact.clone();
+		this.contact.getActivityContacts().add(this);
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

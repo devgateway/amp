@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivitySector implements Versionable, Serializable {
+public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
 	private Long ampActivitySectorId;
 	
@@ -102,8 +102,17 @@ public class AmpActivitySector implements Versionable, Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
 		this.activityId = newActivity;
+		this.ampActivitySectorId = null;
+		this.sectorId = (AmpSector) this.sectorId.clone();
+		//this.sectorId.setAmpSectorId(null);
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

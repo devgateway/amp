@@ -10,7 +10,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Dare
  *
  */
-public class AmpContact implements Comparable, Serializable {
+public class AmpContact implements Comparable, Serializable, Cloneable {
 	private Long id;
 	private String name;
 	private String lastname;
@@ -146,6 +146,12 @@ public class AmpContact implements Comparable, Serializable {
 
 	public void setNameAndLastName(String nameAndLastName) {
 		this.nameAndLastName = nameAndLastName;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 
 }

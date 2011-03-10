@@ -77,15 +77,17 @@ public class CompareActivityVersions extends DispatchAction {
 		// Load the activities.
 		vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
 		Hibernate.initialize(vForm.getActivityOne());
+		ActivityVersionUtil.initializeActivity(vForm.getActivityOne());
 		vForm.setActivityTwo((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityTwoId()));
 		Hibernate.initialize(vForm.getActivityTwo());
+		ActivityVersionUtil.initializeActivity(vForm.getActivityTwo());
 
 		vForm.setOldActivity(vForm.getActivityOne());
 
 		// Retrieve annotated for versioning fields.
 		Field[] fields = AmpActivity.class.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
-			logger.warn(fields[i]);
+			//logger.info(fields[i]);
 			CompareOutput output = new CompareOutput();
 
 			if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
@@ -542,5 +544,22 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 		}
 		return output;
+	}
+
+	private Object initializeCollections(Session session, Object aux) {
+		try {
+			Hibernate.initialize(aux);
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			try {
+				// Should never enter here.
+				Hibernate.initialize(aux);
+			} catch (Exception e2) {
+				logger.error(e2);
+				e2.printStackTrace();
+			}
+		}
+		return aux;
 	}
 }

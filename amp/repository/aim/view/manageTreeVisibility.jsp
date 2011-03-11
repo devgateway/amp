@@ -118,7 +118,7 @@ function showDescriptionToolbox(id){
 	 <c:set var="translation">
          <digi:trn key="aim:addNoLevel">No Level</digi:trn>
         </c:set>
-	<p><digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/>
+	<p style="font-size:12px;"> &nbsp;<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" class="inputx" value="<%=session.getAttribute("templateName")%>"/>
 	<c:set var="templateId">
 		<bean:write name="template" property="root.id"/>
 	</c:set>

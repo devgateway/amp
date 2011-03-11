@@ -1722,8 +1722,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      Session session = PersistenceManager.getRequestDBSession();
 	      String oql = "select count(distinct act) from " + AmpActivityProgram.class.getName() + " prog ";
 	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-	      oql += " order by act.name";
-
 	      Query query = session.createQuery(oql);
 
 	      setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
@@ -1776,8 +1774,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
         String s = " and act in (select f.ampActivityId from " +
-             AmpFunding.class.getName() + " f " +
-            " where f.ampDonorOrgId.ampOrgId in ("+donorOrgId+")) ";
+             AmpFunding.class.getName() + " f inner join f.ampDonorOrgId org " +
+            " where org.ampOrgId in ("+donorOrgId+")) ";
         oql += s;
       }
       if (statusCode != null&&!"".equals(statusCode.trim())) {

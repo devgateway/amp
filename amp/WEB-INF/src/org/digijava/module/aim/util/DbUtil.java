@@ -4887,8 +4887,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct org.ampDonorOrgId from " + AmpFunding.class.getName()
-                + " org order by org.ampDonorOrgId.acronym asc";
+            String queryString = "select distinct org from " + AmpFunding.class.getName()+" f inner join f.ampDonorOrgId org "
+                + " order by org.acronym asc";
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception ex) {

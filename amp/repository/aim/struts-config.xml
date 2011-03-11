@@ -1671,7 +1671,7 @@
     <action name="aimDesktopForm" path="/aim/previewPrintMyDesktop" scope="session" type="org.digijava.module.aim.action.PreviewPrintDesktop" validate="false">
       <forward name="forward" path="/showLayout.do?layout=printMyDesktop" />
     </action>
-
+ 	<action name="aimNPDForm" path="/aim/getProgramIndicators" scope="request" type="org.digijava.module.aim.action.GetProgramIndicators" validate="false" />
     <action name="aimNPDForm" path="/aim/nationalPlaningDashboard" scope="request" type="org.digijava.module.aim.action.ViewNPD" validate="false">
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPD" />
     </action>

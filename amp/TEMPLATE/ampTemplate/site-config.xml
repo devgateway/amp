@@ -562,9 +562,8 @@
 			  <page>cms_categoryDetails</page>
 			</module>
 		</page-group>
-		<page-group masterLayout="clearLayout" tile="body">
+		<page-group masterLayout="popup" tile="body">
 			<module name="aim">
-				<page>amp_viewNPDoptions</page>
 				<page>amp_viewNPDgrid</page>
 			</module>
 		</page-group>

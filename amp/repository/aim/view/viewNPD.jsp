@@ -23,7 +23,17 @@
 .ygtvlabel {
 	font-size: 12px;
 }
+.ygtvtp, .ygtvtph, .ygtvlp,.ygtvlph{
+background:url(/TEMPLATE/ampTemplate/img_2/ico_plus.gif) 0 0 no-repeat;
+}
+.ygtvtm,.ygtvtmh,.ygtvlm,.ygtvlmh{
+background:url(/TEMPLATE/ampTemplate/img_2/ico_minus.gif) 0 0 no-repeat; ;
+}
+.ygtvfocus, .ygtvfocus .ygtvlabel,.ygtvfocus .ygtvlabel:link,.ygtvfocus .ygtvlabel:visited,.ygtvfocus .ygtvlabel:hover{
+background-color:#FFFFFF;
+}
 </style>
+
 
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"/>"></script>
@@ -49,7 +59,6 @@
 	</c:set>
 	<html:hidden property="defaultProgram" styleId="defaultProgram" />
 	<script language="javascript" type="text/javascript">
-
 	var ptree;
 	var curProgId;
 	var curProgNodeIndex;
@@ -230,8 +239,8 @@
 								</td>
 								<td>
 								<div class="jtree"
-									style="width: 350px; height: 350px; overflow: auto;">
-								<div id="tree"></div>
+									style="width: 350px; height: 350px; overflow: scroll;">
+								<div id="tree" ></div>
 								</div>
 								</td>
 							</tr>

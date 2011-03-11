@@ -254,6 +254,7 @@ function setCurProgData(progId,nodeId){
 		//draw tree
 		ptree.treetop.draw();
 		ptree.treetop.collapseAll();
+		
 
 
 		openNodeIter=0;

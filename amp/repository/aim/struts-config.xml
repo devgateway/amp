@@ -1675,9 +1675,7 @@
     <action name="aimNPDForm" path="/aim/nationalPlaningDashboard" scope="request" type="org.digijava.module.aim.action.ViewNPD" validate="false">
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPD" />
     </action>
-    <action name="aimNPDForm" path="/aim/npdOptions" scope="request" type="org.digijava.module.aim.action.ViewNPDoptions" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=amp_viewNPDoptions" />
-    </action>
+   
     <action name="aimNPDForm" path="/aim/npdGrid" scope="request" type="org.digijava.module.aim.action.ViewNpdGrid" validate="false">
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPDgrid" />
     </action>

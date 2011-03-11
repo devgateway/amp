@@ -15,8 +15,9 @@ jktreeview.prototype.addItem=function(itemText, noderef, href){
 }
 
 jktreeview.prototype.addHTMLItem=function(itemHTML, noderef, href){
-	var noderef=(typeof noderef!="undefined" && noderef!="")? noderef : this.treetop.getRoot()
-	var treebranch= new YAHOO.widget.HTMLNode(itemHTML,noderef, true, true)
+	var noderef=(typeof noderef!="undefined" && noderef!="")? noderef : this.treetop.getRoot();
+	var treebranch= new YAHOO.widget.HTMLNode(itemHTML,noderef, true, true);
+	treebranch.enableHighlight=false;
 	if (typeof href!="undefined")
 		treebranch.href=href
 	return treebranch

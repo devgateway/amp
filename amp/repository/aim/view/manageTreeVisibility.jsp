@@ -97,11 +97,11 @@ function showDescriptionToolbox(id){
 	<tr>
 		<td>
 <form name="searchBoxForm" onsubmit="searchFunction();return false;">
-<div id="searchBox" style="background-color:#F2F2F2;  font-size:12px; padding:2px 2px 2px 2px;">
-<digi:trn key="fm:search:searchTitle">Search</digi:trn> 
+<div id="searchBox" style="background-color:#F2F2F2;  font-size:12px; padding:10px;">
+<digi:trn key="fm:search:searchTitle"><b>Search</b></digi:trn> 
 <input type="Text" id="searchCriteria"/> 
-<input type="submit" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
-<input type="button" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
+<input type="submit" class="buttonx" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
+<input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
 
 <input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
 <input type="button" id="nextSearchButton" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>

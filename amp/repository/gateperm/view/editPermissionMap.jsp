@@ -88,8 +88,4 @@ function submitForm(mode) {
 				</td>
   		</tr>
 	</table>
- </digi:form>   							
-			
-			
-			
-			
+ </digi:form>

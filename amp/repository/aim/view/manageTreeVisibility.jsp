@@ -89,19 +89,14 @@ function showDescriptionToolbox(id){
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
-	<digi:trn key="aim:ampFeatureManager">
+	<!--<digi:trn key="aim:ampFeatureManager">
 		Feature Manager 
-	</digi:trn>
+	</digi:trn>-->
 	<!-- end table title -->										
 	</td></tr>
-	
-	<tr>
-		<td><br/>
-		</td>
-	</tr>
 	<tr>
 		<td>
-<div id="searchBox" style="border:1px solid black;padding:2px 2px 2px 2px;"  style="position: fixed;">
+<div id="searchBox" style="background-color:#F2F2F2; padding:2px 2px 2px 2px; position: fixed;">
 <form name="searchBoxForm" onsubmit="searchFunction();return false;">
 <digi:trn key="fm:search:searchTitle">Search</digi:trn> 
 <input type="Text" id="searchCriteria"/> 

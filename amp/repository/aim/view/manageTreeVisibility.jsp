@@ -82,8 +82,7 @@ function showDescriptionToolbox(id){
 	min-height:200px;
 	_height:200px;
 	padding:10px 10px 10px 10px;
- 	background-color: #EEEEEE;
-	border:1px solid black;
+ 	background-color: #FFFFFF;
 }
 	</style>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	

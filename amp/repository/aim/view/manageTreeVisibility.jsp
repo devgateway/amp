@@ -87,17 +87,17 @@ function showDescriptionToolbox(id){
 }
 	</style>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
-	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+	<!--<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">-->
 	<!-- Table title -->
 	<!--<digi:trn key="aim:ampFeatureManager">
 		Feature Manager 
 	</digi:trn>-->
 	<!-- end table title -->										
-	</td></tr>
+	<!--</td></tr> -->
 	<tr>
 		<td>
-<div id="searchBox" style="background-color:#F2F2F2; padding:2px 2px 2px 2px; position: fixed;">
 <form name="searchBoxForm" onsubmit="searchFunction();return false;">
+<div id="searchBox" style="background-color:#F2F2F2;  font-size:12px; padding:2px 2px 2px 2px;">
 <digi:trn key="fm:search:searchTitle">Search</digi:trn> 
 <input type="Text" id="searchCriteria"/> 
 <input type="submit" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
@@ -106,8 +106,7 @@ function showDescriptionToolbox(id){
 <input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
 <input type="button" id="nextSearchButton" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
 <span id="spanSearchMessage" style="color:red;font-weight:bold;"></span>
-</form>
-</div>
+</div></form>
 
 	<digi:instance property="aimVisibilityManagerForm" />
 	<digi:form action="/visibilityManager.do" method="post" >

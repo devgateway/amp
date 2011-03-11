@@ -128,10 +128,11 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activity = newActivity;
-		this.ampOrgRoleId = null;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpOrgRole aux = (AmpOrgRole) clone();
+		aux.activity = newActivity;
+		aux.ampOrgRoleId = null;
+		return aux;
 	}
 	@Override
 	public Object clone() throws CloneNotSupportedException {

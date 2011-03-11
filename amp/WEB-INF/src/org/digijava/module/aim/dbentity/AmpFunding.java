@@ -597,54 +597,55 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
-		this.ampActivityId = newActivity;
-		this.ampFundingId = null;
-		if (this.fundingDetails != null && this.fundingDetails.size() > 0) {
+		AmpFunding aux = (AmpFunding) clone();
+		aux.ampActivityId = newActivity;
+		aux.ampFundingId = null;
+		if (aux.fundingDetails != null && aux.fundingDetails.size() > 0) {
 			Set<AmpFundingDetail> auxSetFD = new HashSet<AmpFundingDetail>();
-			Iterator<AmpFundingDetail> iF = this.fundingDetails.iterator();
+			Iterator<AmpFundingDetail> iF = aux.fundingDetails.iterator();
 			while (iF.hasNext()) {
 				AmpFundingDetail auxFD = iF.next();
 				AmpFundingDetail newFD = (AmpFundingDetail) auxFD.clone();
 				newFD.setAmpFundDetailId(null);
-				newFD.setAmpFundingId(this);
+				newFD.setAmpFundingId(aux);
 				auxSetFD.add(newFD);
 			}
-			this.fundingDetails = auxSetFD;
+			aux.fundingDetails = auxSetFD;
 		} else {
-			this.fundingDetails = null;
+			aux.fundingDetails = null;
 		}
 		
-		if (this.mtefProjections != null && this.mtefProjections.size() > 0) {
+		if (aux.mtefProjections != null && aux.mtefProjections.size() > 0) {
 			Set<AmpFundingMTEFProjection> auxSetMTEF = new HashSet<AmpFundingMTEFProjection>();
-			Iterator<AmpFundingMTEFProjection> iMTEF = this.mtefProjections.iterator();
+			Iterator<AmpFundingMTEFProjection> iMTEF = aux.mtefProjections.iterator();
 			while (iMTEF.hasNext()) {
 				AmpFundingMTEFProjection auxMTEF = iMTEF.next();
 				AmpFundingMTEFProjection newMTEF = (AmpFundingMTEFProjection) auxMTEF.clone();
 				newMTEF.setAmpFundingMTEFProjectionId(null);
-				newMTEF.setAmpFunding(this);
+				newMTEF.setAmpFunding(aux);
 				auxSetMTEF.add(newMTEF);
 			}
-			this.mtefProjections = auxSetMTEF;
+			aux.mtefProjections = auxSetMTEF;
 		} else {
-			this.mtefProjections = null;
+			aux.mtefProjections = null;
 		}
 		
-		if (this.closingDateHistory != null && this.closingDateHistory.size() > 0) {
+		if (aux.closingDateHistory != null && aux.closingDateHistory.size() > 0) {
 			Set<AmpClosingDateHistory> auxSetDH = new HashSet<AmpClosingDateHistory>();
-			Iterator<AmpClosingDateHistory> iDH = this.closingDateHistory.iterator();
+			Iterator<AmpClosingDateHistory> iDH = aux.closingDateHistory.iterator();
 			while (iDH.hasNext()) {
 				AmpClosingDateHistory auxDH = iDH.next();
 				AmpClosingDateHistory newDH = (AmpClosingDateHistory) auxDH.clone();
 				newDH.setAmpClosingDteHstryId(null);
-				newDH.setAmpFundingId(this);
+				newDH.setAmpFundingId(aux);
 				auxSetDH.add(newDH);
 			}
-			this.closingDateHistory = auxSetDH;
+			aux.closingDateHistory = auxSetDH;
 		} else {
-			this.closingDateHistory = null;
+			aux.closingDateHistory = null;
 		}
 		
-		return this;
+		return aux;
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityClosingDates implements Serializable, Versionable {
+public class AmpActivityClosingDates implements Serializable, Versionable, Cloneable {
 		
 	private Long ampActivityClosingDateId;
 	private AmpActivity ampActivityId;
@@ -99,8 +99,15 @@ public class AmpActivityClosingDates implements Serializable, Versionable {
 		return this.type.toString()+this.closingDate;
 	}
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.ampActivityId = newActivity;	
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpActivityClosingDates aux = (AmpActivityClosingDates) clone();
+		aux.ampActivityId = newActivity;
+		aux.ampActivityClosingDateId = null;
+		return aux;
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

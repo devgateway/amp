@@ -12,7 +12,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpRegionalFunding implements Versionable, Serializable {
+public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
 	
 	private Long ampRegionalFundingId;
 	private AmpActivity activity;
@@ -239,8 +239,16 @@ public class AmpRegionalFunding implements Versionable, Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activity = newActivity;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpRegionalFunding aux = (AmpRegionalFunding) clone();
+		aux.activity = newActivity;
+		aux.ampRegionalFundingId = null;
+		return aux;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

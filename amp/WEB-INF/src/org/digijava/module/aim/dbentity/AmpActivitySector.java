@@ -103,11 +103,12 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
-		this.activityId = newActivity;
-		this.ampActivitySectorId = null;
-		this.sectorId = (AmpSector) this.sectorId.clone();
+		AmpActivitySector aux = (AmpActivitySector) clone();
+		aux.activityId = newActivity;
+		aux.ampActivitySectorId = null;
+		//aux.sectorId = (AmpSector) aux.sectorId.clone();
 		//this.sectorId.setAmpSectorId(null);
-		return this;
+		return aux;
 	}
 
 	@Override

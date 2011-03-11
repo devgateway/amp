@@ -79,11 +79,12 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
-		this.activity = newActivity;
-		this.id = null;
+		AmpActivityContact aux = (AmpActivityContact) clone();
+		aux.activity = newActivity;
+		aux.id = null;
 		//this.contact = (AmpContact) this.contact.clone();
-		this.contact.getActivityContacts().add(this);
-		return this;
+		this.contact.getActivityContacts().add(aux);
+		return aux;
 	}
 
 	@Override

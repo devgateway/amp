@@ -185,22 +185,23 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
-		this.ampActivityId = newActivity;
-		this.ampAHSurveyId = null;
-		if (this.responses != null && this.responses.size() > 0) {
+		AmpAhsurvey aux = (AmpAhsurvey) clone();
+		aux.ampActivityId = newActivity;
+		aux.ampAHSurveyId = null;
+		if (aux.responses != null && aux.responses.size() > 0) {
 			Set<AmpAhsurveyResponse> responses = new HashSet<AmpAhsurveyResponse>();
-			Iterator<AmpAhsurveyResponse> i = this.responses.iterator();
+			Iterator<AmpAhsurveyResponse> i = aux.responses.iterator();
 			while (i.hasNext()) {
 				AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) i.next().clone();
-				newResp.setAmpAHSurveyId(this);
+				newResp.setAmpAHSurveyId(aux);
 				newResp.setAmpReponseId(null);
 				responses.add(newResp);
 			}
-			this.responses = responses;
+			aux.responses = responses;
 		} else {
-			this.responses = null;
+			aux.responses = null;
 		}
-		return this;
+		return aux;
 	}
 	
 	@Override

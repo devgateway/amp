@@ -163,11 +163,12 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activities = new HashSet();
-		this.activities.add(newActivity);
-		this.ampComponentId = null;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpComponent aux = (AmpComponent) clone();
+		aux.activities = new HashSet();
+		aux.activities.add(newActivity);
+		aux.ampComponentId = null;
+		return aux;
 	}
 
 	@Override

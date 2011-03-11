@@ -74,10 +74,11 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
 	}
 
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.id = null;
-		this.ampActivity = newActivity;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpActivityDocument aux = (AmpActivityDocument) clone();
+		aux.id = null;
+		aux.ampActivity = newActivity;
+		return aux;
 	}
 
 	@Override

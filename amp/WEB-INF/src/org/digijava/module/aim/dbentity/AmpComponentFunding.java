@@ -235,10 +235,11 @@ public class AmpComponentFunding implements Versionable, Cloneable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activity = newActivity;
-		this.ampComponentFundingId = null;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpComponentFunding aux = (AmpComponentFunding) clone();
+		aux.activity = newActivity;
+		aux.ampComponentFundingId = null;
+		return aux;
 	}
 
 	@Override

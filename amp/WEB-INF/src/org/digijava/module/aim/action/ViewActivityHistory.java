@@ -34,26 +34,24 @@ public class ViewActivityHistory extends Action {
 
 		final Comparator<Object> compareVersions = new Comparator<Object>() {
 			public int compare(Object o1, Object o2) {
-				AmpActivityVersion a1 = (AmpActivityVersion) o1;
-				AmpActivityVersion a2 = (AmpActivityVersion) o2;
-				// return a1.getAmpActivityId().compareTo(a2.getAmpActivityId()
-				// * -1);
-
-				/*
-				 * if (a1.getCreatedDate() == null && a2.getCreatedDate() ==
-				 * null) { return 0; } else if (a1.getCreatedDate() == null) {
-				 * return -1; } else if (a2.getCreatedDate() == null) { return
-				 * 1; }
-				 */
-				Long i1 = Long.valueOf(a1.getCreatedDate().getTime());
-				if (a1.getModifiedDate() != null) {
-					i1 = Long.valueOf(a1.getModifiedDate().getTime());
+				try {
+					AmpActivityVersion a1 = (AmpActivityVersion) o1;
+					AmpActivityVersion a2 = (AmpActivityVersion) o2;
+					Long i1 = Long.valueOf(a1.getCreatedDate().getTime());
+					if (a1.getModifiedDate() != null) {
+						i1 = Long.valueOf(a1.getModifiedDate().getTime());
+					}
+					Long i2 = Long.valueOf(a2.getCreatedDate().getTime());
+					if (a2.getModifiedDate() != null) {
+						i2 = Long.valueOf(a2.getModifiedDate().getTime());
+					}
+					return (i1.compareTo(i2)) * -1;
+				} catch (NullPointerException e) {
+					// Data error.
+					logger.error(e);
+					e.printStackTrace();
+					return 0;
 				}
-				Long i2 = Long.valueOf(a2.getCreatedDate().getTime());
-				if (a2.getModifiedDate() != null) {
-					i2 = Long.valueOf(a2.getModifiedDate().getTime());
-				}
-				return (i1.compareTo(i2)) * -1;
 			}
 		};
 

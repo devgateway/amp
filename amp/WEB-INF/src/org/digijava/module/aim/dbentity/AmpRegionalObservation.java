@@ -98,10 +98,11 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 	}
 
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activity = newActivity;
-		this.ampRegionalObservationId = null;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpRegionalObservation aux = (AmpRegionalObservation) clone();
+		aux.activity = newActivity;
+		aux.ampRegionalObservationId = null;
+		return aux;
 	}
 
 	@Override

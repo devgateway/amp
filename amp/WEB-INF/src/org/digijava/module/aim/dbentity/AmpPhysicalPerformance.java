@@ -201,10 +201,11 @@ public class AmpPhysicalPerformance implements Serializable, Versionable, Clonea
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.ampActivityId = newActivity;
-		this.ampPpId = null;
-		return this;
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		AmpPhysicalPerformance aux = (AmpPhysicalPerformance) clone();
+		aux.ampActivityId = newActivity;
+		aux.ampPpId = null;
+		return aux;
 	}
 
 	@Override

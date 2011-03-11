@@ -26,6 +26,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -39,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -232,9 +234,9 @@ public class ActivityVersionUtil {
 			Iterator<AmpActivityContact> iActCont = out.getActivityContacts().iterator();
 			while (iActCont.hasNext()) {
 				AmpActivityContact auxAmpCont = iActCont.next();
-				AmpActivityContact newAmpCont = (AmpActivityContact) auxAmpCont.clone();
-				newAmpCont.prepareMerge(out);
-				setAmpCont.add(newAmpCont);
+				//AmpActivityContact newAmpCont = (AmpActivityContact) auxAmpCont.clone();
+				auxAmpCont = (AmpActivityContact) auxAmpCont.prepareMerge(out);
+				setAmpCont.add(auxAmpCont);
 			}
 			out.setActivityContacts(setAmpCont);
 		} else {
@@ -251,8 +253,8 @@ public class ActivityVersionUtil {
 			Set<AmpActivityDocument> set = new HashSet<AmpActivityDocument>();
 			Iterator<AmpActivityDocument> i = out.getActivityDocuments().iterator();
 			while (i.hasNext()) {
-				AmpActivityDocument aux = (AmpActivityDocument) i.next().clone();
-				aux.prepareMerge(out);
+				AmpActivityDocument aux = (AmpActivityDocument) i.next();
+				aux = (AmpActivityDocument) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setActivityDocuments(set);
@@ -269,7 +271,21 @@ public class ActivityVersionUtil {
 		out.setAuthor(null);
 		out.setCategories(null);
 		out.setChapter(null);
-		out.setClosingDates(null);
+
+		// Closing Dates.
+		if (out.getClosingDates() != null && out.getClosingDates().size() > 0) {
+			Set<AmpActivityClosingDates> set = new HashSet<AmpActivityClosingDates>();
+			Iterator<AmpActivityClosingDates> i = out.getClosingDates().iterator();
+			while (i.hasNext()) {
+				AmpActivityClosingDates aux = (AmpActivityClosingDates) i.next();
+				aux = (AmpActivityClosingDates) aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setClosingDates(set);
+		} else {
+			out.setClosingDates(null);
+		}
+
 		out.setComponentes(null);
 
 		// Component Fundings.
@@ -277,8 +293,8 @@ public class ActivityVersionUtil {
 			Set<AmpComponentFunding> set = new HashSet<AmpComponentFunding>();
 			Iterator<AmpComponentFunding> i = out.getComponentFundings().iterator();
 			while (i.hasNext()) {
-				AmpComponentFunding aux = (AmpComponentFunding) i.next().clone();
-				aux.prepareMerge(out);
+				AmpComponentFunding aux = (AmpComponentFunding) i.next();
+				aux = (AmpComponentFunding) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setComponentFundings(set);
@@ -291,8 +307,8 @@ public class ActivityVersionUtil {
 			Set<AmpPhysicalPerformance> set = new HashSet<AmpPhysicalPerformance>();
 			Iterator<AmpPhysicalPerformance> i = out.getComponentProgress().iterator();
 			while (i.hasNext()) {
-				AmpPhysicalPerformance aux = (AmpPhysicalPerformance) i.next().clone();
-				aux.prepareMerge(out);
+				AmpPhysicalPerformance aux = (AmpPhysicalPerformance) i.next();
+				aux = (AmpPhysicalPerformance) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setComponentProgress(set);
@@ -305,8 +321,8 @@ public class ActivityVersionUtil {
 			Set<AmpComponent> set = new HashSet<AmpComponent>();
 			Iterator<AmpComponent> i = out.getComponents().iterator();
 			while (i.hasNext()) {
-				AmpComponent aux = (AmpComponent) i.next().clone();
-				aux.prepareMerge(out);
+				AmpComponent aux = (AmpComponent) i.next();
+				aux = (AmpComponent) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setComponents(set);
@@ -314,7 +330,20 @@ public class ActivityVersionUtil {
 			out.setComponents(null);
 		}
 
-		out.setContracts(null);
+		// IPA.
+		if (out.getContracts() != null && out.getContracts().size() > 0) {
+			Set<IPAContract> set = new HashSet<IPAContract>();
+			Iterator<IPAContract> i = out.getContracts().iterator();
+			while (i.hasNext()) {
+				IPAContract aux = (IPAContract) i.next();
+				aux = (IPAContract) aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setContracts(set);
+		} else {
+			out.setContracts(null);
+		}
+		
 		out.setCosts(null);
 		// out.setCreatedBy(null);
 		out.setDocuments(null);
@@ -325,9 +354,8 @@ public class ActivityVersionUtil {
 			Iterator<AmpFunding> iActFunding = out.getFunding().iterator();
 			while (iActFunding.hasNext()) {
 				AmpFunding auxAmpFunding = iActFunding.next();
-				AmpFunding newAmpFunding = (AmpFunding) auxAmpFunding.clone();
-				newAmpFunding.prepareMerge(out);
-				setAmpFunding.add(newAmpFunding);
+				auxAmpFunding = (AmpFunding) auxAmpFunding.prepareMerge(out);
+				setAmpFunding.add(auxAmpFunding);
 			}
 			out.setFunding(setAmpFunding);
 		} else {
@@ -342,8 +370,8 @@ public class ActivityVersionUtil {
 			Set<AmpIssues> set = new HashSet<AmpIssues>();
 			Iterator<AmpIssues> i = out.getIssues().iterator();
 			while (i.hasNext()) {
-				AmpIssues aux = (AmpIssues) i.next().clone();
-				aux.prepareMerge(out);
+				AmpIssues aux = (AmpIssues) i.next();
+				aux = (AmpIssues) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setIssues(set);
@@ -356,8 +384,8 @@ public class ActivityVersionUtil {
 			Set<AmpLocation> set = new HashSet<AmpLocation>();
 			Iterator<AmpLocation> i = out.getLocations().iterator();
 			while (i.hasNext()) {
-				AmpLocation aux = (AmpLocation) i.next().clone();
-				aux.prepareMerge(out);
+				AmpLocation aux = (AmpLocation) i.next();
+				aux = (AmpLocation) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setLocations(set);
@@ -375,8 +403,8 @@ public class ActivityVersionUtil {
 			Set<AmpOrgRole> set = new HashSet<AmpOrgRole>();
 			Iterator<AmpOrgRole> i = out.getOrgrole().iterator();
 			while (i.hasNext()) {
-				AmpOrgRole aux = (AmpOrgRole) i.next().clone();
-				aux.prepareMerge(out);
+				AmpOrgRole aux = (AmpOrgRole) i.next();
+				aux = (AmpOrgRole) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setOrgrole(set);
@@ -386,15 +414,28 @@ public class ActivityVersionUtil {
 
 		out.setProgress(null);
 		out.setReferenceDocs(null);
-		out.setRegionalFundings(null);
+
+		// Regional Funding.
+		if (out.getRegionalFundings() != null && out.getRegionalFundings().size() > 0) {
+			Set<AmpRegionalFunding> set = new HashSet<AmpRegionalFunding>();
+			Iterator<AmpRegionalFunding> i = out.getRegionalFundings().iterator();
+			while (i.hasNext()) {
+				AmpRegionalFunding aux = (AmpRegionalFunding) i.next();
+				aux = (AmpRegionalFunding) aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setRegionalFundings(set);
+		} else {
+			out.setRegionalFundings(null);
+		}
 
 		// Regional Observations.
 		if (out.getRegionalObservations() != null && out.getRegionalObservations().size() > 0) {
 			Set<AmpRegionalObservation> set = new HashSet<AmpRegionalObservation>();
 			Iterator<AmpRegionalObservation> i = out.getRegionalObservations().iterator();
 			while (i.hasNext()) {
-				AmpRegionalObservation aux = (AmpRegionalObservation) i.next().clone();
-				aux.prepareMerge(out);
+				AmpRegionalObservation aux = (AmpRegionalObservation) i.next();
+				aux = (AmpRegionalObservation) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setRegionalObservations(set);
@@ -408,9 +449,8 @@ public class ActivityVersionUtil {
 			Iterator<AmpActivitySector> iActSect = out.getSectors().iterator();
 			while (iActSect.hasNext()) {
 				AmpActivitySector auxAmpSect = iActSect.next();
-				AmpActivitySector newAmpSect = (AmpActivitySector) auxAmpSect.clone();
-				newAmpSect.prepareMerge(out);
-				setAmpSect.add(newAmpSect);
+				auxAmpSect = (AmpActivitySector) auxAmpSect.prepareMerge(out);
+				setAmpSect.add(auxAmpSect);
 			}
 			out.setSectors(setAmpSect);
 		} else {
@@ -422,8 +462,8 @@ public class ActivityVersionUtil {
 			Set<AmpAhsurvey> set = new HashSet<AmpAhsurvey>();
 			Iterator<AmpAhsurvey> i = out.getSurvey().iterator();
 			while (i.hasNext()) {
-				AmpAhsurvey aux = (AmpAhsurvey) i.next().clone();
-				aux.prepareMerge(out);
+				AmpAhsurvey aux = (AmpAhsurvey) i.next();
+				aux = (AmpAhsurvey) aux.prepareMerge(out);
 				set.add(aux);
 			}
 			out.setSurvey(set);

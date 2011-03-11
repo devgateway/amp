@@ -94,15 +94,16 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
-		this.activity = newActivity;
-		this.ampIssueId = null;
-		if (this.measures != null && this.measures.size() > 0) {
+		AmpIssues aux = (AmpIssues) clone();
+		aux.activity = newActivity;
+		aux.ampIssueId = null;
+		if (aux.measures != null && aux.measures.size() > 0) {
 			Set<AmpMeasure> setMeasures = new HashSet<AmpMeasure>();
-			Iterator<AmpMeasure> i = this.measures.iterator();
+			Iterator<AmpMeasure> i = aux.measures.iterator();
 			while (i.hasNext()) {
 				AmpMeasure newMeasure = (AmpMeasure) i.next().clone();
 				newMeasure.setAmpMeasureId(null);
-				newMeasure.setIssue(this);
+				newMeasure.setIssue(aux);
 				if (newMeasure.getActors() != null && newMeasure.getActors().size() > 0) {
 					Set<AmpActor> setActors = new HashSet<AmpActor>();
 					Iterator<AmpActor> j = newMeasure.getActors().iterator();
@@ -118,11 +119,11 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 				}
 				setMeasures.add(newMeasure);
 			}
-			this.measures = setMeasures;
+			aux.measures = setMeasures;
 		} else {
-			this.measures = null;
+			aux.measures = null;
 		}
-		return this;
+		return aux;
 	}
 	
 	@Override

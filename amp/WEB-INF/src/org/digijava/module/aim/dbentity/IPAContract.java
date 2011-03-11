@@ -730,37 +730,31 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	};
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		IPAContract newIPA = null;
-		try {
-			newIPA = (IPAContract) clone();
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+		IPAContract aux = (IPAContract) clone();
+		aux.activity = newActivity;
+		aux.id = null;
 
-			newIPA.activity = newActivity;
-			newIPA.id = null;
-			
-			if (this.getDisbursements() != null) {
-				Iterator<IPAContractDisbursement> iterDisb = this.getDisbursements().iterator();
-				while (iterDisb.hasNext()) {
-					IPAContractDisbursement auxDisb = iterDisb.next();
-					IPAContractDisbursement newIPADisb = (IPAContractDisbursement) auxDisb.clone();
-					newIPADisb.setId(null);
-					newIPADisb.setContract(newIPA);
-				}
+		if (aux.getDisbursements() != null) {
+			Iterator<IPAContractDisbursement> iterDisb = aux.getDisbursements().iterator();
+			while (iterDisb.hasNext()) {
+				IPAContractDisbursement auxDisb = iterDisb.next();
+				IPAContractDisbursement newIPADisb = (IPAContractDisbursement) auxDisb.clone();
+				newIPADisb.setId(null);
+				newIPADisb.setContract(aux);
 			}
-			if (this.getAmendments() != null) {
-				Iterator<IPAContractAmendment> iterAmend = this.getAmendments().iterator();
-				while (iterAmend.hasNext()) {
-					IPAContractAmendment auxAmend = iterAmend.next();
-					IPAContractAmendment newIPAAmend = (IPAContractAmendment) auxAmend.clone();
-					newIPAAmend.setId(null);
-					newIPAAmend.setContract(newIPA);
-				}
-			}
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return newIPA;
+		if (aux.getAmendments() != null) {
+			Iterator<IPAContractAmendment> iterAmend = aux.getAmendments().iterator();
+			while (iterAmend.hasNext()) {
+				IPAContractAmendment auxAmend = iterAmend.next();
+				IPAContractAmendment newIPAAmend = (IPAContractAmendment) auxAmend.clone();
+				newIPAAmend.setId(null);
+				newIPAAmend.setContract(aux);
+			}
+		}
+
+		return aux;
 	}
 	
 	@Override

@@ -560,9 +560,8 @@ function setSearchMessage(stringMessage){
                     </logic:iterate>
                 </div>
         </div>
-		<br />
 	<c:set var="translation">
-		<digi:trn key="aim:treeVisibilitiSaveChanges" styleClass="buttonx">Save Changes</digi:trn>
+		<digi:trn key="aim:treeVisibilitiSaveChanges">Save Changes</digi:trn>
 	</c:set>
 	<html:submit style="dr-menu" value="${translation}" property="saveTreeVisibility" />
 	</digi:form>

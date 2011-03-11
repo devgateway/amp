@@ -563,7 +563,7 @@ function setSearchMessage(stringMessage){
 	<c:set var="translation">
 		<digi:trn key="aim:treeVisibilitiSaveChanges">Save Changes</digi:trn>
 	</c:set>
-	<html:submit style="dr-menu" value="${translation}" property="saveTreeVisibility" />
+	<html:submit style="dr-menu" value="${translation}" styleClass="buttonx" property="saveTreeVisibility" />
 	</digi:form>
 		</td>
 	</tr>

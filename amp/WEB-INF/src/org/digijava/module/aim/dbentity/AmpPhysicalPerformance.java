@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpPhysicalPerformance implements Serializable, Versionable
+public class AmpPhysicalPerformance implements Serializable, Versionable, Cloneable
 {
 	
 	private Long ampPpId ;
@@ -203,6 +203,13 @@ public class AmpPhysicalPerformance implements Serializable, Versionable
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) {
 		this.ampActivityId = newActivity;
+		this.ampPpId = null;
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

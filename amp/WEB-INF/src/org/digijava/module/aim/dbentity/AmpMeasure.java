@@ -3,7 +3,7 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
-public class AmpMeasure  implements Serializable
+public class AmpMeasure  implements Serializable, Cloneable
 {
 
 	private Long ampMeasureId ;
@@ -47,6 +47,12 @@ public class AmpMeasure  implements Serializable
 			return measure.getAmpMeasureId().equals(ampMeasureId);
 		}
 		throw new ClassCastException();
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 	
 }

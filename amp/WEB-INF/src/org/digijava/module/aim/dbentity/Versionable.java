@@ -10,5 +10,14 @@ public interface Versionable {
 
 	public abstract Output getOutput();
 
+	/**
+	 * Implement this method to prepare a persistent object (it exists in the DB
+	 * and is associated to an activity) so a new copy can be saved in the DB
+	 * linked to newActivity.
+	 * 
+	 * @param newActivity
+	 * @return
+	 * @throws Exception
+	 */
 	public abstract Object prepareMerge(AmpActivity newActivity) throws Exception;
 }

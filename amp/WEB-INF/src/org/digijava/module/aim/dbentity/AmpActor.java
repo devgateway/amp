@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-public class AmpActor  implements Serializable
+public class AmpActor  implements Serializable, Cloneable
 {
 
 	private Long ampActorId ;
@@ -45,6 +45,12 @@ public class AmpActor  implements Serializable
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 	
 

@@ -27,10 +27,19 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.DateConversion;
@@ -217,6 +226,7 @@ public class ActivityVersionUtil {
 	public static AmpActivity cloneActivity(AmpActivity in, AmpTeamMember member) throws CloneNotSupportedException {
 		AmpActivity out = (AmpActivityVersion) in.clone();
 
+		// Contacts.
 		if (out.getActivityContacts() != null && out.getActivityContacts().size() > 0) {
 			Set<AmpActivityContact> setAmpCont = new HashSet<AmpActivityContact>();
 			Iterator<AmpActivityContact> iActCont = out.getActivityContacts().iterator();
@@ -235,7 +245,21 @@ public class ActivityVersionUtil {
 		}
 
 		out.setActivityCreator(member);
-		out.setActivityDocuments(null);
+
+		// Activity Documents.
+		if (out.getActivityDocuments() != null && out.getActivityDocuments().size() > 0) {
+			Set<AmpActivityDocument> set = new HashSet<AmpActivityDocument>();
+			Iterator<AmpActivityDocument> i = out.getActivityDocuments().iterator();
+			while (i.hasNext()) {
+				AmpActivityDocument aux = (AmpActivityDocument) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setActivityDocuments(set);
+		} else {
+			out.setActivityDocuments(null);
+		}
+
 		out.setActivityPrograms(null);
 		out.setActPrograms(null);
 		out.setActRankColl(null);
@@ -247,9 +271,49 @@ public class ActivityVersionUtil {
 		out.setChapter(null);
 		out.setClosingDates(null);
 		out.setComponentes(null);
-		out.setComponentFundings(null);
-		out.setComponentProgress(null);
-		out.setComponents(null);
+
+		// Component Fundings.
+		if (out.getComponentFundings() != null && out.getComponentFundings().size() > 0) {
+			Set<AmpComponentFunding> set = new HashSet<AmpComponentFunding>();
+			Iterator<AmpComponentFunding> i = out.getComponentFundings().iterator();
+			while (i.hasNext()) {
+				AmpComponentFunding aux = (AmpComponentFunding) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setComponentFundings(set);
+		} else {
+			out.setComponentFundings(null);
+		}
+
+		// Physical Progress.
+		if (out.getComponentProgress() != null && out.getComponentProgress().size() > 0) {
+			Set<AmpPhysicalPerformance> set = new HashSet<AmpPhysicalPerformance>();
+			Iterator<AmpPhysicalPerformance> i = out.getComponentProgress().iterator();
+			while (i.hasNext()) {
+				AmpPhysicalPerformance aux = (AmpPhysicalPerformance) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setComponentProgress(set);
+		} else {
+			out.setComponentProgress(null);
+		}
+
+		// Components.
+		if (out.getComponents() != null && out.getComponents().size() > 0) {
+			Set<AmpComponent> set = new HashSet<AmpComponent>();
+			Iterator<AmpComponent> i = out.getComponents().iterator();
+			while (i.hasNext()) {
+				AmpComponent aux = (AmpComponent) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setComponents(set);
+		} else {
+			out.setComponents(null);
+		}
+
 		out.setContracts(null);
 		out.setCosts(null);
 		// out.setCreatedBy(null);
@@ -272,17 +336,71 @@ public class ActivityVersionUtil {
 
 		out.setIndicators(null);
 		out.setInternalIds(null);
-		out.setIssues(null);
-		out.setLocations(null);
+
+		// Issues - Measures - Actors.
+		if (out.getIssues() != null && out.getIssues().size() > 0) {
+			Set<AmpIssues> set = new HashSet<AmpIssues>();
+			Iterator<AmpIssues> i = out.getIssues().iterator();
+			while (i.hasNext()) {
+				AmpIssues aux = (AmpIssues) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setIssues(set);
+		} else {
+			out.setIssues(null);
+		}
+
+		// Locations.
+		if (out.getLocations() != null && out.getLocations().size() > 0) {
+			Set<AmpLocation> set = new HashSet<AmpLocation>();
+			Iterator<AmpLocation> i = out.getLocations().iterator();
+			while (i.hasNext()) {
+				AmpLocation aux = (AmpLocation) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setLocations(set);
+		} else {
+			out.setLocations(null);
+		}
+
 		out.setMember(null);
 		out.setModality(null);
 		out.setModifiedBy(member);
 		out.setNotes(null);
-		out.setOrgrole(null);
+
+		// Org.Roles.
+		if (out.getOrgrole() != null && out.getOrgrole().size() > 0) {
+			Set<AmpOrgRole> set = new HashSet<AmpOrgRole>();
+			Iterator<AmpOrgRole> i = out.getOrgrole().iterator();
+			while (i.hasNext()) {
+				AmpOrgRole aux = (AmpOrgRole) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setOrgrole(set);
+		} else {
+			out.setOrgrole(null);
+		}
+
 		out.setProgress(null);
 		out.setReferenceDocs(null);
 		out.setRegionalFundings(null);
-		out.setRegionalObservations(null);
+
+		// Regional Observations.
+		if (out.getRegionalObservations() != null && out.getRegionalObservations().size() > 0) {
+			Set<AmpRegionalObservation> set = new HashSet<AmpRegionalObservation>();
+			Iterator<AmpRegionalObservation> i = out.getRegionalObservations().iterator();
+			while (i.hasNext()) {
+				AmpRegionalObservation aux = (AmpRegionalObservation) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setRegionalObservations(set);
+		} else {
+			out.setRegionalObservations(null);
+		}
 
 		// Sectors.
 		if (out.getSectors() != null && out.getSectors().size() > 0) {
@@ -299,15 +417,22 @@ public class ActivityVersionUtil {
 			out.setSectors(null);
 		}
 
-		out.setSurvey(null);
+		// PI Survey.
+		if (out.getSurvey() != null && out.getSurvey().size() > 0) {
+			Set<AmpAhsurvey> set = new HashSet<AmpAhsurvey>();
+			Iterator<AmpAhsurvey> i = out.getSurvey().iterator();
+			while (i.hasNext()) {
+				AmpAhsurvey aux = (AmpAhsurvey) i.next().clone();
+				aux.prepareMerge(out);
+				set.add(aux);
+			}
+			out.setSurvey(set);
+		} else {
+			out.setSurvey(null);
+		}
+
 		out.setTeam(member.getAmpTeam());
 		out.setThemeId(null);
-
-		return out;
-	}
-
-	public static IPAContract cloneIPAContract() {
-		IPAContract out = new IPAContract();
 
 		return out;
 	}

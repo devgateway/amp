@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.digijava.module.aim.util.Output;
 
 
-public class AmpOrgRole implements Serializable, Versionable
+public class AmpOrgRole implements Serializable, Versionable, Cloneable
 {
     private Long ampOrgRoleId;
     private AmpActivity activity;
@@ -130,6 +130,12 @@ public class AmpOrgRole implements Serializable, Versionable
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) {
 		this.activity = newActivity;
+		this.ampOrgRoleId = null;
 		return this;
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }	

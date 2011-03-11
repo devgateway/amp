@@ -9,6 +9,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import org.digijava.module.aim.util.Output;
 
 import com.rc.retroweaver.runtime.Collections;
 
-public class AmpAhsurvey implements Versionable, Serializable {
+public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 
 	private Long ampAHSurveyId;
 
@@ -165,7 +166,6 @@ public class AmpAhsurvey implements Versionable, Serializable {
 				new Output(new ArrayList(), new String[] { "<br/>", "Questions:" }, new Object[] { "" }));
 		Output questions = out.getOutputs().get(out.getOutputs().size() - 1);
 
-		String responses = "";
 		if (this.responses != null) {
 			List<AmpAhsurveyResponse> auxList = new ArrayList<AmpAhsurveyResponse>(this.responses);
 			Collections.sort(auxList, surveyComparator);
@@ -184,8 +184,28 @@ public class AmpAhsurvey implements Versionable, Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
 		this.ampActivityId = newActivity;
+		this.ampAHSurveyId = null;
+		if (this.responses != null && this.responses.size() > 0) {
+			Set<AmpAhsurveyResponse> responses = new HashSet<AmpAhsurveyResponse>();
+			Iterator<AmpAhsurveyResponse> i = this.responses.iterator();
+			while (i.hasNext()) {
+				AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) i.next().clone();
+				newResp.setAmpAHSurveyId(this);
+				newResp.setAmpReponseId(null);
+				responses.add(newResp);
+			}
+			this.responses = responses;
+		} else {
+			this.responses = null;
+		}
 		return this;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

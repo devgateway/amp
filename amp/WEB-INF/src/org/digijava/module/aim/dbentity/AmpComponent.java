@@ -20,7 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * Persister class for Components
  * @author Priyajith
  */
-public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable {
+public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
 	private Long ampComponentId;
 	private String title;
@@ -166,6 +166,13 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	public Object prepareMerge(AmpActivity newActivity) {
 		this.activities = new HashSet();
 		this.activities.add(newActivity);
+		this.ampComponentId = null;
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

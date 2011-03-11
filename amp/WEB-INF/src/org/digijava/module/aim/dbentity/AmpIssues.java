@@ -3,11 +3,13 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpIssues  implements Serializable, Versionable
+public class AmpIssues  implements Serializable, Versionable, Cloneable
 {
 
 	private Long ampIssueId ;
@@ -91,8 +93,41 @@ public class AmpIssues  implements Serializable, Versionable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
 		this.activity = newActivity;
+		this.ampIssueId = null;
+		if (this.measures != null && this.measures.size() > 0) {
+			Set<AmpMeasure> setMeasures = new HashSet<AmpMeasure>();
+			Iterator<AmpMeasure> i = this.measures.iterator();
+			while (i.hasNext()) {
+				AmpMeasure newMeasure = (AmpMeasure) i.next().clone();
+				newMeasure.setAmpMeasureId(null);
+				newMeasure.setIssue(this);
+				if (newMeasure.getActors() != null && newMeasure.getActors().size() > 0) {
+					Set<AmpActor> setActors = new HashSet<AmpActor>();
+					Iterator<AmpActor> j = newMeasure.getActors().iterator();
+					while (j.hasNext()) {
+						AmpActor newActor = (AmpActor) j.next().clone();
+						newActor.setAmpActorId(null);
+						newActor.setMeasure(newMeasure);
+						setActors.add(newActor);
+					}
+					newMeasure.setActors(setActors);
+				} else {
+					newMeasure.setActors(null);
+				}
+				setMeasures.add(newMeasure);
+			}
+			this.measures = setMeasures;
+		} else {
+			this.measures = null;
+		}
 		return this;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

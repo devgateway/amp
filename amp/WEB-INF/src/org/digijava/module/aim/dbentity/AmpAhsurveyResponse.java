@@ -8,7 +8,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpAhsurveyResponse implements Versionable {
+public class AmpAhsurveyResponse implements Versionable, Cloneable {
 
 	private Long ampReponseId;
 	private AmpAhsurvey ampAHSurveyId;
@@ -94,5 +94,10 @@ public class AmpAhsurveyResponse implements Versionable {
 	public Object prepareMerge(AmpActivity newActivity) {
 		// TODO Auto-generated method stub
 		return this;
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

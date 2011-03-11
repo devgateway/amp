@@ -11,7 +11,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpComponentFunding implements Versionable {
+public class AmpComponentFunding implements Versionable, Cloneable {
 	
 	private Long ampComponentFundingId;
 	private AmpActivity activity;
@@ -237,6 +237,13 @@ public class AmpComponentFunding implements Versionable {
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) {
 		this.activity = newActivity;
+		this.ampComponentFundingId = null;
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

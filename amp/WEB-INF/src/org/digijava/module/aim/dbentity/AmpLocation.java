@@ -8,7 +8,7 @@ import java.util.Set;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.Output;
 
-public class AmpLocation implements Serializable, Versionable
+public class AmpLocation implements Serializable, Versionable, Cloneable
 {
 	private Long ampLocationId ;
 	private String iso3Code ;
@@ -329,8 +329,17 @@ public class AmpLocation implements Serializable, Versionable
 	
 	@Override
 	public Object prepareMerge(AmpActivity newActivity) {
-		this.activities = new HashSet();
+		if (this.activities == null) {
+			this.activities = new HashSet();
+		}
 		this.activities.add(newActivity);
+		// this.ampLocationId = null;
 		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }	

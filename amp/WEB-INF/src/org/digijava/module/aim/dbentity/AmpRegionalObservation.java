@@ -1,10 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
-public class AmpRegionalObservation implements Serializable {
+import org.digijava.module.aim.util.Output;
+
+public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
 	private Long ampRegionalObservationId;
 	private String name;
@@ -58,5 +62,51 @@ public class AmpRegionalObservation implements Serializable {
 
 	public void setObservationDate(Date observationDate) {
 		this.observationDate = observationDate;
+	}
+
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpRegionalObservation aux = (AmpRegionalObservation) obj;
+		String original = this.name != null ? this.name : "";
+		String copy = aux.name != null ? aux.name : "";
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "&nbsp;Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+						: "Empty Name" }));
+		if (this.observationDate != null) {
+			out.getOutputs().add(
+					new Output(null, new String[] { "&nbsp;Date:&nbsp;" }, new Object[] { this.observationDate }));
+		}
+
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		String value = " " + this.name + this.observationDate;
+		//Iterator<AmpRegionalObservationMeasure> i = this.regionalObservationMeasures.iterator() 
+		return value;
+	}
+
+	@Override
+	public Object prepareMerge(AmpActivity newActivity) {
+		this.activity = newActivity;
+		this.ampRegionalObservationId = null;
+		return this;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

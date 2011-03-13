@@ -105,6 +105,7 @@
 			document.getElementById("activityOneId").value = selectedVersions[0].value;
 			document.getElementById("activityTwoId").value = selectedVersions[1].value;
 			document.getElementById('showMergeColumn').value = "false";
+			document.getElementById("ampActivityId").value = <%=request.getParameter("ampActivityId")%>;
 			document.aimCompareActivityVersionsForm.submit();
 		}
 	}

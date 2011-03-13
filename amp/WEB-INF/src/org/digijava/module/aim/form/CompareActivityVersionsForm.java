@@ -26,6 +26,8 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	private String[] mergedValues = new String[] {};
 
+	private Long ampActivityId;
+
 	public Long getActivityOneId() {
 		return activityOneId;
 	}
@@ -96,5 +98,13 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	public String[] getMergedValues() {
 		return mergedValues;
+	}
+
+	public Long getAmpActivityId() {
+		return ampActivityId;
+	}
+
+	public void setAmpActivityId(Long ampActivityId) {
+		this.ampActivityId = ampActivityId;
 	}
 }

@@ -91,6 +91,6 @@
 <input type="hidden" name="activityTwoId" id="activityTwoId" />
 <input type="hidden" name="showMergeColumn" id="showMergeColumn" />
 <input type="hidden" name="method" id="method" />
+<input type="hidden" name="ampActivityId" id="ampActivityId" />
 <input type="button" id="SubmitButton" value="Compare versions" onclick="submitCompare()"/>
 </digi:form>
-

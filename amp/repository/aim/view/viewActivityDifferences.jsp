@@ -44,6 +44,7 @@
 <digi:form action="/compareActivityVersions.do" method="post" styleId="compareForm">
 	<html:hidden property="showMergeColumn" styleId="showMergeColumn"/>
 	<html:hidden property="method" styleId="method"/>
+	<html:hidden property="ampActivityId" styleId="ampActivityId"/>
 	
 	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
@@ -56,12 +57,12 @@
 		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;" class="contentstyle" id="ajaxcontentarea">
 			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
 				<tr>
-					<td height="33" background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+					<td background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
 	            		<div align="center">
 	                		<strong><digi:trn>Value name</digi:trn></strong>
 	            		</div>
 	        		</td>
-					<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+					<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>First version (Older)</digi:trn></strong>
 	            		</div>
@@ -72,18 +73,18 @@
 		                		&nbsp;
 		            		</div>
 		        		</td>
-		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; width: 29%">
 		            		<div align="center">
 		                		<strong><digi:trn>Merge</digi:trn></strong>
 		            		</div>
 		        		</td>
-		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px;">
 		            		<div align="center">
 		                		&nbsp;
 		            		</div>
 		        		</td>
 	        		</logic:equal>
-	        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>Second version (Newer)</digi:trn></strong>
 	            		</div>
@@ -91,10 +92,10 @@
 				</tr>
 				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
 					<tr>
-						<td align="left" valign="center" style="padding-left: 5px;" width="8%" class="inside">
+						<td align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
 							<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
 						</td>
-						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+						<td align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
 							<div id="left${index}">
 								<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
 								<bean:write name="iter" property="stringOutput[1]" filter="false"/>
@@ -109,14 +110,14 @@
 							<td align="left" valign="top" style="padding-left: 5px;" class="inside">
 								<div id="merge${index}">&nbsp;</div>
 							</td>
-							<td align="center" valign="middle" class="inside">
+							<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
 								<button type="button" onClick="javascript:right(${index});" style="border: none; background-color: transparent">
 									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 								</button>	
 							</td>
 							<input type="hidden" id='mergedValues[${index}]' value="" name="mergedValues[${index}]"/>
 						</logic:equal>
-						<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+						<td align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
 							<div id="right${index}">
 								<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
 								<bean:write name="iter" property="stringOutput[0]" filter="false"/>

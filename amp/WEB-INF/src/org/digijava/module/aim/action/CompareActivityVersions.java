@@ -436,6 +436,7 @@ public class CompareActivityVersions extends DispatchAction {
 		if (hasErrors) {
 			saveErrors(request, errors);
 			vForm.setShowMergeColumn(true);
+			vForm.setMethod("enableMerge");
 			return mapping.findForward("forward");
 		}
 

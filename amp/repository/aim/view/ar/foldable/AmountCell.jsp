@@ -5,5 +5,5 @@
 <bean:define id="amountCell" name="viewable" type="org.dgfoundation.amp.ar.cell.AmountCell" scope="request" toScope="page"/>
 
 <div class="desktop_project_count_sel">
-	<bean:write name="amountCell"/>&nbsp;
+	<bean:write name="amountCell"/>
 </div>

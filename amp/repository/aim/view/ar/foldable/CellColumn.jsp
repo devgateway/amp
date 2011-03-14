@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -32,7 +33,7 @@
 			<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
 		</logic:notPresent>
 	</logic:equal>
-	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+	<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	<logic:equal name="columnNo" value="0">
 	</a>
 	</logic:equal>
@@ -47,8 +48,19 @@
 		<digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
 	</a>
 	</logic:equal>
-	<logic:notEqual name="columnNo" value="0">
-		<div class="desktop_project_count_sel">&nbsp;</div>
-	</logic:notEqual>
+	<%
+		String parent = cellColumn.getParent().toString();
+		String name = ArConstants.COLUMN_TOTAL;
+		if (parent.contains("(") && parent.contains("Total Costs")) {%>
+		<logic:notEqual name="columnNo" value="0">
+			<div class="desktop_project_count_sel">0</div>
+		</logic:notEqual>
+	<%}else{%>
+		<logic:notEqual name="columnNo" value="0">
+			<div class="desktop_project_count_sel" style="text-align: left;font-style: italic;">
+				<%=cellColumn.getName().trim()%>&nbsp;<digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
+			</div>
+		</logic:notEqual>
+	<%}%>
 <%}%>
 </td>

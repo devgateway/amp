@@ -182,7 +182,7 @@
 	
 }
 
-.yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:12px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
+.yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
 
 
 .yuiamp-skin-amp .yuiampmenuitemlabel, A.yuiampmenuitemlabel:visited{
@@ -190,7 +190,7 @@
 	padding: 0 5px 0 10px;
 	text-decoration: none;
 	text-transform:uppercase;
-	font-size:12px;
+	font-size:11px;
 	font-weight:bold;
 }
 .yuiamp-skin-amp .yuiampmenuitemlabel .helptext {
@@ -238,5 +238,5 @@
 }
 
 
-.yuiampmenuitem_drop {border-bottom:1px solid #CCCCCC;}
+.yuiampmenuitem_drop {border-bottom:1px solid #CCCCCC;border-right:1px solid #CCCCCC;border-left:1px solid #CCCCCC;}
 .bd_drop  {border:0px 1px 1px 1px solid #CCCCCC; background-color:#FFFFFF; margin-top:5px;}

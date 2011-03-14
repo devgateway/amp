@@ -80,10 +80,10 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
 .workspace_info {float:left; color:#000000; font-size:11px;}
-.workspace_choose {line-height:35px; font-size:17px; margin-top:25px;}
+.workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
 
 /* MENU */
-.main_menu {padding-top:15px; padding-bottom:15px; height:21px; width:1000px; margin-left:auto; margin-right:auto;}
+.main_menu {padding-top:2px; padding-bottom:8px; height:21px; width:1000px; margin-left:auto; margin-right:auto;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}
@@ -117,7 +117,7 @@ top_nav a {color:#FFFFFF;}
 .right_menu {margin-bottom:20px;}
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:222px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:12px; font-weight:bold; }
-.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:222px; }
+.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:220px; }
 .right_menu_cont {padding:10px; font-size:11px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
@@ -146,9 +146,9 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .desktop_project_name {font-size:11px;}
 .desktop_project_name_op {font-size:11px; color:#FF6000;font-weight:bolder;}
 .desktop_project_name_sel {background-color:#F9FFC4; border:1px solid #CCCCCC; padding:3px; font-size:11px;}
-.desktop_project_count {font-size:11px;}
-.desktop_project_count_bolder {font-size:11px;font-weight:bolder;}
-.desktop_project_count_sel {font-size:11px; background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC;}
+.desktop_project_count {font-size:11px;text-align:right;}
+.desktop_project_count_bolder {font-size:11px;font-weight:bolder;text-align:right;}
+.desktop_project_count_sel {font-size:11px; background-color:#F9FFC4; padding:3px; border:1px solid #CCCCCC;text-align:right;}
 .organization_box {background-color:#EFEFEF; font-size:11px; margin-bottom:5px;}
 .organization_box_content {padding:10px;}
 .adding_funding_to_org {background-color:#F8F8F8; border-left:1px solid #EFEFEF; border-right:1px solid #EFEFEF; border-bottom:1px solid #EFEFEF;}

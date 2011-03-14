@@ -16,7 +16,7 @@
 	</logic:present>
 	<logic:empty name="textCell" property="shortTextVersion">...</logic:empty>
 		<bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;
-</div>
+
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">
@@ -24,7 +24,9 @@
 		<bean:write name="textCell" filter="false"/> 
 	</div>
 	
-<div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> Full Text',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>full text</u>]
+<div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> Full Text',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">
+<font style="font-family: Arial,Verdana,Helvetica,sans-serif;">[Full text]</font> 
 </logic:equal>
 </logic:notEqual>
+</div>
 

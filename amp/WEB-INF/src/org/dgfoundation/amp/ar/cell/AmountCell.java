@@ -125,7 +125,7 @@ public class AmountCell extends Cell {
 		// mf.setMaximumFractionDigits(2);
 		double am = getAmount();
 		if (am == 0)
-			return " ";
+			return "0";
 		else
 			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
 	}

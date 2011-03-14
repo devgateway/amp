@@ -266,6 +266,7 @@ public class AddressBookActions extends DispatchAction {
 				List<ContactPropertyHelper> emails=null;
 				List<ContactPropertyHelper> phones=null;
 				List<ContactPropertyHelper> faxes=null;
+				if(contactProperties!=null)
 				for (ContactPropertyHelper property : contactProperties) {
 					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
 						if(emails==null){

@@ -13,59 +13,97 @@
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
 
 
 
 <style>
-.yui-skin-sam .yui-dt th,.yui-skin-sam .yui-dt th a {
-	color: #000000;
+.yui-skin-sam .yui-dt thead th {
+	background-color: #C7D4DB;
+	color: #000;
+	height: 30px;
+	border-color: #fff;
+	border-style: solid;
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 0;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.yui-skin-sam .yui-dt th .yui-dt-liner {
+	font-size: 12px;
+	text-align: center;
 	font-weight: bold;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+.yui-skin-sam .yui-dt td .yui-dt-liner {
+	font-size: 12px;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+.yui-skin-sam tr.yui-dt-odd,.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc
+	{
+	background-color: #dbe5f1;
+}
+
+.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,.yui-skin-sam tr.yui-dt-even td.yui-dt-desc
+	{
+	background-color: #FFF;
+}
+
+.yui-skin-sam tr.yui-dt-highlighted td,.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc,.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc
+	{
+	background-color: #a5bcf2;
+}
+
+
+.yui-skin-sam a.yui-pg-page {
+	padding-right: 10px;
 	font-size: 11px;
-	text-decoration: none;
-	vertical-align: bottom;
+	border-right: 1px solid rgb(208, 208, 208);
 }
 
-
-
-.yui-skin-sam .yui-dt td {
-	color: #000000;
-	font-size: 11px;
-	text-decoration: none;
-	vertical-align: bottom;
-}
-.yui-skin-sam a.yui-pg-page{
-margin-left: 2px;
-padding-right: 7px;
-font-size: 11px;
-border-right: 1px solid rgb(208, 208, 208);
+.yui-skin-sam .yui-pg-pages {
+	border: 0px;
+	padding-left: 0px;
 }
 
-.yui-skin-sam .yui-pg-pages{
-border: 0px;
-padding-left: 0px;
-}
 .yui-pg-current-page {
-    background-color: #FFFFFF;
-    color: rgb(208, 208, 208);
-    padding: 0px;
+	background-color: #FFFFFF;
+	color: rgb(208, 208, 208);
+	padding: 0px;
 }
+
 .current-page {
-    background-color: #FF6000;
-    color: #FFFFFF;
-    padding: 2px;
-    font-weight: bold;
+	background-color: #FF6000;
+	color: #FFFFFF;
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.yui-pg-last {border: 0px}
+
+.yui-skin-sam span.yui-pg-first,.yui-skin-sam span.yui-pg-previous,.yui-skin-sam span.yui-pg-next,.yui-skin-sam span.yui-pg-last
+	{
+	display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+	margin-left: 2px;
+	padding-right: 7px;
+	border-right: 1px solid rgb(208, 208, 208);
 }
 
 .yui-tt {
-	visibility:hidden;
-	position:absolute;
-	color:#000;
-	background-color:#FFF;
-	font-size:11px;
-	padding:2px;
-	border:1px solid #CCC;
-	width:auto;
+	visibility: hidden;
+	position: absolute;
+	color: #000;
+	background-color: #FFF;
+	font-size: 11px;
+	padding: 2px;
+	border: 1px solid #CCC;
+	width: auto;
 }
 
 </style>
@@ -194,13 +232,13 @@ padding-left: 0px;
 		        };        
 		        
 		        var myColumnDefs = [
-		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true},
-		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true},
-		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false},
-		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false},
-		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true},
-		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false},
-		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false},
+		            {key:"title", label:"<digi:trn>TITLE</digi:trn>", sortable:true,className:"inside"},
+		            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true,className:"inside"},
+		            {key:"email", label:"<digi:trn>EMAIL</digi:trn>", sortable:false,className:"inside"},
+		            {key:"organizations", label:"<digi:trn>ORGANIZATIONS</digi:trn>", sortable:false,className:"inside"},
+		            {key:"function", label:"<digi:trn>FUNCTION</digi:trn>", sortable:true,className:"inside"},
+		            {key:"phones", label:"<digi:trn>PHONE</digi:trn>", sortable:false,className:"inside"},
+		            {key:"faxes", label:"<digi:trn>FAX</digi:trn>", sortable:false,className:"inside"},
 		            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
 		  
@@ -224,23 +262,23 @@ padding-left: 0px;
 		        	rowsPerPage:10,
 		        	//totalRecords:document.getElementById("totalResults").value,
 		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
-		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;<span class='paging'>[</span> {FirstPageLink}<span class='paging'>/</span>{PreviousPageLink} <span class='paging'>]</span>{PageLinks} <span class='paging'>[ </span>{NextPageLink}<span class='paging'>/</span>{LastPageLink} <span class='paging'>]</span>", 
+		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
 		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
 		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-		        	firstPageLinkLabel : 	"<digi:trn>first</digi:trn>", 
+		        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
 		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
-		        	firstPageLinkClass : "l_sm",
-		        	lastPageLinkClass: "l_sm",
-		        	nextPageLinkClass: "l_sm",
-		        	previousPageLinkClass: "l_sm",
+		        	firstPageLinkClass : "yui-pg-first l_sm",
+		        	lastPageLinkClass: "yui-pg-last l_sm",
+		        	nextPageLinkClass: "yui-pg-next l_sm",
+		        	previousPageLinkClass: "yui-pg-previous l_sm",
 		        	rowsPerPageDropdownClass:"l_sm",
 		        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last</digi:trn>',
+		        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
 		        	 // use custom page link labels
 		            pageLabelBuilder: function (page,paginator) {
 		                var curr = paginator.getCurrentPage();
 		                if(curr==page){
-		                	return "<span class='current-page'>"+page+"</span>|";
+		                	return "<span class='current-page'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</span>|";
 		                }
 		                else{
 		                	return page;
@@ -263,12 +301,7 @@ padding-left: 0px;
 		        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
 		        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
 		        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
-		        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
-		        
-		 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
-						var target = YAHOO.util.Event.getTarget(ev);
-						var record = this.getRecord(target);
-					});
+		       
 		        
 		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
 		        // Programmatically bring focus to the instance so arrow selection works immediately 
@@ -279,6 +312,7 @@ padding-left: 0px;
 		           oPayload.totalRecords = oResponse.meta.totalRecords;
 		           return oPayload;
 		       }
+		     
 
 				//further lines are for generating tooltips
 		        var showTimer,hideTimer;				

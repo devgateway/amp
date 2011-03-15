@@ -613,6 +613,7 @@ public class GisUtil {
     }
 
     public XMLDocument getImageMap(List mapData,
+                                   int mapLevel,
                                    int pointsPerShape,
                                    int canvasWidth,
                                    int canvasHeight,
@@ -622,6 +623,7 @@ public class GisUtil {
                                    float mapLowY) {
 
         XMLDocument retVal = new XMLDocument();
+        retVal.setCodeset("UTF-8");
         XML imageMapDefRoot = null;
         imageMapDefRoot = new XML("map");
         retVal.addElement(imageMapDefRoot);
@@ -660,17 +662,16 @@ public class GisUtil {
             XML segmentNode = null;
 
             segmentNode = new XML("segment");
-            if (gms.getSegmentName() != null) {
-                segmentNode.addAttribute("name", gms.getSegmentName());
+            //Add region DB Id also
+            Long regionId = DbUtil.getLocationIdByName(gms.getSegmentCode(), mapLevel);
+            if (regionId != null) {
+                segmentNode.addAttribute("regLocId", regionId);
             } else {
-                segmentNode.addAttribute("name", "Unspecified");
+                segmentNode.addAttribute("regLocId", -1);
             }
 
-            if (gms.getSegmentCode() != null) {
-                segmentNode.addAttribute("code", gms.getSegmentCode());
-            } else {
-                segmentNode.addAttribute("code", "Unspecified");
-            }
+            segmentNode.addAttribute("name", gms.getSegmentName());
+            segmentNode.addAttribute("code", gms.getSegmentCode());
             if (gms.getSegmentDescription() != null) {
                 segmentNode.addAttribute("desc", gms.getSegmentDescription());
             }

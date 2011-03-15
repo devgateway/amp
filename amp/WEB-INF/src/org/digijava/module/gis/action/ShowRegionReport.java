@@ -72,17 +72,35 @@ public class ShowRegionReport extends Action {
 
         }
         List secFundings;
-        if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){	
-        	Long donorid =new Long(request.getParameter("donorid"));
-        	secFundings = DbUtil.getSectorFoundingsByDonor(gisRegReportForm.
-                getSectorId(),donorid);
-        }else{
-        	secFundings = DbUtil.getSectorFoundings(gisRegReportForm.
-                    getSectorId());
+        String secIdStr = gisRegReportForm.getSectorIdStr();
+        Long secId = null;
+        int sectorQueryType = 0;
+        if (secIdStr.startsWith("sec_scheme_id_")) {
+            sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
+            secId = new Long(secIdStr.substring(14));
+        } else if (secIdStr.startsWith("sec_id_")) {
+            sectorQueryType = DbUtil.SELECT_SECTOR;
+            secId = new Long(secIdStr.substring(7));
+        } else {
+            sectorQueryType = DbUtil.SELECT_DEFAULT;
+            secId = new Long(secIdStr);
         }
 
+
+        if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){
+        	Long donorid =new Long(request.getParameter("donorid"));
+        	secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType);
+        }else{
+        	secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, null);
+        }
+
+        Long regLocId = Long.parseLong(request.getParameter("regLocId"));
+
+        String regionName = DbUtil.getLocationNameById(regLocId);
+        gisRegReportForm.setRegName(regionName);
+
         Object[] fundingList = getFundingsForLocation(
-                gisRegReportForm.getRegCode(),
+                regLocId,
                 secFundings,
                 new Integer(gisRegReportForm.getMapLevel()),
                 fStartDate.getTime(),
@@ -119,7 +137,7 @@ public class ShowRegionReport extends Action {
         return mapping.findForward("forward");
     }
 
-    private Object[] getFundingsForLocation(String locationCode,
+    private Object[] getFundingsForLocation(Long regLocCode,
                                             List activityList, int level,
                                             Date start, Date end) throws
             Exception {
@@ -187,9 +205,9 @@ public class ShowRegionReport extends Action {
                          fundingForSector.getDisbursement().floatValue() != 0f ||
                          fundingForSector.getExpenditure().floatValue() != 0f)) {
 
-                        String regCode = loc.getLocation().
-                                             getRegionLocation().getName();
-                            if (regCode.equals(locationCode)) {
+                        Long regCode = loc.getLocation().
+                                             getRegionLocation().getId();
+                             if (regCode.equals(regLocCode)) {
 
                                 Set donorOrg = new HashSet();
 
@@ -209,7 +227,7 @@ public class ShowRegionReport extends Action {
 
 
 
-                            if (regCode.equals(locationCode)) {
+                            if (regCode.equals(regLocCode)) {
 
                                 if (locationFundingMap.containsKey(regCode)) {
                                     FundingData existingVal = (FundingData)
@@ -312,7 +330,7 @@ public class ShowRegionReport extends Action {
                                         activityLocationFunding.setTopSectors(topLevelSectorNames);
                                         newVal.getActivityLocationFundingList().
                                         add(activityLocationFunding);
-                                        
+
                                         if (activityLocationFunding.getCommitment().intValue() != 0) {
                                         	activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(activityLocationFunding.
                                         			getCommitment().doubleValue()));
@@ -344,7 +362,7 @@ public class ShowRegionReport extends Action {
                                    equals("Zone")) {
 
 
-                            if (regCode.equals(locationCode)) {
+                            if (regCode.equals(regLocCode)) {
                                 if (locationFundingMap.containsKey(regCode)) {
                                     FundingData existingVal = (FundingData)
                                             locationFundingMap.get(
@@ -472,7 +490,7 @@ public class ShowRegionReport extends Action {
                                         } else {
                                             activityLocationFunding.setFmtDisbursement(null);
                                         }
-                                        
+
                                         if (activityLocationFunding.getExpenditure().intValue() != 0) {
                                             activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(
                                             		activityLocationFunding.getExpenditure().doubleValue()));

@@ -52,6 +52,7 @@
   var getFundDataValues = false;
 	
 	$(document).ready(function(){
+		
 		actionImgLoading = false;
 		$().mousemove(function(e){
 			$("#tooltipContainer").css({"left" : e.pageX + 2 + "px"});
@@ -195,6 +196,7 @@
 			var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 			var toYear = document.getElementsByName('selectedToYear')[0].value;
 			var indYear = $("#indicatorYearCombo").val();
+//			var donorId = document.getElementById('donorsCombo').value;
 			var uniqueStr = (new Date()).getTime();
 			jQuery.fn.initIndicatorCombo();
 			jQuery.fn.initSubgroupCombo();
@@ -221,14 +223,26 @@
             var fundingType = document.getElementById('fundingType').value;
             var donorId = document.getElementById('donorsCombo').value;
             var uniqueStr = (new Date()).getTime();
+            var mapMode = $("#mapModeFin").val();
+            if (mapMode == null) {
+            	mapMode = 0;
+            }
             if (mapLevel == null) {
                 mapLevel = 2;
             }
+            
+            var onlyCurWS = $("#showOnlyCurentWS").attr("checked");
+            if (onlyCurWS == null) {
+            	onlyCurWS = false;
+            }
+            
+            
             //setBusy(true);
-            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 
             $("#testMap").attr({src: newUrl});
-            if (sect > -2) {
+            
+            if (sect != -2) {
             	getFundDataValues = true;
             	actionImgLoading = true;
             	setBusy(true);
@@ -237,7 +251,14 @@
                 fundingDataByRegion = new Array();
             }
             
-//            window.setTimeout(jQuery.fn.getSectorDonors, 0);
+            var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
+						var selSector = $(".sec_selector_item_selected").attr('id');
+						var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
+            var selectionTxt = getSectorSelectionText (queryParam);
+				    $('#sectorSelected').html(selectionTxt);
+						$('#sectorSelected').attr('title', selectionTxt);
+						$('#fundingTypeSelected').html($('#fundingType option:selected').text());
+						$('#donorSelected').html($('#donorsCombo option:selected').text());
         }
         
         jQuery.fn.donorSelectedFin = function(donorId){
@@ -332,6 +353,9 @@
                     fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
                 }
         }
+        
+        
+        
         
         jQuery.fn.getSectorDonors = function() {
             var mapLevel = jQuery.fn.getRadioValue()
@@ -639,11 +663,13 @@
             actionImgLoading = false;
         });
         
+        /*
         $("#donorsCombo").change(function(){
             var donor = $("#donorsCombo option:selected").val();
             jQuery.fn.donorSelectedFin(donor);
             actionImgLoading = false;
         });
+        */
         
         $("#fundingType").change(function(){
             var fndType = $("#fundingType option:selected").val();
@@ -808,6 +834,257 @@
 		 });;
 	});
 
+	//New sector selector functions
+	getSectorHierarchy = function() {
+		var uniqueStr = (new Date()).getTime();
+		var mode = $("#mapModeFin").val();
+		
+		var requestURL = "../../gis/getFoundingDetails.do?action=getSectorTree&mode=" + mode + "&mapCode=TZA&mapLevel=2&uniqueStr=" + uniqueStr;
+		$.get(requestURL, sectorHierarchyReady, "xml");
+		
+	}
+	
+	sectorHierarchyReady = function (data, textStatus){
+		var root = data.documentElement;
+		var markup = buildSectorSelector(root);
+		$("#filtrSectorSelectorContainer").html(markup);
+		
+		$(".sec_selector_item").bind('click', function() {
+			$(".sec_selector_item_selected").removeClass("sec_selector_item_selected").addClass("sec_selector_item");
+  		$(this).removeClass("sec_selector_item").addClass("sec_selector_item_selected");
+  		
+  		$(".sec_scheme_selector_selected").removeClass("sec_scheme_selector_selected").addClass("sec_scheme_selector_active");
+  		
+		});
+		
+		$(".sec_scheme_selector").bind('click', function() {
+			var thisJQueryObj = $(this);
+			$(".sec_scheme_selector").removeClass("sec_scheme_selector_selected").removeClass("sec_scheme_selector_active").addClass("sec_scheme_selector_default");
+  		thisJQueryObj.removeClass("sec_scheme_selector_default").removeClass("sec_scheme_selector_active").addClass("sec_scheme_selector_selected");
+  		
+  		//desellecting any selected sector. If sector scheme is clicked all sectors from that scheme will be in filter
+  		$(".sec_selector_item_selected").removeClass("sec_selector_item_selected").addClass("sec_selector_item");
+  		$(".sec_scheme_selector_active").removeClass("sec_scheme_selector_active").addClass("sec_selector_item");
+  		
+  		$('.child_sector_container').hide();
+  		thisJQueryObj.parent().parent().find('.child_sector_container').show();
+		});
+		
+		$(".tree_expander_collapser").bind('click', function() {
+			var thisJQueryObj = $(this);
+			
+			if (thisJQueryObj.hasClass("tree_state_collapsed")) {
+				thisJQueryObj.removeClass("tree_state_collapsed").addClass("tree_state_expanded");
+				thisJQueryObj.attr('src', '/repository/gis/view/images/tree-collapse-icon.png');
+				thisJQueryObj.parent().parent().next().children('.sector_tree_child_container').css('display','block');
+			} else if (thisJQueryObj.hasClass("tree_state_expanded")) {
+				thisJQueryObj.removeClass("tree_state_expanded").addClass("tree_state_collapsed");
+				thisJQueryObj.attr('src', '/repository/gis/view/images/tree-expand-icon.png');
+				thisJQueryObj.parent().parent().next().children('.sector_tree_child_container').css('display','none');
+			}
+		});
+		
+		$("#sector_selector_expander").bind('change', showFinFilters);
+		$("#mapModeFin").bind('change', mapModeFinChanged);
+		
+		
+    var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
+		var selSector = $(".sec_selector_item_selected").attr('id');
+		var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
+    var selectionTxt = getSectorSelectionText (queryParam);
+    $('#sectorSelected').html(selectionTxt);
+		$('#sectorSelected').attr('title', selectionTxt);
+
+		
+	}
+	
+	function mapModeFinChanged() {
+		getSectorHierarchy();
+		/*
+		var mapModeCombo = $("#mapModeFin");
+		if (mapModeCombo.val() ==  "fundingData") {
+			$("#fundingTypeRow").show();
+		} else if (mapModeCombo.val() ==  "pledgesData") {
+			$("#fundingTypeRow").hide();
+			$("#filtrSectorSelectorContainer").html("");
+		}*/
+	}
+	
+	function showFinFilters () {
+			var bgrDiv = $(".filter_wnd_background");
+			bgrDiv.css ("width", document.body.scrollWidth + "px");
+			bgrDiv.css ("height", document.body.scrollHeight + "px");
+			var filterDiagContainer = $("#filter_dialog");
+			$('.filter_wnd_background_holder').show();
+			
+			filterDiagContainer.css ("left", (document.body.clientWidth - filterDiagContainer.attr("offsetWidth"))/2 + document.body.scrollLeft + "px");
+			filterDiagContainer.css ("top", (document.body.clientHeight - filterDiagContainer.attr("offsetHeight"))/2 + document.body.scrollTop + "px");
+		}
+	
+	
+	buildSectorSelector = function (secHierarchyData) {
+		var sectorSchemes = secHierarchyData.getElementsByTagName('scheme');
+		var markup = [];
+		markup.push ("<table border='0' style='width:500px; z-index:100; display:block'>");
+		var secShcemeIdx = 0;
+		for (secSchemeIdx = 0; secSchemeIdx < sectorSchemes.length; secSchemeIdx++){
+			var curSecScheme = sectorSchemes[secSchemeIdx];
+			var isPrimary = curSecScheme.attributes.getNamedItem("primary").value == 'true';
+			
+			markup.push ("<tr><td>");
+			markup.push ("<div style='width:500px;' class='sec_scheme_selector_outer_frame'>");
+			
+			markup.push ("<div id='sec_scheme_id_");
+			markup.push (curSecScheme.attributes.getNamedItem("id").value);
+			markup.push ("' ");
+			
+			
+			if (isPrimary) {
+				markup.push ("class='sec_scheme_selector sec_scheme_selector_selected'");
+				//Set initial default value
+				$('#sel_sec_filter_display').html(curSecScheme.attributes.getNamedItem("name").value);
+				
+			} else {
+				markup.push ("class='sec_scheme_selector sec_scheme_selector_default'");
+			}
+			 markup.push (">");
+			
+			markup.push (curSecScheme.attributes.getNamedItem("name").value);
+			
+			if (isPrimary) {
+				markup.push ("&nbsp;(primary)");
+			}
+			
+			markup.push ("</div>");
+			markup.push ("</div>");
+
+			
+				if (curSecScheme.hasChildNodes()) {
+					if (isPrimary) {
+						markup.push ("<div class='child_sector_container' style='border:1px solid black; display:block; height:200px; width:500px; overflow:auto;'>");
+					} else {
+						markup.push ("<div class='child_sector_container' style='border:1px solid black; background-color:white; display:none; height:200px; width:500px; overflow:auto;'>");
+					}
+					buildSectorsRecursively (curSecScheme.childNodes, markup, true);
+					markup.push ("</div>");
+				}
+			
+				
+			markup.push ("</td></tr>");
+		}	
+		
+		/*
+		markup.push ("<tr><td align='right'>");
+		markup.push ("<input type='button' value='Apply' onClick='applySectorFilter()'>");
+		markup.push ("&nbsp;");
+		markup.push ("<input type='button' value='Cancel' onClick='closeSectorFilter()'>");
+		markup.push ("</td></tr>");
+		*/
+		
+		markup.push ("</table>");
+		
+		return markup.join("");
+	}
+	
+	function buildSectorsRecursively (sectors, markup, topLevel) {
+		markup.push ("<table border='0' width='100%' cellpadding='0' cellspacing='0'>");
+		
+		var sectorIdx = 0;
+		for (sectorIdx = 0; sectorIdx < sectors.length; sectorIdx ++) {
+			var curSector = sectors[sectorIdx];
+			
+			if (curSector.hasChildNodes()) {
+				if (sectorIdx+1 < sectors.length) {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_plain'>");
+				} else {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree'>");
+				}
+				markup.push ("<span style='background-color:white'>");
+				markup.push ("<img class='tree_expander_collapser tree_state_collapsed' src='/repository/gis/view/images/tree-expand-icon.png'>");
+				markup.push ("</span>");
+				markup.push ("</td><td nowrap>");
+				
+			} else {
+				if (sectorIdx == 0) {
+					if (topLevel) {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_first'>");
+					} else if (sectors.length > 1) {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child'>");
+					} else {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_last'>");
+					}
+				} else if (sectorIdx+1 < sectors.length) {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child'>");
+				} else {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_last'>");
+				}
+				markup.push ("&nbsp;");
+				markup.push ("</td><td nowrap>");
+			}
+			markup.push ("<div id='sec_id_");
+			markup.push (curSector.attributes.getNamedItem("id").value);
+			
+			
+			if (curSector.attributes.getNamedItem("hasFoundings").value == "true") {
+				markup.push ("' class='sec_selector_item' style='width:100%;'>");
+			} else {
+				markup.push ("' class='sec_selector_item_disabled' style='width:100%;'>");
+			}
+			
+			
+			
+			
+			
+			
+			
+			markup.push (curSector.attributes.getNamedItem("name").value);
+			markup.push ("</div>");
+			
+			
+			if (curSector.hasChildNodes()) {
+					markup.push ("<div class='sector_tree_child_container' style='display:none;'>");
+					buildSectorsRecursively (curSector.childNodes, markup, false);
+					markup.push ("</div>");
+			}
+			
+			markup.push ("</td></tr>");
+		}
+		markup.push ("</table>");
+	}
+
+	function applySectorFilter() {
+		var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
+		var selSector = $(".sec_selector_item_selected").attr('id');
+		var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
+		
+		//var selectionTxt = getSectorSelectionText (queryParam);
+		
+		
+		$('#sectorsMapComboFin').attr("value", queryParam);
+		
+		/*
+		$('#sectorSelected').html(selectionTxt);
+		$('#sectorSelected').attr('title', selectionTxt);
+		$('#fundingTypeSelected').html($('#fundingType option:selected').text());
+		$('#donorSelected').html($('#donorsCombo option:selected').text());
+		*/
+
+		$('.filter_wnd_background_holder').hide();
+		
+		jQuery.fn.sectorSelectedFin(queryParam);
+	}
+	
+	function closeSectorFilter() {
+		$('.filter_wnd_background_holder').hide();
+		//$("#sector_selector_expander").find("img").attr("src", "/repository/gis/view/images/sec_filter_expand.png");
+	}
+	
+	function getSectorSelectionText (selId) {
+		return $("#" + selId).html();
+	}
+	
+  //End of New sector selector functions
+
 	function addImageMap(data, textStatus) {
 			
 			imageMapLoaded = true;
@@ -850,7 +1127,7 @@
 				retVal += " href=\"javascript:return null\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
 				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
-				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";
+				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "','" + segment.attributes.getNamedItem("regLocId").value + "')\">";
 			}
 		}
 		retVal += "</map>";
@@ -861,19 +1138,19 @@
 		if (regCode.indexOf("Lake")<0){
 			var mouseEvent = null;
 			document.getElementById("tooltipRegionContainer").innerHTML = regName;
-            if (document.getElementById("tooltipDonorContainer") != null) {
-                var selIdx = document.getElementById("donorsCombo").selectedIndex;
-                var selected_text = document.getElementById("donorsCombo").options[selIdx].text;
+      if (document.getElementById("tooltipDonorContainer") != null) {
+          var selIdx = document.getElementById("donorsCombo").selectedIndex;
+          var selected_text = document.getElementById("donorsCombo").options[selIdx].text;
 
-                document.getElementById("tooltipDonorContainer").innerHTML = selected_text;
-            }
-        
-            if(document.getElementById("tooltipTotalCommitmentContainer")){
-            	document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
-            }
-            if(document.getElementById("tooltipTotalDisbursementContainer")){
+          document.getElementById("tooltipDonorContainer").innerHTML = selected_text;
+      }
+  
+      if(document.getElementById("tooltipTotalCommitmentContainer")){
+      	document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
+      }
+      if(document.getElementById("tooltipTotalDisbursementContainer")){
 				document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund;
-            }
+      }
 			if (document.getElementById("tooltipTotalExpenditureContainer")){
 				document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
 			}
@@ -1256,7 +1533,7 @@
 	}
 	
 	//Region popup report
-	function showRegionReport(regCode, regName) {
+	function showRegionReport(regCode, regName, regLocId) {
 		var mapLevel = getRadioValue("mapLevelRadio");
 		if (mapLevel == null) {
 			mapLevel = 2;
@@ -1266,7 +1543,7 @@
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
 		var donorId = document.getElementById('donorsCombo').value;
 	
-		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorId=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
+		var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
 		//alert(regRepUrl);
 		var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		

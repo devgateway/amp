@@ -18,15 +18,16 @@
 
 
 <style>
+.yui-skin-sam .yui-dt thead th,.yui-skin-sam .yui-dt .yui-dt-data td {
+	border-color: #CCC;
+	border-style: none solid solid none;
+	border-width: medium 1px 1px medium;
+}
+
 .yui-skin-sam .yui-dt thead th {
 	background-color: #C7D4DB;
 	color: #000;
 	height: 30px;
-	border-color: #fff;
-	border-style: solid;
-	border-width: 1px 1px 1px 1px;
-	border-spacing: 0;
-	border-collapse: collapse;
 	text-align: center;
 }
 
@@ -35,6 +36,7 @@
 	text-align: center;
 	font-weight: bold;
 	font-family: Arial, Verdana, Helvetica, sans-serif;
+	border-color: #CCC;
 }
 
 .yui-skin-sam .yui-dt td .yui-dt-liner {
@@ -42,12 +44,7 @@
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
-.yui-skin-sam tr.yui-dt-odd,.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc
-	{
-	background-color: #dbe5f1;
-}
-
-.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,.yui-skin-sam tr.yui-dt-even td.yui-dt-desc
+.yui-skin-sam tr.yui-dt-odd,.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc,.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,.yui-skin-sam tr.yui-dt-even td.yui-dt-desc
 	{
 	background-color: #FFF;
 }
@@ -56,7 +53,6 @@
 	{
 	background-color: #a5bcf2;
 }
-
 
 .yui-skin-sam a.yui-pg-page {
 	padding-right: 10px;
@@ -82,7 +78,9 @@
 	font-weight: bold;
 }
 
-.yui-pg-last {border: 0px}
+.yui-pg-last {
+	border: 0px
+}
 
 .yui-skin-sam span.yui-pg-first,.yui-skin-sam span.yui-pg-previous,.yui-skin-sam span.yui-pg-next,.yui-skin-sam span.yui-pg-last
 	{
@@ -105,7 +103,6 @@
 	border: 1px solid #CCC;
 	width: auto;
 }
-
 </style>
 
 

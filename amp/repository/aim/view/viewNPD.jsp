@@ -162,8 +162,7 @@ background-color:#FFFFFF;
 </script>
 	<!-- MAIN CONTENT PART START -->
 
-	<table cellspacing="0" cellpadding="0" border="0" align="center"
-		width="1000">
+	<table cellspacing="0" cellpadding="0" border="0" align="center" width="1000">
 		<td valign="top" align="left">
 		<div id="content" class="yui-skin-sam">
 		<div id="demo" class="yui-navset">
@@ -185,9 +184,8 @@ background-color:#FFFFFF;
 		</ul>
 
 		<div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
-		<div id="tabs-1"
-			class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-		<fieldset><legend><span class=legend_label><span
+		<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+		<fieldset style="border:none;"><legend><span class=legend_label><span
 			id="graphHeader">&nbsp;</span></span></legend>
 		<div>
 		<div class="show_hide_setting"><digi:link
@@ -195,7 +193,7 @@ background-color:#FFFFFF;
 			<digi:trn>Reports</digi:trn>
 		</digi:link></div>
 		<div class="dashboard_tab_opt">
-		<div class="tab_opt_cont"><a class="l_sm" href="#"><img
+		<div class="tab_opt_cont" style="background-color:#F2F2F2;"><a class="l_sm" href="#"><img
 			border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
 			class="l_sm" href="#" onclick="exportToExcel();return false;">Export
 		to Excel</a> &nbsp;|&nbsp; <a class="l_sm" href="#"><img border="0"
@@ -212,7 +210,7 @@ background-color:#FFFFFF;
 			<tbody>
 				<tr>
 					<td width="50%" valign="top">
-					<div class="dashboard_child_left">
+					<div class="dashboard_child_left_1">
 					<div id="indicatorTable"></div>
 					<div id="">
 					<table>

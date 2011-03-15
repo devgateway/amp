@@ -108,7 +108,7 @@ function getActivities(){
 		labelTD2.innerHTML='<b>'+strActualDisb+' </b>';
 		labelsTR1.appendChild(labelTD2);
 
-        labelsTR1.bgColor='Silver';
+        labelsTR1.bgColor='#C7D4DB';
 		tbody.appendChild(labelsTR1);
 		//end of sum labels
 

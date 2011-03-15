@@ -23,14 +23,26 @@
 <%@ page import="org.digijava.module.categorymanager.dbentity.*"%>
 <%@ page import="org.digijava.module.parisindicator.util.*"%>
 
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+	<div class="centering">
+		<div class="breadcrump_cont" style="visibility: hidden">
+			<span class="sec_name"></span>
+		</div>
+	</div>
+</div>
+<!-- BREADCRUMP END --> 
+
 <table width="100%">
 	<tr align="center">
 		<td>
 			<!-- CSS -->
+			<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
 			<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 			<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
-			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
-			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">	
+			<link href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
+			<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
+			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 			<script language="JavaScript" type="text/javascript" src="<digi:file src="module/parisindicator/script/pi_scripts.js"/>"></script>
@@ -175,26 +187,25 @@
 							<table border="0" cellpadding="0" cellspacing="0">
 								<tr>
 			                        <td>
-			                        	<div id="demo" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+			                        	<div id="content" class="yui-skin-sam">
+			                        	<div id="demo" class="yui-navset">
 				                            <logic:notEmpty name="parisIndicatorForm" property="availablePIReports">
-			                                	<ul class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" id="MyTabs" style="background-color: #F2F2F2;">
+			                                	<ul class="yui-nav" id="MyTabs">
 			                                    	<logic:iterate id="element" name="parisIndicatorForm" property="availablePIReports" indexId="index">
 														<%String selected = ""; 
 														String style = "background: none; background-color: #E0E0E0;";
 														String aStyle = "color: #376091;";%>
 			                                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="${element.indicatorCode}">
-			                                            	<%selected = "ui-tabs-selected"; %>
+			                                            	<%selected = "selected"; %>
 			                                            	<%style = ""; %>
 			                                            	<%aStyle = ""; %>
 			                                            </logic:equal>
-			                                            <li class="desktop_tab ui-state-default ui-corner-top ui-state-active <%=selected%>" style="<%=style%>">
-			                                            	<span class="tab_link">
-			                                                	<digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true&header=true" target="_self" style="<%=aStyle%>">
-			                                                    	<div style="max-width: 80px; font-size: 11px; font-weight: bold;">
-			                                                        	<digi:trn>Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
-			                                                        </div>
-			                                                    </digi:link>
-			                                                </span>
+			                                            <li class="<%=selected%>">
+			                                                <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true&header=true" target="_self">
+			                                                   	<div style="max-width: 80px; font-size: 11px; font-weight: bold;">
+			                                                       	<digi:trn>Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
+			                                                    </div>
+			                                                </digi:link>
 			                                            </li>
 													</logic:iterate>
 			                                 	</ul>
@@ -244,6 +255,7 @@
 							                    	</td>
 							                	</tr>
 							           		</table>
+			                           </div>
 			                           </div>
 				                    </td>
 				                </tr>

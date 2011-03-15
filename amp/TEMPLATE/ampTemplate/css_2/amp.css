@@ -278,7 +278,7 @@ table.report_indicator{margin-bottom:15px}
 .dashboard_tab_opt{margin:10px 0}
 .dashboard_tab_opt img{vertical-align:middle}
 #dashboard_child{vertical-align:top;text-align:center}
-.dashboard_child_left{padding:10px;margin-right:10px;border:1px solid #cccccc;margin-bottom:15px}
+.dashboard_child_left{padding:10px;margin-right:10px; margin-bottom:15px}
 .information{color:#ff0000;font-weight:bold;margin:10px 0}
 #dashboard_child_right{padding:10px;height:533px;margin-left:10px;border:1px solid #cccccc;font-size:11px;margin-bottom:15px;text-align:center}
 .dashboard_inner .show_hide_setting{margin-top:7px;margin-right:5px}

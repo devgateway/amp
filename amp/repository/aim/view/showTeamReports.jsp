@@ -21,10 +21,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- CSS -->
+<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
 <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 <link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<link href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
+<link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <digi:instance property="aimTeamReportsForm" />
 
@@ -66,6 +68,16 @@
 	</c:set>
 </c:if>
 
+<!-- BREADCRUMP START -->
+<div class="breadcrump">
+	<div class="centering">
+		<div class="breadcrump_cont" style="visibility: hidden">
+			<span class="sec_name">${pageTitle}</span>
+		</div>
+	</div>
+</div>
+<!-- BREADCRUMP END --> 
+
 <SCRIPT TYPE="text/javascript">
 <!--
 function popup(mylink, windowname)
@@ -91,15 +103,16 @@ function confirmFunc() {
 <table align="center">
 	<tr>
 		<td>
-			<div id="demo" class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="width: 1000px;" align="center">
-				<ul class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" id="MyTabs">
-					<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-			        	<a rel="Tab_Name" href="#" id="Tab-tab tertiary" class="tab_link" style="background-color: #F2F2F2; margin-bottom: -1px;" onclick="return false;">
-			        		${pageTitle}
+		<div id="content" class="yui-skin-sam">
+			<div id="demo" class="yui-navset" style="width: 1000px;">
+				<ul class="yui-nav" id="MyTabs">
+					<li class="selected">
+			        	<a rel="Tab_Name" href="#" id="Tab-tab tertiary" onclick="return false;" style="background-color: #f2f2f2; background-repeat: no-repeat; background-image: none;">
+			        		<div>${pageTitle}</div>
 			        	</a>
 					</li>
 				</ul>
-				<div id="Tab_Name" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="background-color: #F2F2F2; padding: 5px;">
+				<div id="Tab_Name" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="background-color: #F2F2F2; padding: 5px; border: 1px solid rgb(208, 208, 208);">
 					<table align="center">
 						<tr>
 						    <td>
@@ -290,11 +303,14 @@ function confirmFunc() {
 							                          							</tr>
 																			</c:if>
 					                          							</c:if>
+					                          							<%String color = ""; %>
 					                          							<logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
 					                            						type="org.digijava.module.aim.dbentity.AmpReports">
 					                              							<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-					                              							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >                           
-					                              								<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;">
+					                              							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
+					                              							    <%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
+					                              							    <%if(idx.intValue()%2!=1) color = "#ffffff"; %>
+					                              								<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
 						                              								<logic:notEmpty name="report" property="filterDataSet">
 						                                  								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" vspace="2" border="0" align="middle" />
 						                              								</logic:notEmpty>
@@ -302,7 +318,7 @@ function confirmFunc() {
 						                                   								<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" vspace="2" border="0" align="middle" />
 						                              								</logic:empty>
 					                              								</td>
-					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;">
+					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 						                              									<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 							                              									<b>
@@ -341,21 +357,21 @@ function confirmFunc() {
 					                                									</p>
 					                              									</logic:present>
 					                              								</td>
-					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;">
+					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
 					                                									<logic:present name="report" property="ownerId">
 					                                   										<i><bean:write name="report" property="ownerId.user.name" /></i>
 					                                									</logic:present>
 					                                								</p>
 					                              								</td>
-					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;">
+					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
 					                                  									<logic:present name="report" property="updatedDate">
 					                                      									<bean:write name="report" property="formatedUpdatedDate" />
 					                                  									</logic:present>
 					                                								</p>
 					                              								</td>
-					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;">
+					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
 					                                  									<li>
 																							<%
@@ -416,7 +432,7 @@ function confirmFunc() {
 					                                  									</logic:equal>
 					                                								</p>
 					                              								</td>
-					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;">
+					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 					                                								<logic:iterate name="report" property="hierarchies" id="hierarchy" >
 					                                  									<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 					                                  									<li>
@@ -427,7 +443,7 @@ function confirmFunc() {
 					                                								</logic:iterate>
 					                              								</td>
 					                              							<%if (tm != null) {%>
-					                              								<td width="200" class="inside" style="padding-right: 10px; padding-left: 10px; font-size: 11px; width: 150px;" align="center">  
+					                              								<td width="200" class="inside" style="padding-right: 10px; padding-left: 10px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
 						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 						                                  								<logic:iterate name="report" property="columns" id="column" indexId="index"  >
 						                                    								<%if (index.intValue()%2==0){ %>
@@ -454,7 +470,7 @@ function confirmFunc() {
 						                                							</div>
 						                                							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
 					                                							</td>
-					                                							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;">
+					                                							<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 						                                							<p style="white-space: nowrap">
 						                                								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 						                                								<c:set target="${urlParams}" property="rid">
@@ -625,6 +641,7 @@ function confirmFunc() {
 					  	</tr>
 					</table>
 				</div>
+			</div>
 			</div>
 		</td>
 	</tr>

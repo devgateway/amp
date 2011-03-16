@@ -74,28 +74,28 @@ function confirmDelete() {
 					<table class="inside" style="font-size:12px;">
 					<thead>
 						<tr align="center">
-							<td bgcolor="#006699" class="textalb" align="center">
+							<td bgcolor="#006699" class="inside" align="center" >
 								<digi:trn key="aim:categoryName">
 									Category Name
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="textalb" align="center">
+							<td bgcolor="#006699" class="inside" align="center">
 								<digi:trn key="aim:categoryDescription">
 									Category Description
 								</digi:trn>
 							
 							</td>
-							<td bgcolor="#006699" class="textalb" align="center">
+							<td bgcolor="#006699" class="inside" align="center">
 								<digi:trn key="aim:categoryPossibleValues">
 									Possible Values
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="textalb" align="center">
+							<td bgcolor="#006699" class="inside" align="center">
 								<digi:trn key="aim:categoryOptions">
 									Category Options
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="textalb ignore" align="center">
+							<td bgcolor="#006699" class="inside" align="center">
 								<digi:trn key="aim:categoryActions">
 									Actions
 								</digi:trn>
@@ -105,7 +105,7 @@ function confirmDelete() {
 						<tbody class="yui-dt-data">
 						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
 						<tr align="center">
-							<td>
+							<td class="inside">
 								<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryName( category.getKeyName() ) %>'>
 									<bean:write name="category" property="name" />
 								</digi:trn>
@@ -117,13 +117,13 @@ function confirmDelete() {
 								<i><bean:write name="category" property="keyName" /></i>
 								)
 							</td>
-							<td align="left">
+							<td align="left" class="inside">
 								<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryName( category.getDescription() ) %>'>
 									<bean:write name="category" property="description" /> &nbsp;
 								</digi:trn>
 								&nbsp;
 							</td>
-							<td align="left">
+							<td align="left" class="inside">
 								<ul>
 								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
@@ -137,7 +137,7 @@ function confirmDelete() {
 								</logic:iterate>
 								</ul>
 							</td>
-							<td align="left">
+							<td align="left" class="inside">
 								<% if (category.isMultiselect()) {%>
 									<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 								<% }
@@ -160,7 +160,7 @@ function confirmDelete() {
 									Ordered
 								</digi:trn>
 							</td>
-							<td align="left" class="ignore">
+							<td align="left" class="inside">
 								<ul>
 									<li>
 										<digi:link paramId="edit" paramName="category" paramProperty="id"  href='/categoryManager.do'>

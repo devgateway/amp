@@ -44,35 +44,35 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-<table cellPadding=5 cellspacing="0" width="100%" border="0">
+<table cellPadding=0 cellspacing="0" width="1000" border="0" align=center>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33 bgcolor=#F2F2F2><span class=crumb>
 						<c:set var="translation">
 							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn>Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn>Workspace Manager</digi:trn>
+						<digi:trn><center><b>Workspace Manager</b></center></digi:trn>
+						<hr />
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="center" width="571">
+					<td height="16" vAlign="center">
                     	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
-					<td height="16" vAlign="center" width="571">
+					<td height="16" vAlign="center">
 						<digi:errors />
 					</td>
 				</tr>
 
 			<tr>
 			<td>
-			<table cellspacing="0" class="report_indicator" cellpadding="0"
-				border="0" align="center" width="100%">
+			<table cellspacing="0" class="report_indicator" cellpadding="0" border="0" align="center" width="1000">
 				<tbody>
 					<tr>
 						<td valign="top">
@@ -284,8 +284,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

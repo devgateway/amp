@@ -59,7 +59,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" align="center">
+					<td style="padding-top:15px;" align="center">
                     	<span class=subtitle-blue><digi:trn><b style="font-size:12px;">Workspace Manager</b></digi:trn></span>
 						<hr />
 					</td>

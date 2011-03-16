@@ -75,15 +75,14 @@
 
 </div>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" >
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top">
 
-<table cellPadding=5 cellspacing="0" width="100%" border="0">
+<table cellPadding=5 cellspacing="0" width="100%" border="0" style="margin-bottom:15px;">
 			<tr>
 				<!-- Start Navigation -->
-				<td height=33>
+				<td height=33 bgcolor=#F2F2F2>
 				<a href="/aim/admin.do" styleClass="comment"
 					title="${translation}">
 					<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
@@ -96,9 +95,9 @@
 			</tr>
 		</table>
 	<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
-<tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Discovered Patches</td><td align="center" bgcolor="#05528b" style="color: #ffffff; font-size: larger;" width="400px">Patch Details</td></tr>
+<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: larger;" width="700px">Discovered Patches</td><td align="center" bgcolor="#C0D6E2" style="color: #000000; font-size: larger;" width="400px">Patch Details</td></tr>
 <tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;width:540px"><div id="patchBody"></div></div></td></tr>
-<tr><td bgcolor="#05528b" align="center" style="color: #ffffff; font-size: larger;" width="700px">Patch Logs</td></tr>
+<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: larger;" width="700px">Patch Logs</td></tr>
 <tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
 </table>	
 		</td>

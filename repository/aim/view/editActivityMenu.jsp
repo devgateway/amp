@@ -44,13 +44,27 @@
 		    context: ["showbtn", "tl", "bl"] 
 		    }
 		     );
-	
+         
 		function initScripts() {
 			var msgP5="\n<digi:trn key='aim:saving'>Saving</digi:trn>";
 			mySavePanel.setHeader(msgP5);
 			mySavePanel.setBody("");
 			mySavePanel.render(document.body);
-			savePanelStart = 0;
+            savePanelStart = 0;
+            var   saveAsDraftPanel = new YAHOO.widget.Panel("saveAsDraftPanel", {
+            width: "350px",
+            fixedcenter: true,
+            constraintoviewport: true,
+            underlay: "shadow",
+            close: true,
+            visible: false,
+            modal:true,
+            draggable: false
+        });
+            saveAsDraftPanel.render();
+            YAHOO.util.Event.addListener("saveAsDraft", "click", saveAsDraftPanel.show, saveAsDraftPanel, true);
+            YAHOO.util.Event.addListener("saveAsDraftCanceld", "click", saveAsDraftPanel.hide, saveAsDraftPanel, true);
+
 		}
 	
 		function showLoadingSave() {
@@ -914,7 +928,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<field:display name="Draft" feature="Identification">
 				<tr>
 					<td align="center">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
+						<html:button  styleClass="dr-menu" styleId="saveAsDraft" property="submitButton">
 							<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>
 						</html:button>
 					</td>
@@ -928,3 +942,24 @@ of ActivityUtil class also when change step visibility module/feature name -->
 		</td>
 	</tr>
 </table>
+<div id="saveAsDraftPanel">
+    <div class="hd" style="text-align: left"><digi:trn>Save as Draft</digi:trn></div>
+    <div class="bd" style="text-align: center">
+        <p>
+        <digi:trn>Where would you like to navigate after save action?</digi:trn>
+        </p>
+        <html:radio  value="1" property="draftRedirectedPage">
+            <digi:trn>Go to the desktop</digi:trn>
+        </html:radio>
+          <html:radio  value="2" property="draftRedirectedPage">
+            <digi:trn>Stay on the activity page</digi:trn>
+        </html:radio>
+      <br/>
+      <html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
+			<digi:trn key="aim:saveAsDraft">Save draft</digi:trn>
+       </html:button>
+       <input type="button" id="saveAsDraftCanceld" class="dr-menu" value="<digi:trn>Cancel</digi:trn>"/>
+    </div>
+    <div class="ft"></div>
+</div>
+

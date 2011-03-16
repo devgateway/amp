@@ -47,10 +47,10 @@ function confirmDelete() {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" align=center style="padding-top:15px;">
+					<td valign="center" align=center style="padding-top:10px;">
 						<span class=subtitle-blue>
 							<digi:trn key="aim:categoryManager">
-								Category Manager
+								<b style="font-size:12px;">Category Manager</b>
 							</digi:trn>
 						</span>
 						<hr />
@@ -71,7 +71,7 @@ function confirmDelete() {
 				<td class="report">
 				
 				<logic:notEmpty name="myForm" property="categories">
-					<table border="1px" >
+					<table class="inside" style="font-size:12px;">
 					<thead>
 						<tr align="center">
 							<td bgcolor="#006699" class="textalb" align="center">

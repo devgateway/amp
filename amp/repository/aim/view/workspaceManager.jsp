@@ -47,7 +47,7 @@
 <table cellPadding=0 cellspacing="0" width="1000" border="0" align=center>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2F2><span class=crumb>
+					<td height=33 bgcolor=#F2F2F2 style="padding-left:5px;"><span class=crumb>
 						<c:set var="translation">
 							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -59,8 +59,8 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="center">
-                    	<span class=subtitle-blue><digi:trn><b>Workspace Manager</b></digi:trn></span>
+					<td height="16" align="center">
+                    	<span class=subtitle-blue><digi:trn><b style="font-size:12px;">Workspace Manager</b></digi:trn></span>
 						<hr />
 					</td>
 				</tr>
@@ -276,25 +276,23 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#c9c9c7 class=box-title height=17>
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="font-size:12px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-												
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
@@ -308,7 +306,7 @@
 										</tr>
 																				
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

@@ -23,14 +23,13 @@ function confirmDelete() {
 }
 </script>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="90%" class="box-border-nopadding">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align=center class="box-border-nopadding">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33 bgcolor=#F2F2F2><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -42,18 +41,19 @@ function confirmDelete() {
 						
 						
 						<digi:trn key="aim:categoryManager">
-							Category Manager
+							<b>Category Manager</b>
 						</digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571>
+					<td height=16 valign="center" align=center style="padding-top:15px;">
 						<span class=subtitle-blue>
 							<digi:trn key="aim:categoryManager">
 								Category Manager
 							</digi:trn>
 						</span>
+						<hr />
 					</td>
 				</tr>
 				<tr>

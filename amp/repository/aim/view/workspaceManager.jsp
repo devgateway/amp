@@ -54,14 +54,14 @@
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn>Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn><center><b>Workspace Manager</b></center></digi:trn>
-						<hr />
+						<digi:trn><b>Workspace Manager</b></digi:trn>	
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
 					<td height="16" vAlign="center">
-                    	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
+                    	<span class=subtitle-blue><digi:trn><b>Workspace Manager</b></digi:trn></span>
+						<hr />
 					</td>
 				</tr>
 				<tr>
@@ -96,9 +96,8 @@
 			<td>
 			</tr>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			
 

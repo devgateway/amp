@@ -105,6 +105,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
      * This collection represents the list of surveys available in the Paris Indicator page.
      */
     private Collection<SurveyFunding> surveyFundings = null;
+    private int draftRedirectedPage;
+
+    public int getDraftRedirectedPage() {
+        return draftRedirectedPage;
+    }
+
+    public void setDraftRedirectedPage(int draftRedirectedPage) {
+        this.draftRedirectedPage = draftRedirectedPage;
+    }
 
 	public Collection<SurveyFunding> getSurveyFundings() {
 		return surveyFundings;
@@ -4468,6 +4477,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			}
 
             clearMessages();
+            this.draftRedirectedPage=1; // Desktop
 		}
 		if (this.getLocation().isLocationReset()) {
 			this.getLocation().reset(mapping, request);

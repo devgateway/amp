@@ -2132,7 +2132,7 @@ public class SaveActivity extends Action {
 				ampTeamId = activity.getTeam().getAmpTeamId();
 			else ampTeamId = teamMember.getAmpTeamMemId();
 			String validation = DbUtil.getTeamAppSettingsMemberNotNull(ampTeamId).getValidation();
-			if (activity.getDraft() && tm.getTeamHead() || "validationOff".equals(validation)){
+			if (activity.getDraft() && tm.getTeamHead() || (validation!=null&&"validationOff".equals(validation))){
 				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}else{
 				activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
@@ -2852,6 +2852,7 @@ public class SaveActivity extends Action {
 		/**
 		 *  Perform session & form cleanup
 		 */
+        int redirectDraft=eaForm.getDraftRedirectedPage();
 		cleanup(eaForm, session, request, mapping, actId, tm);
 
 		//OLD!!!
@@ -2873,9 +2874,9 @@ public class SaveActivity extends Action {
             if (rsp.isDidRecover()) {
                 return mapping.findForward("saveErrors");
             } else {
-            	if (activity.getDraft()!=null && !activity.getDraft()) {
+            	if ((activity.getDraft()!=null && !activity.getDraft()) || redirectDraft==Constants.DRAFRT_GO_TO_DESKTOP) {
             		return mapping.findForward("viewMyDesktop");
-                } else {
+                } else {       
                     //eaForm.setActivityId(ActivityVersionUtil.getLastActivityFromGroup(activity.getAmpActivityGroup().getAmpActivityGroupId()).getAmpActivityId());
                     // Set to 1 or next time will be -1 and will fail some checks.
                     eaForm.setPageId(1);

@@ -90,14 +90,14 @@
 				&nbsp;&gt;&nbsp; <a href="/xmlpatcher/xmlpatches.do?mode=listPatches"
 					class="comment" title="${translation}">
 					<digi:trn key="aim:dbpatches">Database Patches</digi:trn>
-				</a>&nbsp;&gt;&nbsp; <digi:trn key="aim:dbpatches">Database Patches</digi:trn></td>
+				</a>&nbsp;&gt;&nbsp; <digi:trn key="aim:dbpatches"><b>Database Patches</b></digi:trn></td>
 				<!-- End navigation -->
 			</tr>
 		</table>
 	<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
-<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: larger;" width="700px">Discovered Patches</td><td align="center" bgcolor="#C0D6E2" style="color: #000000; font-size: larger;" width="400px">Patch Details</td></tr>
+<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Discovered Patches</td><td align="center" bgcolor="#C0D6E2" style="color: #000000; font-size: 12px; font-weight:bold;" width="400px">Patch Details</td></tr>
 <tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;width:540px"><div id="patchBody"></div></div></td></tr>
-<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: larger;" width="700px">Patch Logs</td></tr>
+<tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Patch Logs</td></tr>
 <tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
 </table>	
 		</td>

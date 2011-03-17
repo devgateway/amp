@@ -566,20 +566,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 					<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
-						<table cellpadding="0" cellspacing="0" width="100%" border="0">
+						<table cellpadding="0" cellspacing="0" width="100%" border="0" class="inside">
 							<tr>
 								<td width="100%">
-									<table cellpadding="0" cellspacing="0" width="100%" border="0">
-										<tr>
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-											</td>
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="pledgeInformation">Pledge Information</digi:trn>
-											</td>
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-											</td>
-										</tr>
-									</table>
+									<digi:trn key="pledgeInformation">Pledge Information</digi:trn>
 								</td>
 							</tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">

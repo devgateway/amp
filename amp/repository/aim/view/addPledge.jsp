@@ -529,12 +529,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 <html:hidden name="pledgeForm" styleId="event" property="fundingEvent"/>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="900" vAlign="top" align="center" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
 	
 	<tr>
-		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left valign="top" class=r-dotted-lg>
-			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+		<td align=left valign="top">
+			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>

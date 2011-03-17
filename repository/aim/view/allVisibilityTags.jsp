@@ -79,6 +79,7 @@
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="PUBLIC VIEW"></module:display> 
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
@@ -243,6 +244,7 @@
 <feature:display name="Save and Send button" module="Calendar"></feature:display>
 <feature:display name="Preview Event button" module="Calendar"></feature:display>
 <feature:display name="Event Approve" module="Calendar"></feature:display>
+<feature:display name="NGO Form" module="Organization Manager"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>
@@ -980,3 +982,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
+
+<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Recipients" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form"></field:display>

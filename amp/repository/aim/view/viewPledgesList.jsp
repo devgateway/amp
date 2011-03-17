@@ -247,7 +247,6 @@ function setHoveredRow(rowId) {
 							<td width="75%" vAlign="middle" height="40" align=center>
 								<feature:display name="Add Pledge Button" module="Pledges">
 								<table cellpadding="0" cellspacing="0" width="100%" border="0">
-									<hr />
 									<html:button styleClass="buttonx" property="submitButton" onclick="return addPledge()">
 	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
 									</html:button>

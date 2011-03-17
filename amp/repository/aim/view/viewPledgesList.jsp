@@ -179,88 +179,55 @@ function setHoveredRow(rowId) {
 					</td>
 				</tr>
 				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
-				<tr>
-                   	<td class="report">
-					<table width="100%" height="20" cellpadding="0" cellspacing="0" >
-                      <thead>
-						<tr style="background-color: #999999; color: #000000;" align="center">
-							<td width="25%" align="center">
-								<b> 
-									<digi:trn>Pledge Name</digi:trn>
-								</b>
-							</td>
-							<td width="25%" align="center">
-								<b> 
-									<digi:trn>Organization</digi:trn>
-								</b>
-							</td>
-							<td width="25%" align="center">
-								<b> 
-									<digi:trn>Contact Name</digi:trn>
-								</b>
-							</td>
-							<td width="19%" align="center">
-								<b> 
-									<digi:trn>Contact Email</digi:trn>
-								</b>
-							</td>
-							<td width="6%" align="center">
-								<b> 
-									<digi:trn>Action</digi:trn>
-								</b>
-							</td>
-						</tr>
-						</thead>
-					</table>
-					</td>
-				</tr>
+
 				<tr>
 					<td>
 					<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
-					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
-					<tr style="background-color: #999999; color: #000000;" align="center">
-							<td width="25%" align="center">
+					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside">
+					<tr style="background-color: #C7D4DB; color: #000000; fnt-size:12px;" align="center">
+							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Pledge Name</digi:trn>
 								</b>
 							</td>
-							<td width="25%" align="center">
+							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Organization</digi:trn>
 								</b>
 							</td>
-							<td width="25%" align="center">
+							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Contact Name</digi:trn>
 								</b>
 							</td>
-							<td width="19%" align="center">
+							<td width="19%" align="center" class="inside">
 								<b> 
 									<digi:trn>Contact Email</digi:trn>
 								</b>
 							</td>
-							<td width="6%" align="center">
+							<td width="6%" align="center" class="inside">
 								<b> 
 									<digi:trn>Action</digi:trn>
 								</b>
 							</td>
+							<td>&nbsp;</td>
 						</tr>
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr>
-								<td width="25%" align="center">
+								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.title" />
 								</td>
-								<td width="25%" align="center">
+								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.organization.name" />
 								</td>
-								<td width="25%" align="center">
+								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.contactName" />
 								</td>
-								<td width="19%" align="center">
+								<td width="19%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.contactEmail" />
 								</td>
-								<td width="3%" align="center">
+								<td width="3%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
@@ -268,7 +235,7 @@ function setHoveredRow(rowId) {
 	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">
 									</a>
 								</td>
-								<td width="3%" align="center">
+								<td width="3%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>

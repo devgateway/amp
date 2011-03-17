@@ -136,9 +136,9 @@ function setHoveredRow(rowId) {
 	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
 		<td align=left valign="top" class=r-dotted-lg>
-			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+			<table width="100%" cellSpacing="0" cellPadding="0" vAlign="top" align="left">
 				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
 						<tr>
 							<td>
 								<span class=crumb>

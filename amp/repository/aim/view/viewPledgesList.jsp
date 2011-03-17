@@ -131,10 +131,9 @@ function setHoveredRow(rowId) {
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="960" vAlign="top" align="center" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
 	
 	<tr>
-		<td class=r-dotted-lg width="10">&nbsp;</td>
 		<td align=left valign="top" class=r-dotted-lg>
 			<table width="100%" cellSpacing="0" cellPadding="0" vAlign="top" align="left">
 				<tr><td>
@@ -142,7 +141,7 @@ function setHoveredRow(rowId) {
 						<tr>
 							<td>
 								<span class=crumb>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" >
+									<digi:link href="/viewMyDesktop.do" styleClass="comment">
 
 										<digi:trn key="aim:desktop">Desktop</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
@@ -156,9 +155,9 @@ function setHoveredRow(rowId) {
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-							<td height=50 vAlign="middle" width="100%"><span class=subtitle-blue>
-								<digi:trn key="aim:pledgesList">Pledges List</digi:trn>
-								
+							<td height=50 vAlign="middle" width="100%" align=center><span class=subtitle-blue>
+								<digi:trn key="aim:pledgesList"><b style="font-size:12px;">Pledges List</b></digi:trn>
+								<hr />
 							</td>
 						</tr>
 					</table>

@@ -572,17 +572,17 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							<tr>
 							<td colspan=4 class="inside" align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
 							</tr>
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top" class="inside">
+							<tr><td bgColor=#ffffff align="center" vAlign="top" class="inside">
 								<!-- contents -->
-								<table width="95%" bgcolor="#ffffff" border="0">
-									<tr><td>
+								<table width="95%" bgcolor="#ffffff" border="0" class="inside">
+									<tr><td class="inside">
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
 
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									
-									<tr><td>
+									<tr><td class="inside">
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">

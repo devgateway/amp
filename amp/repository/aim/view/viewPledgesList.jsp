@@ -218,6 +218,33 @@ function setHoveredRow(rowId) {
 					<td>
 					<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
 					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
+					<tr style="background-color: #999999; color: #000000;" align="center">
+							<td width="25%" align="center">
+								<b> 
+									<digi:trn>Pledge Name</digi:trn>
+								</b>
+							</td>
+							<td width="25%" align="center">
+								<b> 
+									<digi:trn>Organization</digi:trn>
+								</b>
+							</td>
+							<td width="25%" align="center">
+								<b> 
+									<digi:trn>Contact Name</digi:trn>
+								</b>
+							</td>
+							<td width="19%" align="center">
+								<b> 
+									<digi:trn>Contact Email</digi:trn>
+								</b>
+							</td>
+							<td width="6%" align="center">
+								<b> 
+									<digi:trn>Action</digi:trn>
+								</b>
+							</td>
+						</tr>
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr>

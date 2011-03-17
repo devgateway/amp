@@ -153,29 +153,16 @@ function setHoveredRow(rowId) {
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
+					<!-- <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=50 vAlign="middle" width="100%" align=center><span class=subtitle-blue>
 								<digi:trn key="aim:pledgesList"><b style="font-size:12px;">Pledges List</b></digi:trn>
 								<hr />
 							</td>
 						</tr>
-					</table>
+					</table>-->
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
-						<tr>
-							<td width="75%" vAlign="middle" height="40">
-								<feature:display name="Add Pledge Button" module="Pledges">
-								<table cellpadding="0" cellspacing="0" width="100%" border="0">
-									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">
-	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
-									</html:button>
-								</table>
-								</feature:display>
-							</td>
-						</tr>
-					</table>
 					</td>
 				</tr>
 				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
@@ -188,53 +175,41 @@ function setHoveredRow(rowId) {
 							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Pledge Name</digi:trn>
-								</b>
-							</td>
+								</b>							</td>
 							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Organization</digi:trn>
-								</b>
-							</td>
+								</b>							</td>
 							<td width="25%" align="center" class="inside">
 								<b> 
 									<digi:trn>Contact Name</digi:trn>
-								</b>
-							</td>
+								</b>							</td>
 							<td width="19%" align="center" class="inside">
 								<b> 
 									<digi:trn>Contact Email</digi:trn>
-								</b>
-							</td>
-							<td width="6%" align="center" class="inside">
+								</b>							</td>
+							<td colspan="2" align="center" class="inside">
 								<b> 
 									<digi:trn>Action</digi:trn>
-								</b>
-							</td>
-							<td>&nbsp;</td>
+								</b>							</td>
 						</tr>
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.title" />
-								</td>
+									<bean:write name="allFundingPledges" property="key.title" />								</td>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.organization.name" />
-								</td>
+									<bean:write name="allFundingPledges" property="key.organization.name" />								</td>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.contactName" />
-								</td>
+									<bean:write name="allFundingPledges" property="key.contactName" />								</td>
 								<td width="19%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.contactEmail" />
-								</td>
-								<td width="3%" align="center" class="inside">
+									<bean:write name="allFundingPledges" property="key.contactEmail" />								</td>
+								<td width="6%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
 									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">
-									</a>
-								</td>
+	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									</a>								</td>
 								<td width="3%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
@@ -243,9 +218,7 @@ function setHoveredRow(rowId) {
 										<bean:write name="allFundingPledges" property="value" />
 									</c:set>
 									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">
-									</a>
-								</td>
+	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">									</a>								</td>
 							</tr>
 						</c:forEach>
                         </tbody>
@@ -267,7 +240,19 @@ function setHoveredRow(rowId) {
 		</td>
 	</tr>
 </table>
-
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
+						<tr>
+							<td width="75%" vAlign="middle" height="40">
+								<feature:display name="Add Pledge Button" module="Pledges">
+								<table cellpadding="0" cellspacing="0" width="100%" border="0">
+									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">
+	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
+									</html:button>
+								</table>
+								</feature:display>
+							</td>
+						</tr>
+					</table>
 	
 <script language="javascript">
 

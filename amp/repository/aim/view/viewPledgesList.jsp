@@ -169,8 +169,8 @@ function setHoveredRow(rowId) {
 
 				<tr>
 					<td>
-					<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
-					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside">
+					<div class="report">
+					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside" style="margin-top:15px;">
 					<tr style="background-color: #C7D4DB; color: #000000; fnt-size:12px;" align="center">
 							<td width="25%" align="center" class="inside">
 								<b> 
@@ -240,9 +240,11 @@ function setHoveredRow(rowId) {
 		</td>
 	</tr>
 </table>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
+<hr />
+
+					<table width="1000" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr>
-							<td width="75%" vAlign="middle" height="40">
+							<td width="75%" vAlign="middle" height="40" align=center>
 								<feature:display name="Add Pledge Button" module="Pledges">
 								<table cellpadding="0" cellspacing="0" width="100%" border="0">
 									<html:button styleClass="dr-menu" property="submitButton" onclick="return addPledge()">

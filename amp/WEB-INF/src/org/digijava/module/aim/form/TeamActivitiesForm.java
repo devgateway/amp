@@ -27,6 +27,8 @@ public class TeamActivitiesForm extends ActionForm {
 	private Long dnrTeamId;
 	private boolean donorFlag = false;
 	
+	private String keyword;
+	private int tempNumResults = 10;
 
     /**
      * @return Returns the activities.
@@ -262,4 +264,17 @@ public class TeamActivitiesForm extends ActionForm {
 	public void setMembers(Collection members) {
 		this.members = members;
 	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public int getTempNumResults() {
+		return tempNumResults;
+	}
+	public void setTempNumResults(int tempNumResults) {
+		this.tempNumResults = tempNumResults;
+	}
+	
 }

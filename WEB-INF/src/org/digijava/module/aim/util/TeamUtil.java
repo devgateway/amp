@@ -1582,7 +1582,7 @@ public class TeamUtil {
         return team;
     }
 
-    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft) {
+    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -1590,21 +1590,28 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "";
             Query qry = null;
+            queryString = "select act from "+ AmpActivity.class.getName() + " act where ";
             if(teamId == null) {
-            	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
-                if(!includedraft){
-                  queryString+="  and   (act.draft is null or act.draft=false) ";
-                }
-            	qry=session.createQuery(queryString);
+            	queryString += " act.team is null" ;
+            }else{
+            	queryString += " (act.team=:teamId)" ;
             }
-            else{
-            	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
-                if(!includedraft){
-                  queryString+="  and   (act.draft is null or act.draft=false) ";
-                }
-            	qry=session.createQuery(queryString);
-            	qry.setParameter("teamId", teamId, Hibernate.LONG);
+            if(!includedraft){
+                queryString+="  and   (act.draft is null or act.draft=false) ";
             }
+            if(keyword!=null){
+              	queryString += " and lower(act.name) like lower(:name)" ;
+            }
+            
+            qry = session.createQuery(queryString);
+          	if(keyword!=null){
+              	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+            }
+          	if(teamId!=null){
+          		qry.setParameter("teamId", teamId, Hibernate.LONG);
+          	}         	
+            
+           
             Iterator itr = qry.list().iterator();
             
             while(itr.hasNext()) {
@@ -1691,7 +1698,7 @@ public class TeamUtil {
         return flag;
     }
 
-    public static Collection getManagementTeamActivities(Long teamId) {
+    public static Collection getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
         Collection col = new ArrayList();
         String queryString = "";
@@ -1712,7 +1719,13 @@ public class TeamUtil {
                     params += id;
                 }
                 queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+") and (a.draft is null or a.draft=false)";
+                if(keyword!=null){
+                	queryString += " and lower(a.name) like lower(:name)" ;
+                }
                 qry = session.createQuery(queryString);
+                if(keyword!=null){
+                	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+                }                
 
                 itr = qry.list().iterator();
                 while(itr.hasNext()) {
@@ -1767,7 +1780,7 @@ public class TeamUtil {
 
  
     
-    public static Collection getAllTeamActivities(Long teamId) {
+    public static Collection getAllTeamActivities(Long teamId, String keyword) {
     	Session session = null;
 		Collection col = new ArrayList();
 
@@ -1783,8 +1796,14 @@ public class TeamUtil {
 				queryString+="where act.team is null";
 			}
             queryString+=" and   (act.draft is null or act.draft=false) ";
-			qry = session.createQuery(queryString);
-			
+            if(keyword!=null){
+            	queryString += " and lower(act.name) like lower(:name)" ;
+            }
+            qry = session.createQuery(queryString);
+            if(keyword!=null){
+            	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+            } 
+            			
 			qry.setFetchSize(100);
 			ArrayList al=(ArrayList) qry.list();
 			Iterator itr = al.iterator();
@@ -2342,7 +2361,7 @@ public class TeamUtil {
 
     public static Collection getAllUnassignedActivities() {
         //return getAllTeamActivities(null);
-    	return getAllTeamAmpActivities(null,true);
+    	return getAllTeamAmpActivities(null,true,null);
     }
 
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {

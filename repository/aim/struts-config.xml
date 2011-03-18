@@ -773,7 +773,6 @@
       <forward name="forward" path="/showLayout.do?layout=showTeamActivities" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="workspaceManager" path="/aim/workspaceManager.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimMemberActivitiesForm" path="/aim/teamMemberActivities" scope="request" type="org.digijava.module.aim.action.GetMemberActivities" validate="false">
       <forward name="forward" path="/showLayout.do?layout=teamMemberActivities" />

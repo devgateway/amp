@@ -25,6 +25,7 @@
 }
 
 .yui-skin-sam .yui-dt thead th {
+	border-color: #FFF;
 	background-color: #C7D4DB;
 	color: #000;
 	height: 30px;
@@ -44,7 +45,11 @@
 	font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
-.yui-skin-sam tr.yui-dt-odd,.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc,.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,.yui-skin-sam tr.yui-dt-even td.yui-dt-desc
+.yui-skin-sam tr.yui-dt-odd,.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc
+	{
+	background-color: #dbe5f1;
+}
+.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,.yui-skin-sam tr.yui-dt-even td.yui-dt-desc
 	{
 	background-color: #FFF;
 }

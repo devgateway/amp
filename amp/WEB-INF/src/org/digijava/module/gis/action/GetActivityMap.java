@@ -101,7 +101,7 @@ public class GetActivityMap extends Action {
             Graphics2D g2d = graph.createGraphics();
 
             if (map != null && rect != null) {
-                if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
+                if (action.equalsIgnoreCase(GisUtil.ACTION_PAINT_MAP)) {
 //                    g2d.setBackground(new Color(0, 0, 100, 255));
 
 //                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);

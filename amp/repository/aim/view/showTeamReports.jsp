@@ -24,6 +24,7 @@
   
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <digi:instance property="aimTeamReportsForm" />
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${aimTeamReportsForm.showTabs}">
 
@@ -135,6 +136,9 @@ function confirmFunc() {
         	</td>
         </tr>
         <tr>
+            <tr>
+                <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+            </tr>
           <td noWrap width=1000 vAlign="top">
             <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
               <tr>
@@ -256,22 +260,59 @@ function confirmFunc() {
                         <table border=0 cellPadding=3 cellSpacing=3 width="100%" >
                           <tr bgColor=#999999>
                             <td bgColor=#999999 align="center" height="20">
+                                <c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
+                                    <digi:link href="/viewTeamReports.do?sortBy=1">
+                                        <b><digi:trn>${titleColumn}</digi:trn></b>
+                                    </digi:link>
+                                   <c:if test="${aimTeamReportsForm.sortBy==2}"><img src="/repository/aim/images/down.gif" alt="down"/></c:if>
+                                </c:if>
+                                <c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
+                                    <digi:link href="/viewTeamReports.do?sortBy=2">
+                                        <b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn></b>
+                                    </digi:link>
+                                      <img  src="/repository/aim/images/up.gif" alt="up"/>
+                                </c:if>
+                            </td>
+                            <td bgColor=#999999 align="center" height="20">
                               <b>
-                              ${titleColumn}
+                              <c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=3}">
+                                  <digi:link href="/viewTeamReports.do?sortBy=3">
+                                      <digi:trn key="aim:reportOwnerName">
+                                          Owner
+                                      </digi:trn>
+                                  </digi:link>
+                                   <c:if test="${aimTeamReportsForm.sortBy==4}"><img src="/repository/aim/images/down.gif" alt="down"/></c:if>
+                                </c:if>
+                                <c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==3}">
+                                    <digi:link href="/viewTeamReports.do?sortBy=4">
+                                       <digi:trn key="aim:reportOwnerName">
+                                          Owner
+                                      </digi:trn>
+                                    </digi:link>
+                                      <img  src="/repository/aim/images/up.gif" alt="up"/>
+                                </c:if>
+                            
                               </b>
                             </td>
                             <td bgColor=#999999 align="center" height="20">
                               <b>
-                              <digi:trn key="aim:reportOwnerName">
-                                Owner
-                              </digi:trn>
-                              </b>
-                            </td>
-                            <td bgColor=#999999 align="center" height="20">
-                              <b>
-                              <digi:trn key="aim:reportCreationDate">
-                                Creation Date 
-                              </digi:trn>
+                                    <c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
+                                  <digi:link href="/viewTeamReports.do?sortBy=5">
+                                      <digi:trn key="aim:reportCreationDate">
+                                          Creation Date
+                                      </digi:trn>
+                                  </digi:link>
+                                   <c:if test="${aimTeamReportsForm.sortBy==6}"><img src="/repository/aim/images/down.gif" alt="down"/></c:if>
+                                </c:if>
+                                <c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
+                                    <digi:link href="/viewTeamReports.do?sortBy=6">
+                                        <digi:trn key="aim:reportCreationDate">
+                                            Creation Date
+                                        </digi:trn>
+                                    </digi:link>
+                                      <img  src="/repository/aim/images/up.gif" alt="up"/>
+                                </c:if>
+                             
                               </b>
                             </td>
                             <td bgColor=#999999 align="center" height="20">
@@ -684,6 +725,7 @@ function confirmFunc() {
                   </c:if>
               </td></tr>
             </table>
+             </digi:form>
 			<logic:present name="isUserLogged" scope="session">          
             <TABLE>
                <TR>

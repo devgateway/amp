@@ -3,8 +3,10 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
+import org.digijava.module.aim.form.ReportsForm.ReportSortBy;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
@@ -46,36 +49,43 @@ public class ShowTeamReports extends Action {
 		
 		List dbReturnSet = null;
 		HttpSession session = request.getSession();
-		String action = request.getParameter("action");
 		
 		boolean appSettingSet = false;
 
 		ReportsForm rf = (ReportsForm) form;
+        String action=rf.getAction();
+        if(action==null||action.trim().equalsIgnoreCase("")||action.equalsIgnoreCase("clear")){
+            rf.setKeyword(null);
+            rf.setAction(null);
+            action=null;
+            rf.setSortByColumn(ReportsForm.ReportSortBy.NONE);
+        }
+
 		rf.setShowTabs(null);
-		if ( request.getParameter("tabs") != null ) {
-			if (  "true".equals( request.getParameter("tabs") )  ) {
+			if ( rf.getTabs()) {
 				rf.setShowTabs(true);
 				forwardName	= "forwardTabs";
 				if (!RequestUtils.isLoggued(response, request.getSession(), request)) {
 					return null;
 				}
 			}
-			if (  "false".equals( request.getParameter("tabs") )  )
+            else{
 				rf.setShowTabs(false);
-		}
+        }
+		
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if ( tm != null )
 			rf.setCurrentMemberId(tm.getMemberId());
-		
-		if(action==null){
-			getAllReports(appSettingSet, rf, tm, request);
-		}
-		                                             
+		                                        
 		int page = 0;
 		if (request.getParameter("page") == null) {
 			page = 0;
 		} else {
 			page = Integer.parseInt(request.getParameter("page"));
+		}
+        if(action==null||action.equalsIgnoreCase("search")){
+			getAllReports(appSettingSet, rf, tm, request);
+            page = 0;
 		}
 		rf.setCurrentPage(new Integer (page));
 		rf.setPagesToShow(10);
@@ -156,21 +166,37 @@ public class ShowTeamReports extends Action {
 				appSettingSet = true;
 			}
 
-			Set<AmpReports> reps = new TreeSet<AmpReports>(
-					new AdvancedReportUtil.AmpReportIdComparator());
-			
-			ArrayList teamResults = null;
+            Comparator sort=null;
+
+            ReportSortBy col =ReportSortBy.NONE;
+            for (ReportSortBy column : ReportSortBy.values()) {
+                if (column.getSortBy() == rf.getSortBy()) {
+                    col = column;
+                    break;
+                }
+            }
+            switch(col){
+                case NAME_ASC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC);break;
+                case NAME_DESC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC); break;
+                case OWNER_ASC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.ASC);break;
+                case OWNER_DESC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.DESC);break;
+                case DATE_ASC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.ASC);break;
+                case DATE_DESC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.DESC);break;
+                default: sort=new AdvancedReportUtil.AmpReportIdComparator();break;
+            }
+           
+			List<AmpReports> teamResults =null;
 			//Collection teamMemberResults = null;
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
 				//rf.setTempNumResults(100);
 			}else{
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword());
 				}
 			boolean found = false;
 			if (defaultTeamReport != null){
@@ -186,9 +212,7 @@ public class ShowTeamReports extends Action {
 			if (!found && defaultTeamReport!=null && rf.getShowTabs()){
 				teamResults.add(defaultTeamReport);
 			}
-			if(teamResults!=null){
-				reps.addAll(teamResults);
-			}
+			
 			//
 			// requirements for translation purposes of hierarchies
 			AmpReports el = null;
@@ -197,9 +221,8 @@ public class ShowTeamReports extends Action {
 			String text = null;
 			String translatedText = null;
 			//String prefix = "aim:reportbuilder:"; not used any more cos hash key translation.
-			Iterator iterator = reps.iterator();
-			Set<AmpReports> transReport = new TreeSet<AmpReports>(
-					new AdvancedReportUtil.AmpReportIdComparator());			
+			Iterator iterator = teamResults.iterator();
+			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
 			while (iterator.hasNext()) {
 				el = (AmpReports) iterator.next(); 
 				if (el.getHierarchies() != null) {
@@ -223,14 +246,12 @@ public class ShowTeamReports extends Action {
 					}
 					el.setHierarchies(h);					
 				}
-				transReport.add(el);
+				sortedReports.add(el);
 			}					
 			//
-			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
+			
 			//do not add this in ArrayList constructor.
-			sortedReports.addAll(transReport);
-			//AmpReports are comparable by name, so this will sort by name.
-			Collections.sort(sortedReports);
+			Collections.sort(sortedReports,sort);
 			rf.setReports(sortedReports);
 			rf.setPage(0);
 		}

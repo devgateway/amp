@@ -445,7 +445,52 @@ public final class AdvancedReportUtil {
 		}
 		
 	}
+    public static enum SortOrder{
+        ASC,DESC;
+    }
+	public static class AmpReportTitleComparator implements Comparator<AmpReports>{
+        SortOrder sortOrder;
+        public AmpReportTitleComparator(SortOrder sort){
+            this.sortOrder=sort;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=r1.getName().compareTo(r2.getName());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
+	public static class AmpReportOwnerComparator implements Comparator<AmpReports>{
+        SortOrder sortOrder;
+        public AmpReportOwnerComparator(SortOrder sort){
+            this.sortOrder=sort;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=r1.getOwnerId().getUser().getName().compareTo(r2.getOwnerId().getUser().getName());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
 
+    public static class AmpReportCreationDateComparator implements Comparator<AmpReports>{
+        SortOrder sortOrder;
+        public AmpReportCreationDateComparator(SortOrder sort){
+            this.sortOrder=sort;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=r1.getUpdatedDate().compareTo(r2.getUpdatedDate());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
 	/*
 	 * this is to delete a report completely by a team lead
 	 */

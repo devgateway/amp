@@ -411,8 +411,7 @@ public class GetFoundingDetails extends Action {
                         	donorId = new Long (-1);
                         }
 
-                        Long secId = new Long(secIdStr);
-                        
+
                         /*
                         List secFundings = DbUtil.getSectorFoundings(secId);
 

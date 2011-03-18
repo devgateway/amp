@@ -1110,7 +1110,7 @@ function collapseAll() {
 												                              	
 												                              	<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 												                              		<a href="javascript:showZoomedMap(true)">
-												                              			<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width="20"0&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
+												                              			<img id="mapThumbnail" border="0" src="/gis/getActivityMap.do?action=paintMap&noCapt=true&width=200&height=200&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>">
 												                              		</a>
 												                              		<div id="zoomMapContainer" style="display:none; border:1px solid black; position:absolute; left:0px; top:0px;" z-index="9999">
 												                              			<a href="javascript:showZoomedMap(false)"><img border="0" src="/gis/getActivityMap.do?action=paintMap&width=500&height=500&mapLevel=2&mapCode=TZA&selRegIDs=<bean:write name="selLocIds"/>"></a>

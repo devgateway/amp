@@ -4184,11 +4184,11 @@ public class DbUtil {
     public static Collection<AmpOrganisation> getDonors() {
         Session session = null;
         Query q = null;
-        Collection<AmpOrganisation> donors = null;
+        Collection<Object[]> donors = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select distinct f.ampDonorOrgId from "
+            queryString = "select distinct f.ampDonorOrgId, f.ampDonorOrgId.name  from "
                 + AmpFunding.class.getName() + " f  order by f.ampDonorOrgId.name";
             q = session.createQuery(queryString);
             logger.debug("No of Donors : " + q.list().size());
@@ -4196,7 +4196,14 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get Donors from database", ex);
         }
-        return donors;
+        Collection <AmpOrganisation> retVal = null;
+        if (donors != null) {
+            retVal = new ArrayList<AmpOrganisation>();
+            for (Object[] org : donors) {
+                retVal.add((AmpOrganisation)org[0]);
+            }
+        }
+        return retVal;
     }
 
     public static Collection getOrganisations() {

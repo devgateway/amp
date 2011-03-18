@@ -34,6 +34,19 @@ import java.awt.geom.*;
  */
 public class GisUtil {
 
+    public static String DEF_MAP_CODE = "WORLD";
+    public static int DEF_CANVAS_WIDTH = 1000;
+    public static int DEF_CANVAS_HEIGHT = 500;
+    public static float DEF_LEFT_POS = -180f;
+    public static float DEF_RIGHT_POS = 180f;
+    public static float DEF_TOP_POS = 90f;
+    public static float DEF_BOTTOM_POS = 90f;
+
+    public static String ACTION_PAINT_MAP = "paintMap";
+    public static String ACTION_GET_IMAGE_MAP = "getImageMap";
+    public static String ACTION_GET_SEGMENT_INFO = "getSegmentInfo";
+
+
     private static Map loadedMaps = null;
 
     static {

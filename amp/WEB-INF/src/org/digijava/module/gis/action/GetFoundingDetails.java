@@ -121,7 +121,7 @@ public class GetFoundingDetails extends Action {
             CoordinateRect rect = gisUtil.getMapRect(map);
 
             if (rect != null) {
-                if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
+                if (action.equalsIgnoreCase(GisUtil.ACTION_PAINT_MAP)) {
                     response.setContentType("image/png");
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
@@ -167,7 +167,7 @@ public class GetFoundingDetails extends Action {
 
                     graph.flush();
 
-                } else if (action.equalsIgnoreCase(GisService.
+                } else if (action.equalsIgnoreCase(GisUtil.
                         ACTION_GET_IMAGE_MAP)) {
                     response.setContentType("text/xml");
 

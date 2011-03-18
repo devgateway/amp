@@ -30,9 +30,7 @@
 	<action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
     	  <forward name="forward" path="/showLayout.do?layout=mapLoader" />
 	    </action>
-    	<action name="gisMapLoaderForm" path="/gis/gisService" scope="request" type="org.digijava.module.gis.action.GisService" validate="false">
-	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
-    	</action>
+
 	<action name="gisMapLoaderForm" path="/gis/getActivityMap" scope="request" type="org.digijava.module.gis.action.GetActivityMap" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
 	 </action>

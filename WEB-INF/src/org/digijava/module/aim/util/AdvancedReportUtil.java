@@ -34,6 +34,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.*;
+import java.text.Collator;
 
 /**
  * AdvancedReportUtil.java
@@ -449,13 +450,15 @@ public final class AdvancedReportUtil {
         ASC,DESC;
     }
 	public static class AmpReportTitleComparator implements Comparator<AmpReports>{
-        SortOrder sortOrder;
-        public AmpReportTitleComparator(SortOrder sort){
+        private SortOrder sortOrder;
+        private Collator collator;
+        public AmpReportTitleComparator(SortOrder sort,Collator collator){
             this.sortOrder=sort;
+            this.collator=collator;
         }
         @Override
 		public int compare(AmpReports r1, AmpReports r2) {
-            int compare=r1.getName().compareTo(r2.getName());
+            int compare=collator.compare(r1.getName(),r2.getName());
             if(sortOrder.equals(SortOrder.DESC)){
                compare=-compare;
             }
@@ -463,13 +466,15 @@ public final class AdvancedReportUtil {
 		}
 	}
 	public static class AmpReportOwnerComparator implements Comparator<AmpReports>{
-        SortOrder sortOrder;
-        public AmpReportOwnerComparator(SortOrder sort){
+        private SortOrder sortOrder;
+        private Collator collator;
+        public AmpReportOwnerComparator(SortOrder sort,Collator collator){
             this.sortOrder=sort;
+            this.collator=collator;
         }
         @Override
 		public int compare(AmpReports r1, AmpReports r2) {
-            int compare=r1.getOwnerId().getUser().getName().compareTo(r2.getOwnerId().getUser().getName());
+            int compare=collator.compare(r1.getOwnerId().getUser().getName(),r2.getOwnerId().getUser().getName());
             if(sortOrder.equals(SortOrder.DESC)){
                compare=-compare;
             }

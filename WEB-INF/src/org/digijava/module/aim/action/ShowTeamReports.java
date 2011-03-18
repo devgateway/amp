@@ -1,11 +1,13 @@
 package org.digijava.module.aim.action;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -149,6 +151,10 @@ public class ShowTeamReports extends Action {
 	}
 
 	private void getAllReports(boolean appSettingSet, ReportsForm rf, TeamMember tm, HttpServletRequest request) {
+        String siteId = RequestUtils.getSite(request).getSiteId();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+        Locale currentLocale = new Locale(locale);
+        Collator collator = Collator.getInstance(currentLocale);
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
@@ -176,10 +182,10 @@ public class ShowTeamReports extends Action {
                 }
             }
             switch(col){
-                case NAME_ASC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC);break;
-                case NAME_DESC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC); break;
-                case OWNER_ASC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.ASC);break;
-                case OWNER_DESC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.DESC);break;
+                case NAME_ASC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC,collator);break;
+                case NAME_DESC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC,collator); break;
+                case OWNER_ASC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.ASC,collator);break;
+                case OWNER_DESC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.DESC,collator);break;
                 case DATE_ASC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.ASC);break;
                 case DATE_DESC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.DESC);break;
                 default: sort=new AdvancedReportUtil.AmpReportIdComparator();break;
@@ -216,8 +222,7 @@ public class ShowTeamReports extends Action {
 			//
 			// requirements for translation purposes of hierarchies
 			AmpReports el = null;
-			String siteId = RequestUtils.getSite(request).getSiteId();
-			String locale = RequestUtils.getNavigationLanguage(request).getCode();
+
 			String text = null;
 			String translatedText = null;
 			//String prefix = "aim:reportbuilder:"; not used any more cos hash key translation.

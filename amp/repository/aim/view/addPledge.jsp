@@ -567,15 +567,15 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
 						<tr><td width="75%" vAlign="top">
 						<table cellpadding="0" cellspacing="0" width="100%" border="0">
-							<tr><td bgcolor="#f4f4f2" width="100%">
+							<tr><td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#C7D4DB">
-							<tr>
+							<!--<tr>
 							<td colspan=4 align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
-							</tr>
+							</tr>-->
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
 								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center>
+									<tr><td align=center bgcolor="#F2F2F2" height=25>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
 
 									</td></tr>
@@ -624,8 +624,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
-								<table width="100%" bgcolor="#f4f4f2" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center bgcolor="#F2F2F2">
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr><td align=center bgcolor="#F2F2F2" height=25>
 									
 										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
 
@@ -692,8 +692,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 								</table>
 								<feature:display name="Pledge Contact 1" module="Pledges">
-								<table width="100%" bgcolor="#f4f4f2" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#F2F2F2" align=center>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr><td bgcolor="#F2F2F2" align=center height=25>
 										<b><digi:trn key="aim:pointContactDonorsConferenceMarch31st">Point of Contact at Donors Conference on March 31st</digi:trn></b>
 
 									</td></tr>
@@ -1414,7 +1414,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 								</table>
 								</feature:display>
-								<table width="95%" bgcolor="#f4f4f2" border="0">
+								<table width="95%" border="0">
 									<tr>
 										<td align="right" width="50%">
 											<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">

@@ -575,7 +575,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
 								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center bgcolor="#F2F2F2" height=25>
+									<tr><td align=center bgcolor="#C7D4DB" height=25>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
 
 									</td></tr>
@@ -625,7 +625,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 								</table>
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center bgcolor="#F2F2F2" height=25>
+									<tr><td align=center bgcolor="#C7D4DB" height=25>
 									
 										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
 
@@ -693,7 +693,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								<feature:display name="Pledge Contact 1" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#F2F2F2" align=center height=25>
+									<tr><td bgcolor="#C7D4DB" align=center height=25>
 										<b><digi:trn key="aim:pointContactDonorsConferenceMarch31st">Point of Contact at Donors Conference on March 31st</digi:trn></b>
 
 									</td></tr>
@@ -867,7 +867,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#F2F2f2" align="center" height=25>
+									<tr><td bgcolor="#C7D4DB" align="center" height=25>
 										
 										<b><digi:trn key="aim:pointContactFollowUp">Point of Contact for Follow Up</digi:trn></b>
 
@@ -1051,7 +1051,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								<feature:display name="Pledge Sector and Location" module="Pledges">
 									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td bgcolor="#F2F2F2" align=center height=25>
+										    <td bgcolor="#C7D4DB" align=center height=25>
 										        <!-- contents -->
 										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
 										         
@@ -1061,7 +1061,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#f2f2f2">
 							                    	<tr>
 							                            <td align="left">
 							                                <b>
@@ -1135,7 +1135,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>&nbsp;</td></tr>
 										<tr>
 							                <td>
-							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
+							                    <table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#f2f2f2">
 							                    	<tr>
 							                            <td align="left">
 							                                <b>
@@ -1202,7 +1202,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								<feature:display name="Pledge Funding" module="Pledges">
 									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td bgcolor="#F2F2F2" align="center" height=25>
+										    <td bgcolor="#C7D4DB" align="center" height=25>
 										        <!-- contents -->
 										        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
 										        
@@ -1212,7 +1212,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr>
 							                <td>
 							                    <div id="fundTitle" style="display:block;">
-												<table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#d7eafd">
+												<table cellPadding=5 cellspacing="1" border="0" width="100%"	bgcolor="#f2f2f2">
 							                    	<tr>
 														<td align="center" valign="bottom" width="20" />
 														<td align="center" width="160">
@@ -1392,7 +1392,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</feature:display>
 								<feature:display name="Pledge Additional Information" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align="center" bgcolor="#F2F2F2" height=25>
+									<tr><td align="center" bgcolor="#C7D4DB" height=25>
 										
 										<b><digi:trn key="aim:additionalInformation">Additional Information</digi:trn></b>
 

@@ -586,9 +586,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">
 													<FONT color=red>*</FONT>
-													<a>
+													
 													<digi:trn key="pledgeTitle">Pledge Title</digi:trn>
-													</a>
+													
 												
 												</td>
 												<td align="left" width="70%">
@@ -637,13 +637,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">
 													<FONT color=red>*</FONT>
-													<a>
+													
 													<digi:trn key="donorCountryInstitution">Donor (Country/Institution)</digi:trn>
-													</a>
-												
+																									
 												</td>
 												<td valign="middle" align="left" width="70%">
-													<a>
+													
 <!--														<html:hidden property="selectedOrgId" />-->
 <!--														<html:text property="selectedOrgName" readonly="true"/>-->
 <!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
@@ -652,38 +651,37 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
 							                              <input name="selectedOrgName" type='text' id="${nameId}" value='${pledgeForm.selectedOrgName}' style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton>
-                            						</a>
+                            						
 													
 												</td>											
 											</tr>
 											<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="30%">
-														<a>
+														
 														<digi:trn key="whoHasAuthorizedPledge">Who Has Authorized Pledge?</digi:trn>
-														</a>
+														
 													
 													</td>
 													<td valign="middle" align="left" width="70%">
-														<a>
+														
 															<html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>											
 												</tr>
 											</field:display>
 											<field:display name="Further Approval Needed" feature="Pledge Donor Information">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="30%">
-														<a>
+														
 														<digi:trn key="pleaseIndicateFurtherApprovalNeeded">Please Indicate any Further Approval Needed</digi:trn> 
-														</a>
+														
 													
 													</td>
 													<td valign="middle" align="left" width="70%">
-														<a>
+														
 															<html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/>
-	                            						</a>
-													</td>											
+	                            																			</td>											
 												</tr>
 											</field:display>
 										</table>
@@ -704,109 +702,107 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											<tr bgcolor="#ffffff">			
 												<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1">								
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactName">Name</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Title" feature="Pledge Contact 1">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTitle">Title</digi:trn>
-														</a>
-													</td>
+																											</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Title" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>		
 												</field:display>								
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 1 - Organization" feature="Pledge Contact 1">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactOrganization">Organization</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<c:set var="valueId1"> contact1OrgId </c:set>
 								                              <c:set var="nameId1"> contact1OrgName </c:set>
 								                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
 								                              <input name="contact1OrgName" type="text" id="${nameId1}" style="text-align:left" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton>
 	                            						
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactMinistry">Ministry</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>			
 												</field:display>							
 											</tr>
 											<tr bgcolor="#ffffff">		
 												<field:display name="Pledge Contact 1 - Address" feature="Pledge Contact 1">									
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactAddress">Address</digi:trn>
-														</a>
-													</td>
+																											</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Address" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 1 - Telephone" feature="Pledge Contact 1">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>		
 												</field:display>								
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 1 - Email" feature="Pledge Contact 1">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactEmail">Email</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 1 - Fax" feature="Pledge Contact 1">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactFax">Fax</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact1Fax" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>									
 											</tr>
@@ -818,44 +814,42 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactName">Name</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>	
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>										
 												</tr>
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactEmail">Email</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/>
-	                            						</a>
+	                            						
 													</td>	
 													<td valign="middle" align="left" width="15%">
-														<a>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
-														</a>
+														
 													</td>										
 												</tr>
 											</table>
@@ -878,118 +872,118 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr>
 												<td valign="middle" align="left" width="15%" colspan="2">
-													<a>
+													
 														<digi:trn key="sameAsOriginalPointOfContact">Same As Original Point Of Contact</digi:trn>
-													</a>
+													
 													<input type="checkbox" id="sameContact" onclick="setSameContact()">
 												</td>
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 2 - Name" feature="Pledge Contact 2">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactName">Name</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Name" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTitle">Title</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Title" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>									
 											</tr>
 											<tr bgcolor="#ffffff">	
 												<field:display name="Pledge Contact 2 - Organization" feature="Pledge Contact 2">										
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactOrganization">Organization</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<c:set var="valueId2"> contact2OrgId </c:set>
 								                              <c:set var="nameId2"> contact2OrgName </c:set>
 								                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
 								                              <input name="contact2OrgName" type='text' id="${nameId2}" style="text-align:left" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC" onKeyDown="return false" class="inp-text"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton>
 	                            						
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactMinistry">Ministry</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Ministry" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>			
 												</field:display>							
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 2 - Address" feature="Pledge Contact 2">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactAddress">Address</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Address" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 2 - Telephone" feature="Pledge Contact 2">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Telephone" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>									
 											</tr>
 											<tr bgcolor="#ffffff">											
 												<field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactEmail">Email</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Email" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 												</field:display>
 												<field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2">
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactFax">Fax</digi:trn>
-														</a>	
+															
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contact2Fax" size="40" styleClass="inp-text"/>
-                            							</a>
+                            							
 													</td>	
 												</field:display>									
 											</tr>
@@ -1001,44 +995,42 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactName">Name</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactTelephone">Telephone</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate2Telephone" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            					
 													</td>										
 												</tr>
 												<tr bgcolor="#ffffff">											
 													<td valign="middle" align="left" width="15%">
-														<a>
+														
 															<digi:trn key="pointContactEmail">Email</digi:trn>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
+														
 															<html:text property="contactAlternate2Email" size="40" styleClass="inp-text"/>
-	                            						</a>
+	                            						
 													</td>	
 													<td valign="middle" align="left" width="15%">
-														<a>
-														</a>
+														
 													</td>
 													<td valign="middle" align="left" width="35%">
-														<a>
-														</a>
+														
 													</td>										
 												</tr>
 											</table>

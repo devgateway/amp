@@ -7,7 +7,7 @@
 
 		<id name="ampPpId" column="amp_pp_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_REPORT_PHY_PER_SEQ</param>
+				<param name="sequence">AMP_REPORT_PHYSICAL_PERFORMANC_seq</param>
 			</generator>
 		</id>
 		<property column="amp_activity_id" name="ampActivityId" type="java.lang.Long" />

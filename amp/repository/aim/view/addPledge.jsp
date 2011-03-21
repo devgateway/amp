@@ -568,21 +568,21 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 						<tr><td width="75%" vAlign="top">
 						<table cellpadding="0" cellspacing="0" width="100%" border="0">
 							<tr><td bgcolor="#f4f4f2" width="100%">
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#C7D4DB" class="inside">
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#C7D4DB">
 							<tr>
-							<td colspan=4 class="inside" align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
+							<td colspan=4 align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
 							</tr>
-							<tr><td bgColor=#ffffff align="center" vAlign="top" class="inside">
+							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
-								<table width="95%" bgcolor="#ffffff" border="0" class="inside">
-									<tr><td class="inside">
+								<table width="95%" bgcolor="#ffffff" border="0">
+									<tr><td>
 										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
 
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									
-									<tr><td class="inside">
+									<tr><td>
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">											
 												<td valign="middle" align="left" width="30%">

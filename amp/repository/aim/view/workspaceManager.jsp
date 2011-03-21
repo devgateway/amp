@@ -160,7 +160,7 @@
 										</digi:form>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" class="inside">
+											<table width="100%" valign="top" align="left" class="inside">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center" class="inside"><b>

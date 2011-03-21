@@ -160,10 +160,10 @@
 										</digi:form>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" bgcolor="#d7eafd">
+											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" class="inside">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
 													<tr bgcolor="#ffffff">
-														<td colspan="5" align="center"><b>
+														<td colspan="5" align="center" class="inside"><b>
 															<digi:trn>No teams present</digi:trn>
 														</b></td>
 													</tr>
@@ -171,11 +171,11 @@
 													<logic:notEmpty name="aimWorkspaceForm" property="workspaces">
 													<logic:iterate name="aimWorkspaceForm" property="workspaces"id="workspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
 													<tr class="teamsOnpage" id="${workspaces.ampTeamId}">
-														<td bgcolor="#ffffff">
+														<td bgcolor="#ffffff" class="inside">
 															<c:set var="teamWrk" value="${workspaces}" target="request" scope="request" />
 															<jsp:include page="teamDetailsPopup.jsp" />
 														</td>
-														<td bgcolor="#ffffff" width="70" align="center">
+														<td bgcolor="#ffffff" width="70" align="center" class="inside">
 										 					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="teamId">
 															<bean:write name="workspaces" property="ampTeamId" />
@@ -187,7 +187,7 @@
 																<digi:trn>Members</digi:trn>
 															</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="70" align="center">
+														<td bgcolor="#ffffff" width="70" align="center" class="inside">
 															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams1}" property="id">
 															<bean:write name="workspaces" property="ampTeamId" />
@@ -199,7 +199,7 @@
 																<digi:trn>Activities</digi:trn>
 															</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="65" align="center">
+														<td bgcolor="#ffffff" width="65" align="center" class="inside">
 															<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams22}" property="tId">
 																<bean:write name="workspaces" property="ampTeamId" />
@@ -214,7 +214,7 @@
 																<digi:trn>Edit</digi:trn>
 															</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="75" align="center">
+														<td bgcolor="#ffffff" width="75" align="center" class="inside">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="tId">
 																<bean:write name="workspaces" property="ampTeamId" />
@@ -228,7 +228,7 @@
 																<digi:trn>Delete</digi:trn>
 																</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" align="center" nowrap>
+														<td bgcolor="#ffffff" align="center" nowrap class="inside">
 															[<a href="JavaScript:openNpdSettingsWindow(${workspaces.ampTeamId});">
 																<digi:trn>Npd Settings</digi:trn>
 															</a>]
@@ -239,7 +239,7 @@
 													<!-- page logic for pagination -->
 													<logic:notEmpty name="aimWorkspaceForm" property="pages">
 													<tr bgcolor="#ffffff">
-														<td colspan="5">
+														<td colspan="5" class="inside">
 															<digi:trn>Pages :</digi:trn>
 															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
@@ -280,7 +280,7 @@
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title height=17>
 												<digi:trn key="aim:otherLinks">
-												<b style="font-size:12px;">Other links</b>
+												<b style="font-size:12px; padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>

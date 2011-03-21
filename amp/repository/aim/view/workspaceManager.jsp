@@ -106,13 +106,13 @@
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
 					<tr><td noWrap width="750" vAlign="top">
-						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+						<table cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+										<tr><td bgColor=#C7D4DB class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn>Teams</digi:trn>
+											<digi:trn><b style="font-size:12px;">Teams</b></digi:trn>
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>&nbsp;</td></tr>
@@ -120,7 +120,7 @@
 										<digi:form action="/workspaceManager.do?page=1" method="post">
 										<tr><td class="box-title" align="center">
 											<!-- Table title -->
-											<table width="100%" >
+											<table width="100%" style="font-size:12px;" bgcolor=#F2F2F2>
 												<tr>
 													<td>
 													<digi:trn>keyword</digi:trn>:&nbsp;

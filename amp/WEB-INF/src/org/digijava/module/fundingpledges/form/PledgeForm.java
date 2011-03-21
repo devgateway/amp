@@ -13,6 +13,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class PledgeForm extends ActionForm implements Serializable{
 
@@ -75,7 +76,25 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> aidModalityCategory = null;
 	private String defaultCurrency;
 	private String[] pledgeNames;
+	private Collection<BeanWrapperImpl> years;
+	private Long year;
 	
+	public Collection<BeanWrapperImpl> getYears() {
+		return years;
+	}
+
+	public void setYears(Collection<BeanWrapperImpl> years) {
+		this.years = years;
+	}
+
+	public Long getYear() {
+		return year;
+	}
+
+	public void setYear(Long year) {
+		this.year = year;
+	}
+
 	/**
 	 * @return the pledgeNames
 	 */

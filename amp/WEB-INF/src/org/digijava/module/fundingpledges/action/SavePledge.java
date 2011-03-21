@@ -108,7 +108,8 @@ public class SavePledge extends Action {
 	    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
 	    			fpd.setAmount(Double.parseDouble(token[3]));
 	    			fpd.setCurrencycode(token[4]);
-	    			fpd.setFundingDate(token[5]);
+	    			fpd.setFundingYear(Long.parseLong(token[5]));
+	    			//fpd.setFundingDate(token[5]);
 	    			fpd.setAidmodalityid(Long.parseLong(token[6]));
 	    			plForm.getFundingPledgesDetails().add(fpd);
     			}

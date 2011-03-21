@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*" %>
+<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*, org.springframework.beans.BeanWrapperImpl" %>
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -1232,22 +1232,22 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
 							                    	<tr>
 														<td align="center" valign="bottom" width="20" />
-														<td align="center" width="160">
+														<td align="center" width="240">
 						                                	<b><digi:trn key="aim:typeOfPledge">Type Of Pledge</digi:trn></b>
 						                            	</td>
 														<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
-															<td align="center" width="190">
+															<td align="center" width="150">
 								                                <b><digi:trn key="aim:typeOfAssistance">Type Of Assistance</digi:trn></b>
 								                            </td>
 														</field:display>
-														<td align="center" width="170">
+														<td align="center" width="150">
 							                                <b><digi:trn key="aim:amount">Amount</digi:trn></b>
 							                            </td>
-														<td align="center" width="110">
+														<td align="center" width="170">
 							                                <b><digi:trn key="aim:typeOfCurrency">Currency</digi:trn></b>
 							                            </td>
-														<td align="center" width="140">
-							                                <b><digi:trn key="aim:date">Date</digi:trn></b>
+														<td align="center" width="100">
+							                                <b><digi:trn key="aim:year">Year</digi:trn></b>
 							                            </td>
 														<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 															<td align="center" width="200">
@@ -1336,20 +1336,19 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																		</select>
 										                            </td>
 																	<td align="center" valign="bottom" width="150">
-										                                <table cellPadding="0" cellSpacing="0">
-																			<tr>
-																				
-																				<td align="left" vAlign="bottom">
-																					<input type="text" name="<%=field6%>" id="<%=field6%>" readonly="true" value="<c:out value="${fundingPledgesDetails.fundingDate}"/>" size="10" style='width:80px' class="inp-text" />
-																				</td>
-																				<td align="left" vAlign="bottom">&nbsp;
-																					<a id="date1<%=field6%>" href='javascript:pickDateById("date1<%=field6%>","<%=field6%>")'>
-																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-																					</a>
-																				</td>														
-																			</tr>
-																		</table>
-										                            </td>
+																		<select name="<%=field6%>" class="inp-text" style="max-width: 150px;">
+																			<c:forEach var="year" items="${pledgeForm.years}">
+																				<c:if test="${fundingPledgesDetails.fundingYear == year.wrappedInstance}">
+																					<option selected="true" value="<c:out value="${year.wrappedInstance}"/>">	
+																				</c:if>
+																				<c:if test="${fundingPledgesDetails.fundingYear != year.wrappedInstance}">
+																					<option value="<c:out value="${year.wrappedInstance}"/>">
+																				</c:if>
+																				<c:out value="${year.wrappedInstance}" />
+																				</option>
+																			</c:forEach>
+																		</select>
+										                                </td>
 																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                               <select name="<%=field7%>" class="inp-text" style="max-width: 150px;">
@@ -1529,10 +1528,21 @@ function addFunding() {
 	 }%>
 	 s += "</select> </td>";
 
-	s += "<td align='center' valign='bottom' width='150'> <table cellPadding='0' cellSpacing='0'>";
-		s += "<tr> <td align='left' vAlign='bottom'> <input type='text' name='fund_"+ numFund +"_6' id='fund_"+ numFund +"_6' readonly='true' size='10' style='width:80px' class='inp-text' />	</td>";
-		s += "<td align='left' vAlign='bottom'>&nbsp; <a id='date1fund_"+ numFund +"_6' href='javascript:pickDateById(\"date1fund_"+ numFund +"_6\",\"fund_"+ numFund +"_6\")'>";
-		s += "<img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0> </a> </td> </tr> </table> </td>";
+	 s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_6' class='inp-text' style='max-width: 150px;'>";
+		<% Collection col5 = pledgeForm.getYears();
+		Iterator itr5 = col5.iterator();
+		while (itr5.hasNext()) {
+			BeanWrapperImpl yearBWI = (BeanWrapperImpl) itr5.next();	
+			Long year = (Long) yearBWI.getWrappedInstance();
+			if (year != null){
+				if (year.equals(pledgeForm.getYear())) {%>
+					s += "<option selected='true' value='<%=year%>'><%=year%></option>";				  			
+			<% } else { %>
+					s += "<option value='<%=year%>'><%=year%></option>";
+			<%}
+			}
+		 }%>
+		 s += "</select> </td>";
 
 	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 	s += "<td align='center' valign='bottom' width='200'> <select name='fund_"+ numFund +"_7' class='inp-text' style='max-width: 150px;'>";

@@ -31,6 +31,7 @@ public class FundingPledgesDetails {
 	private Long pledgetypeid;
 	private Long typeOfAssistanceid;
 	private Long aidmodalityid;
+	private Long fundingYear;
 	
 	public long getId() {
 		return id;
@@ -71,10 +72,12 @@ public class FundingPledgesDetails {
 	}
 	public void setFunding_date(java.sql.Timestamp fundingDate) {
 		this.funding_date = fundingDate;
-		java.util.Date date1 = new java.util.Date(fundingDate.getTime());
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String fundingDateStr = formatter.format(date1);
-        this.fundingDate = fundingDateStr;
+		if (fundingDate!=null) {
+			java.util.Date date1 = new java.util.Date(fundingDate.getTime());
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        String fundingDateStr = formatter.format(date1);
+	        this.fundingDate = fundingDateStr;
+		} 
 	}
 	
 	public AmpCategoryValue getPledgetype() {
@@ -140,5 +143,11 @@ public class FundingPledgesDetails {
 			e.printStackTrace();
 		}
 
+	}
+	public Long getFundingYear() {
+		return fundingYear;
+	}
+	public void setFundingYear(Long fundingYear) {
+		this.fundingYear = fundingYear;
 	}
 }

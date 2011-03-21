@@ -1,6 +1,7 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -18,8 +19,10 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -27,6 +30,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class AddPledge extends Action {
 
@@ -51,6 +55,23 @@ public class AddPledge extends Action {
     		plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
 
     		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
+    		
+    		if (plForm.getYear() == null) {     
+                Long year = null;
+                try {
+                    year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+                } catch (NumberFormatException ex) {
+                    year = new Long(Calendar.getInstance().get(Calendar.YEAR));
+                }
+                plForm.setYear(year);
+            }
+    		plForm.setYears(new ArrayList<BeanWrapperImpl>());
+            long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+            long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+            long maxYear = yearFrom + countYear;
+            for (long i = yearFrom; i <= maxYear; i++) {
+            	plForm.getYears().add(new BeanWrapperImpl(new Long(i)));
+            }
     		
     		Collection currencies = CurrencyUtil.getAmpCurrency();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();

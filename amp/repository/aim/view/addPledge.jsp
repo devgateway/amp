@@ -574,9 +574,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							</tr>
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
-								<table width="95%" bgcolor="#ffffff" border="0">
-									<tr><td>
-										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
+								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
+									<tr><td align=center>
 										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
 
 									</td></tr>
@@ -625,9 +624,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
-								<table width="95%" bgcolor="#f4f4f2" border="0">
-									<tr><td>
-										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
+								<table width="100%" bgcolor="#f4f4f2" border="0" cellpadding="0" cellspacing="0">
+									<tr><td align=center bgcolor="#F2F2F2">
+									
 										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
 
 									</td></tr>
@@ -693,9 +692,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 								</table>
 								<feature:display name="Pledge Contact 1" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border="0">
-									<tr><td>
-										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+								<table width="100%" bgcolor="#f4f4f2" border="0" cellpadding="0" cellspacing="0">
+									<tr><td bgcolor="#F2F2F2" align=center>
 										<b><digi:trn key="aim:pointContactDonorsConferenceMarch31st">Point of Contact at Donors Conference on March 31st</digi:trn></b>
 
 									</td></tr>
@@ -868,9 +866,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border="0">
-									<tr><td>
-										<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr><td bgcolor="#F2F2f2" align="center">
+										
 										<b><digi:trn key="aim:pointContactFollowUp">Point of Contact for Follow Up</digi:trn></b>
 
 									</td></tr>
@@ -1051,11 +1049,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</table>
 								</feature:display>
 								<feature:display name="Pledge Sector and Location" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border="0">
+									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td>
+										    <td bgcolor="#F2F2F2" align=center>
 										        <!-- contents -->
-										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
 										         
 										    </td>
@@ -1203,11 +1200,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									</table>
 								</feature:display>
 								<feature:display name="Pledge Funding" module="Pledges">
-									<table width="95%" bgcolor="#f4f4f2" border="0">
+									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td>
+										    <td bgcolor="#F2F2F2" align="center">
 										        <!-- contents -->
-										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
 										        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
 										        
 										    </td>
@@ -1395,9 +1391,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									</table>
 								</feature:display>
 								<feature:display name="Pledge Additional Information" module="Pledges">
-								<table width="95%" bgcolor="#f4f4f2" border="0">
-									<tr><td>
-										<IMG  height="10" src="../ampTemplate/images/arrow-014E86.gif" width=15>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0">
+									<tr><td align="center" bgcolor="#F2F2F2">
+										
 										<b><digi:trn key="aim:additionalInformation">Additional Information</digi:trn></b>
 
 									</td></tr>

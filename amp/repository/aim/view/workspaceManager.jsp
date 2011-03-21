@@ -110,7 +110,7 @@
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor=#C7D4DB class=box-title height="20" align="center">
+										<tr><td bgColor=#C7D4DB class=box-title height="25" align="center">
 											<!-- Table title -->
 											<digi:trn><b style="font-size:12px;">Teams</b></digi:trn>
 											<!-- end table title -->
@@ -151,7 +151,7 @@
 													<c:set var="translation">
 										                <digi:trn>Show</digi:trn>
 										            </c:set>
-										            <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
+										            <input type="submit" value="${translation}"  class="buttonx" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
 													</td>
 												</tr>
 											</table>

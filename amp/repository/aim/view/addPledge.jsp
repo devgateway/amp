@@ -867,7 +867,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</feature:display>
 								<feature:display name="Pledge Contact 2" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#F2F2f2" align="center">
+									<tr><td bgcolor="#F2F2f2" align="center" height=25>
 										
 										<b><digi:trn key="aim:pointContactFollowUp">Point of Contact for Follow Up</digi:trn></b>
 
@@ -1051,7 +1051,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								<feature:display name="Pledge Sector and Location" module="Pledges">
 									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td bgcolor="#F2F2F2" align=center>
+										    <td bgcolor="#F2F2F2" align=center height=25>
 										        <!-- contents -->
 										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
 										         
@@ -1202,7 +1202,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								<feature:display name="Pledge Funding" module="Pledges">
 									<table width="100%" border="0" cellpadding="0" cellspacing="0">
 										<tr>
-										    <td bgcolor="#F2F2F2" align="center">
+										    <td bgcolor="#F2F2F2" align="center" height=25>
 										        <!-- contents -->
 										        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
 										        
@@ -1392,7 +1392,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 								</feature:display>
 								<feature:display name="Pledge Additional Information" module="Pledges">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align="center" bgcolor="#F2F2F2">
+									<tr><td align="center" bgcolor="#F2F2F2" height=25>
 										
 										<b><digi:trn key="aim:additionalInformation">Additional Information</digi:trn></b>
 

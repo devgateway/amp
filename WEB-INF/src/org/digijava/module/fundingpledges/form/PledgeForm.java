@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
@@ -36,7 +37,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private FundingPledges fundingPledges;
 	private String selectedOrgId;
 	private String selectedOrgName;
-	private String pledgeTitle;
+	private AmpCategoryValue pledgeTitle;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
 	private String contact1Name;
@@ -75,7 +76,8 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> assistanceTypeCategory = null;
 	private Collection<AmpCategoryValue> aidModalityCategory = null;
 	private String defaultCurrency;
-	private String[] pledgeNames;
+	private Collection<AmpCategoryValue> pledgeNames;
+	private Long pledgeTitleId;
 	private Collection<BeanWrapperImpl> years;
 	private Long year;
 	
@@ -95,17 +97,26 @@ public class PledgeForm extends ActionForm implements Serializable{
 		this.year = year;
 	}
 
+	public Long getPledgeTitleId() {
+		return pledgeTitleId;
+	}
+
+	public void setPledgeTitleId(Long pledgeTitleId) {
+		this.pledgeTitleId = pledgeTitleId;
+		this.pledgeTitle = CategoryManagerUtil.getAmpCategoryValueFromDb(this.pledgeTitleId);
+	}
+	
 	/**
 	 * @return the pledgeNames
 	 */
-	public String[] getPledgeNames() {
+	public Collection<AmpCategoryValue> getPledgeNames() {
 		return pledgeNames;
 	}
 
 	/**
 	 * @param pledgeNames the pledgeNames to set
 	 */
-	public void setPledgeNames(String[] pledgeNames) {
+	public void setPledgeNames(Collection<AmpCategoryValue> pledgeNames) {
 		this.pledgeNames = pledgeNames;
 	}
 
@@ -256,13 +267,13 @@ public class PledgeForm extends ActionForm implements Serializable{
 	/**
 	 * @return the pledgeTitle
 	 */
-	public String getPledgeTitle() {
+	public AmpCategoryValue getPledgeTitle() {
 		return pledgeTitle;
 	}
 	/**
 	 * @param pledgeTitle the pledgeTitle to set
 	 */
-	public void setPledgeTitle(String pledgeTitle) {
+	public void setPledgeTitle(AmpCategoryValue pledgeTitle) {
 		this.pledgeTitle = pledgeTitle;
 	}
 	/**

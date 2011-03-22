@@ -44,7 +44,8 @@ public class ViewSelectActivityTabs extends Action {
 			{ "field", "Paris Survey", "parisSurvey" },
 			{ "feature", "Activity Dashboard", "activityDashboard" },
 			{ "field", "Costing Tab", "costing" },
-			{ "field", "Contracting Tab", "contracting" } };
+			{ "field", "Contracting Tab", "contracting" }, 
+			{ "feature", "Regional Observations", "regionalObservations" }};
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm,

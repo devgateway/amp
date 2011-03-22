@@ -253,17 +253,6 @@
 						<tr>
 							<td><jsp:include page="t.jsp"/>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</c:set>
-									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</c:set>
@@ -280,9 +269,7 @@
 
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-
-                                <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+								<c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
                                    <c:set property="translation" var="trans">
                                        <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
                                            Click here to goto Add Activity Step ${step.stepActualNumber}

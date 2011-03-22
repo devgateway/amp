@@ -49,35 +49,53 @@
     <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 		<table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;" border="1" bordercolor="#000000">
 			<tr>
-				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">Country</td>
+				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Country</digi:trn>
+				</td>
 				<td>&nbsp;<%=countryName%></td>
 			</tr>
 			<tr>
-				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">Region</td>
+				<td width="120" style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Region</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="regName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Sector</td>
+				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Sector</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="selSectorName"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Year Range</td>
+				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Year Range</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="startYear"/> - <bean:write name="gisRegReportForm" property="endYear"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Commitments</td>
+				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Actual Commitments</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualCommitmentsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Disbursements</td>
+				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Actual Disbursements</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualDisbursementsStr"/></td>
 			</tr>
 			<tr>
-				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Expenditures</td>
+				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">
+					<digi:trn>Actual Expenditures</digi:trn>
+				</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><font color="red">Note: all numbers are in ${gisRegReportForm.selectedCurrency}</font></td>
+				<td colspan="2" align="center">
+					<font color="red">
+						<digi:trn>Note: all numbers are in</digi:trn> ${gisRegReportForm.selectedCurrency}
+					</font>
+				</td>
 			</tr>
 		</table> 
 	</div>
@@ -104,14 +122,14 @@
 								<td colspan="4" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;" >
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											Overall information
+											<digi:trn>Overall information</digi:trn>
 										</div>
 									</div>
 								</td>
 								<td colspan="3" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
-											For selected sector/region
+											<digi:trn>For selected sector/region</digi:trn>
 										</div>
 									</div>
 								</td>
@@ -121,37 +139,37 @@
 						<tr>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Activity
+											<digi:trn>Activity</digi:trn>
 										</div>
 											</td>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Region(s)
+											<digi:trn>Region</digi:trn>(s)
 										</div>
 								</td>
 								<td width="20%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Sector(s)
+											<digi:trn>Sector</digi:trn>(s)
 										</div>
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Donor(s)
+											<digi:trn>Donor</digi:trn>(s)
 										</div>
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Commitments
+											<digi:trn>Commitments</digi:trn>
 										</div>
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Disbursements
+											<digi:trn>Disbursements</digi:trn>
 										</div>
 								</td>
 								<td width="10%" style="overflow-x:hidden; background-color: #222E5D; color:#FFFFFF;">
 										<div class="gisReportTableBevelCell">
-											Expenditures
+											<digi:trn>Expenditures</digi:trn>
 										</div>
 								</td>
 						</tr>
@@ -310,7 +328,11 @@
 		</logic:present>
 		<logic:notPresent name="gisRegReportForm" property="activityLocationFundingList">
 			<div style="width:100%" align="center">
-				<div class="gisReportWarning" style="width:85%">The report contains no activities. Please adjust your filter criteria.</div>
+				<div class="gisReportWarning" style="width:85%">
+				 <digi:trn>
+				 	The report contains no activities. Please adjust your filter criteria.
+				 </digi:trn>
+				</div>
 			</div>
 		</logic:notPresent>
 </div>		

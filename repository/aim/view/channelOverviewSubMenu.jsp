@@ -165,6 +165,25 @@
 					
 				</DIV>	
 				</TD></TR>
+				<TR>
+					<TD bgcolor="#f7f9e3">
+						<DIV id="leftNav">
+							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
+					  			<span id="leftNavSelected">
+							 		<digi:trn>Regional Observations</digi:trn>								
+								</span>
+							</logic:equal>
+							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="8">
+     							<c:set target="${urlTabs}" property="tabIndex" value="8"/>
+								<div id="gen" title='<digi:trn>Click here to view Regional Observations</digi:trn>'>
+              						<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs" styleClass="leftNavItem">
+							 			<digi:trn>Regional Observations</digi:trn>
+									</digi:link>
+								</div>
+							</logic:notEqual>
+						</DIV>	
+					</TD>
+				</TR>
 			</TABLE>
 		</TD>
 	</TR></digi:form>

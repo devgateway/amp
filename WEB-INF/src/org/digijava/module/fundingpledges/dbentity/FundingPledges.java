@@ -19,7 +19,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class FundingPledges implements Comparable<FundingPledges>{
 	private Long id;
-	private String title;
+	private AmpCategoryValue title;
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
@@ -163,10 +163,10 @@ public class FundingPledges implements Comparable<FundingPledges>{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getTitle() {
+	public AmpCategoryValue getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+	public void setTitle(AmpCategoryValue title) {
 		this.title = title;
 	}
 	public AmpOrganisation getOrganization() {

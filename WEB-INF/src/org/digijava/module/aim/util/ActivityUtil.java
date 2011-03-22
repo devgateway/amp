@@ -2701,6 +2701,35 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
 //end functino to get components
+  
+  public static ArrayList getRegionalObservations(Long id) {
+		ArrayList<AmpRegionalObservation> list = new ArrayList<AmpRegionalObservation>();
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+			Set regObs = activity.getRegionalObservations();
+			Iterator<AmpRegionalObservation> iRegObs = regObs.iterator();
+			while (iRegObs.hasNext()) {
+				AmpRegionalObservation auxRegOb = iRegObs.next();
+				Iterator<AmpRegionalObservationMeasure> iRegMeasures = auxRegOb.getRegionalObservationMeasures()
+						.iterator();
+				while (iRegMeasures.hasNext()) {
+					AmpRegionalObservationMeasure auxRegMeasure = iRegMeasures.next();
+					Iterator<AmpRegionalObservationActor> iRegActors = auxRegMeasure.getActors().iterator();
+					while (iRegActors.hasNext()) {
+						iRegActors.next();
+					}
+				}
+
+				list.add(auxRegOb);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return list;
+	}
+  
   public static ArrayList getIssues(Long id) {
     ArrayList list = new ArrayList();
 

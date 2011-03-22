@@ -696,14 +696,16 @@
                             </td>
                           </tr>
                           </module:display>
-						<tr>
-                            <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
-							   <digi:link module="dataExchange" href="/importChapters.do" title="Import Chapters" >
-							      <digi:trn>Code Chapitre Importer</digi:trn>
-							   </digi:link>
-                            </td>
-                          </tr>
+							<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION">
+							<tr>
+                            	<td class="f-names" nowrap="nowrap">
+                              		<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
+							   		<digi:link module="dataExchange" href="/importChapters.do" title="Import Chapters" >
+							      	<digi:trn>Code Chapitre Importer</digi:trn>
+							   		</digi:link>
+                            	</td>
+                          	</tr>
+                          </module:display>
                         </table>
                       </td>
                     </tr>

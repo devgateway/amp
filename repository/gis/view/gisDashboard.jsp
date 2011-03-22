@@ -48,6 +48,103 @@
 	option.enbl {
 		color:Black;;
 	}
+		
+	td.sec_selector_tree {
+		height: 100%;
+		background-color: white;
+		background-repeat: repeat-y;
+		width: 13px;
+	}
+
+	td.sec_selector_tree_plain {
+		background-image: url(/repository/gis/view/images/tree-vertical-plain.png);
+	}
+	
+	td.sec_selector_tree_has_child {
+		background-image: url(/repository/gis/view/images/tree-vertical-with-child.png);
+	}
+	
+	td.sec_selector_tree_has_child_is_last {
+		background-image: url(/repository/gis/view/images/tree-vertical-with-child-last.png);
+	}
+	
+	td.sec_selector_tree_has_child_is_first {
+		background-image: url(/repository/gis/view/images/tree-vertical-with-child-first.png);
+	}
+	
+	div.sec_selector_item {
+		background-color: white;
+		border: 1px solid white;
+		cursor:pointer;
+		color:black;
+		
+	}	
+	
+	div.sec_selector_item:hover {
+		background-color: #d2e1e8;
+		border: 1px solid #96b8c6;
+	}
+	
+	div.sec_selector_item_selected {
+		background-color: #222e5d;
+		border: 1px solid #3c788e;
+		color: white;
+		cursor:pointer;
+	}
+	
+	div.sec_selector_item_disabled {
+		background-color: white;
+		color:gray;
+	}
+	
+	div.sec_scheme_selector_outer_frame {
+		border: 1px solid silver;
+	}
+	
+	div.sec_scheme_selector {
+		border: 1px solid;
+		border-top-color: white;
+		border-left-color: white;
+		border-bottom-color: #a8a8a8;
+		border-right-color: #a8a8a8;
+		padding: 3px;
+		cursor:pointer;
+		text-align:center;
+	}
+	
+	div.sec_scheme_selector_default {
+		background-color: #edf5ff;
+	}
+	
+	div.sec_scheme_selector_default:hover {
+		background-color: #d2e1e8;
+	}
+	
+	div.sec_scheme_selector_selected {
+		background-color: #222e5d;
+		color:white;
+	}
+	
+	div.sec_scheme_selector_active {
+		background-color: #314388;
+		color:white;
+	}
+	
+	
+	div.filter_wnd_background {
+		background-color:black;
+		position:absolute;
+		left:0px;
+		top:0px;
+		opacity:0.5;
+		filter:alpha(opacity=50);                              
+		z-index: 100;
+		width:100%;
+		height:100%;
+		/*
+		display:none;
+		*/
+	}
 	
 </style>
 
@@ -82,6 +179,96 @@
 </c:if>
 
 
+<div class="filter_wnd_background_holder" style="display:none;">
+	
+	<div class="filter_wnd_background">&nbsp;
+	</div>
+	
+	<div id="filter_dialog" style="position:absolute;z-index:101;">
+		<table bgcolor="white" border="1" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
+			
+			<tr>
+				<td>
+					<digi:trn>Map mode</digi:trn>
+				</td>
+				<td align="right">
+            <select id="mapModeFin" style="width:250px" value="commitment">
+            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
+            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
+        	</select>
+        </td>
+        <td width="10">
+		        &nbsp;
+				</td>
+			</tr>
+			
+			
+			<tr id="fundingTypeRow">
+				<td>
+					<digi:trn>Funding type</digi:trn>
+				</td>
+				<td align="right">
+            <select id="fundingType" onChange="" style="width:250px" value="commitment">
+            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
+            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
+            </field:display>
+            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
+            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
+            </field:display>
+            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
+            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
+            </field:display>
+        	</select>
+        </td>
+        <td width="10">
+		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
+				</td>
+			</tr>
+			
+			<tr>
+        <td>
+             <digi:trn>Select Donor</digi:trn>:
+        </td>
+				<td align="right">
+					<select id="donorsCombo" onChange="" style="width:250px">
+						<option value="-1"><digi:trn>All Donors</digi:trn></option>
+						<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
+							<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>
+						</logic:iterate>
+					</select>
+				</td>
+				<td width="10">
+		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
+		
+				</td>
+			</tr>
+					
+			<tr>
+				<td colspan="2">
+					<digi:trn>Select Sector</digi:trn>
+				</td>
+				<td width="10">
+	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
+				</td>
+			</td>
+			<tr>
+				<td colspan="3">
+					<div id="sector_selector_hider">
+				    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
+				  </div>
+				</td>
+			</tr>
+			
+			<tr><td align='right' colspan="3">
+			<input type='button' value='Apply' onClick='applySectorFilter()'>
+				&nbsp;
+			<input type='button' value='Cancel' onClick='closeSectorFilter()'>
+			</td></tr>
+			
+			
+		</table>
+  </div>
+</div>
 
 
 
@@ -138,6 +325,7 @@
 	<tr>
 		<td colspan="3" align="left">
 			<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/fundingLegend.png" border="0"/>
+			
 			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
 
@@ -314,12 +502,14 @@
         </field:display>
     </feature:display>
 
+    
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Funding type</digi:trn>&nbsp;: 
+             <digi:trn>Selected Funding type</digi:trn>&nbsp;: 
              <br>
         </td>
-        <td>
+        <td id="fundingTypeSelected">&nbsp;
+        	<%--
             <select id="fundingType" onChange="" style="width:250px" value="commitment">
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
@@ -331,45 +521,84 @@
             	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
             </field:display>
         </select>
+        
         </td>
 		<td>
 	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
-		</td>
+		</td>--%>
     </tr>
+    
+    
+    
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Select Sector</digi:trn>:
+             <digi:trn>Selected Sector</digi:trn>:
+             <input type="hidden" id="sectorsMapComboFin" value="-1">
         </td>
-        <td>
+        <td id="sectorSelected">&nbsp;
+        		<%--
             <select id="sectorsMapComboFin" onChange="" style="width:250px">
-            	<%--
-            <option value="-2"><digi:trn>Select Sector</digi:trn></option>
-            --%>
             <option value="-1"><digi:trn>All Sectors</digi:trn></option>
             <logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
                 <option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
             </logic:iterate>
-        </select>
+        		</select>
+        		
+        
         </td>
-		<td>
+			<td>
 	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
-		</td>
+			--%></td>
     </tr>
-    
+
     <%--
     <tr>
+    	<td nowrap width="200" style="font-size:12px">
+    		<digi:trn>Select Sector</digi:trn>:
+    	</td>
+    	<td>
+    		<input type="hidden" id="sectorsMapComboFin" value="-1">
+    		<div style="font-size:12px; width:250px; border: 1px solid; background-color:white; border-top-color:#abadb3; border-bottom-color:#e3e9ef; border-left-color:#e2e3ea; border-right-color:#dbdfe6;">
+	    		<table id="sector_selector_expander" width="100%" style="cursor:pointer;">
+	    			<tr>
+	    				<td width="234"  nowrap >
+	    					<div id="sel_sec_filter_display" style="color:black; height:12px; overflow-x: hidden;">&nbsp;</div>
+	    				</td>
+	    				<td width="16">
+	    					<img src="/repository/gis/view/images/sec_filter_expand.png" style="float:top;">
+	    				</td>
+	    			</tr>
+	    		</table>
+    		</div>
+    		
+    		
+    	</td>
+    </tr>	
+    --%>
+    
+    
+    <tr>
        <td nowrap width="200" style="font-size:12px">
-            <digi:trn>Select Donor</digi:trn>:
-        <td>
+            <digi:trn>Selected Donor</digi:trn>:
+        </td>    
+        <td id="donorSelected">&nbsp;
+        	<%--
         <select id="donorsCombo" onchange="" style="width:250px">    
             <option value=-1><digi:trn>All donors</digi:trn></option>
         </select>
+        --%>
         </td>
     </tr>
-    --%>
+    
+    <tr>
+    	<td><input type="button" value="Show filters" onClick = "showFinFilters()"></td>
+    </tr>
+    
     <c:set var="translation">
-		<digi:trn>Select the funding organization for which you'd like to see the funding information on the map</digi:trn>
-	</c:set>
+			<digi:trn>Select the funding organization for which you'd like to see the funding information on the map</digi:trn>
+		</c:set>
+	
+		<%--
     <tr>
         <td nowrap width="200" style="font-size:12px">
              <digi:trn>Select Donor</digi:trn>:
@@ -385,9 +614,10 @@
 		</td>
 		<td>
 	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
-<%--			<img border="0" title="${translation}" src="../ampTemplate/images/help.gif"> --%>
+
 		</td>
 	</tr>
+	--%>
 </c:if>
 </table>
     </div>
@@ -399,7 +629,7 @@
     <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
  	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	    
-	    <table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+	    <table class="tableElement" border="1" bgcolor="#d9ceba" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
 		    <tr>
 			    <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
 			    <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
@@ -474,7 +704,7 @@
     <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
          <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
         
-        <table class="tableElement" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+        <table class="tableElement" bgcolor="#d9ceba" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
             <tr>
                 <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
                 <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
@@ -491,7 +721,7 @@
                 <td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
             </tr>
             <tr>
-                <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
+                <td bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
@@ -545,5 +775,9 @@
 	var selectIndicatorTxt = "<digi:trn>Select indicator</digi:trn>";
 	var selectSubgroupTxt = "<digi:trn>Select subgroup</digi:trn>";
 	var selectYearTxt = "<digi:trn>Select year</digi:trn>";
-
+	
+	<c:if test="${isDevInfoMode == false}">
+		getSectorHierarchy();
+	</c:if>
+	
 </script>

@@ -85,7 +85,11 @@ public class FundingPledgesDetails {
 	}
 	public void setPledgetype(AmpCategoryValue pledgetype) {
 		this.pledgetype = pledgetype;
-		this.pledgetypeid = pledgetype.getId();
+		if (pledgetype==null) {
+			this.pledgetypeid = -1l;
+		} else {
+			this.pledgetypeid = pledgetype.getId();
+		}
 	}
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
@@ -133,16 +137,17 @@ public class FundingPledgesDetails {
 	 */
 	public void setFundingDate(String fundingDate) {
 		this.fundingDate = fundingDate;
-		try {
-			DateFormat formatter ;
-			java.util.Date date ;
-			formatter = new SimpleDateFormat("dd/MM/yyyy");
-			date = formatter.parse(fundingDate);
-			this.funding_date = new Timestamp(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
+		if (fundingDate!=null && fundingDate.length()>0) {
+			try {
+				DateFormat formatter ;
+				java.util.Date date ;
+				formatter = new SimpleDateFormat("dd/MM/yyyy");
+				date = formatter.parse(fundingDate);
+				this.funding_date = new Timestamp(date.getTime());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 	public Long getFundingYear() {
 		return fundingYear;

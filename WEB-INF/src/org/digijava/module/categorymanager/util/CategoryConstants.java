@@ -42,6 +42,9 @@ public class CategoryConstants {
 	public static final String PLEDGES_TYPES_NAME		= "Pledges Types";
 	public static final String PLEDGES_TYPES_KEY		= "pledges_types";
 	
+	public static final String PLEDGES_NAMES_NAME		= "Pledges Names";
+	public static final String PLEDGES_NAMES_KEY		= "pledges_names";
+	
 	public static final String FINANCING_INSTRUMENT_NAME		= "Financing Instrument";
 	public static final String FINANCING_INSTRUMENT_KEY		= "financing_instrument";
 	

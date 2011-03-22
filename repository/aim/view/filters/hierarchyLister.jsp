@@ -32,7 +32,11 @@
 				<table>
 					<tr>
 						<td valign="top"><input onclick="toggleCheckChildren(this)" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
-						<td><span style="font-family: Arial; font-size: 12px;">${entity.label}</span></td>
+						<td>
+							<span style="font-family: Arial; font-size: 12px;">
+								<digi:trn>${entity.label}</digi:trn> 
+							</span>
+						</td>
 					</tr>
 				</table> 
 				<logic:notEmpty name="entity" property="children">

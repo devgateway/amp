@@ -45,7 +45,8 @@ public class SavePledge extends Action {
 			}
     		
     		pledge.setId(plForm.getPledgeId());
-    		pledge.setTitle(plForm.getPledgeTitle());
+    		//pledge.setTitle(plForm.getPledgeTitle());
+    		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
     		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
@@ -142,17 +143,17 @@ public class SavePledge extends Action {
     		
     		
     		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
-    			if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
+    			/*if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
     					PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getOrganization().getAmpOrgId() != Long.parseLong(plForm.getSelectedOrgId())) {
     				if (isTitleDuplicated(mapping,request,plForm)) {
     					return mapping.findForward("success");
     				}
-				}
+				}*/
     			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
 			} else {
-				if (isTitleDuplicated(mapping,request,plForm)) {
+				/*if (isTitleDuplicated(mapping,request,plForm)) {
 					return mapping.findForward("success");
-				}
+				}*/
 				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
 			}
     		
@@ -161,7 +162,7 @@ public class SavePledge extends Action {
 		}
 
 
-	private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
+	/*private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
 		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
 		if (fpByNameAndOrg != null) {
 			if (fpByNameAndOrg.size()!=0) {
@@ -174,5 +175,5 @@ public class SavePledge extends Action {
 			}
 		}
 		return false;
-	}
+	}*/
 }

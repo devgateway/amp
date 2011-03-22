@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -51,6 +52,8 @@ public class AddPledge extends Action {
     	    //
     		
     		plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
+    		
+    		plForm.setPledgeNames(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY));
     		
     		plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
 
@@ -94,6 +97,7 @@ public class AddPledge extends Action {
 	        	plForm.setFundingPledges(fp);
 				plForm.setPledgeId(fp.getId());
 				plForm.setPledgeTitle(fp.getTitle());
+				plForm.setPledgeTitleId(fp.getTitle().getId());
 				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
 				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
 	        	plForm.setSelectedOrgName(pledgeOrg.getName());
@@ -142,11 +146,12 @@ public class AddPledge extends Action {
 	        	while (it.hasNext()) {
 					FundingPledgesSector fps = (FundingPledgesSector) it.next();
 					AmpSector ampSec = fps.getSector();
+					
 					ActivitySector actSec = new ActivitySector();
 					actSec.setId(fps.getId());
 					actSec.setSectorId(ampSec.getAmpSectorId());
 					actSec.setSectorPercentage(fps.getSectorpercentage());
-					actSec.setSectorScheme(ampSec.getAmpSecSchemeId().getSecSchemeName());
+					actSec.setSectorScheme(SectorUtil.getAmpSectorScheme(ampSec.getAmpSecSchemeId().getAmpSecSchemeId()).getSecSchemeName());
 					actSec.setConfigId(ampSec.getAmpSecSchemeId().getAmpSecSchemeId());
 					if (ampSec.getParentSectorId()==null) {
 						actSec.setSectorName(ampSec.getName());
@@ -174,7 +179,7 @@ public class AddPledge extends Action {
 				}
 			}
 			
-			plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
+			//plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
 	        request.getSession().setAttribute("pledgeForm", plForm);
 	        
 	        ActionMessages errors = (ActionMessages)request.getSession().getAttribute("duplicatedTitleError");
@@ -190,7 +195,8 @@ public class AddPledge extends Action {
     private void resetForm(PledgeForm plForm){
     	plForm.setPledgeId(null);
 		plForm.setPledgeTitle(null);
-    	plForm.setFundingPledges(null);
+		plForm.setPledgeTitleId(null);
+		plForm.setFundingPledges(null);
 		plForm.setSelectedOrgId(null);
     	plForm.setSelectedOrgName(null);
     	plForm.setAdditionalInformation(null);

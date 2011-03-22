@@ -310,14 +310,13 @@ function cancel()
 
 <input type="hidden" name="currUrl">
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
+<table width="1000" cellPadding="0" cellSpacing="0" vAlign="top" align="center">
 <tr><td vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td vAlign="top" align="left">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 vAlign="top" align="left">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 vAlign="top" align="left">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
@@ -350,8 +349,8 @@ function cancel()
 					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
-				<tr bgColor=#f4f4f2>
-					<td bgColor=#f4f4f2>
+				<tr>
+					<td>
 						<digi:errors />
 					</td>
 				</tr>
@@ -361,8 +360,8 @@ function cancel()
 					<tr><td noWrap width=600 vAlign="top">
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
-								<td vAlign="top" width="100%">
-									&nbsp;
+								<td vAlign="top" width="100%">&nbsp;
+									
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -739,8 +738,8 @@ function cancel()
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>
@@ -755,8 +754,8 @@ function cancel()
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

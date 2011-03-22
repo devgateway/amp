@@ -364,7 +364,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     List hilightData = prepareHilightSegments(segmentDataList,
-                            map, new Double(min.doubleValue()), new Double(max.doubleValue()));
+                            map, new Double(min.doubleValue()), new Double(max.doubleValue()), MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
@@ -575,7 +575,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     List hilightData = prepareHilightSegments(segmentDataList,
-                            map, new Double(0), new Double(100));
+                            map, new Double(0), new Double(100), MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
@@ -765,7 +765,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     List hilightData = prepareHilightSegments(segmentDataList,
-                            map, min, max);
+                            map, min, max, MapColorScheme.getDefaultScheme());
 
                     BufferedImage graph = new BufferedImage(canvasWidth,
                             canvasHeight,
@@ -1031,15 +1031,23 @@ public class GetFoundingDetails extends Action {
     }
 
     private List prepareHilightSegments(List segmentData, GisMap map,
-                                        Double min, Double max) {
+                                        Double min, Double max, MapColorScheme scheme) {
 
-        float delta = max.floatValue() - min.floatValue();
-        float coeff;
-        
-        if (delta > 0) {
-        	coeff = 205 / delta;
+        float deltaVal = max.floatValue() - min.floatValue();
+
+        int deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
+        int deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
+        int deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+
+        float coeffRed, coeffGreen, coeffBlue;
+        if (deltaVal > 0) {
+        	coeffRed = deltaRed / deltaVal;
+            coeffGreen = deltaGreen / deltaVal;
+            coeffBlue = deltaBlue / deltaVal;
         } else {
-        	coeff = 1;
+            coeffRed = 1;
+            coeffGreen = 1;
+            coeffBlue = 1;
         }
 
         List retVal = new ArrayList();
@@ -1052,13 +1060,17 @@ public class GetFoundingDetails extends Action {
                 if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
+
+                    float red = (Float.parseFloat(sd.getSegmentValue()) -
+                                   min.floatValue()) * coeffRed + scheme.getGradientMinColor().getRed();
                     float green = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeff;
-                    if (delta > 0) {
-                    hData.setColor(new ColorRGB((int) 0,
-                                                (int) (green + 50f), 0));
+                                   min.floatValue()) * coeffGreen + scheme.getGradientMinColor().getGreen();
+                    float blue = (Float.parseFloat(sd.getSegmentValue()) -
+                                   min.floatValue()) * coeffBlue + scheme.getGradientMinColor().getBlue();
+                    if (deltaVal > 0) {
+                    hData.setColor(new ColorRGB((int) red, (int) green, (int) blue));
                     } else {
-                    	hData.setColor(new ColorRGB(0, 255, 0));
+                    	hData.setColor(scheme.getGradientMaxColor());
                     	
                     }
                     retVal.add(hData);

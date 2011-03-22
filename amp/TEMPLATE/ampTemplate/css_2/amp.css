@@ -49,6 +49,9 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 .clearing {clear:both;}
 .sm_sel {color:#FF6000;}
 .txt_sm_b {font-size:11px; font-weight:bold;}
+.gis_wht {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:10px;}
+.gis_cont {padding:5px; font-size:11px;}
+
 
 
 /* WELCOME */
@@ -223,6 +226,12 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 #private{width:330px;color:#939393;float:left;font-size:11px;margin-bottom:10px}
 #private img{float:left;padding:0 10px 10px 0}
 
+
+.main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
+.main_side_1 {background-color:#EFEFEF; border:1px solid #BDBCB5;}
+.main_side_cont {padding:10px; font-size:12px; line-height:22px;}
+
+
 /* PREVIEW */
 .prv_left {font-size:11px; color:#6A6A6A; padding-right:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8; }
 .prv_right {font-size:11px; padding-left:5px; padding-bottom:3px; padding-top:3px; border-bottom:1px solid #D8D8D8;}
@@ -291,4 +300,6 @@ table.report_indicator{margin-bottom:15px}
 .dashboard_bottom .btn_save{margin:10px 5px	;text-align:left}
 .jtree{margin-top:-1px;float:right}
 .indicator_title{border-color:#c2c1ba;border-style:solid solid none;border-width:1px 1px medium;font-weight:bold;font-size:11px;padding:5px}
+
+
 

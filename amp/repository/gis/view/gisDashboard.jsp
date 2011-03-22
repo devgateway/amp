@@ -12,8 +12,8 @@
 
 <style>
 	div.navHiden{
-		background-color : #8C8C8C;
-		color : #494949;
+		background-color : #5e8ad1;
+		color : white;
 		border-left: 1px solid white;
 		border-top: 1px solid white;
 		border-right: 1px solid black;
@@ -23,7 +23,7 @@
 	
 	div.navVisible{
 		background-color : #C4C4C4;
-		color : Black;
+		color : black;
 		border-left: 1px solid black;
 		border-top: 1px solid black;
 		border-right: 1px solid white;
@@ -206,7 +206,7 @@
 	
 	<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;">
 		<div class="sec_map_filter_container">
-			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
+			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;  font-size: 12px;">
 				<tr><td colspan="3" class="sec_map_filter_title"><digi:trn>Map filters</digi:trn></td></tr>
 				<field:display name="Source of Data" feature="GIS DASHBOARD">
 				<tr>
@@ -300,15 +300,15 @@
 				<tr>
 					<td colspan="3">
 						<div id="sector_selector_hider">
-					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
+					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black; font-size:12px;"></div>
 					  </div>
 					</td>
 				</tr>
 				
 				<tr><td align='right' colspan="3">
-				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
+				<input type='button' class="buttonx" value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
 					&nbsp;
-				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
+				<input type='button' class="buttonx" value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
 				</td></tr>
 				
 				
@@ -320,27 +320,30 @@
 
 
 
-<div id="content" class="yui-skin-sam" style="width:527px;height:100%;max-width: 527x;">
-  <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 527px;">
-      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/tableftcorner.gif" align="left" hspace="0"/>
-      <div class="longTab">
-          <digi:trn key="gis:regionalview">Regional View</digi:trn>
-      </div>
+
+
+							<fieldset>
+															<legend>
+																<span class="legend_label longTab">
+																	<digi:trn key="gis:regionalview">Regional View</digi:trn>
+																</span>
+															</legend>
+
             
-    <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
 
 <div id="ctrlContainer" style="display:none">
-	<div id="navMapContainer" style="width:300px; height:300px; position: absolute; left: 15px; top: 35px; border: 1px solid black"><img id="navCursorMap" width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapLevel=2&mapCode=TZA"></div>
-	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 23px; top: 43px; border: 1px solid white; cursor:pointer;">
+	<div id="navMapContainer" style="width:300px; height:300px; position: absolute; left: 165px; top: 160px; border: 1px solid black">
+		<img id="navCursorMap" width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapLevel=2&mapCode=TZA">
+	</div>
+	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 172px; top: 165px; border: 1px solid white; cursor:pointer;">
 		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); opacity:0.3;"></div>
 	</div>
 	
-		<div title="Zoom 1.0X" onClick="" id="mapZoom10" class="navVisible zoomBt" style="width:30px; position: absolute; top:310px; left:25px;" align="center">1.0X</div>
-		<div title="Zoom 1.5X" onClick="" id="mapZoom15" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:60px;" align="center">1.5X</div>
-		<div title="Zoom 2.0X" onClick="" id="mapZoom20" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:95px;" align="center">2.0X</div>
-		<div title="Zoom 3.0X" onClick="" id="mapZoom30" class="navHiden zoomBt" style="width:30px; position: absolute; top:310px; left:130px;" align="center">3.0X</div>
+		<div title="Zoom 1.0X" onClick="" id="mapZoom10" class="navVisible zoomBt" style="width:30px; position: absolute; top:430px; left:180px; font-size:12px;" align="center">1.0X</div>
+		<div title="Zoom 1.5X" onClick="" id="mapZoom15" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:215px; font-size:12px;" align="center">1.5X</div>
+		<div title="Zoom 2.0X" onClick="" id="mapZoom20" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:250px; font-size:12px;" align="center">2.0X</div>
+		<div title="Zoom 3.0X" onClick="" id="mapZoom30" class="navHiden zoomBt" style="width:30px; position: absolute; top:430px; left:285px; font-size:12px;" align="center">3.0X</div>
 	
 	
 
@@ -348,7 +351,7 @@
 <!-- 
 <div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)"><digi:trn>Map navigation</digi:trn></div>
  -->
-<div class="navHiden" id="mapNav" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick=""><digi:trn>Map navigation</digi:trn></div>
+<div class="navHiden" id="mapNav" align="center" style="position: absolute; left: 165px; top: 160px; width:160px; font-size:12px;" onClick=""><digi:trn>Map navigation</digi:trn></div>
 
 	
 <table cellpadding="5" cellspacing="1" border="0">
@@ -399,18 +402,20 @@
 <c:if test="${isDevInfoMode == true}">
 	<tr>
 		<td colspan="3">
-			<span>
+			<span style="font-size: 12px;">
 				<digi:trn key="gis:minmax:message">
-				Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
-				Regions with the highest (MAX) value are shaded light green. 
+				Regions with the lowest (MIN) values for the selected indicator are shaded darker color. 
+				Regions with the highest (MAX) value are shaded lighter color. 
 				For some indicators (such as mortality rates), having the MAX value indicates the lowest performance.
 				</digi:trn>
 			</span>
 			<br>
 			<br>
-			<digi:trn key="gis:datasource:message">
-				Data Source: Dev Info
-			</digi:trn>
+			<span style="font-size: 12px;">
+				<digi:trn key="gis:datasource:message">
+					Data Source: Dev Info
+				</digi:trn>
+			</span>
 		</td>
 	</tr>
 	<tr>
@@ -425,15 +430,15 @@
 		<field:display name="Map Level Switch" feature="GIS DASHBOARD">
 		<tr>
 	        <td width="200" nowrap style="font-size:12px">
-	                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
+	                <b><digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:</b>
 	        </td>
 			<td width="90%">
 			 <!-- 
 				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
 				<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
 				-->
-				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
-				<input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+				<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked ><span style="font-size:12px"><digi:trn>Region view</digi:trn></span> &nbsp;
+				<input title="District view" type="Radio" value="3" name="mapLevelRadio" ><span style="font-size:12px"><digi:trn>District view</digi:trn></span>
 				
 			</td>
 		</tr>
@@ -503,23 +508,26 @@
 <c:if test="${isDevInfoMode == false}">
     <tr>
         <td colspan="3">
-            <span>
+            <span style="font-size: 12px;">
 				<img alt="" style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;
                 <digi:trn key="gis:minmax:message_fin">
-                Regions with the lowest (MIN) values for the selected funding type are shaded dark green. 
-                Regions with the highest (MAX) value are shaded light green. 
+                Regions with the lowest (MIN) values for the selected funding type are shaded darker color. 
+                Regions with the highest (MAX) value are shaded lighter color. 
                 </digi:trn>
             </span>
             <br>
             <br>
             <span>
-				<img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>&nbsp;<digi:trn>Click on a region to view list of projects implemented in that Region</digi:trn>
+				<img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png"/>
+				&nbsp;<span style="font-size: 12px;"><digi:trn>Click on a region to view list of projects implemented in that Region</digi:trn></span>
             </span>
             <br>
             <br>
-            <digi:trn key="gis:datasource:message_fin">
+            <span style="font-size: 12px;">
+            	<digi:trn key="gis:datasource:message_fin">
                 Data Source AMP
-            </digi:trn>
+	            </digi:trn>
+	          </span>
         </td>
     </tr>
     <tr>
@@ -534,15 +542,15 @@
         <field:display name="Map Level Switch" feature="GIS DASHBOARD">
         <tr>
             <td width="200" nowrap style="font-size:12px">
-                    <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
+                    <b><digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:</b>
             </td>
             <td width="90%" colspan="2">
              <!-- 
                 <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
                 <input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
                 -->
-                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked >Region view &nbsp;
-                <input title="District view" type="Radio" value="3" name="mapLevelRadio" >District view
+                <input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked ><span style="font-size:12px"><digi:trn>Region view</digi:trn></span> &nbsp;
+								<input title="District view" type="Radio" value="3" name="mapLevelRadio" ><span style="font-size:12px"><digi:trn>District view</digi:trn></span>
                 
             </td>
         </tr>
@@ -552,10 +560,10 @@
     
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Selected Funding type</digi:trn>&nbsp;: 
+             <b><digi:trn>Selected Funding type</digi:trn></b>&nbsp;: 
              <br>
         </td>
-        <td id="fundingTypeSelected">&nbsp;
+        <td id="fundingTypeSelected" style="font-size:12px">&nbsp;
         	<%--
             <select id="fundingType" onChange="" style="width:250px" value="commitment">
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
@@ -579,10 +587,10 @@
     
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Selected Sector</digi:trn>:
+             <b><digi:trn>Selected Sector</digi:trn>:</b>
              <input type="hidden" id="sectorsMapComboFin" value="-1">
         </td>
-        <td id="sectorSelected">&nbsp;
+        <td id="sectorSelected" style="font-size:12px">&nbsp;
         		<%--
             <select id="sectorsMapComboFin" onChange="" style="width:250px">
             <option value="-1"><digi:trn>All Sectors</digi:trn></option>
@@ -626,9 +634,9 @@
     
     <tr>
        <td nowrap width="200" style="font-size:12px">
-            <digi:trn>Selected Donor</digi:trn>:
+            <b><digi:trn>Selected Donor</digi:trn>:</b>
         </td>    
-        <td id="donorSelected">&nbsp;
+        <td id="donorSelected" style="font-size:12px">&nbsp;
         	<%--
         <select id="donorsCombo" onchange="" style="width:250px">    
             <option value=-1><digi:trn>All donors</digi:trn></option>
@@ -638,7 +646,7 @@
     </tr>
     
     <tr>
-    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
+    	<td><input type="button" class="buttonx" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
     </tr>
     
     <c:set var="translation">
@@ -667,79 +675,78 @@
 	--%>
 </c:if>
 </table>
-    </div>
-  </div>
-</div>   
+</fieldset>   
+
 
 
 <c:if test="${isDevInfoMode == true}">
-    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #4a687a; color:white; border: 1px solid silver;z-index: 2; width:200px;">
  	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	    
-	    <table class="tableElement" border="1" bgcolor="#d9ceba" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+	    <table class="tableElement" border="1" color="white" bgcolor="#4a687a" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse; style="font-size: 12px;"">
 		    <tr>
-			    <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
-			    <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
+			    <td nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:white;"><digi:trn>Region</digi:trn></td>
+			    <td width="50%" id="tooltipRegionContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 
 		    <tr>
-			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
+			    <td nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Funding details</digi:trn></td>
 		    </tr>
 		    <tr>
-			    <td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
+			    <td colspan="2" nowrap bgcolor="#173141" id="tooltipCurencyYearRange" style="style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    <tr>
-			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
+			    <td nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Total funding for this sector</digi:trn></td>
 		    </tr>
 		    <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-			    <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Commitment</digi:trn></td>
+			    <td width="50%" id="tooltipTotalCommitmentContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-			    <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipTotalDisbursementContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-			    <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Expenditure</digi:trn></td>
+			    <td width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
-			    <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
+			    <td nowrap bgcolor="#173141" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:white;"><digi:trn>For this region</digi:trn></td>
 		    </tr>
 		     <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-			    <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Commitment</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentCommitmentContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		     <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-			    <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentDisbursementContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		     <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-			    <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Expenditure</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
-			    <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Indicator</digi:trn></td>
+			    <td nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Indicator</digi:trn></td>
 		    </tr>
 		    <tr>
-			    <td nowrap width="50%" id="tooltipIndVal"><digi:trn>value</digi:trn></td>
-			    <td width="50%" id="tooltipIndUnit">&nbsp;</td>
+			    <td nowrap width="50%" id="tooltipIndVal" style="font-size: 12px; color:white;"><digi:trn>value</digi:trn></td>
+			    <td width="50%" id="tooltipIndUnit" style="font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 		    <tr>
-			    <td nowrap width="50%">Source</td>
-			    <td id="tooltipIndSrc" style="width:100px; overflow-x: hidden;">&nbsp;</td>
+			    <td nowrap width="50%" style="font-size: 12px color:white;;">Source</td>
+			    <td id="tooltipIndSrc" style="width:100px; overflow-x: hidden; font-size: 12px; color:white;">&nbsp;</td>
 		    </tr>
 	    </table>
 	    </div> 
@@ -748,65 +755,65 @@
 
 
 <c:if test="${isDevInfoMode == false}">
-    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;z-index: 2; width:200px;">
-         <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #4a687a; color:white; border: 1px solid silver;z-index: 2; width:200px;">
+         <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black; style="font-size: 12px;"">
         
-        <table class="tableElement" bgcolor="#d9ceba" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+        <table class="tableElement" bgcolor="#4a687a" color="white" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
             <tr>
-                <td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
-                <td width="50%" id="tooltipRegionContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:white;"><digi:trn>Region</digi:trn></td>
+                <td color="white" width="50%" id="tooltipRegionContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             <tr>
-                <td nowrap width="50%" id="donor"><digi:trn>Donor</digi:trn></td>
-                <td width="50%" id="tooltipDonorContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" id="donor" style="font-size: 12px; color:white;"><digi:trn>Donor</digi:trn></td>
+                <td color="white" width="50%" id="tooltipDonorContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             
             <tr>
-                <td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
+                <td color="white" nowrap bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Funding details</digi:trn></td>
             </tr>
             <tr>
-                <td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
+                <td color="white" colspan="2" nowrap bgcolor="#173141" id="tooltipCurencyYearRange" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             <tr>
-                <td bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
+                <td color="white" bgcolor="#173141" colspan="2" style="font-size: 12px; color:white;"><digi:trn>Total funding for this sector</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-                <td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Commitment</digi:trn></td>
+                <td color="white" width="50%" id="tooltipTotalCommitmentContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-                <td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Disbursement</digi:trn></td>
+                <td color="white" width="50%" id="tooltipTotalDisbursementContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-                <td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Expenditure</digi:trn></td>
+                <td color="white" width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
             <tr>
-                <td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
+                <td color="white" nowrap bgcolor="#173141" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:white;"><digi:trn>For this region</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
-                <td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Commitment</digi:trn></td>
+                <td color="white" width="50%" id="tooltipCurrentCommitmentContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
-                <td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Disbursement</digi:trn></td>
+                <td color="white" width="50%" id="tooltipCurrentDisbursementContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
-                <td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
-                <td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:white;"><digi:trn>Expenditure</digi:trn></td>
+                <td color="white" width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:white;">&nbsp;</td>
             </tr>
             </field:display>
         </table>

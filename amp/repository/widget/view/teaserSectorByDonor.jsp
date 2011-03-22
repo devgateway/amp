@@ -26,16 +26,15 @@
 </script>
 
 
-<div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
-  <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
-      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
-      <div class="longTab">
-          <digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
-        </div>
-    <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+<fieldset>
+	<legend>
+		<span class="legend_label longTab">
+			<digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
+		</span>
+	</legend>
+          
 
-<table width="100%">
+<table width="100%" border="0">
     <tr>
         <td colspan="3" align="left">
             <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">               
@@ -88,6 +87,4 @@
 		</td>
 	</tr>
 </table>
-    </div>
-  </div>
-</div>   
+</fieldset>

@@ -15,18 +15,23 @@ public class MapColorScheme {
     private ColorRGB dashColor;
     private ColorRGB textColor;
 
+    private ColorRGB gradientMinColor;
+    private ColorRGB gradientMaxColor;
+
     public MapColorScheme() {
         
     }
 
     public static MapColorScheme getDefaultScheme() {
-        return new MapColorScheme(new ColorRGB(0,0,100),
-                                  new ColorRGB(201, 153, 113),
-                                  new ColorRGB(51,153,255),
+        return new MapColorScheme(new ColorRGB(74,104,122),
+                                  new ColorRGB(214, 194, 158),
+                                  new ColorRGB(0,0,100),
                                   new ColorRGB(255,255,255,170),
                                   new ColorRGB(0,0,0,70),
                                   new ColorRGB(0,0,0,150),
-                                  new ColorRGB(0,0,3,3));
+                                  new ColorRGB(0,0,3,3),
+                                  new ColorRGB(23,49,65),
+                                  new ColorRGB(218,220,221));
 
     }
 
@@ -36,7 +41,9 @@ public class MapColorScheme {
                           ColorRGB borderColor,
                           ColorRGB regionBorderColor,
                           ColorRGB dashColor,
-                          ColorRGB textColor) {
+                          ColorRGB textColor,
+                          ColorRGB gradientMinColor,
+                          ColorRGB gradientMaxColor) {
         this.backgroundColor = backgroundColor;
         this.terrainColor = terrainColor;
         this.waterColor = waterColor;
@@ -44,7 +51,25 @@ public class MapColorScheme {
         this.regionBorderColor = regionBorderColor;
         this.dashColor = dashColor;
         this.textColor = textColor;
+        this.gradientMinColor = gradientMinColor;
+        this.gradientMaxColor = gradientMaxColor;
         
+    }
+
+    public ColorRGB getGradientMinColor() {
+        return gradientMinColor;
+    }
+
+    public void setGradientMinColor(ColorRGB gradientMinColor) {
+        this.gradientMinColor = gradientMinColor;
+    }
+
+    public ColorRGB getGradientMaxColor() {
+        return gradientMaxColor;
+    }
+
+    public void setGradientMaxColor(ColorRGB gradientMaxColor) {
+        this.gradientMaxColor = gradientMaxColor;
     }
 
     public ColorRGB getTextColor() {

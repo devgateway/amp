@@ -217,10 +217,22 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// GIS Map parameters
 		Long secId = null;
+        String secIdStr = null;
 		Long indId = null;
+        int sectorQueryType = 0;
 		if (request.getParameter("sectorId") != null
 				&& !request.getParameter("sectorId").equals("-1")) {
-			secId = Long.parseLong(request.getParameter("sectorId"));
+            secIdStr = request.getParameter("sectorId");
+            if (secIdStr.startsWith("sec_scheme_id_")) {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
+                secId = new Long(secIdStr.substring(14));
+            } else if (secIdStr.startsWith("sec_id_")) {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
+                secId = new Long(secIdStr.substring(7));
+            } else {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
+                secId = new Long(secIdStr);
+            }
 		}
 		if (request.getParameter("indicatorId") != null
 				&& !request.getParameter("indicatorId").equals("-1")) {
@@ -342,12 +354,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				}
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
-
+            /*
 			if (request.getParameter("sectorId") != null) {
 				secId = Long.parseLong(request.getParameter("sectorId"));
-			}
+			}*/
 
-			if (secId.longValue() == -1f) {
+			if (secId.longValue() == -1f || sectorQueryType != org.digijava.module.gis.util.DbUtil.SELECT_SECTOR) {
 				sectorName = "All Sectors";
 			} else {
 				sectorName = SectorUtil.getAmpSector(secId).getName();

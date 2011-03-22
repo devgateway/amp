@@ -621,8 +621,8 @@
 				navAreaLeft=0;
 				navAreaTop=0;
 				jQuery.fn.scrollMap(0, 0);
-				$("#navCursor").css({'left' : 23 + "px"});
-				$("#navCursor").css({'top' : 43 + "px"});
+				$("#navCursor").css({'left' : 172 + "px"});
+				$("#navCursor").css({'top' : 167 + "px"});
 			}
 			
 		jQuery.fn.scrollMap = function(x, y){
@@ -947,7 +947,7 @@
 			} else {
 				markup.push ("class='sec_scheme_selector sec_scheme_selector_default'");
 			}
-			 markup.push (">");
+			 markup.push (" style='font-size:12px;'>");
 			
 			markup.push (curSecScheme.attributes.getNamedItem("name").value);
 			
@@ -1026,9 +1026,9 @@
 			
 			
 			if (curSector.attributes.getNamedItem("hasFoundings").value == "true") {
-				markup.push ("' class='sec_selector_item' style='width:100%;'>");
+				markup.push ("' class='sec_selector_item' style='width:100%;font-size:12px;'>");
 			} else {
-				markup.push ("' class='sec_selector_item_disabled' style='width:100%;'>");
+				markup.push ("' class='sec_selector_item_disabled' style='width:100%;font-size:12px;'>");
 			}
 			
 			
@@ -1469,8 +1469,8 @@
 				navAreaTop = navigationHeight - navCursorHeight - 14;
 			}
 
-			document.getElementById("navCursor").style.left = navAreaLeft + 23 + "px";
-			document.getElementById("navCursor").style.top = navAreaTop + 43 + "px";
+			document.getElementById("navCursor").style.left = navAreaLeft + 172 + "px";
+			document.getElementById("navCursor").style.top = navAreaTop + 167 + "px";
 			
 			scrollMap (navAreaLeft , navAreaTop);
 			
@@ -1495,8 +1495,8 @@
 		navAreaLeft=0;
 		navAreaTop=0;
 		scrollMap(0, 0);
-		document.getElementById("navCursor").style.left = 23 + "px";
-		document.getElementById("navCursor").style.top = 43 + "px";
+		document.getElementById("navCursor").style.left = 172 + "px";
+		document.getElementById("navCursor").style.top = 167 + "px";
 	}
 	
 	function scrollMap(x, y){

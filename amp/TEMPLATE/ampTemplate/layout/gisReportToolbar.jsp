@@ -5,85 +5,52 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>	
 
 <digi:instance property="gisDashboardForm"/>
-<style>
-<!--
-.toolbar{
-	width: 350px;
-	background: #addadd; 
-	background-color: #addadd; 
-	padding: 3px 3px 3px 3px; 
-	position: relative; 
-	top: 10px; 
-	left: 10px;
-	bottom: 100px;
-		
-}
-.toolbartable{
-	border-color: #FFFFFF;
-	border-width: 2px;
-	border-bottom-width: 2px; 
-	border-right-width: 2px;"
-	border-left-width: 2px;
-	border-style: solid;
-	height: 25px;
-}
--->
-</style>
 
 
-	<table border="0" align="center" cellpadding="3" cellspacing="5" bgcolor="#FFFFFF" style="border:1px solid #CCCCCC; background-color:#C0D6E2; margin-top:15px;">
-		<tr>
-			<td>
-			
-					<table border="0" align="left">
-						<tr>
-							<td nowrap="nowrap" height="30px">
-								<digi:trn>From Date:</digi:trn>
-							</td>
-							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged();mapYearChanged()">
-									<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
-								</html:select>
-							</td>
-							<td nowrap="nowrap">
-								<digi:trn>To Date:</digi:trn>
-							</td>
-							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedToYear" onchange="yearChanged();mapYearChanged()">
-									<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
-								</html:select>
-							</td>
-						</tr>
-					</table>				
-			
-			</td>
-            <td>&nbsp;
-                
-            </td>
-            <td>
-					<table border="0" align="center">
-						<tr>
-							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
-								<a target="_blank" onclick="exportPDF(); return false;">
-									<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
-								</a>
-							</td>
 
-							<td noWrap align=left valign="middle">
-                                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
-                                </digi:link>
-							</td>
-							<td noWrap align=left valign="middle">
-								<digi:link href="#" target="_blank" onclick="javascript:window.close(); return false;">
-									<digi:img src="module/aim/images/close.gif" border="0" alt="Close"/>
-								</digi:link>
-							</td>
-						</tr>
-					</table>
-				
-			</td>
-		</tr>
-	</table>
+<div class="gis_wht" style="height:35px; padding-top:7px; margin-right:4px;" ><div class="gis_cont">
+	<div style="float:right;">
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>
+					<digi:img src="img_2/ico_pdf.gif" align="left" style="margin-right:5px;"/>
+				</td>
+				<td>
+					<a class="l_sm" href="#" target="_blank" onclick="exportPDF(); return false;">Export to PDF</a>
+				</td>
+				<td width=10></td>
+				<td>
+					<digi:img src="img_2/ico_print.gif" style="margin-right:5px;"/>
+				</td>
+				<td>
+					<digi:link styleClass="l_sm" href="#" onclick="window.print(); return false;"><digi:trn>Print</digi:trn></digi:link>
+				</td>
+			</tr>
+		</table>
+	
+		<div class="dash_ico">
+			<div class="dash_ico_link">
+			</div>
+		</div>
+		<div class="dash_ico">
+			<div class="dash_ico_link">
+			</div>
+		</div>
+	</div>
+	
+	<div style="float:left;">
+		<digi:trn>From Date:</digi:trn> 
+		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged();mapYearChanged()">
+			<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
+		</html:select>
+		&nbsp;&nbsp;
+		<digi:trn>To Date:</digi:trn> 
+		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedToYear" onchange="yearChanged();mapYearChanged()">
+			<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
+		</html:select>
+	</div>
+</div>
+
+
 
 <br>

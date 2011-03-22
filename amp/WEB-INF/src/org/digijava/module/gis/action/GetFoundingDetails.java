@@ -27,18 +27,14 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSource;
-import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.fundingpledges.dbentity.*;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.util.ColorRGB;
@@ -147,24 +143,24 @@ public class GetFoundingDetails extends Action {
                     }
 
                     if (map != null) {
-	                    gisUtil.addDataToImage(g2d,
-	                                           map.getSegments(),
-	                                           -1,
-	                                           canvasWidth, canvasHeight,
-	                                           rect.getLeft(), rect.getRight(),
-	                                           rect.getTop(), rect.getBottom(),
-	                                           fill, false);
-	
-	                    if (request.getParameter("noCapt") == null) {
-	
-	                        gisUtil.addCaptionsToImage(g2d,
-	                                map.getSegments(),
-	                                canvasWidth, canvasHeight,
-	                                rect.getLeft(), rect.getRight(),
-	                                rect.getTop(), rect.getBottom());
-	                    }
+                        gisUtil.addDataToImage(g2d,
+                                map.getSegments(),
+                                -1,
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom(),
+                                fill, false);
+
+                        if (request.getParameter("noCapt") == null) {
+
+                            gisUtil.addCaptionsToImage(g2d,
+                                    map.getSegments(),
+                                    canvasWidth, canvasHeight,
+                                    rect.getLeft(), rect.getRight(),
+                                    rect.getTop(), rect.getBottom());
+                        }
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                        gisUtil.getNoDataImage(g2d, "No map data in the database");
                     }
                     g2d.dispose();
 
@@ -196,92 +192,167 @@ public class GetFoundingDetails extends Action {
 
                     //sos.print(imageMapCode);
                 } else if (action.equalsIgnoreCase("getDataForSectorFin")) {
-                	response.setContentType("image/png");
-                	String secIdStr = request.getParameter("sectorId");
-                    Long secId = new Long(secIdStr);
-                    
+                    response.setContentType("image/png");
+                    String secIdStr = request.getParameter("sectorId");
+
+
+                    Long secId = null;
+                    int sectorQueryType = 0;
+                    if (secIdStr.startsWith("sec_scheme_id_")) {
+                        sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
+                        secId = new Long(secIdStr.substring(14));
+                    } else if (secIdStr.startsWith("sec_id_")) {
+                        sectorQueryType = DbUtil.SELECT_SECTOR;
+                        secId = new Long(secIdStr.substring(7));
+                    } else {
+                        sectorQueryType = DbUtil.SELECT_DEFAULT;
+                        secId = new Long(secIdStr);
+                    }
+
+
                     String donorIdStr = request.getParameter("donorId");
                     Long donorId = null;
-                    
+
                     if (donorIdStr != null) {
-                    	donorId = new Long(donorIdStr);
+                        donorId = new Long(donorIdStr);
                     } else {
-                    	donorId = new Long (-1);
+                        donorId = new Long (-1);
                     }
-                    
-                    String fundingType = request.getParameter("fundingType");
-                    
 
-                    //Get segments with funding for dashed paint map
-                    List secFundings = null;
 
-                   if (request.getSession().getAttribute("publicuser")!=null){
-                	   secFundings = DbUtil.getSectorFoundingsPublic(secId);
-                   }else{
-                    if (secId.longValue() > -2l) {
-                        secFundings = DbUtil.getSectorFoundings(secId);
-                    } else {
-                        secFundings = new ArrayList();
-                    }
-                   }
-                    Object[] fundingList = getFundingsByLocations(secFundings,
-                            Integer.parseInt(mapLevel),
-                            fStartDate.getTime(),
-                            fEndDate.getTime(), donorId);
-                    
-                    request.getSession().setAttribute(
-                            "AMP_FUNDING_DATA", fundingList);
-                    
-                    Map fundingLocationMap = (Map) fundingList[0];
+
+                    int mapMode =  (request.getParameter("mapMode") != null && request.getParameter("mapMode").
+                            equalsIgnoreCase("pledgesData")) ? DbUtil.MAP_MODE_PLEDGES : DbUtil.MAP_MODE_ACTIVITIES;
+
 
                     List segmentDataList = new ArrayList();
-
-                    Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
-                    
                     BigDecimal min = null;
                     BigDecimal max = null;
-                    while (locFoundingMapIt.hasNext()) {
-                        String key = (String) locFoundingMapIt.next();
-                        FundingData fData = (FundingData) fundingLocationMap.get(key);
-                        SegmentData segmentData = new SegmentData();
-                        segmentData.setSegmentCode(key);
-                        
-                        BigDecimal selValue = null;
-                        
-                        if (fundingType.equals("commitment")) {
-                        	selValue = fData.getCommitment();
-                        } else if (fundingType.equals("disbursement")) {
-                        	selValue = fData.getDisbursement();
-                        } else if (fundingType.equals("expenditure")) {
-                        	selValue = fData.getExpenditure();
-                        }else{
-                        	selValue = new BigDecimal("0");
+                    if (mapMode == DbUtil.MAP_MODE_PLEDGES) {
+                        List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
+
+                        Object[] fundingList = getPledgesByLocations (selPledges,
+                                Integer.parseInt(mapLevel),
+                                fStartDate.getTime(),
+                                fEndDate.getTime(), donorId);
+
+                        request.getSession().setAttribute(
+                                "AMP_FUNDING_DATA", fundingList);
+
+                        Map fundingLocationMap = (Map) fundingList[0];
+
+
+
+                        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+
+
+                        while (locFoundingMapIt.hasNext()) {
+                            String key = (String) locFoundingMapIt.next();
+                            FundingData fData = (FundingData) fundingLocationMap.get(key);
+                            SegmentData segmentData = new SegmentData();
+                            segmentData.setSegmentCode(key);
+
+                            BigDecimal selValue = null;
+                            selValue = fData.getCommitment();
+
+
+                            segmentData.setSegmentValue(selValue.toString());
+
+                            if (min == null) {
+                                min = selValue;
+                                max = selValue;
+                            }
+
+                            if (selValue.compareTo(min) < 0) {
+                                min = selValue;
+                            }
+
+                            if (selValue.compareTo(max) > 0) {
+                                max = selValue;
+                            }
+
+                            segmentDataList.add(segmentData);
                         }
-                        
-                        
-                        segmentData.setSegmentValue(selValue.toString());
-                        
+
                         if (min == null) {
-                            min = selValue;
-                            max = selValue;
+                            min = new BigDecimal(0);
+                            max = new BigDecimal(0);
+                        }
+                    } else {
+
+                        String fundingType = request.getParameter("fundingType");
+
+
+                        //Get segments with funding for dashed paint map
+                        List secFundings = null;
+
+                        if (request.getSession().getAttribute("publicuser")!=null){
+                            secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
+                        }else{
+                            if (secId.longValue() > -2l) {
+                                secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType);
+                            } else {
+                                secFundings = new ArrayList();
+                            }
+                        }
+                        Object[] fundingList = getFundingsByLocations(secFundings,
+                                Integer.parseInt(mapLevel),
+                                fStartDate.getTime(),
+                                fEndDate.getTime(), donorId);
+
+                        request.getSession().setAttribute(
+                                "AMP_FUNDING_DATA", fundingList);
+
+                        Map fundingLocationMap = (Map) fundingList[0];
+
+
+
+                        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+
+
+                        while (locFoundingMapIt.hasNext()) {
+                            String key = (String) locFoundingMapIt.next();
+                            FundingData fData = (FundingData) fundingLocationMap.get(key);
+                            SegmentData segmentData = new SegmentData();
+                            segmentData.setSegmentCode(key);
+
+                            BigDecimal selValue = null;
+
+                            if (fundingType.equals("commitment")) {
+                                selValue = fData.getCommitment();
+                            } else if (fundingType.equals("disbursement")) {
+                                selValue = fData.getDisbursement();
+                            } else if (fundingType.equals("expenditure")) {
+                                selValue = fData.getExpenditure();
+                            }else{
+                                selValue = new BigDecimal("0");
+                            }
+
+
+                            segmentData.setSegmentValue(selValue.toString());
+
+                            if (min == null) {
+                                min = selValue;
+                                max = selValue;
+                            }
+
+                            if (selValue.compareTo(min) < 0) {
+                                min = selValue;
+                            }
+
+                            if (selValue.compareTo(max) > 0) {
+                                max = selValue;
+                            }
+
+                            segmentDataList.add(segmentData);
                         }
 
-                        if (selValue.compareTo(min) < 0) {
-                            min = selValue;
+                        if (min == null) {
+                            min = new BigDecimal(0);
+                            max = new BigDecimal(0);
                         }
-
-                        if (selValue.compareTo(max) > 0) {
-                            max = selValue;
-                        }
-                        
-                        segmentDataList.add(segmentData);
                     }
 
-                    if (min == null) {
-                        min = new BigDecimal(0);
-                        max = new BigDecimal(0);
-                    }
-                    
                     List hilightData = prepareHilightSegments(segmentDataList,
                             map, new Double(min.doubleValue()), new Double(max.doubleValue()));
 
@@ -296,18 +367,18 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     gisUtil.addDataToImage(g2d,
-                                           map.getSegments(),
-                                           hilightData,
-                                           null,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                            map.getSegments(),
+                            hilightData,
+                            null,
+                            canvasWidth, canvasHeight,
+                            rect.getLeft(), rect.getRight(),
+                            rect.getTop(), rect.getBottom(), true, false);
 
                     gisUtil.addCaptionsToImage(g2d,
-                                               map.getSegments(),
-                                               canvasWidth, canvasHeight,
-                                               rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom());
+                            map.getSegments(),
+                            canvasWidth, canvasHeight,
+                            rect.getLeft(), rect.getRight(),
+                            rect.getTop(), rect.getBottom());
 
                     g2d.dispose();
 
@@ -316,65 +387,81 @@ public class GetFoundingDetails extends Action {
                     ImageIO.write(ri, "png", sos);
 
                     graph.flush();
-                    
+
                 } else if (action.equalsIgnoreCase("getFinansialDataXML")) {
-                        response.setContentType("text/xml");
-                        String secIdStr = request.getParameter("sectorId");
-                        
-                        String donorIdStr = request.getParameter("donorId");
-                        Long donorId = null;
-                        
-                        if (donorIdStr != null) {
-                        	donorId = new Long(donorIdStr);
-                        } else {
-                        	donorId = new Long (-1);
-                        }
+                    response.setCharacterEncoding("UTF-8");
+                    response.setContentType("text/xml");
+                    String secIdStr = request.getParameter("sectorId");
 
-                        Long secId = new Long(secIdStr);
-                        
-                        /*
-                        List secFundings = DbUtil.getSectorFoundings(secId);
+                    String donorIdStr = request.getParameter("donorId");
+                    Long donorId = null;
 
-                        Object[] fundingList = getFundingsByLocations(secFundings,
-                                Integer.parseInt(mapLevel),
-                                fStartDate.getTime(),
-                                fEndDate.getTime(), donorId);
-                                */
-                        Object[] fundingList = (Object[]) request.getSession().
-                        getAttribute("AMP_FUNDING_DATA");
-                        
-                        request.getSession().removeAttribute("AMP_FUNDING_DATA");
-                        
+                    if (donorIdStr != null) {
+                        donorId = new Long(donorIdStr);
+                    } else {
+                        donorId = new Long (-1);
+                    }
 
-                        Map fundingLocationMap = (Map) fundingList[0];
-                        FundingData totalFunding = (FundingData) fundingList[1];
+                    /*
+                 Long secId = null;
+                 int sectorQueryType = 0;
+                 if (secIdStr.startsWith("sec_scheme_id_")) {
+                     sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
+                     secId = new Long(secIdStr.substring(14));
+                 } else if (secIdStr.startsWith("sec_id_")) {
+                     sectorQueryType = DbUtil.SELECT_SECTOR;
+                     secId = new Long(secIdStr.substring(7));
+                 } else {
+                     sectorQueryType = DbUtil.SELECT_DEFAULT;
+                     secId = new Long(secIdStr);
+                 }   */
 
-                        XMLDocument segmendDataInfo = new XMLDocument();
+                    //Long secId = new Long(secIdStr);
 
-                        String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                                "Default Number Format");
-                        //NumberFormat formatter = new DecimalFormat(numberFormat);
+                    /*
+            List secFundings = DbUtil.getSectorFoundings(secId);
 
-                        XML root = new XML("funding");
+            Object[] fundingList = getFundingsByLocations(secFundings,
+                    Integer.parseInt(mapLevel),
+                    fStartDate.getTime(),
+                    fEndDate.getTime(), donorId);
+                    */
+                    Object[] fundingList = (Object[]) request.getSession().
+                            getAttribute("AMP_FUNDING_DATA");
 
-                        root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
-                        root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
-                        root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+                    request.getSession().removeAttribute("AMP_FUNDING_DATA");
 
-                        segmendDataInfo.addElement(root);
-                        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
-                        while (locFoundingMapIt.hasNext()) {
-                            String key = (String) locFoundingMapIt.next();
-                            FundingData ammount = (FundingData) fundingLocationMap.
-                                                  get(key);
-                            XML regionData = new XML("region");
-                            regionData.addAttribute("reg-code", key);
-                            regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().intValue()));
-                            regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
-                            regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
-                            root.addElement(regionData);
-                        }
-                        segmendDataInfo.output(sos);
+
+                    Map fundingLocationMap = (Map) fundingList[0];
+                    FundingData totalFunding = (FundingData) fundingList[1];
+
+                    XMLDocument segmendDataInfo = new XMLDocument();
+                    segmendDataInfo.setCodeset("UTF-8");
+
+                    String numberFormat = FeaturesUtil.getGlobalSettingValue(
+                            "Default Number Format");
+                    //NumberFormat formatter = new DecimalFormat(numberFormat);
+
+                    XML root = new XML("funding");
+
+                    root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
+                    root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
+                    root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+
+                    segmendDataInfo.addElement(root);
+                    Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+                    while (locFoundingMapIt.hasNext()) {
+                        String key = (String) locFoundingMapIt.next();
+                        FundingData ammount = (FundingData) fundingLocationMap.
+                                get(key);
+                        XML regionData = new XML("region");
+                        regionData.addAttribute("reg-code", key);
+                        regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().intValue()));
+                        regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
+                        regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
+                        root.addElement(regionData);
+                    }
+                    segmendDataInfo.output(sos);
                 } else if (action.equalsIgnoreCase("getSectorDonorsXML")) {
                     response.setCharacterEncoding("UTF-8");
                     response.setContentType("text/xml");
@@ -400,7 +487,7 @@ public class GetFoundingDetails extends Action {
 
                     }
                     donorsDoc.output(sos);
-                        
+
                 } else if (action.equalsIgnoreCase("getDataForSector")) {
 
                     response.setContentType("image/png");
@@ -427,13 +514,13 @@ public class GetFoundingDetails extends Action {
                         AmpActivity ampActivity = (AmpActivity) secFounding[0];
                         Double activityFound = DbUtil.getActivityFoundings(
                                 ampActivity.
-                                getAmpActivityId());
+                                        getAmpActivityId());
 
                         Double addAmmount = 0d;
                         if (activityFound != null) {
                             float addPercent = (Float) secFounding[1];
                             addAmmount = activityFound * addPercent /
-                                         100;
+                                    100;
                             totalFund += addAmmount;
                         }
 
@@ -451,19 +538,19 @@ public class GetFoundingDetails extends Action {
                                     getAmpLocationId())) {
                                 Double existingVal = (Double) locationFoundMap.
                                         get(loc.
-                                            getLocation().getAmpLocationId());
+                                                getLocation().getAmpLocationId());
                                 locationFoundMap.put(loc.getLocation().
                                         getAmpLocationId(),
                                         existingVal +
-                                        addAmmount *
-                                        loc.getLocationPercentage() /
-                                        100);
+                                                addAmmount *
+                                                        loc.getLocationPercentage() /
+                                                        100);
                             } else {
                                 locationFoundMap.put(loc.getLocation().
                                         getAmpLocationId(),
                                         addAmmount *
-                                        loc.getLocationPercentage() /
-                                        100);
+                                                loc.getLocationPercentage() /
+                                                100);
                             }
                         }
 
@@ -471,7 +558,7 @@ public class GetFoundingDetails extends Action {
 
                     List segmentDataList = new ArrayList();
                     Iterator locFoundingMapIt = locationFoundMap.keySet().
-                                                iterator();
+                            iterator();
                     while (locFoundingMapIt.hasNext()) {
                         Long key = (Long) locFoundingMapIt.next();
                         AmpLocation loc = (AmpLocation) locationIdObjectMap.get(
@@ -508,20 +595,20 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     if (map != null) {
-                    gisUtil.addDataToImage(g2d,
-                                           map.getSegments(),
-                                           hilightData, null,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                        gisUtil.addDataToImage(g2d,
+                                map.getSegments(),
+                                hilightData, null,
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom(), true, false);
 
-                    gisUtil.addCaptionsToImage(g2d,
-                                               map.getSegments(),
-                                               canvasWidth, canvasHeight,
-                                               rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom());
+                        gisUtil.addCaptionsToImage(g2d,
+                                map.getSegments(),
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom());
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                        gisUtil.getNoDataImage(g2d, "No map data in the database");
                     }
 
                     g2d.dispose();
@@ -564,7 +651,7 @@ public class GetFoundingDetails extends Action {
                     List segmentDataDasheList = new ArrayList();
 
                     Iterator locFoundingMapIt = fundingLocationMap.keySet().
-                                                iterator();
+                            iterator();
                     while (locFoundingMapIt.hasNext()) {
                         String key = (String) locFoundingMapIt.next();
                         SegmentData segmentData = new SegmentData();
@@ -638,7 +725,7 @@ public class GetFoundingDetails extends Action {
 
 
                         if (isRegion(map, segmentCode) &&
-                            !regSet.contains(segmentCode)) {
+                                !regSet.contains(segmentCode)) {
 
                             SegmentData indHilightData = new SegmentData();
                             indHilightData.setSegmentCode(segmentCode);
@@ -674,7 +761,7 @@ public class GetFoundingDetails extends Action {
                         String indUnit = null;
 
                         if (selIndicator.getUnit() != null &&
-                            selIndicator.getUnit().trim().length() > 0) {
+                                selIndicator.getUnit().trim().length() > 0) {
                             indUnit = selIndicator.getUnit();
                         } else {
                             indUnit = "N/A";
@@ -698,21 +785,21 @@ public class GetFoundingDetails extends Action {
                     g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
                     if (map != null) {
-                    gisUtil.addDataToImage(g2d,
-                                           map.getSegments(),
-                                           hilightData,
-                                           hilightDashData,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                        gisUtil.addDataToImage(g2d,
+                                map.getSegments(),
+                                hilightData,
+                                hilightDashData,
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom(), true, false);
 
-                    gisUtil.addCaptionsToImage(g2d,
-                                               map.getSegments(),
-                                               canvasWidth, canvasHeight,
-                                               rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom());
+                        gisUtil.addCaptionsToImage(g2d,
+                                map.getSegments(),
+                                canvasWidth, canvasHeight,
+                                rect.getLeft(), rect.getRight(),
+                                rect.getTop(), rect.getBottom());
                     } else {
-                    	gisUtil.getNoDataImage(g2d, "No map data in the database");
+                        gisUtil.getNoDataImage(g2d, "No map data in the database");
                     }
 
                     g2d.dispose();
@@ -774,8 +861,8 @@ public class GetFoundingDetails extends Action {
                     Long indId = new Long(indIdStr);
 
                     List availSubgroups = DbUtil.
-                                          getAvailSubgroupsForSectorIndicator(
-                            secId, indId, Integer.parseInt(mapLevel));
+                            getAvailSubgroupsForSectorIndicator(
+                                    secId, indId, Integer.parseInt(mapLevel));
 
                     XMLDocument availSubGroupXmlDoc = new XMLDocument();
                     XML root = new XML("availSubgroups");
@@ -810,9 +897,9 @@ public class GetFoundingDetails extends Action {
                     //List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel), subgroupId);
 
                     List availRanges = DbUtil.
-                                       getAvailDateIntervalsForSectorIndicator(
-                            secId, indId, Integer.parseInt(mapLevel),
-                            subgroupId);
+                            getAvailDateIntervalsForSectorIndicator(
+                                    secId, indId, Integer.parseInt(mapLevel),
+                                    subgroupId);
 
                     List availRangeObjects = new ArrayList();
                     if (availRanges != null && !availRanges.isEmpty()) {
@@ -877,11 +964,11 @@ public class GetFoundingDetails extends Action {
                     response.setContentType("text/xml");
 
                     String indicatorUnit = (String) request.getSession().
-                                           getAttribute("AMP_INDICATOR_UNIT");
+                            getAttribute("AMP_INDICATOR_UNIT");
                     request.getSession().removeAttribute("AMP_INDICATOR_UNIT");
 
                     List indicatorVals = (List) request.getSession().
-                                         getAttribute("AMP_INDICATOR_VALUES");
+                            getAttribute("AMP_INDICATOR_VALUES");
 
                     XMLDocument indicators = new XMLDocument();
                     XML root = new XML("indicatorData");
@@ -908,16 +995,24 @@ public class GetFoundingDetails extends Action {
                     }
 
                     indicators.output(sos);
+                }  else if (action.equalsIgnoreCase("getSectorTree")) {
+                    response.setContentType("text/xml");
+                    XMLDocument tree = null;
+                    int treeMode = (request.getParameter("mode") != null && request.getParameter("mode").
+                            equalsIgnoreCase("pledgesData")) ? DbUtil.SECTORS_FOR_PLEDGES : DbUtil.SECTORS_FOR_ACTIVITIES;
+                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode);
+                    tree.output(sos);
                 }
+
             } else if (map == null) {
-            	response.setContentType("image/png");
-            	BufferedImage graph = new BufferedImage(canvasWidth,
+                response.setContentType("image/png");
+                BufferedImage graph = new BufferedImage(canvasWidth,
                         canvasHeight,
                         BufferedImage.TYPE_INT_ARGB);
 
                 Graphics2D g2d = graph.createGraphics();
                 gisUtil.getNoDataImage(g2d, "No map data in the database");
-                
+
                 g2d.dispose();
 
                 RenderedImage ri = graph;
@@ -942,11 +1037,11 @@ public class GetFoundingDetails extends Action {
 
         float delta = max.floatValue() - min.floatValue();
         float coeff;
-        
+
         if (delta > 0) {
-        	coeff = 205 / delta;
+            coeff = 205 / delta;
         } else {
-        	coeff = 1;
+            coeff = 1;
         }
 
         List retVal = new ArrayList();
@@ -960,13 +1055,13 @@ public class GetFoundingDetails extends Action {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
                     float green = (Float.parseFloat(sd.getSegmentValue()) -
-                                   min.floatValue()) * coeff;
+                            min.floatValue()) * coeff;
                     if (delta > 0) {
-                    hData.setColor(new ColorRGB((int) 0,
-                                                (int) (green + 50f), 0));
+                        hData.setColor(new ColorRGB((int) 0,
+                                (int) (green + 50f), 0));
                     } else {
-                    	hData.setColor(new ColorRGB(0, 255, 0));
-                    	
+                        hData.setColor(new ColorRGB(0, 255, 0));
+
                     }
                     retVal.add(hData);
                 }
@@ -1024,15 +1119,15 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    
-    
+
+
     public static Object[] getFundingsByLocations(List activityList, int level,
-            Date start, Date end) throws Exception {
-    	return getFundingsByLocations(activityList, level, start, end, null);
+                                                  Date start, Date end) throws Exception {
+        return getFundingsByLocations(activityList, level, start, end, null);
     }
-    
+
     public static Object[] getFundingsByLocations(List activityList, int level,
-                                            Date start, Date end, Long donorId) throws
+                                                  Date start, Date end, Long donorId) throws
             Exception {
 
         Map locationFundingMap = new HashMap();
@@ -1044,98 +1139,211 @@ public class GetFoundingDetails extends Action {
                 Object[] actData = actIt.next();
                 AmpActivity activity = (AmpActivity) actData[0];
                 Float percentsForSectorSelected = (Float) actData[1];
-                
+
                 if (percentsForSectorSelected != null) {
-                
-                FundingData totalFunding = getActivityTotalFundingInBaseCurrency(
-                        activity, start, end, donorId);
 
-                totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForSectorSelected / 100f)))))  ;
-                totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal (percentsForSectorSelected/ 100f))));
-                totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure().add(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
+                    FundingData totalFunding = getActivityTotalFundingInBaseCurrency(
+                            activity, start, end, donorId);
 
-                FundingData fundingForSector = new FundingData();
-                fundingForSector.setCommitment(totalFunding.getCommitment().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
-                fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
-                fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForSectorSelected / 100f)))))  ;
+                    totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal (percentsForSectorSelected/ 100f))));
+                    totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure().add(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
 
-                Set locations = activity.getLocations();
-                Iterator<AmpActivityLocation> locIt = locations.iterator();
+                    FundingData fundingForSector = new FundingData();
+                    fundingForSector.setCommitment(totalFunding.getCommitment().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 
-                while (locIt.hasNext()) {
-                    AmpActivityLocation loc = locIt.next();
+                    Set locations = activity.getLocations();
+                    Iterator<AmpActivityLocation> locIt = locations.iterator();
+
+                    while (locIt.hasNext()) {
+                        AmpActivityLocation loc = locIt.next();
 
 
-                    //Region level
-                    //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
+                        //Region level
+                        //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                    if (loc.getLocationPercentage() != null &&
-                        loc.getLocationPercentage().floatValue() > 0.0f &&
-                        loc.getLocation().getRegionLocation() != null) {
-                        if (level == GisMap.MAP_LEVEL_REGION &&
-                            loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
+                        if (loc.getLocationPercentage() != null &&
+                                loc.getLocationPercentage().floatValue() > 0.0f &&
+                                loc.getLocation().getRegionLocation() != null) {
+                            if (level == GisMap.MAP_LEVEL_REGION &&
+                                    loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
 
-                            String regCode = loc.getLocation().getRegionLocation().getName();
+                                String regCode = loc.getLocation().getRegionLocation().getName().trim();
 
-                            if (locationFundingMap.containsKey(regCode)) {
-                                FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
 
-                                FundingData newVal = new FundingData();
-                                newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
-                                newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
-                                newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
-                                locationFundingMap.put(regCode, newVal);
-                            } else {
-                                if (fundingForSector.getCommitment().floatValue() !=0f || fundingForSector.getDisbursement().floatValue() != 0f || fundingForSector.getExpenditure().floatValue() != 0f) {
                                     FundingData newVal = new FundingData();
-                                    newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
-                                    newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)));
-                                    newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
                                     locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=0f || fundingForSector.getDisbursement().floatValue() != 0f || fundingForSector.getExpenditure().floatValue() != 0f) {
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
                                 }
-                            }
-                        } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
-                                   loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone")) {
+                            } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                    loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone")) {
 
-                            //District level
-                            //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
+                                //District level
+                                //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                            String regCode = loc.getLocation().getRegionLocation().getName();
+                                String regCode = loc.getLocation().getRegionLocation().getName().trim();
 
-                            if (locationFundingMap.containsKey(regCode)) {
-                                FundingData existingVal = (FundingData)
-                                        locationFundingMap.get(
-                                                regCode);
-
-                                FundingData newVal = new FundingData();
-                                newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/100f))));
-                                newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
-                                newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
-                                locationFundingMap.put(regCode, newVal);
-                            } else {
-                                if (fundingForSector.getCommitment().floatValue() !=
-                                    0f ||
-                                    fundingForSector.getDisbursement().
-                                    floatValue() != 0f ||
-                                    fundingForSector.getExpenditure().
-                                    floatValue() != 0f) {
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData)
+                                            locationFundingMap.get(
+                                                    regCode);
 
                                     FundingData newVal = new FundingData();
-                                    newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
-                                    newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
-                                    newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
-                                 locationFundingMap.put(regCode, newVal);
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f))));
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=
+                                            0f ||
+                                            fundingForSector.getDisbursement().
+                                                    floatValue() != 0f ||
+                                            fundingForSector.getExpenditure().
+                                                    floatValue() != 0f) {
+
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationPercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage()/100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
                                 }
                             }
                         }
+
                     }
 
+                    //    Set activiactivity.getFunding();
                 }
 
-                //    Set activiactivity.getFunding();
             }
-            
+
         }
+        Object[] retVal = new Object[2];
+        retVal[0] = locationFundingMap;
+        retVal[1] = totalFundingForSector;
+        return retVal;
+    }
+
+    public static Object[] getPledgesByLocations(List <FundingPledgesSector> pledgeSectorList, int level, Date start, Date end, Long donorId) throws
+            Exception {
+
+        Map locationFundingMap = new HashMap();
+        FundingData totalFundingForSector = new FundingData();
+        //Calculate total funding
+        if (pledgeSectorList != null) {
+            Iterator<FundingPledgesSector> pledgeIt = pledgeSectorList.iterator();
+            while (pledgeIt.hasNext()) {
+                FundingPledgesSector pledgeSec = pledgeIt.next();
+
+                Float percentsForSectorSelected = pledgeSec.getSectorpercentage();
+
+                if (percentsForSectorSelected != null) {
+
+                    FundingData totalFunding = getActivityTotalFundingInBaseCurrencyForPledge(
+                            pledgeSec.getPledgeid(), start, end, donorId);
+
+                    totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForSectorSelected / 100f)))))  ;
+                    totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal (percentsForSectorSelected/ 100f))));
+                    totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure().add(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f))));
+
+                    FundingData fundingForSector = new FundingData();
+                    fundingForSector.setCommitment(totalFunding.getCommitment().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+                    fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
+
+                    List <FundingPledgesLocation>locations = PledgesEntityHelper.getPledgesLocations(pledgeSec.getPledgeid().getId());
+
+                    Iterator<FundingPledgesLocation> locIt = locations.iterator();
+
+                    while (locIt.hasNext()) {
+                        FundingPledgesLocation loc = locIt.next();
+
+
+                        //Region level
+                        //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
+
+                        if (loc.getLocationpercentage() != null &&
+                                loc.getLocationpercentage().floatValue() > 0.0f &&
+                                loc.getLocation() != null) {
+                            if (level == GisMap.MAP_LEVEL_REGION &&
+                                    loc.getLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
+
+                                String regCode = loc.getLocation().getName().trim();
+
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
+
+                                    FundingData newVal = new FundingData();
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=0f || fundingForSector.getDisbursement().floatValue() != 0f || fundingForSector.getExpenditure().floatValue() != 0f) {
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
+                                }
+                            } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                    loc.getLocation().getParentCategoryValue().getEncodedValue().equals("Zone")) {
+
+                                //District level
+                                //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
+
+                                String regCode = loc.getLocation().getName().trim();
+
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData)
+                                            locationFundingMap.get(
+                                                    regCode);
+
+                                    FundingData newVal = new FundingData();
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=
+                                            0f ||
+                                            fundingForSector.getDisbursement().
+                                                    floatValue() != 0f ||
+                                            fundingForSector.getExpenditure().
+                                                    floatValue() != 0f) {
+
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage()/100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage()/100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    //    Set activiactivity.getFunding();
+                }
+
+            }
 
         }
         Object[] retVal = new Object[2];
@@ -1145,12 +1353,12 @@ public class GetFoundingDetails extends Action {
     }
 
     public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
-            Date start, Date end) {
-    	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
+                                                                    Date start, Date end) {
+        return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
     }
-    
+
     public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
-            Date start, Date end, Long donorId) {
+                                                                    Date start, Date end, Long donorId) {
         FundingData retVal = null;
         Set fundSet = activity.getFunding();
         Iterator<AmpFunding> fundIt = fundSet.iterator();
@@ -1173,25 +1381,88 @@ public class GetFoundingDetails extends Action {
         try {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
-                
-                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
-                
-                Set fundDetails = fund.getFundingDetails();
 
-                Iterator fdIt = fundDetails.iterator();
-                while (fdIt.hasNext()) {
-                    AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
-                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
-                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
-                        fundDetSet.add(fd);
+                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
+
+                    Set fundDetails = fund.getFundingDetails();
+
+                    Iterator fdIt = fundDetails.iterator();
+                    while (fdIt.hasNext()) {
+                        AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
+                        if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
+                                (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
+                            fundDetSet.add(fd);
+                        }
                     }
                 }
             }
+
+            String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+            if ( baseCurr == null ){
+                baseCurr	= "USD";
+            }
+            fch.doCalculations(fundDetSet, baseCurr);
+
+            commitment = fch.getTotActualComm().getValue();
+            disbursement = fch.getTotActualDisb().getValue();
+            expenditure = fch.getTotActualExp().getValue();
+
+        } catch (Exception ex1) {
+            ex1.printStackTrace();
+            //Add exception reporting
         }
 
-           String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        	if ( baseCurr == null ){
-        		baseCurr	= "USD";
+        retVal = new FundingData(commitment, disbursement, expenditure);
+
+        return retVal;
+    }
+
+    public static FundingData getActivityTotalFundingInBaseCurrencyForPledge(FundingPledges pledge,
+                                                                             Date start, Date end, Long donorId) {
+        FundingData retVal = null;
+        List <FundingPledgesDetails> fundSet = PledgesEntityHelper.getPledgesDetails(pledge.getId());
+
+        Iterator<FundingPledgesDetails> fundIt = fundSet.iterator();
+
+        BigDecimal commitment = null;
+        BigDecimal disbursement = null;
+        BigDecimal expenditure = null;
+
+        Timestamp startTs = new Timestamp(start.getTime());
+        startTs.setNanos(0);
+        Timestamp endTs = new Timestamp(end.getTime());
+        endTs.setNanos(0);
+
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+//        fch.doCalculations();
+
+        Set fundDetSet = new HashSet();
+
+
+        try {
+            while (fundIt.hasNext()) {
+                FundingPledgesDetails fund = fundIt.next();
+
+                if (donorId == null || donorId < 0 || donorId.equals(pledge.getOrganization().getAmpOrgId())) {
+                    if ((fund.getFunding_date().after(startTs) || fund.getFunding_date().equals(startTs)) &&
+                            (fund.getFunding_date().before(endTs)) || fund.getFunding_date().equals(endTs)) {
+
+                        AmpFundingDetail forCalculations = new AmpFundingDetail();
+                        forCalculations.setAmpCurrencyId(fund.getCurrency());
+                        forCalculations.setTransactionAmount(fund.getAmount());
+                        forCalculations.setTransactionDate(fund.getFunding_date());
+                        forCalculations.setTransactionType(Constants.COMMITMENT);
+
+
+                        fundDetSet.add(forCalculations);
+                    }
+                }
+            }
+
+
+            String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+            if ( baseCurr == null ){
+                baseCurr	= "USD";
             }
             fch.doCalculations(fundDetSet, baseCurr);
 

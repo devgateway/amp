@@ -581,6 +581,10 @@
 	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
                 viewChannelOverviewObjective.jsp
     </teaser>
+    
+    <teaser name="regionalObservations" action="regionalObservations.do">
+    	viewRegionalObservations.jsp
+	</teaser>
 
 	<teaser name="physicalProgress" action="physicalProgress.do">
                 viewPhysicalProgress.jsp

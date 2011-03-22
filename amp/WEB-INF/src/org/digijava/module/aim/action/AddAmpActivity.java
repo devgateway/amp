@@ -1530,10 +1530,18 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 	
 	//Budget classification
-	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
-	eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
-	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
-	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+	if (eaForm.getIdentification().getBudgetsectors()==null || eaForm.getIdentification().getBudgetsectors().size()==0){
+		eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
+	}
+	if (eaForm.getIdentification().getSelectedorg()==null || eaForm.getIdentification().getSelectedorg()==0){
+		eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
+	}
+	if (eaForm.getIdentification().getSelecteddepartment()==null || eaForm.getIdentification().getSelecteddepartment()==0){
+		eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
+	}
+	if (eaForm.getIdentification().getSelectedprogram()==null || eaForm.getIdentification().getSelectedprogram()==0){
+		eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+	}
 	
 	
 	eaForm.getIdentification().setBudgetsectors(BudgetDbUtil.getBudgetSectors());

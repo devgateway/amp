@@ -9,7 +9,8 @@
 			</generator>
 		</id>
 
-		<property name="title" column="title" type="java.lang.String" />
+<!--		<property name="title" column="title" type="java.lang.String" />-->
+		<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<property name="additionalInformation" column="additionalInformation" type="java.lang.String" />
 		<property name="whoAuthorizedPledge" column="whoAuthorizedPledge" type="java.lang.String" />
 		<property name="furtherApprovalNedded" column="furtherApprovalNedded" type="java.lang.String" />

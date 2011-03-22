@@ -29,9 +29,9 @@ function FilterWrapper() {
 	this.filterOwners		= new Array();
 	this.filterTeamIds		= new Array();
 }
-FilterWrapper.prototype.labelsToHTML	= function() {
+FilterWrapper.prototype.labelsToHTML	= function(text) {
 	var ret	= "";
-	ret += "<strong>Labels:</strong> ";
+	ret += "<strong>"+text+" :</strong> ";
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
@@ -46,8 +46,8 @@ FilterWrapper.prototype.labelsToHTML	= function() {
 	return ret;
 }
 
-FilterWrapper.prototype.fToHTML	= function() {
-	var ret	= "<strong>Filters:</strong> ";
+FilterWrapper.prototype.fToHTML	= function(text) {
+	var ret	= '<strong>'+text+' :</strong> ';
 	if ( this.filterDocTypeIds.length > 0 ) {
 		var docType		= this.filterDocTypeIds[0];
 		if ( docType.key != "0" ) {
@@ -100,6 +100,10 @@ function AbstractDynamicList (containerEl, thisObjName, fDivId) {
 	this.filterInfoDivId	= null;
 }
 
+AbstractDynamicList.prototype.clearBody		= function () {
+	this.containerEl.innerHTML	= "";
+}
+
 AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	this.reqString		= "";
 	if ( shouldRetrieveFilters != null && !shouldRetrieveFilters) 
@@ -117,8 +121,7 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	
 	if ( this.filterInfoDivId != null ) {
 		var divEl	= document.getElementById( this.filterInfoDivId );
-		divEl.innerHTML =
-				this.filterWrapper.labelsToHTML() + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML();
+		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext());
 	}
 }
 

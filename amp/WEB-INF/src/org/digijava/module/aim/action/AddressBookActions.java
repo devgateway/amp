@@ -266,24 +266,26 @@ public class AddressBookActions extends DispatchAction {
 				List<ContactPropertyHelper> emails=null;
 				List<ContactPropertyHelper> phones=null;
 				List<ContactPropertyHelper> faxes=null;
-				for (ContactPropertyHelper property : contactProperties) {
-					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-						if(emails==null){
-							emails=new ArrayList<ContactPropertyHelper>();
-						}
-						emails.add(property);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-						if(phones==null){
-							phones=new ArrayList<ContactPropertyHelper>();
-						}
-						phones.add(property);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-						if(faxes==null){
-							faxes=new ArrayList<ContactPropertyHelper>();
-						}
-						faxes.add(property);
-					}
-				}
+                if (contactProperties != null) {
+                    for (ContactPropertyHelper property : contactProperties) {
+                        if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+                            if(emails==null){
+                                emails=new ArrayList<ContactPropertyHelper>();
+                            }
+                            emails.add(property);
+                        }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+                            if(phones==null){
+                                phones=new ArrayList<ContactPropertyHelper>();
+                            }
+                            phones.add(property);
+                        }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
+                            if(faxes==null){
+                                faxes=new ArrayList<ContactPropertyHelper>();
+                            }
+                            faxes.add(property);
+                        }
+                    }
+                }
 				if(emails!=null){
 					myForm.setEmails(emails.toArray(new ContactPropertyHelper[emails.size()]));
 					myForm.setEmailsSize(myForm.getEmails().length);

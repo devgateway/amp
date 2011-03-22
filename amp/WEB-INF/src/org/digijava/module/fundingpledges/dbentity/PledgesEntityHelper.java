@@ -1,5 +1,6 @@
 package org.digijava.module.fundingpledges.dbentity;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -39,7 +40,7 @@ public class PledgesEntityHelper {
 	        ArrayList<FundingPledges> AllPledges = new ArrayList<FundingPledges>();
 	        List list = null;
 	        try {
-	            session = PersistenceManager.getRequestDBSession();
+	            session = PersistenceManager.getSession();
 	            String queryString = new String();
 	            queryString = " select a from " + FundingPledges.class.getName() + " a ";
 	            q = session.createQuery(queryString);
@@ -51,6 +52,14 @@ public class PledgesEntityHelper {
 
 	        } catch (Exception ex) {
 	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
+	        }finally {
+	        	try {
+	        		if (session != null) {
+	        			PersistenceManager.releaseSession(session);
+	        		}
+	        	} catch (Exception ex) {
+	        		logger.error("releaseSession() failed");
+	        	}
 	        }
 	        return AllPledges;
 	}
@@ -60,7 +69,7 @@ public class PledgesEntityHelper {
 	        Query q = null;
 	        ArrayList<AmpFundingDetail> AllFunds = new ArrayList<AmpFundingDetail>();
 	        try {
-	            session = PersistenceManager.getRequestDBSession();
+	            session = PersistenceManager.getSession();
 	            String queryString = new String();
 	            queryString = "select p from " + AmpFundingDetail.class.getName()
 				+ " p where (p.pledgeid=:id)";
@@ -73,6 +82,14 @@ public class PledgesEntityHelper {
 
 	        } catch (Exception ex) {
 	        	logger.debug("Projects : Unable to get related fundings from database" + ex.getMessage());
+	        }finally {
+	        	try {
+	        		if (session != null) {
+	        			PersistenceManager.releaseSession(session);
+	        		}
+	        	} catch (Exception ex) {
+	        		logger.error("releaseSession() failed");
+	        	}
 	        }
 	        return AllFunds;
 	}
@@ -84,7 +101,7 @@ public class PledgesEntityHelper {
 	        ArrayList<FundingPledges> Pledges = new ArrayList<FundingPledges>();
 	        List list = null;
 	        try {
-	            session = PersistenceManager.getRequestDBSession();
+	            session = PersistenceManager.getSession();
 	            String queryString = new String();
 	            queryString = "select p from " + FundingPledges.class.getName()
 				+ " p where (p.organization=:id)";
@@ -95,9 +112,16 @@ public class PledgesEntityHelper {
 	            	pledge = (FundingPledges) iter.next();
 	            	Pledges.add(pledge);
 	            }
-
 	        } catch (Exception ex) {
 	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
+	        }finally {
+	        	try {
+	        		if (session != null) {
+	        			PersistenceManager.releaseSession(session);
+	        		}
+	        	} catch (Exception ex) {
+	        		logger.error("releaseSession() failed");
+	        	}
 	        }
 	        return Pledges;
 	}
@@ -109,7 +133,7 @@ public class PledgesEntityHelper {
 	        ArrayList<FundingPledges> Pledges = new ArrayList<FundingPledges>();
 	        List list = null;
 	        try {
-	            session = PersistenceManager.getRequestDBSession();
+	            session = PersistenceManager.getSession();
 	            String queryString = new String();
 	            queryString = "select p from " + FundingPledges.class.getName()
 				+ " p where (p.organization=:id) and (p.title=:title)";
@@ -124,6 +148,14 @@ public class PledgesEntityHelper {
 
 	        } catch (Exception ex) {
 	        	logger.debug("Projects : Unable to get Pledges names from database" + ex.getMessage());
+	        }finally {
+	        	try {
+	        		if (session != null) {
+	        			PersistenceManager.releaseSession(session);
+	        		}
+	        	} catch (Exception ex) {
+	        		logger.error("releaseSession() failed");
+	        	}
 	        }
 	        return Pledges;
 	}
@@ -178,7 +210,15 @@ public class PledgesEntityHelper {
 		} catch (Exception e) {
 			logger.error("Unable to get pledge details");
 			logger.debug("Exception " + e);
-		}
+		}finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        }
 		return fundingpledgesdetails;
 	}
 	
@@ -202,7 +242,15 @@ public class PledgesEntityHelper {
 		} catch (Exception e) {
 			logger.error("Unable to get pledge locations");
 			logger.debug("Exception " + e);
-		} 
+		}finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        }
 		return fundingpledgeloc;
 	}
 	public static ArrayList<FundingPledgesSector> getPledgesSectors(Long pledgeid){
@@ -225,13 +273,22 @@ public class PledgesEntityHelper {
 		} catch (Exception e) {
 			logger.error("Unable to get pledge sectors");
 			logger.debug("Exception " + e);
-		} 
+		}finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        } 
 		return fundingPledgesSector;
 	}
 	public static void savePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors,PledgeForm plf) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
+		
 		Transaction tx=null;
 		try {
+			Session session = PersistenceManager.getSession();
 			tx=session.beginTransaction();
 			session.save(pledge);
 			
@@ -267,13 +324,16 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot save Pledge!",e);
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	public static void removePledge(FundingPledges pledge) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
+			Session session = PersistenceManager.getSession();
 			tx=session.beginTransaction();
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
 			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
@@ -297,7 +357,7 @@ public class PledgesEntityHelper {
 				session.update(fundingRelated);
 			}
 			session.delete(pledge);
-			
+			tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error deleting pledge",e);
 			if (tx!=null){
@@ -308,13 +368,17 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot delete Pledge!",e);
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	public static void updatePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors,PledgeForm plf) throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
+		
 		Transaction tx=null;
 		try {
+			Session session = PersistenceManager.getSession();
 			tx=session.beginTransaction();
 			session.update(pledge);
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
@@ -418,6 +482,9 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot save Pledge!",e);
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -426,7 +493,7 @@ public class PledgesEntityHelper {
 		AmpOrganisation ampOrg = null;
 		try {
 			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			ampOrg = (AmpOrganisation) session.load(AmpOrganisation.class, id);
 		}
 		catch (Exception ex) {
@@ -435,7 +502,7 @@ public class PledgesEntityHelper {
 		finally {
 			if (session != null) {
 				try {
-					;//PersistenceManager.releaseSession(session);
+					PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
 					logger.error("Release session failed :" + rsf.getMessage());
@@ -457,13 +524,21 @@ public class PledgesEntityHelper {
 		Query query=null;
 		List pledgeNames=null;
 		try{
-			session=PersistenceManager.getRequestDBSession();
+			session=PersistenceManager.getSession();
 			queryString="select distinct(pl.title) from " +FundingPledges.class.getName()+" pl " ;
 			query=session.createQuery(queryString);
 			pledgeNames=query.list();
 		}catch (Exception e) {
 			logger.error("...Failed to get pledge titles");
-		}
+		}finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        }
 		
 		if(pledgeNames!=null){
 			retValue=new String[pledgeNames.size()];    		

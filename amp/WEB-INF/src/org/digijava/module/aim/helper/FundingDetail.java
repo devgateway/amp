@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.budget.helper.BudgetDbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -40,12 +41,12 @@ public class FundingDetail implements Serializable, Comparable
     private IPAContract contract;
     private Boolean disbursementOrderRejected;        
     private Long pledge;
-    private String pledgename="";
+    private AmpCategoryValue pledgename;
        
 	
     
     
-	public String getPledgename() {
+	public AmpCategoryValue getPledgename() {
 		if (this.pledge!=null && !this.pledge.equals(0L)){
 			FundingPledges pledge = PledgesEntityHelper.getPledgesById(this.pledge);
 			return pledge.getTitle();
@@ -53,7 +54,7 @@ public class FundingDetail implements Serializable, Comparable
 		return pledgename;
 	}
 
-	public void setPledgename(String pledgename) {
+	public void setPledgename(AmpCategoryValue pledgename) {
 		this.pledgename = pledgename;
 	}
     
@@ -291,7 +292,7 @@ public class FundingDetail implements Serializable, Comparable
 	 String returnValue=null;
 	 if (getFixedExchangeRate()!=null){
 		 DecimalFormat decFor=new DecimalFormat();
-		 BigDecimal fixedExchangeRate=new BigDecimal(getFixedExchangeRate());
+		 BigDecimal fixedExchangeRate=new BigDecimal(getFixedExchangeRate().replace(",", "."));
 		 returnValue=decFor.format(fixedExchangeRate);
 	 }
 	 return returnValue;

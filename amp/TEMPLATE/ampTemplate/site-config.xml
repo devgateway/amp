@@ -374,7 +374,12 @@
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="channelOverviewObjective"/>
        </layout>
-
+		
+		<layout name="layoutRegionalObservations" extends="tabLayout">
+        	<put name="title">Activity - Regional Observations </put>
+        	<put-item name="tabBody" module="aim" instance="default" teaser="regionalObservations"/>
+       	</layout>
+		
 	   <layout name="layoutPhysicalProgress" extends="tabLayout">
         <put name="title">Activity - Physical Progress </put>
         <put-item name="tabBody" module="aim" instance="default"

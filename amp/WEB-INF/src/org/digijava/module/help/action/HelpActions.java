@@ -420,14 +420,16 @@ public class HelpActions extends DispatchAction {
 		}else if(request.getParameter("multi").equals("true")){
 			// delete Lucene helpSearch Directory 
 			//WTF???
-			File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
-			LuceneUtil.deleteDirectory(path);
+			//File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
+			//LuceneUtil.deleteDirectory(path);
 			//remove all topics that were selected
 			String tIds=request.getParameter("tIds");
 			List<Long> topicsIds=getTopicsIds(tIds.trim());
 			for (Long id : topicsIds) {
-				HelpTopic ht=HelpUtil.loadhelpTopic(id);
+				//HelpTopic ht=HelpUtil.loadhelpTopic(id);
+				HelpTopic ht = HelpUtil.getHelpTopic(id);
 				if(ht!=null){
+					logger.warn("deleting ht: "+ht.getHelpTopicId()+ht.getTopicKey());
 					removeLastLevelTopic(ht, request);
 				}
 			}			

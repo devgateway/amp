@@ -18,6 +18,7 @@ public class GisRegReportForm extends ActionForm {
     private String regName;
     private int mapLevel;
     private long sectorId;
+    private String sectorIdStr;
     private long startDate;
     private long endDate;
 
@@ -34,6 +35,14 @@ public class GisRegReportForm extends ActionForm {
 
     private List activityLocationFundingList;
     private String selectedCurrency;
+
+    public String getSectorIdStr() {
+        return sectorIdStr;
+    }
+
+    public void setSectorIdStr(String sectorIdStr) {
+        this.sectorIdStr = sectorIdStr;
+    }
 
     public String getSelectedCurrency() {
         return selectedCurrency;

@@ -19,11 +19,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -71,14 +67,27 @@ public class ShowRegionReport extends Action {
                          31, 23, 59, 59);
 
         }
+
+        String secIdStr = gisRegReportForm.getSectorIdStr();
+        Long secId = null;
+        int sectorQueryType = 0;
+        if (secIdStr.startsWith("sec_scheme_id_")) {
+            sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
+            secId = new Long(secIdStr.substring(14));
+        } else if (secIdStr.startsWith("sec_id_")) {
+            sectorQueryType = DbUtil.SELECT_SECTOR;
+            secId = new Long(secIdStr.substring(7));
+        } else {
+            sectorQueryType = DbUtil.SELECT_DEFAULT;
+            secId = new Long(secIdStr);
+        }
+
         List secFundings;
         if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){	
         	Long donorid =new Long(request.getParameter("donorid"));
-        	secFundings = DbUtil.getSectorFoundingsByDonor(gisRegReportForm.
-                getSectorId(),donorid);
+        	secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType);
         }else{
-        	secFundings = DbUtil.getSectorFoundings(gisRegReportForm.
-                    getSectorId());
+        	secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType);
         }
 
         Object[] fundingList = getFundingsForLocation(
@@ -95,11 +104,30 @@ public class ShowRegionReport extends Action {
                               get(gisRegReportForm.getRegCode());
 
         Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
-        AmpSector selSector = SectorUtil.getAmpSector(gisRegReportForm.
-                getSectorId());
 
-        if (selSector != null) {
-            gisRegReportForm.setSelSectorName(selSector.getName());
+
+
+
+
+
+        //AmpSector selSector = SectorUtil.getAmpSector(secId, sectorQueryType);
+        String secName = null;
+        if (sectorQueryType == DbUtil.SELECT_SECTOR_SCHEME) {
+            AmpSectorScheme scheme = SectorUtil.getAmpSectorScheme(secId);
+            if (scheme != null) {
+                secName = scheme.getSecSchemeName();
+            }
+        } else {
+            AmpSector sec = SectorUtil.getAmpSector(secId);
+            if (sec != null) {
+                secName = sec.getName();
+            }
+        }
+
+
+
+        if (secName != null) {
+            gisRegReportForm.setSelSectorName(secName);
         } else {
             gisRegReportForm.setSelSectorName("All");
         }

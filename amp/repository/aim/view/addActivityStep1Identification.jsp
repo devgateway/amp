@@ -205,6 +205,28 @@ function toggleBudgetFields(show) {
 	<field:display name="Code Chapitre Dropdown" feature="Budget">	
 		toggleElement("CodeChapitreDrop", show);
 	</field:display> 
+	<field:display name="Budget Sector" feature="Budget">
+		if (document.getElementById("budget").value!=0){
+			toggleElement("budgsector", show);
+			toggleElement("budgsector1", show);
+			toggleElement("bctd", show);
+			toggleElement("bctd1", show);
+		}else{
+			toggleElement("budgsector", true);
+			toggleElement("budgsector1", true);
+			toggleElement("bctd", true);
+			toggleElement("bctd1", true);
+		}
+	</field:display>
+	<field:display name="Budget Organization" feature="Budget">
+		if (document.getElementById("budget").value!=0){
+			toggleElement("budgetorg", show);
+			toggleElement("budgetorg1", show);
+		}else{
+			toggleElement("budgetorg", true);
+			toggleElement("budgetorg1", true);
+		}
+	</field:display>
 	<field:display name="Budget Department" feature="Budget">
 		toggleElement("budgetdepart", show);
 		toggleElement("budgetdepart1", show);
@@ -757,7 +779,7 @@ target.style.cursor = "default"
 											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
 											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
 											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
-                                                                                                                <html:option value="2"><digi:trn>Treasure</digi:trn></html:option>
+                                                        <html:option value="2"><digi:trn>Treasure</digi:trn></html:option>
 											 		</html:select>
 													</field:display>
 												</td>
@@ -895,20 +917,20 @@ target.style.cursor = "default"
 											<!-- Budget classification -->
 											<field:display name="Budget Classification" feature="Budget">		
 											<tr bgcolor="#ffffff">
-												<td valign="top" align="left">
+												<td valign="top" align="left" id="bctd" >
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn>Budget Classification</digi:trn>
 													</a>
 												</td>
-												<td>
+												<td id="bctd1">
 													<table class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
                                                   		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
-                                                  			<td width="75">
+                                                  			<td width="75" id="budgsector1">
                                                   				<digi:trn>Sector</digi:trn>
                                                   			</td>
 		                                                    <td>
-		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" style="max-width:250; min-width:250;">
+		                                                    	<html:select styleId="budgsector" name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" style="max-width:250; min-width:250;">
 		                                                    		<html:option value="0"><digi:trn>Select</digi:trn></html:option>
 		                                                    		<html:optionsCollection name="aimEditActivityForm" property="identification.budgetsectors" value="idsector" label="sectorname"/>
 		                                                    	</html:select>

@@ -39,6 +39,8 @@ public class SetAttributes extends Action {
 				makePublic( myForm.getUuid(), request);
 		if ( myForm.getAction() != null && myForm.getAction().equals(CrConstants.UNPUBLISH) ) 
 				unpublish( myForm.getUuid() );
+		
+		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
 	}
 	

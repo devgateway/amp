@@ -528,8 +528,9 @@ public class ReportWizardAction extends MultiAction {
 									}
 								}else{
 									if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0 &&
-											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)){
-										ampThemesOrdered.add(aco);
+											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
+											&& !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
+												ampThemesOrdered.add(aco);
 										//System.out.println("	----------------ADDED!");
 									}
 								}

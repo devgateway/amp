@@ -1,3 +1,4 @@
+<%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -200,7 +201,7 @@ function validateData(){
 	 	 Please, insert a pledge title.
 	  </digi:trn>
 	</c:set>
-	if (document.getElementsByName("pledgeTitle")[0]==null || document.getElementsByName("pledgeTitle")[0].value.length==0){
+	if (document.getElementsByName("pledgeTitleId")[0]==null || document.getElementsByName("pledgeTitleId")[0].value==-1 || document.getElementsByName("pledgeTitleId")[0].value==0){
 		alert ("${pleaseInsertTitle}")
 		return false;
 	}
@@ -269,41 +270,7 @@ function validateData(){
 	</c:set>
 	i = 0;
 
-	<c:set var="selectPledgeType">
-	  <digi:trn key="aim:selectPledgeType">
-	  	Please, select a type of pledge.
-	  </digi:trn>
-	</c:set>
-	i = 0;
-	while (i<=numFund){
-		if (document.getElementsByName("fund_"+i+"_2")[0]!=null){
-			var temp = 0;
-			temp = document.getElementsByName("fund_"+i+"_2")[0].value;
-			if (temp==-1){
-				alert ("${selectPledgeType}")
-				return false;
-			}
-		}
-		i++;
-	}
 	
-	<c:set var="selectAssitanceType">
-	  <digi:trn key="aim:selectAssitanceType">
-	  	Please, select a type of assistance.
-	  </digi:trn>
-	</c:set>
-	i = 0;
-	while (i<=numFund){
-		if (document.getElementsByName("fund_"+i+"_3")[0]!=null){
-			var temp = 0;
-			temp = document.getElementsByName("fund_"+i+"_3")[0].value;
-			if (temp==-1){
-				alert ("${selectAssitanceType}")
-				return false;
-			}
-		}
-		i++;
-	}
 	
 	<c:set var="insertAmount">
 	  <digi:trn key="aim:insertAmount">
@@ -341,38 +308,7 @@ function validateData(){
 		i++;
 	}
 	
-	<c:set var="selectFunding_date">
-	  <digi:trn key="aim:selectFunding_date">
-	 	 Please, select a date for each funding.
-	  </digi:trn>
-	</c:set>
-	i = 0;
-	while (i<=numFund){
-		if (document.getElementsByName("fund_"+i+"_6")[0]!=null && document.getElementsByName("fund_"+i+"_6")[0].value.length ==0){
-			alert ("${selectFunding_date}")
-			return false;
-		}
-		i++;
-	}
-
-	<c:set var="selectAidModality">
-	  <digi:trn key="aim:selectAidModality">
-	  	Please, select aid modality.
-	  </digi:trn>
-	</c:set>
-	i = 0;
-	while (i<=numFund){
-		if (document.getElementsByName("fund_"+i+"_7")[0]!=null){
-			var temp = 0;
-			temp = document.getElementsByName("fund_"+i+"_7")[0].value;
-			if (temp==-1){
-				alert ("${selectAidModality}")
-				return false;
-			}
-		}
-		i++;
-	}
-
+	
 	<c:set var="insertValidEmail">
 	  <digi:trn key="aim:insertValidEmail">
 	 	 Please, insert a valid Email.
@@ -404,18 +340,19 @@ function validateData(){
 
 function changeTitle(){
 	var title = document.getElementById("pledgeTitleDropDown").value;
-	if (title=="-2"){
-		document.getElementById("newTitle").style.display = "block";
-		document.getElementById("myTitle").value = "";
-	} else {
-		if (title!="-1"){
-			document.getElementById("newTitle").style.display = "none";
-			document.getElementById("myTitle").value = title;
-		} else {
-			document.getElementById("newTitle").style.display = "none";
-			document.getElementById("myTitle").value = "";
-		}
-	}
+	document.getElementById("myTitle").value = title;
+	//if (title=="-2"){
+	//	document.getElementById("newTitle").style.display = "block";
+	//	document.getElementById("myTitle").value = "";
+	//} else {
+	//	if (title!="-1"){
+	//		document.getElementById("newTitle").style.display = "none";
+	//		document.getElementById("myTitle").value = title;
+	//	} else {
+	//		document.getElementById("newTitle").style.display = "none";
+	//		document.getElementById("myTitle").value = "";
+	//	}
+	//}
 	
 }
 
@@ -608,15 +545,14 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<td align="left" width="70%">
 													<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
 														<option selected="true" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
-														<option value="-2"><digi:trn key="addNewTitle">---Add new title---</digi:trn></option>
 														<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
-															<c:if test="${pledgeForm.pledgeTitle == titles}">
-																<option selected="true" value="<c:out value="${titles}"/>">	
+															<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
+																<option selected="true" value="${titles.id}"/>	
 															</c:if>
-															<c:if test="${pledgeForm.pledgeTitle != titles}">
-																<option value="<c:out value="${titles}"/>">
+															<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
+																<option value="${titles.id}"/>
 															</c:if>
-															<c:out value="${titles}" />
+															<c:out value="${titles.value}" />
 															</option>
 														</c:forEach>
 													</select>
@@ -628,7 +564,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												</td>
 												<td align="left" width="70%">
 													 <div id="newTitle" style="display: none">											
-													    <html:text property="pledgeTitle" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
+													    <html:text property="pledgeTitleId" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
 													   
 													</div>																	    	
 												</td>	
@@ -705,6 +641,351 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>&nbsp;</td></tr>
 								</table>
+								
+								<feature:display name="Pledge Sector and Location" module="Pledges">
+									<table width="95%" bgcolor="#f4f4f2" border=0>
+										<tr>
+										    <td>
+										        <!-- contents -->
+										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+										        <b><digi:trn key="aim:sectorAndLocation">Sector and Location</digi:trn></b>
+										         
+										    </td>
+								        </tr>
+							            <field:display name="Pledge Sector" feature="Pledge Sector and Location">
+										<tr><td>&nbsp;</td></tr>
+										<tr>
+							                <td>
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    	<tr>
+							                            <td align="left">
+							                                <b>
+							                                    <digi:trn key="aim:sector">
+							                                        Sector
+							                                    </digi:trn>
+							                                </b>
+							                            </td>
+							                        </tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+	                                             	<tr><td>
+														<c:forEach var="pledgeSectors" items="${pledgeForm.pledgeSectors}" varStatus="index">
+	                                                            <tr> 
+	                                                                   <c:set var="indexSect" value="${indexSect+1}"/>
+											                            <td align="center" width="3%">
+																			<input type="checkbox" id="checkSect${indexSect}"  >
+																		</td>
+	                                                                    <td  width="67%" valign="middle" align="left">
+	                                                                        
+	                                                                        [${pledgeSectors.sectorScheme}]
+	                                                                        <c:if test="${!empty pledgeSectors.sectorName}">
+	                                                                            [${pledgeSectors.sectorName}]
+	                                                                        </c:if>
+										                               		<c:if test="${!empty pledgeSectors.subsectorLevel1Name}">
+	                                                                            [${pledgeSectors.subsectorLevel1Name}]
+	                                                                        </c:if>
+																			<c:if test="${!empty pledgeSectors.subsectorLevel2Name}">
+	                                                                            [${pledgeSectors.subsectorLevel2Name}]
+	                                                                        </c:if>
+																			
+	                                                                    </td>
+	                                                                    <td width="15%" valign="middle" align="right">
+	                                                                       
+	                                                                    <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
+	                                                                    <td width="15%" valign="middle" align="left">
+	                                                                        <html:text name="pledgeSectors" indexed="true" property="sectorPercentage"size="5" onkeyup="fnChk(this, 'sector')" styleClass="inp-text"/>
+	                                                                    </td>
+	                                                                </tr>
+	                                                                <c:set var="sectorAdded" value="true"/>
+	                                                           </c:forEach>
+													</td></tr>
+													<tr>
+														<td colspan="2"> &nbsp;
+	                                                    	<field:display name="Add Pledge Sector Button" feature="Pledge Sector and Location">
+	                                                           <html:button styleClass="dr-menu"  
+	                                                                         property="submitButton" onclick="addSectors();" >
+	                                                                <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
+	                                                            </html:button>
+															</field:display>
+															<field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location">
+																 &nbsp;
+		                                                 		<logic:notEmpty name="pledgeForm" property="pledgeSectors">
+																	<html:button styleClass="dr-menu" property="submitButton" onclick="return removeSector()">
+		                                                          	  <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
+		                                                        	</html:button>
+																</logic:notEmpty>
+															</field:display>
+		                                                </td>
+		                                            </tr>
+		                                        </table>
+										     
+										    </td>
+										</tr>
+										</field:display>
+										<field:display name="Pledge Location" feature="Pledge Sector and Location">
+										<tr><td>&nbsp;</td></tr>
+										<tr>
+							                <td>
+							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    	<tr>
+							                            <td align="left">
+							                                <b>
+							                                    <digi:trn key="aim:Location">
+							                                        Location
+							                                    </digi:trn>
+							                                </b>
+							                            </td>
+							                        </tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+	                                             	<tr><td>
+													<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
+	                                                  <tr>
+	                                                      <c:set var="indexLoc" value="${indexLoc+1}"/>
+									                            <td align="center" width="3%">
+																	<input type="checkbox" id="checkLoc${indexLoc}"  >
+																</td>
+	                                                            <td align="left" width="67%">
+		                                                            [${selectedLocs.location.name}] 
+	                                                            </td>
+	                                                            <td align="right" width="15%" nowrap="nowrap">
+	                                                            <FONT color="red">*</FONT>
+	                                                            		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
+																</td>
+																<td align="left" width="15%" nowrap="nowrap">
+	                                                            		<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="5"  onkeyup="fnChk(this, 'region')" styleClass="inp-text"/>
+	                                                            </td>
+	                                                          
+	                                                    </tr>
+	                                                  </c:forEach>
+													</td></tr>
+													<tr>
+														<td colspan="2"> &nbsp;
+															<field:display name="Add Pledge Location Button" feature="Pledge Sector and Location">
+	                                                           <html:button styleClass="dr-menu"  
+	                                                                         property="submitButton" onclick="addLocation();">
+	                                                                <digi:trn key="btn:addLocation">Add Location</digi:trn>
+	                                                            </html:button>
+															</field:display>
+															<field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location">
+																 &nbsp;
+		                                                 		<logic:notEmpty name="pledgeForm" property="selectedLocs">
+																	<html:button styleClass="dr-menu" property="submitButton" onclick="return removeLocation()">
+		                                                            <digi:trn key="btn:removeLocation">Remove Location</digi:trn>
+		                                                        	</html:button>
+																</logic:notEmpty>
+															</field:display>
+		                                                </td>
+		                                            </tr>
+		                                        </table>
+										     
+										    </td>
+										</tr>
+										</field:display>
+										<tr><td>&nbsp;</td></tr>
+										<tr><td>&nbsp;</td></tr>
+									</table>
+								</feature:display>
+								<feature:display name="Pledge Funding" module="Pledges">
+									<table width="95%" bgcolor="#f4f4f2" border=0>
+										<tr>
+										    <td>
+										        <!-- contents -->
+										        <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+										        <b><digi:trn key="aim:pledgeInformation">Pledge Information</digi:trn></b>
+										        
+										    </td>
+								        </tr>
+							            <tr><td>&nbsp;</td></tr>
+										<tr>
+							                <td>
+							                    <div id="fundTitle" style="display:block;">
+												<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+							                    	<tr>
+														<td align="center" valign="bottom" width="20" />
+														<td align="center" width="160">
+						                                	<b><digi:trn key="aim:typeOfPledge">Type Of Pledge</digi:trn></b>
+						                            	</td>
+														<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
+															<td align="center" width="190">
+								                                <b><digi:trn key="aim:typeOfAssistance">Type Of Assistance</digi:trn></b>
+								                            </td>
+														</field:display>
+														<td align="center" width="170">
+							                                <b><digi:trn key="aim:amount">Amount</digi:trn></b>
+							                            </td>
+														<td align="center" width="110">
+							                                <b><digi:trn key="aim:typeOfCurrency">Currency</digi:trn></b>
+							                            </td>
+														<td align="center" width="140">
+							                                <b><digi:trn key="aim:date">Date</digi:trn></b>
+							                            </td>
+														<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
+															<td align="center" width="200">
+							                                	<b><digi:trn key="aim:aidModality">Aid Modality</digi:trn></b>
+							                            	</td>
+														</field:display>
+							                        </tr>
+												</table>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+													<tr>
+														<td>
+			                                             	<div id="fundingDiv">
+			                                             	<c:forEach var="fundingPledgesDetails" items="${pledgeForm.fundingPledgesDetails}" varStatus="status">
+															
+															<% String tNameBase = "fund_" + indexFund + "_"; 
+															String divName = "fund_" + indexFund;
+															indexFund++;
+															String field0 = tNameBase + "0"; 
+															 String field1 = tNameBase + "1"; 
+															 String field2 = tNameBase + "2"; 
+															 String field3 = tNameBase + "3"; 
+															 String field4 = tNameBase + "4";
+															 String field5 = tNameBase + "5";
+															 String field6 = tNameBase + "6";
+															 String field7 = tNameBase + "7"; %>
+															 <div id="<%=divName%>" >
+																<table width='100%' bgcolor='#FFFFFF' cellPadding=5 cellSpacing=1>
+																<tr>
+										                            <td align="center" valign="bottom" width="30" >
+																		<input name="<%=field0%>" type="hidden" id="<%=field0%>" value='${fundingPledgesDetails.id}'/>
+											                        	<input type="checkbox" name="<%=field1%>" id="<%=field1%>" >
+																	</td>
+																	<td align="center" valign="bottom" width="170">
+																		<select name="<%=field2%>" class="inp-text" style="max-width: 150px;">
+																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																			<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
+																				<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
+																					<option selected="true" value="<c:out value="${type.id}"/>">	
+																				</c:if>
+																				<c:if test="${fundingPledgesDetails.pledgetypeid != type.id}">
+																					<option value="<c:out value="${type.id}"/>">
+																				</c:if>
+																				<digi:trn>${type.value}</digi:trn>
+																				</option>
+																			</c:forEach>
+																		</select>
+										                            </td>
+																	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
+																		<td align="center" valign="bottom" width="200">
+											                                <select name="<%=field3%>" class="inp-text" style="max-width: 150px;">
+																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																				<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
+																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
+																						<option selected="true" value="<c:out value="${type.id}"/>">	
+																					</c:if>
+																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid != type.id}">
+																						<option value="<c:out value="${type.id}"/>">
+																					</c:if>
+																					<digi:trn>${type.value}</digi:trn>
+																					</option>
+																				</c:forEach>
+																			</select>
+											                            </td>
+																	</field:display>
+																	<td align="center" valign="bottom" width="150">
+																		<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
+										                            </td>
+																	<td align="center" valign="bottom" width="100">
+										                                <select name="<%=field5%>" class="inp-text" style="max-width: 150px;">
+																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																			<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
+																				<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
+																					<option selected="true" value="<c:out value="${currency.currencyCode}"/>">	
+																				</c:if>
+																				<c:if test="${fundingPledgesDetails.currencycode != currency.currencyCode}">
+																					<option value="<c:out value="${currency.currencyCode}"/>">
+																				</c:if>
+																				<c:out value="${currency.currencyName}" />
+																				</option>
+																			</c:forEach>
+																		</select>
+										                            </td>
+																	<td align="center" valign="bottom" width="150">
+										                                <table cellPadding="0" cellSpacing="0">
+																			<tr>
+																				
+																				<td align="left" vAlign="bottom">
+																					<input type="text" name="<%=field6%>" id="<%=field6%>" readonly="true" value="<c:out value="${fundingPledgesDetails.fundingDate}"/>" size="10" style='width:80px' class="inp-text" />
+																				</td>
+																				<td align="left" vAlign="bottom">&nbsp;
+																					<a id="date1<%=field6%>" href='javascript:pickDateById("date1<%=field6%>","<%=field6%>")'>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																					</a>
+																				</td>														
+																			</tr>
+																		</table>
+										                            </td>
+																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
+																		<td align="center" valign="bottom" width="200">
+											                               <select name="<%=field7%>" class="inp-text" style="max-width: 150px;">
+																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																				<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
+																					<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
+																						<option selected="true" value="<c:out value="${type.id}"/>">	
+																					</c:if>
+																					<c:if test="${fundingPledgesDetails.aidmodalityid != type.id}">
+																						<option value="<c:out value="${type.id}"/>">
+																					</c:if>
+																					<digi:trn>${type.value}</digi:trn>
+																					</option>
+																				</c:forEach>
+																			</select>
+											                            </td>
+																	</field:display>
+										                        </tr>
+															</table>
+														</div>
+														</c:forEach>
+														</div>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="4"> &nbsp;
+															<table>
+																<tr>
+																	<td>
+																		<field:display name="Add Pledge Funding Button" feature="Pledge Funding">
+				                                                           <html:button styleClass="dr-menu"  
+				                                                                         property="submitButton" onclick="addFunding();">
+				                                                                <digi:trn key="btn:addFunding">Add Funding</digi:trn>
+				                                                            </html:button>
+																			&nbsp;
+																		</field:display>
+																	</td>
+																	<td>
+																		<field:display name="Remove Pledge Funding Button" feature="Pledge Funding">
+																		<div id="remBut" style="display:block;">
+																			<html:button styleClass="dr-menu" property="submitButton" onclick="return removeFunding()">
+				                                                            <digi:trn key="btn:removeFunding">Remove Funding</digi:trn>
+				                                                        	</html:button>
+																		</div>
+																		</field:display>
+																	</td>
+																</tr>
+															</table>
+		                                                </td>
+		                                            </tr>
+		                                        </table>
+										     </td>
+										</tr>
+										<tr><td>&nbsp;</td></tr>
+										<tr><td>&nbsp;</td></tr>
+									</table>
+								</feature:display>
 								<feature:display name="Pledge Contact 1" module="Pledges">
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
@@ -1504,7 +1785,7 @@ function addFunding() {
 	while (itr2.hasNext()) {
 		AmpCategoryValue type = (AmpCategoryValue) itr2.next();	
 		if (type != null){ %>
-				s += "<option value='<%=type.getId()%>'><%=type.getValue()%></option>";				  			
+				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue(),request)%></option>";				  			
 		<% }
 	 }%>
 	 s += "</select> </td>";
@@ -1552,7 +1833,7 @@ function addFunding() {
 	while (itr4.hasNext()) {
 		AmpCategoryValue type = (AmpCategoryValue) itr4.next();	
 		if (type != null){ %>
-				s += "<option value='<%=type.getId()%>'><%=type.getValue()%></option>";				  			
+				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue(),request)%></option>";				  			
 		<% }
 	 }%>
 	 s += "</select> </td>";

@@ -43,9 +43,9 @@
 
 <c:if test="${myForm.hasAddParticipatingOrgRights}">
 	<aim:addOrganizationButton callBackFunction="showOrgsPanel();"  refreshParentDocument="false" collection="addedOrgs" 
-				form="${crDocToOrgForm}" styleClass="buton"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+				form="${crDocToOrgForm}" styleClass="dr-menu buton"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 	 
 	 <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>
-	 <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide()">
+	 <input class="dr-menu buton" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide()">
 </c:if>
 

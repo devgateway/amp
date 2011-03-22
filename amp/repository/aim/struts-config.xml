@@ -61,6 +61,7 @@
     <form-bean name="aimQuarterlyDiscrepancyAllForm" type="org.digijava.module.aim.form.QuarterlyDiscrepancyAllForm" />
     <form-bean name="aimYearlyDiscrepancyAllForm" type="org.digijava.module.aim.form.YearlyDiscrepancyAllForm" />
     <form-bean name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm" />
+    <form-bean name="aimRegionalObservationsForm" type="org.digijava.module.aim.form.RegionalObservationsForm" />
     <form-bean name="aimKnowledgeForm" type="org.digijava.module.aim.form.KnowledgeForm" />
     <form-bean name="addAmpProjectDetailsForm" type="org.digijava.module.aim.form.AddAmpProjectDetailsForm" />
     <form-bean name="editPhysicalProgressForm" type="org.digijava.module.aim.form.EditPhysicalProgressForm" />
@@ -331,6 +332,7 @@
     <action forward="/showLayout.do?layout=layoutReferences" path="/aim/viewReferences" name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutIndicatorValues" name="aimViewIndicatorForm" path="/aim/viewIndicatorValues" />
     <action forward="/showLayout.do?layout=layoutChannelOverviewObjective" path="/aim/viewChannelOverviewObjective" />
+    <action forward="/showLayout.do?layout=layoutRegionalObservations" path="/aim/viewRegionalObservations" name="aimRegionalObservationsForm" type="org.digijava.module.aim.form.RegionalObservationsForm" validate="false" />
     <action forward="/showLayout.do?layout=layoutPhysicalProgress" path="/aim/viewPhysicalProgress" name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm" validate="false" />
     <action forward="/showLayout.do?layout=layoutPhysicalProgressDetails" path="/aim/viewPhysicalProgressDetails" />
     <action forward="/showLayout.do?layout=layoutComponentDescription" path="/aim/viewComponentDescription" />
@@ -398,13 +400,15 @@
     	<forward name="parisSurvey" path="/aim/viewSurveyList.do?tabIndex=6" redirect="true" />       	
     	<forward name="activityDashboard" path="/aim/viewActivityDashboard.do?tabIndex=7" redirect="true" />       	
     	<forward name="costing" path="/aim/viewProjectCostsBreakdown.do?tabIndex=8" redirect="true" />   	
-    	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />  	
+    	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />
+    	<forward name="regionalObservations" path="/aim/viewRegionalObservations.do?tabIndex=10" redirect="true" />  	
     </action>
     
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />
     <action name="aimReferenceForm" path="/aim/reference" scope="request" type="org.digijava.module.aim.action.ViewReferences" validate="false" />
     <action name="aimChannelOverviewObjectiveForm" path="/aim/channelOverviewObjective" scope="request" type="org.digijava.module.aim.action.ViewChannelOverviewObjective" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/physicalProgress" scope="session" type="org.digijava.module.aim.action.ViewPhysicalProgress" validate="false" />
+    <action name="aimRegionalObservationsForm" path="/aim/regionalObservations" scope="session" type="org.digijava.module.aim.action.ViewRegionalObservations" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/componentDescription" scope="request" type="org.digijava.module.aim.action.ViewComponentDescription" validate="false" />
     <action name="aimKnowledgeForm" path="/aim/knowledge" type="org.digijava.module.aim.action.ViewKnowledge" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/editPhysicalProgress" scope="request" type="org.digijava.module.aim.action.ViewPhysicalProgress" validate="false">

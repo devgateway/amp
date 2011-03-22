@@ -249,10 +249,13 @@ public class QuarterlyInfoWorker {
 			if (transactionAmount != null)
 				tmpAmt = transactionAmount.doubleValue();
 			
-			if (fixedRate!=null && fixedRate.doubleValue()!=1
-					&& selCurrency !=null 
-					){
-				fromCurrency=fixedRate.doubleValue();
+			if (fixedRate!=null && fixedRate.doubleValue()!=1 && selCurrency !=null){
+				if (curr.getCurrencyCode().compareToIgnoreCase(selCurrency)==0){
+					fromCurrency = 1;
+					targetCurrency = 1;
+				}else{
+					fromCurrency=fixedRate.doubleValue();
+				}
 			}
 			
 			//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);

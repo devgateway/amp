@@ -361,15 +361,7 @@ function resetAll()
 						<tr>
 							<td>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
-                                    <c:set var="message">
+							     	<c:set var="message">
 										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 									</c:set>
 									<c:set var="quote">'</c:set>
@@ -382,7 +374,7 @@ function resetAll()
 											Portfolio
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
+								
 								          
 		                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
 		                               <c:set property="translation" var="trans">

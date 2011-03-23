@@ -122,7 +122,7 @@
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
 										<tr>
-											<td width=3 bgcolor="#d7eafd">
+											<td width=3 bgcolor="#C7D4DB" width=25 align=center>
 												<input type="checkbox" name="checkAll" onclick="checkall()">
 											</td>										
 											<td bgColor=#C7D4DB class=box-title height="25" align="center">
@@ -135,7 +135,7 @@
 											</td>
 										</tr>
 										<tr><td colspan="2">
-											<table width="100%" cellspacing="1" cellpadding=2 valign="top" align=left bgcolor="#d7eafd" border="0">
+											<table width="100%" cellspacing="1" cellpadding=2 valign="top" align=left bgcolor="#CCCCCC" border="0">
 													<logic:empty name="aimTeamActivitiesForm" property="activities">
 													<tr bgcolor="#ffffff">
 														<td colspan="2" align="center"><b>

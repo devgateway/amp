@@ -63,19 +63,19 @@ function showUserProfile(id){
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr><td noWrap width=750 vAlign="top">
-						<table  bgcolor="#d7eafd" cellpadding="0" cellspacing="1" width="100%" border="0">
+						<table cellpadding="0" cellspacing="1" width="100%" border="0">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
 								
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+										<tr><td bgColor=#C0D6E2 class=box-title height="20" align="center" style="font-size:12px; font-weight:bold;">
 											<!-- Table title -->
 											<digi:trn key="aim:membersFor">Members for </digi:trn>
 											<bean:write name="aimTeamMemberForm" property="teamName" />
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#d7eafd">
+											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#cccccc">
 													<digi:errors/>
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 														<tr bgcolor="#ffffff">
@@ -146,16 +146,14 @@ function showUserProfile(id){
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#c9c9c7 class=inside>
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-												
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17 class="inside">&nbsp;</td>
 										</tr>
 									</table>
 								</td>

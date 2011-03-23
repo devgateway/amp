@@ -23,9 +23,8 @@ function showUserProfile(id){
 </script>
 
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
@@ -55,15 +54,15 @@ function showUserProfile(id){
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<bean:write name="aimTeamMemberForm" property="teamName" />
 					</span></td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
-					<tr><td noWrap width=600 vAlign="top">
+					<tr><td noWrap width=750 vAlign="top">
 						<table  bgcolor="#d7eafd" cellpadding="0" cellspacing="1" width="100%" border="0">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
@@ -141,6 +140,7 @@ function showUserProfile(id){
 							</tr>
 						</table>
 					</td>
+					<td width=20>&nbsp;</td>
 					<td noWrap width="100%" vAlign="top">
 						<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">	
 							<tr>
@@ -153,8 +153,8 @@ function showUserProfile(id){
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

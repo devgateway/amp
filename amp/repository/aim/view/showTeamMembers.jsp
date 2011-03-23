@@ -75,7 +75,7 @@ function showUserProfile(id){
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#cccccc">
+											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#cccccc" style="font-size:12px;">
 													<digi:errors/>
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 														<tr bgcolor="#ffffff">
@@ -148,21 +148,21 @@ function showUserProfile(id){
 									<!-- Other Links -->
 									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
-											<td bgColor=#c9c9c7 class=inside>
+											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">
 												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17 class="inside">&nbsp;</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class=inside>
 										<tr>
-											<td>
+											<td class=inside>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams1}" property="teamId">
@@ -179,7 +179,7 @@ function showUserProfile(id){
 										</tr>
 										
 										<tr>
-											<td>
+											<td class=inside>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 													<c:set var="clickToViewAdmin">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

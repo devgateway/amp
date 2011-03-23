@@ -108,11 +108,11 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<bean:write name="aimTeamActivitiesForm" property="teamName" />
 					</span></td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
@@ -122,7 +122,7 @@
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
 										<tr>
-											<td width=3 bgcolor="#C7D4DB" width=25 align=center>
+											<td width=25 bgcolor="#C7D4DB" align=center>
 												<input type="checkbox" name="checkAll" onclick="checkall()">
 											</td>										
 											<td bgColor=#C7D4DB class=box-title height="25" align="center">

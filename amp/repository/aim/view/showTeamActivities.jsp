@@ -115,7 +115,7 @@
 				</tr>-->
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1">
+					<table width="1000" cellspacing="1" align="center">
 					<tr><td noWrap width=700 vAlign="top">
 						<table cellpadding="0" cellspacing="1" width="100%" bgcolor="#FFFFFF">
 							<tr bgColor=#ffffff>
@@ -195,7 +195,7 @@
 													<tr bgcolor="#ffffff">
 														<td colspan="2" align="center">		
 															<html:hidden name="aimTeamActivitiesForm" property="teamId"/>												
-															<input type="submit" value="<digi:trn key='btn:remove'>Remove</digi:trn>"  class="dr-menu" onclick="return confirmDelete()">
+															<input type="submit" value="<digi:trn key='btn:remove'>Remove</digi:trn>"  class="buttonx" onclick="return confirmDelete()">
 														</td>
 													</tr>																										
 													</logic:notEmpty>

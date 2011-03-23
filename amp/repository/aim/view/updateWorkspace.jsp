@@ -390,11 +390,11 @@ function cancel()
 											<td bgColor=#ffffff class=box-border>
 												<table border="0" cellPadding=3 cellspacing="1" width="100%" bgcolor="#dddddd">
 													<tr>
-														<td width="150" align="right" bgcolor="#FFFFFF">
+														<td width="150" align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:teamName">Team Name</digi:trn>
 														</td>
-														<td align="left" bgcolor="#FFFFFF">
+														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
 																<b><bean:write name="aimUpdateWorkspaceForm" property="teamName" /></b>
 															</logic:equal>
@@ -411,7 +411,7 @@ function cancel()
 													</tr>
 													
 													<tr>
-														<td align="right" bgcolor="#FFFFFF">
+														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 														</td>
@@ -425,7 +425,7 @@ function cancel()
 														</td>
 														</c:if>
 														<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
-														<td align="left" bgcolor="#FFFFFF">
+														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<c:choose>
 																<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
 																	<c:choose>
@@ -451,10 +451,10 @@ function cancel()
 													
 													
 													<tr>
-														<td align="right" bgcolor="#FFFFFF">
+														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<digi:trn key="aim:description">Description</digi:trn>
 														</td>
-														<td align="left" bgcolor="#FFFFFF">
+														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
 																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
 															</logic:equal>
@@ -473,10 +473,10 @@ function cancel()
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">
-																<td align="right" bgcolor="#FFFFFF">
+																<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
-																<td align="left" bgcolor="#FFFFFF">
+																<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<html:select property="relatedTeam" styleClass="inp-text">
 																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'nil'}">
 																			<html:option value="-1">No related team available</html:option>
@@ -507,10 +507,10 @@ function cancel()
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Donor'}">
 															<tr id="relTeamRow">
-																<td align="right" bgcolor="#FFFFFF">
+																<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
-																<td align="left" bgcolor="#FFFFFF">
+																<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<c:choose>
 																		<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit' && aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																			<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'nil'}">
@@ -563,10 +563,10 @@ function cancel()
 																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																			<table>
 																			<tr>
-																				<td align="right" width="150" bgcolor="#FFFFFF">
+																				<td align="right" width="150" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																					<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>
 																				</td>
-																				<td align="left" bgcolor="#FFFFFF">
+																				<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																					<c:set var="translation">
 																						<digi:trn key="btn:createWorkspaceAdd">
 																							Add
@@ -609,7 +609,7 @@ function cancel()
 															<div id="team_workspace" style="display: none;">
 															<table>
 																<tr>
-																	<td>
+																	<td style="font-size:12px; font-weight:bold;">
 																		<html:checkbox property="computation"  value="true" onclick="computationChange()"><digi:trn key="chk:computation">Computation</digi:trn></html:checkbox>
 																	</td>
 																</tr>
@@ -639,7 +639,7 @@ function cancel()
 																	<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																	<table>
 																		<tr>
-																			<td align="right" width="150" bgcolor="#FFFFFF">
+																			<td align="right" width="150" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
 																			</td>
 																			<td align="left" bgcolor="#FFFFFF">
@@ -692,11 +692,11 @@ function cancel()
 																			</digi:trn>
 																		</c:set>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																			<input type="button" value="${translation}" class="dr-menu"
+																			<input type="button" value="${translation}" class="buttonx"
 																			onclick="update('add')"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="${translation}" class="dr-menu" onclick="update('edit')"/>
+																			<input type="button" value="${translation}" class="buttonx" onclick="update('edit')"/>
 																		</c:if>
 																	</td>
 																	<td>
@@ -707,10 +707,10 @@ function cancel()
 																			</digi:trn>
 																		</c:set>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="${translation}" class="dr-menu" onclick="update1('editreset',${aimUpdateWorkspaceForm.teamId})"/>
+																			<input type="button" value="${translation}" class="buttonx" onclick="update1('editreset',${aimUpdateWorkspaceForm.teamId})"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																			<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
+																			<input type="button" value="${translation}" class="buttonx" onclick="update('reset')"/>
 																		</c:if>
 																	</td>
 																	<td>
@@ -719,7 +719,7 @@ function cancel()
 																				Cancel
 																			</digi:trn>
 																		</c:set>
-																		<input name="" value="${translation}" onclick="cancel()" class="dr-menu" type="button">
+																		<input name="" value="${translation}" onclick="cancel()" class="buttonx" type="button">
 																	</td>
 																</tr>
 															</table>

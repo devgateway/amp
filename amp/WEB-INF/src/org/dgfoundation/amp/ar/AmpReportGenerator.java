@@ -39,6 +39,8 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -390,11 +392,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		boolean categorizeByFundingType = false;
 		if (reportMetadata.getType().intValue() != 4)
 			categorizeByFundingType = true;
-
+		
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
 
-		Column newcol = new GroupColumn();
+		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
 			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
@@ -478,6 +480,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
 		Collections.sort(listMeasurement);
 
+		
+		
 		List<Column> columnlist = newcol.getItems();
 		List<Column> tmpColumnList = new ArrayList<Column>(columnlist.size());
 		// add columns as measurements order
@@ -504,6 +508,29 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// replace items by ordered items
 		newcol.setItems(tmpColumnList);
+				
+		// add subcolumns for type of assistance
+		//split column for type of assistance ONLY when TOA is added as column	
+		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
+				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+		//iterate each column in newcol
+		for (int i=0; i< newcol.getItems().size();i++){
+			Column nestedCol = (Column) newcol.getItems().get(i);
+			if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
+			
+			List<String> cat = new ArrayList<String>();
+			cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
+					true, reportMetadata);
+			
+			nestedCol2.addColumn(nestedCol);
+			nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
+			
+			}
+		}
+		
 		rawColumns.addColumn(newcol);
 	}
 

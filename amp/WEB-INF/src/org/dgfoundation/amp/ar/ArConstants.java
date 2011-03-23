@@ -43,11 +43,13 @@ public final class ArConstants {
 	
 	public final static String FUNDING_TYPE="Funding Type";
 	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
+	public final static String TERMS_OF_ASSISTANCE_TOTAL="Total";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
 	public final static String FISCAL_Y="FISCAL_Y";
 	public final static String FISCAL_M="FISCAL_M";
 	public final static String QUARTER="Quarter";
+	public final static String QUARTERS_TOTAL="Total";
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
 	public final static String SOURCE_FUNDING="Source Funding";

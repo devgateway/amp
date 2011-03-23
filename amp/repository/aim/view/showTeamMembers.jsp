@@ -68,7 +68,7 @@ function showUserProfile(id){
 								<td vAlign="top" width="100%">
 								
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
-										<tr><td bgColor=#C0D6E2 class=box-title height="20" align="center" style="font-size:12px; font-weight:bold;">
+										<tr><td bgColor=#C7D4DB class=box-title height="25" align="center" style="font-size:12px; font-weight:bold;">
 											<!-- Table title -->
 											<digi:trn key="aim:membersFor">Members for </digi:trn>
 											<bean:write name="aimTeamMemberForm" property="teamName" />

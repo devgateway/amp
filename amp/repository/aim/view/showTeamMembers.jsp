@@ -150,7 +150,7 @@ function showUserProfile(id){
 										<tr>
 											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">
-												<b style="padding-left:5px;">Other links</b>
+												<b style="padding-left:5px; font-size:12px;">Other links</b>
 												</digi:trn>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>

@@ -1,12 +1,16 @@
 package org.digijava.module.aim.action;
 
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,14 +30,22 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.AddressBookForm;
+import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddressBookActions extends DispatchAction {
@@ -339,6 +351,7 @@ public class AddressBookActions extends DispatchAction {
 				ContactInfoUtil.deleteContact(contact);
 			}
 		}
+		
 		return viewAddressBook(mapping,myForm,request,response);
 	}
 
@@ -351,7 +364,7 @@ public class AddressBookActions extends DispatchAction {
                     myForm.getOrganizations().remove(organization);                	
                 }
             }
-            return mapping.findForward("addOrEditContact");
+           return null;
         }
    
    public ActionForward addOrganization(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -529,6 +542,8 @@ public class AddressBookActions extends DispatchAction {
 	public ActionForward addNewData (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AddressBookForm myForm=(AddressBookForm)form;
 		String dataName=request.getParameter("data");
+		int number=0;
+		Collection<AmpCategoryValue> phoneTypes=null;
 		//user clicked Add new Email
 		if(dataName.equalsIgnoreCase("email")){
 			if(myForm.getEmails()==null){
@@ -543,7 +558,8 @@ public class AddressBookActions extends DispatchAction {
 				propertiesArray[size-1]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_EMAIL,"",null);			
 				myForm.setEmails(propertiesArray);
 			}
-			myForm.setEmailsSize(myForm.getEmails().length);			
+			number=myForm.getEmails().length;
+			myForm.setEmailsSize(number);			
 		}
 		
 		//user clicked Add new Phone
@@ -560,7 +576,9 @@ public class AddressBookActions extends DispatchAction {
 				propertiesArray[size-1]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_PHONE,"","");				
 				myForm.setPhones(propertiesArray);
 			}
-			myForm.setPhonesSize(myForm.getPhones().length);
+			phoneTypes=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_PHONE_TYPE_KEY);
+			number=myForm.getPhones().length;
+			myForm.setPhonesSize(number);
 		}
 		//user clicked add new fax
 		if(dataName.equalsIgnoreCase("fax")){
@@ -576,10 +594,45 @@ public class AddressBookActions extends DispatchAction {
 				propertiesArray[size-1]=AmpContactsWorker.createProperty(Constants.CONTACT_PROPERTY_NAME_FAX,"",null);				
 				myForm.setFaxes(propertiesArray);
 			}
-			myForm.setFaxesSize(myForm.getFaxes().length);			
-		}	
+			number=myForm.getFaxes().length;
+			myForm.setFaxesSize(number);		
+		}
 		
-		return mapping.findForward("addOrEditContact");
+
+		response.setContentType("text/xml");
+		OutputStreamWriter outputStream = new OutputStreamWriter(
+				response.getOutputStream(), "UTF-8");
+		PrintWriter out = new PrintWriter(outputStream, true);
+
+		try {
+
+			// if there are indicators
+			String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			xml += "<property";		
+			xml+=" type='"+dataName+"' number='"+number+"'>";
+			if(phoneTypes!=null&&!phoneTypes.isEmpty()){
+				xml+="<phoneTypes>";
+				for(AmpCategoryValue value: phoneTypes){
+					xml+="<phoneType id='"+value.getId()+"' value='"+value.getValue()+"'/>";
+				}
+				xml+="</phoneTypes>";
+			}
+			xml += "</property>";
+			out.println(xml);
+			// outputStream.write(xml.getBytes());
+			out.close();
+			// return xml
+
+			outputStream.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return null;
+
+		
 	}
 
 	public ActionForward removeData (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -588,8 +641,10 @@ public class AddressBookActions extends DispatchAction {
 		String ind=request.getParameter("index");
 		int index=new Integer(ind).intValue();
 		ContactPropertyHelper [] myArray=null;
+		String collectionName="phones";
 		if(dataName!=null){
 			if(dataName.equalsIgnoreCase("email")){
+				collectionName="emails";
 				myArray=new ContactPropertyHelper[myForm.getEmails().length-1];
 				if(myArray.length!=0){
 					int j=0;
@@ -621,6 +676,7 @@ public class AddressBookActions extends DispatchAction {
 				}
 				myForm.setPhonesSize(myArray.length);
 			}else if(dataName.equalsIgnoreCase("fax")){
+				collectionName="faxes";
 				myArray=new ContactPropertyHelper[myForm.getFaxes().length-1];
 				if(myArray.length!=0){
 					int j=0;
@@ -637,7 +693,31 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setFaxesSize(myArray.length);
 			}
 		}
-		return mapping.findForward("addOrEditContact");
+		response.setContentType("text/xml");
+		OutputStreamWriter outputStream = new OutputStreamWriter(
+				response.getOutputStream(), "UTF-8");
+		PrintWriter out = new PrintWriter(outputStream, true);
+
+		try {
+		// if there are indicators
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		xml += "<property";		
+		xml+=" type='"+dataName+"' index='"+index+"' collectionName='"+collectionName+"'>" ;
+		
+		xml += "</property>";
+		out.println(xml);
+		// outputStream.write(xml.getBytes());
+		out.close();
+		
+		// return xml
+
+		outputStream.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return null;
 	}
 	
 	private void clearForm(AddressBookForm form){

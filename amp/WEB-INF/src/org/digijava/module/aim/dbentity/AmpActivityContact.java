@@ -74,7 +74,11 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		// TODO Auto-generated method stub
 		if (!(o instanceof AmpActivityContact)) return -1;
 		AmpActivityContact aac = (AmpActivityContact)o;
-		return this.getContact().compareTo(aac.getContact());
+		int result=this.getContact().compareTo(aac.getContact());
+		if(result==0){
+			result=this.activity.compareTo(aac.getActivity());
+		}
+		return result;
 	}
 	
 	@Override

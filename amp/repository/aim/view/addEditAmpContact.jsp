@@ -266,12 +266,178 @@
 	function closeWindow() { //this function closes organizations popin
 		myPanel.hide();
 	}
+		
+		var responseAddNewDataSuccess = function(o) {
+		 	var xml=o.responseXML;
+			var property=xml.getElementsByTagName('property')[0];
+			var dataName=property.getAttribute("type");
+			var index=property.getAttribute("number")-1;
+			var collectionName;
+			var place;
+			var divProperty;
+			if(dataName=='email'){
+				collectionName="emails";
+				place=document.getElementById("emailsPlace");
+				divProperty=createProperty(dataName,collectionName,index);
+			}
+			else{
+				if(dataName=='fax'){
+					collectionName="faxes";
+					place=document.getElementById("faxesPlace");
+					divProperty=createProperty(dataName,collectionName,index);
+				}
+				else{
+					collectionName="phones";
+					place=document.getElementById("phonesPlace");
+					var phoneTypeList = property.childNodes[0].childNodes;
+					divProperty=createProperty(dataName,collectionName,index,phoneTypeList);	
+				}
+			}
+			
+			if(index==0){
+				$("#"+dataName+"BtnEmpty").hide(); 
+				var newLink=createAddLink(dataName);
+				divProperty.appendChild(newLink);
+				
+			}
+			
+			place.appendChild(divProperty);
+
+		};
+		
+		function createProperty(dataName,collectionName,index,phoneTypeList){
+				var propertyDiv=document.createElement("div");
+	       		propertyDiv.id="div_"+dataName+"_"+index;
+	       		var property=document.createElement("input");
+				var deletePropertyLink=document.createElement("a");
+				property.name=collectionName+"["+index+"].value";
+	       		if(dataName=='phone'){
+	       			var select=document.createElement("select");
+					select.className="nputx insidex address-title";
+					select.id="phoneType_"+index;
+					select.name="phones["+index+"].phoneTypeId";
+					var optionNone=document.createElement("option");
+					optionNone.value="0";
+					var labelNone=document.createTextNode("<digi:trn>None</digi:trn>");
+					optionNone.appendChild(labelNone);
+					select.appendChild(optionNone);
+					for (var i=0; i<phoneTypeList.length; i++) {
+						var option=document.createElement("option");
+						option.value=phoneTypeList[i].getAttribute("id");
+						var label=document.createTextNode(phoneTypeList[i].getAttribute("value"));
+						option.appendChild(label);
+						select.appendChild(option);
+					}
+					propertyDiv.appendChild(select);
+					property.id="phoneNum_"+index;
+	       		}
+	       		else{
+	       			property.id=dataName+"_"+index;
+	       		}
+				property.className="inputx insidex";
+				property.size="33";
+				deletePropertyLink.href="javascript:removeData('"+dataName+"',"+index+")";
+				var deleteImg=document.createElement("img");
+				deleteImg.src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif";
+				deleteImg.alt="delete";
+				deleteImg.svpace="2";
+				deleteImg.border="0";
+				deletePropertyLink.appendChild(deleteImg);
+				propertyDiv.appendChild(property);
+				propertyDiv.appendChild(deletePropertyLink);
+				return propertyDiv;
+				
+		}
+		 
+		var responseAddNewDataFailure = function(o) {};
+		 
+		var addNewDataCallback = {
+		  success:responseAddNewDataSuccess,
+		  failure:responseAddNewDataFailure
+		};
+		var responseRemoveNewDataSuccess = function(o) {
+			var xml=o.responseXML;
+			var property=xml.getElementsByTagName('property')[0];
+			var dataName=property.getAttribute("type");
+			var index=property.getAttribute("index");
+			var collectionName=property.getAttribute("collectionName");
+			var div=document.getElementById("div_"+dataName+"_"+index);
+			var addAddLink=false;
+			if(index==0){
+				addAddLink=true;
+			}
+			var place=div.parentNode;
+			place.removeChild(div); 
+			var count=$("input[name^='"+collectionName+"[']").each(function(index) { 
+				     this.parentNode.id="div_"+dataName+"_"+index;
+				     this.nextSibling.href="javascript:removeData('"+dataName+"',"+index+")";
+				     this.name=collectionName+"["+index+"].value";
+				     if(dataName=="phone"){
+				    	 this.id="phoneNum_"+index;
+				    	 this.previousSibling.id="phoneType_"+index;
+						 this.previousSibling.name="phones["+index+"].phoneTypeId";
+				     }
+				     else{
+				    	  this.id=dataName+"_"+index; 
+				     }
+				     if(index==0&&addAddLink){
+				    	var newLink=createAddLink(dataName);
+						this.parentNode.appendChild(newLink);
+				     }
+				     
+				  });
+			if(count.length==0){
+				$("#"+dataName+"BtnEmpty").show(); 
+			}
+		};
+		var responseRemoveNewDataFailure = function(o) {};
+		
+		var removeNewDataCallback = {
+				  success:responseRemoveNewDataSuccess,
+				  failure:responseRemoveNewDataFailure
+		};
+		
+		function createAddLink(dataName){
+			 var newLink=document.createElement("a");
+				newLink.id=dataName+"Btn";
+				newLink.className="l_mid_b";
+				newLink.href="#";
+				var label=document.createTextNode("<digi:trn>Add</digi:trn>");
+				newLink.appendChild(label);
+				$("#"+dataName+"Btn").live('click', function() {
+					addNewData(dataName);
+					return false;
+					}); 
+				return newLink;
+		}
+		
+		var responseRemoveOrganizationsSuccess = function(o) {
+			$("input[name='selOrgs']:checked").parent().parent().remove();
+			if($("input[name='selOrgs']").length==0){
+				$(".added_org_nc").hide(); 
+			}
+		};
+		var responseRemoveOrganizationsFailure = function(o) {};
+		
+		var removeOrganizationsCallback = {
+				  success:responseRemoveOrganizationsSuccess,
+				  failure:responseRemoveOrganizationsFailure
+		};
+		 
 	
     function removeOrgs(){
-            <digi:context name="addCont" property="context/addressBook.do?actionType=removeOrganization"/>
-		    document.addressbookForm.action = "<%= addCont %>";
-		    document.addressbookForm.target = "_self";
-		    document.addressbookForm.submit();
+        <digi:context name="removeOrg" property="context/addressBook.do?actionType=removeOrganization"/>
+    	var url = "<%=removeOrg%>";
+    	var params='';
+    	var count=$("input[name='selOrgs']:checked").each(function(index) {
+    		params+="&selOrgs="+this.value;
+    	});
+    	if(count.length==0){
+    		alert("<digi:trn>Please select organization(s) to remove</digi:trn>");
+    		return false;
+    	} 	
+    	YAHOO.util.Connect.asyncRequest('POST',url, removeOrganizationsCallback, params.substring(1));
+       
         }
            function showPanelLoading(msg){
             myPanel.setHeader(msg);
@@ -285,20 +451,15 @@
         function addNewData(dataName){
             if(notAchievedMaxAllowed(dataName)){
             	<digi:context name="addCont" property="context/addressBook.do?actionType=addNewData"/>
-            	var url = "<%=addCont%>&data="+dataName;
-            	//url += getParamsData();
-    		    document.addressbookForm.action = url;
-    		    document.addressbookForm.target = "_self";
-    		    document.addressbookForm.submit();
+            	var url = "<%=addCont%>";
+            	YAHOO.util.Connect.asyncRequest('POST',url, addNewDataCallback, "data="+dataName);
             }        	
         }
 
         function removeData(propertyType, index){ 
         	<digi:context name="delCont" property="context/addressBook.do?actionType=removeData"/>
-        	var url = "<%=delCont%>&dataName="+propertyType+"&index="+index;
-		    document.addressbookForm.action = url;
-		    document.addressbookForm.target = "_self";
-		    document.addressbookForm.submit();
+        	var url = "<%=delCont%>";
+        	YAHOO.util.Connect.asyncRequest('POST',url, removeNewDataCallback, "dataName="+propertyType+"&index="+index);
         }
 
         function notAchievedMaxAllowed(dataName){
@@ -407,7 +568,7 @@
 <tr>
 <td colspan="2">
 
-<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
+<input  type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
 </tr>
 </table>
 </c:if>
@@ -419,20 +580,20 @@
 							<td><html:text property="name" styleId="name" size="33"
 										styleClass="inputx insidex" readonly="${readonly}" /></td>
 							<td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
-<td><logic:notEmpty name="addressbookForm" property="phones">
+<td id="phonesPlace"><logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
-<div><c:set var="translationNone">
+<div id="div_phone_${ctr}"><c:set var="translationNone">
 <digi:trn>None</digi:trn>
 </c:set> 
 <category:showoptions multiselect="false" firstLine="${translationNone}" name="addressbookForm" property="phones[${ctr}].phoneTypeId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_PHONE_TYPE_KEY%>" styleClass="nputx insidex address-title" outerid="phoneType_${ctr}" /> 	 	
 <html:text name="addressbookForm" property="phones[${ctr}].value" styleId="phoneNum_${ctr}"  size="33" styleClass="inputx insidex" /> 
 <a href="javascript:removeData('phone',${ctr})">
 <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /></a> 
-<c:if test="${addressbookForm.phonesSize==0 ||  ctr==addressbookForm.phonesSize-1}">
+<c:if test="${addressbookForm.phonesSize==0 ||  ctr==0}">
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
+<a id="phoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
 </c:if>
 </div>
 </logic:iterate>
@@ -441,7 +602,7 @@
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="addPhoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
+<a id="phoneBtnEmpty" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
 </logic:empty></td>
 </tr>
 <tr>
@@ -449,40 +610,42 @@
   <td><html:text property="lastname" styleId="lastname" size="33"
 										styleClass="inputx insidex" readonly="${readonly}"/></td>
   <td class="t_mid"><digi:trn>Fax</digi:trn>:</td>
-  <td>
+  <td id="faxesPlace">
   <logic:notEmpty name="addressbookForm" property="faxes">
 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
+<div id=id="div_fax_${ctr}">
 <html:text name="addressbookForm" property="faxes[${ctr}].value" size="33" styleClass="inputx insidex" styleId="fax_${ctr}"/>																												                    																												                    
 <a href="javascript:removeData('fax',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
-<c:if test="${ctr==addressbookForm.faxesSize-1}">
+<c:if test="${ctr==0}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
- <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
+ <a href="#" id="faxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
 </c:if>
+</div>
 <br>
 </logic:iterate>
 </logic:notEmpty>
 <logic:empty name="addressbookForm" property="faxes">
- <a href="#" id="addFaxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
+ <a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
 </logic:empty>
   </td>
 </tr>
 <tr>
   <td class="t_mid"><digi:trn>Email</digi:trn>:</td>
-  <td valign="top">
+  <td valign="top" id="emailsPlace">
   <logic:notEmpty name="addressbookForm" property="emails">
 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
-<div><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
+<div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
  <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 
- <c:if test="${ctr==addressbookForm.emailsSize-1}">
+ <c:if test="${ctr==0}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="addEmailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a>
+<a href="#" id="emailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a>
 </c:if>
 </div>
 </logic:iterate>
 </logic:notEmpty> 
 <logic:empty name="addressbookForm" property="emails">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="addEmailBtn" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a>
+<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a>
 </logic:empty>
 </td>
   <td class="t_mid"><digi:trn>Office Address</digi:trn>:</td>

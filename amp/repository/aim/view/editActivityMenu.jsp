@@ -51,7 +51,7 @@
 			mySavePanel.setBody("");
 			mySavePanel.render(document.body);
             savePanelStart = 0;
-            var   saveAsDraftPanel = new YAHOO.widget.Panel("saveAsDraftPanel", {
+            var   saveAsDraftPanel = new YAHOOAmp.widget.Panel("saveAsDraftPanel", {
             width: "350px",
             fixedcenter: true,
             constraintoviewport: true,
@@ -62,8 +62,8 @@
             draggable: false
         });
             saveAsDraftPanel.render();
-            YAHOO.util.Event.addListener("saveAsDraft", "click", saveAsDraftPanel.show, saveAsDraftPanel, true);
-            YAHOO.util.Event.addListener("saveAsDraftCanceld", "click", saveAsDraftPanel.hide, saveAsDraftPanel, true);
+            YAHOOAmp.util.Event.addListener("saveAsDraft", "click", saveAsDraftPanel.show, saveAsDraftPanel, true);
+            YAHOOAmp.util.Event.addListener("saveAsDraftCanceld", "click", saveAsDraftPanel.hide, saveAsDraftPanel, true);
 
 		}
 	

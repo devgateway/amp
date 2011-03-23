@@ -345,10 +345,10 @@ function cancel()
 						</logic:equal></span>
 					</td>
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn></span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td>
 						<digi:errors />
@@ -360,18 +360,13 @@ function cancel()
 					<tr><td noWrap width=750 vAlign="top">
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
-								<td vAlign="top" width="100%">&nbsp;
-									
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" border="0">
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table border="0" cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title height="20" align="center">
+														<td bgColor=#C0D6E2 class=box-title height="25" align="center" style="font-size:12px; font-weight:bold;">
 															<!-- Table title -->
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<digi:trn key="aim:addTeam">Add Team</digi:trn>
@@ -749,7 +744,7 @@ function cancel()
 								<td>
 									<table cellpadding="0" cellspacing="0" width="100" class="inside">
 										<tr>
-											<td bgColor=#c9c9c7 class="inside">
+											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">
 												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>

@@ -795,7 +795,7 @@ function adminHelp(){
                                         </li>
                                         
                                         <li>
-	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true">
+	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true"  onclick="return canExit()">
 	                                        	<digi:trn>Address Book</digi:trn>
 	                                        </a>
                                         </li>

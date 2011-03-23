@@ -68,7 +68,7 @@
 
 <digi:instance property="aimTeamActivitiesForm" />
 
-<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
+<table width="1000" cellspacing="0" cellpadding="0" valign="top" align=center>
 <tr><td>
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -79,7 +79,6 @@
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=872 border="0">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=850>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
@@ -121,15 +120,17 @@
 						<table cellpadding="0" cellspacing="1" width="100%" bgcolor="#d7eafd">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
 										<tr>
 											<td width=3 bgcolor="#d7eafd">
 												<input type="checkbox" name="checkAll" onclick="checkall()">
 											</td>										
-											<td bgColor=#d7eafd class=box-title height="20" align="center">
+											<td bgColor=#class="inside" class=box-title height="25" align="center">
 												<!-- Table title -->
+												<b>
 												<digi:trn key="aim:activitiesFor">Activities for </digi:trn>
 												<bean:write name="aimTeamActivitiesForm" property="teamName" />
+												</b>
 												<!-- end table title -->
 											</td>
 										</tr>
@@ -213,23 +214,21 @@
 									<!-- Other Links -->
 									<table cellpadding="0" cellspacing="0" width="10"0>
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="font-size:12px; padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="id">
 												<bean:write name="aimTeamActivitiesForm" property="teamId" />
@@ -245,7 +244,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="clickToViewAdmin">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

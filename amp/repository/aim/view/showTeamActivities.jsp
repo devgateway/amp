@@ -117,7 +117,7 @@
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr><td noWrap width=700 vAlign="top">
-						<table cellpadding="0" cellspacing="1" width="100%" bgcolor="#d7eafd">
+						<table cellpadding="0" cellspacing="1" width="100%" bgcolor="#FFFFFF">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
@@ -125,7 +125,7 @@
 											<td width=3 bgcolor="#d7eafd">
 												<input type="checkbox" name="checkAll" onclick="checkall()">
 											</td>										
-											<td bgColor=#class="inside" class=box-title height="25" align="center">
+											<td bgColor=#C7D4DB class=box-title height="25" align="center">
 												<!-- Table title -->
 												<b>
 												<digi:trn key="aim:activitiesFor">Activities for </digi:trn>
@@ -212,7 +212,7 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
 											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">

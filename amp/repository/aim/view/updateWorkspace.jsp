@@ -357,7 +357,7 @@ function cancel()
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
-					<tr><td noWrap width=600 vAlign="top">
+					<tr><td noWrap width=750 vAlign="top">
 						<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
 								<td vAlign="top" width="100%">&nbsp;
@@ -747,25 +747,23 @@ function cancel()
 						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
 								<td>
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100" class="inside">
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#c9c9c7 class="inside">
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-												
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/workspaceManager.do">
 												<digi:trn key="aim:teams">
@@ -777,7 +775,7 @@ function cancel()
 										
 										
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<digi:link href="/admin.do">
 												<digi:trn key="aim:AmpAdminHome">

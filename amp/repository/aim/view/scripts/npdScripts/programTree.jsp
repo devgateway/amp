@@ -326,7 +326,7 @@ function setCurProgData(progId,nodeId){
 
 	function getIndicatorsHTML(prog){
 		var indics=getAllIndicatorsOf(prog,false);
-		 var translation='<digi:trn key="aim:noindicator">No Indicators</digi:trn>';		
+		 var translation='<digi:trn key="aim:noindicator" jsFriendly="true">No Indicators</digi:trn>';		
 		var result='<span  class="ygtvlabel">'+translation+'</span>';
 		if (indics.length>0){
 			result='<table border="0" cellpadding="0" cellspacing="0">';

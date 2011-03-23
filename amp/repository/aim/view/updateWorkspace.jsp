@@ -366,7 +366,7 @@ function cancel()
 											<td bgColor=#f4f4f2>
 												<table border="0" cellpadding="0" cellspacing="0" width="100%">
 													<tr bgColor=#f4f4f2>
-														<td bgColor=#C0D6E2 class=box-title height="25" align="center" style="font-size:12px; font-weight:bold;">
+														<td bgColor=#C7D4DB class=box-title height="25" align="center" style="font-size:12px; font-weight:bold;">
 															<!-- Table title -->
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<digi:trn key="aim:addTeam">Add Team</digi:trn>

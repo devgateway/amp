@@ -149,11 +149,10 @@
 	
 </script>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
-			<table cellPadding=5 cellspacing="0" width="100%" border="0">
+			<table cellPadding=5 cellspacing="1" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -181,8 +180,8 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571>
-						<span class=subtitle-blue>
+					<td height=16 valign="center" bgcolor=#F2F2F2 align="center">
+						<span class=subtitle-blue style="font-size:12px; font-weight:bold;">
 							<digi:trn key="aim:categoryManagerCreator">
 								Category Manager Creator
 							</digi:trn>					
@@ -198,7 +197,7 @@
 				<td>
 	<digi:form action="/categoryManager.do" method="post">
 		<html:hidden property="submitPressed" value="false" /> 
-		<table cellpadding="5px" cellspacing="5px" valign="top" width="80%">
+		<table cellpadding="5px" cellspacing="5px" valign="top" width="100%" border=1>
 			<tr>
 				<td colspan="2">
 					<digi:trn key="aim:categoryManagerAddNameText">

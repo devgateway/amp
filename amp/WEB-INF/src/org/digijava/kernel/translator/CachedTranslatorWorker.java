@@ -144,7 +144,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         message.setSiteId(siteId);
         //search message
         Object obj = messageCache.get(message);   
-        if(obj==null) {
+        /*if(obj==null) {
         	//try loading it from db
         	Session ses;
 			try {
@@ -166,7 +166,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
+        }*/
         
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");

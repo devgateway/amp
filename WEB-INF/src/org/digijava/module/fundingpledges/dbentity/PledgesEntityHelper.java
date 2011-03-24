@@ -253,6 +253,39 @@ public class PledgesEntityHelper {
         }
 		return fundingpledgeloc;
 	}
+	
+	public static ArrayList<FundingPledgesProgram> getPledgesPrograms(Long pledgeid){
+		Session session = null;
+		Query qry = null;
+		ArrayList<FundingPledgesProgram> pledgeProgs = new ArrayList<FundingPledgesProgram>();
+		FundingPledgesProgram fpp = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select p from " + FundingPledgesProgram.class.getName()
+					+ " p where (p.pledgeid=:id)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("id", pledgeid, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				fpp = (FundingPledgesProgram) itr.next();
+				pledgeProgs.add(fpp);
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get pledge programs");
+			logger.debug("Exception " + e);
+		}finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        }
+		return pledgeProgs;
+	}
+	
 	public static ArrayList<FundingPledgesSector> getPledgesSectors(Long pledgeid){
 		Session session = null;
 		Query qry = null;
@@ -313,6 +346,15 @@ public class PledgesEntityHelper {
 					session.save(FundingPledgesloc);
 				}
 			}
+			
+			if(plf.getSelectedProgs()!=null && plf.getSelectedProgs().size()>0){
+				for (Iterator iterator = plf.getSelectedProgs().iterator(); iterator.hasNext();) {
+					FundingPledgesProgram FundingPledgesProg = (FundingPledgesProgram) iterator.next();
+					FundingPledgesProg.setPledgeid(pledge);
+					session.save(FundingPledgesProg);
+				}
+			}
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);
@@ -337,6 +379,7 @@ public class PledgesEntityHelper {
 			tx=session.beginTransaction();
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
 			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			Collection<FundingPledgesProgram> fppl = PledgesEntityHelper.getPledgesPrograms(pledge.getId());
 			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			Collection<AmpFundingDetail> fprl = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
 			for (Iterator iterator = fpsl.iterator(); iterator.hasNext();) {
@@ -350,6 +393,10 @@ public class PledgesEntityHelper {
 			for (Iterator iterator = fpll.iterator(); iterator.hasNext();) {
 				FundingPledgesLocation fundingPledgesloc = (FundingPledgesLocation) iterator.next();
 				session.delete(fundingPledgesloc);
+			}
+			for (Iterator iterator = fppl.iterator(); iterator.hasNext();) {
+				FundingPledgesProgram fundingPledgesProg = (FundingPledgesProgram) iterator.next();
+				session.delete(fundingPledgesProg);
 			}
 			for (Iterator iterator = fprl.iterator(); iterator.hasNext();) {
 				AmpFundingDetail fundingRelated = (AmpFundingDetail) iterator.next();
@@ -383,6 +430,7 @@ public class PledgesEntityHelper {
 			session.update(pledge);
 			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
 			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+			Collection<FundingPledgesProgram> fppl = PledgesEntityHelper.getPledgesPrograms(pledge.getId());
 			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			
 			if(sectors!=null && sectors.size()>0){
@@ -471,6 +519,34 @@ public class PledgesEntityHelper {
 				}
 			}
 			
+			if(plf.getSelectedProgs()!=null && plf.getSelectedProgs().size()>0){
+				for (Iterator iterator = plf.getSelectedProgs().iterator(); iterator.hasNext();) {
+					FundingPledgesProgram fundingPledgesProg = (FundingPledgesProgram) iterator.next();
+					if (fppl.contains(fundingPledgesProg)) {
+						fundingPledgesProg.setPledgeid(pledge);
+						session.update(fundingPledgesProg);
+					} else {
+						fundingPledgesProg.setPledgeid(pledge);
+						session.save(fundingPledgesProg);
+						fppl.add(fundingPledgesProg);
+					}
+				}
+			} else {
+				for (Iterator iterator = fppl.iterator(); iterator.hasNext();) {
+					FundingPledgesProgram fundingPledgesProg = (FundingPledgesProgram) iterator.next();
+					session.delete(fundingPledgesProg);
+				}
+				fppl = null;
+			}
+			
+			if(fppl!=null && fppl.size()>0){
+				for (Iterator iterator = fppl.iterator(); iterator.hasNext();) {
+					FundingPledgesProgram fundingPledgesProg = (FundingPledgesProgram) iterator.next();
+					if (!plf.getSelectedProgs().contains(fundingPledgesProg)) {
+						session.delete(fundingPledgesProg);
+					}
+				}
+			}
 			tx.commit();
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge",e);

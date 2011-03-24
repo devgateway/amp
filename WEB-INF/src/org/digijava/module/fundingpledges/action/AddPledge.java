@@ -168,6 +168,7 @@ public class AddPledge extends Action {
 	        	
 	        	plForm.setPledgeSectors(asl);
 	        	plForm.setSelectedLocs(PledgesEntityHelper.getPledgesLocations(fp.getId()));
+	        	plForm.setSelectedProgs(PledgesEntityHelper.getPledgesPrograms(fp.getId()));
 	        	plForm.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
 	        	request.getSession().removeAttribute("pledgeId");
 			}
@@ -229,6 +230,7 @@ public class AddPledge extends Action {
     	plForm.setFundingPledgesDetails(null);
     	plForm.setPledgeSectors(null);
     	plForm.setSelectedLocs(null);
+    	plForm.setSelectedProgs(null);
     }
     
     private ActionForward addSector(ActionMapping mapping, HttpSession session,

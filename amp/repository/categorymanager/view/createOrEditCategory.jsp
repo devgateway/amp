@@ -180,7 +180,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" bgcolor=#F2F2F2 align="center">
+					<td height=16 valign="center" bgcolor=#c7d4db align="center">
 						<span class=subtitle-blue style="font-size:12px; font-weight:bold;">
 							<digi:trn key="aim:categoryManagerCreator">
 								Category Manager Creator
@@ -214,7 +214,7 @@
 						You can enter a <strong>description</strong> for this category: 
 					</digi:trn>
 					<br />
-					<html:textarea property="description" cols="20" rows="4" />
+					<html:textarea property="description" styleClass="adm_category_desc" />
 				</td>
 				<td valign="middle" class="inside">
 					<html:checkbox property="isMultiselect" />

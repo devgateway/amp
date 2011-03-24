@@ -209,14 +209,14 @@
 				</td>
 			</tr>
 			<tr valign="top">
-				<td class="inside">
+				<td class="inside" width=50%>
 					<digi:trn key="aim:categoryManagerAddDescriptionText">
 						You can enter a <strong>description</strong> for this category: 
 					</digi:trn>
 					<br />
 					<html:textarea property="description" styleClass="adm_category_desc" />
 				</td>
-				<td valign="middle" class="inside">
+				<td valign="middle" class="inside" width=50%>
 					<html:checkbox property="isMultiselect" />
 					<digi:trn key="aim:categoryManagerAllowMultiselect">
 						Should <strong>multiselect</strong> be allowed for this category

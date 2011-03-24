@@ -20,19 +20,19 @@ function search() {
 				<div class="right_menu_cont">
 				 	<table width="85%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-								<td class="tbl_spacing">
+								<td class="tbl_spacing" align="left">
 									<div class="search_label">Keyword:</div>
 								</td>
 								<td align=right class="tbl_spacing">
-									<input name="" type="text" class="inputx" style="width:130px;" id="keyword">
+									<input name="" type="text" class="inputx" style="width:90px;" id="keyword">
 								</td>
 						</tr>
 						<tr>
 								<td>
 									<div class="search_label">Type:</div>
 								</td>
-								<td align=right>
-									<select class="dropdwn_sm" style="width: 130px;" id="querytype" >
+								<td align="left">
+									<select class="dropdwn_sm" style="width: 90px;" id="querytype" >
 									<option value="-1"><digi:trn>ALL</digi:trn></option>
 									<option value="0"><digi:trn>Activities</digi:trn></option>
 									<option value="1"><digi:trn>Reports</digi:trn></option>

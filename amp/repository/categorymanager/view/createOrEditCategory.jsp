@@ -267,7 +267,7 @@
 				</tr>
 				</logic:notEmpty>
 				<tr>
-				<td id="possibleValuesTd" colspan="2" class="inside" align=center>
+				<td id="possibleValuesTd" colspan="2" class="inside" align=center style="padding-top:15px; padding-bottom:15px;">
 					<div id="possibleValuesDiv">
 					<%--<digi:trn key="aim:categoryManagerAddPossibleValueKeysText">
 							Please enter possible <strong>value keys</strong> :
@@ -278,20 +278,20 @@
 			</digi:trn>:
 		
 			<html:text property="numOfAdditionalFields" size="4" value="1"/>
-			<table cellpadding="5px" cellspacing="5px" border="0px" style="margin-top:7px; margin-bottom:7px; font-size:12px;">
+			<table cellpadding="5px" cellspacing="5px" border="0px" style="margin-top:7px; margin-bottom:7px; font-size:12px;" class="inside">
 				<tr>
-					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>Category Value Key</td>
-					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>Translation</td>
-					<logic:notEmpty name="myForm" property="usedCategories">
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside">Category Value Key</td>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside">Translation</td>
+					<logic:notEmpty name="myForm" property="usedCategories">-
 						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>
 							Labels
 						</td>
 					</logic:notEmpty>
-					<td rowspan="2" bgcolor=#F2F2F2 style="font-size: small; font-weight: bold; text-align: center;">Actions</td>
+					<td rowspan="2" bgcolor=#F2F2F2 style="font-size: small; font-weight: bold; text-align: center;" class="inside">Actions</td>
 				</tr>
 					<logic:notEmpty name="myForm" property="usedCategories">
 					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">
-						<td style="font-size: x-small; font-weight: bold; text-align: center;">
+						<td style="font-size: x-small; font-weight: bold; text-align: center;" class="inside">
 							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryName(usedCateg.getKeyName()) %>">${usedCateg.name}</digi:trn>
 							<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return delLabelCategory(${usedCateg.id})" 
 								title="<digi:trn key='cm:categoryManagerDeleteLabelCategory'>Delete Label Category</digi:trn>">
@@ -346,12 +346,12 @@
 				</c:if>
                
 				<tr>
-				<td style="text-align: center;">
+				<td style="text-align: center;" class="inside"> 
                   <html:text name="possibleVals" property="value" readonly="${textReadonly}" style="${textColorStyle} ${borderStyle}" indexed="true" styleId="field${index.count}"/>
                   <html:hidden name="possibleVals" property="disable"  indexed="true" styleId="disabled${index.count}"/>
                   <html:hidden name="possibleVals" property="id" indexed="true" />
 				</td>
-				<td style="text-align: center;">
+				<td style="text-align: center;" class="inside">
 					<c:choose>
 						<c:when test="${pVal.id!=null && pVal.id!=0}">
 							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryValue(pVal.getValue(), myForm.getKeyName() ) %>">
@@ -363,7 +363,7 @@
 				</td>
 				<logic:notEmpty name="myForm" property="usedCategories">
 				<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg" indexId="countCateg">
-					<td align="center">
+					<td align="center" class="inside">
 						<c:forEach var="valId" items="${possibleVals.labelCategories[countCateg].labelsId}">
 							<category:getoptionvalue categoryValueId="${valId}"/> <br />
 						</c:forEach>
@@ -403,7 +403,7 @@
 					</td>
 				</logic:iterate>
 				</logic:notEmpty>
-				<td>  
+				<td class="inside">  
 					<span id="delete${index.count}" style="${deleteField}">
 						&nbsp;
 						<a style="cursor:pointer;"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"

@@ -908,6 +908,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
@@ -920,6 +921,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Pledge Location" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Pledge Program" feature="Pledge Sector and Location"></field:display>
+<field:display name="Add Pledge Program Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Remove Pledge Program Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Pledge Sector" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location"></field:display>

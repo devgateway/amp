@@ -196,6 +196,13 @@
       <forward name="forward" path="/showLayout.do?layout=selectPledgeLocation" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="pledgeForm" path="/aim/selectPledgeProgram" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeProgram" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectPledgeProgram" />
+      <forward name="added" path="/aim/addPledge.do" />
+    </action>
+    <action name="pledgeForm" path="/aim/removePledgeProgram" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeProgram">
+      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+    </action>
     <action name="pledgeForm" path="/aim/removePledgeSector" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeSector">
       <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
     </action>

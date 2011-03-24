@@ -3,9 +3,11 @@ package org.digijava.module.fundingpledges.form;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
@@ -14,6 +16,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class PledgeForm extends ActionForm implements Serializable{
@@ -80,6 +83,24 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Long pledgeTitleId;
 	private Collection<BeanWrapperImpl> years;
 	private Long year;
+	
+	/*Fields for Location*/
+	private boolean noMoreRecords=false;
+	private Long implemLocationLevel = null;
+	private Integer impLevelValue; // Implementation Level value
+	private Long parentLocId;
+	private boolean defaultCountryIsSet;
+	private Collection<FundingPledgesLocation> selectedLocs = null;
+	private Long [] userSelectedLocs;
+	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
+	private TreeMap<Integer, Long> selectedLayers ;
+	
+	/*Fields for program*/
+	private int programType;
+	private List programLevels;
+	private Long selPrograms[];
+	private Collection<FundingPledgesProgram> selectedProgs = null;
+	private AmpActivityProgramSettings nationalSetting;
 	
 	public Collection<BeanWrapperImpl> getYears() {
 		return years;
@@ -629,17 +650,6 @@ public class PledgeForm extends ActionForm implements Serializable{
 		this.fundingEvent = fundingEvent;
 	}
 	
-	//Location
-	private boolean noMoreRecords=false;
-	private Long implemLocationLevel = null;
-	private Integer impLevelValue; // Implementation Level value
-	private Long parentLocId;
-	private boolean defaultCountryIsSet;
-	private Collection<FundingPledgesLocation> selectedLocs = null;
-	private Long [] userSelectedLocs;
-	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
-	private TreeMap<Integer, Long> selectedLayers ;
-	
 	public TreeMap<Integer, Long> getSelectedLayers() {
 		if (selectedLayers == null)
 			selectedLayers		= new TreeMap<Integer, Long>();
@@ -784,4 +794,46 @@ public class PledgeForm extends ActionForm implements Serializable{
 	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
 		this.furtherApprovalNedded = furtherApprovalNedded;
 	}
+
+	public int getProgramType() {
+		return programType;
+	}
+
+	public void setProgramType(int programType) {
+		this.programType = programType;
+	}
+
+	public List getProgramLevels() {
+		return programLevels;
+	}
+
+	public void setProgramLevels(List programLevels) {
+		this.programLevels = programLevels;
+	}
+
+	public Long[] getSelPrograms() {
+		return selPrograms;
+	}
+
+	public void setSelPrograms(Long[] selPrograms) {
+		this.selPrograms = selPrograms;
+	}
+
+	public Collection<FundingPledgesProgram> getSelectedProgs() {
+		return selectedProgs;
+	}
+
+	public void setSelectedProgs(Collection<FundingPledgesProgram> selectedProgs) {
+		this.selectedProgs = selectedProgs;
+	}
+	
+	public AmpActivityProgramSettings getNationalSetting() {
+		return nationalSetting;
+	}
+
+	public void setNationalSetting(AmpActivityProgramSettings nationalSetting) {
+		this.nationalSetting = nationalSetting;
+	}
+
+	
 }

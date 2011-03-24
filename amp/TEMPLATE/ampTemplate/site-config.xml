@@ -706,6 +706,7 @@
 				<page>tabManagerData</page>
 				<page>aim_filterPicker2</page>
 				<page>selectPledgeLocation</page>
+				<page>selectPledgeProgram</page>
 			</module>
             <module name="orgProfile">
                 <page>orgSummary</page>

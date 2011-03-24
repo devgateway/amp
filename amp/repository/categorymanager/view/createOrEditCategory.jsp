@@ -197,9 +197,9 @@
 				<td>
 	<digi:form action="/categoryManager.do" method="post">
 		<html:hidden property="submitPressed" value="false" /> 
-		<table cellpadding="5px" cellspacing="5px" valign="top" width="100%" border=1>
+		<table cellpadding="5px" cellspacing="5px" valign="top" width="100%" border=1 class="inside">
 			<tr>
-				<td colspan="2">
+				<td colspan="2" class="inside">
 					<digi:trn key="aim:categoryManagerAddNameText">
 						Please enter a <strong>name</strong> for this category:
 					</digi:trn>
@@ -209,14 +209,14 @@
 				</td>
 			</tr>
 			<tr valign="top">
-				<td>
+				<td class="inside">
 					<digi:trn key="aim:categoryManagerAddDescriptionText">
 						You can enter a <strong>description</strong> for this category: 
 					</digi:trn>
 					<br />
 					<html:textarea property="description" cols="20" rows="4" />
 				</td>
-				<td valign="middle">
+				<td valign="middle" class="inside">
 					<html:checkbox property="isMultiselect" />
 					<digi:trn key="aim:categoryManagerAllowMultiselect">
 						Should <strong>multiselect</strong> be allowed for this category
@@ -229,11 +229,11 @@
 				</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="inside">
 						<digi:trn key="aim:categoryManagerEnterKeyText"> Please Enter the Key</digi:trn>
 						<font color="#FF0000">*</font>
 					</td>
-					<td>
+					<td class="inside">
 						<c:set var="keyTextReadonly" value="false" />
 						<c:set var="keyTextColorStyle" value="color: black; background-color:white; border-style: none; text-decoration: none;" />
 						
@@ -246,7 +246,7 @@
 				</tr>
 				<logic:notEmpty name="cmCategoryManagerForm" property="editedCategoryId">
 				<tr>
-					<td colspan="2">
+					<td colspan="2" class="inside">
 						<html:hidden property="useAction" value="none"/>
 						<html:hidden property="delUsedCategoryId" value="none"/>
 						<html:select name="cmCategoryManagerForm" property="usedCategoryId" style="font-size: 11px;">

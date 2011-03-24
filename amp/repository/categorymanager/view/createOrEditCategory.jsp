@@ -444,12 +444,13 @@
 			</tr>
 		</table>
 		<br />
-		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
+		<center>
+		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buttonx">
 			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
 			<digi:trn key="aim:categoryManagerSubmit">
 					Submit
 			</digi:trn>
-		</button>
+		</button></center>
 	</digi:form>
 				</td>
 				</tr>

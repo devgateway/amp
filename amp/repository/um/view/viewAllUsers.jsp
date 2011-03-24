@@ -52,7 +52,7 @@ function banUser(txt) {
         <table cellPadding=5 cellspacing="0" width="100%">
           <tr>
             <!-- Start Navigation -->
-            <td height=33>
+            <td height=33 colspan=5>
               <span class=crumb>
                 <c:set var="translation">
                   <digi:trn key="um:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -71,7 +71,7 @@ function banUser(txt) {
             <!-- End navigation -->
           </tr>
           <tr>
-            <td bgcolor=#c7d4db align=center>
+            <td bgcolor=#c7d4db align=center colspan=5>
               <digi:errors/> 
               <span style="font-size:12px; font-weight:bold;">
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
@@ -81,7 +81,7 @@ function banUser(txt) {
             </td>
           </tr>
 			<tr>
-				<td align="left"><!--  please note that this page contains form and you can not nested it inside other form -->
+				<td align="left" colspan=5><!--  please note that this page contains form and you can not nested it inside other form -->
 				<jsp:include page="/repository/aim/view/exportTable.jsp" /></td>
 			</tr>
 			<digi:instance property="umViewAllUsersForm" />
@@ -90,7 +90,7 @@ function banUser(txt) {
           <tr style="width:50%;">
           	<c:choose>
           		<c:when test="${umViewAllUsersForm.showBanned}">
-          		<td width="160">
+          		<td width="160" colspan=5>
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>

@@ -561,14 +561,14 @@ function adminHelp(){
 	                          	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                          </a>
                              <div id="Resources" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-                           	 	<div class="bd bd_drop"
+                           	 	<div class="bd bd_drop">
                                 	<ul class="first-of-type">
                                 		<li class="yuiampmenuitem_drop">
                               				<a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="cursor:pointer;"  onclick="return canExit()">
                                  				<digi:trn>View Resources</digi:trn>
                               				</a>
                               			</li>
-                                	</u>
+                                	</ul>
                                 </div>
                               </div>  
                          	</li>
@@ -613,7 +613,7 @@ function adminHelp(){
 	                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                              </a>
 						  		 <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
-                            	   <div class="bd bd_drop"
+                            	   <div class="bd bd_drop">
                                 		<ul class="first-of-type">  
                           					<li class="yuiampmenuitem_drop">
 					                          	<c:if test="${not empty link}">

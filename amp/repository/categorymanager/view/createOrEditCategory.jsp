@@ -278,16 +278,16 @@
 			</digi:trn>:
 		
 			<html:text property="numOfAdditionalFields" size="4" value="1"/>
-			<table cellpadding="5px" cellspacing="5px" border="1px">
+			<table cellpadding="5px" cellspacing="5px" border="0px" style="margin-top:7px; margin-bottom:7px; font-size:12px;">
 				<tr>
-					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Category Value Key</td>
-					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Translation</td>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>Category Value Key</td>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>Translation</td>
 					<logic:notEmpty name="myForm" property="usedCategories">
-						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;">
+						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>
 							Labels
 						</td>
 					</logic:notEmpty>
-					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Actions</td>
+					<td rowspan="2" bgcolor=#F2F2F2 style="font-size: small; font-weight: bold; text-align: center;">Actions</td>
 				</tr>
 					<logic:notEmpty name="myForm" property="usedCategories">
 					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">

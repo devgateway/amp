@@ -50,7 +50,7 @@ background-color:#FFFFFF;
 
 
 <digi:instance property="aimNPDForm" />
-<digi:form action="/nationalPlaningDashboard.do">
+<digi:form action="/exportIndicators2xsl.do">
 
 	<c:set var="noProgSelected">
 		<digi:trn key="aim:npd:noProgSelected">

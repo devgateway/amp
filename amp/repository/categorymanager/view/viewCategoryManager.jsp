@@ -74,30 +74,30 @@ function confirmDelete() {
 					<table class="inside" style="font-size:12px;">
 					<thead>
 						<tr align="center">
-							<td bgcolor="#006699" class="inside" align="center" >
+							<td bgcolor="#c7d4db" class="inside" align="center" >
 								<digi:trn key="aim:categoryName">
-									Category Name
+									<b>Category Name</b>
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="inside" align="center">
+							<td bgcolor="#c7d4db" class="inside" align="center">
 								<digi:trn key="aim:categoryDescription">
-									Category Description
+									<b>Category Description</b>
 								</digi:trn>
 							
 							</td>
-							<td bgcolor="#006699" class="inside" align="center">
+							<td bgcolor="#c7d4db" class="inside" align="center">
 								<digi:trn key="aim:categoryPossibleValues">
-									Possible Values
+									<b>Possible Values</b>
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="inside" align="center">
+							<td bgcolor="#c7d4db" class="inside" align="center">
 								<digi:trn key="aim:categoryOptions">
-									Category Options
+									<b>Category Options</b>
 								</digi:trn>
 							</td>
-							<td bgcolor="#006699" class="inside" align="center">
+							<td bgcolor="#c7d4db" class="inside" align="center">
 								<digi:trn key="aim:categoryActions">
-									Actions
+									<b>Actions</b>
 								</digi:trn>
 							</td>
 						</tr>

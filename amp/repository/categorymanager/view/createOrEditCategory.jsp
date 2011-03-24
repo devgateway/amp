@@ -252,7 +252,7 @@
 						<html:select name="cmCategoryManagerForm" property="usedCategoryId" style="font-size: 11px;">
 							<html:optionsCollection  name="cmCategoryManagerForm" property="availableCategories" value="key" label="value" />
 						</html:select>
-						<button type="button" onclick="return addLabelCategory()" class="buton" 
+						<button type="button" onclick="return addLabelCategory()" class="buttonx" 
 							style="vertical-align:bottom; padding: 1px;">
 							<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
 							<digi:trn key="aim:categoryManagerAddLabel">
@@ -260,13 +260,14 @@
 							</digi:trn>
 						</button>
 						<br />
+						<div style="margin-top:5px;">
 						<strong><digi:trn key="cm:categoryManagerImportantNote">IMPORTANT NOTE</digi:trn></strong>: 
-						<digi:trn key="cm:categoryManagerPlsUseTranslations">If you need to change the translation for a category value please use Translator View</digi:trn> !
+						<digi:trn key="cm:categoryManagerPlsUseTranslations">If you need to change the translation for a category value please use Translator View</digi:trn> !</div>
 					</td>
 				</tr>
 				</logic:notEmpty>
 				<tr>
-				<td id="possibleValuesTd" colspan="2">
+				<td id="possibleValuesTd" colspan="2" class="inside" align=center>
 					<div id="possibleValuesDiv">
 					<%--<digi:trn key="aim:categoryManagerAddPossibleValueKeysText">
 							Please enter possible <strong>value keys</strong> :
@@ -434,7 +435,7 @@
  
 					</div>
 					
-					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
+					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buttonx" 
 						style="vertical-align:bottom; padding: 1px;">
 						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
 						<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>

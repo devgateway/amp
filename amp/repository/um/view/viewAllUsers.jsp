@@ -46,10 +46,9 @@ function banUser(txt) {
 <!-- End of Logo -->
 
 
-  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=757>
+  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
     <tr>
-      <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg valign="top">
+      <td align=left valign="top">
         <table cellPadding=5 cellspacing="0" width="100%">
           <tr>
             <!-- Start Navigation -->
@@ -72,9 +71,9 @@ function banUser(txt) {
             <!-- End navigation -->
           </tr>
           <tr>
-            <td>
+            <td bgcolor=#c7d4db align=center>
               <digi:errors/> 
-              <span class=subtitle-blue>
+              <span style="font-size:12px; font-weight:bold;">
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
                 List of users
                 </digi:trn>
@@ -166,8 +165,8 @@ function banUser(txt) {
 						<td noWrap width=700 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
+									<td vAlign="top" width="100%">&nbsp;
+										
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
@@ -429,8 +428,8 @@ function banUser(txt) {
 																Other links
 																</digi:trn>
 															</td>
-															<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-															&nbsp;
+															<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
+															
 															</td>
 														</tr>
 													</table>

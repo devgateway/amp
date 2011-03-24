@@ -283,7 +283,7 @@
 					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside">Category Value Key</td>
 					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside">Translation</td>
 					<logic:notEmpty name="myForm" property="usedCategories">-
-						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2>
+						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside">
 							Labels
 						</td>
 					</logic:notEmpty>

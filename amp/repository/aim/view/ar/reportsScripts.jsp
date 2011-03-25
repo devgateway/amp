@@ -297,7 +297,11 @@ saveReportEngine	= null;
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true"; 
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
+
+		document.getElementById("listFiltersDiv").height = "90px";
+		document.getElementById("spanUseFilters").visibility = "visible";		
+		 
 		filterForm.submit();
 	}
 	

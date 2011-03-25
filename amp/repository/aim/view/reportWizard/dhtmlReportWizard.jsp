@@ -242,6 +242,17 @@ body {
 </style>
 
 <!-- BREADCRUMP START -->
+
+<div class="breadcrump">
+	<div class="centering">
+		<div class="breadcrump_cont" style="visibility: hidden">
+			<span class="sec_name">${pageTitle}</span>
+		</div>
+	</div>
+</div>
+<!-- BREADCRUMP END --> 
+
+<!-- BREADCRUMP START -->
 <!--<div class="breadcrump">-->
 <!--	<div class="centering">-->
 <!--		<div class="breadcrump_cont">-->
@@ -375,21 +386,24 @@ body {
 										<td valign="top">&nbsp;</td>
 									</c:if>
 									<td valign="top">
+										<c:set var="spanUseFiltersVisibility">visibility: hidden</c:set>
+										<c:set var="spanUseFiltersHeight">height:90px</c:set>
+										<c:set var="spanUseFiltersDisabled">disabled</c:set>
+										<c:if test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
+											<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>
+											<c:set var="spanUseFiltersDisabled">enabled</c:set>
+										</c:if>
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-											<div id="listFiltersDiv" style="height:90px; overflow-y:auto; overflow-x:hidden;" class="inputx">
+											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
 												<c:choose>
 													<c:when test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
-														<jsp:include page="showSelectedFilters.jsp" />
-														<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>					
+														<jsp:include page="showSelectedFilters.jsp" />				
 													</c:when>
-													<c:otherwise>
-														<c:set var="spanUseFiltersVisibility">visibility: hidden</c:set>
-													</c:otherwise>
 												</c:choose>
 											</div>
-											<span style="${spanUseFiltersVisibility}" id="spanUseFilters">
-												<html:checkbox property="useFilters" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" /> 
+											<span id="spanUseFilters">
+												<html:checkbox property="useFilters" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" disabled="${spanUseFiltersDisabled}"/> 
 												<digi:trn key="rep:wizard:useAboveFilters">Use above filters</digi:trn>
 											</span>
 										</fieldset>

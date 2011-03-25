@@ -94,7 +94,7 @@ $(document).ready(function(){
 });
 
 </script>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=780>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>
     <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="100%">
@@ -118,11 +118,11 @@ $(document).ready(function(){
             </span> </td>
         </tr>
         <tr>
-          <td noWrap width=570 vAlign="top"><table class="contentbox_border" border="0" bgcolor="#f4f4f2" width="100%">
+          <td noWrap width=570 vAlign="top"><table class="contentbox_border" border="0" width="100%">
               <tr>
                 <td align="center"><br />
                   <br />
-                  <table width="90%" id="dataTable" cellpadding="4">
+                  <table width="100%" id="dataTable" cellpadding="4">
                     <tr>
                       <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Title</digi:trn></strong></td>
                       <td bgcolor="#cecece" align="center" width="30%"><strong><digi:trn>Description</digi:trn></strong></td>

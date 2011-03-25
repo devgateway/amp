@@ -144,7 +144,7 @@ function addSectors(editAct,configId) {
   document.aimEditActivityForm.submit();
 */ 	
 	initSectorScript();
-	 myAddSectors("edit=true&configId=1");	  
+	 myAddSectors("edit=true&configId=-1");
 }
 
 function addSector(param)

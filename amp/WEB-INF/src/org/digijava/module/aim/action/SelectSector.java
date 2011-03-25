@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -68,20 +69,41 @@ public class SelectSector extends Action {
 			// and reset the
 			// parent sectors and child sectors.
 			AmpClassificationConfiguration config= null;
+			Collection<AmpClassificationConfiguration> configs = null;
 			if(ssForm.getConfigId()==null){
 				//if no ID specified then load primary config
 				config = SectorUtil.getPrimaryConfigClassification();
 				ssForm.setConfigId(config.getId());
-			}else{
+				ssForm.setConfigName(config.getName());
+				AmpSectorScheme defClassification=config.getClassification();
+				Collection secSchemes = new ArrayList() ;
+	                        secSchemes.add(defClassification);
+				ssForm.setSectorSchemes(secSchemes);
+				ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
+			}else if(ssForm.getConfigId()==-1){
+				//else if ID = -1 load all classifications
+				configs = SectorUtil.getAllClassificationConfigs();
+				Collection secSchemes = new ArrayList() ;
+				for (Iterator iterator = configs.iterator(); iterator.hasNext();) {
+					config = (AmpClassificationConfiguration) iterator.next();
+					ssForm.setConfigName(config.getName());
+					AmpSectorScheme defClassification=config.getClassification();
+					ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
+					secSchemes.add(defClassification);
+				}
+				ssForm.setSectorSchemes(secSchemes);
+			} else {
 				//else load with specified ID 
 				config = SectorUtil.getClassificationConfigById(ssForm.getConfigId());
+				ssForm.setConfigName(config.getName());
+				AmpSectorScheme defClassification=config.getClassification();
+				Collection secSchemes = new ArrayList() ;
+	                        secSchemes.add(defClassification);
+				ssForm.setSectorSchemes(secSchemes);
+				ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
 			}
-			ssForm.setConfigName(config.getName());
-			AmpSectorScheme defClassification=config.getClassification();
-			Collection secSchemes = new ArrayList() ;
-                        secSchemes.add(defClassification);
-			ssForm.setSectorSchemes(secSchemes);
-			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
+			
+			
 			Collection parentSectors = SectorUtil
 			.getAllParentSectors(ssForm.getSectorScheme());
 			ssForm.setParentSectors(parentSectors);

@@ -97,7 +97,7 @@ $(document).ready(function(){
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>
-    <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="100%">
+    <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="1000">
         <tr>
           <td height=33 colspan="2">
           	<span class=crumb>
@@ -118,7 +118,7 @@ $(document).ready(function(){
             </span> </td>
         </tr>
         <tr>
-          <td noWrap width=570 vAlign="top"><table class="contentbox_border" border="0" width="100%">
+          <td noWrap width=570 vAlign="top"><table border="0" width="100%">
               <tr>
                 <td align="center"><br />
                   <br />
@@ -184,20 +184,20 @@ $(document).ready(function(){
           <td noWrap width=180 vAlign="top"><table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
               <tr>
                 <td><!-- Other Links -->
-                  <table cellpadding="0" cellspacing="0" width="10"0>
+                  <table cellpadding="0" cellspacing="0" width="100">
                     <tr>
-                      <td bgColor=#c9c9c7 class=box-title><digi:trn key="aim:otherLinks"> Other links </digi:trn>
+                      <td bgColor=#c9c9c7 class=box-title><digi:trn key="aim:otherLinks"><b style="font-size:12px; padding-left:5px;">Other links </b></digi:trn>
                       </td>
                       <td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;</td>
                     </tr>
                   </table></td>
               </tr>
               <tr>
-                <td bgColor=#ffffff class=box-border><table cellPadding=5 cellspacing="1" width="100%">
+                <td bgColor=#ffffff class=box-border><table cellPadding=5 cellspacing="1" width="100%" class="inside">
                     <tr>
-                      <td><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+                      <td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                       </td>
-                      <td>
+                      <td class="inside">
                       	<digi:link module="content"  href="/contentManager.do?action=add&reset=true">
                           <digi:trn>Add new content</digi:trn>
                         </digi:link>

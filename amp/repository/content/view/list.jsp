@@ -112,23 +112,22 @@ $(document).ready(function(){
             </span>
           </td>
         </tr>
-        <tr>
+        <!--<tr>
           <td height=16 valign="center" colspan="2"><span class=subtitle-blue>
             <digi:trn>List of Public View Content</digi:trn>
             </span> </td>
-        </tr>
+        </tr>-->
         <tr>
           <td noWrap width=570 vAlign="top"><table border="0" width="100%">
               <tr>
-                <td align="center"><br />
-                  <br />
+                <td align="center">
                   <table width="100%" id="dataTable" cellpadding="4">
                     <tr>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Title</digi:trn></strong></td>
-                      <td bgcolor="#cecece" align="center" width="30%"><strong><digi:trn>Description</digi:trn></strong></td>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Page Code</digi:trn></strong></td>
-                      <td bgcolor="#cecece" align="center" width="10%"><strong><digi:trn>Current Homepage</digi:trn></strong></td>
-                      <td bgcolor="#cecece" align="center" width="20%"><strong><digi:trn>Action</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%"><strong style="font-size:12px;"><digi:trn>Title</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="30%"><strong style="font-size:12px;"><digi:trn>Description</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%"><strong style="font-size:12px;"><digi:trn>Page Code</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="10%"><strong style="font-size:12px;"><digi:trn>Current Homepage</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%"><strong><digi:trn>Action</digi:trn></strong></td>
                     </tr>
                     <c:if test="${fn:length(requestScope.contentList) eq 0}">
                       <tr bgColor=#f4f4f2>
@@ -188,7 +187,7 @@ $(document).ready(function(){
                     <tr>
                       <td bgColor=#c9c9c7 class=box-title><digi:trn key="aim:otherLinks"><b style="font-size:12px; padding-left:5px;">Other links </b></digi:trn>
                       </td>
-                      <td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;</td>
+                      <td background="module/aim/images/corner-r.gif" height="17" width=17></td>
                     </tr>
                   </table></td>
               </tr>
@@ -197,7 +196,7 @@ $(document).ready(function(){
                     <tr>
                       <td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
                       </td>
-                      <td class="inside">
+                      <td class="inside" width=100%>
                       	<digi:link module="content"  href="/contentManager.do?action=add&reset=true">
                           <digi:trn>Add new content</digi:trn>
                         </digi:link>

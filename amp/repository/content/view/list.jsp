@@ -121,21 +121,21 @@ $(document).ready(function(){
           <td noWrap width=570 vAlign="top"><table border="0" width="100%">
               <tr>
                 <td align="center">
-                  <table width="100%" id="dataTable" cellpadding="4">
+                  <table width="100%" id="dataTable" cellpadding="4" class="inside"> 
                     <tr>
-                      <td bgcolor="#c7d4db" align="center" width="20%"><strong style="font-size:12px;"><digi:trn>Title</digi:trn></strong></td>
-                      <td bgcolor="#c7d4db" align="center" width="30%"><strong style="font-size:12px;"><digi:trn>Description</digi:trn></strong></td>
-                      <td bgcolor="#c7d4db" align="center" width="20%"><strong style="font-size:12px;"><digi:trn>Page Code</digi:trn></strong></td>
-                      <td bgcolor="#c7d4db" align="center" width="10%"><strong style="font-size:12px;"><digi:trn>Current Homepage</digi:trn></strong></td>
-                      <td bgcolor="#c7d4db" align="center" width="20%"><strong><digi:trn>Action</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%" class="inside"><strong style="font-size:12px;"><digi:trn>Title</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="30%" class="inside"><strong style="font-size:12px;"><digi:trn>Description</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%" class="inside"><strong style="font-size:12px;"><digi:trn>Page Code</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="10%" class="inside"><strong style="font-size:12px;"><digi:trn>Current Homepage</digi:trn></strong></td>
+                      <td bgcolor="#c7d4db" align="center" width="20%" class="inside"><strong><digi:trn>Action</digi:trn></strong></td>
                     </tr>
                     <c:if test="${fn:length(requestScope.contentList) eq 0}">
                       <tr bgColor=#f4f4f2>
-                        <td align="center"><digi:trn>No contents created</digi:trn>
+                        <td align="center" class="inside"><digi:trn>No contents created</digi:trn>
                         </td>
                       </tr>
                       <tr>
-                        <td>&nbsp;</td>
+                        <td class="inside">&nbsp;</td>
                       </tr>
                     </c:if>
                     <c:if test="${fn:length(requestScope.contentList) gt 0}">
@@ -144,10 +144,10 @@ $(document).ready(function(){
                     </c:set>
                       <c:forEach  var="content" items="${requestScope.contentList}">
                         <tr bgColor=#f4f4f2>
-                          <td align="center"> ${content.title} </td>
-                          <td align="center"> ${content.description}</td>
-                          <td align="center"> ${content.pageCode}</td>
-                          <td align="center">
+                          <td align="center" class="inside"> ${content.title} </td>
+                          <td align="center" class="inside"> ${content.description}</td>
+                          <td align="center" class="inside"> ${content.pageCode}</td>
+                          <td align="center" class="inside">
                           <c:choose>
                             <c:when test="${content.isHomepage eq true}">
                             	Yes
@@ -158,7 +158,7 @@ $(document).ready(function(){
                           </c:choose>
                           </td>
                           
-                          <td align="center">
+                          <td align="center" class="inside">
                           	<digi:link href="/contentManager.do?action=edit&id=${content.ampContentItemId}">
                               <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit content</digi:trn>"/>
                             </digi:link>

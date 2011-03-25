@@ -134,7 +134,7 @@ function banUser(txt) {
 	              </td>
 	              </c:otherwise>
               </c:choose>
-              <td width="200">
+              <td width="150">
 	              <digi:trn key="um:viewAllUsers:keyword">
 	              keyword:
 	              </digi:trn>
@@ -163,12 +163,7 @@ function banUser(txt) {
               <table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
 						<td noWrap width=700 vAlign="top">
-							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
-								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">&nbsp;
-										
-									</td>
-								</tr>
+							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
 										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">

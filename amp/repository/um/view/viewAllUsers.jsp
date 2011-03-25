@@ -52,7 +52,7 @@ function banUser(txt) {
         <table cellPadding=5 cellspacing="0" width="100%">
           <tr>
             <!-- Start Navigation -->
-            <td height=33 colspan=5>
+            <td height=33 colspan=8>
               <span class=crumb>
                 <c:set var="translation">
                   <digi:trn key="um:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -71,7 +71,7 @@ function banUser(txt) {
             <!-- End navigation -->
           </tr>
           <tr>
-            <td bgcolor=#c7d4db align=center colspan=5>
+            <td bgcolor=#c7d4db align=center colspan=8>
               <digi:errors/> 
               <span style="font-size:12px; font-weight:bold;">
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
@@ -81,7 +81,7 @@ function banUser(txt) {
             </td>
           </tr>
 			<tr>
-				<td align="left" colspan=5><!--  please note that this page contains form and you can not nested it inside other form -->
+				<td align="left" colspan=8><!--  please note that this page contains form and you can not nested it inside other form -->
 				<jsp:include page="/repository/aim/view/exportTable.jsp" /></td>
 			</tr>
 			<digi:instance property="umViewAllUsersForm" />
@@ -173,11 +173,11 @@ function banUser(txt) {
 									<td valign="top">
 										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
 											<tr>
-												<td bgColor=#ffffff class=box-border>
-													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
+												<td bgColor=#ffffff>
+													<table border="0" cellpadding="1" cellspacing="1" width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
 																<digi:trn key="um:users">Users</digi:trn>
                                                               </b>
 															</td>
@@ -421,11 +421,11 @@ function banUser(txt) {
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="10"0>
+													<table cellpadding="0" cellspacing="0" width="100">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																<digi:trn key="aim:otherLinks">
-																Other links
+																<b style="font-weight:bold; font-size:12px;">Other links</b>
 																</digi:trn>
 															</td>
 															<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
@@ -437,7 +437,7 @@ function banUser(txt) {
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=5 cellspacing="1" width="100%">
+													<table cellPadding=0 cellspacing="0" width="100%" class="">
 														<tr>
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>

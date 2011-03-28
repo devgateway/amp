@@ -187,11 +187,12 @@ div.fakefile2 input {
                   </table></td>
               </tr>
               <tr>
-                <td valign="top" bgcolor="#f4f4f2" align="center"><table border="0" cellpadding="0" cellspacing="0" width=772>
+                <td valign="top" bgcolor="#f4f4f2" align="center">
+				<table border="0" cellpadding="0" cellspacing="0" width=772>
                     <tr>
                       <td width=14>&nbsp;</td>
                       <td align=left valign="top" width=520>
-                        <table border="0" cellPadding=5 cellspacing="0" width="100%">
+                        <table border="0" cellPadding=5 cellspacing="0" width="100%" style="font-size:12px; margin-bottom:15px;">
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left class=title noWrap colspan="2">
@@ -200,12 +201,12 @@ div.fakefile2 input {
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=left class=title noWrap colspan="2"><digi:trn key="um:allMarkedRequiredField"> All fields marked with an <FONT color=red><B><BIG>*</BIG> </B></FONT> are required. </digi:trn>
+                            <td align=center class=title noWrap colspan="2"><digi:trn key="um:allMarkedRequiredField"> All fields marked with an <FONT color=red><B><BIG>*</BIG> </B></FONT> are required. </digi:trn>
                             </td>
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=left>
+                            <td align=right>
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Title</digi:trn>
                             </td>
                             <td align=left>
@@ -214,7 +215,7 @@ div.fakefile2 input {
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=left>
+                            <td align=right>
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Page Code</digi:trn>
                             </td>
                             <td align=left>
@@ -223,7 +224,7 @@ div.fakefile2 input {
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=left>
+                            <td align=right>
     	                        <digi:trn>Description</digi:trn>
                             </td>
                             <td align=left>
@@ -297,7 +298,7 @@ div.fakefile2 input {
                             </c:otherwise>
                         </c:choose>
                     </c:set>
-                    <div style="width:950px;padding:10px;background-color:#ffffff;${displayLayout}" id="layout_${layoutNumber}" name="layoutGroup">
+                    <div style="width:1000px;background-color:#ffffff;${displayLayout}" id="layout_${layoutNumber}" name="layoutGroup">
                     <c:import url="/repository/content/view/layout_${layoutNumber}.jsp">
 					  <c:param name="pageCode" value="${contentForm.pageCode}"/>
                       <c:param name="htmlblock_1" value="${contentForm.htmlblock_1}"/>

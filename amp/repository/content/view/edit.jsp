@@ -180,9 +180,9 @@ div.fakefile2 input {
           <td noWrap vAlign="top">
           <table class="contentbox_border" width="100%" border="0" bgcolor="#f4f4f2" cellspacing=0 cellpadding=0>
               <tr>
-                <td align="center"><table width="100%" >
+                <td align="center"><table width="100%" cellspacing=0 cellpadding=0>
                     <tr>
-                      <td style="background-color: #c7d4db;height: 18px;"><strong>Information</strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong>Information</strong> </td>
                     </tr>
                   </table></td>
               </tr>
@@ -239,7 +239,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Layout</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong><digi:trn>Layout</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -275,7 +275,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Content</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong><digi:trn>Content</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -310,7 +310,7 @@ div.fakefile2 input {
               <tr>
                 <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Thumbnails</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px; font-size:12px;" align=center><strong><digi:trn>Thumbnails</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>

@@ -329,7 +329,7 @@ target.style.cursor = "default"
 
 </script>
 
-<html:hidden styleId="FYs" value="${aimEditActivityForm.resetselectedFYs}" name="aimEditActivityForm" property="resetselectedFYs"/>
+<html:hidden styleId="FYs" value="${aimEditActivityForm.identification.resetselectedFYs}" name="aimEditActivityForm" property="identification.resetselectedFYs"/>
 <digi:instance property="aimEditActivityForm" />
 
 											<bean:define id="contentDisabled">false</bean:define>
@@ -834,31 +834,6 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td align="right">
-													<%--
-														<c:set var="multipleFiscalYears">
-														<field:display name="Multiple Fiscal Years" feature="Budget">yes</field:display>
-													</c:set>
-												
-													
-													<c:if test="${multipleFiscalYears=='yes'}">
-														<html:select name="aimEditActivityForm" property="identification.selectedFYs" multiple="true" styleId="FYsSel" size="5" style="width:120px">
-															<logic:empty name="aimEditActivityForm" property="identification.yearsRange">
-																<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
-															</logic:empty>					                        			
-						                        			<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
-						                        				<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
-						                        			</logic:notEmpty>						                        			
-						                				</html:select>
-													</c:if>
-													<c:if test="${multipleFiscalYears!='yes'}">
-														<html:select name="aimEditActivityForm" property="identification.selectedFYs" style="width:120px">
-															<html:option value="-1"><digi:trn>--Select--</digi:trn></html:option>
-														</html:select>
-														<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
-						                        			<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
-						                        		</logic:notEmpty>
-													</c:if>
-													 --%>
 													<html:select name="aimEditActivityForm" property="identification.selectedFYs" multiple="true" styleId="FYsSel" size="5" style="width:120px">
 															<logic:empty name="aimEditActivityForm" property="identification.yearsRange">
 																<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>

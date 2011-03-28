@@ -172,17 +172,17 @@ div.fakefile2 input {
           <!-- End navigation -->
         </tr>
         <tr>
-          <td colspan="2"><span class=subtitle-blue>
-            <digi:trn>Add/Edit content</digi:trn>
+          <td colspan="2" align=center><span class=subtitle-blue>
+            <digi:trn><b style="font-size:12px;">Add/Edit content</b></digi:trn>
             </span> </td>
         </tr>
         <tr>
           <td noWrap vAlign="top">
-          <table class="contentbox_border" width="100%" border="0" bgcolor="#f4f4f2">
+          <table class="contentbox_border" width="100%" border="0" bgcolor="#f4f4f2" cellspacing=0 cellpadding=0>
               <tr>
-                <td align="center"><table width="100%">
+                <td align="center"><table width="100%" >
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong>Information</strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px;"><strong>Information</strong> </td>
                     </tr>
                   </table></td>
               </tr>
@@ -237,9 +237,9 @@ div.fakefile2 input {
                   </table></td>
               </tr>
               <tr>
-                <td align="center"><table width="100%">
+                <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Layout</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Layout</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -273,9 +273,9 @@ div.fakefile2 input {
                 </td>
               </tr>
               <tr>
-                <td align="center"><table width="100%">
+                <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Content</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Content</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>
@@ -308,9 +308,9 @@ div.fakefile2 input {
                 </td>
               </tr>
               <tr>
-                <td align="center"><table width="100%">
+                <td align="center"><table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="background-color: #CCDBFF;height: 18px;"><strong><digi:trn>Thumbnails</digi:trn></strong> </td>
+                      <td style="background-color: #c7d4db;height: 18px;"><strong><digi:trn>Thumbnails</digi:trn></strong> </td>
                     </tr>
                   </table>
                 </td>

@@ -318,20 +318,20 @@ div.fakefile2 input {
               </tr>
               <tr>
                 <td valign="top" align="center">
-					<table cellpadding="3" cellspacing="3" border="0" width="75%"  bgcolor="#FFFFFF" id="dataTable">
+					<table cellpadding="3" cellspacing="3" border="0" width="75%"  bgcolor="#FFFFFF" id="dataTable" class="inside">
 						<tr id="tr_path_thumbnail">
-                            <td bgcolor="#CECECE" width="20%"><digi:trn>Thumbnail</digi:trn></td>
-                            <td bgcolor="#CECECE" width="40%"><digi:trn>Label</digi:trn></td>
-                            <td bgcolor="#CECECE" width="20%"><digi:trn>Related File</digi:trn></td>
-                            <td bgcolor="#CECECE" width="20%"><digi:trn>Action</digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Thumbnail</digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="40%" class="inside"><digi:trn>Label</digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Related File</digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Action</digi:trn></td>
                         </tr>
                     <c:forEach  var="content" items="${contentForm.sortedContentThumbnails}" varStatus="loop">
 						<tr id="tr_path_thumbnail">
-                        <td><img src="/content/displayThumbnail.do?index=${loop.index}&pageCode=${contentForm.pageCode}&isAdmin=true" align="middle" width="20" style="border:1px solid #cecece">
+                        <td class="inside"><img src="/content/displayThumbnail.do?index=${loop.index}&pageCode=${contentForm.pageCode}&isAdmin=true" align="middle" width="20" style="border:1px solid #cecece">
                         </td>
-                        <td>${content.thumbnailLabel}</td>
-                        <td>${content.optionalFileName}</td>
-                        <td>
+                        <td class="inside">${content.thumbnailLabel}</td>
+                        <td class="inside">${content.optionalFileName}</td>
+                        <td class="inside">
                         	<c:if test="${loop.index != 0}">
                           	<a onclick="doAction(${loop.index}, 'moveup', false)">
                               <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" border="0" title="<digi:trn>Move up</digi:trn>"/>

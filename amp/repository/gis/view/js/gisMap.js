@@ -621,8 +621,11 @@
 				navAreaLeft=0;
 				navAreaTop=0;
 				jQuery.fn.scrollMap(0, 0);
-				$("#navCursor").css({'left' : 172 + "px"});
-				$("#navCursor").css({'top' : 167 + "px"});
+				
+				var navPos = getDocumentOffsetX ($("#mapNav")[0]);
+				
+				$("#navCursor").css({'left' : navPos.left + 5 + 7 + "px"});
+				$("#navCursor").css({'top' : navPos.top + 35 + 7 + "px"});
 			}
 			
 		jQuery.fn.scrollMap = function(x, y){
@@ -722,6 +725,19 @@
 			function(){
 				$("#mapNav").addClass("navVisible");
 				$("#mapNav").removeClass("navHiden");
+				
+				var navPos = getDocumentOffsetX ($("#mapNav")[0]);
+				var navContainer = $("#navMapContainer");
+				navContainer.css("left", navPos.left + 5 + "px");
+				navContainer.css("top", navPos.top + 35 + "px");
+				
+				//Place zoom controls
+				
+				$("#mapZoom10").css("left", navPos.left + 20 + "px").css("top", navPos.top + 305 + "px");
+				$("#mapZoom15").css("left", navPos.left + 55 + "px").css("top", navPos.top + 305 + "px");
+				$("#mapZoom20").css("left", navPos.left + 90 + "px").css("top", navPos.top + 305 + "px");
+				$("#mapZoom30").css("left", navPos.left + 125 + "px").css("top", navPos.top + 305 + "px");
+				
 				$("#ctrlContainer").show();	
 			},
 			function(){
@@ -1469,8 +1485,16 @@
 				navAreaTop = navigationHeight - navCursorHeight - 14;
 			}
 
+			var navContainerPos = getDocumentOffsetX ($("#navMapContainer")[0]);
+
+			document.getElementById("navCursor").style.left = navAreaLeft + navContainerPos.left + 7 + "px";
+			document.getElementById("navCursor").style.top = navAreaTop + navContainerPos.top + 7 + "px";
+			
+
+/*
 			document.getElementById("navCursor").style.left = navAreaLeft + 172 + "px";
 			document.getElementById("navCursor").style.top = navAreaTop + 167 + "px";
+*/	
 			
 			scrollMap (navAreaLeft , navAreaTop);
 			
@@ -1495,8 +1519,11 @@
 		navAreaLeft=0;
 		navAreaTop=0;
 		scrollMap(0, 0);
-		document.getElementById("navCursor").style.left = 172 + "px";
-		document.getElementById("navCursor").style.top = 167 + "px";
+		
+		var navPos = getDocumentOffsetX ($("#mapNav")[0]);
+		$("#navCursor").css({'left' : navPos.left + 5 + 7 + "px"});
+		$("#navCursor").css({'top' : navPos.top + 35 + 7 + "px"});
+
 	}
 	
 	function scrollMap(x, y){
@@ -1512,7 +1539,9 @@
 		document.getElementById("mapCanvasContainer").scrollTop = y * deltaCanvasHeight / deltaCursorHeight;
 	}
 	
-	initNavCursorSize();
+	$(initNavCursorSize);
+	
+	
 	initNavCursorEvents();
 	
 	

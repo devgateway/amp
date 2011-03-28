@@ -322,18 +322,18 @@
 
 
 
-							<fieldset>
-															<legend>
-																<span class="legend_label longTab">
-																	<digi:trn key="gis:regionalview">Regional View</digi:trn>
-																</span>
-															</legend>
+<fieldset style="position:static;">
+	<legend>
+		<span class="legend_label longTab">
+			<digi:trn key="gis:regionalview">Regional View</digi:trn>
+		</span>
+	</legend>
 
             
 
 
-<div id="ctrlContainer" style="display:none">
-	<div id="navMapContainer" style="width:300px; height:300px; position: absolute; left: 165px; top: 160px; border: 1px solid black">
+<div id="ctrlContainer" style="display:none; ">
+	<div id="navMapContainer" style="width:300px; height:300px; position:absolute; border:1px solid black">
 		<img id="navCursorMap" width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapLevel=2&mapCode=TZA">
 	</div>
 	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 172px; top: 165px; border: 1px solid white; cursor:pointer;">
@@ -351,10 +351,17 @@
 <!-- 
 <div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)"><digi:trn>Map navigation</digi:trn></div>
  -->
+ <!--
 <div class="navHiden" id="mapNav" align="center" style="position: absolute; left: 165px; top: 160px; width:160px; font-size:12px;" onClick=""><digi:trn>Map navigation</digi:trn></div>
+-->
 
 	
 <table cellpadding="5" cellspacing="1" border="0">
+	<tr>
+		<td colspan="3" align="left">
+			<div class="navHiden" id="mapNav" align="center" style="font-size:12px;width:150px;"><digi:trn>Map navigation</digi:trn></div>
+		</td>
+	</tr>	
 	<tr>
 		<td colspan="3" align="left">
 		  <!--

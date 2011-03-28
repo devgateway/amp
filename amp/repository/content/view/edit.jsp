@@ -380,7 +380,7 @@ div.fakefile2 input {
 						</tr>
 						<tr>
 							<td colspan="2" align="center"> 
-	                        <input type="button" styleClass="buttonx" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
+	                        <input type="button" class="buttonx" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
 							</td>
 						</tr>
 						</tr>

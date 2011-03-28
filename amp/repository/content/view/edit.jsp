@@ -19,9 +19,7 @@
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style>
 .contentbox_border {
-	border: 	1px solid #666666;
-	width: 		1050px;
-	background-color: #f4f4f2;
+	width: 		1000px;
 }
 .tableEven {
 	background-color:#dbe5f1;
@@ -149,9 +147,8 @@ div.fakefile2 input {
 </script>
 <digi:instance property="contentForm" />
 <digi:form action="/contentManager.do?action=save" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-<table bgColor=#ffffff cellPadding=5 cellspacing="1" width="1000">
+<table bgColor=#ffffff cellPadding=5 cellspacing="1" width="1000" align=center>
   <tr>
-    <td width=14>&nbsp;</td>
     <td align=left valign="top" width="1000"><table cellPadding=5 cellspacing="0" width="100%">
         <tr>
           <!-- Start Navigation -->

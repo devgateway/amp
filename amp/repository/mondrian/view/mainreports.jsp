@@ -297,7 +297,7 @@
  				<br>
  				<tr>
  				</feature:display>
- 				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
+ 				<feature:display name="Pledges Default Reports" module="Pledge Reports">
 					<td height=30 align="left" vAlign=center>
 							<span class=subtitle-blue>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>

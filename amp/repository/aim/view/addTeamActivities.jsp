@@ -88,6 +88,8 @@ function checkSelActivities() {
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
 		</td>
 	</tr>
+	<tr>
+	<td>
 
 									<c:set var="selectedTab" value="2" scope="request"/>
 									<c:set var="selectedSubTab" value="2" scope="request"/>

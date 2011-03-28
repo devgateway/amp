@@ -33,6 +33,8 @@ function showUser(email){
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
 		</td>
 	</tr>
+	<tr>
+	<td>
 	
 									<c:set var="selectedTab" value="7" scope="request"/>
 									<c:set var="selectedSubTab" value="0" scope="request"/>

@@ -59,13 +59,14 @@ function addTeamMember(id) {
 <%--
 <html:hidden property="action" />
 --%>
-
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td width="100%">
 			<jsp:include page="teamPagesHeader.jsp" flush="true" />
 		</td>
 	</tr>
+	<tr>
+	<td>
 									<c:set var="selectedTab" value="1" scope="request"/>
 										
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">

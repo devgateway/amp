@@ -103,7 +103,7 @@ function updateChild(action) {
 			<c:set var="teamAccessTypeLocal" scope="session"><bean:write name="aimUpdateWorkspaceForm" property="teamAccessType"/>
 			</c:set>
 			
-			<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+			<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 				<tr>
 					<td height=33>
 						<c:set var="translation">

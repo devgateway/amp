@@ -61,6 +61,8 @@
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
+<tr>
+<td>
 									<c:if test="${aimTeamReportsForm.showReportList == true}">
 										<c:set var="selectedTab" value="3" scope="request"/>
 									</c:if>

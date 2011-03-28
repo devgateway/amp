@@ -84,6 +84,8 @@
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
+<tr>
+<td>
 
 									<c:if test="${aimTeamReportsForm.showReportList == true}">
 										<c:set var="selectedTab" value="3" scope="request"/>
@@ -93,7 +95,7 @@
 									</c:if>									
 									<c:set var="selectedSubTab" value="0" scope="request"/>
 										
-										<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+										<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 											<tr>
 											<td>
 												<div class="breadcrump_cont">

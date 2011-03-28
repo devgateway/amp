@@ -32,6 +32,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 </td></tr>
+<tr>
+<td>
 
 									<c:set var="selectedTab" value="6" scope="request"/>
 

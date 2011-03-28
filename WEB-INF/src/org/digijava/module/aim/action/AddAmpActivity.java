@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
@@ -1828,6 +1829,11 @@ private ActionForward showStep1(ActionMapping mapping,
 	      List steps = ActivityUtil.getSteps();
 	      eaForm.setSteps(steps);
 	  }
+	  
+	//get yearsRange
+	  List<LabelValueBean> yearsRange = EditOrganisation.getYearsBeanList();
+	  eaForm.getIdentification().setYearsRange(yearsRange);
+	  
      
 	return mapping.findForward("addActivityStep1");
 }

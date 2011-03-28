@@ -329,7 +329,7 @@ target.style.cursor = "default"
 
 </script>
 
-
+<html:hidden styleId="FYs" value="${aimEditActivityForm.resetselectedFYs}" name="aimEditActivityForm" property="resetselectedFYs"/>
 <digi:instance property="aimEditActivityForm" />
 
 											<bean:define id="contentDisabled">false</bean:define>
@@ -791,20 +791,23 @@ target.style.cursor = "default"
 											
 											<td>
 											<table id="budgetTable" class="box-border" cellSpacing=1 cellPadding=1 border=0 width="350">
-											<field:display name="Imputation" feature="Budget">
-											<tr valign="top" id="Imputation" align="left"  >
-												<td>
-													<a title="<digi:trn>Imputation</digi:trn>">
-													<digi:trn>
-														Imputation
-													</digi:trn>
-													</a>
-												</td>
-												<td align="right">
-													<html:text property="identification.FY" size="18" styleId="ImputationField" styleClass="inp-text" onkeyup="imputationRules.check();"/>
-												</td>
-											</tr>
-											</field:display>
+											<%--
+												<field:display name="Imputation" feature="Budget">
+												<tr valign="top" id="Imputation" align="left"  >
+													<td>
+														<a title="<digi:trn>Imputation</digi:trn>">
+														<digi:trn>
+															Imputation
+														</digi:trn>
+														</a>
+													</td>
+													<td align="right">
+														<html:text property="identification.FY" size="18" styleId="ImputationField" styleClass="inp-text" onkeyup="imputationRules.check();"/>
+													</td>
+												</tr>
+												</field:display>
+											 --%>
+											
 											
 											<field:display name="Code Chapitre" feature="Budget">
 											<tr valign="top" id="CodeChapitre" align="left"  >
@@ -831,7 +834,43 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td align="right">
-													<html:text property="identification.FY" size="18" styleClass="inp-text"/>
+													<%--
+														<c:set var="multipleFiscalYears">
+														<field:display name="Multiple Fiscal Years" feature="Budget">yes</field:display>
+													</c:set>
+												
+													
+													<c:if test="${multipleFiscalYears=='yes'}">
+														<html:select name="aimEditActivityForm" property="identification.selectedFYs" multiple="true" styleId="FYsSel" size="5" style="width:120px">
+															<logic:empty name="aimEditActivityForm" property="identification.yearsRange">
+																<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+															</logic:empty>					                        			
+						                        			<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
+						                        				<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
+						                        			</logic:notEmpty>						                        			
+						                				</html:select>
+													</c:if>
+													<c:if test="${multipleFiscalYears!='yes'}">
+														<html:select name="aimEditActivityForm" property="identification.selectedFYs" style="width:120px">
+															<html:option value="-1"><digi:trn>--Select--</digi:trn></html:option>
+														</html:select>
+														<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
+						                        			<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
+						                        		</logic:notEmpty>
+													</c:if>
+													 --%>
+													<html:select name="aimEditActivityForm" property="identification.selectedFYs" multiple="true" styleId="FYsSel" size="5" style="width:120px">
+															<logic:empty name="aimEditActivityForm" property="identification.yearsRange">
+																<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+															</logic:empty>					                        			
+						                        			<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
+						                        				<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
+						                        			</logic:notEmpty>						                        			
+						                			</html:select>
+												
+													
+													<%-- <html:text property="identification.FY" size="18" styleClass="inp-text"/> --%>
+													
 												</td>
 											</tr>
 											</field:display>

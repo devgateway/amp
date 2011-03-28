@@ -170,7 +170,7 @@ function previewClicked() {
 }
 
 function saveClicked() {
-  var draftStatus=document.getElementById("draftFlag");
+  var draftStatus=document.getElementById("draftFlag");  
   if(draftStatus!=null){
     draftStatus.value=false;
     validateCommitments();
@@ -193,7 +193,17 @@ function save() {
   var flag = true;//validateForm();
   if (flag == true) {
    /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
+   
   	showLoadingSave();
+
+  	//departments reset or not
+	var selFYs=document.getElementById('FYsSel');
+    if(selFYs!=null && selFYs.value!='' && selFYs.value!=0){
+    	document.getElementById('FYs').value=false;
+    }else{
+    	document.getElementById('FYs').value=true;
+    }
+
   	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";

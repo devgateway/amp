@@ -2054,7 +2054,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         <%
        String tempIndexStr = "";
                         %> <%
-                                                                                                                                               int tempIndex = 0;
+                               int tempIndex = 0;
                         %> <!-- ############################## -->
                         <table width="100%" border="0" bgcolor="#f4f4f2"
                                cellspacing="1" cellpadding="0"

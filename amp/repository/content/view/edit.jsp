@@ -318,12 +318,12 @@ div.fakefile2 input {
               </tr>
               <tr>
                 <td valign="top" align="center">
-					<table cellpadding="3" cellspacing="3" border="0" width="75%"  bgcolor="#FFFFFF" id="dataTable" class="inside">
+					<table cellpadding="3" cellspacing="3" border="0" width="75%"  bgcolor="#FFFFFF" id="dataTable" class="inside" style="margin-top:15px;">
 						<tr id="tr_path_thumbnail">
-                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Thumbnail</digi:trn></td>
-                            <td bgcolor="#C7D4DB" width="40%" class="inside"><digi:trn>Label</digi:trn></td>
-                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Related File</digi:trn></td>
-                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn>Action</digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn><b>Thumbnail</b></digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="40%" class="inside"><digi:trn><b>Label</b></digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn><b>Related File</b></digi:trn></td>
+                            <td bgcolor="#C7D4DB" width="20%" class="inside"><digi:trn><b>Action</b></digi:trn></td>
                         </tr>
                     <c:forEach  var="content" items="${contentForm.sortedContentThumbnails}" varStatus="loop">
 						<tr id="tr_path_thumbnail">
@@ -357,22 +357,22 @@ div.fakefile2 input {
                     </table>
                     <br />
                     <br />
-					<table cellpadding="3" cellspacing="3" style="border:1px solid black;">
+					<table cellpadding="3" cellspacing="3" style="font-size:12px;">
 						<tr id="tr_path_thumbnail">
-						<td><strong><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
+						<td><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></td>
 						<td>
                             <html:file property="tempContentThumbnail"/>
 						</td>
 						</tr>
 						<tr id="tr_path_optional">
-						<td><strong><digi:trn>Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
+						<td><digi:trn>Select Optional File to upload:</digi:trn><font color="red"></font></td>
 						<td>
                             <html:file property="tempContentFile"/>
 						</td>
 						</tr>
 						<tr>
 							<td> 
-								<strong><digi:trn>Thumbnail Label:</digi:trn><font color="red"></font></strong>
+								<digi:trn>Thumbnail Label:</digi:trn><font color="red"></font>
 							</td>
 							<td> 
                             	<html:text property="tempContentThumbnailLabel"/>
@@ -380,7 +380,7 @@ div.fakefile2 input {
 						</tr>
 						<tr>
 							<td colspan="2" align="center"> 
-	                        <input type="button" styleClass="dr-menu buton" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
+	                        <input type="button" styleClass="buttonx" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
 							</td>
 						</tr>
 						</tr>

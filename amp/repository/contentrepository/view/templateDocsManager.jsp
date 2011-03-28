@@ -18,9 +18,8 @@
 <digi:context name="digiContext" property="context" />
 
 
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
-		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
 				<tr>
@@ -38,13 +37,13 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height="16" vAlign="center" width="571">
                         <span class="subtitle-blue">
                         	<digi:trn>Templates Manager</digi:trn>
                         </span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height="16" vAlign="middle" width="571">
 						<digi:errors />
@@ -123,20 +122,18 @@
 									<table cellPadding="0" cellSpacing="0" width="100">
 										<tr>
 											<td bgColor="#c9c9c7" class="box-title">
-												<digi:trn>Other links</digi:trn>
+												<digi:trn><b style="font-size:12px; padding-left:5px;">Other links</b></digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width="17">
-												&nbsp;
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							<tr>
-								<td bgColor="#ffffff" class="box-border">
-									<table cellPadding="5" cellSpacing="1" width="100%">
+								<td bgColor="#ffffff">
+									<table cellPadding="5" cellSpacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn>Click here to Add New Template</digi:trn>
@@ -147,7 +144,7 @@
 											</td>
 										</tr>																
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn>Click here to goto Admin Home</digi:trn>

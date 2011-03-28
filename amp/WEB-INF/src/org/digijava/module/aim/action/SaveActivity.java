@@ -345,11 +345,28 @@ public class SaveActivity extends Action {
 		/*
 		 * tanzania adds
 		 */
-		if (eaForm.getIdentification().getFY() == null
-				|| eaForm.getIdentification().getFY().trim().length() == 0)
+//		if (eaForm.getIdentification().getFY() == null || eaForm.getIdentification().getFY().trim().length() == 0)
+//			activity.setFY(new String(" "));
+//		else
+//			activity.setFY(eaForm.getIdentification().getFY());
+		if(eaForm.getIdentification().getResetselectedFYs()!=null && eaForm.getIdentification().getResetselectedFYs()){
+			eaForm.getIdentification().setSelectedFYs(null);
+		}
+		
+		if (eaForm.getIdentification().getSelectedFYs() == null || eaForm.getIdentification().getSelectedFYs().length == 0){
 			activity.setFY(new String(" "));
-		else
-			activity.setFY(eaForm.getIdentification().getFY());
+		}else{
+			String [] selectedFYs = eaForm.getIdentification().getSelectedFYs();
+			String fy ="";
+			for(int i=0;i<selectedFYs.length;i++){
+				fy+=selectedFYs[i];
+				if(i!=selectedFYs.length-1){
+					fy+=",";
+				}				
+			}
+			activity.setFY(fy);
+		}
+		
 
 		if (eaForm.getIdentification().getVote() == null
 				|| eaForm.getIdentification().getVote().trim().length() == 0)

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -420,7 +421,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String actAthFirstName;
 		private String actAthLastName;
 		private String conditions;
+		
 		private String FY;
+		
+		private List<LabelValueBean> yearsRange;
+		private String[] selectedFYs;
+		private Boolean resetselectedFYs;
+		
 		private String vote;
 		private String subVote;
 		private String subProgram;
@@ -458,6 +465,30 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long projectImplUnitId;
 		
 	
+		public List<LabelValueBean> getYearsRange() {
+			return yearsRange;
+		}
+
+		public void setYearsRange(List<LabelValueBean> yearsRange) {
+			this.yearsRange = yearsRange;
+		}
+
+		public String[] getSelectedFYs() {
+			return selectedFYs;
+		}
+
+		public Boolean getResetselectedFYs() {
+			return resetselectedFYs;
+		}
+
+		public void setResetselectedFYs(Boolean resetselectedFYs) {
+			this.resetselectedFYs = resetselectedFYs;
+		}
+
+		public void setSelectedFYs(String[] selectedFYs) {
+			this.selectedFYs = selectedFYs;
+		}
+
 		public ArrayList<AmpOrganisation> getBudgetorgs() {
 			return budgetorgs;
 		}
@@ -1017,6 +1048,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setPreviousApprovalStatus(String previousApprovalStatus) {
 			this.previousApprovalStatus = previousApprovalStatus;
 		}
+		
 	
 		/**
 		 * @return the chapterCode

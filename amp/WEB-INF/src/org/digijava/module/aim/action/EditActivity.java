@@ -510,6 +510,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  eaForm.getIdentification().setVote(null);
     	  eaForm.getIdentification().setSubVote(null);
     	  eaForm.getIdentification().setFY(null);
+    	  eaForm.getIdentification().setSelectedFYs(null);
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
     	  eaForm.getIdentification().setGbsSbs(null);
@@ -740,8 +741,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           /*
            * Tanzania adds
            */
-          if (activity.getFY() != null)
-            eaForm.getIdentification().setFY(activity.getFY().trim());
+          if (activity.getFY() != null) {
+        	  String fy =activity.getFY().trim();
+        	  eaForm.getIdentification().setFY(fy);
+        	  String[] years = fy.split(",");
+        	  eaForm.getIdentification().setSelectedFYs(years);
+        	  
+          }
+            
+          
           if (activity.getVote() != null)
             eaForm.getIdentification().setVote(activity.getVote().trim());
           if (activity.getSubVote() != null)

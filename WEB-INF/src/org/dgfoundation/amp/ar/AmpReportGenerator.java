@@ -30,6 +30,8 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -39,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.hibernate.HibernateException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -335,6 +338,21 @@ public class AmpReportGenerator extends ReportGenerator {
 								.next();
 						cac.applyMetaFilter(c.getName(), fakeMc, cac);
 					}
+					
+					for ( CellColumn tempCellColumn: rawColumnsByName.values() ) {
+						if (tempCellColumn.getName().toLowerCase().contains("mtef")) {
+							Iterator<Cell> mtefCellIt	= tempCellColumn.iterator();
+							while (mtefCellIt.hasNext()) {
+								CategAmountCell cacParent = (CategAmountCell) mtefCellIt.next();
+								if ( cacParent.getMergedCells() != null ) 
+									for ( Object cacObj: cacParent.getMergedCells() ) {
+										CategAmountCell cac	= (CategAmountCell) cacObj;
+										cac.applyMetaFilter(c.getName(), fakeMc, cac); 
+									}
+							}
+						}
+					}
+					
 				}
 			}
 
@@ -380,6 +398,30 @@ public class AmpReportGenerator extends ReportGenerator {
 			ColumnFilterGenerator.attachHardcodedFilters(acProp);
 			reportMetadata.getOrderedColumns().add(arcProp);
 		}
+		
+		Iterator<AmpReportColumn> iterRC	= reportMetadata.getColumns().iterator();
+		while ( iterRC.hasNext() ) {
+			
+			AmpReportColumn tempRC	= iterRC.next();
+			AmpColumns tempCol		= tempRC.getColumn();
+			if ( tempCol.getColumnName().toLowerCase().contains("mtef") ) {
+				AmpColumns clonedCol	= new AmpColumns();
+				clonedCol.setColumnName( tempCol.getColumnName() );
+				clonedCol.setColumnId( tempCol.getColumnId() );
+				clonedCol.setAliasName( tempCol.getAliasName() );
+				clonedCol.setCellType( tempCol.getCellType() );
+				clonedCol.setDescription( tempCol.getDescription() );
+				clonedCol.setExtractorView( tempCol.getExtractorView() );
+				clonedCol.setFilterRetrievable( tempCol.getFilterRetrievable() );
+				clonedCol.setRelatedContentPersisterClass( tempCol.getRelatedContentPersisterClass() );
+				clonedCol.setTokenExpression( tempCol.getTokenExpression() );
+				clonedCol.setTotalExpression( tempCol.getTotalExpression() );
+				
+				tempRC.setColumn(clonedCol);
+				
+				ColumnFilterGenerator.attachHardcodedFilters(clonedCol);
+			}
+		}
 	}
 
 	/**
@@ -395,6 +437,15 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
+		
+		//get the MTEF columns
+		List<TotalComputedAmountColumn> mtefCols	= new ArrayList<TotalComputedAmountColumn>();
+		for ( Object tempObj:rawColumns.getItems() ) {
+			Column tempCol		= (Column) tempObj;
+			if ( tempCol.getAbsoluteColumnName().contains("MTEF") ) {
+				mtefCols.add( (TotalComputedAmountColumn) tempCol );
+			}
+		}
 
 		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
@@ -451,6 +502,14 @@ public class AmpReportGenerator extends ReportGenerator {
 				while (i.hasNext()) {
 					AmountCell element = (AmountCell) i.next();
 					cTac.addCell(element);
+				}
+				
+				for (TotalComputedAmountColumn tcaCol: mtefCols ) {
+					Iterator <ComputedAmountCell>	iterCac = tcaCol.getItems().iterator();
+					while ( iterCac.hasNext() ) {
+						ComputedAmountCell cac	= iterCac.next();
+						cTac.addCell(cac);
+					}
 				}
 
 				newcol.getItems().add(cTac);

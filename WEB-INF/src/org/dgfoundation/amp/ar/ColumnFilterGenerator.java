@@ -45,7 +45,7 @@ public class ColumnFilterGenerator {
 	 */
 	public static void attachHardcodedFilters(AmpColumns c) {
 		c.setFilters(new HashSet<AmpColumnsFilters>());
-		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView())) {
+		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView()) || c.getColumnName().toLowerCase().contains("mtef")) {
 			// TODO: example here of how to add hardcoded filters for hardcoded
 			// FUNDING columns
 			// AmpColumnsFilters acf=new

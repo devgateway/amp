@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.util.SectorUtil;
 
@@ -29,7 +29,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivity> am)
+	public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivityVersion> am)
 			throws Exception {
 		super(id, fmName, am);
 		RepeatingView view = new RepeatingView("allSectorsTables");

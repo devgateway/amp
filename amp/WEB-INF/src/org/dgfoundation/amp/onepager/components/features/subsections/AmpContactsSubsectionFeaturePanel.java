@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.apache.wicket.MarkupContainer;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -22,19 +20,17 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAddContactFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.items.AmpContactOrganizationFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpContactFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
@@ -45,7 +41,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
  * @author dmihaila@dginternational.org
  * since Dec 6, 2010
  */
-public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivity> implements IHeaderContributor {
+public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel<AmpActivityVersion> implements IHeaderContributor {
 
     private static final long serialVersionUID = -2114204838953838609L;
     protected ListView<AmpActivityContact> idsList;
@@ -55,14 +51,14 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
     }
     private List<TransparentWebMarkupContainer> sliders;
     private AmpAddContactFeaturePanel newContactDetails;
-    private AmpActivity activity;
+    private AmpActivityVersion activity;
     /**
      * @param id
      * @param fmName
      * @param am
      * @throws Exception
      */
-    public AmpContactsSubsectionFeaturePanel(String id, String fmName, final IModel<AmpActivity> am, final String contactType) throws Exception {
+    public AmpContactsSubsectionFeaturePanel(String id, String fmName, final IModel<AmpActivityVersion> am, final String contactType) throws Exception {
         //super(id, contactModel, fmName, true);
         super(id, fmName, am);
         final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
@@ -144,7 +140,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 
                 try {
                     AmpActivityContact aaContact = new AmpActivityContact();
-                    AmpActivity act = am.getObject();
+                    AmpActivityVersion act = am.getObject();
                     aaContact.setActivity(act);
                     AmpContact choice = (AmpContact) contactDuplicationTable.getContactsGroup().getDefaultModelObject();
                     aaContact.setContact(choice);

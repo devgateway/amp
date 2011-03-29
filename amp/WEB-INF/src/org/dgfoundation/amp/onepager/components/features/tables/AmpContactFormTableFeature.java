@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -19,7 +19,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 
 public class AmpContactFormTableFeature extends AmpFormTableFeaturePanel{
 	private final RadioGroup<AmpContact> group = new RadioGroup<AmpContact>("contactsContainer", new Model<AmpContact>());
-	public AmpContactFormTableFeature(String id, final IModel<AmpActivity> activityModel , 
+	public AmpContactFormTableFeature(String id, final IModel<AmpActivityVersion> activityModel , 
 			String fmName,List<AmpContact> possibleDuplications)
 			throws Exception {
 		super(id, activityModel, fmName);

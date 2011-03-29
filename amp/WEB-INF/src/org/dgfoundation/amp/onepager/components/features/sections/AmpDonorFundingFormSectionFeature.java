@@ -22,7 +22,7 @@ import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTe
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -46,7 +46,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	 * @throws Exception
 	 */
 	public AmpDonorFundingFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final IModel<Set<AmpFunding>> setModel = new PropertyModel<Set<AmpFunding>>(
 				am, "funding");

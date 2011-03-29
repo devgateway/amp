@@ -18,21 +18,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractBasicSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractDetailsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractDisbursementsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractFundingAllocationSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpContractOrganizationsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
-import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
-import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -50,21 +43,19 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpMEItemFeaturePanel(String id, String fmName,
-			final IModel<IndicatorActivity> indicatorModel){
-		super(id, indicatorModel, fmName, true);
+	public AmpMEItemFeaturePanel(String id, String fmName, final IModel<IndicatorActivity> conn,
+			IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values){
+		super(id, fmName, true);
 		
-		final IndicatorActivity ia = indicatorModel.getObject();
-
-		if (ia.getValues() == null)
-			ia.setValues(new HashSet<AmpIndicatorValue>());
+		if (values.getObject() == null)
+			values.setObject(new HashSet<AmpIndicatorValue>());
 		
-		final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicatorModel.getObject().getIndicator(), "name"));
+		final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
 		add(indicatorNameLabel);
 
 		String indCodeString = "";
-		if (indicatorModel.getObject().getIndicator().getCode() != null && indicatorModel.getObject().getIndicator().getCode().trim().compareTo("") != 0)
-			indCodeString = " - " + indicatorModel.getObject().getIndicator().getCode();
+		if (indicator.getObject().getCode() != null && indicator.getObject().getCode().trim().compareTo("") != 0)
+			indCodeString = " - " + indicator.getObject().getCode();
 		
 		final Label indicatorCodeLabel = new Label("indicatorCode", new Model<String>(indCodeString));
 		add(indicatorCodeLabel);
@@ -77,72 +68,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 			logger.error(e);
 		}
 
-		final IModel<AmpIndicatorValue> baseVal = new PersistentObjectModel<AmpIndicatorValue>();
-		final IModel<AmpIndicatorValue> targetVal = new PersistentObjectModel<AmpIndicatorValue>();
-		final IModel<AmpIndicatorValue> revisedVal = new PersistentObjectModel<AmpIndicatorValue>();
-		final IModel<AmpIndicatorValue> currentVal = new PersistentObjectModel<AmpIndicatorValue>();
-		
-		final Model<Boolean> valuesSet = new Model<Boolean>(false);
-
-		Iterator<AmpIndicatorValue> iterator = ia.getValues().iterator();
-		while (iterator.hasNext()) {
-			AmpIndicatorValue val = (AmpIndicatorValue) iterator
-					.next();
-			
-			switch (val.getValueType()) {
-			case AmpIndicatorValue.BASE:
-				baseVal.setObject(val);
-				break;
-			case AmpIndicatorValue.TARGET:
-				targetVal.setObject(val);
-				break;
-			case AmpIndicatorValue.REVISED:
-				revisedVal.setObject(val);
-				break;
-			case AmpIndicatorValue.ACTUAL:
-				currentVal.setObject(val);
-				break;
-			default:
-				break;
-			}
-		}
-
-		if (baseVal.getObject() == null)
-			baseVal.setObject(new AmpIndicatorValue(AmpIndicatorValue.BASE));
-		if (targetVal.getObject() == null){
-			targetVal.setObject(new AmpIndicatorValue(AmpIndicatorValue.TARGET));
-			valuesSet.setObject(false);
-		}
-		else
-			valuesSet.setObject(true);
-			
-		if (revisedVal.getObject() == null)
-			revisedVal.setObject(new AmpIndicatorValue(AmpIndicatorValue.REVISED));
-		if (currentVal.getObject() == null)
-			currentVal.setObject(new AmpIndicatorValue(AmpIndicatorValue.ACTUAL));
-		
-		final AmpIndicatorGroupField base = new AmpIndicatorGroupField("base", baseVal, "Base Value", "Base");
-		add(base);
-		
-		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", targetVal, "Target Value", "Target");
-		if (valuesSet.getObject())
-			target.setEnabled(false);
-		else
-			target.setEnabled(true);
-		target.setOutputMarkupId(true);
-		add(target);
-
-		final AmpIndicatorGroupField revised = new AmpIndicatorGroupField("revised", revisedVal, "Revised Value", "Revised");
-		if (valuesSet.getObject())
-			revised.setVisible(true);
-		else
-			revised.setVisible(false);
-		revised.setOutputMarkupId(true);
-		add(revised);
-
-		final AmpIndicatorGroupField current = new AmpIndicatorGroupField("current", currentVal, "Current Value", "Current");
-		add(current);
-		
 		final IModel<AmpIndicatorRiskRatings> riskModel = new PersistentObjectModel<AmpIndicatorRiskRatings>();
 
 		AbstractSingleSelectChoice<AmpIndicatorRiskRatings> risk = new DropDownChoice<AmpIndicatorRiskRatings>(
@@ -156,50 +81,110 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		risk.setOutputMarkupId(true);
 		add(risk);
 
+		final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+		final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+		final AmpIndicatorValue revisedVal = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+		final AmpIndicatorValue currentVal = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+		
+		final Model<Boolean> valuesSet = new Model<Boolean>(false);
+
+		Iterator<AmpIndicatorValue> iterator = values.getObject().iterator();
+		while (iterator.hasNext()) {
+			AmpIndicatorValue val = (AmpIndicatorValue) iterator
+					.next();
+			
+			switch (val.getValueType()) {
+			case AmpIndicatorValue.BASE:
+				val.copyValuesTo(baseVal);
+				break;
+			case AmpIndicatorValue.TARGET:
+				val.copyValuesTo(targetVal);
+				valuesSet.setObject(true);
+				break;
+			case AmpIndicatorValue.REVISED:
+				val.copyValuesTo(revisedVal);
+				break;
+			case AmpIndicatorValue.ACTUAL:
+				val.copyValuesTo(currentVal);
+				break;
+			default:
+				break;
+			}
+		}
+
+		final AmpIndicatorGroupField base = new AmpIndicatorGroupField("base", new PropertyModel(baseVal, "value"), new PropertyModel(baseVal, "valueDate"), new PropertyModel(baseVal, "comment"), "Base Value", "Base");
+		base.setOutputMarkupId(true);
+		add(base);
+		
+		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", new PropertyModel(targetVal, "value"), new PropertyModel(targetVal, "valueDate"), new PropertyModel(targetVal, "comment"), "Target Value", "Target");
+		if (valuesSet.getObject()){
+			target.setEnabled(false);
+			logFrameModel.setObject(targetVal.getLogFrame());
+			riskModel.setObject(targetVal.getRisk());
+		}
+		else
+			target.setEnabled(true);
+		target.setOutputMarkupId(true);
+		add(target);
+
+		final AmpIndicatorGroupField revised = new AmpIndicatorGroupField("revised", new PropertyModel(revisedVal, "value"), new PropertyModel(revisedVal, "valueDate"), new PropertyModel(revisedVal, "comment"), "Revised Value", "Revised");
+		if (valuesSet.getObject())
+			revised.setVisible(true);
+		else
+			revised.setVisible(false);
+		revised.setOutputMarkupId(true);
+		add(revised);
+
+		final AmpIndicatorGroupField current = new AmpIndicatorGroupField("current", new PropertyModel(currentVal, "value"), new PropertyModel(currentVal, "valueDate"), new PropertyModel(currentVal, "comment"), "Current Value", "Current");
+		current.setOutputMarkupId(true);
+		add(current);
+		
 		AjaxButton setValue = new AjaxButton("setValues", new Model<String>("Set Value")) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget art, Form<?> arg1) {
 				AmpCategoryValue logFrame = logFrameModel.getObject();
 				AmpIndicatorRiskRatings riskVal = riskModel.getObject();
 				
-				Set<AmpIndicatorValue> vals = indicatorModel.getObject().getValues();
+				Set<AmpIndicatorValue> vals = values.getObject();
 				vals.clear();
-
-				AmpIndicatorValue tmp = baseVal.getObject();
-				tmp.setLogFrame(logFrame);
-				tmp.setRisk(riskVal);
-				vals.add(tmp);
-				baseVal.setObject(tmp.clone());
 				
-				tmp = revisedVal.getObject(); 
+				AmpIndicatorValue tmp = baseVal.clone();
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
+				tmp.setIndicatorConnection(conn.getObject());
+				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
-				revisedVal.setObject(tmp.clone());
 				
-				tmp = targetVal.getObject(); 
+				tmp = revisedVal.clone(); 
 				tmp.setLogFrame(logFrame);
 				tmp.setRisk(riskVal);
+				tmp.setIndicatorConnection(conn.getObject());
+				tmp.setIndValId(null); //for hibernate to think it's a new object
 				vals.add(tmp);
-				targetVal.setObject(tmp.clone());
-
-				tmp = currentVal.getObject(); 
-				tmp.setLogFrame(logFrame);
-				tmp.setRisk(riskVal);
-				vals.add(tmp);
-				currentVal.setObject(tmp.clone());
-
 				
+				tmp = targetVal.clone(); 
+				tmp.setLogFrame(logFrame);
+				tmp.setRisk(riskVal);
+				tmp.setIndicatorConnection(conn.getObject());
+				tmp.setIndValId(null); //for hibernate to think it's a new object
+				vals.add(tmp);
+				
+				tmp = currentVal.clone(); 
+				tmp.setLogFrame(logFrame);
+				tmp.setRisk(riskVal);
+				tmp.setIndicatorConnection(conn.getObject());
+				tmp.setIndValId(null); //for hibernate to think it's a new object
+				vals.add(tmp);
+
 				if (!valuesSet.getObject()){
 					target.setEnabled(false);
 					revised.setVisible(true);
 					valuesSet.setObject(true);
 				}
 
-				art.addComponent(base);
-				art.addComponent(target);
-				art.addComponent(revised);
-				art.addComponent(current);
+				art.addComponent(base.getParent());
+				art.appendJavascript(OnePagerConst.getToggleChildrenJS(this.getParent()));
+				art.appendJavascript(OnePagerConst.getClickToggle2JS(this.getParent()));
 			}
 		};
 		add(setValue);

@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -27,9 +26,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -44,7 +42,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
  */
 public class AmpLocationFormTableFeature extends
-		AmpFormTableFeaturePanel<AmpActivity, AmpActivityLocation> {
+		AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityLocation> {
 
 	protected String getFormattedLocationName(AmpCategoryValueLocations l) {
 		return getFormattedLocationName(new StringBuffer(), l).toString();
@@ -64,7 +62,7 @@ public class AmpLocationFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpLocationFormTableFeature(String id, String fmName,
-			final IModel<AmpActivity> am,
+			final IModel<AmpActivityVersion> am,
 			final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
 			final AmpCategorySelectFieldPanel implementationLocation)
 			throws Exception {

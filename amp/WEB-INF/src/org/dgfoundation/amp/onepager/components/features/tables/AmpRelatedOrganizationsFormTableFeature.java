@@ -12,9 +12,7 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -25,19 +23,17 @@ import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTe
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
  * @author aartimon@dginternational.org
  * since Oct 26, 2010
  */
-public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeaturePanel<AmpActivity,AmpOrgRole> {
+public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion,AmpOrgRole> {
 
 	/**
 	 * @param id
@@ -46,7 +42,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 	 * @throws Exception
 	 */
 	public AmpRelatedOrganizationsFormTableFeature(String id, String fmName,
-			final IModel<AmpActivity> am, final String roleName) throws Exception {
+			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpOrgRole>> setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
 		final AmpRole specificRole = DbUtil.getAmpRole(roleName);

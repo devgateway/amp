@@ -29,9 +29,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -53,7 +52,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 	final ListView listView;
 
 	public AmpCommentPanel(String id, String fmName,
-			final IModel<AmpActivity> activityModel) {
+			final IModel<AmpActivityVersion> activityModel) {
 		super(id, fmName, true);
 		super.setOutputMarkupId(true);
 

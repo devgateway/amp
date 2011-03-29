@@ -203,5 +203,22 @@ public class AmpIndicatorValue implements Serializable{
     	return r;
     }
 
+    public void copyValuesTo(AmpIndicatorValue r) {
+    	r.setValue(value);
+    	r.setValueDate(valueDate);
+    	r.setComment(comment);
+    	r.setIndValId(indValId);
+    	r.setDataIntervalStart(dataIntervalStart);
+    	r.setDataIntervalEnd(dataIntervalEnd);
+    	r.setValueType(valueType);
+    	r.setLogFrame(logFrame);
+    	r.setRisk(risk);
+    	r.setDefaultInd(defaultInd);
+    	r.setIndicatorConnection(indicatorConnection);
+    	r.setLocation(location);
+    	r.setIndicatorSource(indicatorSource);
+    	r.setSubgroup(subgroup);
+    }
+
 }
 

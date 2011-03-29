@@ -38,13 +38,13 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 		slider.setOutputMarkupId(true);
 		add(slider);
 	}
-public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel) {
-	// TODO Auto-generated constructor stub
-	super(id, model,fmName, hideLabel);
-	slider = new TransparentWebMarkupContainer("slider");
-	slider.setOutputMarkupId(true);
-	add(slider);
-}
+	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel) {
+		// TODO Auto-generated constructor stub
+		super(id, model,fmName, hideLabel);
+		slider = new TransparentWebMarkupContainer("slider");
+		slider.setOutputMarkupId(true);
+		add(slider);
+	}
 	
 	public TransparentWebMarkupContainer getSlider() {
 		return slider;

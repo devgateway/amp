@@ -6,12 +6,8 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpInternalIdsFormTableFeature;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpProgramFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * @author aartimon@dginternational.org since Oct 26, 2010
@@ -22,7 +18,7 @@ public class AmpCrossCuttingIssuesFormSectionFeature extends
 	private static final long serialVersionUID = -6654390083784446344L;
 
 	public AmpCrossCuttingIssuesFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		
 		add(new AmpTextAreaFieldPanel<String>("equalOpportunity",

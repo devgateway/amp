@@ -18,11 +18,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
@@ -37,7 +36,7 @@ public class AmpRegionalObservationsFormSectionFeature extends
 	private static final long serialVersionUID = -6654390083784446344L;
 
 	public AmpRegionalObservationsFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpRegionalObservation>> setModel=new PropertyModel<Set<AmpRegionalObservation>>(am,"regionalObservations");
 		final ListView<AmpRegionalObservation> list;

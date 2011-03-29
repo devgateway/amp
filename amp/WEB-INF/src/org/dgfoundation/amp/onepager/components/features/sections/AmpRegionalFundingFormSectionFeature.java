@@ -13,10 +13,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -40,7 +39,7 @@ public class AmpRegionalFundingFormSectionFeature extends
 	 * @throws Exception
 	 */
 	public AmpRegionalFundingFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
 				am, "regionalFundings");

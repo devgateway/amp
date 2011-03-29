@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentsFundingFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
@@ -32,7 +32,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 	 * @throws Exception
 	 */
 	public AmpComponentsFundingSubsectionFeature(String id, 
-			final IModel<AmpActivity> activityModel, final IModel<AmpComponent> componentModel,
+			final IModel<AmpActivityVersion> activityModel, final IModel<AmpComponent> componentModel,
 			final IModel<Set<AmpComponentFunding>> compFundsModel,
 			String fmName, final int transactionType) throws Exception {
 		super(id, fmName);

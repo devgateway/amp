@@ -1,7 +1,6 @@
 package org.digijava.module.aim.util;
 		
 import java.text.Collator;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -35,7 +33,6 @@ import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -48,7 +45,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 		
 		
 		/**
@@ -978,6 +974,38 @@ public class IndicatorUtil {
 		return result;
 	}
 
+	
+	/**
+	 * Loads all indicators for activity.
+	 * NULL if there are no Indicators
+	 * TODO correct this method
+	 * @param activityId
+	 * @return
+	 * @throws DgException
+	 */
+	public static Set<IndicatorActivity> getAllIndicatorsForActivity(Long activityId) throws DgException{
+		Set<IndicatorActivity> result=null;
+		Session sesison=PersistenceManager.getRequestDBSession();
+		String oql="select indi from "+IndicatorActivity.class.getName()+" indi ";
+		oql+="where indi.activity.ampActivityId =:actId ";
+		try {
+			Query query=sesison.createQuery(oql);
+			query.setLong("actId", activityId);
+			List resultList=query.list();
+			if (resultList!=null && resultList.size()>0){
+				result=new HashSet<IndicatorActivity>();
+				for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
+					IndicatorActivity indicator = (IndicatorActivity) iterator.next();
+					result.add(indicator);
+				}
+			}
+		} catch (HibernateException e) {
+			logger.error(e);
+			throw new DgException("Cannot load indicators for Activity with id "+activityId,e);
+		}
+		return result;
+	}
+
 	/**
 	 * Returns Indicator helper beans for activity.
 	 * Used on edit activity action. please remove this when Edit activity is refactored.
@@ -1157,7 +1185,7 @@ public class IndicatorUtil {
 	
 	//TODO INDIC - Old Methods below this. Above are added by Irakli.
 	//most code below is deprecated or removed because of ugly names and ugly implementation!
-
+	/*
 	@Deprecated
 	public static void saveIndicators(AmpPrgIndicator tempPrgInd) {
 
@@ -1249,7 +1277,7 @@ public class IndicatorUtil {
 			logger.debug("Exception : " + ex);
 		}
 	}
-
+	*/
 	@Deprecated
 	public static ArrayList getAmpIndicator() {
 		Session session = null;

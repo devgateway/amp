@@ -13,17 +13,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -38,7 +36,7 @@ public class AmpIssuesFormSectionFeature extends
 	private static final long serialVersionUID = -6654390083784446344L;
 
 	public AmpIssuesFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpIssues>> setModel=new PropertyModel<Set<AmpIssues>>(am,"issues");
 		final ListView<AmpIssues> list;

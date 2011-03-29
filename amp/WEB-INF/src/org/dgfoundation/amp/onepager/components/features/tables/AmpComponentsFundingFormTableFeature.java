@@ -22,7 +22,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoRenderer;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 
@@ -44,7 +44,7 @@ public class AmpComponentsFundingFormTableFeature extends
 	public AmpComponentsFundingFormTableFeature(String id,
 			final IModel<AmpComponent> componentModel,
 			final IModel<Set<AmpComponentFunding>> compFundsModel, 
-			final IModel<AmpActivity> activityModel, String fmName,
+			final IModel<AmpActivityVersion> activityModel, String fmName,
 			final int transactionType) throws Exception {
 		super(id, activityModel, fmName);
 		setTitleHeaderColSpan(5);

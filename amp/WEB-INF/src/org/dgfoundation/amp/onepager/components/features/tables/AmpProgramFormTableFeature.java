@@ -25,7 +25,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -35,7 +35,7 @@ import org.digijava.module.aim.util.ProgramUtil;
  * @author aartimon@dginternational.org
  * since Oct 21, 2010
  */
-public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpActivity,AmpActivityProgram>{
+public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpActivityVersion,AmpActivityProgram>{
 
 	/**
 	 * @param id
@@ -44,7 +44,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 	 * @throws Exception
 	 */
 	public AmpProgramFormTableFeature(String id, String fmName,
-			final IModel<AmpActivity> am, final String programSettingsString) throws Exception {
+			final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpActivityProgram>> setModel=new PropertyModel<Set<AmpActivityProgram>>(am,"actPrograms");
 		

@@ -4,29 +4,17 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCommentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCommentSimpleWrapper;
-import org.dgfoundation.amp.onepager.components.fields.AmpCommentTab;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Implements the planning section of the one pager
@@ -43,7 +31,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 	 * @param fmName
 	 */
 	public AmpPlanningFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> actModel) throws Exception {
+			final IModel<AmpActivityVersion> actModel) throws Exception {
 		super(id, fmName, actModel);
 
 		RangeValidator<Integer> rankValidator = new RangeValidator<Integer>(1,5);

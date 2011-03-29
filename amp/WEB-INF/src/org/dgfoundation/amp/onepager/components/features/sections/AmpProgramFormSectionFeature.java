@@ -6,11 +6,9 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpInternalIdsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpProgramFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -22,7 +20,7 @@ public class AmpProgramFormSectionFeature extends
 	private static final long serialVersionUID = -6654390083784446344L;
 
 	public AmpProgramFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		AmpProgramFormTableFeature npdTable = new AmpProgramFormTableFeature(
 				"npoTable", "National Plan Objective", am, ProgramUtil.NATIONAL_PLAN_OBJECTIVE);

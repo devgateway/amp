@@ -39,5 +39,11 @@ public class IndicatorActivity extends IndicatorConnection{
 	public void setRisk(AmpIndicatorRiskRatings risk) {
 		this.risk = risk;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		IndicatorActivity ia = (IndicatorActivity) obj; 
+		return getId().compareTo(ia.getId()) == 0;
+	}
 
 }

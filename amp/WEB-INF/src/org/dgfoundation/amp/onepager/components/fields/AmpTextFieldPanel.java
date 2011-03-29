@@ -46,4 +46,22 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	
 	
+	/**
+	 * You can use this constructor to specify the class 
+	 * for the convertor in TextField
+	 * 
+	 * @param id
+	 * @param model
+	 * @param fmName
+	 * @param hideLabel
+	 * @param hideNewLine
+	 * @param clazz  Class is needed for convertor
+	 */
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, Class<T> clazz) {
+		super(id, fmName, hideLabel, hideNewLine);
+		textContainer = new TextField<T>("textContainer",model, clazz);
+		textContainer.setOutputMarkupId(true);
+		addFormComponent(textContainer);
+	}
+	
 }

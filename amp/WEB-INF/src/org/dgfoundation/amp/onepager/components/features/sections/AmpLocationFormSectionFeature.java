@@ -14,7 +14,7 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormT
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -38,7 +38,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 	 * @throws Exception
 	 */
 	public AmpLocationFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am, AmpRegionalFundingFormSectionFeature regionalFundingFeature) throws Exception {
+			final IModel<AmpActivityVersion> am, AmpRegionalFundingFormSectionFeature regionalFundingFeature) throws Exception {
 		super(id, fmName, am);
 
 		AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(

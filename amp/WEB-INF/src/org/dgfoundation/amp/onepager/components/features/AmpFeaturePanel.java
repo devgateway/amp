@@ -35,8 +35,12 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 
 	protected BeautyTipBehavior tooltipContainer;
 
-	public AmpFeaturePanel(String id, String fmName) throws Exception {
+	public AmpFeaturePanel(String id, String fmName){
 		this(id, null, fmName, false);
+	}
+
+	public AmpFeaturePanel(String id, String fmName, boolean hideLabel){
+		this(id, null, fmName, hideLabel);
 	}
 
 	public AmpFeaturePanel(String id, IModel<T> model, String fmName) {

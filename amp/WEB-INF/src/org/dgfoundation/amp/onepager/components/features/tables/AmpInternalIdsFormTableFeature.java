@@ -21,7 +21,7 @@ import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTe
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
@@ -40,7 +40,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 	 * @throws Exception
 	 */
 	public AmpInternalIdsFormTableFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, am, fmName);
 		final IModel<Set<AmpActivityInternalId>> setModel=new PropertyModel<Set<AmpActivityInternalId>>(am,"internalIds");
 		

@@ -23,7 +23,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -51,7 +51,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 	 * @param am
 	 * @throws Exception
 	 */
-	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivity> activityModel, 
+	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
 			final IModel<AmpComponent> componentModel, WebMarkupContainer componentFundingSection, String fmName) throws Exception{
 		super(id, activityModel,fmName, true);
 		setTitleHeaderColSpan(5);

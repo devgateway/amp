@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentsFundingSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentIdentificationFormTableFeature;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
@@ -26,7 +26,7 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 	private static final long serialVersionUID = 0L;
 	private RadioChoice<Boolean> choiceContainer;
 
-	public AmpComponentField(String id,	IModel<AmpActivity> activityModel, 
+	public AmpComponentField(String id,	IModel<AmpActivityVersion> activityModel, 
 			IModel<AmpComponent> componentModel, String fmName){
 		super(id,fmName, true);
 		

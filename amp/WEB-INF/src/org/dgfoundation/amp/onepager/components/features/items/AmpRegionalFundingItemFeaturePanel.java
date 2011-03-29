@@ -8,11 +8,10 @@ import java.util.Set;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpRegionalTransactionsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -36,7 +35,7 @@ public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpR
 	 * @throws Exception
 	 */
 	public AmpRegionalFundingItemFeaturePanel(String id, String fmName,
-			IModel<AmpActivity> am, IModel<Set<AmpRegionalFunding>> fundingModel, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
+			IModel<AmpActivityVersion> am, IModel<Set<AmpRegionalFunding>> fundingModel, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
 		super(id, fundingModel, fmName, true);
 		AmpLabelFieldPanel<AmpCategoryValueLocations> regionLocation = new AmpLabelFieldPanel<AmpCategoryValueLocations>(
 				"region", cvLocationModel, "Region", true);

@@ -7,7 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Implements the aspect of a form section. A section is actually a {@link AmpFMTypes#FEATURE}
@@ -19,14 +19,14 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 	
 	
-	protected final IModel<AmpActivity> am;
+	protected final IModel<AmpActivityVersion> am;
 
 	/**
 	 * @param id
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpFormSectionFeaturePanel(String id, String fmName,final IModel<AmpActivity> am)
+	public AmpFormSectionFeaturePanel(String id, String fmName,final IModel<AmpActivityVersion> am)
 			throws Exception {
 		super(id, fmName);	
 		this.am = am;

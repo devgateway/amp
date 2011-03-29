@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,7 +22,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -32,7 +31,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
  */
 public class AmpSectorsFormTableFeature extends
-		AmpFormTableFeaturePanel<AmpActivity,AmpActivitySector> {
+		AmpFormTableFeaturePanel<AmpActivityVersion,AmpActivitySector> {
 
 	/**
 	 * @param id
@@ -41,7 +40,7 @@ public class AmpSectorsFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpSectorsFormTableFeature(String id, String fmName,
-			final IModel<AmpActivity> am,
+			final IModel<AmpActivityVersion> am,
 			final AmpClassificationConfiguration sectorClassification)
 			throws Exception {
 		super(id, am, fmName);

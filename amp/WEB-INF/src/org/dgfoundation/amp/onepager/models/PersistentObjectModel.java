@@ -7,14 +7,11 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.injection.web.InjectorHolder;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.dgfoundation.amp.onepager.OnePagerApp;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -29,16 +26,48 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 	private static final long serialVersionUID = 1L;
 	private Class _clazz;
 	private Serializable _id;
-	
 	private PersistenceManager _myDao;
+
+	public static IModel getModel(Serializable object){
+		IModel ret = null;
+		
+		Class clazz;
+		
+		if (object instanceof HibernateProxy)
+			clazz = ((HibernateProxy)object).getHibernateLazyInitializer().getImplementation().getClass();
+		else
+			clazz = object.getClass();
+		
+		Session session;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String idProperty = session.getSessionFactory().getClassMetadata(clazz)
+						.getIdentifierPropertyName();
+			
+			Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
+			Object result = method.invoke(object);
+			
+			if (result != null)
+				ret = new PersistentObjectModel(object);
+			else
+				ret = new Model(object);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		
+		return ret;
+	}
 	
 	private void setPrivateFields(T object){
+		if (object == null){
+			_id = null;
+			_clazz = null;
+			return;
+		}
 		if (object instanceof HibernateProxy)
 			_clazz = ((HibernateProxy)object).getHibernateLazyInitializer().getImplementation().getClass();
 		else
 			_clazz = object.getClass();
-		
-		//_id = ((IPersistentObject)object).getId();
 		
 		Session session;
 		try {
@@ -57,10 +86,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 	
 	public PersistentObjectModel(final T object) {
 		super(object);
-		
 		setPrivateFields(object);
-		
-		//InjectorHolder.getInjector().inject(this);
 	}
 	
 	public PersistentObjectModel() {
@@ -70,8 +96,6 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 	public PersistentObjectModel(final Class clazz, final Serializable id) {
 		_clazz = clazz;
 		_id = id;
-		
-		//InjectorHolder.getInjector().inject(this);
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpInternalIdsFormTableFeature;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Organisation IDs from the activity form. This is also an AMP Feature
@@ -21,7 +21,7 @@ public class AmpInternalIdsFormSectionFeature extends
 	private static final long serialVersionUID = -6654390083784446344L;
 
 	public AmpInternalIdsFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivity> am) throws Exception {
+			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 
 		AmpInternalIdsFormTableFeature internalIdsTable = new AmpInternalIdsFormTableFeature(

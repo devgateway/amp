@@ -219,6 +219,17 @@ public class ViewChannelOverview extends TilesAction {
 			}
 			formBean.setAllComments(allComments);
 
+			
+			try {
+				AmpCategoryValue budgetCV =  
+					CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, activity.getCategories() );
+				
+				formBean.setBudgetCV(budgetCV);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			// added by Akash
 			// desc: approval status check
 			// start

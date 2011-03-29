@@ -23,7 +23,7 @@
     	document.aimEditActivityForm.submit();
 	}
 </script>
-
+<digi:instance property="aimEditActivityForm" />
 <%@page import="org.digijava.module.aim.helper.Constants"%><script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
@@ -206,7 +206,7 @@ function toggleBudgetFields(show) {
 		toggleElement("CodeChapitreDrop", show);
 	</field:display> 
 	<field:display name="Budget Sector" feature="Budget">
-		if (document.getElementById("budget").value!=0){
+		if (document.getElementById("budgetCV").value!=${aimEditActivityForm.identification.budgetCVOff}){
 			toggleElement("budgsector", show);
 			toggleElement("budgsector1", show);
 			toggleElement("bctd", show);
@@ -219,7 +219,7 @@ function toggleBudgetFields(show) {
 		}
 	</field:display>
 	<field:display name="Budget Organization" feature="Budget">
-		if (document.getElementById("budget").value!=0){
+		if (document.getElementById("budgetCV").value!=${aimEditActivityForm.identification.budgetCVOff}){
 			toggleElement("budgetorg", show);
 			toggleElement("budgetorg1", show);
 		}else{
@@ -266,11 +266,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	function budgetCheckboxClick()
 	{
 		
-		if (document.getElementById("budget") != null) {
-			var l = document.getElementById("budget").options.length;
+		if (document.getElementById("budgetCV") != null) {
+			var l = document.getElementById("budgetCV").options.length;
 			var bud=false;
 			for(i=0; i<l; i++){
-				if(document.getElementById("budget").options[i].selected && document.getElementById("budget").options[i].value=='1'){
+				if(document.getElementById("budgetCV").options[i].selected && document.getElementById("budgetCV").options[i].value=='${aimEditActivityForm.identification.budgetCVOn}'){
 					toggleBudgetFields ( true );
 				 	bud=true;
 				}
@@ -282,7 +282,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	}
 
 function InitBud(){
-	if(document.getElementById("budget").value=="1"){
+	if(document.getElementById("budgetCV").value=="${aimEditActivityForm.identification.budgetCVOn}"){
 		 toggleBudgetFields ( true );
 	}
 	else{
@@ -309,20 +309,20 @@ function disableSelection1(target){
 			nownode=target.childNodes[i];
 			alert("ad "+i+" ::"+nownode);
 			if (typeof nownode.onselectstart!="undefined") //IE route
-				nownode.onselectstart=function(){return false}
+				nownode.onselectstart=function(){return false;};
 			else if (typeof nownode.style.MozUserSelect!="undefined") //Firefox route
 					nownode.style.MozUserSelect="none"
 				else //All other route (ie: Opera)
-			nownode.onmousedown=function(){return false}
+			nownode.onmousedown=function(){return false;};
 			
 	}
 
 if (typeof target.onselectstart!="undefined") //IE route
-	target.onselectstart=function(){return false}
+	target.onselectstart=function(){return false;};
 else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
 	target.style.MozUserSelect="none"
 else //All other route (ie: Opera)
-	target.onmousedown=function(){return false}
+	target.onmousedown=function(){return false;};
 	//alert("Ad");
 target.style.cursor = "default"
 }
@@ -330,8 +330,6 @@ target.style.cursor = "default"
 </script>
 
 <html:hidden styleId="FYs" value="${aimEditActivityForm.identification.resetselectedFYs}" name="aimEditActivityForm" property="identification.resetselectedFYs"/>
-<digi:instance property="aimEditActivityForm" />
-
 											<bean:define id="contentDisabled">false</bean:define>
 											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
 											</c:set>
@@ -775,13 +773,12 @@ target.style.cursor = "default"
 												</td>
 												<td>
 												<field:display name="On/Off/Treasure Budget" feature="Budget">
-													<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
-											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
-											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
-											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
-                                                        <html:option value="2"><digi:trn>Treasure</digi:trn></html:option>
-											 		</html:select>
-													</field:display>
+													<c:set var="noanswer">
+														<digi:trn>No Answer</digi:trn>
+													</c:set>
+											 		<category:showoptions firstLine="${noanswer}" name="aimEditActivityForm" property="identification.budgetCV" outeronchange="budgetCheckboxClick();"
+											 		  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_BUDGET_KEY %>" styleClass="inp-text" outerid="budgetCV" />	
+												</field:display>
 												</td>
 											</tr>
 											<tr bgcolor="#ffffff"/>

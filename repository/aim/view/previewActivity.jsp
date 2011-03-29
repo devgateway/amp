@@ -759,20 +759,22 @@ function collapseAll() {
 										<div id="act_budget" style="display: none;">
 										<field:display name="On/Off/Treasure Budget" feature="Budget">
 
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
-										<digi:trn>Activity is On Budget</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
-										<digi:trn>Activity is Off Budget</digi:trn>
-										</logic:equal>
-                                                                                <logic:equal name="aimEditActivityForm" property="identification.budget" value="2">
-										<digi:trn>Activity is On Treasure</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
-										<digi:trn>Budget Unallocated</digi:trn>
-										</logic:equal>
-										
-										<c:if test="${aimEditActivityForm.identification.budget == 1}">
+											<c:choose>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+												<digi:trn>Activity is On Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOff}">
+												<digi:trn>Activity is Off Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==0}">
+												<digi:trn>Budget Unallocated</digi:trn>
+												</c:when>
+												<c:otherwise>
+													<digi:trn>Activity is On</digi:trn>  
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.budgetCV}" />
+												</c:otherwise>
+											</c:choose>	
+										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 										<p/>
 										<field:display name="Project Code" feature="Budget">
 											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 

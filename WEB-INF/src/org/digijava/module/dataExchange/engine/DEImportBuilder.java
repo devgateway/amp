@@ -66,6 +66,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -362,7 +363,13 @@ public class DEImportBuilder {
 				}
 				//Senegal add
 				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					activity.setBudget(new Integer(1));
+					try{
+						AmpCategoryValue onCV	= CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+						CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

@@ -75,6 +75,9 @@ public class CategoryConstants {
 	public static final String DATA_EXCHANGE_NAME		= "Data Echange Category";
 	public static final String DATA_EXCHANGE_KEY		= "data_exchange";
 	
+	public static final String ACTIVITY_BUDGET_NAME			= "Activity Budget";
+	public static final String ACTIVITY_BUDGET_KEY			= "activity_budget";
+	
 	//--- IPA Contracting Step 13
 	
 	//Activity Category
@@ -138,7 +141,12 @@ public class CategoryConstants {
 	
 	 public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "International", true);
-	
+	 
+	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_ON = 
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On", true);
+	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off", true);
+	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
 	 public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";

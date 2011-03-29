@@ -1,8 +1,10 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 public class ReportsForm extends ActionForm {
 
@@ -37,6 +39,16 @@ public class ReportsForm extends ActionForm {
     private String action;
     private boolean tabs;
     private int sortBy;
+    private boolean reset;
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public void setReset(boolean reset) {
+        this.reset = reset;
+    }
+    
 
     public int getSortBy() {
         return sortBy;

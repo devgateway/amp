@@ -698,10 +698,10 @@ public class ShowActivityPrintPreview
               	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
               	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
                 }
+
                 
 
         
-
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;
                 if(activity.getRegionalFundings()!=null) {

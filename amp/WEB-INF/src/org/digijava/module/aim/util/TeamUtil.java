@@ -2096,9 +2096,9 @@ public class TeamUtil {
                        + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                        + AmpTeamReports.class.getName() 
                        + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
-                       if(name!=null){
-                           queryString += " and r.name like '%"+name+"%' ";
-                       }
+                      if (name != null) {
+                       queryString += " and r.name like :name ";
+                   }
 
                    queryString +=  " order by r.name";
                    qry = session.createQuery(queryString);
@@ -2106,6 +2106,9 @@ public class TeamUtil {
                    qry.setParameter("teamid", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
+                   if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
                    }
@@ -2117,15 +2120,18 @@ public class TeamUtil {
                    queryString = "select r from "
                        + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
                        + "  where " + tabFilter + " (tr.team=:teamId)";
-                    if(name!=null){
-                           queryString += " and r.name like '%"+name+"%' ";
-                       }
+                      if (name != null) {
+                       queryString += " and r.name like :name ";
+                   }
 
                    queryString +=  " order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setLong("teamId", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
+                    if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
                    
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
@@ -2140,13 +2146,16 @@ public class TeamUtil {
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                   if(name!=null){
-                           queryString += " and r.name like '%"+name+"%' ";
+                           queryString += " and r.name like :name";
                   }
             	  qry = session.createQuery(queryString); 
             	  qry.setLong("ampTeamMemId", memberId);
              	  qry.setLong("teamId", teamId);
              	  if ( getTabs!=null )
              		  qry.setBoolean("getTabs", getTabs);
+                   if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
             	  if (currentPage !=null){
                	   qry.setFirstResult(currentPage);
                   }

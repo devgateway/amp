@@ -65,6 +65,7 @@ function popup(mylink, windowname)
 </style>
 
 <digi:instance property="aimTeamReportsForm" />
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
   <c:set var="pageTitle">
@@ -103,6 +104,9 @@ function popup(mylink, windowname)
               </b> </a> </c:if>
           </td>
         </tr>
+         <tr>
+                <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+            </tr>
         <tr>
           <td noWrap width=1000 vAlign="top"><table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
               <tr>
@@ -219,8 +223,19 @@ function popup(mylink, windowname)
 	                      <thead>
                           <tr>
                             <td align="center" height="20" style="text-transform:capitalize;">
-                              <b>${titleColumn}
-                              </b> </td>
+                                  <c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
+                                      <digi:link href="/viewTeamReports.do?sortBy=1" style="color:#FFF;">
+                                        <b><digi:trn>${titleColumn}</digi:trn></b>
+                                    </digi:link>
+                                   <c:if test="${aimTeamReportsForm.sortBy==2}"><img src="/repository/aim/images/down.gif" alt="down"/></c:if>
+                                </c:if>
+                                <c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
+                                    <digi:link href="/viewTeamReports.do?sortBy=2" style="color:#FFF;">
+                                        <b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn></b>
+                                    </digi:link>
+                                      <img  src="/repository/aim/images/up.gif" alt="up"/>
+                                </c:if>
+                             </td>
                             <td align="center" height="20" style="text-transform:capitalize;"><b>
                               <digi:trn>Type</digi:trn>
                               </b> </td>
@@ -465,6 +480,7 @@ function popup(mylink, windowname)
                 </td>
               </tr>
             </table>
+             </digi:form>
             <br />
             <br />
             <br />

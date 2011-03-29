@@ -56,11 +56,14 @@ public class ShowTeamReports extends Action {
 
 		ReportsForm rf = (ReportsForm) form;
         String action=rf.getAction();
-        if(action==null||action.trim().equalsIgnoreCase("")||action.equalsIgnoreCase("clear")){
+		
+        if (rf.isReset()||(action!=null&&action.equalsIgnoreCase("clear"))) {
             rf.setKeyword(null);
             rf.setAction(null);
-            action=null;
-            rf.setSortByColumn(ReportsForm.ReportSortBy.NONE);
+            rf.setSortBy(ReportSortBy.NONE.getSortBy());
+            rf.setCurrentPage(0);
+            rf.setReset(false);
+            rf.setPage(0);
         }
 
 		rf.setShowTabs(null);
@@ -78,19 +81,14 @@ public class ShowTeamReports extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if ( tm != null )
 			rf.setCurrentMemberId(tm.getMemberId());
-		                                        
-		int page = 0;
-		if (request.getParameter("page") == null) {
-			page = 0;
-		} else {
-			page = Integer.parseInt(request.getParameter("page"));
-		}
-        if(action==null||action.equalsIgnoreCase("search")){
-			getAllReports(appSettingSet, rf, tm, request);
-            page = 0;
-		}
-		rf.setCurrentPage(new Integer (page));
+		                                        	
+		getAllReports(appSettingSet, rf, tm, request);
+		rf.setCurrentPage(rf.getPage());
 		rf.setPagesToShow(10);
+        if(action!=null&&action.equalsIgnoreCase("search")){
+            rf.setCurrentPage(0);
+            rf.setPage(0);
+        }
 		
 		doPagination(rf, request);
 		
@@ -158,9 +156,32 @@ public class ShowTeamReports extends Action {
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
+        ReportSortBy col = ReportSortBy.NONE;
+        Comparator sort=null;
+        for (ReportSortBy column : ReportSortBy.values()) {
+            if (column.getSortBy() == rf.getSortBy()) {
+                col = column;
+                break;
+            }
+        }
+        
 
 		if (tm == null) {
-			Collection reports = ARUtil.getAllPublicReports(false);
+		List reports = ARUtil.getAllPublicReports(false, rf.getKeyword());
+            if (reports != null) {
+                switch (col) {
+                    case NAME_ASC:
+                        sort = new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC, collator);
+                        break;
+                    case NAME_DESC:
+                        sort = new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC, collator);
+                        break;
+                    default:
+                        sort = new AdvancedReportUtil.AmpReportIdComparator();
+                        break;
+                }
+                Collections.sort(reports, sort);
+            }
 			rf.setReports(reports);
 			rf.setTotalPages(FIRST_PAGE);
 		} else {
@@ -172,15 +193,7 @@ public class ShowTeamReports extends Action {
 				appSettingSet = true;
 			}
 
-            Comparator sort=null;
-
-            ReportSortBy col =ReportSortBy.NONE;
-            for (ReportSortBy column : ReportSortBy.values()) {
-                if (column.getSortBy() == rf.getSortBy()) {
-                    col = column;
-                    break;
-                }
-            }
+            
             switch(col){
                 case NAME_ASC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC,collator);break;
                 case NAME_DESC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC,collator); break;
@@ -258,7 +271,7 @@ public class ShowTeamReports extends Action {
 			//do not add this in ArrayList constructor.
 			Collections.sort(sortedReports,sort);
 			rf.setReports(sortedReports);
-			rf.setPage(0);
+			//rf.setPage(0);
 		}
 	}
 

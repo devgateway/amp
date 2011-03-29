@@ -21,7 +21,7 @@
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
-			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
+			<table cellPadding="0" cellSpacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
 					<td height="33">
@@ -52,12 +52,12 @@
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
-					<tr><td noWrap width="600" vAlign="top">
+					<tr><td noWrap width="750" vAlign="top">
 						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor="#d7eafd" class="box-title" height="20" align="center">
+										<tr><td bgColor="#c7d4db" class="box-title" height="20" align="center">
 											<!-- Table title -->
 											<digi:trn>Templates	</digi:trn>
 											<!-- end table title -->

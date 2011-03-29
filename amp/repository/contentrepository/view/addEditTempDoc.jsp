@@ -268,7 +268,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 </script>
 
 <digi:form action="/tempDocManager.do?actType=saveTemplateDocument" method="post">
-<table border="0" cellpadding="15">
+<table border="0" cellpadding="0" align="center" width=1000>
 	<tr>
 		<td colspan="2">
 			<span class="crumb">
@@ -287,8 +287,8 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	</tr>
 	<tr><td colspan="2"><digi:errors/></td></tr>
 	<tr>
-		<td colspan="2">
-			<span class="subtitle-blue"><digi:trn>Create/Edit template document</digi:trn></span>
+		<td colspan="2" bgcolor=#c7d4db>
+			<span class="subtitle-blue"><digi:trn><b style="font-size:12px;">Create/Edit template document</b></digi:trn></span>
 		</td>
 	</tr>
 	<tr>

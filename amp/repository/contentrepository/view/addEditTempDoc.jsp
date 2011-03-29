@@ -270,7 +270,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 <digi:form action="/tempDocManager.do?actType=saveTemplateDocument" method="post">
 <table border="0" cellpadding="0" align="center" width=1000>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" style="padding-bottom:15px;">
 			<span class="crumb">
               <c:set var="translation">
                 <digi:trn>Click here to goto Admin Home</digi:trn>
@@ -326,6 +326,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 				</tr>
 				<tr>					
 					<td align=center>
+					<hr />
 						<c:set var="trnadd"><digi:trn>Add Field</digi:trn></c:set>
 				    	<input type="button" class="buttonx" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnadd}" onclick="addNewField()">
 						&nbsp;

@@ -376,7 +376,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Identification {
 		
 		private String ampId = null;
-		private Integer budget;
+		//private Integer budget;
+		private Long budgetCV;
+		private Long budgetCVOff;
+		private Long budgetCVOn;
+		
+		
 		private AmpTeam team;
 		
 		private String title = null;
@@ -955,12 +960,38 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.ampId = ampId;
 		}
 
-		public Integer getBudget() {
-			return budget;
+//		public Integer getBudget() {
+//			return budget;
+//		}
+//
+//		public void setBudget(Integer budget) {
+//			this.budget = budget;
+//		}
+		
+		
+		public Long getBudgetCV() {
+			return budgetCV;
+		}
+		
+		public void setBudgetCV(Long budgetCV) {
+			this.budgetCV = budgetCV;
+		}
+		
+
+		public Long getBudgetCVOff() {
+			return budgetCVOff;
 		}
 
-		public void setBudget(Integer budget) {
-			this.budget = budget;
+		public void setBudgetCVOff(Long budgetCVOff) {
+			this.budgetCVOff = budgetCVOff;
+		}
+
+		public Long getBudgetCVOn() {
+			return budgetCVOn;
+		}
+
+		public void setBudgetCVOn(Long budgetCVOn) {
+			this.budgetCVOn = budgetCVOn;
 		}
 
 		public AmpTeam getTeam() {

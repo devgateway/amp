@@ -234,7 +234,7 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 		activity.setAmpId(eaForm.getIdentification().getAmpId());
 		processActivityMustHaveInfo(eaForm, activity);
-		activity.setBudget(eaForm.getIdentification().getBudget());
+		//activity.setBudget(eaForm.getIdentification().getBudget());
 		if (eaForm.getIdentification().getDescription() == null
 				|| eaForm.getIdentification().getDescription().trim().length() == 0) {
 			activity.setDescription(new String(" "));
@@ -262,7 +262,7 @@ public class SaveActivity extends Action {
 		} else {
 			activity.setProjectImpact(eaForm.getIdentification().getProjectImpact());
 		}
-		if(eaForm.getIdentification().getBudget() != null && (eaForm.getIdentification().getBudget().intValue()==-1 || eaForm.getIdentification().getBudget().intValue()==0))
+		if(eaForm.getIdentification().getBudgetCV() != null && (eaForm.getIdentification().getBudgetCV().intValue()==0 || eaForm.getIdentification().getBudgetCV().intValue()==1))
 			activity.setChapter(null);
 		else
 			activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
@@ -413,7 +413,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getIdentification().getSelectedorg() != null){
 			activity.setBudgetorganization(eaForm.getIdentification().getSelectedorg());
 		}
-		if(eaForm.getIdentification().getBudget() != null && (eaForm.getIdentification().getBudget().intValue()!=-1 || eaForm.getIdentification().getBudget().intValue()!=0 )){
+		if(eaForm.getIdentification().getBudgetCV() != null && (eaForm.getIdentification().getBudgetCV().intValue()!=0 || eaForm.getIdentification().getBudgetCV().intValue()!=1 )){
 			if (eaForm.getIdentification().getSelecteddepartment()!=null){
 				activity.setBudgetdepartment(eaForm.getIdentification().getSelecteddepartment());
 			}
@@ -561,6 +561,7 @@ public class SaveActivity extends Action {
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getActivityLevel(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectImplUnitId(), activity.getCategories());
+        CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getBudgetCV(), activity.getCategories());
 		/* END - Saving categories to AmpActivity */
 			
         

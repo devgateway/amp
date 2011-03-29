@@ -586,6 +586,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                     CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
             if (ampCategoryValue != null)
                   eaForm.getIdentification().setProjectCategory(new Long(ampCategoryValue.getId()));
+            
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                    CategoryConstants.ACTIVITY_BUDGET_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+                  eaForm.getIdentification().setBudgetCV(new Long(ampCategoryValue.getId()));
+            else
+            	 eaForm.getIdentification().setBudgetCV(0L);
 
             
 
@@ -707,7 +714,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setUpdatedBy(activity.getUpdatedBy());
-          eaForm.getIdentification().setBudget(activity.getBudget());
+         // eaForm.getIdentification().setBudget(activity.getBudget());
+          AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);	
+          eaForm.getIdentification().setBudgetCVOff(
+        		  (budgetOff==null)?0:budgetOff.getId()
+        		  );
+          AmpCategoryValue budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);	
+          eaForm.getIdentification().setBudgetCVOn(
+        		  (budgetOn==null)?1:budgetOn.getId()
+        		  );
+          
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
           

@@ -104,10 +104,16 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String budgetdepartment;
 	private String budgetprogram;
 	
+	private AmpCategoryValue budgetCV;
 	
-	
-	
-	
+
+	public AmpCategoryValue getBudgetCV() {
+		return budgetCV;
+	}
+
+	public void setBudgetCV(AmpCategoryValue budgetCV) {
+		this.budgetCV = budgetCV;
+	}
 
 	public String getBudgetsector() {
 		return budgetsector;

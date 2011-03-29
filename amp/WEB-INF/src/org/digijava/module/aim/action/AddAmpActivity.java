@@ -1530,6 +1530,20 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getContracts().setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContracts().getContractDetails(), request));
 	eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 	
+	try {
+	 AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);	
+     eaForm.getIdentification().setBudgetCVOff(
+   		  (budgetOff==null)?0:budgetOff.getId()
+   		  );
+     AmpCategoryValue budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);	
+     eaForm.getIdentification().setBudgetCVOn(
+   		  (budgetOn==null)?1:budgetOn.getId()
+   		  );
+	}
+	catch (Exception e) {
+		e.printStackTrace();
+	}
+	
 	//Budget classification
 	if (eaForm.getIdentification().getBudgetsectors()==null || eaForm.getIdentification().getBudgetsectors().size()==0){
 		eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));

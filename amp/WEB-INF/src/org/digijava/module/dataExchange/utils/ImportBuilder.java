@@ -904,7 +904,13 @@ public class ImportBuilder {
 					activity.setProjectCode(aft.getValue().substring(8, 11));
 				}
 				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					activity.setBudget(new Integer(1));
+					try{
+						AmpCategoryValue onCV	= CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+						CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

@@ -393,7 +393,8 @@ function commentWin(val, commentId) {
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																				<table>
-																				<c:if test="${activity.budget==1}">
+																				<c:if test="${aimChannelOverviewForm.budgetCV != null && 
+																						aimChannelOverviewForm.budgetCV.value=='On'}">
 																					<field:display name="On/Off/Treasure Budget" feature="Budget">
 																						<tr>
 																							<td>
@@ -535,15 +536,19 @@ function commentWin(val, commentId) {
 																					</field:display>
 																				</table>
 																			<field:display name="On/Off/Treasure Budget" feature="Budget">
-																			<c:if test="${activity.budget==0}">
-																				<digi:trn>Activity is Off Budget</digi:trn>
-																			</c:if>
-																			<c:if test="${activity.budget==-1}">
-																				<digi:trn>Budget Unallocated</digi:trn>
-																			</c:if>
-                                                                                                                                                         <c:if test="${activity.budget==2}">
-																				<digi:trn>Budget Treasure</digi:trn>
-																			</c:if>
+																			<c:choose>
+																				<c:when test="${aimChannelOverviewForm.budgetCV!=null && aimChannelOverviewForm.budgetCV.value=='Off'}">
+																					<digi:trn>Activity is Off Budget</digi:trn>
+																				</c:when>
+																				<c:when test="${aimChannelOverviewForm.budgetCV!=null && aimChannelOverviewForm.budgetCV.value=='On'}">
+																				</c:when>
+																				<c:when test="${aimChannelOverviewForm.budgetCV==null}">
+																					<digi:trn>Budget Unallocated</digi:trn>
+																				</c:when>
+	                                                                            <c:otherwise>
+																					<digi:trn>${aimChannelOverviewForm.budgetCV.value}</digi:trn>
+																				</c:otherwise>
+																			</c:choose>
 																			</field:display>
 																			</TD>
 																		</TR>

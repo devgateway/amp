@@ -11,8 +11,8 @@
 <digi:form action="/manageField.do?action=saveValues" method="post">
 <table width="420px" cellPadding="4" cellSpacing="1" valign="top" align="left" bgcolor="#ffffff" border="0">
   <tr>
-    <td bgColor="#d7eafd" class="box-title" height="10" align="center" colspan="7">
-    	<digi:trn>Add/Edit Values</digi:trn>
+    <td bgColor="#c7d4db" class="box-title" height="10" align="center" colspan="7">
+    	<digi:trn><b style="font-size:12px;">Add/Edit Values</b></digi:trn>
     </td>
   </tr>  
   <c:if test="${!empty manageFieldForm.possibleValuesForField}">
@@ -59,18 +59,18 @@
       		<c:set var="buttonStyle">font-family:verdana;font-size:11px;color: gray</c:set>
       </c:if>
       
-      <input style="${buttonStyle}" type="button" name="addValBtn" value="${trnadd}" onclick="addNewPreDefinedValue()" ${disabledbutton}>&nbsp;&nbsp;
+      <input style="${buttonStyle}" type="button" class="buttonx" name="addValBtn" value="${trnadd}" onclick="addNewPreDefinedValue()" ${disabledbutton}>&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>
-    <td bgColor="#dddddb" height="25" align="center" colspan="6">
+    <td height="25" align="center" colspan="6">
       <c:set var="trn"><digi:trn>Save</digi:trn></c:set>
       <c:set var="trncancel"><digi:trn>Cancel</digi:trn></c:set>
       <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>      
       
-      <input class="dr-menu" type="reset" value="${trn}" onclick="submitPreDefinedValues('${isTextArea}');">    
-      <input class="dr-menu" type="reset" value="${trncancel}">
-      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="myPanel.hide()">
+      <input type="reset" class="buttonx" value="${trn}" onclick="submitPreDefinedValues('${isTextArea}');">    
+      <input type="reset" class="buttonx" value="${trncancel}">
+      <input type="button" class="buttonx" name="close" value="${trnclose}" onclick="myPanel.hide()">
     </td>
   </tr>  
 </table>

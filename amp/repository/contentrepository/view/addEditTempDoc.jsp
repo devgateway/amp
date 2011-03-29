@@ -287,7 +287,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	</tr>
 	<tr><td colspan="2"><digi:errors/></td></tr>
 	<tr>
-		<td colspan="2" bgcolor=#c7d4db>
+		<td colspan="2" bgcolor=#c7d4db height=25 align=center>
 			<span class="subtitle-blue"><digi:trn><b style="font-size:12px;">Create/Edit template document</b></digi:trn></span>
 		</td>
 	</tr>
@@ -306,15 +306,15 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 					<td colspan="2">
 						<!-- rows to add new fields -->						
 							<logic:notEmpty name="tempDocManagerForm" property="pendingFields">
-							<table id="templateFieldsTbl">
+							<table id="templateFieldsTbl" class="inside" width=450 align=center>
 								<c:forEach var="pf" items="${tempDocManagerForm.pendingFields}">
 									<tr>
-										<td>
+										<td class="inside">
 											<html:multibox property="selectedFieldsIds" styleClass="selectedTempFieldsIds">
 								             	${pf.fieldTemporaryId}
 								             </html:multibox>
 										</td>
-										<td>
+										<td class="inside">
 											<html:select property="fieldType" name="pf" styleClass="inp-text" styleId="fieldType_${pf.fieldTemporaryId}" onchange="fieldTypeChanged('${pf.fieldTemporaryId}')">
 												<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 												<logic:iterate id="ft" name="tempDocManagerForm" property="availableFields">																																															
@@ -322,7 +322,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 												</logic:iterate>
 											</html:select>
 										</td>
-										<td>
+										<td class="inside">
 											<c:set var="trnManage"><digi:trn>Manage Field</digi:trn></c:set>
 						    				<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnManage}" onclick="manageField('${pf.fieldTemporaryId}')" id="manBut_${pf.fieldTemporaryId}">
 										</td>

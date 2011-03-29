@@ -37,7 +37,7 @@ public class ComputedAmountCell extends CategAmountCell {
 		if (getValues().containsKey(COMPUTED_VALUE)) {
 			BigDecimal val = getValues().get(COMPUTED_VALUE);
 			if (val != null) {
-				return val.doubleValue();
+				return val.doubleValue() * (getPercentage() / 100);
 			} else {
 				return 0d;
 			}
@@ -68,7 +68,7 @@ public class ComputedAmountCell extends CategAmountCell {
 				getValues().prepareCountValues();
 				BigDecimal result = expression.result(getValues());
 				if (result != null) {
-					return result.doubleValue();
+					return result.doubleValue() * (getPercentage() / 100);
 				}
 
 			}

@@ -24,6 +24,7 @@ public final class OnePagerConst {
 	public final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
 	public final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
 	public final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
+	public final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
 
 	public final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";
 	
@@ -42,7 +43,21 @@ public final class OnePagerConst {
 		return String.format(toggleJSPM, c.getMarkupId());
 	}
 	
+	/**
+	 * Use this when c is a sibbling with the slider or the slider itself
+	 * @param c
+	 * @return
+	 */
 	public static String getClickToggleJS(Component c){
 		return String.format(clickToggleJS, c.getMarkupId());
+	}
+
+	/**
+	 * Use this when c is the parent to the slider
+	 * @param c
+	 * @return
+	 */
+	public static String getClickToggle2JS(Component c){
+		return String.format(clickToggle2JS, c.getMarkupId());
 	}
 }

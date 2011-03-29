@@ -295,55 +295,44 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 		<td>
 			<table border="0" cellpadding="5" align="center" style="font-family:verdana;font-size:11px; border:1px solid silver;" width="100%">
 				<tr>
-					<td align="right" nowrap="nowrap">
+					<td nowrap="nowrap" align=center>
 						<font color="red">*</font><strong><digi:trn>Name</digi:trn>:</strong>
-					</td>
-					<td>
-						<html:text name="tempDocManagerForm" property="templateName" style="width : 200px" styleId="tempName"/>
-					</td>
+						<html:text name="tempDocManagerForm" property="templateName" style="width : 200px" styleId="tempName"/>					</td>
 				</tr>								
 				<tr>
-					<td colspan="2">
+					<td>
 						<!-- rows to add new fields -->						
 							<logic:notEmpty name="tempDocManagerForm" property="pendingFields">
-							<table id="templateFieldsTbl" class="inside" width=450 align=center>
+							<table id="templateFieldsTbl" class="inside" align=center>
 								<c:forEach var="pf" items="${tempDocManagerForm.pendingFields}">
 									<tr>
 										<td class="inside">
 											<html:multibox property="selectedFieldsIds" styleClass="selectedTempFieldsIds">
-								             	${pf.fieldTemporaryId}
-								             </html:multibox>
-										</td>
+								             	${pf.fieldTemporaryId}								             </html:multibox>										</td>
 										<td class="inside">
 											<html:select property="fieldType" name="pf" styleClass="inp-text" styleId="fieldType_${pf.fieldTemporaryId}" onchange="fieldTypeChanged('${pf.fieldTemporaryId}')">
 												<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 												<logic:iterate id="ft" name="tempDocManagerForm" property="availableFields">																																															
 													<html:option value="${ft.value}"><digi:trn>${ft.label}</digi:trn></html:option>																		
 												</logic:iterate>
-											</html:select>
-										</td>
+											</html:select>										</td>
 										<td class="inside">
 											<c:set var="trnManage"><digi:trn>Manage Field</digi:trn></c:set>
-						    				<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnManage}" onclick="manageField('${pf.fieldTemporaryId}')" id="manBut_${pf.fieldTemporaryId}">
-										</td>
+						    				<input type="button" class="buttonx" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnManage}" onclick="manageField('${pf.fieldTemporaryId}')" id="manBut_${pf.fieldTemporaryId}">										</td>
 									</tr>
 								</c:forEach>
 							</table>
-						</logic:notEmpty>						
-						
-					</td>
+						</logic:notEmpty>					</td>
 				</tr>
 				<tr>					
-					<td colspan="2">
+					<td align=center>
 						<c:set var="trnadd"><digi:trn>Add Field</digi:trn></c:set>
-				    	<input type="button" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnadd}" onclick="addNewField()">
+				    	<input type="button" class="buttonx" style="font-family:verdana;font-size:11px;" name="addValBtn" value="${trnadd}" onclick="addNewField()">
 						&nbsp;
 						<c:set var="trndel"><digi:trn>Remove Selected Fields</digi:trn></c:set>
-				    	<input type="button" style="font-family:verdana;font-size:11px;" name="delValBtn" value="${trndel}" onclick="deleteFields()">
+				    	<input type="button" style="font-family:verdana;font-size:11px;" class="buttonx" name="delValBtn" value="${trndel}" onclick="deleteFields()">
 				    	&nbsp;
-						<html:submit onclick="return validateDoc()"><digi:trn>Save Template</digi:trn></html:submit>
-				    	
-					</td>
+						<html:submit styleClass="buttonx" onclick="return validateDoc()"><digi:trn>Save Template</digi:trn></html:submit>					</td>
 				</tr>
 			</table>
 		</td>

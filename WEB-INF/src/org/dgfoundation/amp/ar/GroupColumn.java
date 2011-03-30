@@ -238,7 +238,13 @@ public class GroupColumn extends Column {
         // iterate the set and create a subColumn for each of the metainfo
         i = metaSet.iterator();
         while (i.hasNext()) {
-            MetaInfo element = (MetaInfo) i.next();
+        	MetaInfo element = (MetaInfo) i.next();
+        	
+        	//do not consider the Totals subcolumn in years/quarters as a real category
+        	//if this category is found inside the grand totals column, ignore it 
+            if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
+            		element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL) && src instanceof TotalAmountColumn) continue;
+
             CellColumn cc = null;
             if (generateTotalCols)
                 cc = new TotalAmountColumn(element.getValue().toString(),true);

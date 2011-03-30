@@ -180,9 +180,10 @@
 	YAHOO.util.Event.addListener(window, "load", initTree) ;
 </script>
 <bean:define id="myForm" toScope="request" name="crLabelManagerForm" />
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">
 	<tr>
-	    <td align="left" class="r-dotted-lg" vAlign="top" width="750">
+		<td class="r-dotted-lg" width="14">&nbsp;</td>
+		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
@@ -204,10 +205,10 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="25" Align="center" width="571" bgcolor=#c7d4db>
+					<td height="16" vAlign="center" width="571">
 						<span class="subtitle-blue">
 							<digi:trn>
-								<b style="font-size:12px;">Resources Label Manager</b>
+								Resources Label Manager
 							</digi:trn>
 						</span>
 					</td>

@@ -91,7 +91,7 @@
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" border="1" align="center" class="box-border-nopadding">
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">

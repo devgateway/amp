@@ -19,17 +19,17 @@ public class Values extends HashMap<String, BigDecimal> {
 	Set<Values> countValues = new HashSet<Values>();
 	
 	private List<AmpColumns> mtefCols	;
-	private List<AmpMeasures> mtefMeas	;
+	//private List<AmpMeasures> mtefMeas	;
 
 	public Values(Long ownerID) {
 		this.ownerId = ownerID;
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
-		this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
+		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
 	public Values() {
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
-		this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
+		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
 	public void addValue(String key, BigDecimal value) {
@@ -85,11 +85,11 @@ public class Values extends HashMap<String, BigDecimal> {
 				String mtefColName	= col.getColumnName();
 				this.addValue(mtefColName, values.get(mtefColName) );
 			}
-		if ( this.mtefMeas != null )
-			for (AmpMeasures meas: this.mtefMeas ) {
-				String mtefMeasName	= meas.getMeasureName();
-				this.addValue(mtefMeasName, values.get(mtefMeasName) );
-			}
+//		if ( this.mtefMeas != null )
+//			for (AmpMeasures meas: this.mtefMeas ) {
+//				String mtefMeasName	= meas.getMeasureName();
+//				this.addValue(mtefMeasName, values.get(mtefMeasName) );
+//			}
 
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_COMMITMENT, ac);
 		this.setIfGreaterThan(ArConstants.MAX_ACTUAL_DISBURSEMENT, ad);
@@ -181,15 +181,15 @@ public class Values extends HashMap<String, BigDecimal> {
 				
 				this.addValue(col.getColumnName(), evalResult );
 			}
-		if ( this.mtefMeas != null )
-			for (AmpMeasures meas: this.mtefMeas ) {
-				String mtefExprName	= meas.getExpression();
-				mtefExprName		= mtefExprName.replace("Measure ", "");
-				String yearStr		= mtefExprName.substring(mtefExprName.length()-4, mtefExprName.length() );
-				Integer year		= Integer.parseInt(yearStr)-1;
-				double evalResult	= TokenRepository.buildMtefColumnToken(mtefExprName, year).evaluate(cell);
-				this.addValue(meas.getMeasureName(), evalResult );
-			}
+//		if ( this.mtefMeas != null )
+//			for (AmpMeasures meas: this.mtefMeas ) {
+//				String mtefExprName	= meas.getExpression();
+//				mtefExprName		= mtefExprName.replace("Measure ", "");
+//				String yearStr		= mtefExprName.substring(mtefExprName.length()-4, mtefExprName.length() );
+//				Integer year		= Integer.parseInt(yearStr)-1;
+//				double evalResult	= TokenRepository.buildMtefColumnToken(mtefExprName, year).evaluate(cell);
+//				this.addValue(meas.getMeasureName(), evalResult );
+//			}
 
 	}
 
@@ -226,11 +226,11 @@ public class Values extends HashMap<String, BigDecimal> {
 				this.addValue(mtefColName, values.get(mtefColName) );
 			}
 		
-		if ( this.mtefMeas != null )
-			for (AmpMeasures meas: this.mtefMeas ) {
-				String mtefMeasName	= meas.getMeasureName();
-				this.addValue(mtefMeasName, values.get(mtefMeasName) );
-			}
+//		if ( this.mtefMeas != null )
+//			for (AmpMeasures meas: this.mtefMeas ) {
+//				String mtefMeasName	= meas.getMeasureName();
+//				this.addValue(mtefMeasName, values.get(mtefMeasName) );
+//			}
 		
 	}
 

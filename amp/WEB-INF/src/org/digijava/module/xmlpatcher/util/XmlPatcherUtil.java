@@ -446,9 +446,9 @@ public final class XmlPatcherUtil {
 	public static List<Object[]> getAllDiscoveredPatches(int startIndexInt,int recordsInt,String sortBy,String dir)
 			throws DgException, HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
-		if(sortBy.equals("attempts")) sortBy="count(l)"; else sortBy="p."+sortBy;
+		if(sortBy.equals("attempts")) sortBy="count(l)";else sortBy="p."+sortBy;
 		Query query = session
-				.createQuery("SELECT p.patchId,p.discovered,p.location,p.state,count(l) FROM " + AmpXmlPatch.class.getName()+ " p left join p.logs l group by p.patchId order by "+sortBy+" "+dir);
+				.createQuery("SELECT p.patchId,p.discovered,p.location,p.state,count(l) FROM " + AmpXmlPatch.class.getName()+ " p left join p.logs l group by p.patchId, p.discovered,p.location,p.state order by "+sortBy+" "+dir);
 		query.setFirstResult(startIndexInt);
 		query.setMaxResults(recordsInt);
 		List<Object[]> list = query.list();

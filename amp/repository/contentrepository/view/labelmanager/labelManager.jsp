@@ -204,7 +204,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="25" align=center width="1000">
+					<td height="25" align=center width="1000" bgcolor=#c7d4db>
 						<span class="subtitle-blue">
 							<digi:trn>
 								<b style="font-size:12px;">Resources Label Manager</b>
@@ -218,11 +218,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<p>
+					<td style="border:1px solid #CCCCCC;">
+						<div style="background-color:#F2F2F2; padding:5px;">
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
-						</p>
+						</div>
 
 						<p style="display: none" id="p_tree">
 							<font size="3">

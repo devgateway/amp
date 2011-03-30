@@ -92,7 +92,7 @@ function submitPages(){
 
 
 
-<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
+<table width="1000" cellspacing="0" cellpadding="0" valign="top" align="center">
 <tr><td>
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />

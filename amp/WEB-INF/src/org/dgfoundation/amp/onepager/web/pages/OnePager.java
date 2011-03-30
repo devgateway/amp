@@ -16,7 +16,6 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIds
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;

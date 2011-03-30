@@ -147,13 +147,6 @@ public class GisUtil {
             float yPos = canvasHeight - (yOffset + (ccRect.getBottom() +
                          (ccRect.getTop() - ccRect.getBottom()) / 2) * scale);
 
-            if (xPos < border) {
-                xPos = border;
-            }
-
-            if (xPos > canvasWidth - glv.getVisualBounds().getWidth() - border) {
-                xPos = (float) (canvasWidth - glv.getVisualBounds().getWidth() - border);
-            }
 
             CoordinateRect captionRect =
             new CoordinateRect((int)xPos, (int)(xPos + glv.getVisualBounds().getWidth()),

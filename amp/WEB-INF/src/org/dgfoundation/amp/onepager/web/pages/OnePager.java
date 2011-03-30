@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.web.pages;
 import org.apache.log4j.Logger;
 import org.apache.wicket.PageParameters;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -83,7 +84,6 @@ public class OnePager extends OnePagerWrapper {
 			AmpRegionalObservationsFormSectionFeature regionalObs = new AmpRegionalObservationsFormSectionFeature("regionalObs", "Regional Observations", am);
 			activityForm.add(regionalObs);
 
-			
 			AmpContactsFormSectionFeature contacts = new AmpContactsFormSectionFeature("contacts", "Contacts", am);
 			activityForm.add(contacts);
 			

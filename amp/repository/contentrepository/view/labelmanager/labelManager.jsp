@@ -199,7 +199,7 @@
 						
 						
 						<digi:trn>
-							<b style="font-size:12px;">Resources Label Manager</b>
+							Resources Label Manager
 						</digi:trn>
 					</td>
 					<!-- End navigation -->

@@ -220,7 +220,7 @@ function submitPages(){
 											align="left" width="100%" class="inside">
 											<thead>
 											<tr bgcolor="eeeeee">
-												<td width="5%" class="inside"></td>
+												<td width="5%"></td>
 												<td align="left" class="inside" width="20%" style="cursor: pointer;"
 													onclick="sortSubmit(1)"
 													onMouseOver="this.className='colHeaderOver'"
@@ -319,25 +319,23 @@ function submitPages(){
 														<td align="left" bgcolor="#ffffff"><digi:trn
 															key="aim:denotesAnActiveCurrency">
 															Denotes an active currency</digi:trn></td>
-													</tr>
-												  </table></td>
-											</tr>
-											<tr>
-												<td align="left">
-												  <table cellSpacing="1" cellPadding="2" vAlign="top"
+													    <td align="left" bgcolor="#ffffff"><table cellspacing="1" cellpadding="2" valign="top"
 													align="left">
-													<tr>
-														<td align="left" bgcolor="#ffffff" width="3"><digi:img
+                                                          <tr>
+                                                            <td align="left" bgcolor="#ffffff" width="3"><digi:img
 															src="module/aim/images/bullet_grey.gif" /></td>
-														<td align="left" bgcolor="#ffffff"><digi:trn
-															key="aim:denotesAnInActiveCurrency">
-															Denotes an inactive currency</digi:trn></td>
+                                                            <td align="left" bgcolor="#ffffff"><digi:trn
+															key="aim:denotesAnInActiveCurrency"> Denotes an inactive currency</digi:trn></td>
+                                                          </tr>
+                                                        </table></td>
 													</tr>
 												  </table></td>
 											</tr>
 											<c:if test="${!empty aimCurrencyForm.pages}">
 												<tr>
-													<td align="left">Pages : <c:if
+													<td align="left" style="font-size:12px;" align=center>
+													<hr />
+													Pages : <c:if
 														test="${aimCurrencyForm.currentPage > 1}">
 														<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 															class="java.util.HashMap" />

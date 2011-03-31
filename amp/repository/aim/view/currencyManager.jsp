@@ -316,7 +316,7 @@ function submitPages(){
 													<tr>
 														<td align="left" bgcolor="#ffffff" width="3"><digi:img
 															src="module/aim/images/bullet_green.gif" /></td>
-														<td align="left" bgcolor="#ffffff"><digi:trn
+														<td align="left" bgcolor="#ffffff" style="font-size:12px;"><digi:trn
 															key="aim:denotesAnActiveCurrency">
 															Denotes an active currency</digi:trn></td>
 													    <td align="left" bgcolor="#ffffff"><table cellspacing="1" cellpadding="2" valign="top"
@@ -324,7 +324,7 @@ function submitPages(){
                                                           <tr>
                                                             <td align="left" bgcolor="#ffffff" width="3"><digi:img
 															src="module/aim/images/bullet_grey.gif" /></td>
-                                                            <td align="left" bgcolor="#ffffff"><digi:trn
+                                                            <td align="left" bgcolor="#ffffff" style="font-size:12px;"><digi:trn
 															key="aim:denotesAnInActiveCurrency"> Denotes an inactive currency</digi:trn></td>
                                                           </tr>
                                                         </table></td>
@@ -333,7 +333,7 @@ function submitPages(){
 											</tr>
 											<c:if test="${!empty aimCurrencyForm.pages}">
 												<tr>
-													<td align="left" style="font-size:12px;" align=center>
+													<td align="left" style="font-size:12px;">
 													<hr />
 													Pages : <c:if
 														test="${aimCurrencyForm.currentPage > 1}">
@@ -436,11 +436,13 @@ function submitPages(){
 										</td>
 									</tr>
 									<tr>
-										<td><!-- Other links -->
-										<table cellSpacing="1" cellPadding="2" vAlign="top"
-											align="left">
+										<td align=center>
+										<hr />
+										<!-- Other links -->
+										<table cellSpacing="1" cellPadding="2" vAlign="top">
 											<tr>
-												<td align="left" bgcolor="#ffffff"><a
+												<td align="left" bgcolor="#ffffff" style="font-size:12px;">
+												<a
 													href="javascript:addNewCurrency()"> <digi:trn
 													key="aim:addNewCurrency">
 											Add a new currency</digi:trn></a></td>

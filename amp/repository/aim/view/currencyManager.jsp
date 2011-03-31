@@ -217,21 +217,21 @@ function submitPages(){
 										<!-- Currency list table -->
 										<!--  to export table we are adding class "report" to its container -->
 										<table cellSpacing="1" cellPadding="4" vAlign="top"
-											align="left" bgcolor="#aaaaaa" width="100%">
+											align="left" bgcolor="#aaaaaa" width="100%" class="inside">
 											<thead>
 											<tr bgcolor="eeeeee">
-												<td width="5%" class="ignore"></td>
-												<td align="left" width="20%" style="cursor: pointer;"
+												<td width="5%" class="inside"></td>
+												<td align="left" class="inside" width="20%" style="cursor: pointer;"
 													onclick="sortSubmit(1)"
 													onMouseOver="this.className='colHeaderOver'"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
 													key="aim:currCode">Code</digi:trn></b></td>
-												<td align="left" width="35%" style="cursor: pointer;"
+												<td align="left" class="inside" width="35%" style="cursor: pointer;"
 													onclick="sortSubmit(2)"
 													onMouseOver="this.className='colHeaderOver'"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
 													key="aim:currencyName">Currency Name</digi:trn></b></td>
-												<td colspan="2" align="left" style="cursor: pointer;"
+												<td colspan="2" align="left" class="inside" style="cursor: pointer;"
 													onMouseOver="this.className='colHeaderOver'"
 													onclick="sortSubmit(3)"
 													onMouseOut="this.className='colHeaderLink'"><b><digi:trn
@@ -242,7 +242,7 @@ function submitPages(){
 											<tbody class="yui-dt-data">
 											<c:if test="${empty aimCurrencyForm.currency}">
 												<tr bgcolor="#f4f4f2">
-													<td colspan="5" align="center"><digi:trn
+													<td colspan="5" align="center" class="inside"><digi:trn
 														key="aim:noCurrencies">No currencies present</digi:trn></td>
 												</tr>
 											</c:if>
@@ -259,7 +259,7 @@ function submitPages(){
 											}
 											index++;
 											%>
-														<td align="left" width="3" class="ignore"><c:if
+														<td align="left" width="3" class="inside"><c:if
 															test="${curr.activeFlag == 1}">
 															<c:set var="translation">
 																<digi:trn key="aim:clickHereToMakeTheCurrencyInactive">
@@ -279,15 +279,15 @@ function submitPages(){
 																title="${translation}"> <digi:img
 																src="module/aim/images/bullet_grey.gif" border="0" /></a>
 														</c:if></td>
-														<td align="left"><a
+														<td align="left" class="inside"><a
 															href="javascript:editCurrency('${curr.currencyCode}')">
 														<digi:trn
 															key='aim:currency:${fn:replace(curr.currencyCode, " ", "_")}'>${curr.currencyCode}</digi:trn>
 														</a></td>
-														<td align="left"><a
+														<td align="left" class="inside"><a
 															href="javascript:editCurrency('${curr.currencyCode}')">
 														${curr.currencyName}</a></td>
-														<td align="left"><a
+														<td align="left" class="inside"><a
 															href="javascript:editCurrency('${curr.currencyCode}')">
 														<c:if test="${curr.countryLocation.id!=null}">
 															<digi:trn>${curr.countryLocation.name}</digi:trn>

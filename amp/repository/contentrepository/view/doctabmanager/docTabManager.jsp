@@ -210,7 +210,7 @@
 											<div id="public_markup" align="left">											</div>									</td>
 								</tr>
 							</table>
-							<center><button class="buton" type="buttonx" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button></center>
+							<center><button class="buttonx" type="button" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button></center>
 							<bean:define id="filterDivId" value="publicFilterDivId" toScope="request" />
 							<jsp:include page="../filters/filters.jsp"/>	 
 					</td>

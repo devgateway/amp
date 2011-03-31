@@ -99,7 +99,7 @@ function submitPages(){
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
@@ -120,9 +120,9 @@ function submitPages(){
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td colspan="2" height=16 valign="center" width=571><span class=subtitle-blue>
+					<td colspan="2" height=25 align="center" width=1000 bgcolor="#c7d4db"><span class=subtitle-blue>
 						<digi:trn key="aim:currencyManager">
-							Currency Manager
+							<b style="font-size:12px;">Currency Manager</b>
 						</digi:trn></span>
 						<digi:errors/>
 					</td>

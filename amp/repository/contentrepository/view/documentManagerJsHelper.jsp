@@ -10,9 +10,9 @@
 .yui-tt{ background: LightYellow; border-color: black }
 .yui-skin-sam .yui-dt th{background:#C7D4DB}
 
-.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 100%}
+.all_markup table {border-collapse:collapse;border: 1px solid #CCCCCC;  width: 100%}
 .all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px;}
-.all_markup th {padding:.25em;background-color:#000000; font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup th {padding:.25em;background-color:#f2f2f2; font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
 .all_markup .yui-dt {width: 100%;} 
@@ -26,7 +26,7 @@
 
 
 .versions_markup {margin:1em; overflow: auto; } 
-.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
+.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #CCCCCC;} 
 .versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}

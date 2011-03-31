@@ -189,16 +189,16 @@
 											</select>
 										</span>
 										<br/><br/>
-										<center><input type="submit" class="butonx" value="<digi:trn>Submit</digi:trn>" /></center>
+										<center><input type="submit" class="buttonx" value="<digi:trn>Submit</digi:trn>" /></center>
 										</form>
 										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />									</td>
 								</tr>
 								<tr>
 						        	<td>
-								    	<button id="publicFilterButtonId" class="buton" type="button" onclick="publicListObj.getFilterPanel('publicFilterButtonId','publicFilterDivId').show();">
+								    	<button id="publicFilterButtonId" class="buttonx" type="button" onclick="publicListObj.getFilterPanel('publicFilterButtonId','publicFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
-								    	<button id="publicLabelButtonId" class="buton" type="button" onclick="fPanel.toggleView();">
+								    	<button id="publicLabelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
 								    	</button>								    </td>								    
 								</tr>
@@ -210,7 +210,7 @@
 											<div id="public_markup" align="left">											</div>									</td>
 								</tr>
 							</table>
-							<button class="buton" type="button" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button>
+							<center><button class="buton" type="buttonx" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button></center>
 							<bean:define id="filterDivId" value="publicFilterDivId" toScope="request" />
 							<jsp:include page="../filters/filters.jsp"/>	 
 					</td>

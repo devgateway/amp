@@ -78,16 +78,18 @@ public class ReportHeadingsXLS extends XLSExporter {
 				if (  summaryReport == null  || !summaryReport ) {
 					Column tempCol			= (Column)columnReport.getItems().get(0);
 					maxRowSpan				= (tempCol.getRowSpan()>maxRowSpan)?tempCol.getRowSpan():maxRowSpan;
+                                        if(maxRowSpan>1) maxRowSpan-=1;
 				}
 				else {
 					Iterator<Column> colIter	= columnReport.getItems().iterator();
 					while ( colIter.hasNext() ) {
 						Column tempCol	= colIter.next();
-						maxRowSpan		= (tempCol.getRowSpan()>maxRowSpan)?tempCol.getRowSpan():maxRowSpan;
+						maxRowSpan		= (tempCol.getCurrentRowSpan()>maxRowSpan)?tempCol.getCurrentRowSpan():maxRowSpan;
 					}
 					if ( maxRowSpan > 3 ) maxRowSpan = 3;
-				}  
-				if(maxRowSpan>1) makeRowSpan(maxRowSpan-1,true);
+                                        
+				}
+                                makeRowSpan(maxRowSpan,true);
 				sheet.setColumnWidth((short)colId.value, (short)5120);
 			}
 			else

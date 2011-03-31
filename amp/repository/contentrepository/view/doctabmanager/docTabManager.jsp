@@ -129,14 +129,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td style="border:1px solid #CCCCCC;">
 						<table border="0" cellPadding="1" cellSpacing="0" width="980" style="position: relative; font-size:12px;" align=center>
 								<tr>
 									<td>
 										<form name="publicViewPositionForm" method="POST" action="/contentrepository/publicDocTabManager.do?action=savePositions">
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 1</digi:trn>:
-											<select name="select" class="inp-text" style="font-size: 10px;">
+											<select name="select" class="inp-text" style="font-size: 10px; margin-right:20px;">
                                               <option value="-1">
                                                 <digi:trn>Please select from below</digi:trn>
                                               </option>
@@ -151,7 +151,7 @@
 </span>&nbsp;
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 2</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px; margin-right:20px;">
 												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
 													<c:set var="optionSelected"> </c:set>
@@ -164,7 +164,7 @@
 										</span>
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 3</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
+											<select name="publicViewPosition" class="inp-text" style="font-size: 10px; margin-right:20px;">
 												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
 													<c:set var="optionSelected"> </c:set>
@@ -189,7 +189,7 @@
 											</select>
 										</span>
 										<br/><br/>
-										<input type="submit" class="buton" value="<digi:trn>Submit</digi:trn>" />
+										<center><input type="submit" class="butonx" value="<digi:trn>Submit</digi:trn>" /></center>
 										</form>
 										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />									</td>
 								</tr>

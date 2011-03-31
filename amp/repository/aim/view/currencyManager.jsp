@@ -173,7 +173,7 @@ function submitPages(){
 														<td bgcolor="#f4f4f2"><c:set
 															var="trnGoBtn">
 															<digi:trn key="aim:goBtn"> Go </digi:trn>
-														</c:set> <input type="button" value="${trnGoBtn}" class="dr-menu"
+														</c:set> <input type="button" value="${trnGoBtn}" class="buttonx"
 															onclick="applyFilter()" /></td>
 													</tr>
 												</table>
@@ -183,19 +183,17 @@ function submitPages(){
 											<tr>
 												<td bgcolor="#f4f4f2">
 												<table cellpadding="0" cellSpacing=2 align="left" border="0"
-													vAlign="center">
+													vAlign="center" style="font-size:12px;">
 													<tr>
-														<td bgcolor="#f4f4f2" vAlign="center" width="170"
-															align="left"><digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
+														<td bgcolor="#f4f4f2" vAlign="center" 
+															align="left" style="padding-right:10px;"><digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
 														</td>
-														<td bgcolor="#f4f4f2" vAlign="center" width="50"
-															align="left"><html:text property="numRecords"
-															size="3" styleClass="inp-text" /></td>
+														
 														<td bgcolor="#f4f4f2" vAlign="center" align="left"><c:set
 															var="trnViewBtn">
 															<digi:trn key="aim:trnViewBtn"> View </digi:trn>
 														</c:set> <input type="button" value="${trnViewBtn}"
-															class="dr-menu" onclick="submitPages()" /></td>
+															class="buttonx" onclick="submitPages()" /></td>
 													</tr>
 												</table>
 												</td>
@@ -472,7 +470,7 @@ function submitPages(){
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title><digi:trn
 													key="aim:otherLinks">
-															<b style="font-size:12px;">Other links</b>
+															<b style="font-size:12px; padding-left:5px;">Other links</b>
 															</digi:trn></td>
 												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 											</tr>

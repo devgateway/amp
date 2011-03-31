@@ -101,7 +101,6 @@ function submitPages(){
 <tr><td>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
@@ -151,7 +150,7 @@ function submitPages(){
 
 
 										<table cellpadding="1" cellspacing="1" align="left"
-											bgcolor="#dddddd" width="330">
+											bgcolor="#dddddd" width="100%">
 											<tr>
 												<td bgcolor="#f4f4f2">
 												<table cellpadding="0" cellSpacing=2 align="left" border="0"
@@ -221,7 +220,7 @@ function submitPages(){
 										<!-- Currency list table -->
 										<!--  to export table we are adding class "report" to its container -->
 										<table cellSpacing="1" cellPadding="4" vAlign="top"
-											align="left" bgcolor="#aaaaaa" width="500">
+											align="left" bgcolor="#aaaaaa" width="100%">
 											<thead>
 											<tr bgcolor="eeeeee">
 												<td width="5%" class="ignore"></td>
@@ -470,11 +469,11 @@ function submitPages(){
 									border="0">
 									<tr>
 										<td><!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="10"0>
+										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title><digi:trn
 													key="aim:otherLinks">
-															Other links
+															<b style="font-size:12px;">Other links</b>
 															</digi:trn></td>
 												<td background="module/aim/images/corner-r.gif" height="17"
 													width=17>&nbsp;</td>
@@ -484,9 +483,9 @@ function submitPages(){
 									</tr>
 									<tr>
 										<td bgColor="#ffffff" class="box-border">
-										<table cellPadding=5 cellspacing="1" width="100%">
+										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
-												<td><digi:img src="module/aim/images/arrow-014E86.gif"
+												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 													width="15" height="10" /> <c:set var="translation">
 													<digi:trn>Click here to go back to admin home page</digi:trn>
 												</c:set> <digi:link href="/admin.do" title="${translation}">
@@ -494,7 +493,7 @@ function submitPages(){
 												</digi:link></td>
 											</tr>
 											<tr>
-												<td><digi:img src="module/aim/images/arrow-014E86.gif"
+												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 													width="15" height="10" /> <c:set var="translation">
 													<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
 												</c:set> <digi:link
@@ -504,7 +503,7 @@ function submitPages(){
 												</digi:link></td>
 											</tr>
 											<tr>
-												<td><digi:img src="module/aim/images/arrow-014E86.gif"
+												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 													width="15" height="10" /> <c:set var="translation">
 													<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
 												</c:set> <digi:link href="/selectFilteredRates.do"

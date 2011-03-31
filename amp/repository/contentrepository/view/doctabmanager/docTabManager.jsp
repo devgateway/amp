@@ -124,29 +124,31 @@
 					</td>
 				</tr>
 				<tr>
-					<td height="16" vAlign="center" width="571">
+					<td height="16" vAlign="center" width="1000">
 						<digi:errors />
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 20px" >
+						<table border="0" cellPadding="1" cellSpacing="0" width="980" style="position: relative; font-size:12px;" align=center>
 								<tr>
 									<td>
 										<form name="publicViewPositionForm" method="POST" action="/contentrepository/publicDocTabManager.do?action=savePositions">
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 1</digi:trn>:
-											<select name="publicViewPosition" class="inp-text" style="font-size: 10px;">
-												<option value="-1"><digi:trn>Please select from below</digi:trn></option>
-												<c:forEach var="filter" items="${myForm.availableDocumentFilters}">
-													<c:set var="optionSelected"> </c:set>
-													<c:if test="${filter.publicViewPosition==0}">
-														<c:set var="optionSelected">selected="selected"</c:set>
-													</c:if>
-													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
-												</c:forEach>
-											</select>
-										</span>
+											<select name="select" class="inp-text" style="font-size: 10px;">
+                                              <option value="-1">
+                                                <digi:trn>Please select from below</digi:trn>
+                                              </option>
+                                              <c:forEach var="filter" items="${myForm.availableDocumentFilters}">
+                                                <c:set var="optionSelected"> </c:set>
+                                                <c:if test="${filter.publicViewPosition==0}">
+                                                  <c:set var="optionSelected">selected="selected"</c:set>
+                                                </c:if>
+                                                <option value="${filter.id}" ${optionselected}>${filter.name}</option>
+                                              </c:forEach>
+                                            </select>
+</span>&nbsp;
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 2</digi:trn>:
 											<select name="publicViewPosition" class="inp-text" style="font-size: 10px">
@@ -158,7 +160,7 @@
 													</c:if>
 													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
 												</c:forEach>
-											</select>
+											</select>&nbsp;
 										</span>
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 3</digi:trn>:
@@ -171,7 +173,7 @@
 													</c:if>
 													<option value="${filter.id}" ${optionSelected}>${filter.name}</option>
 												</c:forEach>
-											</select>
+											</select>&nbsp;
 										</span>
 										<span style="white-space: nowrap;">
 											<digi:trn>Position 4</digi:trn>:
@@ -189,8 +191,7 @@
 										<br/><br/>
 										<input type="submit" class="buton" value="<digi:trn>Submit</digi:trn>" />
 										</form>
-										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />
-									</td>
+										<hr style="width: 97%;margin-left: 0px; margin-right: 15px;" />									</td>
 								</tr>
 								<tr>
 						        	<td>
@@ -199,18 +200,14 @@
 								    	</button>
 								    	<button id="publicLabelButtonId" class="buton" type="button" onclick="fPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
-								    	</button>
-								    </td>								    
+								    	</button>								    </td>								    
 								</tr>
 								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;"/></td></tr>
 								<tr>
 									<td>
 										<br />
-											<div id="publicFilterInfoDiv"  >
-											</div>
-											<div id="public_markup" align="left">
-											</div>
-									</td>
+											<div id="publicFilterInfoDiv"  >											</div>
+											<div id="public_markup" align="left">											</div>									</td>
 								</tr>
 							</table>
 							<button class="buton" type="button" onclick="showTitlePanel();"><digi:trn>Save currently applied filter</digi:trn></button>

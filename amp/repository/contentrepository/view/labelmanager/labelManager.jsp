@@ -255,7 +255,7 @@
 		<input type="hidden" name="editParentUUID" />
 		<input type="hidden" name="editUUID" />
 		<input type="hidden" name="editLabelType" />
-		<table>
+		<table width=300 align=center style="font-size:12px;">
 			<tr>
 				<td><digi:trn>Name</digi:trn></td>
 				<td><input type="text" name="editLabelName" /></td>
@@ -269,8 +269,8 @@
 				<td><input type="text" name="editLabelBackgroundColor" onclick="showColorPickerPanel(this)" onfocus="showColorPickerPanel(this)" /></td>
 			</tr>
 			<tr>
-				<td colspan="2">
-					<button type="submit"><digi:trn>Submit</digi:trn></button>
+				<td colspan="2" align=center>
+					<button type="submit" styleClass="buttonx"><digi:trn>Submit</digi:trn></button>
 				</td>
 			</tr>
 		</table>

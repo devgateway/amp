@@ -205,12 +205,10 @@
 				</tr>
 				<tr>
 					<td height="25" align=center width="1000" bgcolor=#c7d4db>
-						<span class="subtitle-blue">
-							<digi:trn>
+						<digi:trn>
 								<b style="font-size:12px;">Resources Label Manager</b>
 							</digi:trn>
-						</span>
-					</td>
+						</td>
 				</tr>
 				<tr>
 					<td height="16" vAlign="center" width="571">
@@ -270,7 +268,7 @@
 			</tr>
 			<tr>
 				<td colspan="2" align=center>
-					<button type="submit" styleClass="buttonx"><digi:trn>Submit</digi:trn></button>
+					<button type="submit" class="buttonx"><digi:trn>Submit</digi:trn></button>
 				</td>
 			</tr>
 		</table>

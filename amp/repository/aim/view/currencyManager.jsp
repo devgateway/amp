@@ -217,7 +217,7 @@ function submitPages(){
 										<!-- Currency list table -->
 										<!--  to export table we are adding class "report" to its container -->
 										<table cellSpacing="1" cellPadding="4" vAlign="top"
-											align="left" bgcolor="#aaaaaa" width="100%" class="inside">
+											align="left" width="100%" class="inside">
 											<thead>
 											<tr bgcolor="eeeeee">
 												<td width="5%" class="inside"></td>
@@ -293,7 +293,7 @@ function submitPages(){
 															<digi:trn>${curr.countryLocation.name}</digi:trn>
 														</c:if> </a></td>
 														<!--  tds marked with class "ignore" will be ignored during export -->
-														<td align="right" class="ignore"><a
+														<td align="right" class="inside"><a
 															href="javascript:deleteCurrency('${curr.currencyCode}')">
 														<digi:img src="../ampTemplate/images/deleteIcon.gif"
 															border="0" alt="Delete this Currency" /> </a></td>
@@ -306,12 +306,12 @@ function submitPages(){
 									</tr>
 									<tr>
 										<td><!-- Pagination -->
-										<table width="460" cellSpacing="1" cellPadding="0"
+										<hr />
+										<table width="100%" cellSpacing="1" cellPadding="0"
 											vAlign="top">
 											<tr>
-												<td>&nbsp;</td>
-												<td align="right" width="184">
-												<table cellSpacing="1" cellPadding="2" vAlign="top"
+												<td>
+												  <table cellSpacing="1" cellPadding="2" vAlign="top"
 													align="left">
 													<tr>
 														<td align="left" bgcolor="#ffffff" width="3"><digi:img
@@ -320,13 +320,11 @@ function submitPages(){
 															key="aim:denotesAnActiveCurrency">
 															Denotes an active currency</digi:trn></td>
 													</tr>
-												</table>
-												</td>
+												  </table></td>
 											</tr>
 											<tr>
-												<td width="200" align="left"></td>
-												<td align="right" width="184">
-												<table cellSpacing="1" cellPadding="2" vAlign="top"
+												<td align="left">
+												  <table cellSpacing="1" cellPadding="2" vAlign="top"
 													align="left">
 													<tr>
 														<td align="left" bgcolor="#ffffff" width="3"><digi:img
@@ -335,12 +333,11 @@ function submitPages(){
 															key="aim:denotesAnInActiveCurrency">
 															Denotes an inactive currency</digi:trn></td>
 													</tr>
-												</table>
-												</td>
+												  </table></td>
 											</tr>
 											<c:if test="${!empty aimCurrencyForm.pages}">
 												<tr>
-													<td colspan="2" align="left">Pages : <c:if
+													<td align="left">Pages : <c:if
 														test="${aimCurrencyForm.currentPage > 1}">
 														<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 															class="java.util.HashMap" />
@@ -354,8 +351,7 @@ function submitPages(){
 														<digi:link href="/currencyManager.do"
 															style="text-decoration=none" name="urlParamsFirst"
 															title="${translation}">
-													&lt;&lt;
-												</digi:link>
+&lt;&lt;												</digi:link>
 														<jsp:useBean id="urlParamsPrevious" type="java.util.Map"
 															class="java.util.HashMap" />
 														<c:set target="${urlParamsPrevious}" property="page"
@@ -368,8 +364,7 @@ function submitPages(){
 														<digi:link href="/currencyManager.do"
 															name="urlParamsPrevious" style="text-decoration=none"
 															title="${translation}">
-													&lt;
-												</digi:link>
+&lt;												</digi:link>
 													</c:if> <c:set var="length" value="${aimCurrencyForm.pagesToShow}"></c:set>
 													<c:set var="start" value="${aimCurrencyForm.offset}" /> <logic:iterate
 														name="aimCurrencyForm" property="pages" id="pages"
@@ -383,16 +378,14 @@ function submitPages(){
 														<c:set target="${urlParams1}" property="order"
 															value="${aimCurrencyForm.order}" />
 														<c:if test="${aimCurrencyForm.currentPage == pages}">
-															<font color="#FF0000"><%=pages%></font>
-														</c:if>
+															<font color="#FF0000"><%=pages%></font>														</c:if>
 														<c:if test="${aimCurrencyForm.currentPage != pages}">
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 															</c:set>
 															<digi:link href="/currencyManager.do" name="urlParams1"
 																title="${translation}">
-																<%=pages%>
-															</digi:link>
+																<%=pages%>															</digi:link>
 														</c:if>
 												|&nbsp;
 											</logic:iterate> <c:if
@@ -411,8 +404,7 @@ function submitPages(){
 														<digi:link href="/currencyManager.do"
 															style="text-decoration=none" name="urlParamsNext"
 															title="${translation}">
-													&gt;
-												</digi:link>
+&gt;												</digi:link>
 														<jsp:useBean id="urlParamsLast" type="java.util.Map"
 															class="java.util.HashMap" />
 														<c:if
@@ -435,8 +427,7 @@ function submitPages(){
 														<digi:link href="/currencyManager.do"
 															style="text-decoration=none" name="urlParamsLast"
 															title="${translation}">
-													&gt;&gt; 
-												</digi:link>
+&gt;&gt;												</digi:link>
 												&nbsp;&nbsp;
 											</c:if> <c:out value="${aimCurrencyForm.currentPage}"></c:out> <digi:trn
 														key="aim:of">of</digi:trn> <c:out

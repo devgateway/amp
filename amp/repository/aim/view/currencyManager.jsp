@@ -127,7 +127,7 @@ function submitPages(){
 					</td>
 				</tr>
 					<tr>
-						<td align="left">
+						<td align="left" colspan=5>
 						<!--  please note that this page contains form and you can not nested it inside other form -->
 						<jsp:include
 							page="/repository/aim/view/exportTable.jsp" /></td>
@@ -153,14 +153,13 @@ function submitPages(){
 											bgcolor="#dddddd" width="100%">
 											<tr>
 												<td bgcolor="#f4f4f2">
-												<table cellpadding="0" cellSpacing=2 align="left" border="0"
-													width="330">
+												<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px;">
 													<tr>
-														<td bgcolor="#f4f4f2" align="left" width="100"><b><digi:trn
+														<td bgcolor="#f4f4f2" align="left" style="padding-right:10px;"><b><digi:trn
 															key="aim:filterBy">Filter By</digi:trn>:</b></td>
-														<td bgcolor="#f4f4f2" align="right" width="80"><digi:trn
+														<td bgcolor="#f4f4f2" style="padding-right:10px;"><digi:trn
 															key="aim:currencies">Currencies</digi:trn></td>
-														<td bgcolor="#f4f4f2" align="left" width="100"><html:select
+														<td bgcolor="#f4f4f2" style="padding-right:10px;"><html:select
 															property="filterByCurrency" styleClass="inp-text">
 															<html:option value="">--<digi:trn
 																	key="aim:all">All</digi:trn>--</html:option>
@@ -171,7 +170,7 @@ function submitPages(){
 																<digi:trn key="aim:inactivecurrencies">Inactive Currencies</digi:trn>
 															</html:option>
 														</html:select></td>
-														<td bgcolor="#f4f4f2" align="right" width="50"><c:set
+														<td bgcolor="#f4f4f2"><c:set
 															var="trnGoBtn">
 															<digi:trn key="aim:goBtn"> Go </digi:trn>
 														</c:set> <input type="button" value="${trnGoBtn}" class="dr-menu"
@@ -475,8 +474,7 @@ function submitPages(){
 													key="aim:otherLinks">
 															<b style="font-size:12px;">Other links</b>
 															</digi:trn></td>
-												<td background="module/aim/images/corner-r.gif" height="17"
-													width=17>&nbsp;</td>
+												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 											</tr>
 										</table>
 										</td>

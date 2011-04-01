@@ -96,16 +96,16 @@
 										align=left>
 
 										<tr>
-											<td>
-											<table width="100%" style="font-size:12px;" bgcolor=#F2F2F2>
+											<td bgcolor=#F2F2F2>
+											<table width="100%" style="font-size:12px; margin:10px;">
 												<tr>
-													<td><digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font
+													<td style="padding-right:10px;"><digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font
 														color="red">*</font>:</td>
 													<td><html:textarea name="aimAddSectorForm"
 														property="secSchemeName" rows="1" cols="35" /></td>
 												</tr>
 												<tr>
-													<td><digi:trn key="aim:SchemeCode">Scheme Code</digi:trn><font
+													<td style="padding-right:10px;"><digi:trn key="aim:SchemeCode">Scheme Code</digi:trn><font
 														color="red">*</font>:</td>
 													<td><html:text name="aimAddSectorForm"
 														property="secSchemeCode" size="5" /></td>
@@ -115,7 +115,7 @@
 
 												<tr>
 													<td>&nbsp;</td>
-													<td>&nbsp;&nbsp; <input type="button" class="buttonx"
+													<td valign=top><input type="button" style="margin-top:10px;" class="buttonx"
 														name="addBtn"
 														value='<digi:trn key="btn:save">Save</digi:trn>'
 														onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')" />

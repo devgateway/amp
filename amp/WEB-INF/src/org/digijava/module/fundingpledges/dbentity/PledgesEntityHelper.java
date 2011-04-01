@@ -633,4 +633,33 @@ public class PledgesEntityHelper {
 		}
 		return retValue;
 	}
+
+	public static void updateFundingPledgeDetail(FundingPledgesDetails fpd) throws DgException {
+		Session session = null;
+		Transaction tx=null;
+		try {
+			session = PersistenceManager.getSession();
+			tx=session.beginTransaction();
+			session.update(fpd);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Error saving pledge detail",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save pledge action",ex);
+				}
+				throw new DgException("Cannot save Pledge detail!",e);
+			}
+		} finally {
+        	try {
+        		if (session != null) {
+        			PersistenceManager.releaseSession(session);
+        		}
+        	} catch (Exception ex) {
+        		logger.error("releaseSession() failed");
+        	}
+        }
+	}
 }

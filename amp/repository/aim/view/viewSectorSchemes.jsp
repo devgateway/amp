@@ -71,7 +71,7 @@
 
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left class="inside">
 									<thead>
-										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" class="inside">
+										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" >
 											<!-- Table title -->
 											<digi:trn key="aim:schemes"><b style="font-size:12px;">Schemes</b></digi:trn>
 											<!-- end table title -->
@@ -79,7 +79,7 @@
 										</thead>
 													<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
 													<tr bgcolor="#ffffff">
-														<td colspan="5" align="center" class="inside"><b>
+														<td colspan="5" align="center"><b>
 															<digi:trn key="aim:noSchemes">
 															No Schemes present
 															</digi:trn>
@@ -92,7 +92,7 @@
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
-														<td width="256" bgcolor="#ffffff" class="inside">
+														<td width="80%" bgcolor="#ffffff" class="inside">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -109,7 +109,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="97" align="right" class="inside">
+														<td bgcolor="#ffffff" width="10%" align="right" class="inside">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -123,7 +123,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="75" align="left" class="inside">
+														<td bgcolor="#ffffff" width="10%" align="left" class="inside">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">

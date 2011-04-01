@@ -110,6 +110,9 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimQuarterlyComparisonsForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -148,7 +151,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <digi:form action="/quarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm"
 
-type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
+type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="get" styleId="myForm">
 
 
 
@@ -157,6 +160,8 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 <html:hidden property="ampFundingId" />
 
 <html:hidden property="transactionType" />
+
+
 
 <html:hidden property="tabIndex" />
 <table width="98%" cellspacing="3" cellpadding="3" valign="top" bgcolor="#f4f4f4" border="0">
@@ -313,7 +318,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                   </tr>
                 </table></td>
               </logic:equal>
-              <td><html:submit value="GO" styleClass="dr-menu"/>
+              <td><input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
               </td>
             </tr>
           </table>
@@ -482,6 +487,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                           <c:set var="translation">
                             <digi:trn key="aim:clickToViewYearlyComparisons">Click here to view Yearly Comparisons</digi:trn>
                           </c:set>
+                          <c:set target="${urlShowQuarterly}" property="currency"  >
+							<bean:write name="aimQuarterlyComparisonsForm" property="currency"/>
+						  </c:set>
                           <digi:link href="/viewYearlyComparisons.do" name="urlShowQuarterly" title="${translation}" > <strong>
                             <digi:trn key="aim:showYearly">Show Yearly</digi:trn>
                           </strong> </digi:link>
@@ -514,6 +522,11 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 <script language="javascript">
 setStripsTable("dataTable", "tableEven", "tableOdd");
 setHoveredTable("dataTable", false);
+
+function go() {
+	document.getElementById("myForm").action = "/aim/viewMonthlyComparisons.do";
+	document.getElementById("myForm").submit();
+}
 </script>
 </digi:form>
 </logic:equal>

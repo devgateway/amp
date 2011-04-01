@@ -48,6 +48,27 @@
 	option.enbl {
 		color:Black;;
 	}
+	
+	
+	div.sec_map_filter_outer_frame {
+		border: 1px solid gray;
+	}
+	
+	div.sec_map_filter_container {
+		border: 1px solid;
+		border-top-color: white;
+		border-left-color: white;
+		border-bottom-color: black;
+		border-right-color: black;
+		border-right-width: 2px;
+		border-bottom-width: 2px;
+	}
+	
+	td.sec_map_filter_title {
+		background-color: #222e5d;
+		color:white;
+		font-weight:bold;
+	}
 		
 	td.sec_selector_tree {
 		height: 100%;
@@ -181,93 +202,119 @@
 
 <div class="filter_wnd_background_holder" style="display:none;">
 	
-	<div class="filter_wnd_background">&nbsp;
-	</div>
+	<div class="filter_wnd_background">&nbsp;</div>
 	
-	<div id="filter_dialog" style="position:absolute;z-index:101;">
-		<table bgcolor="white" border="1" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
+	<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;">
+		<div class="sec_map_filter_container">
+			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
+				<tr><td colspan="3" class="sec_map_filter_title"><digi:trn>Map filters</digi:trn></td></tr>
+				<field:display name="Source of Data" feature="GIS DASHBOARD">
+				<tr>
+					<td>
+						<digi:trn>Source of Data</digi:trn>
+					</td>
+					<td align="right">
+	            <select id="mapModeFin" style="width:250px" value="commitment">
+	            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
+	            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
+	        	</select>
+	        </td>
+	        <td width="10">
+			        &nbsp;
+					</td>
+				</tr>
+			</field:display>
+				
+				
+				<tr id="fundingTypeRow">
+					<td>
+						<digi:trn>Funding type</digi:trn>
+					</td>
+					<td align="right">
+	            <select id="fundingType" onChange="" style="width:250px" value="commitment">
+	            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
+	            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
+	            </field:display>
+	            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
+	            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
+	            </field:display>
+	            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
+	            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
+	            </field:display>
+	        	</select>
+	        </td>
+	        <td width="10">
+			        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
+					</td>
+				</tr>
+				
+				<tr>
+	        <td>
+	             <digi:trn>Select Donor</digi:trn>:
+	        </td>
+					<td align="right">
+						<select id="donorsCombo" onChange="" style="width:250px">
+							<option value="-1"><digi:trn>All Donors</digi:trn></option>
+							<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
+								<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>
+							</logic:iterate>
+						</select>
+					</td>
+					<td width="10">
+			        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
 			
-			<tr>
-				<td>
-					<digi:trn>Map mode</digi:trn>
+					</td>
+				</tr>
+				
+				<field:display name="Show fundings only from curent WS" feature="GIS DASHBOARD">
+				<tr>
+					<td>
+						<digi:trn>Show data only for workspace selected</digi:trn>
+					</td>
+					<td align="right">
+            <input id="showOnlyCurentWS" type="checkbox" value="true">
+	        </td>
+	        <td width="10">
+			        &nbsp;
+					</td>
+				</tr>
+			</field:display>
+				
+				
+				
+				<tr>
+					<td colspan="3">
+						<hr>
+					</td>
+				</tr>
+						
+						
+				<tr>
+					<td colspan="2">
+						<digi:trn>Select Sector</digi:trn>
+					</td>
+					<td width="10">
+		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
+					</td>
 				</td>
-				<td align="right">
-            <select id="mapModeFin" style="width:250px" value="commitment">
-            	<option value="fundingData"><digi:trn>Activity Funding Data</digi:trn></option>
-            	<option value="pledgesData"><digi:trn>Pledges Data</digi:trn></option>
-        	</select>
-        </td>
-        <td width="10">
-		        &nbsp;
-				</td>
-			</tr>
-			
-			
-			<tr id="fundingTypeRow">
-				<td>
-					<digi:trn>Funding type</digi:trn>
-				</td>
-				<td align="right">
-            <select id="fundingType" onChange="" style="width:250px" value="commitment">
-            <field:display name="Measure Commitment" feature="GIS DASHBOARD">
-            	<option value="commitment"><digi:trn>Commitment</digi:trn></option>
-            </field:display>
-            <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
-            	<option value="disbursement"><digi:trn>Disbursement</digi:trn></option>
-            </field:display>
-            <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
-            	<option value="expenditure"><digi:trn>Expenditure</digi:trn></option>
-            </field:display>
-        	</select>
-        </td>
-        <td width="10">
-		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select whether the map should be highlighted according to Donor Commitments or Donor Disbursements</digi:trn>" />
-				</td>
-			</tr>
-			
-			<tr>
-        <td>
-             <digi:trn>Select Donor</digi:trn>:
-        </td>
-				<td align="right">
-					<select id="donorsCombo" onChange="" style="width:250px">
-						<option value="-1"><digi:trn>All Donors</digi:trn></option>
-						<logic:iterate name="gisDashboardForm" property="allDonorOrgs" id="donor">
-							<option value="<bean:write name="donor" property="value"/>"><bean:write name="donor" property="label"/></option>
-						</logic:iterate>
-					</select>
-				</td>
-				<td width="10">
-		        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="${translation}" />
-		
-				</td>
-			</tr>
-					
-			<tr>
-				<td colspan="2">
-					<digi:trn>Select Sector</digi:trn>
-				</td>
-				<td width="10">
-	        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" title="<digi:trn>Select the OECD/DAC sector for which you'd like to see the funding information on the map</digi:trn>" />
-				</td>
-			</td>
-			<tr>
-				<td colspan="3">
-					<div id="sector_selector_hider">
-				    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
-				  </div>
-				</td>
-			</tr>
-			
-			<tr><td align='right' colspan="3">
-			<input type='button' value='Apply' onClick='applySectorFilter()'>
-				&nbsp;
-			<input type='button' value='Cancel' onClick='closeSectorFilter()'>
-			</td></tr>
-			
-			
-		</table>
-  </div>
+				<tr>
+					<td colspan="3">
+						<div id="sector_selector_hider">
+					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
+					  </div>
+					</td>
+				</tr>
+				
+				<tr><td align='right' colspan="3">
+				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
+					&nbsp;
+				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
+				</td></tr>
+				
+				
+			</table>
+	  </div>
+	</div>
 </div>
 
 
@@ -591,7 +638,7 @@
     </tr>
     
     <tr>
-    	<td><input type="button" value="Show filters" onClick = "showFinFilters()"></td>
+    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
     </tr>
     
     <c:set var="translation">

@@ -353,6 +353,7 @@ public class ReportWizardAction extends MultiAction {
 							break;
 						}else{
 							/*if Project Title column is already added then remove it from hierarchies list*/
+							if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
 							AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
 							break;
 						}

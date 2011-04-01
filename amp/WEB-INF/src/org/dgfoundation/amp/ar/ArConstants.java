@@ -58,6 +58,9 @@ public final class ArConstants {
 
 	
 	public final static String DONOR="Donor Agency";
+	public final static String MODE_OF_PAYMENT="Mode of Payment";
+	public final static String FUNDING_STATUS="Funding Status";
+	
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
 	
@@ -225,6 +228,8 @@ public final class ArConstants {
 	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
 	public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
 	
+	
+	public static final String PLEDGES_REPORT="pledgereport";
 	
 	//Columns order names
 	public static final String PLEDGES_COLUMNS="Pledges Columns";

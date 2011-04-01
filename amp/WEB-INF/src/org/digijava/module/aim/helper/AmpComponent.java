@@ -18,6 +18,15 @@ public class AmpComponent
 	private Collection responsibleActor;
 	//used in selectComponent.jsp
 	private String ShortName;
+	private String description;
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	private int count;
 

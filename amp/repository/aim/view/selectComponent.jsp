@@ -63,8 +63,7 @@
 								<td align="right"><digi:trn key="aim:comptype">
 									              Component Type
 									              </digi:trn></td>
-								<td><html:select property="components.selectedType"
-									styleClass="inp-text" styleId="selectedType">
+								<td><html:select property="components.selectedType" styleClass="inp-text" styleId="selectedType">
 									
 									<html:option value="-1">
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
@@ -87,12 +86,25 @@
 								<digi:trn key="aim:title">Title</digi:trn> 
 							</td>
 							<td>
-								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
+								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/>
 								<html:button property="components.addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>
+								
 							</td>
 						</tr>
+						<field:display name="Admin - Component Description" feature="Admin - Component">
+							<tr>
+								<td align="right">
+									<digi:trn key="aim:description">Description</digi:trn> 
+								</td>
+								<td>
+									<html:textarea styleId="newCompoenentName" property="components.componentDesc" value="<%=eaForm.getComponents().getComponentDesc()%>" cols="40"></html:textarea>
+								</td>
+							</tr>
+						</field:display>
+												    
+						
 					</table>
 					
 

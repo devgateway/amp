@@ -807,10 +807,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount = 0;
 		
 		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
+			request.getSession().removeAttribute(ArConstants.PLEDGES_REPORT);
 			filter.generateFilterQuery(request);
 		}else {
 			pledgereport = true;
-			request.getSession().setAttribute("pledgereport", "true");
+			request.getSession().setAttribute(ArConstants.PLEDGES_REPORT, "true");
 			filter.generateFilterQuery(request);
 		}
 		

@@ -373,19 +373,19 @@
     <action name="aimViewContractingForm" path="/aim/contractingBreakdown" scope="request" type="org.digijava.module.aim.action.ContractingBreakdown" validate="false" />
     <action name="aimActivityDashboardForm" path="/aim/activityDashboard" scope="request" type="org.digijava.module.aim.action.ViewActivityDashboard" validate="false" />
     <action name="aimRegionalFundingForm" path="/aim/getRegionalFundings" scope="session" type="org.digijava.module.aim.action.GetRegionalFundings" validate="false" />
-    <action input="/aim/viewFinancingBreakdownFilter" name="aimFinancingBreakdownForm" path="/aim/financingBreakdownFilter" scope="request" type="org.digijava.module.aim.action.FinancingBreakdownFilter" validate="true" />
+    <action input="/aim/viewFinancingBreakdownFilter" name="aimFinancingBreakdownForm" path="/aim/financingBreakdownFilter" scope="request" type="org.digijava.module.aim.action.FinancingBreakdownFilter" validate="false" />
     <action name="aimFinancialOverviewForm" path="/aim/financialOverview" scope="request" type="org.digijava.module.aim.action.ViewFinancialOverview" validate="false" />
-    <action input="/aim/viewYearlyInfo" name="aimYearlyInfoForm" path="/aim/yearlyInfo" scope="request" type="org.digijava.module.aim.action.ViewYearlyInfo" validate="true" />
-    <action input="/aim/viewYearlyInfoFilter" name="aimYearlyInfoForm" path="/aim/yearlyInfoFilter" scope="request" type="org.digijava.module.aim.action.YearlyInfoFilter" validate="true" />
-    <action input="/aim/viewQuarterlyInfo" name="aimQuarterlyInfoForm" path="/aim/quarterlyInfo" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyInfo" validate="true" />
+    <action input="/aim/viewYearlyInfo" name="aimYearlyInfoForm" path="/aim/yearlyInfo" scope="request" type="org.digijava.module.aim.action.ViewYearlyInfo" validate="false" />
+    <action input="/aim/viewYearlyInfoFilter" name="aimYearlyInfoForm" path="/aim/yearlyInfoFilter" scope="request" type="org.digijava.module.aim.action.YearlyInfoFilter" validate="false" />
+    <action input="/aim/viewQuarterlyInfo" name="aimQuarterlyInfoForm" path="/aim/quarterlyInfo" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyInfo" validate="false" />
     <action input="/aim/viewMonthlyInfo" name="aimMonthlyInfoForm" path="/aim/monthlyInfo" scope="request" type="org.digijava.module.aim.action.ViewMonthlyInfo"  />
-    <action input="/aim/viewQuarterlyGrouping" name="aimQuarterlyInfoForm" path="/aim/quarterlyGrouping" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyGrouping" validate="true" />
-    <action input="/aim/viewQuarterlyInfoFilter" name="aimQuarterlyInfoForm" path="/aim/quarterlyInfoFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyInfoFilter" validate="true" />
-    <action input="/aim/viewQuarterlyComparisons" name="aimQuarterlyComparisonsForm" path="/aim/quarterlyComparisons" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyComparisons" validate="true" />
+    <action input="/aim/viewQuarterlyGrouping" name="aimQuarterlyInfoForm" path="/aim/quarterlyGrouping" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyGrouping" validate="false" />
+    <action input="/aim/viewQuarterlyInfoFilter" name="aimQuarterlyInfoForm" path="/aim/quarterlyInfoFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyInfoFilter" validate="false" />
+    <action input="/aim/viewQuarterlyComparisons" name="aimQuarterlyComparisonsForm" path="/aim/quarterlyComparisons" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyComparisons" validate="false" />
     <action input="/aim/viewMonthlyComparisons" name="aimMonthlyInfoForm" path="/aim/monthlyComparisons" scope="request" type="org.digijava.module.aim.action.ViewMonthlyInfo" validate="false" />
-    <action input="/aim/viewQuarterlyComparisonsFilter" name="aimQuarterlyComparisonsForm" path="/aim/quarterlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyComparisonsFilter" validate="true" />
-    <action input="/aim/viewYearlyComparisons" name="aimYearlyComparisonsForm" path="/aim/yearlyComparisons" scope="request" type="org.digijava.module.aim.action.ViewYearlyComparisons" validate="true" />
-    <action input="/aim/viewYearlyComparisonsFilter" name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="true" />
+    <action input="/aim/viewQuarterlyComparisonsFilter" name="aimQuarterlyComparisonsForm" path="/aim/quarterlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyComparisonsFilter" validate="false" />
+    <action input="/aim/viewYearlyComparisons" name="aimYearlyComparisonsForm" path="/aim/yearlyComparisons" scope="request" type="org.digijava.module.aim.action.ViewYearlyComparisons" validate="false" />
+    <action input="/aim/viewYearlyComparisonsFilter" name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false" />
     <action name="aimQuarterlyDiscrepancyForm" path="/aim/quarterlyDiscrepancy" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancy" validate="false" />
     <action input="/aim/viewQuarterlyDiscrepancyFilter" name="aimQuarterlyDiscrepancyForm" path="/aim/quarterlyDiscrepancyFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyDiscrepancyFilter" validate="true" />
     <action name="aimYearlyDiscrepancyForm" path="/aim/yearlyDiscrepancy" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancy" validate="false" />

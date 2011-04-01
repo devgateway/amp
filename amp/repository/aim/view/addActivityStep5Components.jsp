@@ -286,12 +286,14 @@
 														<td colspan="2">
 															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0
 															class="box-border-nopadding">
-															<tr><td width="100%" bgcolor="#dddddd" height="15">
-																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a
-																project to achieve component objectives</digi:trn>">
-																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
-																</a>
-															</td></tr>
+															<tr>
+																<td width="100%" bgcolor="#dddddd" height="15">
+																	<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a
+																	project to achieve component objectives</digi:trn>">
+																		<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
+																	</a>
+																</td>
+															</tr>
 															<field:display name="Add Physical Progress Link" feature="Physical Progress">
 															<c:if test="${empty selComponents.phyProgress}">
 																<tr><td colspan="2"><b>
@@ -308,12 +310,17 @@
 																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																		<tr>
 																		<field:display name="Add Physical Progress Link" feature="Physical Progress">
-																		<td vAlign="center" align="left" width="95%">
+																		<td vAlign="top" align="left" width="35%">
 																			<a href="javascript:addPhyProgess(<bean:write name="phyProg"
 																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
 																				<bean:write name="phyProg" property="title" /> -
 																				<bean:write name="phyProg" property="reportingDate" />
 																			</a>
+																		</td>
+																		</field:display>
+																		<field:display name="Physical Progress Description" feature="Physical Progress">
+																		<td valign="middle" align="left" width="60%">
+																				<bean:write name="phyProg" property="description" />
 																		</td>
 																		</field:display>
 																		<field:display name="Remove Physical Progress Link" feature="Physical Progress">

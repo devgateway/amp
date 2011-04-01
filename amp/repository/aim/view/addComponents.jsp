@@ -162,8 +162,8 @@ function closeWindow()
                                           </td>
                                         </tr>
 
-                                  </tr>
-								  </field:display>
+								  		</field:display>
+								  <tr>
                                   <td width=30% align = right>
                                      <font color=red>*
                                       <digi:trn key="aim:addNewComponent:mandatoryFields">
@@ -171,6 +171,7 @@ function closeWindow()
                                       </digi:trn>
                                     </font>
                                   </td>
+                                  </tr>
                                   <tr>
                                     <td colspan="2" width="60%">
                                       <table width="100%" cellspacing="5">

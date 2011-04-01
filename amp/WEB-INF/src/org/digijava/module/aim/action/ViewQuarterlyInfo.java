@@ -76,11 +76,16 @@ public class ViewQuarterlyInfo extends TilesAction	{
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setCurrency(fp.getCurrencyCode());
+			//formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams",fp);
+			
+			String fpCurrencyCode = fp.getCurrencyCode();
+			if(formBean.getCurrency() != null) {
+				fp.setCurrencyCode(formBean.getCurrency());
+			}
 
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
@@ -115,7 +120,7 @@ public class ViewQuarterlyInfo extends TilesAction	{
 						yearlyInfo, Constants.ACTUAL);
 				formBean.setTotalActual(strTotalActual);
 			}
-			
+			fp.setCurrencyCode(fpCurrencyCode);
 		}
 		return null;
 	}

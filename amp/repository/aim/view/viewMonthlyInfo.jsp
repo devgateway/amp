@@ -108,6 +108,9 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimMonthlyInfoForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -147,6 +150,9 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 
 <c:set target="${urlAll}" property="tabIndex" value="2"/>
+<c:set target="${urlAll}" property="currency"  >
+	<bean:write name="aimMonthlyInfoForm" property="currency"/>
+</c:set>
 
 
 
@@ -189,7 +195,7 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 
 
-<digi:form action="/monthlyInfo.do" name="aimMonthlyInfoForm" type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
+<digi:form action="/monthlyInfo.do" name="aimMonthlyInfoForm" type="org.digijava.module.aim.form.MonthlyInfoForm" method="get" styleId="myForm">
     
     
     
@@ -200,8 +206,7 @@ function setHoveredTable(tableId, hasHeaders) {
     <html:hidden property="transactionType" />
     
     <html:hidden property="tabIndex" />
-    
-    
+     
     
     <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
         
@@ -558,7 +563,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                             
                                                                             <TD>
                                                                                 
-                                                                                <html:submit value="GO" styleClass="dr-menu"/>
+                                                                                <input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
                                                                                 
                                                                             </TD>
                                                                             
@@ -823,6 +828,11 @@ setHoveredTable("dataTable", false);
     
     </digi:form>
 <script>
+function go() {
+	document.getElementById("myForm").action = "/aim/viewMonthlyInfo.do";
+	document.getElementById("myForm").submit();
+}
+
 if(document.getElementById('showBottomBorder').value=='1'){
 	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
 }

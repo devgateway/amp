@@ -258,14 +258,15 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
 </logic:iterate>
  
-<feature:display name="Enable New User Registration" module="Login - User Management"></feature:display> 
+<feature:display name="Enable New User Registration" module="Login - User Management"></feature:display>
  
-<field:display name="Add Observations Button" feature="Regional Observations"></field:display>
-<field:display name="Measures Taken" feature="Regional Observations"></field:display>
-<field:display name="Add Measures Link" feature="Regional Observations"></field:display>
-<field:display name="Add Actors Link" feature="Regional Observations"></field:display>
-<field:display name="Actors" feature="Regional Observations"></field:display>
-<field:display name="Observation Date" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations" feature="Regional Observations"></field:display> 
+<field:display name="Regional Observations Add Button" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Measures Taken" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Add Measures Link" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Add Actors Link" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 

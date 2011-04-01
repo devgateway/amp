@@ -474,7 +474,8 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	}
 
 	public void generateFilterQuery(HttpServletRequest request) {
-		if (request.getSession().getAttribute("pledgereport") != null && request.getSession().getAttribute("pledgereport").toString().equalsIgnoreCase("true")){
+		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
+				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
 		
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("

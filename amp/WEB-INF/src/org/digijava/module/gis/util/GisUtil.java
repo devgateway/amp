@@ -147,6 +147,13 @@ public class GisUtil {
             float yPos = canvasHeight - (yOffset + (ccRect.getBottom() +
                          (ccRect.getTop() - ccRect.getBottom()) / 2) * scale);
 
+            if (xPos < border) {
+                xPos = border;
+            }
+
+            if (xPos > canvasWidth - glv.getVisualBounds().getWidth() - border) {
+                xPos = (float) (canvasWidth - glv.getVisualBounds().getWidth() - border);
+            }
 
             CoordinateRect captionRect =
             new CoordinateRect((int)xPos, (int)(xPos + glv.getVisualBounds().getWidth()),
@@ -576,6 +583,7 @@ public class GisUtil {
     }
 
     public XMLDocument getImageMap(List mapData,
+                                   int mapLevel,
                                    int pointsPerShape,
                                    int canvasWidth,
                                    int canvasHeight,
@@ -624,6 +632,14 @@ public class GisUtil {
             XML segmentNode = null;
 
             segmentNode = new XML("segment");
+            //Add region DB Id also
+            Long regionId = DbUtil.getLocationIdByName(gms.getSegmentCode(), mapLevel);
+            if (regionId != null) {
+                segmentNode.addAttribute("regLocId", regionId);
+            } else {
+                segmentNode.addAttribute("regLocId", -1);
+            }
+
             segmentNode.addAttribute("name", gms.getSegmentName());
             segmentNode.addAttribute("code", gms.getSegmentCode());
             if (gms.getSegmentDescription() != null) {

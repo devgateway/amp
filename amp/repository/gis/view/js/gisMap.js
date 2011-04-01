@@ -224,11 +224,21 @@
             var donorId = document.getElementById('donorsCombo').value;
             var uniqueStr = (new Date()).getTime();
             var mapMode = $("#mapModeFin").val();
+            if (mapMode == null) {
+            	mapMode = 0;
+            }
             if (mapLevel == null) {
                 mapLevel = 2;
             }
+            
+            var onlyCurWS = $("#showOnlyCurentWS").attr("checked");
+            if (onlyCurWS == null) {
+            	onlyCurWS = false;
+            }
+            
+            
             //setBusy(true);
-            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 
             $("#testMap").attr({src: newUrl});
             
@@ -877,6 +887,15 @@
 		$("#sector_selector_expander").bind('change', showFinFilters);
 		$("#mapModeFin").bind('change', mapModeFinChanged);
 		
+		
+    var selSectorScheme = $(".sec_scheme_selector_selected").attr('id');
+		var selSector = $(".sec_selector_item_selected").attr('id');
+		var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
+    var selectionTxt = getSectorSelectionText (queryParam);
+    $('#sectorSelected').html(selectionTxt);
+		$('#sectorSelected').attr('title', selectionTxt);
+
+		
 	}
 	
 	function mapModeFinChanged() {
@@ -1108,7 +1127,7 @@
 				retVal += " href=\"javascript:return null\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
 				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
-				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";
+				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "','" + segment.attributes.getNamedItem("regLocId").value + "')\">";
 			}
 		}
 		retVal += "</map>";
@@ -1514,7 +1533,7 @@
 	}
 	
 	//Region popup report
-	function showRegionReport(regCode, regName) {
+	function showRegionReport(regCode, regName, regLocId) {
 		var mapLevel = getRadioValue("mapLevelRadio");
 		if (mapLevel == null) {
 			mapLevel = 2;
@@ -1524,7 +1543,7 @@
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
 		var donorId = document.getElementById('donorsCombo').value;
 	
-		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
+		var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
 		//alert(regRepUrl);
 		var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		

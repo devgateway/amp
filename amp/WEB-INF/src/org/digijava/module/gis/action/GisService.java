@@ -178,6 +178,7 @@ public class GisService extends Action {
 
 
             String imageMapCode = gisUtil.getImageMap(mapDataSegments, 10, canvasWidth,
+                                    2,
                                    canvasHeight, mapLeft, mapRight, mapTop,
                                    mapBottom).toString();
 

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -21,6 +22,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.mortbay.jetty.servlet.SessionManager;
 
 /**
  * <p>Title: </p>
@@ -245,10 +247,59 @@ public class DbUtil {
     }
 
     public static List getSectorFoundings(Long sectorId) {
-        return getSectorFoundings(sectorId, SELECT_DEFAULT);
+        return getSectorFoundings(sectorId, SELECT_DEFAULT, null);
     }
 
-    public static List getSectorFoundings(Long sectorId, int sectorQueryType) {
+    public static Long getLocationIdByName (String locationName, int mapLevel) {
+        Long retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select reg.id from ");
+            queryStr.append(AmpCategoryValueLocations.class.getName());
+            queryStr.append(" as reg where reg.name = :REG_NAME ");
+            queryStr.append(" and reg.parentCategoryValue.value = :MAP_LEVEL");
+
+            Query q = sess.createQuery(queryStr.toString());
+
+
+            String mapLevelParam = null;
+            if (mapLevel == 2) {
+                mapLevelParam = "Region";
+            } else if (mapLevel == 3) {
+                mapLevelParam = "District";
+            } else {
+                throw new DgException("Incorrect map level parameter");
+            }
+            q.setString("REG_NAME", locationName);
+            q.setString("MAP_LEVEL", mapLevelParam);
+            retVal = (Long) q.uniqueResult();
+        } catch (Exception ex) {
+            logger.debug("Unable to get region ID from DB", ex);
+        }
+
+
+        return retVal;
+    }
+
+    public static String getLocationNameById (Long locId) {
+        String retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select reg.name from ");
+            queryStr.append(AmpCategoryValueLocations.class.getName());
+            queryStr.append(" as reg where reg.id = :REG_ID");
+            Query q = sess.createQuery(queryStr.toString());
+            q.setLong("REG_ID", locId);
+            retVal = (String) q.uniqueResult();
+        } catch (Exception ex) {
+            logger.debug("Unable to get region name from DB", ex);
+        }
+        return retVal;
+    }
+
+    public static List getSectorFoundings(Long sectorId, int sectorQueryType, Long teamId) {
         List subSectorIds = null;
         if (sectorId > -1) {
             if (sectorQueryType == SELECT_SECTOR_SCHEME) {
@@ -278,17 +329,59 @@ public class DbUtil {
                         whereCaluse.append(",");
                     }
                 }
-                StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+
+
+                //Get only activities with fundings
+                /*
+                List actsToGet = getActIdsHavingFundings();
+                StringBuffer actWhereClause = new StringBuffer(" sec.activityId.ampActivityId in (");
+                Iterator <Long> it = actsToGet.iterator();
+                while (it.hasNext()) {
+                    Long actId = it.next();
+                    actWhereClause.append(actId);
+                    if (it.hasNext()) {
+                        actWhereClause.append(",");
+                    }
+                }
+                actWhereClause.append(")");  */
+
+
+                //Get only activities with regional and district locations
+                List actsToGet = getActIdsHavingRegionalAndDistrictLevels();
+                StringBuffer actWhereClause = new StringBuffer(" and sec.activityId.ampActivityId in (");
+                Iterator <Long> it = actsToGet.iterator();
+                while (it.hasNext()) {
+                    Long actId = it.next();
+                    actWhereClause.append(actId);
+                    if (it.hasNext()) {
+                        actWhereClause.append(",");
+                    }
+                }
+                actWhereClause.append(")");
+
+
+                StringBuffer qs = new StringBuffer("select distinct sec.activityId, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
-                qs.append(" sec where sec.sectorId in (");
+                qs.append(" sec where sec.activityId.draft=false and sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(")");
-                qs.append(" and sec.activityId.team is not null");
+                qs.append(" and sec.activityId.team is not null ");
+                if (sectorQueryType == SELECT_SECTOR_SCHEME) {
+                    qs.append(actWhereClause);
+                }
+
+                if (teamId != null) {
+                    qs.append(" and sec.activityId.team.ampTeamId = :TEAM_ID");
+                }
+
                 q = session.createQuery(qs.toString());
+                if (teamId != null) {
+                    q.setLong("TEAM_ID", teamId);
+                }
            } else {
                 //Get only activities with regional and district locations
                 List actsToGet = getActIdsHavingRegionalAndDistrictLevels();
-                StringBuffer whereClause = new StringBuffer(" where sec.activityId.ampActivityId in (");
+                StringBuffer whereClause = new StringBuffer(" and sec.activityId.ampActivityId in (");
                 Iterator <Long> it = actsToGet.iterator();
                 while (it.hasNext()) {
                     Long actId = it.next();
@@ -301,8 +394,17 @@ public class DbUtil {
                 //q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec where sec.activityId.");
                 StringBuffer qs = new StringBuffer("select distinct sec.activityId, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
-                qs.append(" sec");
+                qs.append(" sec where sec.activityId.draft=false");
                 qs.append(whereClause);
+
+                if (teamId != null) {
+                    qs.append(" and sec.activityId.team.ampTeamId = :TEAM_ID");
+                }
+
+                q = session.createQuery(qs.toString());
+                if (teamId != null) {
+                    q.setLong("TEAM_ID", teamId);
+                }
 
                 q = session.createQuery(qs.toString());
             }
@@ -323,6 +425,24 @@ public class DbUtil {
             qs.append("select distinct actLoc.activity.ampActivityId from ");
             qs.append(AmpActivityLocation.class.getName());
             qs.append(" actLoc where actLoc.location.regionLocation != null and (actLoc.location.regionLocation.parentCategoryValue.value = 'Region' or actLoc.location.regionLocation.parentCategoryValue.value = 'Zone')");
+            q = session.createQuery(qs.toString());
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get activity IDs from DB", ex);
+        }
+        return retVal;
+    }
+
+    public static List getActIdsHavingFundings() {
+        List<Long> retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer qs = new StringBuffer();
+            qs.append("select distinct actFundDet.ampFundingId.ampActivityId.ampActivityId from ");
+            qs.append(AmpFundingDetail.class.getName());
+            qs.append(" as actFundDet");
             q = session.createQuery(qs.toString());
             retVal = q.list();
         } catch (Exception ex) {
@@ -1107,30 +1227,44 @@ public class DbUtil {
        }
    }
 
-    public static XMLDocument getAllSectorsAsHierarchyXML() {
-        return getAllSectorsAsHierarchyXML(SECTORS_FOR_ACTIVITIES);
+    public static XMLDocument getAllSectorsAsHierarchyXML(boolean showSecondarySectorSchemes) {
+        return getAllSectorsAsHierarchyXML(SECTORS_FOR_ACTIVITIES, showSecondarySectorSchemes);
 
     }
 
-    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode) {
+    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showSecondarySectorSchemes) {
         Collection <AmpSectorScheme> schemes = SectorUtil.getAllSectorSchemes();
         Long primarySchemeId = null;
+        List<AmpClassificationConfiguration> allClassificationConfigs  = null;
         try {
             primarySchemeId = SectorUtil.getPrimaryConfigClassificationId();
+            allClassificationConfigs  = SectorUtil.getAllClassificationConfigs();
         } catch (DgException ex) {
 
         }
+
+        Set multySectorSchemIDs = new HashSet();
+        for (AmpClassificationConfiguration ampccs : allClassificationConfigs) {
+            if (ampccs.isMultisector()) {
+                multySectorSchemIDs.add(ampccs.getClassification().getAmpSecSchemeId());
+            }
+        }
+
         XMLDocument xmlDoc = new XMLDocument();
         XML root = new XML("sector-tree");
         xmlDoc.addElement(root);
 
+
         for (AmpSectorScheme scheme : schemes) {
+            boolean primary = (primarySchemeId != null && primarySchemeId.equals(scheme.getAmpSecSchemeId()));
+           if (primary || (multySectorSchemIDs.contains(scheme.getAmpSecSchemeId()) && showSecondarySectorSchemes)) {
+
             XML schemeNode = new XML("scheme");
             schemeNode.addAttribute("name", scheme.getSecSchemeName());
             schemeNode.addAttribute("code", scheme.getSecSchemeCode());
             schemeNode.addAttribute("id", scheme.getAmpSecSchemeId());
 
-            boolean primary = (primarySchemeId != null && primarySchemeId.equals(scheme.getAmpSecSchemeId()));
+
 
             schemeNode.addAttribute("primary", primary);
 
@@ -1147,6 +1281,7 @@ public class DbUtil {
             }
 
             root.addElement(schemeNode);
+           }
         }
         return xmlDoc;
     }
@@ -1308,17 +1443,19 @@ public class DbUtil {
             Query q = session.createQuery(qStr.toString());
 
             retVal = q.list();
-            //init lazy collection. with getRequestDBSession it should work but does not
-
+            /*
             Iterator <FundingPledgesSector> psi = retVal.iterator();
             while (psi.hasNext()) {
                 FundingPledgesSector fps = psi.next();
                 fps.getPledgeid().getOrganization();
             }
+            */
 
 		} catch (Exception e) {
 			logger.error("Error getting pledges, " + e);
-		} finally {
+		}
+        /*
+        finally {
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);
@@ -1327,7 +1464,7 @@ public class DbUtil {
 				logger.debug("releaseSession() failed");
 			}
 		}
-
+        */
 
         return retVal;
     }

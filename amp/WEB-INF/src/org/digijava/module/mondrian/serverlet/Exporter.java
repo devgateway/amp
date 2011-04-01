@@ -32,6 +32,14 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.mondrian.query.QueryThread;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,6 +55,8 @@ import com.tonbeller.wcf.component.RendererParameters;
 import com.tonbeller.wcf.controller.RequestContext;
 import com.tonbeller.wcf.controller.RequestContextFactoryFinder;
 import com.tonbeller.wcf.utils.XmlUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 
 public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 	/**
@@ -67,6 +77,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 				&& request.getParameter("type") != null) {
 			try {
 				String xslUri = null;
+				String currency = QueryThread.getCurrency();
 				int type = Integer.parseInt(request.getParameter("type"));
 				switch (type) {
 				case XML:
@@ -173,6 +184,34 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							ExporterHelper helper = new ExporterHelper(wb);
 							
 							NodeList rowslist = document.getElementsByTagName("row");
+							
+							String textamount = null;
+							String textcurrency = null;
+							String currencytext = null;
+							//for translation purposes
+							Site site = QueryThread.getSite();
+							Locale navigationLanguage = QueryThread.getLocale();
+							
+							if (site != null && location !=null){
+								String siteId=site.getId().toString();
+								String locale=navigationLanguage.getCode();	
+							
+								if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+									textamount = TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
+								}
+							
+								if(currency!= null) {
+									AmpCurrency currobj = CurrencyUtil.getCurrencyByCode(currency);
+									textcurrency=TranslatorWorker.translateText(currobj.getCountryName(),locale,siteId);
+									currencytext = TranslatorWorker.translateText("Currency",locale,siteId);
+								}
+							
+								helper.addMergenoBorder(rowslist.getLength()+1, 0, rowslist.getLength()+1, 1);
+								HSSFRow currencyrow = wb.getSheet("data").createRow((short) (rowslist.getLength()+1));
+								helper.addCellBlue(textamount + " - " + currencytext +" : " + textcurrency,0 , currencyrow);
+							}
+							
+							
 							for (int i = 0; i < rowslist.getLength(); i++) {
 								HSSFRow row = wb.getSheet("data").createRow((short) (i));
 								NodeList rownode = rowslist.item(i).getChildNodes();

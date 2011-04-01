@@ -387,7 +387,7 @@ public class DEImportBuilder {
 		activity.setName("");
 		//TODO default language to be added is en
 		String lang = "en";
-		if(actType.getTitle()!=null)
+		if(actType.getTitle()!=null && actType.getTitle().size() >0 )
 		{
 			boolean found=false;
 			ArrayList<FreeTextType> titlesList=(ArrayList<FreeTextType>) actType.getTitle();
@@ -418,7 +418,7 @@ public class DEImportBuilder {
 	private void processDescription(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
 		//description
-		if(actType.getDescription()!=null){
+		if(actType.getDescription()!=null && actType.getDescription().size()>0 ){
 			activity.setDescription(setEditorFreeTextType(actType.getDescription(), activity, "aim-desc-00-"));
 		}
 	}
@@ -426,7 +426,7 @@ public class DEImportBuilder {
 	//objective
 	private void processObjective(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		if(actType.getObjective()!=null){
+		if(actType.getObjective()!=null && actType.getObjective().size() > 0){
 			activity.setObjective(setEditorFreeTextType(actType.getObjective(), activity, "aim-obj-00-"));
 		}
 	}
@@ -434,7 +434,7 @@ public class DEImportBuilder {
 	
 	private void processActivityAssigningOrg(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		if(actType.getId() != null){
+		if(actType.getId() != null && actType.getId().size() > 0){
 			Set internalIds = new HashSet();
 			ArrayList<Id> ids = (ArrayList<Id>) actType.getId();
 			for (Iterator it = ids.iterator(); it.hasNext();) {
@@ -457,7 +457,7 @@ public class DEImportBuilder {
 
 	//proposed Approval date
 	private void processProposedApprovalDate(AmpActivity activity, ActivityType actType){
-	  if(actType.getProposedApprovalDate()!=null){
+	  if(actType.getProposedApprovalDate()!=null && "".compareTo(actType.getProposedApprovalDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getProposedApprovalDate().getDate());
 		  if(date!=null)
 			  activity.setProposedApprovalDate(date);
@@ -466,7 +466,7 @@ public class DEImportBuilder {
 
 	//closing date
 	private void processClosingDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getClosingDate()!=null){
+	  if(actType.getClosingDate()!=null && "".compareTo(actType.getClosingDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getClosingDate().getDate());
 		  if(date!=null)
 			  activity.setProposedCompletionDate(date);
@@ -475,7 +475,7 @@ public class DEImportBuilder {
 
 	//modified closing date
 	private void processModifiedClosingDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getModifiedClosingDate()!=null){
+	  if(actType.getModifiedClosingDate()!=null && "".compareTo(actType.getModifiedClosingDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getModifiedClosingDate().getDate());
 		  if(date!=null)
 			  activity.setActualCompletionDate(date);
@@ -485,7 +485,7 @@ public class DEImportBuilder {
 	  
 	//actual start date
 	private void processActualStartDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getActualStartDate()!=null){
+	  if(actType.getActualStartDate()!=null && "".compareTo(actType.getActualStartDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getActualStartDate().getDate());
 		  if(date!=null)
 			  activity.setActualStartDate(date);
@@ -494,7 +494,7 @@ public class DEImportBuilder {
 
 	//proposed start date
 	private void processProposedStartDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getProposedStartDate()!=null){
+	  if(actType.getProposedStartDate()!=null && "".compareTo(actType.getProposedStartDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getProposedStartDate().getDate());
 		  if(date!=null)
 			  activity.setProposedStartDate(date);
@@ -503,7 +503,7 @@ public class DEImportBuilder {
 
 	//actual Approval date
 	private void processActualApprovalDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getActualApprovalDate()!=null){
+	  if(actType.getActualApprovalDate()!=null && "".compareTo(actType.getActualApprovalDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getActualApprovalDate().getDate());
 		  if(date!=null)
 			  activity.setActualApprovalDate(date);
@@ -513,7 +513,7 @@ public class DEImportBuilder {
 	//activity status
 	private void processStatus(AmpActivity activity, ActivityType actType, Boolean update) {
 		// TODO Auto-generated method stub
-		if( actType.getStatus()!=null ){
+		if( isValidCodeValueTypeValue(actType.getStatus())){
 			
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
@@ -818,6 +818,7 @@ public class DEImportBuilder {
 
 	private void processRelatedOrgs(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
+		if(actType.getRelatedOrgs()== null || actType.getRelatedOrgs().size()<1) return;
 		ArrayList<RelatedOrgs> relatedOrgs = (ArrayList<RelatedOrgs>)actType.getRelatedOrgs();
 		Set orgRole = new HashSet();
 		if(activity.getOrgrole() !=null )
@@ -899,6 +900,7 @@ public class DEImportBuilder {
 
 	//components
 	private void processComponent(AmpActivity activity, ActivityType actType) {
+		if(actType.getComponent() == null || actType.getComponent().size() < 1) return;
 		Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
 		ArrayList<Component> componentList = (ArrayList<Component>) actType.getComponent();
 		//Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
@@ -996,7 +998,7 @@ public class DEImportBuilder {
 	private void processDocuments(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		//(new MockStrutTest()).getActionMockObjectFactory().getMockRequest();
-		if( actType.getDocuments() == null || actType.getDocuments().size() == 0 ) return;
+		if( actType.getDocuments() == null || actType.getDocuments().size() < 1 ) return;
 		
 		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
 //		DEMockTest mock = new DEMockTest();
@@ -1044,7 +1046,7 @@ public class DEImportBuilder {
 	//related links
 	private void processRelatedLinks(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		if( actType.getRelatedLinks() == null || actType.getRelatedLinks().size() == 0 ) return;
+		if( actType.getRelatedLinks() == null || actType.getRelatedLinks().size() < 1 ) return;
 		
 		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
 //		DEMockTest mock = new DEMockTest();

@@ -2124,11 +2124,15 @@ public class FeaturesUtil {
 			else feature.setHasLevel(true);
 			session.save(feature);
 			tx.commit();
-			tx = session.beginTransaction();
-			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-					templateId);
-			template.getFeatures().add(feature);
-			tx.commit();
+			
+       		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
+       		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+				tx = session.beginTransaction();
+				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+						templateId);
+				template.getFeatures().add(feature);
+				tx.commit();
+       		}
 			//session.saveOrUpdate(template);
 			//tx.commit();
 
@@ -2169,11 +2173,15 @@ public class FeaturesUtil {
 			else module.setHasLevel(true);
 			session.save(module);
 			tx.commit();
-			tx = session.beginTransaction();
-			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-					templateId);
-			template.getItems().add(module);
-			tx.commit();
+			
+			String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
+       		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+				tx = session.beginTransaction();
+				template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+						templateId);
+				template.getItems().add(module);
+				tx.commit();
+       		}
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

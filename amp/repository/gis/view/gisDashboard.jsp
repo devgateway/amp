@@ -191,6 +191,13 @@
 </script>
 
 
+<script language="JavaScript">
+	var sectorTitleTrn = "<digi:trn>Sector</digi:trn>";
+	var programTitleTrn = "<digi:trn>Program</digi:trn>";
+</script>
+
+
+
 <bean:define id="isDevInfoMode">true</bean:define>
 	<c:set var="isDevInfoMode"><feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
 </c:set>

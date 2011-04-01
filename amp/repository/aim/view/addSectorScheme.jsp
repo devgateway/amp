@@ -74,7 +74,7 @@
 										
 										<tr>
 											<td>	
-												<table width="100%" style="font-size:12px;">
+												<table width="100%" style="font-size:12px;" bgcolor=#F2F2F2>
 													<tr>
 														<td>
 															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font color="red">*</font>:
@@ -106,10 +106,7 @@
 										
 									
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding=4 valign="top" align=left bgcolor="#d7eafd">
-												
-													<!-- end page logic -->													
-											</table>
+											<!-- end page logic -->	
 										</td></tr>
 									</table>
 									
@@ -123,7 +120,7 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -139,7 +136,7 @@
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 					                            	<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>

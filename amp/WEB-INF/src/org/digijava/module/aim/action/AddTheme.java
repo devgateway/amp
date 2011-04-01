@@ -322,6 +322,7 @@ public class AddTheme extends Action {
 		ampTheme.setOutputs(themeForm.getProgramOutputs());
 		ampTheme.setBeneficiaries(themeForm.getProgramBeneficiaries());
 		ampTheme.setEnvironmentConsiderations(themeForm.getProgramEnvironmentConsiderations());
+        ampTheme.setShowInRMFilters(themeForm.getShowInRMFilters());
 
 		if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(themeForm.getParentId()));
@@ -378,6 +379,7 @@ public class AddTheme extends Action {
 		themeForm.setProgramOutputs(ampTheme.getOutputs());
 		themeForm.setProgramBeneficiaries(ampTheme.getBeneficiaries());
 		themeForm.setProgramEnvironmentConsiderations(ampTheme.getEnvironmentConsiderations());
+        themeForm.setShowInRMFilters (ampTheme.getShowInRMFilters());
 
 		if (ampTheme.getExternalFinancing() == null) {
 			themeForm.setProgramExternalFinancing(Double.valueOf(0));

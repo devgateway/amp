@@ -1664,6 +1664,7 @@ public class ProgramUtil {
 				tempAmpTheme.setExternalFinancing(editeTheme.getExternalFinancing());
 				tempAmpTheme.setInternalFinancing(editeTheme.getInternalFinancing());
 				tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
+                tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
 				
 				tx = session.beginTransaction();
 				session.update(tempAmpTheme);

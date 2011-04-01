@@ -54,8 +54,19 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 	private Double totalFinancing;
 	
 	private transient Collection<AmpTheme> transientChildren;
-	
-	private String programviewname;
+
+
+    private Boolean showInRMFilters;
+
+    public Boolean getShowInRMFilters() {
+        return showInRMFilters;
+    }
+
+    public void setShowInRMFilters(Boolean showInRMFilters) {
+        this.showInRMFilters = showInRMFilters;
+    }
+
+    private String programviewname;
         private Set programSettings;
 
 	public Set getActivities() {

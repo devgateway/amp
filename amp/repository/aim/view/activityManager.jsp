@@ -198,7 +198,7 @@
 											<td bgColor=#c7d4db height="25"
 												align="center"><!-- Table title --> <digi:trn
 												key="aim:activityList">
-												<b style="font-size:12px; font-family:Arial;">Activity List</b>
+												<b style="font-size:12px; font-family:Arial; color:#000000;">Activity List</b>
 											</digi:trn> <!-- end table title --></td>
 										</tr>
 										<tr>
@@ -251,7 +251,6 @@
 																</c:set> <input type="checkbox" id="chkAll"
 																	onclick="javascript:selectAll()"
 																	title="${trnSelectAll}" /></td>
-																	<td class="inside">&nbsp;</td>
 															</tr>
 															</thead>
 														<!--  to export table we are adding class "yui-dt-data" to its tbody-->
@@ -301,7 +300,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td bgColor=#ffffff height="20" align="left"><img
+											<td bgColor=#ffffff height="20" align="left" style="padding-top:15px;"><img
 												src="../ampTemplate/images/start_button.gif" border="0">
 											- <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
 											</td>
@@ -313,7 +312,8 @@
 
 											<tr bgcolor="#ffffff">
 												<td>
-												<table>
+												<hr />
+												<table width=100%>
 													<tr>
 														<td>
 														<%

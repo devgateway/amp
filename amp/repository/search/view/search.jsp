@@ -65,12 +65,20 @@
 	<tr>
 		<td valign="top">
 		<fieldset><digi:form action="/search.do" onsubmit="return checkKeyWord()">
+			<c:set var="keywordClasses">
+			txt_sm_b
+			</c:set>
+		
 			<c:if test="${!empty searchform.keyword}">
 				<div class="search_results_header">Search results for "<span
 					class="green_text">${searchform.keyword}</span>"</div>
+			<c:set var="keywordClasses">
+				help_search txt_sm_b
+			</c:set>
+			
 			</c:if>
 
-			<div class="help_search txt_sm_b" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: <html:text
+			<div class="${keywordClasses}" style="padding-right: 150px"><digi:trn>Keyword</digi:trn>: <html:text
 				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
 			<html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">

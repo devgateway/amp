@@ -910,6 +910,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>

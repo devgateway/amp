@@ -808,7 +808,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									                            <td align="center" width="3%">
 																	<input type="checkbox" id="checkLoc${indexLoc}"  >
 																</td>
-	                                                            <td align="left" width="67%">
+																<td align="left" width="67%">
 		                                                            [${selectedLocs.location.name}] 
 	                                                            </td>
 	                                                            <td align="right" width="15%" nowrap="nowrap">

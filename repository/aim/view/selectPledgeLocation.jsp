@@ -5,18 +5,30 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
+	function updateLocLevel(){
+		var locationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+		if ( locationLevelSelect.selectedIndex > 0 ) {
+			document.pledgeForm.action	= "/aim/selectPledgeLocation.do?edit=true";		
+			document.pledgeForm.submit();
+		}
+	}
+	
 	function locationChanged( selectId ) {
 		var selectEl		= document.getElementById(selectId);
 		document.pledgeForm.parentLocId.value = selectEl.options[selectEl.selectedIndex].value;
 		if ( document.pledgeForm.parentLocId.value != "-1" ) {
-			document.pledgeForm.action	= "/aim/pledgeLocationSelected.do?edit=true";		
+			document.pledgeForm.action	= "/aim/selectPledgeLocation.do?edit=true";		
 			document.pledgeForm.submit();
 		}
 	}
@@ -35,6 +47,7 @@
 
 <digi:form action="/pledgeLocationSelected.do" method="post">
 
+<html:hidden styleId="parentLocId" property="parentLocId" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -51,6 +64,29 @@
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellPadding=2 cellSpacing=2>
+									<tr>
+										<td>
+											<digi:trn key="aim:implementationLoc">
+                                                  Implementation Location
+                                        	</digi:trn>
+                                        </td>
+										<td vAlign="center" >
+				                      		<c:set var="translation">
+											<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+											</c:set>					
+											<category:showoptions multiselect="false" firstLine="${translation}" name="pledgeForm" property="implemLocationLevel" tag="${pledgeForm.levelId}" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+												                                             													                                             	                                              	
+				                         	<script language="Javascript">                                             	
+												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+												if(implemLocationLevelSelect!=null){
+				                            		implemLocationLevelSelect.onchange=function() {
+				                           			//removeAllLocations();
+				                          			updateLocLevel();
+				                              		}
+												}
+				                       		</script>
+										</td>
+									</tr>
 									<logic:notEmpty name="pledgeForm" property="locationByLayers">
 										<logic:iterate name="pledgeForm" property="locationByLayers" id="entry">
 											<bean:define id="myCollection" type="java.util.Collection" name="entry" property="value" />

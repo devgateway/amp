@@ -139,8 +139,10 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
 	
-	 public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
+	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "International", true);
+	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_REGIONAL = 
+		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "Regional", true);
 	 
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_ON = 
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On", true);

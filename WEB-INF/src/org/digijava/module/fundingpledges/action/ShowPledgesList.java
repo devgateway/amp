@@ -52,7 +52,9 @@ public class ShowPledgesList extends Action {
 					if (fpd.getFundingYear()!=null) {
 						pledge.getYearsList().add(fpd.getFundingYear());
 					} else if (fpd.getFunding_date()!=null) {
-						Long year = new Long(fpd.getFunding_date().getYear());
+						Long year = new Long(fpd.getFunding_date().getYear()+1900);
+						fpd.setFundingYear(year);
+						PledgesEntityHelper.updateFundingPledgeDetail(fpd);
 						pledge.getYearsList().add(year);
 					}
 				}

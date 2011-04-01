@@ -63,15 +63,15 @@
 				</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
-					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr><td noWrap width=750 vAlign="top">
+						<table cellpadding="1" cellspacing="1" width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%" class="report">
 
-									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left class="inside">
 									<thead>
-										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="20" align="center">
+										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" class="inside">
 											<!-- Table title -->
 											<digi:trn key="aim:schemes"><b style="font-size:12px;">Schemes</b></digi:trn>
 											<!-- end table title -->
@@ -79,7 +79,7 @@
 										</thead>
 													<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
 													<tr bgcolor="#ffffff">
-														<td colspan="5" align="center"><b>
+														<td colspan="5" align="center" class="inside"><b>
 															<digi:trn key="aim:noSchemes">
 															No Schemes present
 															</digi:trn>
@@ -92,7 +92,7 @@
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
-														<td width="256" bgcolor="#ffffff">
+														<td width="256" bgcolor="#ffffff" class="inside">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -109,7 +109,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="97" align="right" class="ignore">
+														<td bgcolor="#ffffff" width="97" align="right" class="inside">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -123,7 +123,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="75" align="left" class="ignore">
+														<td bgcolor="#ffffff" width="75" align="left" class="inside">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
@@ -177,9 +177,7 @@
 												<b style="font-size:12px; padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-												
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 								</td>

@@ -104,10 +104,7 @@
 											
 										</tr>	
 										
-									
-										<tr><td>
-											<!-- end page logic -->	
-										</td></tr>
+									<!-- end page logic -->
 									</table>
 									
 								</td>

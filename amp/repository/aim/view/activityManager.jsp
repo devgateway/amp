@@ -113,9 +113,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
@@ -135,7 +134,7 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:activityManager">
@@ -143,7 +142,7 @@
 						</digi:trn>
 						</span>
 					</td>
-				</tr>
+				</tr>-->
 			<tr>
 				<td align="left">
 				<!--  please note that this page contains form and you can not nested it inside other form -->
@@ -154,7 +153,7 @@
 			<digi:form action="/activityManager.do" method="post">
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
+					<table width="100%" cellpadding="1" cellspacing="1" border="0">
 						<tr>
 							<td noWrap width=600 vAlign="top">
 							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%"
@@ -196,7 +195,7 @@
 										</tr>
 
 										<tr>
-											<td bgColor=#d7eafd class=box-title height="20"
+											<td bgColor=#c7d4db class=box-title height="25"
 												align="center"><!-- Table title --> <digi:trn
 												key="aim:activityList">
 												Activity List
@@ -214,7 +213,7 @@
 													<!--  to export table we are adding class "report" to its container -->
 														<td class="report">
 														<table width="100%" cellspacing="1" cellpadding=3
-															bgcolor="#d7eafd">
+															bgcolor="#cccccc" style="font-size:12px;">
 															<thead>
 															<tr bgcolor="#ffffff">
 																<jsp:useBean id="urlParamsSort" type="java.util.Map"

@@ -141,7 +141,7 @@
 
 												<tr>
 													<td>&nbsp;</td>
-													<td>&nbsp;&nbsp; <input class="buttonx" type="button" name="addBtn"
+													<td><input class="buttonx" type="button" name="addBtn"
 														value="Save"
 														onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />')" />
 													<td>
@@ -161,7 +161,7 @@
 															height="20" align="center">
 															<!-- Table title --> <digi:trn
 													key="aim:LeveltwoSectors">
-												Level Two Sectors
+												<b>Level Two Sectors</b>
 											</digi:trn> <!-- end table title --></td>
 											</tr>
 											</thead>

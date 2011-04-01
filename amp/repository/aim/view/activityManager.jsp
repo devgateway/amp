@@ -165,7 +165,7 @@
 										align=left>
 										<tr>
 											<td>
-											<table>
+											<table style="margin-bottom:15px;5">
 												<tr>
 													<td width="195"><digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
 													<html:text property="keyword" styleClass="inp-text" /></td>
@@ -195,16 +195,16 @@
 										</tr>
 
 										<tr>
-											<td bgColor=#c7d4db class=box-title height="25"
+											<td bgColor=#c7d4db height="25"
 												align="center"><!-- Table title --> <digi:trn
 												key="aim:activityList">
-												Activity List
+												<b style="font-size:12px; font-family:Arial;">Activity List</b>
 											</digi:trn> <!-- end table title --></td>
 										</tr>
 										<tr>
 										
 											<td>
-											<table width="100%" cellspacing="1" cellpadding=4 valign="top"
+											<table width="100%" cellspacing="0" cellpadding=0 valign="top"
 												align=left bgcolor="#ffffff">
 												
 												<logic:notEmpty name="aimActivityForm"
@@ -212,23 +212,23 @@
 													<tr>
 													<!--  to export table we are adding class "report" to its container -->
 														<td class="report">
-														<table width="100%" cellspacing="1" cellpadding=3
-															bgcolor="#cccccc" style="font-size:12px;">
+														<table width="100%" cellspacing="0" cellpadding=0
+															bgcolor="#cccccc" style="font-size:12px;" class="inside">
 															<thead>
 															<tr bgcolor="#ffffff">
 																<jsp:useBean id="urlParamsSort" type="java.util.Map"
 																	class="java.util.HashMap" />
 																<c:set target="${urlParamsSort}" property="action"
 																	value="sort" />
-																<td width="9" height="15">&nbsp;</td>
-																<td><b> <c:set target="${urlParamsSort}"
+																<td width="9" height="15" class="inside">&nbsp;</td>
+																<td class="inside"><b> <c:set target="${urlParamsSort}"
 																	property="sortByColumn" value="activityName" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
 																	<digi:trn key="aim:ActivityNameCol">
 	                                                                            	Activity Name
 	                                                                            </digi:trn>
 																</digi:link> </b></td>
-																<td width="200"><b> <c:set
+																<td width="200" class="inside"><b> <c:set
 																	target="${urlParamsSort}" property="sortByColumn"
 																	value="activityTeamName" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
@@ -237,7 +237,7 @@
 	                                                                            </digi:trn>
 																</digi:link> </b></td>
 
-																<td width="100"><b> <c:set
+																<td width="100" class="inside"><b> <c:set
 																	target="${urlParamsSort}" property="sortByColumn"
 																	value="activityId" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
@@ -245,12 +245,13 @@
 	                                                                            	Activity Id
 	                                                                            </digi:trn>
 																</digi:link> </b></td>
-																<td width="5%" align="left" class="ignore"><c:set
+																<td width="5%" align="left" class="inside"><c:set
 																	var="trnSelectAll">
 																	<digi:trn>Select All</digi:trn>
 																</c:set> <input type="checkbox" id="chkAll"
 																	onclick="javascript:selectAll()"
 																	title="${trnSelectAll}" /></td>
+																	<td class="inside">&nbsp;</td>
 															</tr>
 															</thead>
 														<!--  to export table we are adding class "yui-dt-data" to its tbody-->
@@ -260,25 +261,25 @@
 																type="org.digijava.module.aim.dbentity.AmpActivity">
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
-																		<td width="9" height="15"><img
+																		<td width="9" height="15" class="inside"><img
 																			src="../ampTemplate/images/arrow_right.gif" border="0">
 																		</td>
 																	</logic:notEmpty>
 																	<logic:empty name="activities" property="team">
-																		<td width="9" height="15"><img
+																		<td width="9" height="15" class="inside"><img
 																			src="../ampTemplate/images/start_button.gif" border="0">
 																		</td>
 																	</logic:empty>
-																	<td><bean:write name="activities" property="name" />
+																	<td class="inside"><bean:write name="activities" property="name" />
 																	</td>
-																	<td width="100"><logic:notEmpty name="activities"
+																	<td width="100" class="inside"><logic:notEmpty name="activities"
 																		property="team">
 																		<bean:write name="activities" property="team.name" />
 																	</logic:notEmpty></td>
-																	<td width="100"><bean:write name="activities"
+																	<td width="100" class="inside"><bean:write name="activities"
 																		property="ampId" /></td>
 
-																	<td align="left" width="12" class="ignore"><c:set var="actId">
+																	<td align="left" width="12" class="inside"><c:set var="actId">
 																		<bean:write name="activities" property="ampActivityId" />
 																	</c:set> <input type="checkbox" value="${actId}" /></td>
 																</tr>

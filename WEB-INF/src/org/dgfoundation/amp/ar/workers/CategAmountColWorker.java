@@ -237,6 +237,23 @@ public class CategAmountColWorker extends ColumnWorker {
 			acc.getMetaData().add(termsAssistMeta);
 		}
 
+		if (columnsMetaData.contains("mode_of_payment_name")) {
+			String modeOfPayment = rs.getString("mode_of_payment_name");
+			if (modeOfPayment != null) {
+				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
+						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
+				acc.getMetaData().add(termsAssistMeta);
+			}
+		}
+
+		if (columnsMetaData.contains("funding_status_name")) {
+			String fundingStatus = rs.getString("funding_status_name");
+			if (fundingStatus != null) {
+				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
+						ArConstants.FUNDING_STATUS, fundingStatus);
+				acc.getMetaData().add(termsAssistMeta);
+			}
+		}
 
 		MetaInfo headMeta=null;
 		

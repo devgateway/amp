@@ -128,7 +128,7 @@ YAHOOAmp.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 		 			var divYuiEl    = new YAHOOAmp.util.Element(listOfDivs[i]);
 		 			if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
 		 				var buttonEl    = listOfDivs[i].getElementsByTagName("button")[0];
-		 					buttonEl.click();
+		 					if(typeof(buttonEl) != "undefined") buttonEl.click();
 		 					break;
 		 				}
 		 		}

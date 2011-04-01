@@ -123,6 +123,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 <html:hidden property="ampActivityId" />
 <html:hidden property="ampFundingId" />
 <html:hidden property="tabIndex" />
+<html:hidden property="currency" />
+
 
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">

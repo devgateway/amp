@@ -95,7 +95,7 @@ function updateObservations(id) {
 	<digi:context name="addObservation" property="context/module/moduleinstance/showUpdateObservation.do?edit=true" />
 	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addObservation%>&observations.issueId="+id,callback);
 }
-            
+
 function addMeasures(observationId) {
 	myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateRegionalObservationMeasure.do?edit=true" />

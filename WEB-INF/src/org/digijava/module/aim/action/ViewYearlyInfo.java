@@ -84,11 +84,15 @@ public class ViewYearlyInfo extends TilesAction {
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setCurrency(fp.getCurrencyCode());
+			//formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams", fp);
+			String fpCurrencyCode = fp.getCurrencyCode();
+			if(formBean.getCurrency() != null) {
+				fp.setCurrencyCode(formBean.getCurrency());
+			}
 
 			Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
 			if (yearlyInfo.size() != 0) {
@@ -128,6 +132,7 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
+			fp.setCurrencyCode(fpCurrencyCode);
 		}
 		return null;
 	}

@@ -674,29 +674,35 @@ public class SaveActivity extends Action {
 						}
 						
 						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
-							if(!hasPrimarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Primary Sector", ampContext)){
-								errors.add("noPrimarySectorsAdded",
+							if(!hasPrimarySectorsAdded ) {
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Primary Sector", ampContext)){
+									errors.add("noPrimarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
+								}
 							}
-							if(primaryPrc!=100)
+							else if(primaryPrc!=100)
 								errors.add("primarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
 						}
 
 						
 						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
-							if(!hasSecondarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Secondary Sector", ampContext)){
-								errors.add("noSecondarySectorsAdded",
-										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
+							if(!hasSecondarySectorsAdded ) {
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Secondary Sector", ampContext)){
+									errors.add("noSecondarySectorsAdded",
+										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));
+								}
 							}
-							if(hasSecondarySectorsAdded && secondaryPrc!=100)
+							else if(hasSecondarySectorsAdded && secondaryPrc!=100)
 								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 						}
                         if (Boolean.parseBoolean(eaForm.getSectors().getTertiarySectorVisible()) && isInConfig(eaForm, "Tertiary")){
-							if(!hasTertiarySectorsAdded && FeaturesUtil.isVisibleField("Validate Mandatory Tertiary Sector", ampContext)){
-								errors.add("noTertiarySectorsAdded",
+							if(!hasTertiarySectorsAdded) { 
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Tertiary Sector", ampContext)){
+									errors.add("noTertiarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors",locale,siteId)));
+								}
 							}
-							if(hasTertiarySectorsAdded && tertiaryPrc!=100)
+							else if(hasTertiarySectorsAdded && tertiaryPrc!=100)
 								errors.add("tertiarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.tertiarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all tertiary sector percentage must be 100",locale,siteId)));
 						}
 
@@ -1171,8 +1177,10 @@ public class SaveActivity extends Action {
 					}
 					ampFunding.setComments(new String(" "));
 					ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
-					ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
-					ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
+					if(fund.getActStartDate()!=null)
+						ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+					if(fund.getActCloseDate()!=null)
+						ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 					ampFunding.setAmpActivityId(activity);
 					this.saveMTEFProjections(fund, ampFunding);
 					fundings.add(ampFunding);

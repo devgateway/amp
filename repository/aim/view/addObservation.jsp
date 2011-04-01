@@ -19,7 +19,7 @@
 					addObservationForm.observation.focus();
 					return false;
 				}
-				<field:display feature="Regional Observations" name="Observation Date">
+				<field:display name="Regional Observations Date" feature="Regional Observations" >
 					if(isEmpty(document.getElementById('observation').value) == true) {	
 						var observationError2 = "<digi:trn jsFriendly='true'>Please enter observation date</digi:trn>"; 	
 						alert(observationError2);
@@ -60,7 +60,7 @@
 													</a>
 												</td>
 											</tr>								
-											<field:display feature="Regional Observations" name="Observation Date">
+											<field:display name="Regional Observations Date" feature="Regional Observations" >
 											<tr>
 												<td align="right"><digi:trn key="aim:dateOfobservation">Date of Observation</digi:trn>&nbsp;</td>
 										      	<td>

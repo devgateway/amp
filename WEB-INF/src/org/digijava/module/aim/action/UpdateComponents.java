@@ -70,6 +70,7 @@ public class UpdateComponents extends Action {
 				AmpComponent ampComp = new AmpComponent();
 				ampComp.setAmpComponentId(id);
 				ampComp.setTitle(updCompForm.getCompTitle());
+				ampComp.setDescription(updCompForm.getCompDes());
 				ampComp.setCode(updCompForm.getCompCode());
 				ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getCompType()));
 				if (updCompForm.getCompDes() == null) {

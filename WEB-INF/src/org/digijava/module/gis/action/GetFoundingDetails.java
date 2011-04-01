@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,13 +28,16 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.fundingpledges.dbentity.*;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
@@ -63,6 +67,10 @@ public class GetFoundingDetails extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         ServletOutputStream sos = null;
+
+
+
+
 
         try {
 
@@ -178,6 +186,7 @@ public class GetFoundingDetails extends Action {
 
 
                     XMLDocument xml = gisUtil.getImageMap(mapDataSegments,
+                            Integer.parseInt(mapLevel),
                             20,
                             canvasWidth,
                             canvasHeight, rect.getLeft(),
@@ -195,6 +204,20 @@ public class GetFoundingDetails extends Action {
                     response.setContentType("image/png");
                     String secIdStr = request.getParameter("sectorId");
 
+
+                    TeamMember tm = null;
+                    //AmpTeam team = null;
+                    Long teamId = null;
+
+                    boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+
+                    if (curWorkspaceOnly) {
+                        tm = (TeamMember)request.getSession().getAttribute("currentMember");
+                        if (tm != null) {
+                            AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                            teamId = team.getAmpTeamId();
+                        }
+                    }
 
                     Long secId = null;
                     int sectorQueryType = 0;
@@ -290,7 +313,7 @@ public class GetFoundingDetails extends Action {
                             secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
                         }else{
                             if (secId.longValue() > -2l) {
-                                secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType);
+                                secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
                             } else {
                                 secFundings = new ArrayList();
                             }
@@ -331,20 +354,23 @@ public class GetFoundingDetails extends Action {
 
                             segmentData.setSegmentValue(selValue.toString());
 
-                            if (min == null) {
-                                min = selValue;
-                                max = selValue;
-                            }
+                            //Hilight only if value is not 0
+                            if (selValue.longValue() != 0l) {
+                                if (min == null) {
+                                    min = selValue;
+                                    max = selValue;
+                                }
 
-                            if (selValue.compareTo(min) < 0) {
-                                min = selValue;
-                            }
+                                if (selValue.compareTo(min) < 0) {
+                                    min = selValue;
+                                }
 
-                            if (selValue.compareTo(max) > 0) {
-                                max = selValue;
-                            }
+                                if (selValue.compareTo(max) > 0) {
+                                    max = selValue;
+                                }
 
-                            segmentDataList.add(segmentData);
+                                segmentDataList.add(segmentData);
+                            }
                         }
 
                         if (min == null) {
@@ -1000,7 +1026,13 @@ public class GetFoundingDetails extends Action {
                     XMLDocument tree = null;
                     int treeMode = (request.getParameter("mode") != null && request.getParameter("mode").
                             equalsIgnoreCase("pledgesData")) ? DbUtil.SECTORS_FOR_PLEDGES : DbUtil.SECTORS_FOR_ACTIVITIES;
-                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode);
+
+                    ServletContext ampContext = getServlet().getServletContext();
+                    AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
+                    boolean showSecondaryScheme = FeaturesUtil.getFieldVisibility("Secondary Sector").isFieldActive(ampTreeVisibility);
+
+                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme);
                     tree.output(sos);
                 }
 

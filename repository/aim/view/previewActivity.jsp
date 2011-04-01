@@ -361,6 +361,7 @@ function collapseAll() {
 											</td>
 									</tr>
 								</field:display>
+ 
 									<field:display name="Contract Number" feature="Planning">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" class="t-name" >                                        
@@ -379,29 +380,19 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.identification.title}"/>&nbsp;										</td>
 									</tr>
 									</field:display>
-								                  
-						 			<field:display feature="Identification" name="Project Comments">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
-										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
-										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-                                        <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
-											<digi:edit key="${projcomKey}"></digi:edit>
-                                            </c:if>&nbsp;										</td>
-									</tr>
-									</field:display>
-                                  
-                                  <field:display name="NPD Clasification" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
-										<td class="v-name" bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>&nbsp;										
-										</td>
-									</tr>
-									</field:display>
-                                  
-                                    
+									
+								     <field:display name="Status" feature="Identification">
+                                        <tr>
+	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0"  class="t-name" ><digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
+	                                        <td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+	                                        	<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
+	                                        </td>
+                                        </tr>
+                                        <tr>
+	                                        <td valign="top" nowrap="nowrap" bgcolor="#f0f0f0"></td>
+	                                        <td bgcolor="#f0f0f0" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
+                                        </tr>
+                                    </field:display> 
                                     <!--Begin Objectives --->
 			     					<field:display feature="Identification" name="Objectives">
 			      					<field:display feature="Identification" name="Objective">
@@ -466,7 +457,8 @@ function collapseAll() {
 						 			<field:display feature="Identification" name="Description">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:description">
-											 Description</digi:trn>										</td>
+											 Description</digi:trn>
+										</td>
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
                                         <c:if test="${aimEditActivityForm.identification.description!=null}">
 											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
@@ -475,6 +467,30 @@ function collapseAll() {
 										&nbsp;</td>
 									</tr>
 									</field:display>
+
+								                  
+						 			<field:display feature="Identification" name="Project Comments">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
+										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
+										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+                                        <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
+											<digi:edit key="${projcomKey}"></digi:edit>
+                                            </c:if>&nbsp;										</td>
+									</tr>
+									</field:display>
+                                  
+                                  <field:display name="NPD Clasification" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
+										<td class="v-name" bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>&nbsp;										
+										</td>
+									</tr>
+									</field:display>
+                                  
+                                    
 									
 									<field:display name="Lessons Learned" feature="Identification">
 										<TR>
@@ -1009,6 +1025,7 @@ function collapseAll() {
 													</td>
 												</tr>
 												</field:display>
+												<!-- 
 												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
@@ -1032,24 +1049,14 @@ function collapseAll() {
 												</tr>
 												</c:if>
 												</field:display>
+												 -->
 											</table>
 											</div>										</td>
 									</tr>
                                     <!--END 15-->
                                      </feature:display>
                                     <!--16-->
-                                    <field:display name="Status" feature="Identification">
-                                        <tr>
-	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
-	                                        <td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
-	                                        </td>
-                                        </tr>
-                                        <tr>
-	                                        <td valign="top" nowrap="nowrap" bgcolor="#f0f0f0"></td>
-	                                        <td bgcolor="#f0f0f0" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
-                                        </tr>
-                                    </field:display>                                   
+                                 
                                    
 								<module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>

@@ -106,7 +106,7 @@ cursor:pointer;
             
            	<module:display name="Public Reports" parentModule="PUBLIC VIEW">
 			<li class="yuiampmenuitem" style="float:left;">
-				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;"  onclick="return canExit()">
+				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;"  onclick="return canExit()">
                     <digi:trn>Public Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
@@ -795,7 +795,7 @@ function adminHelp(){
                                         </li>
                                         
                                         <li>
-	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true"  onclick="return canExit()">
+	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true" onclick="return canExit()">
 	                                        	<digi:trn>Address Book</digi:trn>
 	                                        </a>
                                         </li>

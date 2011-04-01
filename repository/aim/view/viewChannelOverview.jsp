@@ -303,10 +303,9 @@ function commentWin(val, commentId) {
 												<TD width="49%" vAlign="top" align="left">
 												<TABLE width="100%" cellPadding="3" cellSpacing="1"
 													vAlign="top" align="left">
-													<module:display name="Project ID and Planning"
-														parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Planning"
-															module="Project ID and Planning">
+													
+													<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+														<feature:display name="Planning" module="Project ID and Planning">
 															<TR>
 																<TD>
 																<TABLE width="100%" cellPadding=2 cellSpacing=1
@@ -557,381 +556,8 @@ function commentWin(val, commentId) {
 																	</TD>
 																</TR>
 														</feature:display>
-														<feature:display module="Project ID and Planning" name="Sectors">
-															<field:display feature="Sectors" name="Level 1 Sectors List">
-																<TR>
-																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
-																		vAlign="top" align="top" bgcolor="#aaaaaa">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
-																				width=15> <b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
-																		</TR>
-																		<TR>
-																			<TD bgcolor="#ffffff">
-												                            <c:forEach var="config" items="${aimChannelOverviewForm.classificationConfigs}" varStatus="ind">
-																				<bean:define id="emptySector" value="Sector"></bean:define>
-																				<field:display name="${config.name} Sector" feature="Sectors">
-																				<c:set var="hasSectors">
-																					false
-																				</c:set>
-
-																				<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
-																					<c:if test="${actSect.configId==config.id}">
-																						<c:set var="hasSectors">
-																							true
-																						</c:set>
-																					</c:if>
-																				</c:forEach>
-																				<c:if test="${hasSectors}">
-												                                <strong>
-													                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
-													                                <c:out value="${config.name} Sector"/>
-													                                </digi:trn>
-													                                </strong>
-												                                </c:if>
-										                                        <c:if test="${!empty aimChannelOverviewForm.activitySectors}">
-																					<ul>
-																						<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
-						                                                            		<c:if test="${actSect.configId==config.id}">
-																								<li>
-																									<field:display name="Sector Scheme Name" feature="Sectors">
-																										<c:out value="${actSect.sectorScheme}" />
-																										<br/>&nbsp;
-																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
-																									</field:display>
-																									<field:display name="${config.name} Sector" feature="Sectors">
-																										<c:out value="${actSect.sectorName}" />
-																									</field:display>
-																									<c:if test="${!empty actSect.subsectorLevel1Name}">
-																										<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
-																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																											src="../ampTemplate/images/link_out_bot.gif"/>
-																										<c:out value="${actSect.subsectorLevel1Name}" />
-																										
-																											<c:if test="${!empty actSect.subsectorLevel2Name}">
-																											<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
-																												 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																													src="../ampTemplate/images/link_out_bot.gif"/>
-																												<c:out value="${actSect.subsectorLevel2Name}" />
-																												&nbsp;
-																											</field:display>
-																											</c:if>
-																										</field:display>
-																									</c:if>
-																									<field:display name="Percentage" feature="Sectors">
-				                                                                                    <logic:present name="actSect" property="sectorPercentage">
-																										<c:if test="${actSect.sectorPercentage!=0}">
-																											(<c:out value="${actSect.sectorPercentage}" />%)
-																										</c:if>
-																									</logic:present>
-																									</field:display>
-
-																								</li>
-																								</c:if>
-																						</c:forEach>
-																					</ul>
-										                                        </c:if>
-											                                    </field:display>
-																			</c:forEach>
-																			
-																			</TD>
-																		</TR>
-																	</TABLE>
-																	</TD>
-																</TR>
-
-															</field:display>
-														</feature:display>
-
-														<feature:display module="Project ID and Planning"
-															name="Location">
-															<TR>
-																<TD>
-																<TABLE width="100%" cellPadding=2 cellSpacing=1
-																	vAlign="top" align="left" bgcolor="#aaaaaa">
-																	<TR>
-																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																			height=10
-																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn key="aim:location">Location</digi:trn></b>
-																		</TD>
-																	</TR>
-																	<TR>
-																		<TD bgcolor="#ffffff">
-																		<TABLE width="100%" cellSpacing="0" cellPadding="0"
-																			vAlign="top" align="left" bgcolor="#ffffff">
-																			<TR>
-																				<TD>
-																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																					vAlign="top" align="left" bgcolor="#dddddd">
-																					<field:display name="Implementation Level"
-																						feature="Location">
-																						<TR>
-																							<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
-																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
-																								 :
-                                                                                                 [<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.implemLocationLevel}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>"  />]
-
-																							</TD>
-																						</TR>
-																					</field:display>
-																					<field:display name="Implementation Location" feature="Location">
-																					<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
-																						<i>
-																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
-																							:&nbsp;
-																						</i>
-[<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.impLocation}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />]
-
-																					</TD>
-																					</field:display>
-
-																					<c:if test="${!empty activity.locations}">
-                                                                                       
-                                                                                         <tr>
-                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
-                                                                                        	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
-	                                                                                        	 	<td align="center" bgcolor="#ffffff">
-	                                                                                         		<i>
-	                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-	                                                                                         		</i>
-	                                                                                         		</td>
-                                                                                         		</c:if>
-                                                                                        	 </c:forEach>
-                                                                                        	 <td  align="center" bgcolor="#ffffff">
-                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
-																							</td>
-                                                                                         </tr>
-																						<%--
-																						<TR>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
-																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" >
-																									<i>
-																									<category:getoptionvalue categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-																									</i>
-																								</c:if>
-																								&nbsp;
-																							</TD>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
-																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 2}" >
-																									<i>
-																									<category:getoptionvalue categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-																									</i>
-																								</c:if>
-																								&nbsp;
-																							</TD>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
-																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 3}" >
-																									<i>
-																									<category:getoptionvalue categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
-																									</i>
-																								</c:if>
-																								&nbsp;
-																							</TD>
-                                                                                              <TD  align="center" bgcolor="#ffffff">
-                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
-																							</TD>
-																							</TR>
-																						
-																						<c:forEach varStatus="varSt" var="loc" items="${activity.locations}">
-
-																							
-                                                                                            
-																							
-																							<c:if test="${not empty loc.location.ampRegion || not empty loc.location.ampZone ||not empty loc.location.ampWoreda}">
-																							
-																							<c:set var="mapParam">${mapParam}${loc.location.region}/${loc.location.zone}/${loc.locationPercentage}</c:set>
-																							<c:if test="${not varSt.last}">
-																								<c:set var="mapParam">${mapParam}|</c:set>
-																							</c:if>
-																							
-																							<TR>
-																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.location.region}" />
-																								</TD>
-
-																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.location.zone}" />
-																								</TD>
-																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.location.woreda}" />
-																								</TD>
-                                                                                                  <TD  align="center" bgcolor="#ffffff">
-                                                                                                     <c:if test='${loc.locationPercentage > 0}'>
-
-																										<fmt:formatNumber type="number" value="${loc.locationPercentage}" />
-
-                                                                                                     %
-																									
-                                                                                                     </c:if>
-																								</TD>
-																							</TR>
-                                                                                            </c:if>
-																						</c:forEach> --%>
-																						<c:forEach varStatus="varSt" var="actLoc" items="${activity.locations}">
-																							<bean:define id="loc" name="actLoc" property="location.location" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
-																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
-																							<tr>
-																							<bean:size id="numOfAncestors" name="ancestorMap"/>
-																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
-																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
-																									<td align="center" bgcolor="#ffffff">
-																									<c:choose>
-																										<c:when test="${ancestorMap[indexLayer] != null}">
-																												${ancestorMap[indexLayer]}
-																										</c:when>
-																										<c:otherwise>
-																											&nbsp;
-																										</c:otherwise>
-																									</c:choose>
-																									</td>
-																								</c:if>
-																							</c:forEach>
-																							<td align="center" bgcolor="#ffffff">
-																								<field:display name="Regional Percentage" feature="Location">&nbsp;
-																								<c:choose>
-                                                                                            		<c:when test='${actLoc.locationPercentage > 0}'>
-																										<fmt:formatNumber type="number" value="${actLoc.locationPercentage}" />
-                                             														</c:when>
-                                             													</c:choose>
-                                             													</field:display>
-																							</td>
-																							</tr>
-																						</c:forEach>
-																					 
-																					</c:if>
-																					<!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM 
-																					<tr>
-																						<td colspan="4">
-																							<img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
-																						</td>
-																					</tr>
-																					 -->
-																				</TABLE>
-																				</TD>
-																			</TR>
-																		</TABLE>
-																		</TD>
-																	</TR>
-																</TABLE>
-																</TD>
-															</TR>
-														</feature:display>
-													</module:display>
-
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
-															vAlign="top" align="left" bgcolor="#aaaaaa">
-															<module:display name="National Planning Dashboard"
-																parentModule="NATIONAL PLAN DASHBOARD">
-																<feature:display name="NPD Programs"
-																	module="National Planning Dashboard">
-																	<field:display name="National Plan Objective"
-																		feature="NPD Programs">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
-																				width=15> <b><digi:trn
-																				key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
-																		</TR>
-																		<TR>
-																			<TD bgcolor="#ffffff">
-																			<c:forEach var="program"
-																				items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
-																				<c:out value="${program.hierarchyNames}" />&nbsp;
-																				<c:out value="${program.programPercentage}"/>%<br/>
-																			</c:forEach></TD>
-																		</TR>
-																	</field:display>
-																	<field:display name="Primary Program"
-																		feature="NPD Programs">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
-																				width=15> <b><digi:trn
-																				key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
-																		</TR>
-																		<TR>
-																			<TD bgcolor="#ffffff"><c:forEach var="program"
-																				items="${aimChannelOverviewForm.primaryPrograms}">
-																				<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
-																					value="${program.programPercentage}" />%<br />
-																			</c:forEach></TD>
-																		</TR>
-																	</field:display>
-
-																	<field:display name="Secondary Program"
-																		feature="NPD Programs">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
-																				width=15> <b><digi:trn
-																				key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
-																		</TR>
-																	</field:display>
-																	<TR>
-																		<TD bgcolor="#ffffff"><c:forEach var="program"
-																			items="${aimChannelOverviewForm.secondaryPrograms}">
-																			<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
-																				value="${program.programPercentage}" />%<br />
-																		</c:forEach></TD>
-																	</TR>
-																</feature:display>
-															</module:display>
-                                                            <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT">
-                                                                <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues">
-                                                                            <TR>
-                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-                                                                                    height=10
-                                                                                    src="../ampTemplate/images/arrow-014E86.gif"
-                                                                                    width=15> <b><digi:trn>Cross Cutting Issues</digi:trn></b></TD>
-                                                                            </TR>
-                                                                            <TR>
-                                                                                <TD bgcolor="#ffffff" height="5"></TD>
-                                                                            </TR>
-                                                                          <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
-                                                                            <c:if test="${not empty aimChannelOverviewForm.equalOpportunity && fn:trim(aimChannelOverviewForm.equalOpportunity) ne ''}" >
-                                                                            <tr>
-                                                                                <td bgcolor="#ffffff">
-	                                                                                <i><digi:trn>Equal Opportunity</digi:trn>:</i><br />
-																					<digi:edit key="${aimChannelOverviewForm.equalOpportunity}"/>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </c:if>
-                                                                          </field:display>
-                                                                          <field:display name="Environment" feature="Cross Cutting Issues">
-                                                                            <c:if test="${!empty aimChannelOverviewForm.environment && fn:trim(aimChannelOverviewForm.environment) ne ''}" >
-                                                                            <tr>
-                                                                                <td bgcolor="#ffffff">
-                                                                                    <i><digi:trn>Environment</digi:trn>:</i><br />
-                                                                                    <digi:edit key="${aimChannelOverviewForm.environment}"/>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </c:if>
-                                                                          </field:display>
-                                                                          <field:display name="Minorities" feature="Cross Cutting Issues">
-                                                                            <c:if test="${!empty aimChannelOverviewForm.minorities && fn:trim(aimChannelOverviewForm.minorities) ne ''}" >
-                                                                            <tr>
-                                                                                <td bgcolor="#ffffff">
-                                                                                  <i><digi:trn key="aim:monitories">Minorities</digi:trn>:</i><br />
-                                                                                   <digi:edit key="${aimChannelOverviewForm.minorities}"/>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </c:if>
-                                                                          </field:display>
-                                                                </feature:display>
-                                                            </module:display>
-															<module:display name="Project ID and Planning"
-																parentModule="PROJECT MANAGEMENT">
-																<feature:display name="Identification"
-																	module="Project ID and Planning">
+														
+														<feature:display name="Identification" module="Project ID and Planning">
 																		<field:display name="Description" feature="Identification">
                                                                         <TR>
                                                                             <TD bgcolor="#eeeeee" height="18">&nbsp;
@@ -1271,7 +897,382 @@ function commentWin(val, commentId) {
 																			</c:if>
 																		</field:display>
 																</feature:display>
+														
+														
+														
+														<feature:display module="Project ID and Planning" name="Sectors">
+															<field:display feature="Sectors" name="Level 1 Sectors List">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
+												                            <c:forEach var="config" items="${aimChannelOverviewForm.classificationConfigs}" varStatus="ind">
+																				<bean:define id="emptySector" value="Sector"></bean:define>
+																				<field:display name="${config.name} Sector" feature="Sectors">
+																				<c:set var="hasSectors">
+																					false
+																				</c:set>
+
+																				<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
+																					<c:if test="${actSect.configId==config.id}">
+																						<c:set var="hasSectors">
+																							true
+																						</c:set>
+																					</c:if>
+																				</c:forEach>
+																				<c:if test="${hasSectors}">
+												                                <strong>
+													                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
+													                                <c:out value="${config.name} Sector"/>
+													                                </digi:trn>
+													                                </strong>
+												                                </c:if>
+										                                        <c:if test="${!empty aimChannelOverviewForm.activitySectors}">
+																					<ul>
+																						<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
+						                                                            		<c:if test="${actSect.configId==config.id}">
+																								<li>
+																									<field:display name="Sector Scheme Name" feature="Sectors">
+																										<c:out value="${actSect.sectorScheme}" />
+																										<br/>&nbsp;
+																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																									</field:display>
+																									<field:display name="${config.name} Sector" feature="Sectors">
+																										<c:out value="${actSect.sectorName}" />
+																									</field:display>
+																									<c:if test="${!empty actSect.subsectorLevel1Name}">
+																										<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
+																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																											src="../ampTemplate/images/link_out_bot.gif"/>
+																										<c:out value="${actSect.subsectorLevel1Name}" />
+																										
+																											<c:if test="${!empty actSect.subsectorLevel2Name}">
+																											<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
+																												 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																													src="../ampTemplate/images/link_out_bot.gif"/>
+																												<c:out value="${actSect.subsectorLevel2Name}" />
+																												&nbsp;
+																											</field:display>
+																											</c:if>
+																										</field:display>
+																									</c:if>
+																									<field:display name="Percentage" feature="Sectors">
+				                                                                                    <logic:present name="actSect" property="sectorPercentage">
+																										<c:if test="${actSect.sectorPercentage!=0}">
+																											(<c:out value="${actSect.sectorPercentage}" />%)
+																										</c:if>
+																									</logic:present>
+																									</field:display>
+
+																								</li>
+																								</c:if>
+																						</c:forEach>
+																					</ul>
+										                                        </c:if>
+											                                    </field:display>
+																			</c:forEach>
+																			
+																			</TD>
+																		</TR>
+																	</TABLE>
+																	</TD>
+																</TR>
+
+															</field:display>
+														</feature:display>
+
+														<feature:display module="Project ID and Planning"
+															name="Location">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	vAlign="top" align="left" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:location">Location</digi:trn></b>
+																		</TD>
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff">
+																		<TABLE width="100%" cellSpacing="0" cellPadding="0"
+																			vAlign="top" align="left" bgcolor="#ffffff">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<field:display name="Implementation Level"
+																						feature="Location">
+																						<TR>
+																							<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
+																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
+																								 :
+                                                                                                 [<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.implemLocationLevel}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>"  />]
+
+																							</TD>
+																						</TR>
+																					</field:display>
+																					<field:display name="Implementation Location" feature="Location">
+																					<TD width="100%" colspan="${aimChannelOverviewForm.numImplLocationLevels+1}" align="left" bgcolor="#ffffff">
+																						<i>
+																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
+																							:&nbsp;
+																						</i>
+[<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.impLocation}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />]
+
+																					</TD>
+																					</field:display>
+
+																					<c:if test="${!empty activity.locations}">
+                                                                                       
+                                                                                         <tr>
+                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
+                                                                                        	 	<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+	                                                                                        	 	<td align="center" bgcolor="#ffffff">
+	                                                                                         		<i>
+	                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+	                                                                                         		</i>
+	                                                                                         		</td>
+                                                                                         		</c:if>
+                                                                                        	 </c:forEach>
+                                                                                        	 <td  align="center" bgcolor="#ffffff">
+                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
+																							</td>
+                                                                                         </tr>
+																						<%--
+																						<TR>
+																							<TD width="30%" align="center" bgcolor="#ffffff">
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" >
+																									<i>
+																									<category:getoptionvalue categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
+																								</c:if>
+																								&nbsp;
+																							</TD>
+																							<TD width="30%" align="center" bgcolor="#ffffff">
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 2}" >
+																									<i>
+																									<category:getoptionvalue categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
+																								</c:if>
+																								&nbsp;
+																							</TD>
+																							<TD width="30%" align="center" bgcolor="#ffffff">
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 3}" >
+																									<i>
+																									<category:getoptionvalue categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
+																								</c:if>
+																								&nbsp;
+																							</TD>
+                                                                                              <TD  align="center" bgcolor="#ffffff">
+                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
+																							</TD>
+																							</TR>
+																						
+																						<c:forEach varStatus="varSt" var="loc" items="${activity.locations}">
+
+																							
+                                                                                            
+																							
+																							<c:if test="${not empty loc.location.ampRegion || not empty loc.location.ampZone ||not empty loc.location.ampWoreda}">
+																							
+																							<c:set var="mapParam">${mapParam}${loc.location.region}/${loc.location.zone}/${loc.locationPercentage}</c:set>
+																							<c:if test="${not varSt.last}">
+																								<c:set var="mapParam">${mapParam}|</c:set>
+																							</c:if>
+																							
+																							<TR>
+																								<TD width="30%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.location.region}" />
+																								</TD>
+
+																								<TD width="30%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.location.zone}" />
+																								</TD>
+																								<TD width="30%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.location.woreda}" />
+																								</TD>
+                                                                                                  <TD  align="center" bgcolor="#ffffff">
+                                                                                                     <c:if test='${loc.locationPercentage > 0}'>
+
+																										<fmt:formatNumber type="number" value="${loc.locationPercentage}" />
+
+                                                                                                     %
+																									
+                                                                                                     </c:if>
+																								</TD>
+																							</TR>
+                                                                                            </c:if>
+																						</c:forEach> --%>
+																						<c:forEach varStatus="varSt" var="actLoc" items="${activity.locations}">
+																							<bean:define id="loc" name="actLoc" property="location.location" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
+																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
+																							<tr>
+																							<bean:size id="numOfAncestors" name="ancestorMap"/>
+																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
+																								<c:if test="${aimChannelOverviewForm.numOfLocationsPerLayer[indexLayer]>0}">
+																									<td align="center" bgcolor="#ffffff">
+																									<c:choose>
+																										<c:when test="${ancestorMap[indexLayer] != null}">
+																												${ancestorMap[indexLayer]}
+																										</c:when>
+																										<c:otherwise>
+																											&nbsp;
+																										</c:otherwise>
+																									</c:choose>
+																									</td>
+																								</c:if>
+																							</c:forEach>
+																							<td align="center" bgcolor="#ffffff">
+																								<field:display name="Regional Percentage" feature="Location">&nbsp;
+																								<c:choose>
+                                                                                            		<c:when test='${actLoc.locationPercentage > 0}'>
+																										<fmt:formatNumber type="number" value="${actLoc.locationPercentage}" />
+                                             														</c:when>
+                                             													</c:choose>
+                                             													</field:display>
+																							</td>
+																							</tr>
+																						</c:forEach>
+																					 
+																					</c:if>
+																					<!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM 
+																					<tr>
+																						<td colspan="4">
+																							<img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
+																						</td>
+																					</tr>
+																					 -->
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</TABLE>
+																		</TD>
+																	</TR>
+																</TABLE>
+																</TD>
+															</TR>
+														</feature:display>
+													</module:display>
+
+													<TR>
+														<TD>
+														<TABLE width="100%" cellPadding=3 cellSpacing=1
+															vAlign="top" align="left" bgcolor="#aaaaaa">
+
+															<module:display name="National Planning Dashboard"
+																parentModule="NATIONAL PLAN DASHBOARD">
+																<feature:display name="NPD Programs"
+																	module="National Planning Dashboard">
+																	<field:display name="National Plan Objective"
+																		feature="NPD Programs">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn
+																				key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																			<c:forEach var="program"
+																				items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
+																				<c:out value="${program.hierarchyNames}" />&nbsp;
+																				<c:out value="${program.programPercentage}"/>%<br/>
+																			</c:forEach></TD>
+																		</TR>
+																	</field:display>
+																	<field:display name="Primary Program"
+																		feature="NPD Programs">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn
+																				key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff"><c:forEach var="program"
+																				items="${aimChannelOverviewForm.primaryPrograms}">
+																				<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+																					value="${program.programPercentage}" />%<br />
+																			</c:forEach></TD>
+																		</TR>
+																	</field:display>
+
+																	<field:display name="Secondary Program"
+																		feature="NPD Programs">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn
+																				key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
+																		</TR>
+																	</field:display>
+																	<TR>
+																		<TD bgcolor="#ffffff"><c:forEach var="program"
+																			items="${aimChannelOverviewForm.secondaryPrograms}">
+																			<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+																				value="${program.programPercentage}" />%<br />
+																		</c:forEach></TD>
+																	</TR>
+																</feature:display>
 															</module:display>
+                                                            <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT">
+                                                                <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues">
+                                                                            <TR>
+                                                                                <TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+                                                                                    height=10
+                                                                                    src="../ampTemplate/images/arrow-014E86.gif"
+                                                                                    width=15> <b><digi:trn>Cross Cutting Issues</digi:trn></b></TD>
+                                                                            </TR>
+                                                                            <TR>
+                                                                                <TD bgcolor="#ffffff" height="5"></TD>
+                                                                            </TR>
+                                                                          <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
+                                                                            <c:if test="${not empty aimChannelOverviewForm.equalOpportunity && fn:trim(aimChannelOverviewForm.equalOpportunity) ne ''}" >
+                                                                            <tr>
+                                                                                <td bgcolor="#ffffff">
+	                                                                                <i><digi:trn>Equal Opportunity</digi:trn>:</i><br />
+																					<digi:edit key="${aimChannelOverviewForm.equalOpportunity}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                          <field:display name="Environment" feature="Cross Cutting Issues">
+                                                                            <c:if test="${!empty aimChannelOverviewForm.environment && fn:trim(aimChannelOverviewForm.environment) ne ''}" >
+                                                                            <tr>
+                                                                                <td bgcolor="#ffffff">
+                                                                                    <i><digi:trn>Environment</digi:trn>:</i><br />
+                                                                                    <digi:edit key="${aimChannelOverviewForm.environment}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                          <field:display name="Minorities" feature="Cross Cutting Issues">
+                                                                            <c:if test="${!empty aimChannelOverviewForm.minorities && fn:trim(aimChannelOverviewForm.minorities) ne ''}" >
+                                                                            <tr>
+                                                                                <td bgcolor="#ffffff">
+                                                                                  <i><digi:trn key="aim:monitories">Minorities</digi:trn>:</i><br />
+                                                                                   <digi:edit key="${aimChannelOverviewForm.minorities}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </c:if>
+                                                                          </field:display>
+                                                                </feature:display>
+                                                            </module:display>
+
 														</TABLE>
 														</TD>
 													</TR>

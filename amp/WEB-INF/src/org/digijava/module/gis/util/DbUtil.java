@@ -10,7 +10,10 @@ import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -43,6 +46,7 @@ public class DbUtil {
     public static final int SELECT_DEFAULT = 0;
     public static final int SELECT_SECTOR_SCHEME = 1;
     public static final int SELECT_SECTOR = 2;
+    public static final int SELECT_PROGRAM = 3;
 
     public  static final int SECTORS_FOR_ACTIVITIES = 0;
     public  static final int SECTORS_FOR_PLEDGES = 1;
@@ -163,6 +167,8 @@ public class DbUtil {
         }
         return retVal;
     }
+
+
 
     public static List getSectorFoundingDonors(Long sectorId) {
 
@@ -415,6 +421,34 @@ public class DbUtil {
         return retVal;
     }
 
+    public static List getProgramFoundings(Long prgId) {
+
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer qs = new StringBuffer("select prg.activity, prg.programPercentage from ");
+            qs.append(AmpActivityProgram.class.getName());
+            qs.append(" prg where prg.program.ampThemeId = :PRG_ID or prg.program.parentThemeId.ampThemeId = :PRG_ID ");
+            qs.append(" or prg.program.parentThemeId.parentThemeId.ampThemeId = :PRG_ID ");
+            qs.append(" and prg.activity.team is not null");
+            q = session.createQuery(qs.toString());
+            q.setLong("PRG_ID", prgId);
+            retVal = q.list();
+
+            //Convert double percentages to floats
+            for (Object o : retVal) {
+                Object[] o1 = (Object[]) o;
+                o1[1] = new Float(((Long)o1[1]).floatValue());
+            }
+
+        } catch (Exception ex) {
+            logger.debug("Unable to get program fundings from DB", ex);
+        }
+        return retVal;
+    }
+
     public static List getActIdsHavingRegionalAndDistrictLevels() {
         List<Long> retVal = null;
         Session session = null;
@@ -518,7 +552,30 @@ public class DbUtil {
         }
         return retVal;
     }
-    
+
+    public static List getProgramFoundingsByDonor(Long prgId, Long donorid) {
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer donorwhere = new StringBuffer("select f.ampActivityId from "+ AmpFunding.class.getName()
+            		+" f where f.ampDonorOrgId ="+donorid);
+
+            StringBuffer qs = new StringBuffer("select prg.activity, prg.programPercentage from ");
+            qs.append(AmpActivityProgram.class.getName());
+            qs.append(" prg where prg.program.ampThemeId = :PRG_ID ");
+            qs.append(" and prg.activity.team is not null and prg.activity in ("+donorwhere+")");
+            q = session.createQuery(qs.toString());
+            q.setLong("PRG_ID", prgId);
+
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector fundings from DB", ex);
+        }
+        return retVal;
+    }
+
     public static List getSectorFoundingsByDonor(Long sectorId, Long donorid, int sectorQueryType) {
         List subSectorIds = null;
         if (sectorId > -1) {
@@ -533,12 +590,7 @@ public class DbUtil {
                 subSectorIds = getSubSectorIdsWhereclause(sectorId);
             }
         }
-        /*
-    	List subSectorIds = null;
-        if (sectorId > -1) {
-            subSectorIds = getSubSectorIdsWhereclause(sectorId);
-        }
-        */
+
         List retVal = null;
         Session session = null;
         try {
@@ -547,16 +599,6 @@ public class DbUtil {
             StringBuffer donorwhere = new StringBuffer("select f.ampActivityId from "+ AmpFunding.class.getName()  
             		+" f where f.ampDonorOrgId ="+donorid);
             if (sectorId > -1) {
-                /*
-            	StringBuffer whereCaluse = new StringBuffer();
-            	Iterator parentIt = subSectorIds.iterator();
-                while (parentIt.hasNext()) {
-                    Long parSecId = (Long) parentIt.next();
-                    whereCaluse.append(parSecId.longValue());
-                    if (parentIt.hasNext()) {
-                        whereCaluse.append(",");
-                    }
-                }     */
                 StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
                 qs.append(AmpActivitySector.class.getName());
                 qs.append(" sec where sec.sectorId in (");
@@ -1185,6 +1227,8 @@ public class DbUtil {
        }
    }
 
+
+
    public static class HelperRegionNameAscComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -1251,8 +1295,12 @@ public class DbUtil {
         }
 
         XMLDocument xmlDoc = new XMLDocument();
-        XML root = new XML("sector-tree");
+        XML root = new XML("data");
         xmlDoc.addElement(root);
+
+
+        XML secRoot = new XML("sector-tree");
+        root.addElement(secRoot);
 
 
         for (AmpSectorScheme scheme : schemes) {
@@ -1280,9 +1328,25 @@ public class DbUtil {
                 populateSectorTree(sectors, schemeNode, subSet, sectorMode);
             }
 
-            root.addElement(schemeNode);
+            secRoot.addElement(schemeNode);
            }
         }
+
+        //Programs
+        Collection<AmpTheme> allPrograms = null;
+        try {
+            allPrograms = ProgramUtil.getAllThemes(true);
+        } catch (DgException ex) {
+
+        }
+        Collection programsFlatTree = CollectionUtils.getHierarchy(
+                allPrograms,
+                new ProgramUtil.ProgramHierarchyDefinition(),
+                new ProgramUtil.XMLtreeItemFactory());
+        XML prgRoot = new XML("programs-tree");
+        root.addElement(prgRoot);
+        populateProgramsTree (programsFlatTree, prgRoot, getUsedPrograms());
+
         return xmlDoc;
     }
 
@@ -1290,6 +1354,36 @@ public class DbUtil {
                                             Set usedSectorSublist) {
         return populateSectorTree (sectors, parentNode, usedSectorSublist, SECTORS_FOR_ACTIVITIES);
 
+    }
+
+    private static boolean populateProgramsTree (Collection<TreeItem> programs, XML parentNode, Set usedProgramSublist) {
+        boolean oneOfPrgsHasFounding = false;
+        for (TreeItem prgTreeItem: programs) {
+            AmpTheme theme = (AmpTheme) prgTreeItem.getMember();
+            XML sectorTag = new XML("program");
+            sectorTag.addAttribute("name", theme.getName());
+            sectorTag.addAttribute("id", theme.getAmpThemeId());
+
+            boolean curentPrjHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
+            boolean oneOfChildrenHasFounding = false;
+            if (!oneOfPrgsHasFounding && oneOfPrgsHasFounding) {
+                oneOfPrgsHasFounding = true;
+            }
+
+            Collection<TreeItem> childPrgs = prgTreeItem.getChildren();
+            if (childPrgs != null && !childPrgs.isEmpty()) {
+                oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag,usedProgramSublist);;
+                if (!oneOfPrgsHasFounding && oneOfChildrenHasFounding) {
+                    oneOfPrgsHasFounding = oneOfChildrenHasFounding;
+                }
+            }
+
+            sectorTag.addAttribute("hasFoundings", curentPrjHasFunding || oneOfChildrenHasFounding);
+            parentNode.addElement(sectorTag);
+
+        }
+
+        return oneOfPrgsHasFounding;
     }
 
     private static boolean populateSectorTree (Collection <AmpSector> sectors, XML parentNode,
@@ -1306,7 +1400,7 @@ public class DbUtil {
                 oneOfSecsHasFounding = true;
             }
 
-            //Better to have lazy collections for child sectors IMHO
+
             Collection<AmpSector> childSecs = SectorUtil.getAllChildSectors(sector.getAmpSectorId());
             if (childSecs != null && !childSecs.isEmpty()) {
                 Set actSec = null;
@@ -1325,6 +1419,26 @@ public class DbUtil {
             parentNode.addElement(sectorTag);
         }
         return oneOfSecsHasFounding;
+    }
+
+    private static Set getUsedPrograms() {
+        Set retVal = null;
+        Session sess = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+        } catch (DgException ex) {
+
+        }
+
+        StringBuffer queryStr = new StringBuffer("select distinct prj.ampActivityProgramId from ");
+        queryStr.append(AmpActivityProgram.class.getName());
+        queryStr.append(" as prj");
+
+        Query q = sess.createQuery(queryStr.toString());
+        retVal = new HashSet(q.list());
+
+        return retVal;
     }
 
     public static Set getSectorsInActivitiesSublist (Collection <AmpSector> listToFilter) {

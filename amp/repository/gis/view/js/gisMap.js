@@ -256,6 +256,7 @@
 						var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
             var selectionTxt = getSectorSelectionText (queryParam);
 				    $('#sectorSelected').html(selectionTxt);
+				    $("#sectorsMapComboFin").val(queryParam);
 						$('#sectorSelected').attr('title', selectionTxt);
 						$('#fundingTypeSelected').html($('#fundingType option:selected').text());
 						$('#donorSelected').html($('#donorsCombo option:selected').text());
@@ -924,8 +925,10 @@
 	
 	buildSectorSelector = function (secHierarchyData) {
 		var sectorSchemes = secHierarchyData.getElementsByTagName('scheme');
+		
 		var markup = [];
 		markup.push ("<table border='0' style='width:500px; z-index:100; display:block'>");
+		//Sectors
 		var secShcemeIdx = 0;
 		for (secSchemeIdx = 0; secSchemeIdx < sectorSchemes.length; secSchemeIdx++){
 			var curSecScheme = sectorSchemes[secSchemeIdx];
@@ -948,12 +951,16 @@
 				markup.push ("class='sec_scheme_selector sec_scheme_selector_default'");
 			}
 			 markup.push (">");
+			 
+			 markup.push ("(Sector) ");
 			
 			markup.push (curSecScheme.attributes.getNamedItem("name").value);
 			
+			/*
 			if (isPrimary) {
 				markup.push ("&nbsp;(primary)");
 			}
+			*/
 			
 			markup.push ("</div>");
 			markup.push ("</div>");
@@ -971,16 +978,39 @@
 			
 				
 			markup.push ("</td></tr>");
+		}
+		
+		//Programs
+		var programs = secHierarchyData.getElementsByTagName('programs-tree');
+		var prgIdx = 0;
+		for (prgIdx = 0; prgIdx < programs[0].childNodes.length; prgIdx++){
+			var topLevelPrg = programs[0].childNodes[prgIdx];
+			
+			markup.push ("<tr><td>");
+			markup.push ("<div style='width:500px;' class='sec_scheme_selector_outer_frame'>");
+			
+			markup.push ("<div id='prj_id_");
+			markup.push (topLevelPrg.attributes.getNamedItem("id").value);
+			markup.push ("' class='sec_scheme_selector sec_scheme_selector_default'>");
+			markup.push ("(Program) ");
+			
+			markup.push (topLevelPrg.attributes.getNamedItem("name").value);
+			
+			
+			markup.push ("</div>");
+			markup.push ("</div>");
+
+			
+				if (topLevelPrg.hasChildNodes()) {
+					markup.push ("<div class='child_sector_container' style='border:1px solid black; background-color:white; display:none; height:200px; width:500px; overflow:auto;'>");
+					buildProjectsRecursively (topLevelPrg.childNodes, markup, true)
+					markup.push ("</div>");
+				}
+
+				
+			markup.push ("</td></tr>");
 		}	
-		
-		/*
-		markup.push ("<tr><td align='right'>");
-		markup.push ("<input type='button' value='Apply' onClick='applySectorFilter()'>");
-		markup.push ("&nbsp;");
-		markup.push ("<input type='button' value='Cancel' onClick='closeSectorFilter()'>");
-		markup.push ("</td></tr>");
-		*/
-		
+
 		markup.push ("</table>");
 		
 		return markup.join("");
@@ -1044,6 +1074,73 @@
 			if (curSector.hasChildNodes()) {
 					markup.push ("<div class='sector_tree_child_container' style='display:none;'>");
 					buildSectorsRecursively (curSector.childNodes, markup, false);
+					markup.push ("</div>");
+			}
+			
+			markup.push ("</td></tr>");
+		}
+		markup.push ("</table>");
+	}
+	
+	
+	function buildProjectsRecursively (prj, markup, topLevel) {
+		markup.push ("<table border='0' width='100%' cellpadding='0' cellspacing='0'>");
+		
+		var prjIdx = 0;
+		for (prjIdx = 0; prjIdx < prj.length; prjIdx ++) {
+			var curPrj = prj[prjIdx];
+			
+			if (curPrj.hasChildNodes()) {
+				if (prjIdx+1 < prj.length) {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_plain'>");
+				} else {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree'>");
+				}
+				markup.push ("<span style='background-color:white'>");
+				markup.push ("<img class='tree_expander_collapser tree_state_collapsed' src='/repository/gis/view/images/tree-expand-icon.png'>");
+				markup.push ("</span>");
+				markup.push ("</td><td nowrap>");
+				
+			} else {
+				if (prjIdx == 0) {
+					if (topLevel) {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_first'>");
+					} else if (prj.length > 1) {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child'>");
+					} else {
+						markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_last'>");
+					}
+				} else if (prjIdx+1 < prj.length) {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child'>");
+				} else {
+					markup.push ("<tr><td width='13' height='100%' valign='top' class='sec_selector_tree sec_selector_tree_has_child_is_last'>");
+				}
+				markup.push ("&nbsp;");
+				markup.push ("</td><td nowrap>");
+			}
+			markup.push ("<div id='prj_id_");
+			markup.push (curPrj.attributes.getNamedItem("id").value);
+			
+			
+			if (curPrj.attributes.getNamedItem("hasFoundings").value == "true") {
+				markup.push ("' class='sec_selector_item' style='width:100%;'>");
+			} else {
+				markup.push ("' class='sec_selector_item_disabled' style='width:100%;'>");
+			}
+			
+			
+			
+			
+			
+			
+			
+			markup.push (curPrj.attributes.getNamedItem("name").value);
+			markup.push ("</div>");
+			
+			
+			if (curPrj.hasChildNodes()) {
+					markup.push ("<div class='sector_tree_child_container' style='display:none;'>");
+					buildSectorsRecursively (curPrj.childNodes, markup, false);
 					markup.push ("</div>");
 			}
 			

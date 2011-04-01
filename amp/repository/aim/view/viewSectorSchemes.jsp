@@ -25,9 +25,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
@@ -47,10 +46,10 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:sectorManager">Sector Manager</digi:trn></span>
+				<!--<tr>
+					<td height=25 valign="center" align=center width=1000 bgcolor="#c7d4db"><digi:trn key="aim:sectorManager"><b style="font-size:12px;">Sector Manager</b></digi:trn>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 						<td align="left">
 						<!--  please note that this page contains form and you can not nested it inside other form -->
@@ -72,9 +71,9 @@
 
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>
 									<thead>
-										<tr><td colspan="3" bgColor=#d7eafd class=box-title height="20" align="center">
+										<tr><td colspan="3" bgColor=#c7d4db class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:schemes">Schemes</digi:trn>
+											<digi:trn key="aim:schemes"><b style="font-size:12px;">Schemes</b></digi:trn>
 											<!-- end table title -->
 										</td></tr>
 										</thead>
@@ -171,11 +170,11 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="20"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="font-size:12px; padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
@@ -187,10 +186,10 @@
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="trnAddScheme">
 													<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
@@ -205,7 +204,7 @@
 										</field:display>
                                                                              	<field:display name="Multi Sector Configuration" feature="Sectors">
                                                                                      <tr>
-                                                                                         <td>
+                                                                                         <td class="inside">
                                                                                              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                                                                              <c:set var="trnViewConfigurations">
                                                                                                  <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
@@ -220,7 +219,7 @@
 																				</field:display>
                                                                          
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="trnViewAdmin">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

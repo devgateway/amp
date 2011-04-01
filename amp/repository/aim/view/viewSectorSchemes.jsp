@@ -109,7 +109,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="10%" align="right" class="inside">
+														<td bgcolor="#ffffff" width="10%" align="center" class="inside">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>

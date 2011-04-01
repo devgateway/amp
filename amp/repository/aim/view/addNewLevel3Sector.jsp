@@ -149,13 +149,13 @@
 											<tr>
 										<td class="report">
 												<table width="100%" cellspacing="1" cellpadding=4 valign="top"
-													align=left bgcolor="#cccccc">
+													align=left bgcolor="#cccccc" style="font-size:12px;">
 												<thead>
 													<tr>
 														<td colspan="3" bgColor=#c7d4db class=box-title
 															height="20" align="center"><!-- Table title --> <digi:trn
 														key="aim:LevelthreeSectors">
-												Level Three Sectors
+												<b>Level Three Sectors</b>
 											</digi:trn> <!-- end table title --></td>
 												</tr>
 												</thead>
@@ -236,7 +236,7 @@
 								border="0">
 								<tr>
 									<td><!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title><digi:trn
 												key="aim:otherLinks">

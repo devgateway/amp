@@ -1360,26 +1360,28 @@ public class DbUtil {
         boolean oneOfPrgsHasFounding = false;
         for (TreeItem prgTreeItem: programs) {
             AmpTheme theme = (AmpTheme) prgTreeItem.getMember();
-            XML sectorTag = new XML("program");
-            sectorTag.addAttribute("name", theme.getName());
-            sectorTag.addAttribute("id", theme.getAmpThemeId());
+            if (theme.getParentThemeId() != null || (theme.getShowInRMFilters() != null && theme.getShowInRMFilters().booleanValue())) {
+                XML sectorTag = new XML("program");
+                sectorTag.addAttribute("name", theme.getName());
+                sectorTag.addAttribute("id", theme.getAmpThemeId());
 
-            boolean curentPrjHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
-            boolean oneOfChildrenHasFounding = false;
-            if (!oneOfPrgsHasFounding && oneOfPrgsHasFounding) {
-                oneOfPrgsHasFounding = true;
-            }
-
-            Collection<TreeItem> childPrgs = prgTreeItem.getChildren();
-            if (childPrgs != null && !childPrgs.isEmpty()) {
-                oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag,usedProgramSublist);;
-                if (!oneOfPrgsHasFounding && oneOfChildrenHasFounding) {
-                    oneOfPrgsHasFounding = oneOfChildrenHasFounding;
+                boolean curentPrjHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
+                boolean oneOfChildrenHasFounding = false;
+                if (!oneOfPrgsHasFounding && oneOfPrgsHasFounding) {
+                    oneOfPrgsHasFounding = true;
                 }
-            }
 
-            sectorTag.addAttribute("hasFoundings", curentPrjHasFunding || oneOfChildrenHasFounding);
-            parentNode.addElement(sectorTag);
+                Collection<TreeItem> childPrgs = prgTreeItem.getChildren();
+                if (childPrgs != null && !childPrgs.isEmpty()) {
+                    oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag,usedProgramSublist);;
+                    if (!oneOfPrgsHasFounding && oneOfChildrenHasFounding) {
+                        oneOfPrgsHasFounding = oneOfChildrenHasFounding;
+                    }
+                }
+
+                sectorTag.addAttribute("hasFoundings", curentPrjHasFunding || oneOfChildrenHasFounding);
+                parentNode.addElement(sectorTag);
+            }
 
         }
 

@@ -221,9 +221,6 @@ public class ContactInfoUtil {
 		return contacts;
 	}
 	/**
-	 * @param fromRecord from which record should be loaded contacts
-	 * @param resultsNum how many contacts should be loaded
-	
 	 * @return contacts
 	 * @throws Exception
 	 */
@@ -238,13 +235,13 @@ public class ContactInfoUtil {
 			queryString = "select cont from " + AmpContact.class.getName()
 					+ " cont ";
 	
-			queryString += " where cont.name=:name "
-					+ "or cont.lastname =:lastname";
+			queryString += " where lower(cont.name) like lower(:name) "
+					+ "or lower(cont.lastname) like lower(:lastname)";
 
 			queryString += " order by cont.function desc ";
 			query = session.createQuery(queryString);
-			query.setString("name",  name);
-			query.setString("lastname",  lastname);
+			query.setString("name", "%"+ name+"%");
+			query.setString("lastname", "%"+ lastname+"%");
 			contacts = query.list();
 		} catch (Exception e) {
 			logger.error(e);

@@ -952,7 +952,9 @@
 			}
 			 markup.push (">");
 			 
-			 markup.push ("(Sector) ");
+			 markup.push ("(");
+			 markup.push (sectorTitleTrn);
+			 markup.push (") ");
 			
 			markup.push (curSecScheme.attributes.getNamedItem("name").value);
 			
@@ -992,7 +994,9 @@
 			markup.push ("<div id='prj_id_");
 			markup.push (topLevelPrg.attributes.getNamedItem("id").value);
 			markup.push ("' class='sec_scheme_selector sec_scheme_selector_default'>");
-			markup.push ("(Program) ");
+			markup.push ("(");
+			markup.push (programTitleTrn);
+			markup.push (") ");
 			
 			markup.push (topLevelPrg.attributes.getNamedItem("name").value);
 			

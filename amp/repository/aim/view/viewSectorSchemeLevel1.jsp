@@ -84,10 +84,10 @@
 			<html:hidden property="idGot"/>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
+					<table width="100%" cellpadding="1" cellspacing="1" border="0">
 						<tr>
 							<td noWrap width=750 vAlign="top">
-							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%"
+							<table bgColor=#cccccc cellpadding="1" cellspacing="1" width="100%"
 								valign="top">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
@@ -97,7 +97,7 @@
 
 										<tr>
 											<td>
-											<table width="100%">
+											<table width="100%" style="font-size:12px;">
 												<tr>
 													<td><digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font
 														color="red">*</font>:</td>
@@ -130,13 +130,13 @@
 										<tr>
 										<td class="report">
 												<table width="100%" cellspacing="1" cellpadding=4 valign="top"
-													align=left bgcolor="#d7eafd">
+													align=left bgcolor="#cccccc" style="font-size:12px;">
 												<thead>
 													<tr>
-														<td colspan="3" bgColor=#d7eafd class=box-title
-															height="20" align="center"><!-- Table title --> <digi:trn
+														<td colspan="3" bgColor=#c7d4db class=box-title
+															height="25" align="center"><!-- Table title --> <digi:trn
 															key="aim:LeveloneSectors">
-												Level One Sectors
+												<b style="font-size:12px;">Level One Sectors</b>
 											</digi:trn> <!-- end table title --></td>
 													</tr>
 												</thead>

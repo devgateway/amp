@@ -6473,7 +6473,7 @@ public class DbUtil {
                     " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and (msg.locale=:locale)";
 
                 qry = session.createQuery(queryString);
-                qry.setParameter("siteId", site.getId(), Hibernate.LONG);
+                qry.setParameter("siteId", site.getId().toString(), Hibernate.STRING);
                 qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
                 qry.setParameter("msgLangKey", country.getMessageLangKey(), Hibernate.STRING);
                 msgCol = qry.list();

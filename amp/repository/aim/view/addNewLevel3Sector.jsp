@@ -44,9 +44,8 @@
 <!-- End of Logo -->
 
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
@@ -68,14 +67,14 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 					<digi:trn key="aim:sectormanager">
 						Sector Manager
 					</digi:trn>
 					</span>
 					</td>
-				</tr>
+				</tr>-->
 			<tr>
 				<td align="left"><!--  please note that this page contains form and you can not nested it inside other form -->
 				<jsp:include page="/repository/aim/view/exportTable.jsp" /></td>
@@ -88,10 +87,10 @@
 				</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
+					<table width="100%" cellspacing="1" cellpadding="1" border="0">
 						<tr>
-							<td noWrap width=600 vAlign="top">
-							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%"
+							<td noWrap width=750 vAlign="top">
+							<table cellpadding="1" cellspacing="1" width="100%"
 								valign="top">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
@@ -100,8 +99,8 @@
 										align=left>
 
 										<tr>
-											<td>
-											<table width="100%">
+											<td bgcolor=#F2F2F2>
+											<table width="100%" style="margin:10px; font-size:12px;">
 												<tr>
 													<td><digi:trn key="aim:sectorManagerLevel">
 															Sector Name
@@ -136,7 +135,7 @@
 
 												<tr>
 													<td>&nbsp;</td>
-													<td>&nbsp;&nbsp; <input type="button" name="addBtn"
+													<td><input type="button"  class="buttonx" style="margin-top:10px;" name="addBtn"
 														value="Save"
 														onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')" />
 													<td>
@@ -150,10 +149,10 @@
 											<tr>
 										<td class="report">
 												<table width="100%" cellspacing="1" cellpadding=4 valign="top"
-													align=left bgcolor="#d7eafd">
+													align=left bgcolor="#cccccc">
 												<thead>
 													<tr>
-														<td colspan="3" bgColor=#d7eafd class=box-title
+														<td colspan="3" bgColor=#c7d4db class=box-title
 															height="20" align="center"><!-- Table title --> <digi:trn
 														key="aim:LevelthreeSectors">
 												Level Three Sectors
@@ -241,10 +240,9 @@
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title><digi:trn
 												key="aim:otherLinks">
-												Other links
+												<b style="font-size:12px; padding-left:5px;">Other links</b>
 												</digi:trn></td>
-											<td background="module/aim/images/corner-r.gif" height="17"
-												width=17>&nbsp;</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
@@ -252,12 +250,12 @@
 
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<field:display name="Add Sector Level 3 Link"
 											feature="Sectors">
 											<c:if test="${aimAddSectorForm.jspFlag == false}">
 												<tr>
-													<td><jsp:useBean id="urlParams5" type="java.util.Map"
+													<td class="inside"><jsp:useBean id="urlParams5" type="java.util.Map"
 														class="java.util.HashMap" /> <c:set target="${urlParams5}"
 														property="ampSecSchemeId">
 														<bean:write name="aimAddSectorForm" property="sectorId" />
@@ -278,7 +276,7 @@
 										</field:display>
 										<field:display name="View Schemes Link" feature="Sectors">
 											<tr>
-												<td><digi:img src="module/aim/images/arrow-014E86.gif"
+												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 													width="15" height="10" /> <c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set> <digi:link href="/getSectorSchemes.do"
@@ -290,7 +288,7 @@
 											</tr>
 										</field:display>
 										<tr>
-											<td><digi:img src="module/aim/images/arrow-014E86.gif"
+											<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 												width="15" height="10" /> <c:set var="translation">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 											</c:set> <digi:link href="/admin.do" title="${translation}">

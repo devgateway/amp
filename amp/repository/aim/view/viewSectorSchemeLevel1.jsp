@@ -87,7 +87,7 @@
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
 						<tr>
 							<td noWrap width=750 vAlign="top">
-							<table bgColor=#cccccc cellpadding="1" cellspacing="1" width="100%"
+							<table cellpadding="1" cellspacing="1" width="100%"
 								valign="top">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
@@ -97,7 +97,7 @@
 
 										<tr>
 											<td>
-											<table width="100%" style="font-size:12px;">
+											<table width="100%" style="font-size:12px;" bgcolor=#F2F2F2>
 												<tr>
 													<td><digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font
 														color="red">*</font>:</td>
@@ -115,7 +115,7 @@
 
 												<tr>
 													<td>&nbsp;</td>
-													<td>&nbsp;&nbsp; <input type="button" class="dr-menu"
+													<td>&nbsp;&nbsp; <input type="button" class="buttonx"
 														name="addBtn"
 														value='<digi:trn key="btn:save">Save</digi:trn>'
 														onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')" />

@@ -31,41 +31,71 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 public class SelectPledgeLocation extends Action {
 
 	private static Logger logger = Logger.getLogger(SelectPledgeLocation.class);
+	
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
+	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
-		PledgeForm plForm = (PledgeForm) form;
-		plForm.setNoMoreRecords(false);
+		PledgeForm pledgeForm = (PledgeForm) form;
+		pledgeForm.setNoMoreRecords(false);
 		
+		String resetSelLocs=request.getParameter("resetSelLocs"); 
+		if(resetSelLocs!=null && resetSelLocs.equalsIgnoreCase("reset")){
+			pledgeForm.setSelectedLocs(null);
+		}
+
 		Integer impLevelValue;
-		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+		Long impLocLevel=null;
+		if(request.getParameter("implemLocationLevel")!=null){
+			impLocLevel=new Long(request.getParameter("implemLocationLevel"));
+			pledgeForm.setImplemLocationLevel(impLocLevel);			
+		}
+		pledgeForm.setLevelId(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LEVEL_REGIONAL).getId());
+		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getImplemLocationLevel() );
 		if ( implLocValue == null )
-			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_REGION );
 		if (implLocValue != null) {
 			impLevelValue	= new Integer ( implLocValue.getIndex() + 1 );
 		}
 		else
 			impLevelValue 	= new Integer( 1 );
 
-		plForm.setImpLevelValue( impLevelValue );
+		pledgeForm.setImpLevelValue( impLevelValue );
 		
 		/* New Region Manager changes */
 		if ( !"true".equals( request.getParameter("edit") ) ) {
-			plForm.setParentLocId(null);
-			plForm.getLocationByLayers().clear();
-			plForm.getSelectedLayers().clear();
+			pledgeForm.setParentLocId(null);
+			pledgeForm.getLocationByLayers().clear();
+			pledgeForm.getSelectedLayers().clear();
 		}
 		String cIso= FeaturesUtil.getDefaultCountryIso();
-		Long parentLocId			= plForm.getParentLocId();
 		
-		Map<Integer, Collection<KeyValue>> locationByLayers		= 
-								plForm.getLocationByLayers();
+		Long parentLocId			= pledgeForm.getParentLocId();
+		
+		Map<Integer, Collection<KeyValue>> locationByLayers		= 	pledgeForm.getLocationByLayers();
+		
+		AmpCategoryValue implLevel              = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
+		if ( implLevel!=null &&
+				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
+				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) )  {
+			Collection<AmpCategoryValueLocations> countries =
+				DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			if ( countries != null ) {
+				Integer countryIndex    = null;
+				ArrayList<KeyValue> countriesKV                         = new ArrayList<KeyValue>();
+				for (AmpCategoryValueLocations country: countries) {
+					countryIndex    = (countryIndex==null)?country.getParentCategoryValue().getIndex():countryIndex;
+					KeyValue countryKV                                              = new KeyValue(country.getId().toString() , country.getName() );
+					countriesKV.add(countryKV);
+				}
+				locationByLayers.put(countryIndex, countriesKV);
+			}
+			return mapping.findForward("forward");
+		}
+	
 		
         if(cIso!=null && parentLocId == null){ // Setting up the country
-        	plForm.setDefaultCountryIsSet(true);
+        	pledgeForm.setDefaultCountryIsSet(true);
         	AmpCategoryValueLocations defCountry		= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
         	Integer countryLayerIndex						= defCountry.getParentCategoryValue().getIndex();
         	KeyValue countryKV							= new KeyValue(defCountry.getId().toString() , defCountry.getName() );
@@ -76,10 +106,14 @@ public class SelectPledgeLocation extends Action {
         		parentLocId			= defCountry.getId();
         	}
         }
-        
+        if ( parentLocId == 0 ) {
+        	AmpCategoryValueLocations defCountry		= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        	parentLocId			= defCountry.getId();
+    	}
+        int lastLayer=0;
         while ( parentLocId != null ) {
         	AmpCategoryValueLocations parentLoc					= DynLocationManagerUtil.getLocation(parentLocId, true);
-        	plForm.getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
+        	pledgeForm.getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
         	
         	Iterator<Entry<Integer, Collection<KeyValue>>> entryIter		= locationByLayers.entrySet().iterator();
         	while ( entryIter.hasNext() ) {
@@ -93,10 +127,9 @@ public class SelectPledgeLocation extends Action {
         	
         	parentLocId											= null;
         	Collection<AmpCategoryValueLocations> childrenLocs 	= parentLoc.getChildLocations();
-        	int lastLayer=0;
         	if ( childrenLocs != null && childrenLocs.size() > 0 ) {
-        		Integer currentLayer							= 
-        			((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
+        		Integer currentLayer = (parentLoc.getParentCategoryValue().getIndex()) + 1;
+        			//((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
         		
         		if ( currentLayer <= implLocValue.getIndex() ) { 
 	        		ArrayList<KeyValue> childrenKV					= new ArrayList<KeyValue>(childrenLocs.size());
@@ -106,8 +139,8 @@ public class SelectPledgeLocation extends Action {
 	        			 * If we are on the last layer that needs to be shown, we have to 
 	        			 * hide locations that are already selected
 	        			 */
-	        			if ( currentLayer == implLocValue.getIndex() && plForm.getSelectedLocs() != null ) {
-	        				for ( FundingPledgesLocation l: plForm.getSelectedLocs() ) {
+	        			if ( currentLayer == implLocValue.getIndex() && pledgeForm.getSelectedLocs() != null ) {
+	        				for ( FundingPledgesLocation l: pledgeForm.getSelectedLocs() ) {
 	        					if ( child.equals(l.getLocation()) ) {
 	        						addLocationAllowed	= false;
 	        						break;
@@ -128,11 +161,11 @@ public class SelectPledgeLocation extends Action {
      
         	} else{
         		if (lastLayer < implLocValue.getIndex()){
-        			plForm.setNoMoreRecords(true);
+        			pledgeForm.setNoMoreRecords(true);
         		}
         	}
         	
         }
-		return mapping.findForward("forward");
+        return mapping.findForward("forward");
 	}
 }

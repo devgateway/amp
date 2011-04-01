@@ -12,6 +12,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -88,6 +89,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private boolean noMoreRecords=false;
 	private Long implemLocationLevel = null;
 	private Integer impLevelValue; // Implementation Level value
+	private Long levelId = null;
 	private Long parentLocId;
 	private boolean defaultCountryIsSet;
 	private Collection<FundingPledgesLocation> selectedLocs = null;
@@ -709,6 +711,14 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 */
 	public void setImpLevelValue(Integer impLevelValue) {
 		this.impLevelValue = impLevelValue;
+	}
+
+	public Long getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
 	/**

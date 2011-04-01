@@ -579,7 +579,7 @@
     
     <tr>
         <td nowrap width="200" style="font-size:12px">
-             <digi:trn>Selected Sector</digi:trn>:
+             <digi:trn>Selected Sector/Program</digi:trn>:
              <input type="hidden" id="sectorsMapComboFin" value="-1">
         </td>
         <td id="sectorSelected">&nbsp;

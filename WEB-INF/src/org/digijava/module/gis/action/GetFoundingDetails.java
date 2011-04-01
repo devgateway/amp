@@ -220,6 +220,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     Long secId = null;
+                    Long prgId = null;
                     int sectorQueryType = 0;
                     if (secIdStr.startsWith("sec_scheme_id_")) {
                         sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
@@ -227,6 +228,9 @@ public class GetFoundingDetails extends Action {
                     } else if (secIdStr.startsWith("sec_id_")) {
                         sectorQueryType = DbUtil.SELECT_SECTOR;
                         secId = new Long(secIdStr.substring(7));
+                    } else if (secIdStr.startsWith("prj_id_")) {
+                        sectorQueryType = DbUtil.SELECT_PROGRAM;
+                        prgId = new Long(secIdStr.substring(7));
                     } else {
                         sectorQueryType = DbUtil.SELECT_DEFAULT;
                         secId = new Long(secIdStr);
@@ -309,14 +313,19 @@ public class GetFoundingDetails extends Action {
                         //Get segments with funding for dashed paint map
                         List secFundings = null;
 
-                        if (request.getSession().getAttribute("publicuser")!=null){
-                            secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
-                        }else{
-                            if (secId.longValue() > -2l) {
-                                secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
-                            } else {
-                                secFundings = new ArrayList();
+
+                        if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+                            if (request.getSession().getAttribute("publicuser")!=null){
+                                secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
+                            }else{
+                                if (secId.longValue() > -2l) {
+                                    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
+                                } else {
+                                    secFundings = new ArrayList();
+                                }
                             }
+                        } else {
+                            secFundings = DbUtil.getProgramFoundings(prgId);
                         }
                         Object[] fundingList = getFundingsByLocations(secFundings,
                                 Integer.parseInt(mapLevel),

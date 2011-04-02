@@ -908,11 +908,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     <tr>
                         <td>
                             <table border="0" bgColor=#f4f4f2>
-                                 <tr>
-                                    <td  align="right" colspan="2">&nbsp;
-                                        
-                                    </td>
-                                </tr>
+                                 
                                 <c:if test="${aimAddOrgForm.type=='NGO'}">
                                     <tr>
                                         <td  align="right" colspan="2">
@@ -922,14 +918,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
                                     </tr>
                                 </c:if>
-                                 <tr>
-                                    <td  align="right" colspan="2">&nbsp;
-                                        
-                                    </td>
-                                </tr>
                                 <tr>
-                                    <td bgColor=#dddddb height="20" align="center"
-                                        colspan="2" class="tdBoldClass" style="font-size:13px"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
+                                    <td bgColor=#c7d4db height="25" align="center"
+                                        colspan="2" class="tdBoldClass" style="font-size:12px; font-weight:bold;"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
                                             <digi:trn>Add Organization</digi:trn>
                                         </c:if> <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                                             <digi:trn>Edit Organization</digi:trn>
@@ -1000,8 +991,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
                                 <c:if test="${aimAddOrgForm.type=='REGIONAL'}">
                                     <tr>
-                                        <td style=" text-align:right"><digi:trn>Region</digi:trn></td>
-                                        <td  height="30px" >
+                                        <td style=" text-align:right;" width=50%><digi:trn>Region</digi:trn></td>
+                                        <td height="30px" width=50%>
                                             <html:select property="regionId" >
                                                 <c:set var="translation">
                                                     <digi:trn

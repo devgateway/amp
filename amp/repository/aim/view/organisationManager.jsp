@@ -176,10 +176,10 @@
 												<logic:notEmpty name="aimOrgManagerForm" property="pagedCol">
 													<tr>
 														<td width="100%" class="report"><!--  to export table we are adding class "report" to its container -->
-														<table cellpadding="2" width="100%">
+														<table cellpadding="0" cellspacing="0" width="100%" class="inside">
 															<thead>
 																<tr>
-																	<td><c:if
+																	<td class="inside"><c:if
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=nameAscending&reset=false&orgSelReset=false">
@@ -198,7 +198,7 @@
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}">
 																		<img src="/repository/aim/images/down.gif" />
 																	</c:if></td>
-																	<td><c:if
+																	<td class="inside"><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=acronymAscending&reset=false&orgSelReset=false">
@@ -220,7 +220,7 @@
 																	<%--<td height="60" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																	<td><c:if
+																	<td class="inside"><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=typeAscending&reset=false&orgSelReset=false">
@@ -239,7 +239,7 @@
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}">
 																		<img src="/repository/aim/images/down.gif" />
 																	</c:if></td>
-																	<td><c:if
+																	<td class="inside"><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=groupAscending&reset=false&orgSelReset=false">
@@ -264,8 +264,8 @@
 															<tbody class="yui-dt-data">
 																<logic:iterate name="aimOrgManagerForm"
 																	property="pagedCol" id="organisation" indexId="index">
-																	<tr bgcolor=<%=(index%2)==1 ? "f4f4f2" : "cccccc" %>>
-																		<td><jsp:useBean id="urlParams"
+																	<tr>
+																		<td class="inside"><jsp:useBean id="urlParams"
 																			type="java.util.Map" class="java.util.HashMap" /> <c:set
 																			target="${urlParams}" property="mode"
 																			value="resetMode" /> <c:set target="${urlParams}"
@@ -276,21 +276,21 @@
 																			name="urlParams">
 																			<bean:write name="organisation" property="name" />
 																		</digi:link></td>
-																		<td><bean:write name="organisation"
+																		<td class="inside"><bean:write name="organisation"
 																			property="acronym" /></td>
 																		<%--<td height="30" width="171">
                                                                             <logic:notEmpty name="organisation" property="countryId">
                                                               					<c:out value="${organisation.countryId.countryName}" />
                                                               				</logic:notEmpty>
 																		</td>--%>
-																		<td><logic:notEmpty name="organisation"
+																		<td class="inside"><logic:notEmpty name="organisation"
 																			property="orgGrpId">
 																			<c:out
 																				value="${organisation.orgGrpId.orgType.orgType}" />
 
 																			<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
 																		</logic:notEmpty></td>
-																		<td><logic:notEmpty name="organisation"
+																		<td class="inside"><logic:notEmpty name="organisation"
 																			property="orgGrpId">
 																			<c:out value="${organisation.orgGrpId.orgGrpName}" />
 																		</logic:notEmpty></td>

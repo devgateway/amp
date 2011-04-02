@@ -28,7 +28,7 @@
 		</tr>
 		<tr>
 			<td>
-				<span class="subtitle-blue">Result Matrix/GIS settings</span>
+				<span class="subtitle-blue"><digi:trn>Result Matrix/GIS settings</digi:trn></span>
 			</td>
 		</tr>
 		<tr>
@@ -52,17 +52,17 @@
 					</table>
 					--%>
 					<fieldset>
-						<legend>Sector classification settiongs</legend>
+						<legend><digi:trn>Sector classification settiongs</digi:trn></legend>
 						<html:select name="gisSettingsForm" property="gisSettings.sectorSchemeFilterMode" style="width:500px;">
-							<html:option value="0">Display sectors selected</html:option>
-							<html:option value="1">Display only primary and multisector classifications</html:option>
+							<html:option value="0"><digi:trn>Display sectors selected</digi:trn></html:option>
+							<html:option value="1"><digi:trn>Display only primary and multisector classifications</digi:trn></html:option>
 						</html:select>
 						<hr>
 				
 						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
 							<tr>
 								<td height="20" colspan="2" bgcolor="#d7eafd">
-									<b>Sector classification name</b>
+									<b><digi:trn>Sector classification name</digi:trn></b>
 								</td>
 							</tr>	
 							<logic:iterate name="gisSettingsForm" property="secShcemes" id="secScheme">
@@ -79,12 +79,12 @@
 					</fieldset>
 					<br>
 					<fieldset>
-						<legend>Project settiongs</legend>
+						<legend><digi:trn>Project settiongs</digi:trn></legend>
 						
 						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
 							<tr>
 								<td height="20" colspan="2" bgcolor="#d7eafd">
-									<b>Program name</b>
+									<b><digi:trn>Program name</digi:trn></b>
 								</td>
 							</tr>	
 							<logic:iterate name="gisSettingsForm" property="topLevelPrograms" id="program">
@@ -103,7 +103,7 @@
 		</tr>
 		<tr>
 			<td align="center">
-				<html:submit styleClass="dr-menu" value="update"/>
+				<input type="submit" class="dr-menu" value="<digi:trn>update</digi:trn>"/>
 			</td>	
 		</tr>
 	</table>

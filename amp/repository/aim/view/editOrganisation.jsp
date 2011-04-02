@@ -1603,8 +1603,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             </c:when>
             <c:otherwise>
                 <tr>
-                    <td style=" text-align:right;" class="tdBoldClass"><digi:trn>DAC Code</digi:trn></td>
-                    <td width="500px" height="30px">
+                    <td style=" text-align:right;" class="tdBoldClass" width=50%><digi:trn>DAC Code</digi:trn></td>
+                    <td width="505" height="30px">
                     	<html:text property="dacOrgCode" size="15" styleId="dacOrgCode"/></td>
                 </tr>
                 <tr>

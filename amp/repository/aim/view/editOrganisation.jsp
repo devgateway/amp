@@ -929,7 +929,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <table cellpadding="2" cellspacing="2" border="0" width="100%">
+                                        <table cellpadding="2" cellspacing="2" border="0" width="80%" align=center style="margin-top:15px; margin-bottom:15px;">
                                             <tr>
                                                 <td style="text-align:left; "  class="tdBoldClass" nowrap>
                                                     <digi:trn>Organization Name</digi:trn>
@@ -978,8 +978,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                     </html:select></td>
                                             </tr>
                                             <tr>
-                                                <td align="right" height="2" colspan="2">&nbsp;</td>
-                                                <td height="1" align="center" colspan="2"><digi:img
+                                              
+                                                <td height="1" align="center" colspan="5"><digi:img
                                                         src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
                                                     </a></td>
@@ -1010,11 +1010,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td  class="tdBoldClass" style="font-size:13px;" nowrap>
+                                            <td  class="tdBoldClass" style="font-size:13px;" nowrap width=50%>
                                                 <digi:trn>Organization Primary Purpose</digi:trn>
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
-                                            <td>
+                                            <td width=50%>
                                                 <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>
                                             </td>
                                         </tr>

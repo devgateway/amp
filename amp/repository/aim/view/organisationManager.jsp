@@ -59,10 +59,9 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="879">
 				<tr>
 					<!-- Start Navigation -->
@@ -87,7 +86,7 @@
 					</td>
 				</tr>
 			<tr>
-				<td align="left">
+				<td align="left" colspan=5>
 				<!--  please note that this page contains form and you can not nested it inside other form -->
 				<jsp:include
 					page="/repository/aim/view/exportTable.jsp" /></td>

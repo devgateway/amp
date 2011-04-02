@@ -858,10 +858,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 	<html:hidden styleId="departments" value="${aimAddOrgForm.resetDepartments}" name="aimAddOrgForm" property="resetDepartments"/>
 	<html:hidden styleId="budgSects" value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm" property="resetBudgetSectors"/>
 
-    <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
+    <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000 align=center>
         <tr>
-            <td class="r-dotted-lg" width="1%">&nbsp;</td>
-            <td align=left class=r-dotted-lg valign="top" width="99%">
+            <td align=left valign="top" width="100%">
                 <table bgcolor="#ffffff" cellPadding=5 cellspacing="0" width="100%">
                     <tr>
                         <!-- Start Navigation -->
@@ -885,11 +884,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                             </span></td>
                         <!-- End navigation -->
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td height="16px" valign="center" width="700px">
                             <span class="subtitle-blue"> <digi:trn>Organization Manager </digi:trn> </span> <br/>
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
                     </tr>
@@ -910,8 +909,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         <td>
                             <table border="0" bgColor=#f4f4f2>
                                  <tr>
-                                    <td  align="right" colspan="2">
-                                        &nbsp;
+                                    <td  align="right" colspan="2">&nbsp;
+                                        
                                     </td>
                                 </tr>
                                 <c:if test="${aimAddOrgForm.type=='NGO'}">
@@ -924,8 +923,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     </tr>
                                 </c:if>
                                  <tr>
-                                    <td  align="right" colspan="2">
-                                        &nbsp;
+                                    <td  align="right" colspan="2">&nbsp;
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -1412,8 +1411,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     </tr>
                                     </c:if>
                                      <tr>
-                                    <td style="width:40px;text-align:center;font-weight:bold">
-                                        &nbsp;
+                                    <td style="width:40px;text-align:center;font-weight:bold">&nbsp;
+                                        
                                     </td>
                                     <td style="width:130px;text-align:center; "  class="tdBoldClass">
                                             <digi:trn>Year</digi:trn>
@@ -1424,12 +1423,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     <td style="width:150px;text-align:center; "  class="tdBoldClass">
                                         <digi:trn>Number of Staff</digi:trn>
                                     </td>
-                                    <td style="width:90px;text-align:center;font-weight:bold">
-                                        &nbsp;
+                                    <td style="width:90px;text-align:center;font-weight:bold">&nbsp;
+                                        
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> &nbsp;</td>
+                                    <td>&nbsp; </td>
                                     <td align="center">
                                         <c:set var="translation">
                                             <digi:trn> Select Year</digi:trn>
@@ -1519,8 +1518,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     </tr>
                                 </c:if>
                                      <tr>
-                                    <td style="width:40px;text-align:center; "  class="tdBoldClass">
-                                        &nbsp;
+                                    <td style="width:40px;text-align:center; "  class="tdBoldClass">&nbsp;
+                                        
                                     </td>
                                     <td style="width:130px;text-align:center; "  class="tdBoldClass">
                                         <digi:trn>Year</digi:trn>
@@ -1537,10 +1536,10 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     <td style="text-align:center;"  class="tdBoldClass">
                                         <digi:trn>Currency</digi:trn>
                                     </td>
-                                     <td> &nbsp;</td>
+                                     <td>&nbsp; </td>
                                 </tr>
                                 <tr>
-                                    <td> &nbsp;</td>
+                                    <td>&nbsp; </td>
                                     <td>
                                         <c:set var="translation">
                                             <digi:trn> Select Year</digi:trn>
@@ -1888,8 +1887,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                                </c:if>
 								                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content">
 								                                    <tr>
-								                                        <td>
-								                                            &nbsp;
+								                                        <td>&nbsp;
+								                                            
 								                                        </td>
 								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>LAST NAME</digi:trn>
@@ -1912,8 +1911,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                        	<digi:trn>PRIMARY </digi:trn>
 								                                        </td>
-								                                        <td colspan="2">
-								                                            &nbsp;
+								                                        <td colspan="2">&nbsp;
+								                                            
 								                                        </td>
 								                                    </tr>
 								                                    <c:forEach var="orgCont" items="${aimAddOrgForm.orgContacts}" varStatus="stat">

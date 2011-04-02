@@ -142,20 +142,18 @@
 
 				<tr>
 					<td noWrap width=867 vAlign="top" colspan="7">
-					<table width="100%" cellspacing="1" cellspacing="1">
+					<table width="100%" cellspacing="0" cellpadding="0">
 						<tr>
 							<td noWrap width=750 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
-								<tr>
-									<td vAlign="top" width="100%">&nbsp;</td>
-								</tr>
+								
 								<tr>
 									<td valign="top">
 									<table align="center" cellpadding="0" cellspacing="0"
 										width="100%" border="0">
 										<tr>
 											<td bgColor=#ffffff>
-											<table border="0" cellpadding="0" cellspacing="0" width="100%">
+											<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px;">
 												<tr bgColor=#dddddb>
 													<!-- header -->
 													<td bgColor=#c7d4db height="25" align="center" colspan="5"><B>
@@ -308,7 +306,9 @@
 										<!-- page logic for pagination -->
 										<logic:notEmpty name="aimOrgManagerForm" property="pages">
 											<tr>
-												<td colspan="4"><digi:trn key="aim:organizationPages">
+												<td colspan="4">
+												<hr />
+												<digi:trn key="aim:organizationPages">
 													Pages :</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">
 													<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 														class="java.util.HashMap" />
@@ -470,7 +470,7 @@
 								</logic:notEmpty>
 							</table>
 							</td>
-							<td noWrap width="100%" vAlign="top"><jsp:include
+							<td noWrap width="100%" vAlign="top" style="padding-top:10px;"><jsp:include
 								page="orgManagerOtherLinks.jsp" /></td>
 						</tr>
 					</table>

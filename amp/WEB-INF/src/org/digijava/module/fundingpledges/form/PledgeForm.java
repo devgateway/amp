@@ -82,8 +82,8 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String defaultCurrency;
 	private Collection<AmpCategoryValue> pledgeNames;
 	private Long pledgeTitleId;
-	private Collection<BeanWrapperImpl> years;
-	private Long year;
+	private Collection<String> years;
+	private String year;
 	
 	/*Fields for Location*/
 	private boolean noMoreRecords=false;
@@ -104,19 +104,19 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<FundingPledgesProgram> selectedProgs = null;
 	private AmpActivityProgramSettings nationalSetting;
 	
-	public Collection<BeanWrapperImpl> getYears() {
+	public Collection<String> getYears() {
 		return years;
 	}
 
-	public void setYears(Collection<BeanWrapperImpl> years) {
+	public void setYears(Collection<String> years) {
 		this.years = years;
 	}
 
-	public Long getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(Long year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 

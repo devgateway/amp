@@ -1036,13 +1036,13 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	<td align="center" valign="bottom" width="150">
 																		<select name="<%=field6%>" class="inp-text" style="max-width: 150px;">
 																			<c:forEach var="year" items="${pledgeForm.years}">
-																				<c:if test="${fundingPledgesDetails.fundingYear == year.wrappedInstance}">
-																					<option selected="true" value="<c:out value="${year.wrappedInstance}"/>">	
+																				<c:if test="${fundingPledgesDetails.fundingYear == year}">
+																					<option selected="true" value="<c:out value="${year}"/>">	
 																				</c:if>
-																				<c:if test="${fundingPledgesDetails.fundingYear != year.wrappedInstance}">
-																					<option value="<c:out value="${year.wrappedInstance}"/>">
+																				<c:if test="${fundingPledgesDetails.fundingYear != year}">
+																					<option value="<c:out value="${year}"/>">
 																				</c:if>
-																				<c:out value="${year.wrappedInstance}" />
+																				<digi:trn>${year}</digi:trn>
 																				</option>
 																			</c:forEach>
 																		</select>
@@ -1589,13 +1589,13 @@ function addFunding() {
 		<% Collection col5 = pledgeForm.getYears();
 		Iterator itr5 = col5.iterator();
 		while (itr5.hasNext()) {
-			BeanWrapperImpl yearBWI = (BeanWrapperImpl) itr5.next();	
-			Long year = (Long) yearBWI.getWrappedInstance();
+			String year = (String) itr5.next();	
+			
 			if (year != null){
 				if (year.equals(pledgeForm.getYear())) {%>
-					s += "<option selected='true' value='<%=year%>'><%=year%></option>";				  			
+					s += "<option selected='true' value='<%=year%>'><%=TranslatorWorker.translateText(year,request)%></option>";				  			
 			<% } else { %>
-					s += "<option value='<%=year%>'><%=year%></option>";
+					s += "<option value='<%=year%>'><%=TranslatorWorker.translateText(year,request)%></option>";
 			<%}
 			}
 		 }%>

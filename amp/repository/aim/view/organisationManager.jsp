@@ -413,7 +413,7 @@
 												<td align="center" colspan="4">
 												<table width="90%">
 													<tr>
-														<td><c:if
+														<td align=center><c:if
 															test="${not empty aimOrgManagerForm.currentAlpha}">
 															<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
 																<c:if test="${aimOrgManagerForm.currentAlpha!=''}">
@@ -456,7 +456,7 @@
 								</tr>
 								<logic:notEmpty name="aimOrgManagerForm" property="alphaPages">
 									<tr>
-										<td><c:if
+										<td align=center><c:if
 											test="${not empty aimOrgManagerForm.currentAlpha}">
 											<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
 												<c:if test="${aimOrgManagerForm.currentAlpha!=''}">

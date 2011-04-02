@@ -61,8 +61,8 @@
 
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td align=left valign="top" width=750>
-			<table cellPadding=5 cellspacing="0" width="879">
+		<td align=left valign="top" width=1000>
+			<table cellPadding=5 cellspacing="0" width="1000">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 colspan="7" width="867"><span class=crumb>
@@ -144,15 +144,14 @@
 					<td noWrap width=867 vAlign="top" colspan="7">
 					<table width="100%" cellspacing="1" cellspacing="1">
 						<tr>
-							<td noWrap width=600 vAlign="top">
-							<table bgColor=#ffffff cellpadding="0" cellspacing="0"
-								class=box-border-nopadding width="100%">
+							<td noWrap width=750 vAlign="top">
+							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 								<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="100%">&nbsp;</td>
 								</tr>
-								<tr bgColor=#f4f4f2>
+								<tr>
 									<td valign="top">
-									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0"
+									<table align="center" cellpadding="0" cellspacing="0"
 										width="100%" border="0">
 										<tr>
 											<td bgColor=#ffffff class=box-border>
@@ -178,7 +177,7 @@
 												<logic:notEmpty name="aimOrgManagerForm" property="pagedCol">
 													<tr>
 														<td width="100%" class="report"><!--  to export table we are adding class "report" to its container -->
-														<table bgColor=#f4f4f2 cellpadding="2" width="100%">
+														<table cellpadding="2" width="100%">
 															<thead>
 																<tr>
 																	<td><c:if

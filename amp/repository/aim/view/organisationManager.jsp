@@ -77,14 +77,14 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=867 colspan="7"><span class=subtitle-blue>
 						<digi:trn key="aim:organizationManager"></span><span class=crumb>Organization
                       Manager
 						</digi:trn>
                       </span>
 					</td>
-				</tr>
+				</tr>-->
 			<tr>
 				<td align="left" colspan=5>
 				<!--  please note that this page contains form and you can not nested it inside other form -->
@@ -134,7 +134,7 @@
 						onclick="return searchOrganization()"></td>
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=867 colspan="7"><digi:trn
+					<td height=16 valign="center" width=867 colspan="7" style="border-bottom:1px solid #CCCCCC; padding-bottom:15px;"><digi:trn
 						key="aim:organMan:topFilterNote">
 						Select the value "ALL" in Results per page to view all results of your selection on one page.
 						</digi:trn></td>
@@ -155,10 +155,10 @@
 										width="100%" border="0">
 										<tr>
 											<td bgColor=#ffffff>
-											<table border="0" cellpadding="1" cellspacing="1" width="100%">
+											<table border="0" cellpadding="0" cellspacing="0" width="100%">
 												<tr bgColor=#dddddb>
 													<!-- header -->
-													<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
+													<td bgColor=#c7d4db height="25" align="center" colspan="5"><B>
 													<digi:trn key="aim:organizationList">List of Organizations</digi:trn>
 													</b></td>
 													<!-- end header -->

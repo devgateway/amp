@@ -49,7 +49,12 @@ public class ShowPledgesList extends Action {
 				for (Iterator iterator2 = fpdl.iterator(); iterator2.hasNext();) {
 					FundingPledgesDetails fpd = (FundingPledgesDetails) iterator2.next();
 					pledge.setTotalAmount(pledge.getTotalAmount() + fpd.getAmount());
-					pledge.getYearsList().add(fpd.getFundingYear());
+					if (fpd.getFundingYear()!=null) {
+						pledge.getYearsList().add(fpd.getFundingYear());
+					} else {
+						pledge.getYearsList().add("To specify");
+					}
+				
 				}
 			}
 			ArrayList<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);

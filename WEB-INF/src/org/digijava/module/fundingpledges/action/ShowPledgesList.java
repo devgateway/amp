@@ -43,20 +43,13 @@ public class ShowPledgesList extends Action {
 		for (Iterator iterator = pledges.iterator(); iterator.hasNext();) {
 			FundingPledges pledge = (FundingPledges) iterator.next();
 			pledge.setTotalAmount((double) 0);
-			pledge.setYearsList(new TreeSet<Long>());
+			pledge.setYearsList(new TreeSet<String>());
 			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			if (fpdl!=null) {
 				for (Iterator iterator2 = fpdl.iterator(); iterator2.hasNext();) {
 					FundingPledgesDetails fpd = (FundingPledgesDetails) iterator2.next();
 					pledge.setTotalAmount(pledge.getTotalAmount() + fpd.getAmount());
-					if (fpd.getFundingYear()!=null) {
-						pledge.getYearsList().add(fpd.getFundingYear());
-					} else if (fpd.getFunding_date()!=null) {
-						Long year = new Long(fpd.getFunding_date().getYear()+1900);
-						fpd.setFundingYear(year);
-						PledgesEntityHelper.updateFundingPledgeDetail(fpd);
-						pledge.getYearsList().add(year);
-					}
+					pledge.getYearsList().add(fpd.getFundingYear());
 				}
 			}
 			ArrayList<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);

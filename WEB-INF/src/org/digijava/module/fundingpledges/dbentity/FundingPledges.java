@@ -57,7 +57,7 @@ public class FundingPledges implements Comparable<FundingPledges>{
 	private String contactAlternativeEmail_1; 
 	
 	private Double totalAmount;
-	private TreeSet<Long> yearsList;
+	private TreeSet<String> yearsList;
 	
 	public String getContactName() {
 		return contactName;
@@ -314,10 +314,10 @@ public class FundingPledges implements Comparable<FundingPledges>{
 	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	public TreeSet<Long> getYearsList() {
+	public TreeSet<String> getYearsList() {
 		return yearsList;
 	}
-	public void setYearsList(TreeSet<Long> yearsList) {
+	public void setYearsList(TreeSet<String> yearsList) {
 		this.yearsList = yearsList;
 	}
 	@Override

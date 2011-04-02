@@ -31,7 +31,7 @@ public class FundingPledgesDetails {
 	private Long pledgetypeid;
 	private Long typeOfAssistanceid;
 	private Long aidmodalityid;
-	private Long fundingYear;
+	private String fundingYear;
 	
 	public long getId() {
 		return id;
@@ -149,10 +149,10 @@ public class FundingPledgesDetails {
 			}
 		}
 	}
-	public Long getFundingYear() {
+	public String getFundingYear() {
 		return fundingYear;
 	}
-	public void setFundingYear(Long fundingYear) {
+	public void setFundingYear(String fundingYear) {
 		this.fundingYear = fundingYear;
 	}
 }

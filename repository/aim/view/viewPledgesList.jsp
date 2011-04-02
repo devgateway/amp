@@ -182,9 +182,9 @@ function setHoveredRow(rowId) {
 				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
 				<tr>
                    	<td class="report">
-					<table width="100%" height="20" cellpadding="0" cellspacing="0" >
+					<table width="100%" height="40" cellpadding="0" cellspacing="0" >
                       <thead>
-						<tr style="background-color: #999999; color: #000000;" align="center">
+						<tr height="25" style="background-color: #999999; color: #000000;" align="center">
 							<td width="25%" align="center">
 								<b> 
 									<digi:trn>Pledge Name</digi:trn>
@@ -217,11 +217,11 @@ function setHoveredRow(rowId) {
 				</tr>
 				<tr>
 					<td>
-					<div style="overflow: auto; width: 100%; height: 200px; max-height: 220px;" class="report">
+					<div style="overflow: auto; width: 100%; height: 400px; max-height: 420px;" class="report">
 					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" >
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
-							<tr>
+							<tr style="height: 25px">
 								<td width="25%" align="center">
 									<bean:write name="allFundingPledges" property="key.title" />
 								</td>
@@ -233,7 +233,7 @@ function setHoveredRow(rowId) {
 								</td>
 								<td width="19%" align="center">
 									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">
-										<li> ${year}&nbsp;</li>
+										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
 									</c:forEach>
 								</td>
 								<td width="3%" align="center">

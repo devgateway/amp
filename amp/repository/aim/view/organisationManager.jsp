@@ -146,7 +146,7 @@
 						<tr>
 							<td noWrap width=750 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
-								<tr bgColor=#f4f4f2>
+								<tr>
 									<td vAlign="top" width="100%">&nbsp;</td>
 								</tr>
 								<tr>
@@ -154,9 +154,8 @@
 									<table align="center" cellpadding="0" cellspacing="0"
 										width="100%" border="0">
 										<tr>
-											<td bgColor=#ffffff class=box-border>
-											<table border="0" cellpadding="1" cellspacing="1" class=box-border
-												width="100%">
+											<td bgColor=#ffffff>
+											<table border="0" cellpadding="1" cellspacing="1" width="100%">
 												<tr bgColor=#dddddb>
 													<!-- header -->
 													<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
@@ -457,7 +456,7 @@
 								</tr>
 								<logic:notEmpty name="aimOrgManagerForm" property="alphaPages">
 									<tr>
-										<td bgColor=#f4f4f2><c:if
+										<td><c:if
 											test="${not empty aimOrgManagerForm.currentAlpha}">
 											<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
 												<c:if test="${aimOrgManagerForm.currentAlpha!=''}">

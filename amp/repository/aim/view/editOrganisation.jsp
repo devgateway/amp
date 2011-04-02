@@ -69,7 +69,7 @@
         font-family:Arial;
         font-size: 13px;
         font-weight:bold;
-        color:#0000FF;
+        color:#ffffff;
     }
 </style>
 
@@ -985,6 +985,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                     </a></td>
                                             </tr>
                                         </table>
+										<hr width=80% align=center>
                                     </td>
 
                                 </tr>
@@ -1864,7 +1865,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                             </a>
 								        </div>
-								        <fieldset>
+								        <fieldset style="width:80%; margin-left:auto; margin-right:auto;">
 								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
 								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
 								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>

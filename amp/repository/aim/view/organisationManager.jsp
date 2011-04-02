@@ -177,7 +177,7 @@
 														<table cellpadding="0" cellspacing="0" width="100%" class="inside">
 															<thead>
 																<tr>
-																	<td class="inside"><c:if
+																	<td class="inside" bgcolor=#F2F2F2><c:if
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=nameAscending&reset=false&orgSelReset=false">
@@ -196,7 +196,7 @@
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}">
 																		<img src="/repository/aim/images/down.gif" />
 																	</c:if></td>
-																	<td class="inside"><c:if
+																	<td class="inside" bgcolor=#F2F2F2><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=acronymAscending&reset=false&orgSelReset=false">
@@ -218,7 +218,7 @@
 																	<%--<td height="60" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																	<td class="inside"><c:if
+																	<td class="inside" bgcolor=#F2F2F2><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=typeAscending&reset=false&orgSelReset=false">
@@ -237,7 +237,7 @@
 																		test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}">
 																		<img src="/repository/aim/images/down.gif" />
 																	</c:if></td>
-																	<td class="inside"><c:if
+																	<td class="inside" bgcolor=#F2F2F2><c:if
 																		test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
 																		<digi:link
 																			href="/organisationManager.do?sortBy=groupAscending&reset=false&orgSelReset=false">
@@ -306,7 +306,7 @@
 										<!-- page logic for pagination -->
 										<logic:notEmpty name="aimOrgManagerForm" property="pages">
 											<tr>
-												<td colspan="4">
+												<td colspan="4" align=center>
 												<hr />
 												<digi:trn key="aim:organizationPages">
 													Pages :</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">

@@ -8,8 +8,11 @@ import java.sql.Timestamp;
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.TreeItem;
@@ -20,12 +23,15 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.gis.dbentity.GisSettings;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mortbay.jetty.servlet.SessionManager;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Title: </p>
@@ -1271,12 +1277,8 @@ public class DbUtil {
        }
    }
 
-    public static XMLDocument getAllSectorsAsHierarchyXML(boolean showSecondarySectorSchemes) {
-        return getAllSectorsAsHierarchyXML(SECTORS_FOR_ACTIVITIES, showSecondarySectorSchemes);
 
-    }
-
-    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showSecondarySectorSchemes) {
+    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showSecondarySectorSchemes, int sectorFilterMode) {
         Collection <AmpSectorScheme> schemes = SectorUtil.getAllSectorSchemes();
         Long primarySchemeId = null;
         List<AmpClassificationConfiguration> allClassificationConfigs  = null;
@@ -1305,7 +1307,9 @@ public class DbUtil {
 
         for (AmpSectorScheme scheme : schemes) {
             boolean primary = (primarySchemeId != null && primarySchemeId.equals(scheme.getAmpSecSchemeId()));
-           if (primary || (multySectorSchemIDs.contains(scheme.getAmpSecSchemeId()) && showSecondarySectorSchemes)) {
+           if ( (sectorFilterMode == GisSettings.SECTOR_SCHEME_AUTOMATIC &&
+                   (primary || (multySectorSchemIDs.contains(scheme.getAmpSecSchemeId()) && showSecondarySectorSchemes)))
+              || (sectorFilterMode == GisSettings.SECTOR_SCHEME_CONFIGURABLE && scheme.getShowInRMFilters())) {
 
             XML schemeNode = new XML("scheme");
             schemeNode.addAttribute("name", scheme.getSecSchemeName());
@@ -1595,6 +1599,47 @@ public class DbUtil {
             }
         }
         return retVal;
+    }
+
+    public static GisSettings getGisSettings (HttpServletRequest request) {
+        Site site = RequestUtils.getSite(request);
+        ModuleInstance modInst = RequestUtils.getModuleInstance(request);
+        return getGisSettings (site.getSiteId(), modInst.getInstanceName());
+    }
+
+    public static GisSettings getGisSettings (String siteId, String instanceId) {
+        GisSettings retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuffer queryStr = new StringBuffer("from ");
+            queryStr.append(GisSettings.class.getName());
+            queryStr.append(" as gs where gs.siteId = :SITE_ID and gs.instanceId = :INSTANCE_ID ");
+
+            Query q = sess.createQuery(queryStr.toString());
+            q.setString("SITE_ID", siteId);
+            q.setString("INSTANCE_ID", instanceId);
+
+            retVal = (GisSettings)q.uniqueResult();
+
+            //If settings do not exist
+            if (retVal == null) {
+                GisSettings newOne = new GisSettings(siteId, instanceId);
+                createGisSettings (newOne);
+                retVal = newOne;
+            }
+
+        } catch (DgException ex) {
+          logger.error("Error getting GIS settings from database " + ex);
+        }
+
+
+        return retVal;
+    }
+
+    private static void createGisSettings (GisSettings sets) throws DgException {
+        Session sess = PersistenceManager.getRequestDBSession();
+        sess.save(sets);
     }
 
 }

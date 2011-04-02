@@ -1041,7 +1041,7 @@ public class GetFoundingDetails extends Action {
 
                     boolean showSecondaryScheme = FeaturesUtil.getFieldVisibility("Secondary Sector").isFieldActive(ampTreeVisibility);
 
-                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme);
+                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme, DbUtil.getGisSettings(request).getSectorSchemeFilterMode());
                     tree.output(sos);
                 }
 

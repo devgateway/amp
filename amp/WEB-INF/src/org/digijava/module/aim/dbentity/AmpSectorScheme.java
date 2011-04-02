@@ -10,8 +10,18 @@ public class AmpSectorScheme implements Serializable
 	private Long ampSecSchemeId ;
 	private String secSchemeCode ;
 	private String secSchemeName ;
-	
-	/**
+
+    private Boolean showInRMFilters;
+
+    public Boolean getShowInRMFilters() {
+        return showInRMFilters;
+    }
+
+    public void setShowInRMFilters(Boolean showInRMFilters) {
+        this.showInRMFilters = showInRMFilters;
+    }
+
+    /**
 	 * @return
 	 */
 	public Long getAmpSecSchemeId() {

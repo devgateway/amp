@@ -60,6 +60,16 @@
 
 		</layout>
 
+		<layout name="gisSettingsLayout" extends="default" file="gisSettingsLayout.jsp">
+			<put name="title">Aid Management Platform</put>
+			<put-item name="body" module="gis" page="gisSettings"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+
+		</layout>
+
+
 		<layout name="gisRegReportLayout" extends="default" file="gisRegReportLayout.jsp">
 			<put name="title">GIS Regional Report</put>
 			<put-item name="body" module="gis" page="gisRegionReport"/>

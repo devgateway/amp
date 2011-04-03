@@ -1026,7 +1026,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                                                     </a>                        
                                                 </div>
-                                                        <fieldset><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
+                                                        <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
                                                       	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
                                 						<img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
                                 <div id="div_container_general">
@@ -1365,8 +1365,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         </a>
                        
                          </div>
-                        <fieldset>
-                            <legend align="left" class="tdBoldClass" style="font-size:13px;color:#0000FF; "><digi:trn>Staff Information</digi:trn></legend>
+                        <fieldset style="margin-left:10px; margin-right:10px;">
+                            <legend align="left" class="tdBoldClass" style="font-size:13px;color:#FFFFFF; "><digi:trn>Staff Information</digi:trn></legend>
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
@@ -1463,7 +1463,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                             </a>
                          </div>
-                        <fieldset>
+                        <fieldset style="margin-left:10px; margin-right:10px;">
                             <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
                                 <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
                                 <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
@@ -1865,7 +1865,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                             </a>
 								        </div>
-								        <fieldset style="width:80%; margin-left:auto; margin-right:auto;">
+								        <fieldset style="margin-left:10px; margin-right:10px;">
 								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
 								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
 								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>

@@ -16,6 +16,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -52,7 +53,8 @@ public class ShowPledgesList extends Action {
 					if (fpd.getFundingYear()!=null) {
 						pledge.getYearsList().add(fpd.getFundingYear());
 					} else {
-						pledge.getYearsList().add("To specify");
+						String unspecified = TranslatorWorker.translateText("unspecified", request);
+						pledge.getYearsList().add(unspecified);
 					}
 				
 				}

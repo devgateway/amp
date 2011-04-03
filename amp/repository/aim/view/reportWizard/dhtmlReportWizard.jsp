@@ -303,7 +303,7 @@
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
 											position: relative;">
 								<table style="top: 17%; left: 1%; position: absolute;">
-									<%if (request.getParameter("type")== null){%>
+									<%if (Integer.parseInt(request.getParameter("type"))!= ArConstants.PLEDGES_TYPE){%>
 									<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
@@ -375,6 +375,7 @@
 													</digi:trn>
 												</html:radio>
 											</td>
+											<%if (Integer.parseInt(request.getParameter("type"))!= ArConstants.PLEDGES_TYPE){%>
 											<td>								
 												<html:radio property="reportPeriod" value="Q">
 													<digi:trn key="aim:QuarterlyReport">
@@ -389,6 +390,7 @@
 													</digi:trn>
 												</html:radio>
 											</td>
+											<%}%>
 										</tr>
 										<tr>
 											<td colspan="4" style="margin-top: 5px;margin-bottom: 5px">

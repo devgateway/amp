@@ -61,7 +61,7 @@ public class AddPledge extends Action {
 
     		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
     		
-    		String yearToSpecify = "To specify";
+    		String yearToSpecify = TranslatorWorker.translateText("unspecified", request);
             
             if (plForm.getYear() == null) {     
                plForm.setYear(yearToSpecify);
@@ -70,7 +70,7 @@ public class AddPledge extends Action {
             long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
             long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
             long maxYear = yearFrom + countYear;
-            plForm.getYears().add(yearToSpecify);
+           // plForm.getYears().add(yearToSpecify);
             for (long i = yearFrom; i <= maxYear; i++) {
             	plForm.getYears().add(String.valueOf(i));
             }

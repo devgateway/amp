@@ -70,6 +70,8 @@ public class FundingPledgesDetails {
 	public java.sql.Timestamp getFunding_date() {
 		return funding_date;
 	}
+	
+	@Deprecated
 	public void setFunding_date(java.sql.Timestamp fundingDate) {
 		this.funding_date = fundingDate;
 		if (fundingDate!=null) {
@@ -129,12 +131,14 @@ public class FundingPledgesDetails {
 	/**
 	 * @return the fundingDate
 	 */
+	@Deprecated
 	public String getFundingDate() {
 		return fundingDate;
 	}
 	/**
 	 * @param fundingDate the fundingDate to set
 	 */
+	@Deprecated
 	public void setFundingDate(String fundingDate) {
 		this.fundingDate = fundingDate;
 		if (fundingDate!=null && fundingDate.length()>0) {

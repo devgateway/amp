@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -9,7 +10,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -229,7 +230,8 @@ function setHoveredRow(rowId) {
 									<bean:write name="allFundingPledges" property="key.organization.name" />
 								</td>
 								<td width="25%" align="center">
-									<bean:write name="allFundingPledges" property="key.totalAmount" />
+										<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />
+									
 								</td>
 								<td width="19%" align="center">
 									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">

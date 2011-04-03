@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*, org.springframework.beans.BeanWrapperImpl" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -1016,7 +1017,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											                            </td>
 																	</field:display>
 																	<td align="center" valign="bottom" width="150">
-																		<input type="text" name="<%=field4%>" value="<c:out value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
+																		
+																		<input type="text" name="<%=field4%>" value="<aim:formatNumber value="${fundingPledgesDetails.amount}"/>" style="width:90px" class="inp-text"/>
 										                            </td>
 																	<td align="center" valign="bottom" width="100">
 										                                <select name="<%=field5%>" class="inp-text" style="max-width: 150px;">
@@ -1042,7 +1044,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																				<c:if test="${fundingPledgesDetails.fundingYear != year}">
 																					<option value="<c:out value="${year}"/>">
 																				</c:if>
-																				<digi:trn>${year}</digi:trn>
+																					${year}
 																				</option>
 																			</c:forEach>
 																		</select>

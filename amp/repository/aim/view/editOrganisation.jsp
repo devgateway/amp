@@ -1888,25 +1888,25 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                                        <td>&nbsp;
 								                                            
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>LAST NAME</digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>FIRST NAME</digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>EMAIL </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn> TELEPHONE </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn> FAX </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                            <digi:trn>TITLE </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
+								                                        <td class="tdBoldClass" style="color:#FFFFFF">
 								                                        	<digi:trn>PRIMARY </digi:trn>
 								                                        </td>
 								                                        <td colspan="2">&nbsp;
@@ -1988,7 +1988,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                    </tr>
 								                </c:if>
 								                <tr>
-								                    <td colspan="2" align=center><aim:addContactButton collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
+								                    <td colspan="2"><aim:addContactButton collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
 								                </tr>
 								
 								            </table>

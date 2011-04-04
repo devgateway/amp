@@ -135,10 +135,16 @@ function confirmFunc() {
 				</c:if>
         	</td>
         </tr>
-        <tr>
-            <tr>
-                <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
-            </tr>
+         <tr>
+         	<td>
+          	<table cellpadding="6" cellspacing="6">
+               <tr>
+               <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit></td> <td><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+               </tr>
+              </table>
+             </td>
+         </tr>
+         <tr>
           <td noWrap width=1000 vAlign="top">
             <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
               <tr>

@@ -28,7 +28,7 @@
 				<td bgcolor=#CCCCCC width="13" height="20"> </td>
 			</tr>
 			<tr style="display: table-row;  " name="otherDocumentsTr" bgcolor="#f4f4f2">
-				<td colspan="3" name="otherDocumentsTd" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
+				<td colspan="3" name="otherDocumentsTd" style="border-color: #cccccc; border-left-style: solid; border-left-width: thin; 
 					border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
 					<digi:trn key="contentrepository:Empty">Empty</digi:trn><a name="otherDocumentsDiv">&nbsp;</a>
 				</td>

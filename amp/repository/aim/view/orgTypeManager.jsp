@@ -55,8 +55,8 @@
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#c7d4db height="20" align="center" colspan="5"><B>
-																<digi:trn key="aim:orgTypeList">List
-                                                                of Organization Types</digi:trn>						
+																<digi:trn key="aim:orgTypeList"><b style="font-size:12px;">List
+                                                                of Organization Types</b></digi:trn>						
                                                               </b>						
 															</td>
 															<!-- end header -->
@@ -75,18 +75,18 @@
 														<logic:notEmpty name="aimOrgTypeManagerForm" 	property="organisation">
 														<tr>
 															<td width="100%">	
-																<table width="500" border="0"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" class="inside">
 																	<tr>
-																		<td height="30" width="350"><b>
+																		<td height="30" width="350" class="inside" bgcolor="#f2F2f2"><b>
 																			<digi:trn key="aim:orgTypeName">Name</digi:trn></b>
 																		</td>	
-																		<td height="30" width="150"><b>
+																		<td height="30" width="150" class="inside" bgcolor="#f2F2f2"><b>
 																			<digi:trn key="aim:orgTypeCode">Code</digi:trn></b>
 																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgTypeManagerForm" property="organisation" id="organisation">
                                                            			<tr>
-																		<td height="30" width="350">
+																		<td height="30" lass="inside">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="action" value="edit" />
 																		  <c:set target="${urlParams}" property="ampOrgTypeId">
@@ -96,7 +96,7 @@
 																		  	<bean:write name="organisation" property="orgType" />
 																		  </digi:link>
 																		</td>
-																		<td height="30" width="150">
+																		<td height="30" class="inside">
 																			<logic:empty name="organisation" property="orgTypeCode">
 																				<c:out value="-" />
 																			</logic:empty>
@@ -141,7 +141,7 @@
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="10"0>
+										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">

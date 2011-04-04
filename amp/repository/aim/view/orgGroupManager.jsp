@@ -51,7 +51,6 @@
 <digi:form action="/orgGroupManager.do">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" style="font-size:12px;">
 				<tr>
@@ -123,13 +122,13 @@
 				
 				<tr>
 					<td noWrap width=867  colspan="7" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1">
+					<table width="100%" cellpadding="1" cellspacing="1">
 					<tr>
 						<td noWrap width=750 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr>
 									<td valign="top">
-										<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
+										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">	
 											<tr>
 												<td bgColor=#ffffff >
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
@@ -249,7 +248,7 @@
 											<!-- page logic for pagination -->
 											<logic:notEmpty name="aimOrgGroupManagerForm" property="pages">
 											<tr>
-												<td colspan="4">
+												<td colspan="4" align=center style="font-size:12px;">
 													<digi:trn key="aim:organizationPages">
 													Pages :</digi:trn>
 													<logic:iterate name="aimOrgGroupManagerForm" 	property="pages" id="pages" type="java.lang.Integer">
@@ -271,7 +270,7 @@
 											<!-- end page logic for pagination -->
 											<logic:notEmpty name="aimOrgGroupManagerForm" property="alphaPages">
 											<tr>
-												<td align="center" colspan="4">
+												<td align="center" colspan="4" style="font-size:12px;">
 													<table width="90%">
 														<tr>
 														    <td>
@@ -312,11 +311,7 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>&nbsp;
-										
-									</td>
-								</tr>
+
 							</table>
 						</td>
 						<td noWrap width="100%" vAlign="top">

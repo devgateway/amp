@@ -49,11 +49,11 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <digi:form action="/orgGroupManager.do">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
-			<table cellPadding=5 cellspacing="0" width="100%">
+			<table cellPadding=5 cellspacing="0" width="100%" style="font-size:12px;">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 colspan="7" width="867"><span class=crumb>
@@ -68,14 +68,14 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571 colspan="7"><span class=subtitle-blue>
 						<digi:trn key="aim:orgGroupManager"></span><span class=crumb>Organization Group
                       Manager
 						</digi:trn>
                       </span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td width="250">
 						<digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
@@ -104,13 +104,13 @@
                     <c:set var="trnResetBtn">
                       <digi:trn key="aim:btnReset"> Reset </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+                    <input type="button" value="${trnResetBtn}" class="buttonx" onclick="return resetSearch()">
 					</td>
 					<td width="300">					
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()">
+                    <input type="button" value="${trnGoBtn}" class="buttonx" onclick="return searchOrganization()">
 					</td>
 				</tr>
 				<tr>
@@ -125,22 +125,17 @@
 					<td noWrap width=867  colspan="7" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
-						<td noWrap width=600 vAlign="top">
+						<td noWrap width=750 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
-								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
-									</td>
-								</tr>
-								<tr bgColor=#f4f4f2>
+								<tr>
 									<td valign="top">
-										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">	
+										<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
 											<tr>
-												<td bgColor=#ffffff class=box-border>
+												<td bgColor=#ffffff >
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#c7d4db height="25" align="center" colspan="5"><B style="font-size:12px;">
 																<digi:trn key="aim:orgGroupList">List
                                                                 of Organization Groups</digi:trn>						
                                                               </b>						
@@ -161,9 +156,9 @@
 														<logic:notEmpty name="aimOrgGroupManagerForm" 	property="organisation">
 														<tr>
 															<td width="100%">	
-																<table width="634" border="0"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" class="inside">
 																	<tr>
-																		<td height="30" width="377">
+																		<td height="30" width="377" class="inside">
 																			<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams4}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy!='nameAscending'}">
@@ -179,7 +174,7 @@
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>	
-																		<td height="30" width="171">
+																		<td height="30" width="171" class="inside">
 																			<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams5}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='codeAscending'}">
@@ -195,7 +190,7 @@
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
-																		<td height="30" width="147">
+																		<td height="30" width="147" class="inside">
 																			<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams6}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='typeAscending'}">
@@ -215,7 +210,7 @@
 																	</tr>
 																<logic:iterate name="aimOrgGroupManagerForm" property="organisation" id="organisation">
                                                            			<tr>
-																		<td height="30" width="377">
+																		<td height="30" width="377" class="inside">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="action" value="edit" />
 																		  <c:set target="${urlParams}" property="ampOrgGrpId">
@@ -225,7 +220,7 @@
 																		  	<bean:write name="organisation" property="orgGrpName" />
 																		  </digi:link>
 																		</td>
-																		<td height="30" width="171">
+																		<td height="30" width="171" class="inside">
 																			<logic:empty name="organisation" property="orgGrpCode">
 																				<c:out value="-" />
 																			</logic:empty>
@@ -233,7 +228,7 @@
 																				<bean:write name="organisation" property="orgGrpCode" />
 																			</logic:notEmpty>
                                                                         </td>
-																		<td height="30" width="147">
+																		<td height="30" width="147" class="inside">
 																			<logic:notEmpty name="organisation" property="orgType">
                                                               					<c:out value="${organisation.orgType.orgType}" />
                                                               				</logic:notEmpty>
@@ -318,8 +313,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
+									<td bgColor=#f4f4f2>&nbsp;
+										
 									</td>
 								</tr>
 							</table>
@@ -329,39 +324,37 @@
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="10"0>
+										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
-													Other links
+													<b style="font-size:12px; padding-left:5px;">Other links</b>
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
-												</td>
+												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 											</tr>
 										</table>
 									</td>
 								</tr>
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellspacing="1" width="100%">
+										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<digi:link href="/editOrgGroup.do?action=create" >
 															<digi:trn key="aim:addNewOrgGroup">Add Group</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<digi:link href="/organisationManager.do" >
 															<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<digi:link href="/admin.do">
 													<digi:trn key="aim:AmpAdminHome">

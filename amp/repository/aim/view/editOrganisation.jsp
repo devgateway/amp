@@ -909,15 +909,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                         <td>
                             <table border="0" bgColor=#f4f4f2>
                                  
-                                <c:if test="${aimAddOrgForm.type=='NGO'}">
-                                    <tr>
-                                        <td  align="right" colspan="2">
-                                            <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
-                                            <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
-                                        </td>
-
-                                    </tr>
-                                </c:if>
+                               
                                 <tr>
                                     <td bgColor=#c7d4db height="25" align="center"
                                         colspan="2" class="tdBoldClass" style="font-size:12px; font-weight:bold;"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
@@ -928,6 +920,16 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                     </td>
                                 </tr>
                                 <tr>
+								 <c:if test="${aimAddOrgForm.type=='NGO'}">
+                                    <tr>
+                                        <td  align="center" colspan="2">
+                                            <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
+                                            <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
+											<hr />
+                                        </td>
+
+                                    </tr>
+                                </c:if>
                                     <td colspan="2">
                                         <table cellpadding="2" cellspacing="2" border="0" width="80%" align=center style="margin-top:15px; margin-bottom:15px;">
                                             <tr>
@@ -1011,11 +1013,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td  class="tdBoldClass" style="font-size:13px;" nowrap width=50%>
+                                            <td  class="tdBoldClass" style="font-size:11px;" nowrap width=50% align=right>
                                                 <digi:trn>Organization Primary Purpose</digi:trn>
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
-                                            <td width=50%>
+                                            <td width=50% style="padding-right:15px;">
                                                 <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>
                                             </td>
                                         </tr>

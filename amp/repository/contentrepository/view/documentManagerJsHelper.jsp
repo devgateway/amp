@@ -11,8 +11,8 @@
 .yui-skin-sam .yui-dt th{background:#C7D4DB}
 
 .all_markup table {border-collapse:collapse;border: 1px solid #CCCCCC;  width: 100%}
-.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px;}
-.all_markup th {padding:.25em;background-color:#E1E1E1; font-size:12px; color: black; text-align: center;border-right: #E1E1E1 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px; background-color:#FFFFFF;}
+.all_markup th {padding:.25em;background-color:#E1E1E1; font-size:12px; color: black; text-align: center;border-right: #CCCCCC 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
 .all_markup .yui-dt {width: 100%;} 

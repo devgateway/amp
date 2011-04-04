@@ -10,7 +10,7 @@
 	<table name="framingTable" border="0" cellPadding=5 cellspacing="0" style="position: relative; left: 2px; font-size: 10px; margin-top:15px; width:800px;" id="team_table" bgcolor=#CCCCCC>
 			<tr>
 				<td bgcolor=#CCCCCC> </td>
-				<td class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
+				<td bgcolor=#CCCCCC class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
 					<a style="cursor:pointer" >
 						<img
 							border="0" align="absmiddle"

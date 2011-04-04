@@ -157,7 +157,7 @@
 															<td width="100%">	
 																<table width="100%" border="0" class="inside">
 																	<tr>
-																		<td height="30" width="377" class="inside">
+																		<td height="30" width="377" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams4}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy!='nameAscending'}">
@@ -173,7 +173,7 @@
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>	
-																		<td height="30" width="171" class="inside">
+																		<td height="30" width="171" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams5}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='codeAscending'}">
@@ -189,7 +189,7 @@
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
-																		<td height="30" width="147" class="inside">
+																		<td height="30" width="147" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams6}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='typeAscending'}">
@@ -248,7 +248,7 @@
 											<!-- page logic for pagination -->
 											<logic:notEmpty name="aimOrgGroupManagerForm" property="pages">
 											<tr>
-												<td colspan="4" align=center style="font-size:12px;">
+												<td colspan="4" align=center style="font-size:12px; padding-top:15px;">
 													<digi:trn key="aim:organizationPages">
 													Pages :</digi:trn>
 													<logic:iterate name="aimOrgGroupManagerForm" 	property="pages" id="pages" type="java.lang.Integer">
@@ -271,7 +271,7 @@
 											<logic:notEmpty name="aimOrgGroupManagerForm" property="alphaPages">
 											<tr>
 												<td align="center" colspan="4" style="font-size:12px;">
-													<table width="90%">
+													<table width="90%" style="font-size:12px;">
 														<tr>
 														    <td>
 														    <c:if test="${not empty aimOrgGroupManagerForm.currentAlpha}">

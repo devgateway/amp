@@ -122,7 +122,7 @@
 												<td bgColor=#ffffff>
 													<table border="0" cellpadding="1" cellspacing="1" width="100%">
 														<tr>
-															<td height="20" bgcolor=#c7d4db align="center" colspan="5" style="font-size:12px; font-weight:bold;">
+															<td height="25" bgcolor=#c7d4db align="center" colspan="5" style="font-size:12px; font-weight:bold; padding-bottom:15px;">
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
 																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>																</logic:equal>
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >

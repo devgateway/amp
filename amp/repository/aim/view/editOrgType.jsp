@@ -77,24 +77,21 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=757>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-	  <td align=left class=r-dotted-lg valign="top" width=750>
+	  <td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 		  <tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33 colspan="5"><span class=crumb>
 
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
+						Admin Home						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:link href="/orgTypeManager.do" styleClass="comment">
 						<digi:trn key="aim:orgTypeManager">
-						Oraganization Type Manager
-						</digi:trn>
+						Oraganization Type Manager						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
 							<digi:trn key="aim:addOrgType">Add Organization Type</digi:trn>
@@ -102,65 +99,52 @@
 						<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >
 							<digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn>
 						</logic:equal>
-                      </span>
-					</td>
+                      </span>					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
+					<td height=16 valign="center" width=571 colspan="5"><span class=subtitle-blue>
 						<digi:trn key="aim:orgTypeManager">
-						Oraganization Type Manager
-						</digi:trn>
+						Oraganization Type Manager						</digi:trn>
 						</span>
 						<br/>
 						<br/>
 						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>						
-						<digi:errors/>
-					</td>
+						<digi:errors/>					</td>
 				</tr>
 				<tr>
-					<td noWrap width="100%" vAlign="top">
+					<td noWrap width="571" vAlign="top">
 					<tr>
-						<td width=571 align="center" vAlign="top" noWrap>
+						<td colspan="2" align="center" vAlign="top" noWrap>
 					  <table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">&nbsp;
-										
-									</td>
-								</tr>
-								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="90%" border="0">
+										<table bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" border="0">
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
-																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>
-																</logic:equal>
+																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>																</logic:equal>
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >
-																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>
-																</logic:equal>
-															</td>
+																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>																</logic:equal>															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%">
 																<table width="100%" cellPadding=3 cellSpacing=3 border="0" bgColor=#f4f4f2>
 															  		<tr>
-																		<td width="30%" align="right">
+																		<td width="50%" align="right">
 																		<digi:trn key="aim:orgTypeName">Name</digi:trn><font size="2" color="#FF0000">*</font></td>																
-																	    <td width="30%" >
-																	          <html:text property="orgType" size="35" />
-																	    </td>
+																	    <td width="50%" >
+																	          <html:text property="orgType" size="35" />																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
 																        <digi:trn key="aim:orgTypeCode">Type Code<font size="2" color="#FF0000">*</font></digi:trn></td>
 																		<td width="30%">
-																           <html:text property="orgTypeCode" size="15" />
-																		</td>
+																           <html:text property="orgTypeCode" size="15" />																		</td>
 																	</tr>
 																	<tr>
                                                                         <td colspan="2" align="center">
@@ -169,8 +153,7 @@
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
                                                                             <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="dr-menu"/>
-                                                                            </fieldset>
-                                                                        </td>
+                                                                            </fieldset>                                                                        </td>
 																	</tr>
 																																		
 																	<tr align="center">
@@ -192,11 +175,9 @@
 																					<digi:trn key="aim:btnDeleteThisType">Delete this Type</digi:trn>
 																				</c:set>
 																				<input type="button" value="${translation}" class="dr-menu" onclick="msg()">
-																			
 																	</logic:equal>																				</td>
 																				</tr>
-																			</table>
-																	  </td>
+																			</table>																	  </td>
 																  </tr>
 															
 																	<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="orgReferences" >
@@ -205,31 +186,21 @@
 																				<b><digi:trn key="aim:cannotDeleteOrgTypeMsg"><font color="#FF0000">
 																						Can not delete this Type as some organization/group references it!</font>
 																					</digi:trn>
-																				</b>
-																			</td>
+																				</b>																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>
-														  </td>
+																</table>														  </td>
 														</tr>
 													<!-- end page logic -->
-													</table>
-												</td>
+													</table>												</td>
 											</tr>
-
-										</table>
-									</td>
+										</table>									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>&nbsp;
-										
-									</td>
+									<td bgColor=#f4f4f2>&nbsp;									</td>
 								</tr>
-							</table>
-						</td>
-						<td noWrap width="100%" vAlign="top"> 
-						</td>
-		    </tr>
+						  </table>						</td>
+			  </tr>
 				</table>
 	  </td>
 		</tr>

@@ -305,15 +305,15 @@ myTable.enhanceMarkup = function(markupName) {
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 		//alert (1);
 	    this.columnHeaders = [
-			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true/*,width:150*/},
 		    {key:"type",label:"${trans_headerType}",sortable:true},
-	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+	        {key:"file_name",label:"${trans_headerFileName}",sortable:true/*,width:150*/},
 	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
 	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
 	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
 	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	        {key:"labels",label:"${trans_headerLabels}",sortable:false,width:200},
-	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:400}
+	        {key:"labels",label:"${trans_headerLabels}",sortable:false/*,width:200*/},
+	        {key:"actions",label:"${trans_headerActions}",sortable:false/*,width:400*/}
 	    ];
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {

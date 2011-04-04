@@ -86,7 +86,7 @@
 																	</tr>
 																<logic:iterate name="aimOrgTypeManagerForm" property="organisation" id="organisation">
                                                            			<tr>
-																		<td height="30" lass="inside">
+																		<td height="30" class="inside">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="action" value="edit" />
 																		  <c:set target="${urlParams}" property="ampOrgTypeId">
@@ -157,7 +157,7 @@
 									<td bgColor=#ffffff class=box-border>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<digi:link href="/editOrgType.do?action=create" >
 															<digi:trn key="aim:addNewOrgType">Add Type</digi:trn></digi:link>

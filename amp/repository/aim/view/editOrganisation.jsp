@@ -2028,10 +2028,10 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     
 	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
-            <td colspan="2">
-				<table width="600px" cellspacing="0" cellpadding="0" border="0" bgcolor="white" align="left">
+            <td colspan="2" align=center>
+				<table width="95%" cellspacing="0" cellpadding="0" border="0">
 					<tr>									
-						<td bgcolor=#f4f4f2>
+						<td bgcolor=#f4f4f2 align=center>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />
 							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
 							<bean:define toScope="request" id="versioningRights" value="false" />

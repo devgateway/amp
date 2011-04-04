@@ -7,10 +7,9 @@
 </div>
 
 <div id="tableTemplate" style="display:none">
-	<table name="framingTable" border="0" cellPadding=5 cellspacing="0" style="position: relative; left: 2px; font-size: 10px; margin-top:15px; width:800px;" id="team_table">
+	<table name="framingTable" border="0" cellPadding=5 cellspacing="0" style="position: relative; left: 2px; font-size: 10px; margin-top:15px; width:800px;" id="team_table" bgcolor=#CCCCCC>
 			<tr>
-				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
-				width="13" height="20"> </td>
+				<td bgcolor=#CCCCCC> </td>
 				<td class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
 					<a style="cursor:pointer" >
 						<img
@@ -26,8 +25,7 @@
 					</button>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>&nbsp;</span>
 				</td>
-				<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" 
-				width="13" height="20"> </td>
+				<td bgcolor=#CCCCCC width="13" height="20"> </td>
 			</tr>
 			<tr style="display: table-row;  " name="otherDocumentsTr" bgcolor="#f4f4f2">
 				<td colspan="3" name="otherDocumentsTd" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 

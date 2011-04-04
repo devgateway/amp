@@ -198,11 +198,13 @@ function save() {
 
   	//departments reset or not
 	var selFYs=document.getElementById('FYsSel');
-    if(selFYs!=null && selFYs.value!='' && selFYs.value!=0){
-    	document.getElementById('FYs').value=false;
-    }else{
-    	document.getElementById('FYs').value=true;
-    }
+    var fy = document.getElementById('FYs');
+    if(fy!=null && fy.value!='' && fy.value!=0)
+	    if(selFYs!=null && selFYs.value!='' && selFYs.value!=0){
+	    	document.getElementById('FYs').value=false;
+	    }else{
+	    	document.getElementById('FYs').value=true;
+	    }
 
   	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";

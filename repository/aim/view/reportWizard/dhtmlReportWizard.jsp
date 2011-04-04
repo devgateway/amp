@@ -303,7 +303,10 @@
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
 											position: relative;">
 								<table style="top: 17%; left: 1%; position: absolute;">
-									<%if (Integer.parseInt(request.getParameter("type"))!= ArConstants.PLEDGES_TYPE){%>
+								<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
+								<c:choose>
+									<c:when test="${param.type==null || param.type!=pledges_type_const}">
+								
 									<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
@@ -340,7 +343,8 @@
                                                    </td>
                                                  </tr>
                                                </feature:display>
-                                              <%}else{%>
+                                           </c:when>
+                                           <c:otherwise>
                                               <c:set var="disablePledgeType">true</c:set>
                                               	<tr>
                                               		<td>
@@ -349,7 +353,8 @@
                                                      	</html:radio>
                                                    </td>
                                                 </tr>
-                                              <%}%>
+                                           </c:otherwise>
+                                         </c:choose>
                                      	</table>
 									<br />
 								</div>
@@ -375,7 +380,7 @@
 													</digi:trn>
 												</html:radio>
 											</td>
-											<%if (Integer.parseInt(request.getParameter("type"))!= ArConstants.PLEDGES_TYPE){%>
+									<c:if test="${param.type==null || param.type!=pledges_type_const}">
 											<td>								
 												<html:radio property="reportPeriod" value="Q">
 													<digi:trn key="aim:QuarterlyReport">
@@ -390,7 +395,7 @@
 													</digi:trn>
 												</html:radio>
 											</td>
-											<%}%>
+									</c:if>
 										</tr>
 										<tr>
 											<td colspan="4" style="margin-top: 5px;margin-bottom: 5px">

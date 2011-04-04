@@ -1888,25 +1888,25 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                                        <td>&nbsp;
 								                                            
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn>LAST NAME</digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn>FIRST NAME</digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn>EMAIL </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn> TELEPHONE </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn> FAX </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                            <digi:trn>TITLE </digi:trn>
 								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#FFFFFF">
+								                                        <td class="tdBoldClass" style="color:#000000">
 								                                        	<digi:trn>PRIMARY </digi:trn>
 								                                        </td>
 								                                        <td colspan="2">&nbsp;

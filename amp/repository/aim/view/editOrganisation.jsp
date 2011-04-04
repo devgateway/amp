@@ -45,7 +45,7 @@
 
     }
     .tableHeader {
-        background-color:#222e5d;
+        background-color:#c7d4db;
         color:white;
         padding:2px;
     }
@@ -1883,7 +1883,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                            <c:if test="${fn:length(aimAddOrgForm.orgContacts)>1}">
 								                                <div style="overflow-y: scroll; overflow-x: hidden;width: 95%; height: 100px;">
 								                                </c:if>
-								                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content">
+								                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content" style="margin-top:20px;">
 								                                    <tr>
 								                                        <td>&nbsp;
 								                                            
@@ -1988,7 +1988,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								                    </tr>
 								                </c:if>
 								                <tr>
-								                    <td colspan="2"><aim:addContactButton collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
+								                    <td colspan="2" align=center><aim:addContactButton collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
 								                </tr>
 								
 								            </table>

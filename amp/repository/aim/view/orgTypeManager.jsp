@@ -14,14 +14,13 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33 colspan=5><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -33,34 +32,29 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:orgTypeManager"></span><span class=crumb>Organization Type
                       Manager
 						</digi:trn>
                       </span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
-					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1">
+					<td noWrap width="100%" vAlign="top" colspan=5>
+					<table width="100%" cellpadding="1" cellspacing="1">
 					<tr>
-						<td noWrap width=500 vAlign="top">
+						<td noWrap width=750 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
-									</td>
-								</tr>
-								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">	
+										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">	
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#c7d4db height="20" align="center" colspan="5"><B>
 																<digi:trn key="aim:orgTypeList">List
                                                                 of Organization Types</digi:trn>						
                                                               </b>						
@@ -140,11 +134,6 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
-									</td>
-								</tr>
 							</table>
 						</td>
 						<td noWrap width="100%" vAlign="top">
@@ -156,19 +145,17 @@
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
-													Other links
+													<b style="font-size:12px; padding-left:5px;">Other links</b>
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
-												</td>
+												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 											</tr>
 										</table>
 									</td>
 								</tr>
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellspacing="1" width="100%">
+										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
@@ -177,14 +164,14 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<digi:link href="/organisationManager.do" >
 															<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
-												<td>
+												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 													<digi:link href="/admin.do">
 													<digi:trn key="aim:AmpAdminHome">

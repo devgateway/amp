@@ -2031,7 +2031,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             <td colspan="2">
 				<table width="600px" cellspacing="0" cellpadding="0" border="0" bgcolor="white" align="left">
 					<tr>									
-						<td>
+						<td bgcolor=#f4f4f2>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />
 							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
 							<bean:define toScope="request" id="versioningRights" value="false" />

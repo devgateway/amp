@@ -923,6 +923,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 								 <c:if test="${aimAddOrgForm.type=='NGO'}">
                                     <tr>
                                         <td  align="center" colspan="2">
+										<hr>
                                             <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
                                             <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
 											<hr />
@@ -1023,12 +1024,13 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         </tr>
                                         <tr>
                                             <td width="100%" colspan="2">
-                                                <div style="float:right">
+                                               
+                                                        <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
+														 <div style="float:right">
                                                     <a href="javascript:exportGeneralInfo();" >
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                                                     </a>                        
                                                 </div>
-                                                        <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
                                                       	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
                                 						<img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
                                 <div id="div_container_general">
@@ -1361,14 +1363,14 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div style="float:right">
+                    
+                        <fieldset style="margin-left:10px; margin-right:10px;">
+                            <legend align="left" class="tdBoldClass" style="font-size:13px;color:#FFFFFF; "><digi:trn>Staff Information</digi:trn></legend>    <div style="float:right">
                         <a href="javascript:exportInfo('exportStaffInfo')" >
 				<digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                         </a>
                        
                          </div>
-                        <fieldset style="margin-left:10px; margin-right:10px;">
-                            <legend align="left" class="tdBoldClass" style="font-size:13px;color:#FFFFFF; "><digi:trn>Staff Information</digi:trn></legend>
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
@@ -1460,13 +1462,14 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
                 <tr>
                     <td colspan="2">
-                        <div style="float:right">
+                      
+                        <fieldset style="margin-left:10px; margin-right:10px;">
+                            <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
+							  <div style="float:right">
                             <a href="javascript:exportInfo('exportBudgetInfo')" >
                                 <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                             </a>
                          </div>
-                        <fieldset style="margin-left:10px; margin-right:10px;">
-                            <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
                                 <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
                                 <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
@@ -1862,13 +1865,14 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
  <!-- Contact -->
 								<tr>
 								    <td colspan="2">
-								        <div style="float:right">
+								        
+								        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
+								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
+											<div style="float:right">
                                             <a href="javascript:exportInfo('exportContactInfo')" >
                                                 <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                             </a>
 								        </div>
-								        <fieldset style="margin-left:10px; margin-right:10px;">
-								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
 								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
 								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
 								                <div id="div_container_contact">
@@ -1998,7 +2002,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     <tr>
         <td style=" text-align:right" class="tdBoldClass"><digi:trn>Other Information</digi:trn></td>
         <td>
-            <html:textarea property="otherInformation"  cols="100" rows="4"  styleId="otherInformation"/>
+            <html:textarea property="otherInformation"  cols="50" rows="4"  styleId="otherInformation"/>
         </td>
     </tr>
 </c:if>
@@ -2063,6 +2067,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         <table width="100%" >
             <tr>
                 <td align="center">
+				<hr />
                 	<html:button styleClass="dr-menu" property="submitButton" onclick="return validateSaveOrg()">
                         <digi:trn>Save</digi:trn>
                 	</html:button>

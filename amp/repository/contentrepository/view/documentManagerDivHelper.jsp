@@ -7,11 +7,11 @@
 </div>
 
 <div id="tableTemplate" style="display:none">
-	<table name="framingTable" border="0" cellPadding=5 cellspacing="0" style="position: relative; left: 2px; font-size: 10px; width:800px;" id="team_table">
+	<table name="framingTable" border="0" cellPadding=5 cellspacing="0" style="position: relative; left: 2px; font-size: 10px; margin-top:15px; width:800px;" id="team_table">
 			<tr>
 				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
 				width="13" height="20"> </td>
-				<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
+				<td class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; color:#FFFFFF; padding-bottom: 1px; padding-top: 1px">
 					<a style="cursor:pointer" >
 						<img
 							border="0" align="absmiddle"

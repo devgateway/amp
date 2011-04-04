@@ -104,11 +104,9 @@
 				</tr>
 				<tr>
 					<td height=16 valign="center" width=571 colspan="5"><span class=subtitle-blue>
-						<digi:trn key="aim:orgTypeManager">
-						Oraganization Type Manager						</digi:trn>
+						<!--<digi:trn key="aim:orgTypeManager">
+						Oraganization Type Manager						</digi:trn>-->
 						</span>
-						<br/>
-						<br/>
 						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>						
 						<digi:errors/>					</td>
 				</tr>
@@ -116,15 +114,15 @@
 					<td noWrap width="571" vAlign="top">
 					<tr>
 						<td colspan="2" align="center" vAlign="top" noWrap>
-					  <table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
-								<tr bgColor=#f4f4f2>
+					  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
+								<tr>
 									<td valign="top">
-										<table bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" border="0">
+										<table cellPadding="0" cellSpacing="0" width="100%" border="0">
 											<tr>
-												<td bgColor=#ffffff class=box-border>
-													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
-														<tr bgColor=#dddddb>
-															<td bgColor=#dddddb height="20" align="center" colspan="5">
+												<td bgColor=#ffffff>
+													<table border="0" cellpadding="1" cellspacing="1" width="100%">
+														<tr>
+															<td height="20" bgcolor=#c7d4db align="center" colspan="5" style="font-size:12px; font-weight:bold;">
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
 																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>																</logic:equal>
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >

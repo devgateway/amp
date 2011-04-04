@@ -130,8 +130,8 @@
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">
-																<table width="100%" cellPadding=3 cellSpacing=3 border="0" bgColor=#f4f4f2>
+															<td width="100%" bgColor=#f4f4f2 >
+																<table width="100%" cellPadding=3 cellSpacing=3 border="0" style="margin-top:15px;">
 															  		<tr>
 																		<td width="50%" align="right">
 																		<digi:trn key="aim:orgTypeName">Name</digi:trn><font size="2" color="#FF0000">*</font></td>																
@@ -146,11 +146,11 @@
 																	</tr>
 																	<tr>
                                                                         <td colspan="2" align="center">
-                                                                            <fieldset style="width: 40%;border-color: #000000; text-align: left;border-style:dotted">
+                                                                            <fieldset style="width: 40%;border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
-                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="dr-menu"/>
+                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="buttonx"/>
                                                                             </fieldset>                                                                        </td>
 																	</tr>
 																																		
@@ -162,17 +162,17 @@
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnSave">Save</digi:trn>
 																						</c:set>
-																						<input type="button" value="${translation}" class="dr-menu" onclick="check()">																					
+																						<input type="button" value="${translation}" class="buttonx" onclick="check()">																					
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnCancel">Cancel</digi:trn>
 																						</c:set>
-																						<input type="button" value="${translation}" class="dr-menu" onclick="move()">	
+																						<input type="button" value="${translation}" class="buttonx" onclick="move()">	
                                                                                         		<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="delete" >
 																		
 																				<c:set var="translation">
 																					<digi:trn key="aim:btnDeleteThisType">Delete this Type</digi:trn>
 																				</c:set>
-																				<input type="button" value="${translation}" class="dr-menu" onclick="msg()">
+																				<input type="button" value="${translation}" class="buttonx" onclick="msg()">
 																	</logic:equal>																				</td>
 																				</tr>
 																			</table>																	  </td>
@@ -193,9 +193,6 @@
 													</table>												</td>
 											</tr>
 										</table>									</td>
-								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>&nbsp;									</td>
 								</tr>
 						  </table>						</td>
 			  </tr>

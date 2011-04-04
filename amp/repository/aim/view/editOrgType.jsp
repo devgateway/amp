@@ -130,7 +130,7 @@
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%" bgColor=#f4f4f2 >
+															<td width="100%" bgColor=#f4f4f2 style="border:1px solid #CCCCCC;">
 																<table width="100%" cellPadding=3 cellSpacing=3 border="0" style="margin-top:15px;">
 															  		<tr>
 																		<td width="50%" align="right">

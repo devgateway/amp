@@ -811,6 +811,7 @@ public class DataDispatcher extends DispatchAction {
 
 
 		boolean typeOfAid = request.getParameter("typeofaid") != null ? Boolean.parseBoolean(request.getParameter("typeofaid")) : false;
+		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         double divideByDenominator;
@@ -852,24 +853,47 @@ public class DataDispatcher extends DispatchAction {
         }
         
 		if(format != null && format.equals("xml")){
+			
 			StringBuffer xmlString = new StringBuffer();
-			//Loop funding types
-			Iterator<AmpCategoryValue> it = categoryValues.iterator();
-			while (it.hasNext()){
-				AmpCategoryValue value = it.next();
-				xmlString.append("<aidtype name=\"" + value.getValue() + "\">\n");
-				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
-					Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-					Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-	                DecimalWraper funding = null;
-	                if (typeOfAid) {
-	                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
-	                } else {
-	                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
-	                }
-					xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+			if(donut){
+				Iterator<AmpCategoryValue> it = categoryValues.iterator();
+				while (it.hasNext()){
+					AmpCategoryValue value = it.next();
+					xmlString.append("<aidtype name=\"" + value.getValue() + "\">\n");
+					for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+						Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+						Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+		                DecimalWraper funding = null;
+		                if (typeOfAid) {
+		                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+		                } else {
+		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
+		                }
+						xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+					}
+					xmlString.append("</aidtype>\n");
 				}
-				xmlString.append("</aidtype>\n");
+			}
+			else
+			{
+				//Loop funding types
+				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+					xmlString.append("<year name=\"" + i + "\">\n");
+					Iterator<AmpCategoryValue> it = categoryValues.iterator();
+					while (it.hasNext()){
+						AmpCategoryValue value = it.next();
+						Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+						Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+		                DecimalWraper funding = null;
+		                if (typeOfAid) {
+		                    funding = DbUtil.getFunding(filter, startDate, endDate, value.getId(), null, filter.getTransactionType(),Constants.ACTUAL);
+		                } else {
+		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
+		                }
+						xmlString.append("<aidtype category=\"" + value.getValue() + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+					}
+					xmlString.append("</year>\n");
+				}
 			}
 			
 			
@@ -991,7 +1015,6 @@ public class DataDispatcher extends DispatchAction {
 	            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,Constants.COMMITMENT, Constants.ACTUAL);
 				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator) + "\"/>\n");
 				xmlString.append("</year>\n");
-				
 			}
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -1133,61 +1156,40 @@ public class DataDispatcher extends DispatchAction {
 		//TODO: Change this to use XML DOM Object
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
-			//Loop funding types
-			
-			xmlString.append("<fundingtype name=\"Commitments\">\n");
+
 			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+				xmlString.append("<year name=\"" + i + "\">\n");
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-				DecimalWraper fundingComm = DbUtil
-				.getFunding(filter, startDate, endDate, null, null,
-						Constants.COMMITMENT, Constants.ACTUAL);
-				xmlString
-				.append("<year category=\"" + i + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator) + "\"/>\n");
-				
-			}
-			xmlString.append("</fundingtype>\n");
-			xmlString.append("<fundingtype name=\"Disbursements\">\n");
-			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
-				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+
 				DecimalWraper fundingDisb = DbUtil
 				.getFunding(filter, startDate, endDate, null, null,
 						Constants.DISBURSEMENT, Constants.ACTUAL);
 				xmlString
-				.append("<year category=\"" + i + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator) + "\"/>\n");
-				
-			}
-			xmlString.append("</fundingtype>\n");
-			if (filter.isExpendituresVisible()) {
-				xmlString.append("<fundingtype name=\"Expenditure\">\n");
-				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
-					Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-					Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+				.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator) + "\"/>\n");
+				DecimalWraper fundingComm = DbUtil
+				.getFunding(filter, startDate, endDate, null, null,
+						Constants.COMMITMENT, Constants.ACTUAL);
+				xmlString
+				.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator) + "\"/>\n");
+				if (filter.isExpendituresVisible()) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
-					.append("<year category=\"" + i + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator) + "\"/>\n");
-					
+					.append("<fundingtype category=\"Expenditures\" amount=\""+ fundingExp.getValue().divide(divideByDenominator) + "\"/>\n");
 				}
-				xmlString.append("</fundingtype>\n");
-			}
-			if (filter.isPledgeVisible()) {
-				xmlString.append("<fundingtype name=\"Pledges\">\n");
-				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
+
+				if (filter.isPledgeVisible()) {
 					Double fundingPledge = 0d;
-					Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-					Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 					fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
 							filter.getOrganizationGroupId(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<year category=\"" + i + "\" amount=\""+ fundingPledge
+					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge
 							/ divideByDenominator.doubleValue() + "\"/>\n");
-					
 				}
-				xmlString.append("</fundingtype>\n");
+				xmlString.append("</year>\n");
 			}
 
 			

@@ -654,9 +654,10 @@ function changeTab (selected){
 	</ul>
 	<div class="yui-content">
 	<div id="tab1">
+<!-- 		
 		<fieldset>
 			<legend><span class=legend_label>Commitments, Disbursements, Expenditures, Pledges</span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FundingChart')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FundingChart')">Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FundingChart')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="FundingChart">
@@ -668,7 +669,7 @@ function changeTab (selected){
 		</fieldset>
 		<fieldset>
 			<legend><span class=legend_label>Aid Predictability</span></legend>
-			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictability')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidPredictability')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictability')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictability')">Data View</a></div>
+			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictability')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictability')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictability')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
 				<div id="AidPredictability">
@@ -678,6 +679,7 @@ function changeTab (selected){
 				</div>
 			</div>
 		</fieldset>
+-->
 		<fieldset>
 			<legend><span class=legend_label>Aid Type</span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidType')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidType')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidType')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidType')">Data View</a></div>
@@ -690,6 +692,7 @@ function changeTab (selected){
 				</div>
 			</div>
 		</fieldset>
+<!-- 		
 		<fieldset>
 			<legend><span class=legend_label>Financing Instrument</span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FinancingInstrument')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FinancingInstrument')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FinancingInstrument')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FinancingInstrument')">Data View</a></div>
@@ -703,7 +706,7 @@ function changeTab (selected){
 			</div>
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-			<fieldset>
+ 			<fieldset>
 				<legend><span class=legend_label>Donor Profile</span></legend>
 				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'DonorProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'DonorProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'DonorProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'DonorProfile')">Data View</a></div>
 				<br />
@@ -744,6 +747,7 @@ function changeTab (selected){
 				</div>
 			</fieldset>
 		</c:if>
+-->
 	</div>
 	<div id="tab2">
 		Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
@@ -1099,8 +1103,8 @@ function changeChart(e, chartType, container){
 	var yearsInRange = document.getElementById("yearsInRange").value;
 	var minSlider =  "" + (currentYear - yearsInRange + 1);
 	var maxSlider =  "" + currentYear;
-	var flashvars = { minSlider: minSlider, maxSlider: maxSlider};
-	//var flashvars = {};
+	var flashvars = { minSlider: minSlider, maxSlider: maxSlider };
+
 	var params = {};
 	var attributes = {};
 	attributes.id = container;

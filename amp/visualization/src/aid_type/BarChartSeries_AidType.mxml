@@ -66,32 +66,24 @@
 			 */
 			public function start():void
 			{
-				/** Sums up all the counts of medals within a country ( you also get min, max, avg) This will be used to draw the overlaid total
-				 *    bar that shows up on the chart, one for each country.
-				 *  This only works for data that is read in through the axiis DataSet object otherwise you'd need to provide your own approach to aggregate
-				 	Provides 4 values under ds.data.object where is X is the final drill point and Y is each of the array elements
-						object.aggregates.X_Y_sum  EG: aggregates.medal_count_sum
-						object.aggregates.X_Y_avg
-						object.aggregates.X_Y_min
-						object.aggregates.X_Y_max
-				 */ 
-				ds.aggregateData(service.lastResult, "aidtype.year", ["amount"]);
-				/**
-				 * Now aggregate all the sums per country. Ultimately to get the max value so we can scale the chart appropriately
-				 */
-				ds.aggregateData(service.lastResult, "aidtype", ["aggregates.year_amount_sum"]);
-				/**
-				 * Note the odd syntax regarding how you access aggregates of aggregated data
-				 */
-				vScale.maxValue = service.lastResult.aggregates['aidtype_aggregates:year_amount_sum_max'];
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+
+				var maxValue:Number = 0;
+				var fillCategories:Boolean = false;
+				for(var i:Number = 0; i < service.lastResult.year.length; i++){
+					for(var j:Number = 0; j < service.lastResult.year[i].aidtype.length; j++){
+						var currentValue:Number = service.lastResult.year[i].aidtype[j].amount;
+						//Just add the categories in the last iteration
+						if(i == service.lastResult.year.length-1)
+							categoriesLocal.addItem(service.lastResult.year[i].aidtype[j]);
+						if (maxValue < currentValue) maxValue = currentValue;
+					}
+				}
+				categories = categoriesLocal; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = 0;
-				/**
-				 * So each iteration of the repeater in the graph will have a country node
-				 */
-				dataProvider = service.lastResult.aidtype;
-				/**
-				 * Anytime the DataCanvas dp is set this must be called
-				 */
+				dataProvider = service.lastResult.year;
+				dc.visible = true;
 				dc.invalidateDisplayList();
 			}
 
@@ -141,9 +133,10 @@
 
 
 	<!--  GLOBAL VARIABLES -->
+	<mx:Object id="categories"/>
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
-	<mx:String id="dataField">year</mx:String>
+	<mx:String id="dataField">aidtype</mx:String>
 	<mx:String id="labelField">name</mx:String>
 	<mx:String id="childDataField">amount</mx:String>
 	<mx:String id="childLabelField">category</mx:String>
@@ -160,7 +153,7 @@
 	They inherit from Canvas
 	-->
 	<axiis:DataCanvas top="20"
-		bottom="50"
+		bottom="0"
 		width="{this.width*.9}"
 		id="dc"
 		verticalCenter="0"
@@ -168,7 +161,8 @@
 		showDataTips="true"
 		strokes="{strokes}"
 		fills="{fills}"
-		palettes="{palettes}">
+		palettes="{palettes}"
+		visible="false">
 
 		<!-- Background -->
 		<!-- backgrounds appear behind the graph. There are also foregroundGeometries for doing annotations on top of the graph 
@@ -189,14 +183,15 @@
 		-->
 		<axiis:backgroundGeometries>
 			<axis:VAxis verticalScale="{vScale}"
-				tickStroke="{axisStroke}"
-				width="{dc.width}"
-				height="{hLayout.height}"
-				showDataTips="false"
-				fontFamily="Myriad Pro"
-				fontColor="0"
-				fontSize="12"
-				tickGap="5"/>
+						tickStroke="{axisStroke}"
+						
+						width="{dc.width}"
+						height="{hLayout.height}"
+						showDataTips="false"
+						fontFamily="Myriad Pro"
+						fontColor="0"
+						fontSize="12"
+						tickGap="5"/>
 		</axiis:backgroundGeometries>
 
 		<!-- Layouts -->
@@ -239,7 +234,7 @@
 				x="25"
 				y="0"
 				showDataTips="false"
-				height="{dc.height-70}"
+				height="{dc.height-50}"
 				width="{dc.width-25}"
 				percentGap="{percentGap}"
 				dataProvider="{dataProvider}" 
@@ -275,26 +270,6 @@
 					     Note that it uses the aggregates as a data provider and uses the X_Y_sum value, or medal_count_sum for the dataField
 					     Also, note the way you need to access the aggregates through []
 					-->
-					<groupings:ColumnCluster 
-						id="myStack"
-						x="0"
-						y="0"
-						width="{hLayout.currentReference.width}"
-						height="{hLayout.currentReference.height}"
-						dataProvider="{hLayout.currentDatum.aggregates}"
-						dataField="year_amount_sum"
-						labelField="year_amount_sum"
-						fill="{stackFill}"
-						stroke="{colStroke}"
-						verticalScale="{vScale}"
-						fontFamily="Myriad Pro"
-						fontSize="12"
-						showLabel="false"
-						dataFontColor="{outerPalette.currentColor}"
-						preRender="myStack_preRenderHandler(event)"
-						showDataLabel="false"
-						/>
-						
 					<!-- Cluster Group
 						 These are the individual medal columns within a country 
 							NOTE: In this example, the width is only .9 of the reference geometry to provide some clearance
@@ -315,44 +290,72 @@
 						stroke="{colStroke}"
 						verticalScale="{vScale}"
 						fontFamily="Myriad Pro"
+						fontSize="11"
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
 						showDataLabel="false"
-					    minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
-
-
+						showLabel="false"
+						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
+					
+					
+					
 				</axiis:layouts>
-
+				
 				<!--HBracket
-					A bracket that can be used to denote a group and label items that are laid out horizontally.
-
-					height="60"										The height of the bracket from the base of the bracket, how far the sides extend upwards.
-					fontFamily="Myriad Pro"							The fontFamily of the label
-					fontSize="14"									The font size of the label
-					fontColor="{outerPalette.currentColor}"			The color of the label
-					y="{hLayout.height+5}"
-					x="{hLayout.currentReference.x}"
-					labelValue="{hLayout.currentLabel}"				The text of the label placed beneath the bracket.
-					markerStroke="{myStroke}"						The stroke used to draw lines of the bracket.					
+				A bracket that can be used to denote a group and label items that are laid out horizontally.
+				
+				height="60"										The height of the bracket from the base of the bracket, how far the sides extend upwards.
+				fontFamily="Myriad Pro"							The fontFamily of the label
+				fontSize="14"									The font size of the label
+				fontColor="{outerPalette.currentColor}"			The color of the label
+				y="{hLayout.height+5}"
+				x="{hLayout.currentReference.x}"
+				labelValue="{hLayout.currentLabel}"				The text of the label placed beneath the bracket.
+				markerStroke="{myStroke}"						The stroke used to draw lines of the bracket.					
 				-->
 				<!-- Bottom Bracket -->
 				<axiis:drawingGeometries>
 					<labels:HBracket 
 						x="{hLayout.currentReference.x}"
-						y="{hLayout.height+5}"
+						y="{hLayout.height}"
 						width="{hLayout.currentReference.width}"
-						height="60"
+						height="3"
 						fontFamily="Myriad Pro"
-						fontSize="14"
+						fontSize="12"
 						fontColor="{outerPalette.currentColor}"
 						labelValue="{hLayout.currentLabel}"
-						markerStroke="{myStroke}"/>
+						markerStroke="{myStroke}"
+						id="hBracket"/>
 				</axiis:drawingGeometries>
-
+				
 			</axiis:HBoxLayout>
+			<axiis:HBoxLayout id="legendLayout" 
+							  y="{hLayout.height+25}"
+							  width="{hLayout.width}" 
+							  height="300"
+							  dataProvider="{categories}"
+							  dataField="category" 
+							  showDataTips="false"
+							  
+							  > 
+				<axiis:drawingGeometries> 
+					<degrafa:RasterText 
+						id="legendText" 
+						y="{legendLayout.currentReference.y}" 
+						x="{legendLayout.currentReference.x+12}" 
+						text="{legendLayout.currentDatum['category']}" 
+						fontFamily="Myriad Pro"
+						fontSize="12"
+						/> 
+					<degrafa:RegularRectangle 
+						id="legendSquare" width="10" height="10" fill="{legendFill}" 
+						y="{legendLayout.currentReference.y+4}" 
+						x="{legendLayout.currentReference.x}"/> 
+				</axiis:drawingGeometries> 
+			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
-
+	
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
 	and will contain x values where x is the number of objects in the Layout's dataProvider. As the Layout renders and its currentIndex property is incremented, 
@@ -364,15 +367,18 @@
 	the array. If the layout needs more colors than the array contains, the colors wraps around the array using the mod operator.
 	
 	NOTE: The major difference between Layout and LayoutAuto: 
-			Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
-			LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
-			If you want a series with repeating colors from series to series use Layout. 
-			If you want different colors for all bars, use LayoutAuto
+	Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
+	LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
+	If you want a series with repeating colors from series to series use Layout. 
+	If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
 		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
-		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
-		<paint:LayoutAutoPalette id="stackPalette" layout="{myStack}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+		<axiis:LayoutAutoPalette id="clusterPalette" colorFrom="0xCC3333" 
+								 colorTo="0x3333CC" layout="{myCluster}"/> 
+		<!--		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>-->
+		<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xCC3333" 
+								 colorTo="0x3333CC" layout="{legendLayout}"/> 
 	</mx:Array>
 	
 	<!--
@@ -389,6 +395,8 @@
 			<degrafa:GradientStop color="{outerPalette.currentColor}" alpha=".5"/>
 			<degrafa:GradientStop color="{outerPalette.currentColor | 0x333333}" alpha=".1"/>
 		</degrafa:LinearGradientFill>
+		<degrafa:SolidFill id="legendFill" 
+						   color="{legendPalette.currentColor}" /> 
 	</mx:Array>
 	
 	<!--
@@ -408,9 +416,9 @@
 			color="0x222222" 
 			pixelHinting="true"/>
 		<degrafa:SolidStroke
-			 id="myStroke" 
-			 color="{outerPalette.currentColor}" 
-			 alpha=".5"/>
+			id="myStroke" 
+			color="{outerPalette.currentColor}" 
+			alpha=".5"/>
 		<degrafa:SolidStroke 
 			id="myStroke2"
 			color="{outerPalette.currentColor}"
@@ -418,8 +426,5 @@
 			weight="6"
 			caps="none"/>
 	</mx:Array>
-
-	
-	
 	
 </mx:Application>

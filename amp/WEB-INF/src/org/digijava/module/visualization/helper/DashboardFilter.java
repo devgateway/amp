@@ -54,6 +54,14 @@ public class DashboardFilter {
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
 
+    private Long[] orgGroupIds;
+    private Long orgGroupId;
+    private Long orgId;
+    private Long subSectorId;
+    private Long[] regionIds;
+    private Long regionId;
+    private Long[] zoneIds;
+    private Long zoneId;
 
     private int yearsInRange;
     private Boolean pledgeVisible;
@@ -432,6 +440,70 @@ public class DashboardFilter {
 
 	public void setActivityId(Long activityId) {
 		this.activityId = activityId;
+	}
+
+	public void setOrgGroupIds(Long[] orgGroupIds) {
+		this.orgGroupIds = orgGroupIds;
+	}
+
+	public Long[] getOrgGroupIds() {
+		return orgGroupIds;
+	}
+
+	public void setOrgGroupId(Long orgGroupId) {
+		this.orgGroupId = orgGroupId;
+	}
+
+	public Long getOrgGroupId() {
+		return orgGroupId;
+	}
+
+	public void setOrgId(Long orgId) {
+		this.orgId = orgId;
+	}
+
+	public Long getOrgId() {
+		return orgId;
+	}
+
+	public void setSubSectorId(Long subSectorId) {
+		this.subSectorId = subSectorId;
+	}
+
+	public Long getSubSectorId() {
+		return subSectorId;
+	}
+
+	public void setRegionIds(Long[] regionIds) {
+		this.regionIds = regionIds;
+	}
+
+	public Long[] getRegionIds() {
+		return regionIds;
+	}
+
+	public void setRegionId(Long regionId) {
+		this.regionId = regionId;
+	}
+
+	public Long getRegionId() {
+		return regionId;
+	}
+
+	public void setZoneIds(Long[] zoneIds) {
+		this.zoneIds = zoneIds;
+	}
+
+	public Long[] getZoneIds() {
+		return zoneIds;
+	}
+
+	public void setZoneId(Long zoneId) {
+		this.zoneId = zoneId;
+	}
+
+	public Long getZoneId() {
+		return zoneId;
 	}
 
 }

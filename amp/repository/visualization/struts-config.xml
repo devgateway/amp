@@ -9,9 +9,9 @@
 	<action-mappings>
 		<action name="visualizationform" path="/visualization/showDashboard"
 			scope="session" type="org.digijava.module.visualization.action.ShowDashboard">
-			<forward name="sector" path="/showLayout.do?layout=sectorDashboard" />
-			<forward name="donor" path="/showLayout.do?layout=donorDashboard" />
-			<forward name="region" path="/showLayout.do?layout=regionDashboard" />
+			<forward name="sector" path="/showLayout.do?layout=showDashboard" />
+			<forward name="donor" path="/showLayout.do?layout=showDashboard" />
+			<forward name="region" path="/showLayout.do?layout=showDashboard" />
 		</action>
 	    <action name="visualizationform" path="/visualization/dataDispatcher" parameter="action" scope="session" type="org.digijava.module.visualization.action.DataDispatcher" validate="false">
 	      <forward name="list" path="/showLayout.do?layout=list" />

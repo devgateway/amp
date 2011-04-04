@@ -75,22 +75,20 @@ function Edit(id) {
 				</tr>
 				<tr>
 					<td colspan="5">
-						<table width="100%">
+						<table style="font-size:12px;">
 							<tr>
-								<td><font color="red" >*</font></td>
-								<td><digi:trn>Department Name</digi:trn>:</td>
-								<td><html:text property="departmentname" styleId="dname" size="30"></html:text></td>
-							    <td><font color="red" >*</font></td>
-							    <td><digi:trn>Department Code</digi:trn>:</td>
-							    <td>
+								<td style="padding-right:5px;"><font color="red" >*</font></td>
+								<td style="padding-right:10px;"><digi:trn>Department Name</digi:trn>:</td>
+								<td style="padding-right:20px;"><html:text property="departmentname" styleId="dname" size="30"></html:text></td>
+							    <td style="padding-right:5px;"><font color="red" >*</font></td>
+							    <td style="padding-right:10px;"><digi:trn>Department Code</digi:trn>:</td>
+							    <td style="padding-right:20px;">
 									<html:text property="departmentcode" size="5" styleId="dcode"></html:text>								</td>
-							</tr>
-							<tr>
-								<td colspan="6" align="center"> 
-									<html:button property="submitButton" onclick="validatesector();" styleClass="buttonx">
+							    <td><html:button property="submitButton" onclick="validatesector();" styleClass="buttonx">
 										<digi:trn>Add</digi:trn>
-									</html:button>								</td>	
+									</html:button>								</td>
 							</tr>
+
 					  </table>
 					</td>
 				</tr>

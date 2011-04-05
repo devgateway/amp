@@ -485,7 +485,7 @@ public class ChartWidgetUtil {
 
 		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
 		numberAxis.setNumberFormatOverride(formatAxis);
-		numberAxis.setLabelFont(plainFont);
+		numberAxis.setLabelFont(subTitleFont);
 		Range oldRange = numberAxis.getRange();
 		Range newRange = Range.expand(oldRange, 0, 0.1);
 		numberAxis.setRange(newRange);

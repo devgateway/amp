@@ -394,7 +394,7 @@ public class ChartWidgetUtil {
 		JFreeChart chart = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
-        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 11);
         CategoryDataset dataset =null;
         TextTitle subTitle=null;
         String titleType="";

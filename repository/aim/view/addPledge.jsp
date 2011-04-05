@@ -1588,7 +1588,7 @@ function addFunding() {
 	 }%>
 	 s += "</select> </td>";
 
-	 s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_6' class='inp-text' style='max-width: 150px;'>";
+	 s += "<td align='center' valign='bottom' width='100'> <select name='fund_"+ numFund +"_6' class='inp-text' style='max-width: 150px;'> <option value='unspecified'><digi:trn>unspecified</digi:trn></option>";
 		<% Collection col5 = pledgeForm.getYears();
 		Iterator itr5 = col5.iterator();
 		while (itr5.hasNext()) {

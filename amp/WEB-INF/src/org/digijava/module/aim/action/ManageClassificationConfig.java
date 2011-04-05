@@ -10,6 +10,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.SectorClassConfigForm;
@@ -45,6 +48,16 @@ public class ManageClassificationConfig extends Action {
         if (event != null && event.equals("save")) {
                 Long configId = configForm.getId();
                 String configName = configForm.getConfigName();
+                //check for duplication
+                int calCount = SectorUtil.getClassificationConfigCount(configName, configId);
+			 	if(calCount>0){
+			 		ActionMessages errors= new ActionMessages();
+					errors.add("classification config not unique", new ActionMessage("admin.clasConfig.calExists",TranslatorWorker.translateText("Classification Config with the given email already exists", request) ));
+					saveErrors(request, errors);
+					return mapping.findForward("edit");
+			 	}
+                
+                
                 boolean multiSector = false;
                 Long sectorClassId = configForm.getSectorClassId();
                 AmpSectorScheme classification = SectorUtil.getAmpSectorScheme(sectorClassId);

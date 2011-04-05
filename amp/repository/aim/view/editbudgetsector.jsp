@@ -30,6 +30,9 @@ function closePopup() {
   document.EditBudgetSectorForm.target = window.opener.name;
   document.EditBudgetSectorForm.submit();
   window.close();
+  if (window.opener && !window.opener.closed) {
+	  window.opener.location.reload();
+} 
 }
 
 function validatesector(){

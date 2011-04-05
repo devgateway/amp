@@ -1037,6 +1037,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										                            </td>
 																	<td align="center" valign="bottom" width="150">
 																		<select name="<%=field6%>" class="inp-text" style="max-width: 150px;">
+																			<option value="unspecified"><digi:trn>unspecified</digi:trn></option>	
 																			<c:forEach var="year" items="${pledgeForm.years}">
 																				<c:if test="${fundingPledgesDetails.fundingYear == year}">
 																					<option selected="selected" value="<c:out value="${year}"/>">	

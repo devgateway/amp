@@ -209,13 +209,13 @@
 														<c:forEach var="currency"
 															items="${aimEditActivityForm.funding.validcurrencies}">
 															<c:if test="${comm.currencyCode == currency.currencyCode}">
-																<option selected="true" value="<c:out value="${currency.currencyCode}"/>">													
+																<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">													
 															</c:if>
 															<c:if test="${comm.currencyCode != currency.currencyCode}">
 																<option value="<c:out value="${currency.currencyCode}"/>">													
 															</c:if>
 															<c:out value="${currency.currencyName}" />
-															</option>
+																</option>
 														</c:forEach>
 													</select>
 												</td>

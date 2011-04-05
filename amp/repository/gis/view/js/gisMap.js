@@ -894,6 +894,7 @@
 		var queryParam = selSectorScheme != null ? selSectorScheme : selSector;
     var selectionTxt = getSectorSelectionText (queryParam);
     $('#sectorSelected').html(selectionTxt);
+    $("#sectorsMapComboFin").val(queryParam);
 		$('#sectorSelected').attr('title', selectionTxt);
 
 		
@@ -1175,6 +1176,8 @@
 		jQuery.fn.sectorSelectedFin(queryParam);
 	}
 	
+	
+	
 	function closeSectorFilter() {
 		$('.filter_wnd_background_holder').hide();
 		//$("#sector_selector_expander").find("img").attr("src", "/repository/gis/view/images/sec_filter_expand.png");
@@ -1451,7 +1454,7 @@
             }
             
             if (document.getElementById("sectorsMapComboFin") != null) {
-                document.getElementById("sectorsMapComboFin").disabled = true;
+                //document.getElementById("sectorsMapComboFin").disabled = true;
                 document.getElementById("fundingType").disabled = true;
                 document.getElementById("donorsCombo").disabled = true;
             }
@@ -1481,7 +1484,7 @@
             }
             
             if (document.getElementById("sectorsMapComboFin") != null) {
-                document.getElementById("sectorsMapComboFin").disabled = false;
+                //document.getElementById("sectorsMapComboFin").disabled = false;
                 document.getElementById("fundingType").disabled = false;
                 document.getElementById("donorsCombo").disabled = false;
             }

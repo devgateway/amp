@@ -66,14 +66,14 @@ window.onload = function(){
 			var indicatorId = document.getElementById("indicatorsCombo").value;	
 			var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 			var timeInterval = document.getElementById("indicatorYearCombo").value;
-		  
 			openURLinWindow("/gis/pdfExport.do?mapMode=DevInfo&selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + "&subgroupId=" + subgroupId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&indYear=" + timeInterval, 780, 500);
 		} else {
 			var sectorId =  document.getElementById("sectorsMapComboFin").value;
 			var fundingType = document.getElementById("fundingType").value;	
 			var donorId = document.getElementById("donorsCombo").value;
+			var mapModeFin = document.getElementById("mapModeFin").value;
 		  
-			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
+			openURLinWindow("/gis/pdfExport.do?mapMode=FinInfo&selectedDonor=" + selectedDonor + "&mapModeFin=" + mapModeFin + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&fundingType=" + fundingType + "&donorId=" + donorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
 
 		}
   }

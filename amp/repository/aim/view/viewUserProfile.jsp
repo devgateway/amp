@@ -153,7 +153,12 @@ function unload() {
 											%>
 										</td>
 										<td bgcolor="#f4f4f2" class="text1" width="500px">
-											<c:out value="${info}"/>
+										<logic:equal value="Workspace Manager" name="info">
+											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
+										</logic:equal>
+										<logic:equal value="Workspace Member" name="info">
+											<digi:trn key="aim:workspaceMember">Workspace Member</digi:trn>
+										</logic:equal>
 										</td>
 									</tr>
 									</c:forEach>
@@ -165,7 +170,7 @@ function unload() {
 			</tr>
 			<tr align="center">
 				<td>
-					<input type="button" value="Close" class="dr-menu" onclick="hidePWorkspaceframe()">
+					<input type="button" value='<digi:trn key="aim:close">Close</digi:trn>' class="dr-menu" onclick="hidePWorkspaceframe()" />
 				</td>
 			</tr>
 		</table>

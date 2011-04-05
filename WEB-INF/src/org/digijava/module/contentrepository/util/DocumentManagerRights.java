@@ -1,7 +1,10 @@
 package org.digijava.module.contentrepository.util;
 
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Workspace;
+import javax.jcr.version.Version;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -70,7 +73,8 @@ public class DocumentManagerRights {
 	}
 	
 	public static Boolean hasAddParticipatingOrgRights(Node node, HttpServletRequest request) {
-		return true && (isOwnerOrTeamLeader(node, request) || isCreator(node, request));
+		Boolean isVersion	= isNodeAVersion(request, node);
+		return true && (isOwnerOrTeamLeader(node, request) || isCreator(node, request)) && (isVersion!=null && !isVersion) ;
 	}
 	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {
@@ -200,6 +204,17 @@ public class DocumentManagerRights {
 				return null;
 			}
 		}
+	}
+	
+	private static Boolean isNodeAVersion(HttpServletRequest request, Node node){
+		try {
+			List<Version> vList	= DocumentManagerUtil.getVersions(node.getUUID(), request, false);
+			return (vList==null)?true:false;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private static Boolean isOwnerOrTeamLeader(Node node, HttpServletRequest request) {

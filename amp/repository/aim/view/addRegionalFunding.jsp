@@ -124,7 +124,7 @@
                                         <option value="<c:out value="${currency.currencyCode}"/>">
                                     </c:if>
                                     <c:if test="${currency.currencyCode==aimEditActivityForm.funding.fundingCurrCode}">
-                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
+                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="selected">
                                         </c:if>
                                         <c:out value="${currency.currencyName}" />
                                     </option>
@@ -183,19 +183,19 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
+														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency"
 													items="${aimEditActivityForm.funding.validcurrencies}">
 													<c:if test="${comm.currencyCode == currency.currencyCode}">
-														<option selected="true"
+														<option selected="selected"
 															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
 													<c:if test="${comm.currencyCode != currency.currencyCode}">
 														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
@@ -259,19 +259,19 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
+														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency"
 													items="${aimEditActivityForm.funding.validcurrencies}">
 													<c:if test="${comm.currencyCode == currency.currencyCode}">
-														<option selected="true"
+														<option selected="selected"
 															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
 													<c:if test="${comm.currencyCode != currency.currencyCode}">
 														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
@@ -334,19 +334,19 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="1" selected="selected"><digi:trn key="aim:Actual">Actual</digi:trn></option>
 														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
+														<option value="0" selected="selected"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency"
 													items="${aimEditActivityForm.funding.validcurrencies}">
 													<c:if test="${comm.currencyCode == currency.currencyCode}">
-														<option selected="true"
+														<option selected="selected"
 															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
 													<c:if test="${comm.currencyCode != currency.currencyCode}">
 														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>

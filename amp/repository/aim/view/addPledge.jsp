@@ -600,10 +600,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												</td>
 												<td align="left" width="70%">
 													<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
-														<option selected="true" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
+														<option selected="selected" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
 														<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
 															<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
-																<option selected="true" value="${titles.id}"/>	
+																<option selected="selected" value="${titles.id}"/>	
 															</c:if>
 															<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
 																<option value="${titles.id}"/>
@@ -986,10 +986,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	</td>
 																	<td align="center" valign="bottom" width="170">
 																		<select name="<%=field2%>" class="inp-text" style="max-width: 150px;">
-																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																			<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="type" items="${pledgeForm.pledgeTypeCategory}">
 																				<c:if test="${fundingPledgesDetails.pledgetypeid == type.id}">
-																					<option selected="true" value="<c:out value="${type.id}"/>">	
+																					<option selected="selected" value="<c:out value="${type.id}"/>">	
 																				</c:if>
 																				<c:if test="${fundingPledgesDetails.pledgetypeid != type.id}">
 																					<option value="<c:out value="${type.id}"/>">
@@ -1002,10 +1002,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                                <select name="<%=field3%>" class="inp-text" style="max-width: 150px;">
-																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																				<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.assistanceTypeCategory}">
 																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid == type.id}">
-																						<option selected="true" value="<c:out value="${type.id}"/>">	
+																						<option selected="selected" value="<c:out value="${type.id}"/>">	
 																					</c:if>
 																					<c:if test="${fundingPledgesDetails.typeOfAssistanceid != type.id}">
 																						<option value="<c:out value="${type.id}"/>">
@@ -1022,10 +1022,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										                            </td>
 																	<td align="center" valign="bottom" width="100">
 										                                <select name="<%=field5%>" class="inp-text" style="max-width: 150px;">
-																			<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																			<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																			<c:forEach var="currency" items="${pledgeForm.validcurrencies}">
 																				<c:if test="${fundingPledgesDetails.currencycode == currency.currencyCode}">
-																					<option selected="true" value="<c:out value="${currency.currencyCode}"/>">	
+																					<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">	
 																				</c:if>
 																				<c:if test="${fundingPledgesDetails.currencycode != currency.currencyCode}">
 																					<option value="<c:out value="${currency.currencyCode}"/>">
@@ -1039,7 +1039,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																		<select name="<%=field6%>" class="inp-text" style="max-width: 150px;">
 																			<c:forEach var="year" items="${pledgeForm.years}">
 																				<c:if test="${fundingPledgesDetails.fundingYear == year}">
-																					<option selected="true" value="<c:out value="${year}"/>">	
+																					<option selected="selected" value="<c:out value="${year}"/>">	
 																				</c:if>
 																				<c:if test="${fundingPledgesDetails.fundingYear != year}">
 																					<option value="<c:out value="${year}"/>">
@@ -1052,10 +1052,10 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 																	<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
 																		<td align="center" valign="bottom" width="200">
 											                               <select name="<%=field7%>" class="inp-text" style="max-width: 150px;">
-																				<option selected="true" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+																				<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 																				<c:forEach var="type" items="${pledgeForm.aidModalityCategory}">
 																					<c:if test="${fundingPledgesDetails.aidmodalityid == type.id}">
-																						<option selected="true" value="<c:out value="${type.id}"/>">	
+																						<option selected="selected" value="<c:out value="${type.id}"/>">	
 																					</c:if>
 																					<c:if test="${fundingPledgesDetails.aidmodalityid != type.id}">
 																						<option value="<c:out value="${type.id}"/>">

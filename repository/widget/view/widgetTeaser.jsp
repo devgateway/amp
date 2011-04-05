@@ -86,9 +86,10 @@
                 function mapCallBack_${gisWidgetTeaserForm.type}(status, statusText, responseText, responseXML){
                     var map=responseXML.getElementsByTagName('map')[0];
                     var id=map.getAttribute('id');
-                    var mapSpan= document.getElementById(id);
+                    var mapSpanId="span_"+id;
+                    var mapSpan= document.getElementById(mapSpanId);
                     mapSpan.innerHTML=responseText;
-                }
+                   }
                 function  loadDataSource_${gisWidgetTeaserForm.type}(){
                     $(".tab_graph_${gisWidgetTeaserForm.type}_unselected").each(function(index) {
                         this.style.display="block";
@@ -106,18 +107,34 @@
                         if(${gisWidgetTeaserForm.type}==5){
                         $(".sectorChart").each(function(index) {
                             var lastTimeStamp = new Date().getTime();
-                            var newsrc=this.src;
-                            this.src="images/amploading.gif";
-                            var index=newsrc.indexOf("&sectorClassConfigId=");
-                            if(index!=-1){
-                                newsrc=newsrc.substring(0, index)
-                            }
-                            var indexTimeStamp=newsrc.indexOf("&lastTimeStamp=");
-                            if(indexTimeStamp!=-1){
-                                newsrc=newsrc.substring(0, indexTimeStamp)
-                            }
-                            newsrc+="&sectorClassConfigId="+configId+"&lastTimeStamp="+lastTimeStamp;
-                            this.src=newsrc;
+                                    var newsrc=this.src;
+                                    var index=newsrc.indexOf("&sectorClassConfigId=");
+                                    if(index!=-1){
+                                        newsrc=newsrc.substring(0, index)
+                                    }
+
+                                    var indexTimeStamp=newsrc.indexOf("&lastTimeStamp=");
+                                    if(indexTimeStamp!=-1){
+                                        newsrc=newsrc.substring(0, indexTimeStamp)
+                                    }
+                                    var newImage = new Image();
+                                    newsrc+="&sectorClassConfigId="+configId+"&lastTimeStamp="+lastTimeStamp;
+                                    newImage.src=newsrc;
+                                    newImage.alt="<digi:trn>chart</digi:trn>";
+                                    newImage.className="sectorChart";
+                                    var map=this.useMap;
+
+                                    newImage.border="0";
+                                    newImage.onload=this.onload;
+                                    var mapId=map.substring(1);
+                                    var oldMap= document.getElementById(mapId);
+                                    if(oldMap!=null){
+                                        oldMap.parentNode.removeChild(oldMap);
+                                    }
+                                    newImage.useMap=map;
+                                    var parent=this.parentNode;
+                                    parent.appendChild(newImage);
+                                    parent.removeChild(this);
                         });
                         }
                         $(".tab_graph_${gisWidgetTeaserForm.type}_selected").each(function(index) {
@@ -181,10 +198,9 @@
                                 YAHOO.util.Connect.asyncRequest("POST", url, callback_${gisWidgetTeaserForm.type}, postString);
                             }
                             else{
-                                $(".sectorChart").each(function(index) {
+                            $(".sectorChart").each(function(index) {
                                     var lastTimeStamp = new Date().getTime();
                                     var newsrc=this.src;
-                                    this.src="images/amploading.gif";
                                     var index=newsrc.indexOf("&sectorClassConfigId=");
                                     if(index!=-1){
                                         newsrc=newsrc.substring(0, index)
@@ -194,9 +210,25 @@
                                     if(indexTimeStamp!=-1){
                                         newsrc=newsrc.substring(0, indexTimeStamp)
                                     }
-
+                                    var newImage = new Image();
                                     newsrc+="&sectorClassConfigId="+configId+"&lastTimeStamp="+lastTimeStamp;
-                                    this.src=newsrc;
+                                    newImage.src=newsrc;
+                                    newImage.alt="<digi:trn>chart</digi:trn>";
+                                    newImage.className="sectorChart";
+                                    var map=this.useMap;
+                                    
+                                    newImage.border="0";
+                                    newImage.onload=this.onload;
+                                    var mapId=map.substring(1);
+                                    var oldMap= document.getElementById(mapId);
+                                    if(oldMap!=null){
+                                        oldMap.parentNode.removeChild(oldMap);
+                                    }
+                                    newImage.useMap=map;
+                                    var parent=this.parentNode;
+                                    parent.appendChild(newImage);
+                                    parent.removeChild(this);
+                                                                   
                                 });
                             }
 
@@ -285,16 +317,16 @@
                 <c:choose>
                     <c:when test="${sessionScope.orgProfileFilter.transactionType==2&&gisWidgetTeaserForm.type!=3}">
                         <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=0~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}_0" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(0)"/>
-                        <span id="chartMap${gisWidgetTeaserForm.type}_0">
+                        <span id="span_chartMap${gisWidgetTeaserForm.type}_0">
                         </span>
                         <br/>
                         <img class="${imageClass}" alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~transactionType=1~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}_1" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}(1)"/>
-                        <span id="chartMap${gisWidgetTeaserForm.type}_1">
+                        <span id="span_chartMap${gisWidgetTeaserForm.type}_1">
                         </span>
                     </c:when>
                     <c:otherwise>
-                        <img class="${imageClass}" alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
-                        <span id="chartMap${gisWidgetTeaserForm.type}">
+                        <img  class="${imageClass}" alt="<digi:trn>chart</digi:trn>" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=350~imageWidth=580~lastTimeStamp=${gisWidgetTeaserForm.time}" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap_${gisWidgetTeaserForm.type}()"/>
+                        <span id="span_chartMap${gisWidgetTeaserForm.type}">
 
                         </span>
                     </c:otherwise>

@@ -1485,8 +1485,9 @@ public class GetFoundingDetails extends Action {
                 FundingPledgesDetails fund = fundIt.next();
 
                 if (donorId == null || donorId < 0 || donorId.equals(pledge.getOrganization().getAmpOrgId())) {
-                    if ((fund.getFunding_date().after(startTs) || fund.getFunding_date().equals(startTs)) &&
-                            (fund.getFunding_date().before(endTs)) || fund.getFunding_date().equals(endTs)) {
+                    if (fund.getFundingYear() != null && !fund.getFundingYear().isEmpty() &&
+                            (fund.getFunding_date().after(startTs) || fund.getFunding_date().equals(startTs)) &&
+                            (fund.getFunding_date().before(endTs) || fund.getFunding_date().equals(endTs))) {
 
                         AmpFundingDetail forCalculations = new AmpFundingDetail();
                         forCalculations.setAmpCurrencyId(fund.getCurrency());

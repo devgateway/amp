@@ -11,6 +11,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -51,7 +54,14 @@ public class EditFiscalCalendar extends Action {
 						 	if (session.getAttribute("ampFisCal") != null) {
 								session.removeAttribute("ampFisCal");
 							}
-							
+							//check for name duplication 
+						 	int calCount = org.digijava.module.calendar.util.DbUtil.getFiscalCalendarCount(editForm.getFiscalCalName(), editForm.getFiscalCalId());
+						 	if(calCount>0){
+						 		ActionMessages errors= new ActionMessages();
+								errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists", request) ));
+								saveErrors(request, errors);
+								return mapping.findForward("forward");
+						 	}
 							AmpFiscalCalendar ampFisCal = new AmpFiscalCalendar();
 							ampFisCal.setStartMonthNum(new Integer(editForm.getStartMonthNum()));
 							ampFisCal.setStartDayNum(new Integer(editForm.getStartDayNum()));
@@ -76,6 +86,8 @@ public class EditFiscalCalendar extends Action {
 				 
 						} else if ("edit".equals(action)){
 							editForm.setFiscalCalId(new Long(Integer.parseInt(request.getParameter("fiscalCalId"))));
+							
+										 	
 							AmpFiscalCalendar ampFisCal = FiscalCalendarUtil.getAmpFiscalCalendar(editForm.getFiscalCalId());
 							if (ampFisCal == null) {
 								if (session.getAttribute("ampFisCal") != null) {
@@ -119,6 +131,15 @@ public class EditFiscalCalendar extends Action {
 							 	if (session.getAttribute("ampFisCal") != null) {
 									session.removeAttribute("ampFisCal");
 								}
+							 	
+							 	//check for name duplication 
+							 	int calCount = org.digijava.module.calendar.util.DbUtil.getFiscalCalendarCount(editForm.getFiscalCalName(), editForm.getFiscalCalId());
+							 	if(calCount>0){
+							 		ActionMessages errors= new ActionMessages();
+									errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists", request) ));
+									saveErrors(request, errors);
+									return mapping.findForward("forward");
+							 	}
 								
 								ampFisCal.setStartMonthNum(new Integer(editForm.getStartMonthNum()));
 								ampFisCal.setStartDayNum(new Integer(editForm.getStartDayNum()));

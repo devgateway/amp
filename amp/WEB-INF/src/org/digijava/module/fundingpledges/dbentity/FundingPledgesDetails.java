@@ -68,7 +68,8 @@ public class FundingPledgesDetails {
 		this.setCurrency(CurrencyUtil.getAmpcurrency(currencycode));
 	}
 	public java.sql.Timestamp getFunding_date() {
-		return funding_date;
+        Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
+        return retVal;
 	}
 	
 	@Deprecated

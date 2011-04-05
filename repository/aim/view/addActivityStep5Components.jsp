@@ -45,7 +45,7 @@
                                                                                         <option value="<c:out value="${currency.currencyCode}"/>">
                                                                                     </c:if>
                                                                                     <c:if test="${currency.currencyCode==aimEditActivityForm.fundingCurrCode}">
-                                                                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
+                                                                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="selected">
                                                                                         </c:if>
                                                                                         <c:out value="${currency.currencyName}" />
                                                                                     </option>

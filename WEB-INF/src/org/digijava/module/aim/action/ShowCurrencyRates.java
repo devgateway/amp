@@ -13,12 +13,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
@@ -48,7 +50,15 @@ public class ShowCurrencyRates extends Action {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();
-
+        HttpSession httpSession = request.getSession();
+        
+        ActionMessages errors = null;
+        errors = (ActionMessages) httpSession.getAttribute("CurrencyRateFileUploadError");
+        if(errors!=null) {
+        	saveErrors(request, errors);
+        	httpSession.setAttribute("CurrencyRateFileUploadError",null);
+        }
+        
         String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
         if ( baseCurrency == null )
       	  baseCurrency			= "USD";

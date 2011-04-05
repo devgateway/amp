@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
@@ -1374,6 +1375,27 @@ public class SectorUtil {
         }
 
     }
+    
+    
+    
+    public static int getClassificationConfigCount(String name,Long id) throws Exception{
+		int retValue=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select count(cc.id) from " +AmpClassificationConfiguration.class.getName() + " cc where cc.name='"+name+"'";
+            if(id!=null){
+            	queryString+=" and cc.id!="+id;
+            }
+			query=session.createQuery(queryString);
+			retValue=(Integer)query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retValue;
+	}
     
     /**
      * Loads AmpClassificationConfiguration bean which is primary.

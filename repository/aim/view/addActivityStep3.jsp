@@ -112,6 +112,8 @@
 	}
 
 	function fnOnDeleteItem(orgId,fundId)	{
+		var msg	= "<digi:trn>Are you sure you want to remove the funding item ?</digi:trn>";
+		if ( !confirm(msg) ) return;
 		<digi:context name="remItem" property="context/module/moduleinstance/removeFunding.do"/>
 		document.aimEditActivityForm.action = "<%= remItem %>?fundOrgId=" + orgId + "&fundId=" + fundId+"&edit=true";
 		document.aimEditActivityForm.target = "_self";

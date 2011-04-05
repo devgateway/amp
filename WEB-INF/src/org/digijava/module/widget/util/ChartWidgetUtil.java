@@ -1986,7 +1986,7 @@ public class ChartWidgetUtil {
         oql += FundingPledgesDetails.class.getName()
                 + " fd inner join fd.pledgeid plg ";
         oql += " inner join  plg.organization org  ";
-        oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
+        oql += " where fd.fundingYear>=:startYear and fd.fundingYear<=:endYear ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
@@ -1996,10 +1996,13 @@ public class ChartWidgetUtil {
         }
         Session session = PersistenceManager.getRequestDBSession();
         List<FundingPledgesDetails> fundingDets = null;
+
+        String startYear = String.valueOf(startDate.getYear()); 
+        String endYear = String.valueOf(endDate.getYear());
         try {
             Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
+            query.setString("startYear", startYear);
+            query.setString("endYear", endYear);
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
             }

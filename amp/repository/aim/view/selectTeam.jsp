@@ -9,12 +9,12 @@
 
 <digi:instance property="aimLoginForm" />
 <!-- BREADCRUMP START -->
-	<div class="breadcrump">
+	<!--<div class="breadcrump">
 		<div class="centering">
 			<div class="breadcrump_cont">
 			</div>
 		</div>
-	</div>
+	</div>-->
 <!-- BREADCRUMP END -->
 <!-- SELECT TEAM -->
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">

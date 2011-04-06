@@ -116,7 +116,7 @@
 					<table width="100%" cellpadding="1" cellspacing="1">
 					<tr>
 						<td noWrap width=1000 vAlign="top">
-							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
+							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 								<tr>
 									<td vAlign="top" width="100%">&nbsp;
 										
@@ -124,7 +124,7 @@
 								</tr>
 								<tr>
 									<td valign="top">
-										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
+										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
@@ -140,8 +140,8 @@
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">
-																<table width="100%" border="0"	 bgColor=#f4f4f2>
+															<td width="100%" bgColor=#f4f4f2 >
+																<table width="100%" border="0" cellpadding="3" cellspacing="3"	style="margin-top:15px;margin-bottom:15px;">
 																	<tr>
 																		<td width="30%" align="right">
 																		<digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
@@ -221,7 +221,7 @@
 																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>
+															  </table>
 															</td>
 														</tr>
 													<!-- end page logic -->
@@ -232,11 +232,7 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td>&nbsp;
-										
-									</td>
-								</tr>
+
 							</table>
 						</td>
 						<td noWrap width="100%" vAlign="top">

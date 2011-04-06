@@ -70,7 +70,8 @@
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
 	</div>
-	
+
+<div>aaa</div>	
 			
 	<table width="100%">
 		<tr>

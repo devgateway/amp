@@ -77,7 +77,7 @@ top_nav a {color:#FFFFFF;}
 .workspace_choose {line-height:35px; font-size:17px; margin-top:25px;}
 
 /* MENU */
-.main_menu {padding-top:15px; padding-bottom:15px; height:21px;}
+/* .main_menu {padding-top:15px; padding-bottom:15px; height:21px;} */
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}

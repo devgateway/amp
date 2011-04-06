@@ -191,7 +191,7 @@
 																		</td>
 																	</tr> --%>
 																	<tr>
-																		<td colspan="2" width="60%"  align="center">
+																		<td colspan="2" width="60%"  align="center" style="padding-top:15px;">
 																			
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>

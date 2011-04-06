@@ -58,12 +58,9 @@
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
 	</div>
-	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
-	<!-- BREADCRUMP START -->
-	<div class="breadcrump">
-		<div class="centering">
-			<div class="breadcrump_cont">
-			<div style="float:right;">
+	<div class="breadcrump_1">
+	
+				<div style="float:right;">
 			<logic:notEmpty name="currentMember" scope="session">
 				<feature:display name="Change Workspace" module="My Desktop">
 					<div class="workspace_info">
@@ -85,6 +82,16 @@
 			</feature:display>
 			</logic:notEmpty>
 			</div>
+	
+	
+	
+	</div>
+	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
+	<!-- BREADCRUMP START -->
+	<div class="breadcrump">
+		<div class="centering">
+			<div class="breadcrump_cont">
+
 				<%if (arf.isPublicView()==true){%>
 				<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 					<tr>

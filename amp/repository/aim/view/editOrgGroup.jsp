@@ -126,9 +126,9 @@
 									<td valign="top">
 										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
-												<td bgColor=#ffffff class=box-border>
-													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
-														<tr bgColor=#dddddb>
+												<td bgColor=#ffffff>
+													<table border="0" cellpadding="1" cellspacing="1" width="100%">
+														<tr>
 															<td bgColor=#c7d4db height="25" align="center" colspan="5">
 																<logic:equal name="aimAddOrgGroupForm" property="action" value="create" >
 																	<b><digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn></b>

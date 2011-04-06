@@ -60,7 +60,7 @@
 	</div>
 	<div class="breadcrump_1">
 	
-				<div style="margin-left: auto; margin-right: auto; width: 1000px; border: 1px solid; height: 100px;">
+				<div style="margin-left: auto; margin-right: auto; width: 1000px;">
 			<logic:notEmpty name="currentMember" scope="session">
 				<feature:display name="Change Workspace" module="My Desktop">
 					<div class="workspace_info">

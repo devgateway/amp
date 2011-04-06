@@ -71,7 +71,7 @@
 		<digi:insert attribute="headerMiddle"/>
 	</div>
 
-<div>aaa</div>	
+<div class="breadcrump_1">&nbsp;</div>	
 			
 	<table width="100%">
 		<tr>

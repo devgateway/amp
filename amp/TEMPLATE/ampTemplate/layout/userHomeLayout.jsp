@@ -60,7 +60,7 @@
 	</div>
 	<div class="breadcrump_1">
 	
-				<div style="float:right;">
+				<div>
 			<logic:notEmpty name="currentMember" scope="session">
 				<feature:display name="Change Workspace" module="My Desktop">
 					<div class="workspace_info">

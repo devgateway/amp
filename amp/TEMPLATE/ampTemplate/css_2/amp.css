@@ -96,7 +96,7 @@ top_nav a {color:#FFFFFF;}
 
 
 /* BREADCRUMP */
-.breadcrump {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:40px;}
+.breadcrump {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:40px; display:none;}
 .breadcrump_1 {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:20px;}
 .breadcrump_cont {padding-top:11px; padding-bottom:10px; font-size:12px;}
 .sec_name {font-size:12px; font-weight:bold;}

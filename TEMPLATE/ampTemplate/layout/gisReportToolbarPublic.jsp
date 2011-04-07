@@ -36,7 +36,7 @@
 					<table width="100%" border="0" align="left" bgcolor="#EDF5FF" >
 						<tr>
 							<td height="30px" colspan="4">
-						        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" /> Select the date range for the funding information on the map
+						        <img style="width: 16px; height: 16px; vertical-align: middle;" src="/TEMPLATE/ampTemplate/images/info.png" /> <digi:trn>Select the date range for the funding information on the map</digi:trn>
 							</td>
 						</tr>
 						<tr>

@@ -21,6 +21,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisSettings;
@@ -1349,7 +1350,15 @@ public class DbUtil {
                 new ProgramUtil.XMLtreeItemFactory());
         XML prgRoot = new XML("programs-tree");
         root.addElement(prgRoot);
-        populateProgramsTree (programsFlatTree, prgRoot, getUsedPrograms());
+
+        Set usedPrograms = null;
+        if (sectorMode == SECTORS_FOR_ACTIVITIES) {
+            usedPrograms = getUsedPrograms();
+        } else if (sectorMode == SECTORS_FOR_PLEDGES) {
+            usedPrograms = getUsedProgramsForPledges();
+        }
+
+        populateProgramsTree (programsFlatTree, prgRoot, usedPrograms);
 
         return xmlDoc;
     }
@@ -1369,9 +1378,9 @@ public class DbUtil {
                 sectorTag.addAttribute("name", theme.getName());
                 sectorTag.addAttribute("id", theme.getAmpThemeId());
 
-                boolean curentPrjHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
+                boolean curentPrgHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
                 boolean oneOfChildrenHasFounding = false;
-                if (!oneOfPrgsHasFounding && oneOfPrgsHasFounding) {
+                if (!oneOfPrgsHasFounding && curentPrgHasFunding) {
                     oneOfPrgsHasFounding = true;
                 }
 
@@ -1383,7 +1392,7 @@ public class DbUtil {
                     }
                 }
 
-                sectorTag.addAttribute("hasFoundings", curentPrjHasFunding || oneOfChildrenHasFounding);
+                sectorTag.addAttribute("hasFoundings", curentPrgHasFunding || oneOfChildrenHasFounding);
                 parentNode.addElement(sectorTag);
             }
 
@@ -1439,6 +1448,26 @@ public class DbUtil {
 
         StringBuffer queryStr = new StringBuffer("select distinct prj.ampActivityProgramId from ");
         queryStr.append(AmpActivityProgram.class.getName());
+        queryStr.append(" as prj");
+
+        Query q = sess.createQuery(queryStr.toString());
+        retVal = new HashSet(q.list());
+
+        return retVal;
+    }
+
+    private static Set getUsedProgramsForPledges() {
+        Set retVal = null;
+        Session sess = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+        } catch (DgException ex) {
+
+        }
+
+        StringBuffer queryStr = new StringBuffer("select distinct prj.program.ampThemeId from ");
+        queryStr.append(FundingPledgesProgram.class.getName());
         queryStr.append(" as prj");
 
         Query q = sess.createQuery(queryStr.toString());
@@ -1563,29 +1592,31 @@ public class DbUtil {
             Query q = session.createQuery(qStr.toString());
 
             retVal = q.list();
-            /*
-            Iterator <FundingPledgesSector> psi = retVal.iterator();
-            while (psi.hasNext()) {
-                FundingPledgesSector fps = psi.next();
-                fps.getPledgeid().getOrganization();
-            }
-            */
-
 		} catch (Exception e) {
 			logger.error("Error getting pledges, " + e);
 		}
-        /*
-        finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-        */
+        return retVal;
+    }
 
+    public static List <FundingPledgesProgram> getPledgesByProgram (Long programId) {
+        List retVal = null;
+        Session session = null;
+
+        try {
+			session = PersistenceManager.getRequestDBSession();
+            StringBuffer qStr = new StringBuffer("select distinct pp from ");
+            qStr.append(FundingPledgesProgram.class.getName());
+            qStr.append(" as pp ");
+            qStr.append(" where pp.program.ampThemeId = :PRG_ID or");
+            qStr.append(" pp.program.parentThemeId.ampThemeId = :PRG_ID or");
+            qStr.append(" pp.program.parentThemeId.parentThemeId.ampThemeId = :PRG_ID ");
+            Query q = session.createQuery(qStr.toString());
+            q.setLong("PRG_ID", programId);
+
+            retVal = q.list();
+		} catch (Exception e) {
+			logger.error("Error getting pledges, " + e);
+		}
         return retVal;
     }
 

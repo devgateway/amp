@@ -1295,8 +1295,53 @@
 			var newCapt = "("+selectedCurrency+") " + fromYear + " - " + toYear;
 			document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
 			
+			
+			//pledges
+			var mapMode = $("#mapModeFin").val();
+			if (mapMode != null && mapMode == "pledgesData") {
+				if(document.getElementById("tooltipTotalPledgeContainer")){
+      		document.getElementById("tooltipTotalPledgeContainer").innerHTML = totalCommitmentFund;
+      	}
+      	if(document.getElementById("tooltipCurrentPledgeContainer")){
+					document.getElementById("tooltipCurrentPledgeContainer").innerHTML = regData[0] + note;
+				}
+			}
 		}
 	}
+	
+	$("#mapModeFin").change (function () {
+		if (this.value == "pledgesData") {
+			$("#commitmentRowTotal").hide();
+			$("#disbursementRowTotal").hide();
+			$("#expenditureRowTotal").hide();
+			$("#pledgeRowTotal").show();
+			
+			$("#commitmentRow").hide();
+			$("#disbursementRow").hide();
+			$("#expenditureRow").hide();
+			$("#pledgeRow").show();
+			
+			$("#fundingTypeRow").hide();
+			$("#selectedFundingtypeRow").hide();
+			
+			
+			
+		} else {
+			$("#commitmentRowTotal").show();
+			$("#disbursementRowTotal").show();
+			$("#expenditureRowTotal").show();
+			$("#pledgeRowTotal").hide();
+			
+			$("#commitmentRow").show();
+			$("#disbursementRow").show();
+			$("#expenditureRow").show();
+			$("#pledgeRow").hide();
+			
+			$("#fundingTypeRow").show();
+			$("#selectedFundingtypeRow").show();
+		}
+		
+	})
     
 
 	

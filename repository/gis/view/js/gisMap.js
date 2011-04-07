@@ -1683,20 +1683,23 @@
 	
 	//Region popup report
 	function showRegionReport(regCode, regName, regLocId) {
-		var mapLevel = getRadioValue("mapLevelRadio");
-		if (mapLevel == null) {
-			mapLevel = 2;
-		}
-		var sec = document.getElementById("sectorsMapCombo") != null ? document.getElementById("sectorsMapCombo").value:document.getElementById("sectorsMapComboFin").value;
-		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
-		var toYear = document.getElementsByName('selectedToYear')[0].value;
-		var donorId = document.getElementById('donorsCombo').value;
-	
-		var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
-		//alert(regRepUrl);
-		var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 		
-		popup.focus();
+		if ($("#mapModeFin").val() != "pledgesData") {
+			var mapLevel = getRadioValue("mapLevelRadio");
+			if (mapLevel == null) {
+				mapLevel = 2;
+			}
+			var sec = document.getElementById("sectorsMapCombo") != null ? document.getElementById("sectorsMapCombo").value:document.getElementById("sectorsMapComboFin").value;
+			var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+			var toYear = document.getElementsByName('selectedToYear')[0].value;
+			var donorId = document.getElementById('donorsCombo').value;
+		
+			var regRepUrl = "/gis/ShowRegionReport.do?regLocId=" + regLocId + "&regCode=" + regCode + "&mapLevel=" + mapLevel + "&sectorIdStr=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear + "&donorid=" + donorId;
+			//alert(regRepUrl);
+			var popup = window.open(regRepUrl, null, "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+			
+			popup.focus();
+		}
 	}
 	
 	var logged = false

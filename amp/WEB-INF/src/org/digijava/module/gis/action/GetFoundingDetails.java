@@ -256,12 +256,25 @@ public class GetFoundingDetails extends Action {
                     BigDecimal min = null;
                     BigDecimal max = null;
                     if (mapMode == DbUtil.MAP_MODE_PLEDGES) {
-                        List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
 
-                        Object[] fundingList = getPledgesByLocations (selPledges,
+                        //getPledgesByLocationsForPrograms
+
+                        Object[] fundingList = null;
+
+                        if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+                            List <FundingPledgesSector> selPledges = DbUtil.getPledgesBySector(secId, sectorQueryType);
+                            fundingList = getPledgesByLocations (selPledges,
                                 Integer.parseInt(mapLevel),
                                 fStartDate.getTime(),
                                 fEndDate.getTime(), donorId);
+                        } else {
+                            List <FundingPledgesProgram> selPledges = DbUtil.getPledgesByProgram(prgId);
+                            fundingList = getPledgesByLocationsForPrograms (selPledges,
+                                Integer.parseInt(mapLevel),
+                                fStartDate.getTime(),
+                                fEndDate.getTime(), donorId);
+
+                        }
 
                         request.getSession().setAttribute(
                                 "AMP_FUNDING_DATA", fundingList);
@@ -1386,6 +1399,114 @@ public class GetFoundingDetails extends Action {
 
             }
 
+        }
+        Object[] retVal = new Object[2];
+        retVal[0] = locationFundingMap;
+        retVal[1] = totalFundingForSector;
+        return retVal;
+    }
+
+    public static Object[] getPledgesByLocationsForPrograms(List <FundingPledgesProgram> pledgeProgramList, int level, Date start, Date end, Long donorId) throws
+            Exception {
+
+        Map locationFundingMap = new HashMap();
+        FundingData totalFundingForSector = new FundingData();
+        //Calculate total funding
+        if (pledgeProgramList != null) {
+            Iterator<FundingPledgesProgram> pledgeIt = pledgeProgramList.iterator();
+            while (pledgeIt.hasNext()) {
+                FundingPledgesProgram pledgePrg = pledgeIt.next();
+
+                Float percentsForProgramSelected = pledgePrg.getProgrampercentage();
+
+                if (percentsForProgramSelected != null) {
+
+                    FundingData totalFunding = getActivityTotalFundingInBaseCurrencyForPledge(
+                            pledgePrg.getPledgeid(), start, end, donorId);
+
+                    totalFundingForSector.setCommitment(totalFundingForSector.getCommitment().add(totalFunding.getCommitment().multiply(new BigDecimal((percentsForProgramSelected / 100f)))))  ;
+                    totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement().add(totalFunding.getDisbursement().multiply(new BigDecimal (percentsForProgramSelected/ 100f))));
+                    totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure().add(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForProgramSelected / 100f))));
+
+                    FundingData fundingForSector = new FundingData();
+                    fundingForSector.setCommitment(totalFunding.getCommitment().multiply(new BigDecimal(percentsForProgramSelected / 100f)));
+                    fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForProgramSelected / 100f)));
+                    fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForProgramSelected / 100f)));
+
+                    List <FundingPledgesLocation>locations = PledgesEntityHelper.getPledgesLocations(pledgePrg.getPledgeid().getId());
+
+                    Iterator<FundingPledgesLocation> locIt = locations.iterator();
+
+                    while (locIt.hasNext()) {
+                        FundingPledgesLocation loc = locIt.next();
+
+
+                        //Region level
+                        //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
+
+                        if (loc.getLocationpercentage() != null &&
+                                loc.getLocationpercentage().floatValue() > 0.0f &&
+                                loc.getLocation() != null) {
+                            if (level == GisMap.MAP_LEVEL_REGION &&
+                                    loc.getLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
+
+                                String regCode = loc.getLocation().getName().trim();
+
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
+
+                                    FundingData newVal = new FundingData();
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=0f || fundingForSector.getDisbursement().floatValue() != 0f || fundingForSector.getExpenditure().floatValue() != 0f) {
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
+                                }
+                            } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                    loc.getLocation().getParentCategoryValue().getEncodedValue().equals("Zone")) {
+
+                                //District level
+                                //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
+
+                                String regCode = loc.getLocation().getName().trim();
+
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData)
+                                            locationFundingMap.get(
+                                                    regCode);
+
+                                    FundingData newVal = new FundingData();
+                                    newVal.setCommitment(existingVal.getCommitment().add(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/100f))));
+                                    newVal.setDisbursement(existingVal.getDisbursement().add(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    newVal.setExpenditure(existingVal.getExpenditure().add(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage() / 100f))));
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (fundingForSector.getCommitment().floatValue() !=
+                                            0f ||
+                                            fundingForSector.getDisbursement().
+                                                    floatValue() != 0f ||
+                                            fundingForSector.getExpenditure().
+                                                    floatValue() != 0f) {
+
+                                        FundingData newVal = new FundingData();
+                                        newVal.setCommitment(fundingForSector.getCommitment().multiply(new BigDecimal(loc.getLocationpercentage()/ 100f)));
+                                        newVal.setDisbursement(fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationpercentage()/100f)));
+                                        newVal.setExpenditure(fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationpercentage()/100f)));
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         Object[] retVal = new Object[2];
         retVal[0] = locationFundingMap;

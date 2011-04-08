@@ -21,6 +21,7 @@
 			<forward name="helpAdminPage" path="/help/helpActions.do~actionType=viewAdmin" redirect="true"/>
 			<forward name="glossaryHome" path="/help/glossary" redirect="true"/>
 			<forward name="glossaryEdit" path="/showLayout.do?layout=editGlossaryTopicLayout"/>
+			<forward name="helpPrintPreview" path="/showLayout.do?layout=printPreview"/>
 		</action>
 		<action forward="/showLayout.do?layout=helpLayout"  name="helpForm" path="/help/help"/>
 		<action name="helpForm" path="/help/viewHelpTopics" type="org.digijava.module.help.action.ViewHelpTopics"/>

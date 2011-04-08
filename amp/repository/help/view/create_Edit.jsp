@@ -39,6 +39,9 @@ function edit(){
         window.location = actUrl;
     }
 }
+function printPreview (){
+	window.open("/help/helpActions.do?actionType=printPreview&helpTopicId="+selectedTopicId);
+}
 
 function remove(){
     if(validate(getKey())){
@@ -163,7 +166,8 @@ function GetXmlHttpObj()	{
                                 <c:set var="savetreeState">
                                   <digi:trn>Click here to Delete Help Topic</digi:trn>
                                 </c:set>
-
+										<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a> |
+										
                                       <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
 
                                       <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |

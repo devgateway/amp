@@ -3,6 +3,7 @@
 <secondary-pages>
     <page page="glossaryBodyTable" name="glossaryMain" title="Glossary" />
     <page page="addGlossary" name="glossaryAdd" title="Glossary : Add" />
+    <page page="helpTopicPrintPreview" name="printPreview" title="Printer Friendly Preview" />
 </secondary-pages>
 	
  	<module>

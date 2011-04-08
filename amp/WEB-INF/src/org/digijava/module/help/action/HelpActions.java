@@ -44,6 +44,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.jaxbi.AmpHelpRoot;
@@ -73,6 +74,19 @@ public class HelpActions extends DispatchAction {
 		result.add(new LabelValueBean("Standard","1"));
 		result.add(new LabelValueBean("Dropdown Filter - Donors","2"));
 		return result;
+	}
+	
+	public ActionForward printPreview(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response)throws Exception{
+		HelpForm helpForm = (HelpForm) form;
+		Long helpTopicId=helpForm.getHelpTopicId();
+		if(helpTopicId!=null){
+			String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+			HelpTopic helpTopic = HelpUtil.getHelpTopic(helpTopicId);
+			helpForm.setTopicKey(helpTopic.getTopicKey());
+			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
+			//Editor helpTopicBody= DbUtil.getEditor(helpTopic.getBodyEditKey(), lang); 
+		}
+		return mapping.findForward("helpPrintPreview");
 	}
 
 

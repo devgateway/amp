@@ -709,6 +709,9 @@
 			<module name="dataExchange">
 				<page>de_showLog</page>
 			</module>
+			<module name="help">
+				<page>printPreview</page>
+			</module>
 		</page-group>
 		<page-group masterLayout="noLayout" tile="body">
 			<module name="contentrepository">

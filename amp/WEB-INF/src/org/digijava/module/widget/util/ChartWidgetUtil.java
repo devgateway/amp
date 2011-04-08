@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -53,7 +54,10 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
@@ -278,7 +282,7 @@ public class ChartWidgetUtil {
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge=0d;
             if (filter.isPledgeVisible()) {
-                fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
+                fundingPledge = getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), i, currCode,filter.getLocationIds());
                 result.addValue(fundingPledge / divideByDenominator.doubleValue(), pledgesTranslatedTitle, new Long(i));
             }
             DecimalWraper fundingComm = getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT,Constants.ACTUAL);
@@ -1977,44 +1981,71 @@ public class ChartWidgetUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static double getPledgesFunding(Long[] orgIds, Long orgGroupId,
-            Date startDate, Date endDate,
-            String currCode) throws DgException {
+    public static double getPledgesFunding(Long[] orgIds, Long orgGroupId, int year,
+            String currCode, Collection<Long> locationIds) throws DgException {
         double totalPlannedPldges = 0;
-        String oql = "select fd ";
-        oql += " from ";
-        oql += FundingPledgesDetails.class.getName()
-                + " fd inner join fd.pledgeid plg ";
-        oql += " inner join  plg.organization org  ";
-        oql += " where fd.fundingYear = :currentYear ";
-        if (orgIds == null) {
-            if (orgGroupId != -1) {
-                oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
-            }
-        } else {
-            oql += " and org.ampOrgId in (" + getInStatment(orgIds) + ") ";
-        }
-        Session session = PersistenceManager.getRequestDBSession();
-        List<FundingPledgesDetails> fundingDets = null;
         // Since there's no date for FundingPledgeDetail we use the year of the startDate from calendar
-        String currentYear = String.valueOf(startDate.getYear()+1900); 
-
+        String currentYear = String.valueOf(year);
+        List<Long> orgs = new ArrayList<Long>();
+        if (orgIds != null) {
+            orgs = Arrays.asList(orgIds);
+        }
         try {
-            Query query = session.createQuery(oql);
+            boolean locationCondition = locationIds != null && locationIds.size() > 0;
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query;
+            StringBuilder oql = new StringBuilder("select fd from ");
+            oql.append(FundingPledgesDetails.class.getName());
+            oql.append(" fd inner join fd.pledgeid plg ");
+            oql.append(" inner join  plg.organization org  ");
+            oql.append(" where fd.fundingYear = :currentYear ");
+            if (orgIds == null) {
+                if (orgGroupId != -1) {
+                    oql.append(" and  org.orgGrpId.ampOrgGrpId=:orgGroupId ");
+                }
+            } else {
+                oql.append(" and org.ampOrgId in (:organizations) ");
+            }
+            List<FundingPledgesDetails> fundingDets = null;
+            query = session.createQuery(oql.toString());
             query.setString("currentYear", currentYear);
 
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
+            } else {
+                if (orgIds != null) {
+                    query.setParameterList("organizations", orgs);
+                }
             }
             fundingDets = query.list();
             Iterator<FundingPledgesDetails> fundDetIter = fundingDets.iterator();
             while (fundDetIter.hasNext()) {
-                FundingPledgesDetails pledge = fundDetIter.next();
+                FundingPledgesDetails pledgeDet = fundDetIter.next();
+                Double amount = pledgeDet.getAmount();
+
+                if (locationCondition) { // The locationlist is commented in FundingPledgesLocation
+                    FundingPledges pledge = pledgeDet.getPledgeid();
+                    Collection<FundingPledgesLocation> pledesLocations = PledgesEntityHelper.getPledgesLocations(pledge.getId());
+                    double percent = 0;
+                    if (pledesLocations != null) {
+                        for (FundingPledgesLocation pledgesLocation : pledesLocations) {
+                            if (locationIds.contains(pledgesLocation.getLocation().getId())) {
+                                percent += pledgesLocation.getLocationpercentage();
+                            }
+
+                        }
+                        if (amount != null) {
+                            amount *= percent / 100;
+                        }
+                    }
+
+                }
+
                 //converting amounts
-                java.sql.Date dt = new java.sql.Date(pledge.getFunding_date().getTime());
-                double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
+                java.sql.Date dt = new java.sql.Date(pledgeDet.getFunding_date().getTime());
+                double frmExRt = Util.getExchange(pledgeDet.getCurrency().getCurrencyCode(), dt);
                 double toExRt = Util.getExchange(currCode, dt);
-                DecimalWraper amt = CurrencyWorker.convertWrapper(pledge.getAmount(), frmExRt, toExRt, dt);
+                DecimalWraper amt = CurrencyWorker.convertWrapper(amount, frmExRt, toExRt, dt);
                 totalPlannedPldges += amt.doubleValue();
             }
 
@@ -2023,7 +2054,7 @@ public class ChartWidgetUtil {
         } catch (Exception e) {
             logger.error(e);
             throw new DgException(
-                    "Cannot load sector fundings by donors from db", e);
+                    "Cannot load pledge fundings by donors from db", e);
         }
 
 

@@ -29,6 +29,7 @@
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 
 <digi:instance property="aimTeamReportsForm" />
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${aimTeamReportsForm.showTabs}">
 	<c:set var="translation">
@@ -121,6 +122,15 @@ function confirmFunc() {
 					          			<td>
 					            			<table bgcolor="#FFFFFF" style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">
 					              				<tr>
+         	<td>
+          	<table cellpadding="6" cellspacing="6">
+               <tr>
+               <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit></td> <td><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+               </tr>
+              </table>
+             </td>
+         </tr>
+         <tr>
 					                				<td>
 					                					<c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}"></c:set>
 					                  					<c:if test="${reportNumber != 0}">
@@ -637,6 +647,7 @@ function confirmFunc() {
 					          			</td>
 					        		</tr>
 					      		</table>
+             </digi:form>
 					    	</td>
 					  	</tr>
 					</table>

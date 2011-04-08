@@ -122,6 +122,11 @@ public class EditFunding extends Action {
 								formBean.getOldFunding().setDonorObjective(funding.getDonorObjective());
 								formBean.getFunding().setFundingConditions(funding.getConditions());
 								formBean.getOldFunding().setFundingConditions(funding.getConditions());
+
+								formBean.getFunding().setActualStartDate(funding.getActStartDate());
+								formBean.getOldFunding().setActualStartDate(funding.getActStartDate());
+								formBean.getFunding().setActualCompletionDate(funding.getActCloseDate());
+								formBean.getOldFunding().setActualCompletionDate(funding.getActCloseDate());
 								
 								if (funding.getFundingDetails() != null) {
 									//

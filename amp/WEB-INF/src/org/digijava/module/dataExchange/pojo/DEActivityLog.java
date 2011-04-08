@@ -119,7 +119,7 @@ public class DEActivityLog extends DELog{
 				result += DataExchangeConstants.MISSING_CURRENCY + "<![CDATA[\"<br/>\"]]>" + aux;
 			}
 			
-			return result;
+			return result.replaceAll("&", "&amp;");
 		}
 		else return null;
 	}

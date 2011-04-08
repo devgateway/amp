@@ -42,6 +42,8 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
@@ -1435,5 +1437,26 @@ public class DbUtil {
 	}
 	
 	
+	public static int getFiscalCalendarCount(String name,Long id) throws Exception{
+		int retValue=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select count(cal.ampFiscalCalId) from " +AmpFiscalCalendar.class.getName() + " cal where cal.name='"+name+"'";
+            if(id!=null){
+            	queryString+=" and cal.ampFiscalCalId!="+id;
+            }
+			query=session.createQuery(queryString);
+//            if(id!=null){
+//            	query.setLong("id", id);
+//            }
+			retValue=(Integer)query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retValue;
+	}
 	
 }

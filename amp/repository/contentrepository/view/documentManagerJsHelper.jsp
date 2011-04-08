@@ -81,10 +81,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" ></script>
 
 
 <%@page import="java.net.URLDecoder"%>
@@ -94,10 +94,10 @@
 </c:set>
 
 <c:set var="headerVersion">
-				<digi:trn>Version</digi:trn>
+	<digi:trn>Version</digi:trn>
 </c:set>
 <c:set var="headerType">
-				<digi:trn>Type</digi:trn>
+	<digi:trn>Type</digi:trn>
 </c:set>
 
 <c:set var="headerFileName">
@@ -109,15 +109,22 @@
 </c:set>
 
 <c:set var="headerFileSize">
-				<digi:trn>Size (MB)</digi:trn>
+	<digi:trn>Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
-				<digi:trn>Notes</digi:trn>
+	<digi:trn>Notes</digi:trn>
 </c:set>
 
 <c:set var="headerAction">
-				<digi:trn>Actions</digi:trn>
+	<digi:trn>Actions</digi:trn>
+</c:set>
+
+<c:set var="labelstrn">
+	<digi:trn>Labels</digi:trn>
+</c:set>
+<c:set var="filterstrn">
+	<digi:trn>Filters</digi:trn>
 </c:set>
 
 
@@ -172,7 +179,14 @@
 		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
 		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions, null, options	);
 	};
-
+	
+	function getfiltertext(){
+		return '${filterstrn}';
+	}
+	
+	function getlabelsext(){
+		return '${labelstrn}';
+	}
 </script>
 <c:set var="translation1">
 	<digi:trn>Are you sure you want to delete this document ?</digi:trn>
@@ -426,7 +440,7 @@ var categories	= YAHOO.amp.actionPanels;
 
 /* Ajax function that creates a callback object after a delete command 
 was issued in order to delete the respective row/document*/
-function getCallbackForDelete (rows, table) {
+function getCallbackForDelete (rows) {
 	callbackForDelete = {
 		success: function(o) {
 			YAHOO.amp.panels[2].setBody(o.responseText);
@@ -439,6 +453,11 @@ function getCallbackForDelete (rows, table) {
 							YAHOO.amp.datatables[ii].deleteRow(this.myRows[i]);
 						}
 					}
+					
+					repositoryTabView.activatedLists[2]	= false;
+					repositoryTabView.activatedLists[3]	= false;
+					sharedListObj.clearBody();
+					publicListObj.clearBody();
 				}
 			}
 			else 
@@ -477,7 +496,7 @@ function deleteRow(uuid, o) {
 		//YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
 		//showPanel(2);
 		//YAHOO.amp.table.dataTable.deleteRow(possibleRow);
-		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows, YAHOO.amp.table.dataTable));
+		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows));
 		
 	}
 }
@@ -1101,22 +1120,22 @@ function validateAddDocument() {
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
-		msg = msg + "${translation_validation_title}" ;
+		msg = msg + "${translation_validation_title}"+'<br>';
 	else {
 		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
 		var found	= regexp.exec(title);
 		//document.forms['crDocumentManagerForm'].docTitle.value = title;
 		if ( found != title ) {
-			msg = msg + "${translation_validation_title_chars}" ;
+			msg = msg + "${translation_validation_title_chars}"+'<br>' ;
 		}
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
 	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document
-		msg = msg + "${translation_validation_filedata}" ;
+		msg = msg + "${translation_validation_filedata}"+'<br>';
 	}
 	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
-		msg = msg + "${translation_validation_url}" ;
+		msg = msg + "${translation_validation_url}"+'<br>' ;
 	}
 	//if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && document.forms['crDocumentManagerForm'].fileData.value == '')
 	//	msg = msg + "${translation_validation_filedata}" ;
@@ -1203,7 +1222,7 @@ function rejectDoc (uuid,actType){
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid, callback);
 }
 
-function setAttributeOnNode(action, uuid, doReload) {
+function setAttributeOnNode(action, uuid, doReload,tabType) {
 	
 	var callback	= new Object();
 	callback.success	= function(o) {
@@ -1212,7 +1231,7 @@ function setAttributeOnNode(action, uuid, doReload) {
 	callback.failure	= function(o) {
 							alert("${translation_make_public_failed}");
 						};	
-	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/setAttributes.do?uuid="+uuid+"&action="+action, callback);
+	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/setAttributes.do?uuid="+uuid+"&action="+action+"&type="+tabType, callback);
 }
 
 function createToolTips(containerElement) {
@@ -1395,6 +1414,7 @@ function showActions(linkId, divId, category,timestamp){
 		panels[linkId]	= actionPanel;
 		panels.size++;
 	}
+	actionPanel.align("tl","bl");
 	actionPanel.show();
 	actionPanel.myIsVisible	= true;
 }

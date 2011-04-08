@@ -11,7 +11,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
+
+<%@page import="java.math.BigDecimal"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -52,7 +53,7 @@
 		*/
 		    
 	    var myPanelIPAContracting = new YAHOOAmp.widget.Panel("newmyContract", {
-			width:"100%",
+			width:"730px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -125,7 +126,7 @@
 	
 	#myContract .content { 
 	    overflow:auto; 
-	    height:455px; 
+	    height:600px; 
 	    background-color:fff; 
 	    padding:10px; 
 	} 
@@ -143,7 +144,7 @@
     }
     
     
-    function callUrl(indexId){
+    function callUrl(indexId) {
 	    var async=new Asynchronous();
 	    async.complete=mapCallBack;
 	    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
@@ -152,7 +153,7 @@
     
     
     function addIPAContract() {
-        openNewWindow(900, 700);
+        openNewWindow(900, 600);
         <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?new" />
         document.aimEditActivityForm.action = "<%= editIPAContract %>";
         document.aimEditActivityForm.target = popupPointer.name;
@@ -252,17 +253,6 @@
 						<tr>
 							<td><jsp:include page="t.jsp"/>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</c:set>
-									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</c:set>
@@ -279,9 +269,7 @@
 
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-
-                                <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+								<c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
                                    <c:set property="translation" var="trans">
                                        <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
                                            Click here to goto Add Activity Step ${step.stepActualNumber}
@@ -783,12 +771,15 @@
 		                                               
 			                                     
 		                                          <field:display name="Contracting Amendments" feature="Contracting">
+		                                          		<bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
 		                                          		<tr>
 			                                              <td align="left">
 			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              										&nbsp; ${contract.donorContractFundinAmount} &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			                                              	<c:if test="${ct.donorContractFundinAmount != null}">			                                              																	
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString() %>  &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -796,7 +787,9 @@
 			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              										&nbsp; ${contract.totAmountDonorContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			                                              	<c:if test="${ct.totAmountDonorContractFunding != null}">
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 		                                          		<tr>
@@ -804,7 +797,9 @@
 			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
 			                                              </td>
 			                                              <td>
-			              										&nbsp; ${contract.totAmountCountryContractFunding} &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			                                              	<c:if test="${ct.totAmountCountryContractFunding != null}">
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			              									</c:if>
 			                                              </td>
 			                                          </tr>
 			                                          <tr>
@@ -817,6 +812,7 @@
 			                                              </td>
 			                                              <td>
 		                                                      <logic:notEmpty name="contract" property="amendments">
+		                                                      
 		                                                           <table width="100%">
 																    <tr>
 																		<th><digi:trn>Amount</digi:trn></th>
@@ -824,10 +820,10 @@
 																		<th><digi:trn>Date</digi:trn></th>
 																		<th><digi:trn>Reference</digi:trn></th>																		
 																	</tr>
-			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >
+			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >			                                                           
 			                                                               <tr>
 			                                                                   <td align="center" valign="top">
-			                                                                       ${amendment.amount}
+			                                                                    ${amendment.amoutStr}
 			                                                                   </td>
 			                                                                   <td align="center" valign="top">
 			                                                                       ${amendment.currency.currencyName}

@@ -151,6 +151,7 @@
 		<!-- Pledges classes -->
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledges</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>
+		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesSector</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails</hibernate-class>
 		

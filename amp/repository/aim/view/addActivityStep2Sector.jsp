@@ -92,6 +92,7 @@
 									<bean:define id="contentDisabled">false</bean:define>
 									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
 									</c:set>
+									<c:set var="mandatoryname">Validate Mandatory ${auxSectorType}</c:set>
 									
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
@@ -101,9 +102,11 @@
                                         	<c:set var="sectorAdded" value="false"/>
                                          <tr>
                                              <td  align="left"> 
+                                                     <field:display name="${mandatoryname}" feature="Sectors">
                                                      <FONT color="red">
                                                          *
                                                      </FONT>
+                                                     </field:display>
                                                      <b><digi:trn key="aim:addActivitySectors:${auxSectorType}">${auxSectorType}</digi:trn></b>
                                                 </td>
                                     	</tr>

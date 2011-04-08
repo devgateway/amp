@@ -165,7 +165,7 @@
 												<digi:trn>Click here to download document</digi:trn>
 											</c:set> 
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-											onClick="downloadFile('<bean:write name='documentData' property='nodeVersionUUID' />');" title="${translation}">
+											onClick="downloadFile('${documentData.uuid}');" title="${translation}">
 												<digi:trn>Download</digi:trn>
 											</a>
 										</c:when>
@@ -204,7 +204,7 @@
 										<c:if test="${ (!documentData.isPublic) || (!documentData.lastVersionIsPublic) }">
 											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
-											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
+											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true,'${tabTypeLocal}');"
 											title="<digi:trn>Click here to make this document public</digi:trn>">
 												<digi:trn>Make Public</digi:trn>
 											</a>
@@ -216,7 +216,7 @@
 										<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 											<br />
 											<a style="cursor:pointer; text-decoration:none; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
-											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
+											onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>',null,'${tabTypeLocal}');"
 											title="<digi:trn>Click here to unpublish this document</digi:trn>">
 												<digi:trn>Unpublish</digi:trn>
 											</a>

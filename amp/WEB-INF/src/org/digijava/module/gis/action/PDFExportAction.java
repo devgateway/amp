@@ -43,7 +43,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -52,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -80,7 +80,6 @@ import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
-import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.SectorTableHelper;
@@ -216,24 +215,29 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		Image imgChart = Image.getInstance(outChartByteArray.toByteArray());
 
 		// GIS Map parameters
-		Long secId = null;
-        String secIdStr = null;
+		String secIdStr = null;
 		Long indId = null;
-        int sectorQueryType = 0;
-		if (request.getParameter("sectorId") != null
-				&& !request.getParameter("sectorId").equals("-1")) {
-            secIdStr = request.getParameter("sectorId");
-            if (secIdStr.startsWith("sec_scheme_id_")) {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
-                secId = new Long(secIdStr.substring(14));
-            } else if (secIdStr.startsWith("sec_id_")) {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
-                secId = new Long(secIdStr.substring(7));
-            } else {
-                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
-                secId = new Long(secIdStr);
-            }
+		if (request.getParameter("sectorId") != null && !request.getParameter("sectorId").equals("-1")) {
+			secIdStr = request.getParameter("sectorId");
 		}
+
+        Long secId = null;
+        Long prgId = null;
+        int sectorQueryType = 0;
+        if (secIdStr.startsWith("sec_scheme_id_")) {
+            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
+            secId = new Long(secIdStr.substring(14));
+        } else if (secIdStr.startsWith("sec_id_")) {
+            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
+            secId = new Long(secIdStr.substring(7));
+        } else if (secIdStr.startsWith("prj_id_")) {
+            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
+            prgId = new Long(secIdStr.substring(7));
+        } else {
+            sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
+            secId = new Long(secIdStr);
+        }
+        
 		if (request.getParameter("indicatorId") != null
 				&& !request.getParameter("indicatorId").equals("-1")) {
 			indId = Long.parseLong(request.getParameter("indicatorId"));
@@ -355,15 +359,52 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			}
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
             /*
+
+            if (request.getParameter("sectorId") != null && !request.getParameter("sectorId").equals("-1")) {
+                secIdStr = request.getParameter("sectorId");
+            }
+
+            if (secIdStr.startsWith("sec_scheme_id_")) {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME;
+                secId = new Long(secIdStr.substring(14));
+            } else if (secIdStr.startsWith("sec_id_")) {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_SECTOR;
+                secId = new Long(secIdStr.substring(7));
+            } else if (secIdStr.startsWith("prj_id_")) {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM;
+                prgId = new Long(secIdStr.substring(7));
+            } else {
+                sectorQueryType = org.digijava.module.gis.util.DbUtil.SELECT_DEFAULT;
+                secId = new Long(secIdStr);
+            }
+
+            /*
 			if (request.getParameter("sectorId") != null) {
 				secId = Long.parseLong(request.getParameter("sectorId"));
 			}*/
+    		
 
+
+            if (sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_SECTOR_SCHEME) {
+                AmpSectorScheme scheme = SectorUtil.getAmpSectorScheme(secId);
+                if (scheme != null) {
+                    sectorName = scheme.getSecSchemeName();
+                }
+            } else {
+                AmpSector sec = SectorUtil.getAmpSector(secId);
+                if (sec != null) {
+                    sectorName = sec.getName();
+                }
+            }
+
+
+
+            /*
 			if (secId.longValue() == -1f || sectorQueryType != org.digijava.module.gis.util.DbUtil.SELECT_SECTOR) {
 				sectorName = "All Sectors";
 			} else {
 				sectorName = SectorUtil.getAmpSector(secId).getName();
-			}
+        	}*/
 			// Old if, when the <select> had -2 as "select sector".
 			// if (secId.longValue() == -2f) {
 			// sectorName = "None";
@@ -389,19 +430,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			}
 
+                Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
+
 			if (mapCode != null && mapCode.trim().length() > 0) {
 
-				outMapByteArray = getMapImageFinancial(mapCode, secId,
-						Long.parseLong(request.getParameter("donorId")),
-						request.getParameter("fundingType"),
-						fStartDate.getTime(), fEndDate.getTime(), mapLevel);
-			} else {
-				outMapByteArray = getMapImageFinancial("TZA", secId,
-						Long.parseLong(request.getParameter("donorId")),
-						request.getParameter("fundingType"),
-						fStartDate.getTime(), fEndDate.getTime(), mapLevel);
-			}
-		}
+                if (mapCode != null && mapCode.trim().length() > 0) {
+
+                    outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                } else {
+                    outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                }
+        }
+
 
 		// Get the Map Image
 		// GIS, this
@@ -562,6 +602,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		ServletOutputStream out = response.getOutputStream();
 		baos.writeTo(out);
 		out.flush();
+		
+		}
 		return null;
 	}
 
@@ -955,22 +997,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				baseCurr = "USD";
 			}
 
-			textCell.addElement(new Paragraph("All amounts in 000s of "
-					+ baseCurr
-					+ "\n"
-					+ TranslatorWorker.translateText(selectedDonorTranslation,
-							locale, siteId)
-					+ ": "
-					+ selectedDonorName
-					+ "\n"
-					+ TranslatorWorker.translateText(
-							selectedStartYearTranslation, locale, siteId)
-					+ ": "
-					+ selectedStartYear
-					+ "\n"
-					+ TranslatorWorker.translateText(
-							selectedEndYearTranslation, locale, siteId) + ": "
-					+ selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
+			textCell.addElement(new Paragraph("All amounts in 000s of "+baseCurr + "\n" + TranslatorWorker.translateText(selectedDonorTranslation, locale, siteId) + ": " + selectedDonorName + "\n"
+				+ TranslatorWorker.translateText(selectedStartYearTranslation, locale, siteId) + ": " + selectedStartYear + "\n" + TranslatorWorker.translateText(selectedEndYearTranslation, locale, siteId) + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
 			textCell.setBorder(Rectangle.NO_BORDER);
 			generalBox.addCell(textCell);
@@ -1684,9 +1712,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-	private ByteArrayOutputStream getMapImageFinancial(String mapCode,
-			Long secId, Long donorId, String fundingType, Date fStartDate,
-			Date fEndDate, String mapLevel) throws Exception {
+   private ByteArrayOutputStream getMapImageFinancial(String mapCode, Long secId, int mapMode, Long donorId, String fundingType, Date fStartDate, Date fEndDate, String mapLevel) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1699,8 +1725,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		List secFundings = null;
 
 		if (secId.longValue() > -2l) {
-			secFundings = org.digijava.module.gis.util.DbUtil
-					.getSectorFoundings(secId);
+                        if (mapMode != org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM) {
+                            secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null);
+                        } else {
+                            secFundings = org.digijava.module.gis.util.DbUtil.getProgramFoundings(secId);
+                        }
 		} else {
 			secFundings = new ArrayList();
 		}
@@ -2202,8 +2231,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return retVal;
 	}
 
-	private FundingData getActivityTotalFundingInBaseCurrency(
-			AmpActivity activity) {
+	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity) {
 		FundingData retVal = null;
 		Set fundSet = activity.getFunding();
 		Iterator<AmpFunding> fundIt = fundSet.iterator();

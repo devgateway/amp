@@ -95,7 +95,7 @@ function updateObservations(id) {
 	<digi:context name="addObservation" property="context/module/moduleinstance/showUpdateObservation.do?edit=true" />
 	var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addObservation%>&observations.issueId="+id,callback);
 }
-            
+
 function addMeasures(observationId) {
 	myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateRegionalObservationMeasure.do?edit=true" />
@@ -382,16 +382,7 @@ function removeSelComponents() {
 				                      		<tr>
 				                        		<td>
 				                          			<span class=crumb>
-				                            		<c:if test="${aimEditActivityForm.pageId == 0}">
-				                              			<c:set property="translation" var="trans" >
-				                                			<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-				                              			</c:set>
-				                              			<digi:link href="admin.do" styleClass="comment" title="${trans}">
-				                                		<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-				                              			</digi:link>&nbsp;&gt;&nbsp;
-				                            		</c:if>
-				                            		<c:if test="${aimEditActivityForm.pageId == 1}">
-				                              			<c:set property="translation" var="ttt">
+				                            			<c:set property="translation" var="ttt">
 				                                			<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 				                              			</c:set>
 				                              			<c:set var="message">
@@ -403,8 +394,7 @@ function removeSelComponents() {
 				                              			<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="${trans}">
 				                                		<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 				                              			</digi:link>&nbsp;&gt;&nbsp;
-				                            		</c:if>
-				                           			<c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+				                            			<c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
 				                               			<c:set property="translation" var="trans">
 				                                   			<digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">Click here to goto Add Activity Step ${step.stepActualNumber}</digi:trn>
 				                               			</c:set>

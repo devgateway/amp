@@ -482,7 +482,7 @@ function adminHelp(){
 		                                            </a>
 		                                        </li>
 		                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-		                                            <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewTeamReports.do?tabs=true">
+		                                            <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewTeamReports.do?tabs=true&reset=true">
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
 												</li>
@@ -540,7 +540,7 @@ function adminHelp(){
                                                     </a>
                                                 </li>
                                         </feature:display>
-                                        <feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
+                                        <feature:display name="Pledges Default Reports" module="Pledge Reports">
                                         	<li class="yuiampmenuitem_drop" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
                                             	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
                                                 	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
@@ -791,7 +791,7 @@ function adminHelp(){
                                         </li>
                                         
                                         <li class="yuiampmenuitem_drop">
-	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true">
+	                                        <a class="yuiampmenuitemlabel" href="/aim/addressBook.do?actionType=viewAddressBook&reset=true" onclick="return canExit()">
 	                                        	<digi:trn>Address Book</digi:trn>
 	                                        </a>
                                         </li>

@@ -324,7 +324,8 @@ public class DocumentManagerUtil {
 			} 
 			catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn( e.getMessage() );
+				logger.warn( "Above warning could be normal in case we're just testing to see if this node is a version or not." );
 				return null;
 			}
 		}

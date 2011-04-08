@@ -245,3 +245,10 @@ a.settingsLinkDisable{
 	text-decoration:none;
 	color: #EEEEEE ;
 }
+
+a.nohoverlink{
+	text-decoration:none;
+}
+a.nohoverlink:hover{
+	background-color:transparent;
+}

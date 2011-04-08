@@ -100,18 +100,25 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	@Override
 	public boolean equals(Object obj) {
 		AmpComponent target=(AmpComponent) obj;
+		if (this.ampComponentId == null)
+			return super.equals(obj);
+		
 		if (target!=null && this.ampComponentId!=null){
 			return (target.getAmpComponentId().doubleValue()==this.getAmpComponentId().doubleValue());
 		}
 		return false;
 		
 	}
-	
+	/**
+	 * If overriding is really needed please fully comment on the reason!
+	 *
 	@Override
 	public int hashCode() {
 		if( this.ampComponentId ==null) return 0;
 		return this.ampComponentId.hashCode();
 	}
+	 */
+	
 	public java.sql.Timestamp getCreationdate() {
 		return creationdate;
 	}

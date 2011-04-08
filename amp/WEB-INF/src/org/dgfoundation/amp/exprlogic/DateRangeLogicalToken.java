@@ -23,17 +23,21 @@ public class DateRangeLogicalToken extends LogicalToken {
 	@Override
 	public boolean evaluate(CategAmountCell c) {
 		MetaInfo m = MetaInfo.getMetaInfo(c.getMetaData(), ArConstants.TRANSACTION_DATE);
-		Date date = (Date) m.getValue();
-		if ((d1 != null) && (d2 != null)) {
-			ret = (date.compareTo(d1) > -1 && date.compareTo(d2) < 0);
+		if ( m != null) {
+			Date date = (Date) m.getValue();
+			if ((d1 != null) && (d2 != null)) {
+				ret = (date.compareTo(d1) > 0 && date.compareTo(d2) < 0);
+			}
+			if ((d1 == null) && (d2 != null)) {
+				ret = date.compareTo(d2) < 0;
+			}
+	
+			if ((d1 != null) && (d2 == null)) {
+				ret = date.compareTo(d1) > -1;
+			}
 		}
-		if ((d1 == null) && (d2 != null)) {
-			ret = date.compareTo(d2) < 0;
-		}
-
-		if ((d1 != null) && (d2 == null)) {
-			ret = date.compareTo(d1) > -1;
-		}
+		else 
+			ret		= false;
 		return super.evaluate(c);
 	}
 }

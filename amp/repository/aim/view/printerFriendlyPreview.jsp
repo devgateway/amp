@@ -296,7 +296,24 @@
 									</logic:present>
 									</field:display>
 									
-<field:display name="Accession Instrument" feature="Identification">
+									<field:display name="Project Impact" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display> 
+									
+									
+									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>		</b>								</td>
@@ -307,6 +324,20 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									
+									<field:display name="Project Implementing Unit" feature="Identification">
+										<tr>
+											<td width="30%" align="right" valign="top" nowrap="nowrap">
+												<b><digi:trn>Project Implementing Unit</digi:trn></b>
+											</td>
+											<td bgcolor="#ffffff">
+												<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
+												</c:if>&nbsp;
+											</td>
+										</tr>
+									</field:display>
+									
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
@@ -335,18 +366,30 @@
 										</b>										
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="On/Off Budget" feature="Budget">	
-
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
-										<digi:trn>Activity is On Budget</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
-										<digi:trn>Activity is Off Budget</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
-										<digi:trn>Budget Unallocated</digi:trn>
-										</logic:equal>
+										<field:display name="On/Off/Treasure Budget" feature="Budget">
+											<c:choose>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+												<digi:trn>Activity is On Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOff}">
+												<digi:trn>Activity is Off Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==0}">
+												<digi:trn>Budget Unallocated</digi:trn>
+												</c:when>
+												<c:otherwise>
+													<digi:trn>Activity is On</digi:trn>  
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.budgetCV}" />
+												</c:otherwise>
+											</c:choose>	
 										</field:display>
+										
+										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
+										<p/>
+										<field:display name="Project Code" feature="Budget">
+											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 
+										</field:display>										
+										</c:if>				
 										</td>
 									</tr>
 									</feature:display>
@@ -486,6 +529,24 @@
 													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
+												
+												<field:display name="Proposed Start Date" feature="Planning">
+												<tr>
+													<td width="32%">
+														<digi:trn>Proposed Start Date</digi:trn>
+													</td>
+													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.originalStartDate}													</td>
+												</tr>
+												</field:display>
+												<field:display name="Actual Start Date" feature="Planning">
+												<tr>
+													<td width="32%"><digi:trn>Actual Start Date</digi:trn></td>													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.revisedStartDate}													</td>
+												</tr>
+												</field:display>
 											
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
@@ -506,14 +567,7 @@
 												</tr>
 												
 												</field:display>
-												<field:display name="Proposed Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%">													
@@ -531,14 +585,7 @@
 														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
 												</tr>
 												</field:display>
-												<field:display name="Actual Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
 												<tr>
@@ -686,7 +733,7 @@
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
 											<digi:trn key="aim:level">
-										    Level</digi:trn>
+										    Implementation Level</digi:trn>
 										  </b>
 										</td>
 <td bgcolor="#ffffff">
@@ -695,6 +742,50 @@
 											</c:if>										</td>
 									</tr>
 									</field:display>
+									
+								  <field:display name="Implementation Location" feature="Location">	  
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:implementationLocation">
+										    Implementation Location</digi:trn>
+										  </b>
+										</td>
+<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+											</c:if>										</td>
+									</tr>
+									</field:display>
+									
+                            </feature:display>   
+                            
+                            
+							<feature:display name="Program" module="Program">
+                            <field:display name="National Planning Objectives" feature="NPD Programs">                       
+                          	<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
+                        					</b>
+                        				</td>
+							<td bgcolor="#ffffff">
+							<table width="100%" cellSpacing="2" cellPadding="1">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
+                                                          <tr><td>
+                                                                                 ${nationalPlanObjectivePrograms.hierarchyNames}
+                                                          <td align="right">
+                                                                    ${nationalPlanObjectivePrograms.programPercentage}%
+                                                          </td></tr>                                                          
+                                                          </c:forEach>
+
+                                                        </c:if>
+                            </table>
+							</td>
+							</tr>
+						</field:display>
                             </feature:display>   
                                     <feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

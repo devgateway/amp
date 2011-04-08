@@ -118,6 +118,7 @@ public class EditOrganisation extends DispatchAction {
       AmpOrganisation organization = DbUtil.getOrganisation(orgId);
       editForm.setName(organization.getName());
       editForm.setAcronym(organization.getAcronym());
+      editForm.setFundingorgid(organization.getFundingorgid());
       Collection orgGroups = null;
       AmpOrgType orgType = null;
       if (organization.getOrgGrpId() != null) {
@@ -917,6 +918,7 @@ public class EditOrganisation extends DispatchAction {
       
       organization.setName(editForm.getName());
       organization.setAcronym(editForm.getAcronym());
+      organization.setFundingorgid(editForm.getFundingorgid());
       organization.setAddress(editForm.getAddress());
       organization.setAddressAbroad(editForm.getAddressAbroad());
 
@@ -1340,6 +1342,7 @@ public class EditOrganisation extends DispatchAction {
           form.setAddress(null);
           form.setAmpOrgGrpId(null);
           form.setAmpOrgId(null);
+          form.setFundingorgid(null);
           form.setAmpOrgTypeId(null);
           form.setBudgetOrgCode(null);
           form.setCountryId(null);

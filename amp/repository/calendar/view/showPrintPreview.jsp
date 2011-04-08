@@ -129,7 +129,7 @@ function deleteEvent(){
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
 					                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
-					                ${calendarEventForm.selectedEventTypeName}
+					                <digi:trn>${calendarEventForm.selectedEventTypeName}</digi:trn>
 					              </td>
 					            </tr>
 					            <tr height="3px"><td colspan="2"></td></tr>

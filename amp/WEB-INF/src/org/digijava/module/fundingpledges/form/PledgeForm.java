@@ -3,16 +3,22 @@ package org.digijava.module.fundingpledges.form;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class PledgeForm extends ActionForm implements Serializable{
 
@@ -35,7 +41,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private FundingPledges fundingPledges;
 	private String selectedOrgId;
 	private String selectedOrgName;
-	private String pledgeTitle;
+	private AmpCategoryValue pledgeTitle;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
 	private String contact1Name;
@@ -74,19 +80,66 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> assistanceTypeCategory = null;
 	private Collection<AmpCategoryValue> aidModalityCategory = null;
 	private String defaultCurrency;
-	private String[] pledgeNames;
+	private Collection<AmpCategoryValue> pledgeNames;
+	private Long pledgeTitleId;
+	private Collection<String> years;
+	private String year;
+	
+	/*Fields for Location*/
+	private boolean noMoreRecords=false;
+	private Long implemLocationLevel = null;
+	private Integer impLevelValue; // Implementation Level value
+	private Long levelId = null;
+	private Long parentLocId;
+	private boolean defaultCountryIsSet;
+	private Collection<FundingPledgesLocation> selectedLocs = null;
+	private Long [] userSelectedLocs;
+	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
+	private TreeMap<Integer, Long> selectedLayers ;
+	
+	/*Fields for program*/
+	private int programType;
+	private List programLevels;
+	private Long selPrograms[];
+	private Collection<FundingPledgesProgram> selectedProgs = null;
+	private AmpActivityProgramSettings nationalSetting;
+	
+	public Collection<String> getYears() {
+		return years;
+	}
+
+	public void setYears(Collection<String> years) {
+		this.years = years;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public Long getPledgeTitleId() {
+		return pledgeTitleId;
+	}
+
+	public void setPledgeTitleId(Long pledgeTitleId) {
+		this.pledgeTitleId = pledgeTitleId;
+		this.pledgeTitle = CategoryManagerUtil.getAmpCategoryValueFromDb(this.pledgeTitleId);
+	}
 	
 	/**
 	 * @return the pledgeNames
 	 */
-	public String[] getPledgeNames() {
+	public Collection<AmpCategoryValue> getPledgeNames() {
 		return pledgeNames;
 	}
 
 	/**
 	 * @param pledgeNames the pledgeNames to set
 	 */
-	public void setPledgeNames(String[] pledgeNames) {
+	public void setPledgeNames(Collection<AmpCategoryValue> pledgeNames) {
 		this.pledgeNames = pledgeNames;
 	}
 
@@ -237,13 +290,13 @@ public class PledgeForm extends ActionForm implements Serializable{
 	/**
 	 * @return the pledgeTitle
 	 */
-	public String getPledgeTitle() {
+	public AmpCategoryValue getPledgeTitle() {
 		return pledgeTitle;
 	}
 	/**
 	 * @param pledgeTitle the pledgeTitle to set
 	 */
-	public void setPledgeTitle(String pledgeTitle) {
+	public void setPledgeTitle(AmpCategoryValue pledgeTitle) {
 		this.pledgeTitle = pledgeTitle;
 	}
 	/**
@@ -599,17 +652,6 @@ public class PledgeForm extends ActionForm implements Serializable{
 		this.fundingEvent = fundingEvent;
 	}
 	
-	//Location
-	private boolean noMoreRecords=false;
-	private Long implemLocationLevel = null;
-	private Integer impLevelValue; // Implementation Level value
-	private Long parentLocId;
-	private boolean defaultCountryIsSet;
-	private Collection<FundingPledgesLocation> selectedLocs = null;
-	private Long [] userSelectedLocs;
-	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
-	private TreeMap<Integer, Long> selectedLayers ;
-	
 	public TreeMap<Integer, Long> getSelectedLayers() {
 		if (selectedLayers == null)
 			selectedLayers		= new TreeMap<Integer, Long>();
@@ -669,6 +711,14 @@ public class PledgeForm extends ActionForm implements Serializable{
 	 */
 	public void setImpLevelValue(Integer impLevelValue) {
 		this.impLevelValue = impLevelValue;
+	}
+
+	public Long getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
 	/**
@@ -754,4 +804,46 @@ public class PledgeForm extends ActionForm implements Serializable{
 	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
 		this.furtherApprovalNedded = furtherApprovalNedded;
 	}
+
+	public int getProgramType() {
+		return programType;
+	}
+
+	public void setProgramType(int programType) {
+		this.programType = programType;
+	}
+
+	public List getProgramLevels() {
+		return programLevels;
+	}
+
+	public void setProgramLevels(List programLevels) {
+		this.programLevels = programLevels;
+	}
+
+	public Long[] getSelPrograms() {
+		return selPrograms;
+	}
+
+	public void setSelPrograms(Long[] selPrograms) {
+		this.selPrograms = selPrograms;
+	}
+
+	public Collection<FundingPledgesProgram> getSelectedProgs() {
+		return selectedProgs;
+	}
+
+	public void setSelectedProgs(Collection<FundingPledgesProgram> selectedProgs) {
+		this.selectedProgs = selectedProgs;
+	}
+	
+	public AmpActivityProgramSettings getNationalSetting() {
+		return nationalSetting;
+	}
+
+	public void setNationalSetting(AmpActivityProgramSettings nationalSetting) {
+		this.nationalSetting = nationalSetting;
+	}
+
+	
 }

@@ -15,7 +15,16 @@ public class SetAttributesForm extends ActionForm {
 
 	private String uuid;
 	private String action;
+	private String type;
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public SetAttributesForm() {
 		uuid	= null;
 		action	= null;

@@ -378,4 +378,31 @@ public class BudgetDbUtil {
 			logger.error("Can not Update Department" + e.getMessage());
 		};
 	}	
+	
+	public static boolean existsDepartment(String name ,String code , Long id){
+		Session session = null;
+        Query q = null;
+        boolean retVal=true;
+        try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select s from " + AmpDepartments.class.getName() +" s where (s.name=:name or s.code=:code) " ;
+			if(id!=null){
+				queryString+=" and s.id!=:id" ;
+			}
+			q = session.createQuery(queryString);
+			if(id!=null){
+				q.setLong("id", id);
+			}			
+			q.setParameter("name", name);
+			q.setParameter("code", code);
+			Collection col = q.list();
+			if (col ==null || col.size()==0) {
+				retVal = false;
+	    	}
+        } catch (DgException e) {
+        	logger.error("Unable to get Departments from database " + e.getMessage());
+		}
+        
+		return retVal;
+	}
 }

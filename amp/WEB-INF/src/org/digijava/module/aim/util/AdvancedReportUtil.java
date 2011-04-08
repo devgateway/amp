@@ -20,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpPages;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -32,6 +34,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.*;
+import java.text.Collator;
 
 /**
  * AdvancedReportUtil.java
@@ -443,7 +446,56 @@ public final class AdvancedReportUtil {
 		}
 		
 	}
+    public static enum SortOrder{
+        ASC,DESC;
+    }
+	public static class AmpReportTitleComparator implements Comparator<AmpReports>{
+        private SortOrder sortOrder;
+        private Collator collator;
+        public AmpReportTitleComparator(SortOrder sort,Collator collator){
+            this.sortOrder=sort;
+            this.collator=collator;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=collator.compare(r1.getName(),r2.getName());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
+	public static class AmpReportOwnerComparator implements Comparator<AmpReports>{
+        private SortOrder sortOrder;
+        private Collator collator;
+        public AmpReportOwnerComparator(SortOrder sort,Collator collator){
+            this.sortOrder=sort;
+            this.collator=collator;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=collator.compare(r1.getOwnerId().getUser().getName(),r2.getOwnerId().getUser().getName());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
 
+    public static class AmpReportCreationDateComparator implements Comparator<AmpReports>{
+        SortOrder sortOrder;
+        public AmpReportCreationDateComparator(SortOrder sort){
+            this.sortOrder=sort;
+        }
+        @Override
+		public int compare(AmpReports r1, AmpReports r2) {
+            int compare=r1.getUpdatedDate().compareTo(r2.getUpdatedDate());
+            if(sortOrder.equals(SortOrder.DESC)){
+               compare=-compare;
+            }
+            return compare;
+		}
+	}
 	/*
 	 * this is to delete a report completely by a team lead
 	 */
@@ -592,4 +644,62 @@ public final class AdvancedReportUtil {
 	    }
 	    return false;
 	}
+	
+	/**
+	 * Return true if the column colName is already in the columns list.
+	 * @param columns
+	 * @param colName
+	 * @return
+	 */
+	public static boolean isColumnAdded (Set <AmpReportColumn> columns, String colName){
+		
+		for ( AmpReportColumn tempCol: columns ) {
+			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Removes the column colName from the hierarchies list.
+	 * @param columns
+	 * @param colName
+	 */
+	public static void removeColumnFromHierarchies (Set <AmpReportHierarchy> columns, String colName){
+		AmpReportHierarchy hierarchy = null;
+		for ( AmpReportHierarchy tempCol: columns ) {
+			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
+				hierarchy = tempCol;
+				break;
+			}
+		}
+		if (hierarchy!=null) {
+			columns.remove(hierarchy);
+		}
+	}
+	
+	/**
+	 * Find and removes duplicate columns from a AmpReport
+	 * @param ampReport
+	 */
+	public static void removeDuplicatedColumns(AmpReports ampReport){
+		Set<AmpReportColumn> cols1 = ampReport.getColumns();
+		Set<AmpReportColumn> cols2 = ampReport.getColumns();
+		for (Iterator iterator = cols1.iterator(); iterator.hasNext();) {
+			AmpReportColumn ampReportColumn1 = (AmpReportColumn) iterator.next();
+			int cont = 0;
+			for (Iterator iterator2 = cols2.iterator(); iterator2.hasNext();) {
+				AmpReportColumn ampReportColumn2 = (AmpReportColumn) iterator2.next();
+				if (ampReportColumn1.getColumn().getColumnName().equals(ampReportColumn2.getColumn().getColumnName())) {
+					cont++;
+				}
+			}
+			if (cont>1) {
+				iterator.remove();
+			}
+		}
+		ampReport.setColumns(cols1);
+	}
+	
 }

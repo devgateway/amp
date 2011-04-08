@@ -63,8 +63,7 @@
 								<td align="right"><digi:trn key="aim:comptype">
 									              Component Type
 									              </digi:trn></td>
-								<td><html:select property="components.selectedType"
-									styleClass="inp-text" styleId="selectedType">
+								<td><html:select property="components.selectedType" styleClass="inp-text" styleId="selectedType">
 									
 									<html:option value="-1">
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
@@ -87,12 +86,25 @@
 								<digi:trn key="aim:title">Title</digi:trn> 
 							</td>
 							<td>
-								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
+								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/>
 								<html:button property="components.addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>
+								
 							</td>
 						</tr>
+						<field:display name="Admin - Component Description" feature="Admin - Component">
+							<tr>
+								<td align="right">
+									<digi:trn key="aim:description">Description</digi:trn> 
+								</td>
+								<td>
+									<html:textarea styleId="newCompoenentName" property="components.componentDesc" value="<%=eaForm.getComponents().getComponentDesc()%>" cols="40"></html:textarea>
+								</td>
+							</tr>
+						</field:display>
+												    
+						
 					</table>
 					
 
@@ -117,28 +129,28 @@
 </gs:test>
 							</td>
                         </tr>
-                            <tr>
-                            <td>
-
-                               <digi:trn>Select currency </digi:trn>
-
-                               <html:select property="components.fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()" styleId="compFundCurr">
-                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
-                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.components.fundingCurrCode}">
-                                        <option value="<c:out value="${currency.currencyCode}"/>">
-                                    </c:if>
-                                    <c:if test="${currency.currencyCode==aimEditActivityForm.components.fundingCurrCode}">
-                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
-                                        </c:if>
-                                        <c:out value="${currency.currencyName}" />
-                                    </option>
-                                </c:forEach>
-
-                                </html:select>
-
-							</td>
-
-						</tr>
+<!--                            <tr>-->
+<!--                            <td>-->
+<!---->
+<!--                               <digi:trn>Select currency </digi:trn>-->
+<!---->
+<!--                               <html:select property="components.fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()" styleId="compFundCurr">-->
+<!--                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">-->
+<!--                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.components.fundingCurrCode}">-->
+<!--                                        <option value="<c:out value="${currency.currencyCode}"/>">-->
+<!--                                    </c:if>-->
+<!--                                    <c:if test="${currency.currencyCode==aimEditActivityForm.components.fundingCurrCode}">-->
+<!--                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="selected">-->
+<!--                                        </c:if>-->
+<!--                                        <c:out value="${currency.currencyName}" />-->
+<!--                                    </option>-->
+<!--                                </c:forEach>-->
+<!---->
+<!--                                </html:select>-->
+<!---->
+<!--							</td>-->
+<!---->
+<!--						</tr>-->
 						<tr bgcolor="#f4f4f2">
 							<td colspan="2" class="box-border-alt1">
                              <span class="f-names" id="total_comm">
@@ -178,13 +190,13 @@
 												<td>
 													<select name="<%=field1%>" class="inp-text">
 														<c:if test="${comm.adjustmentType == 1}">
-															<option value="1" selected="true"><digi:trn
+															<option value="1" selected="selected"><digi:trn
 																key="aim:actual">Actual</digi:trn></option>
 															<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 														</c:if>
 														<c:if test="${comm.adjustmentType == 0}">
 															<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-															<option value="0" selected="true"><digi:trn
+															<option value="0" selected="selected"><digi:trn
 																key="aim:planned">Planned</digi:trn></option>
 														</c:if>
 													</select>
@@ -197,13 +209,13 @@
 														<c:forEach var="currency"
 															items="${aimEditActivityForm.funding.validcurrencies}">
 															<c:if test="${comm.currencyCode == currency.currencyCode}">
-																<option selected="true" value="<c:out value="${currency.currencyCode}"/>">													
+																<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">													
 															</c:if>
 															<c:if test="${comm.currencyCode != currency.currencyCode}">
 																<option value="<c:out value="${currency.currencyCode}"/>">													
 															</c:if>
 															<c:out value="${currency.currencyName}" />
-															</option>
+																</option>
 														</c:forEach>
 													</select>
 												</td>
@@ -260,13 +272,13 @@
 													<td>
 														<select name="<%=field1%>" class="inp-text">
 														<c:if test="${comm.adjustmentType == 1}">
-															<option value="1" selected="true"><digi:trn
+															<option value="1" selected="selected"><digi:trn
 																key="aim:actual">Actual</digi:trn></option>
 															<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 														</c:if>
 														<c:if test="${comm.adjustmentType == 0}">
 															<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-															<option value="0" selected="true"><digi:trn
+															<option value="0" selected="selected"><digi:trn
 																key="aim:planned">Planned</digi:trn></option>
 														</c:if>
 														</select>
@@ -279,12 +291,12 @@
 															<c:forEach var="currency"
 																items="${aimEditActivityForm.funding.validcurrencies}">
 																<c:if test="${comm.currencyCode == currency.currencyCode}">
-																	<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
+																	<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">
 																</c:if>
 																<c:if test="${comm.currencyCode != currency.currencyCode}">
 																	<option value="<c:out value="${currency.currencyCode}"/>">
 																</c:if>
-																<c:out value="${currency.currencyName}" />
+																<c:out value="${currency.currencyName}" />aaa
 																</option>
 															</c:forEach>
 														</select>
@@ -352,12 +364,12 @@
 														<td>
 															<select name="<%=field1%>" class="inp-text">
 															<c:if test="${comm.adjustmentType == 1}"> 
-																<option value="1" selected="true"><digi:trn key="aim:actual">Actual</digi:trn></option>
+																<option value="1" selected="selected"><digi:trn key="aim:actual">Actual</digi:trn></option>
 																<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 															</c:if>
 															<c:if test="${comm.adjustmentType == 0}">
 																<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-																<option value="0" selected="true"><digi:trn
+																<option value="0" selected="selected"><digi:trn
 																	key="aim:planned">Planned</digi:trn></option>
 															</c:if>
 															</select>
@@ -369,7 +381,7 @@
 															<select name="<%=field3%>" class="inp-text">
 															<c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
 																<c:if test="${comm.currencyCode == currency.currencyCode}">
-																	<option selected="true" value="<c:out value="${currency.currencyCode}"/>">														
+																	<option selected="selected" value="<c:out value="${currency.currencyCode}"/>">														
 																</c:if>
 																<c:if test="${comm.currencyCode != currency.currencyCode}">
 																	<option value="<c:out value="${currency.currencyCode}"/>">														
@@ -443,7 +455,7 @@
 					{
 						AmpCurrency curr = (AmpCurrency) itr.next();
 						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+							<option value='<%=curr.getCurrencyCode()%>' selected='selected'><%=curr.getCurrencyName()%></option>
 						<% } else { %>
 							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
 						<% }
@@ -484,7 +496,7 @@
 					while (itr.hasNext()) {
 						AmpCurrency curr = (AmpCurrency) itr.next();
 						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+							<option value='<%=curr.getCurrencyCode()%>' selected='selected'><%=curr.getCurrencyName()%></option>
 						<% } else { %>
 							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
 						<% }
@@ -525,7 +537,7 @@
 					while (itr.hasNext()) {
 						AmpCurrency curr = (AmpCurrency) itr.next();
 						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+							<option value='<%=curr.getCurrencyCode()%>' selected='selected'><%=curr.getCurrencyName()%></option>
 						<% } else { %>
 							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
 						<% }

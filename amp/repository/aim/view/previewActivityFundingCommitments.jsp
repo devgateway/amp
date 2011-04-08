@@ -58,7 +58,8 @@
 								feature="Commitments">
 								<bean:write name="fundingDetail" property="currencyCode" />
 							</field:display> &nbsp;</td>
-							<td height="18"><field:display
+							<td height="18">
+							<field:display
 								name="Exchange Rate" feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display></td>

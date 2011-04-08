@@ -247,9 +247,12 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	function deleteFields(){
 		var checkboxes=$("#templateFieldsTbl").find("input.selectedTempFieldsIds:checked");
 		if(checkboxes!=null && checkboxes.length>0){
+            var flag = confirm("<digi:trn jsFriendly='true'>Delete this data?</digi:trn>");
+            if(flag){
 			<digi:context name="remFields" property="context/module/moduleinstance/tempDocManager.do?actType=deleteTemplateDocumentField" />
 			tempDocManagerForm.action = "${remFields}";
 			tempDocManagerForm.submit();
+            }
 		}else{
 			var msg='<digi:trn>Please select Field to remove</digi:trn>';
 			alert(msg);

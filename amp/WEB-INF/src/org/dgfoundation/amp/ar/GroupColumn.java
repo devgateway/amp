@@ -160,7 +160,7 @@ public class GroupColumn extends Column {
             if(minfo==null || minfo.getValue()==null) return null;
             	//if the year is not renderizable just not add it to minfo
            
-            if (element.isRenderizable()) {
+            if (generateTotalCols || element.isRenderizable()) {
         	    metaSet.add(minfo);
         	    
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
@@ -185,14 +185,22 @@ public class GroupColumn extends Column {
 //        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
 //        }
 // this has been moved to ARUtil.insertEmptyColumns   
-      
+      if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true")) {
+    	  if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) ) {
+        	metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,ArConstants.TERMS_OF_ASSISTANCE_TOTAL));
+          }
+    	  
+    	  if(category.equals(ArConstants.QUARTER)) {
+    		  metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,ArConstants.QUARTERS_TOTAL));
+    	  }
+        
+      }
+        
     	   //manually add at least one term :(
     	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
     	   //Commented for Bolivia
     		if (metaSet.size()==0)
     			metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
-    		//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
-    		//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
     		}
        
        
@@ -230,7 +238,13 @@ public class GroupColumn extends Column {
         // iterate the set and create a subColumn for each of the metainfo
         i = metaSet.iterator();
         while (i.hasNext()) {
-            MetaInfo element = (MetaInfo) i.next();
+        	MetaInfo element = (MetaInfo) i.next();
+        	
+        	//do not consider the Totals subcolumn in years/quarters as a real category
+        	//if this category is found inside the grand totals column, ignore it 
+            if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
+            		element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL) && src instanceof TotalAmountColumn) continue;
+
             CellColumn cc = null;
             if (generateTotalCols)
                 cc = new TotalAmountColumn(element.getValue().toString(),true);
@@ -253,6 +267,21 @@ public class GroupColumn extends Column {
             Iterator ii=src.iterator();
             while (ii.hasNext()) {
     			Categorizable item = (Categorizable) ii.next();
+    			
+    			//add terms of assistance total items if this subcategory was forced from above.
+    			//this means ALL cells be added here regardless of their category
+    			if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
+    					element.getValue().equals(ArConstants.TERMS_OF_ASSISTANCE_TOTAL)){
+    					cc.addCell(item);
+    					continue;
+    			}
+    			
+    			//add totals for quarters for each year
+    			if(element.getCategory().equals(ArConstants.QUARTER) && 
+    					element.getValue().equals(ArConstants.QUARTERS_TOTAL)){
+    					cc.addCell(item);
+    					continue;
+    			}
     			if(item.hasMetaInfo(element)) cc.addCell(item);
     		}
         }

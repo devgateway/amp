@@ -510,6 +510,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  eaForm.getIdentification().setVote(null);
     	  eaForm.getIdentification().setSubVote(null);
     	  eaForm.getIdentification().setFY(null);
+    	  eaForm.getIdentification().setSelectedFYs(null);
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
     	  eaForm.getIdentification().setGbsSbs(null);
@@ -554,6 +555,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
+        
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories());
+        if (ampCategoryValue != null){
+        	eaForm.getIdentification().setProjectImplUnitId(new Long(ampCategoryValue.getId()));
+        }
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
@@ -580,6 +586,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                     CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
             if (ampCategoryValue != null)
                   eaForm.getIdentification().setProjectCategory(new Long(ampCategoryValue.getId()));
+            
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                    CategoryConstants.ACTIVITY_BUDGET_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+                  eaForm.getIdentification().setBudgetCV(new Long(ampCategoryValue.getId()));
+            else
+            	 eaForm.getIdentification().setBudgetCV(0L);
 
             
 
@@ -590,7 +603,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         
         //Added because of a problem with the save as draft and redirect.
         try {
-        	request.getParameterMap().put("viewAllRights", "true");
+        	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
+        	//request.getParameterMap().put("viewAllRights", "true");
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -704,7 +718,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setUpdatedBy(activity.getUpdatedBy());
-          eaForm.getIdentification().setBudget(activity.getBudget());
+         // eaForm.getIdentification().setBudget(activity.getBudget());
+          AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);	
+          eaForm.getIdentification().setBudgetCVOff(
+        		  (budgetOff==null)?0:budgetOff.getId()
+        		  );
+          AmpCategoryValue budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);	
+          eaForm.getIdentification().setBudgetCVOn(
+        		  (budgetOn==null)?1:budgetOn.getId()
+        		  );
+          
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
           
@@ -738,8 +761,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           /*
            * Tanzania adds
            */
-          if (activity.getFY() != null)
-            eaForm.getIdentification().setFY(activity.getFY().trim());
+          if (activity.getFY() != null) {
+        	  String fy =activity.getFY().trim();
+        	  eaForm.getIdentification().setFY(fy);
+        	  String[] years = fy.split(",");
+        	  eaForm.getIdentification().setSelectedFYs(years);
+        	  
+          }
+            
+          
           if (activity.getVote() != null)
             eaForm.getIdentification().setVote(activity.getVote().trim());
           if (activity.getSubVote() != null)
@@ -1098,7 +1128,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                         FundingOrganization fundOrg = new FundingOrganization();
                         fundOrg.setAmpOrgId(org.getAmpOrgId());
                         fundOrg.setOrgName(org.getName());
-
+                        fundOrg.setFundingorgid(org.getFundingorgid());
                         fundOrg.setFundingActive(ampFunding.getActive());
                         fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
                         fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());
@@ -1130,6 +1160,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 			            fund.setFundingStatus(ampFunding.getFundingStatus());
 			            fund.setModeOfPayment(ampFunding.getModeOfPayment());
+			            
+			            fund.setActStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
+			            fund.setActCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
 			            
 			            fund.setFundingId(ampFunding.getAmpFundingId().
 			                              longValue());
@@ -1165,6 +1198,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            /* END - Get MTEF Projections */
 
 			            Collection fundDetails = ampFunding.getFundingDetails();
+			            
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			            //  Iterator fundDetItr = fundDetails.iterator();
 			             // long indexId = System.currentTimeMillis();
@@ -1177,6 +1211,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                          while(fundingIterator.hasNext())
                          {
                          	FundingDetail currentFundingDetail = (FundingDetail)fundingIterator.next();
+                         	
+                         	currentFundingDetail.getContract();
                          	
                          	if(currentFundingDetail.getFixedExchangeRate() == null)
                          	{

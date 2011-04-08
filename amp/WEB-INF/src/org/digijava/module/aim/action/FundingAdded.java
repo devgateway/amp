@@ -125,6 +125,8 @@ public class FundingAdded extends Action {
 			newFund.setModeOfPayment( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModeOfPayment()) );
 			newFund.setOrgFundingId(currentFunding.getOrgFundingId());
 			newFund.setConditions(currentFunding.getFundingConditions());
+			newFund.setActStartDate(currentFunding.getActualStartDate());
+			newFund.setActCloseDate(currentFunding.getActualCompletionDate());
 			//
 			Collection mtefProjections=new ArrayList();
 			if (currentFunding.getFundingMTEFProjections() != null) {

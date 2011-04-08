@@ -67,6 +67,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -320,7 +321,7 @@ public class DEImportBuilder {
 	//fundings, regional fundings
 	private void processStep3(AmpActivity activity, ActivityType actType, Boolean update){
 		if(isFieldSelected("activity.funding"))
-			processFunding(activity,actType);
+			processFunding(activity,actType, update);
 		if(isFieldSelected("activity.location"))
 			processLocation(activity,actType);
 
@@ -330,7 +331,6 @@ public class DEImportBuilder {
 	//process step 4 
 	//related organizations
 	private void processStep4(AmpActivity activity, ActivityType actType, Boolean update) {
-		// TODO Auto-generated method stub
 		if(isFieldSelected("activity.relatedOrgs"))
 			processRelatedOrgs(activity, actType);
 	}
@@ -389,7 +389,13 @@ public class DEImportBuilder {
 				}
 				//Senegal add
 				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					activity.setBudget(new Integer(1));
+					try{
+						AmpCategoryValue onCV	= CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+						CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -407,7 +413,7 @@ public class DEImportBuilder {
 		activity.setName("");
 		//TODO default language to be added is en
 		String lang = "en";
-		if(actType.getTitle()!=null)
+		if(actType.getTitle()!=null && actType.getTitle().size() >0 )
 		{
 			boolean found=false;
 			ArrayList<FreeTextType> titlesList=(ArrayList<FreeTextType>) actType.getTitle();
@@ -438,7 +444,7 @@ public class DEImportBuilder {
 	private void processDescription(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
 		//description
-		if(actType.getDescription()!=null){
+		if(actType.getDescription()!=null && actType.getDescription().size()>0 ){
 			activity.setDescription(setEditorFreeTextType(actType.getDescription(), activity, "aim-desc-00-"));
 		}
 	}
@@ -446,7 +452,7 @@ public class DEImportBuilder {
 	//objective
 	private void processObjective(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		if(actType.getObjective()!=null){
+		if(actType.getObjective()!=null && actType.getObjective().size() > 0){
 			activity.setObjective(setEditorFreeTextType(actType.getObjective(), activity, "aim-obj-00-"));
 		}
 	}
@@ -454,7 +460,7 @@ public class DEImportBuilder {
 	
 	private void processActivityAssigningOrg(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
-		if(actType.getId() != null){
+		if(actType.getId() != null && actType.getId().size() > 0){
 			Set internalIds = new HashSet();
 			ArrayList<Id> ids = (ArrayList<Id>) actType.getId();
 			for (Iterator it = ids.iterator(); it.hasNext();) {
@@ -477,7 +483,7 @@ public class DEImportBuilder {
 
 	//proposed Approval date
 	private void processProposedApprovalDate(AmpActivity activity, ActivityType actType){
-	  if(actType.getProposedApprovalDate()!=null){
+	  if(actType.getProposedApprovalDate()!=null && "".compareTo(actType.getProposedApprovalDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getProposedApprovalDate().getDate());
 		  if(date!=null)
 			  activity.setProposedApprovalDate(date);
@@ -486,7 +492,7 @@ public class DEImportBuilder {
 
 	//closing date
 	private void processClosingDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getClosingDate()!=null){
+	  if(actType.getClosingDate()!=null && "".compareTo(actType.getClosingDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getClosingDate().getDate());
 		  if(date!=null)
 			  activity.setProposedCompletionDate(date);
@@ -495,7 +501,7 @@ public class DEImportBuilder {
 
 	//modified closing date
 	private void processModifiedClosingDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getModifiedClosingDate()!=null){
+	  if(actType.getModifiedClosingDate()!=null && "".compareTo(actType.getModifiedClosingDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getModifiedClosingDate().getDate());
 		  if(date!=null)
 			  activity.setActualCompletionDate(date);
@@ -505,7 +511,7 @@ public class DEImportBuilder {
 	  
 	//actual start date
 	private void processActualStartDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getActualStartDate()!=null){
+	  if(actType.getActualStartDate()!=null && "".compareTo(actType.getActualStartDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getActualStartDate().getDate());
 		  if(date!=null)
 			  activity.setActualStartDate(date);
@@ -514,7 +520,7 @@ public class DEImportBuilder {
 
 	//proposed start date
 	private void processProposedStartDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getProposedStartDate()!=null){
+	  if(actType.getProposedStartDate()!=null && "".compareTo(actType.getProposedStartDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getProposedStartDate().getDate());
 		  if(date!=null)
 			  activity.setProposedStartDate(date);
@@ -523,7 +529,7 @@ public class DEImportBuilder {
 
 	//actual Approval date
 	private void processActualApprovalDate(AmpActivity activity, ActivityType actType) {
-	  if(actType.getActualApprovalDate()!=null){
+	  if(actType.getActualApprovalDate()!=null && "".compareTo(actType.getActualApprovalDate().getDate().toString()) !=0){
 		  Date date=DataExchangeUtils.XMLGregorianDateToDate(actType.getActualApprovalDate().getDate());
 		  if(date!=null)
 			  activity.setActualApprovalDate(date);
@@ -533,7 +539,7 @@ public class DEImportBuilder {
 	//activity status
 	private void processStatus(AmpActivity activity, ActivityType actType, Boolean update) {
 		// TODO Auto-generated method stub
-		if( actType.getStatus()!=null ){
+		if( isValidCodeValueTypeValue(actType.getStatus())){
 			
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
@@ -580,11 +586,13 @@ public class DEImportBuilder {
 				String sectorValue = "";
 				
 				sectorAux.setValue(idmlSector.getValue());
-				sectorValue= idmlSector.getValue();
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
+				//sectorValue= idmlSector.getValue();
 				//SENEGAL changes
 //			    sectorValue= idmlSector.getCode()+". "+idmlSector.getValue();
 //			    sectorAux.setValue(sectorValue);
-			    
+				
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
 			    //get sector by name and code 
 				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
 				
@@ -664,21 +672,20 @@ public class DEImportBuilder {
  */
 	
 	//fundings
-	private void processFunding(AmpActivity activity, ActivityType actType) {
+	private void processFunding(AmpActivity activity, ActivityType actType, Boolean update) {
 		if(actType.getFunding() != null && actType.getFunding().size() > 0){
 			Set fundings = new HashSet();
-			fundings = (HashSet) getFundingXMLtoAMP(activity, actType);
+			fundings = (HashSet) getFundingXMLtoAMP(activity, actType, update);
 			
 			if(activity.getFunding() == null) 
 				activity.setFunding(new HashSet());
 			else
 				activity.getFunding().clear();
 			activity.getFunding().addAll(fundings);
-//			activity.setFunding(fundings);
 		}
 	}
 	
-	
+	//locations
 	private void processLocation(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
 	if(actType.getLocation() !=null && actType.getLocation().size() >0)	{
@@ -837,13 +844,14 @@ public class DEImportBuilder {
 
 	private void processRelatedOrgs(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
+		if(actType.getRelatedOrgs()== null || actType.getRelatedOrgs().size()<1) return;
 		ArrayList<RelatedOrgs> relatedOrgs = (ArrayList<RelatedOrgs>)actType.getRelatedOrgs();
 		Set orgRole = new HashSet();
 		if(activity.getOrgrole() !=null )
 			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
 				AmpOrgRole aor = (AmpOrgRole) it.next();
-				if( !Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
-					it.remove();
+				if(  (org.digijava.module.aim.helper.Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode())) ) ;
+				else it.remove();
 			}
 		if(relatedOrgs!=null)
 			for (Iterator it = relatedOrgs.iterator(); it.hasNext();) {
@@ -898,12 +906,16 @@ public class DEImportBuilder {
 				//activity.setOrgrole(new HashSet());
 				//}
 				//activity.getOrgrole().addAll(orgRole);
-				
-				if (activity.getOrgrole() == null){
-					activity.setOrgrole(new HashSet());
+				if (activity.getOrgrole()==null){
+					activity.setOrgrole(orgRole);
+				}else{
+					activity.getOrgrole().addAll(orgRole);
 				}
-				else activity.getOrgrole().clear();
-				activity.getOrgrole().addAll(orgRole);
+//				if (activity.getOrgrole() == null){
+//					activity.setOrgrole(new HashSet());
+//				}
+//				else ;;//activity.getOrgrole().clear();
+//				activity.getOrgrole().addAll(orgRole);
 				
 			}
 	}
@@ -914,6 +926,7 @@ public class DEImportBuilder {
 
 	//components
 	private void processComponent(AmpActivity activity, ActivityType actType) {
+		if(actType.getComponent() == null || actType.getComponent().size() < 1) return;
 		Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
 		ArrayList<Component> componentList = (ArrayList<Component>) actType.getComponent();
 		//Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
@@ -1011,7 +1024,7 @@ public class DEImportBuilder {
 	private void processDocuments(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		//(new MockStrutTest()).getActionMockObjectFactory().getMockRequest();
-		if( actType.getDocuments() == null || actType.getDocuments().size() == 0 ) return;
+		if( actType.getDocuments() == null || actType.getDocuments().size() < 1 ) return;
 		
 		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
 //		DEMockTest mock = new DEMockTest();
@@ -1059,7 +1072,7 @@ public class DEImportBuilder {
 	//related links
 	private void processRelatedLinks(AmpActivity activity, ActivityType actType, HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		if( actType.getRelatedLinks() == null || actType.getRelatedLinks().size() == 0 ) return;
+		if( actType.getRelatedLinks() == null || actType.getRelatedLinks().size() < 1 ) return;
 		
 		AmpTeamMember teamLead = activity.getTeam().getTeamLead();
 //		DEMockTest mock = new DEMockTest();
@@ -1228,7 +1241,8 @@ public class DEImportBuilder {
 				percentage+=idmlSector.getPercentage();
 				CodeValueType sectorAux = new CodeValueType();
 				sectorAux.setCode(idmlSector.getCode());
-				sectorAux.setValue(idmlSector.getValue());
+				//senegal_change
+				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
 				AmpSector ampSector = (AmpSector) getAmpObject(Constants.AMP_SECTOR,sectorAux);
 				if(ampSector == null) 
 					//errors.add(toStringCVT(sectorAux));
@@ -1507,14 +1521,15 @@ public class DEImportBuilder {
 		
 	}
 	
-	private Set getFundingXMLtoAMP(AmpActivity activity, ActivityType actType){
+	private Set getFundingXMLtoAMP(AmpActivity activity, ActivityType actType, Boolean update){
 		Set<AmpFunding> fundings= null;
 		Set orgRole = new HashSet();
 		if(activity.getOrgrole() !=null && actType.getFunding() != null)
 			for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
 				AmpOrgRole aor = (AmpOrgRole) it.next();
-				if( Constants.IDML_FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
+				if( org.digijava.module.aim.helper.Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) )
 					it.remove();
+				//else orgRole.add(aor);
 			}
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
 			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
@@ -1523,19 +1538,19 @@ public class DEImportBuilder {
 			AmpFunding ampFunding = new AmpFunding();
 			ampFunding.setActive(true);
 			AmpOrganisation ampOrg = (AmpOrganisation) getAmpObject(Constants.AMP_ORGANIZATION,fundingOrg);
-			Set<AmpFundingDetail> fundDetails = new HashSet<AmpFundingDetail>();
+			Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
 
 			
 			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
-			addFundingDetailsToSet(funding.getCommitments(), fundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT);
-			addFundingDetailsToSet(funding.getDisbursements(), fundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
-			addFundingDetailsToSet(funding.getExpenditures(), fundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE);
+			addFundingDetailsToSet(funding.getCommitments(), ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT);
+			addFundingDetailsToSet(funding.getDisbursements(), ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
+			addFundingDetailsToSet(funding.getExpenditures(), ampFundDetails, org.digijava.module.aim.helper.Constants.EXPENDITURE);
 			
 			if(ampFunding.getFundingDetails() == null ) ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
-			if(fundDetails != null) ampFunding.getFundingDetails().addAll(fundDetails);
+			if(ampFundDetails != null) ampFunding.getFundingDetails().addAll(ampFundDetails);
 			if(funding.getAssistanceType() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				ampFunding.setTypeOfAssistance(acv);
@@ -1545,15 +1560,33 @@ public class DEImportBuilder {
 				ampFunding.setFinancingInstrument(acv);
 			}
 			if(activity !=null ) ampFunding.setAmpActivityId(activity);
-			if(activity.getFunding() ==  null) activity.setFunding(new HashSet<AmpFunding>());
+//			if(activity.getFunding() ==  null) activity.setFunding(new HashSet<AmpFunding>());
+			
+			//populate the funding with the existing data in AMP DB
+			
+			Set<AmpFunding> ampFundings = activity.getFunding();
+			for (AmpFunding af : ampFundings) {
+				if(ampFunding.getAmpDonorOrgId().compareTo(af.getAmpDonorOrgId()) == 0){
+					ampFunding.setFinancingId(af.getFinancingId());
+					ampFunding.setModeOfPayment(af.getModeOfPayment());
+					ampFunding.setFundingStatus(af.getFundingStatus());
+					ampFunding.setActualStartDate(af.getActualStartDate());
+					ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+					ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+					ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+					ampFunding.setConditions(af.getConditions());
+					ampFunding.setDonorObjective(af.getDonorObjective());
+					break;
+				}
+			}
 			
 			if(fundings == null) fundings=new HashSet<AmpFunding>();
 			
 			//conditions
 			//TODO: the language - lang attribute
-			if(funding.getConditions() != null) ampFunding.setConditions(funding.getConditions().getValue());
+			if(isValidFreeTextType(funding.getConditions())) ampFunding.setConditions(funding.getConditions().getValue());
+			
 			fundings.add(ampFunding);
-
 			AmpOrgRole ampOrgRole = new AmpOrgRole();
 			ampOrgRole.setActivity(activity);
 			ampOrgRole.setRole(role);
@@ -1561,12 +1594,16 @@ public class DEImportBuilder {
 			orgRole.add(ampOrgRole);
 		}
 		
-		if (activity.getOrgrole() == null){
-			activity.setOrgrole(new HashSet<AmpOrgRole>());
+//		if (activity.getOrgrole() == null){
+//			activity.setOrgrole(new HashSet<AmpOrgRole>());
+//		}
+//		else ; // already cleared at the beginning of the method!
+		//activity.getOrgrole().addAll(orgRole);
+		if (activity.getOrgrole()==null){
+			activity.setOrgrole(orgRole);
+		}else{
+			activity.getOrgrole().addAll(orgRole);
 		}
-		else ; // already cleared at the beginning of the method!
-		activity.getOrgrole().addAll(orgRole);
-		
 		return fundings;
 	}
 
@@ -1817,6 +1854,7 @@ public class DEImportBuilder {
 	}
 	
 	private void processFeed(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
+		logger.info("SYSOUT: processing "+this.getAmpImportItem().getActivities().getActivity().size()+" projects");
 		for (Iterator it = this.getAmpImportItem().getActivities().getActivity().iterator(); it.hasNext();) {
 			ActivityType actType 	= (ActivityType) it.next();
 			AmpActivity activity 	= getAmpActivity(actType);
@@ -1832,7 +1870,7 @@ public class DEImportBuilder {
 
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
-				item.setDescription(contentLogger.display());
+				item.setDescription("Activity: "+actType.getDbKey()+" "+contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				//iLog.saveObject(item);
 				log.getLogItems().add(item);
@@ -1840,7 +1878,7 @@ public class DEImportBuilder {
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-			item.setDescription("OK");
+			item.setDescription("Activity: "+actType.getDbKey()+" OK");
 			try {
 				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
@@ -1857,14 +1895,14 @@ public class DEImportBuilder {
 					else {
 						//write in log that this activity was skipped
 						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-						item.setDescription("Activity was skipped");
+						item.setDescription("Activity: "+actType.getDbKey()+" was skipped");
 					}
 			
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				item.setDescription(e.getMessage());
+				item.setDescription("Activity: "+actType.getDbKey()+" "+e.getMessage());
 			}
 
 			log.getLogItems().add(item);
@@ -1913,13 +1951,20 @@ public class DEImportBuilder {
 					}
 					acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 			}
+			if(ampCVLoc == null)
+				{
+					CodeValueType cvtLocation = new CodeValueType();
+					cvtLocation.setCode(location.getLocationName().getCode());
+					cvtLocation.setValue(location.getLocationName().getValue());
+					logger.getItems().add(new DEImplLevelMissingLog(cvtLocation));
+				}
 			if(acv==null)
 			{
 				logger.getItems().add(new DEImplLevelMissingLog(cvt));
 			}
 			//implementation levels
 			//added here for Senegal
-			AmpCategoryValue acv1= new AmpCategoryValue();
+			AmpCategoryValue acv1= null;// new AmpCategoryValue();
 			if( actType.getImplementationLevels()!=null ){
 						
 				if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
@@ -1938,7 +1983,7 @@ public class DEImportBuilder {
 				
 			}
 			//regional funding
-			checkRegionalFundingCurrency(location, ampCVLoc,logger);
+			checkRegionalFundingCurrency(location, logger);
 		}
 
 	}
@@ -1946,7 +1991,6 @@ public class DEImportBuilder {
 	}
 
 	private void checkCurrencyFunding(List<FundingDetailType> funding, DEActivityLog logger) {
-		// TODO Auto-generated method stub
 		for (Iterator it = funding.iterator(); it.hasNext();) {
 			FundingDetailType fdt = (FundingDetailType) it.next();
 			
@@ -1961,8 +2005,7 @@ public class DEImportBuilder {
 		}
 	}
 	
-	private void checkRegionalFundingCurrency(Location location, AmpCategoryValueLocations ampCVLoc, DEActivityLog logger) {
-		// TODO Auto-generated method stub
+	private void checkRegionalFundingCurrency(Location location, DEActivityLog logger) {
 		Set regFundings = new HashSet();
 		for (Iterator<LocationFundingType> it = location.getLocationFunding().iterator(); it.hasNext();) {
 			LocationFundingType funding = (LocationFundingType) it.next();
@@ -1971,8 +2014,6 @@ public class DEImportBuilder {
 			checkCurrencyFunding(funding.getExpenditures(), logger);
 			
 		}
-		//getRegionalFundingXMLToAmp(location.getLocationFunding(),regFundings);
-		
 	}
 
 	private void checkFunding(ActivityType actType, DEActivityLog logger) {
@@ -1991,18 +2032,16 @@ public class DEImportBuilder {
 			
 			addMTEFProjectionsToSet(funding.getProjections(),ampFunding);
 			
-			//type of assitance
+			//type of assistance
 			if(funding.getAssistanceType() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getAssistanceType(), Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				if(acv == null)
-					//errors.add(toStringCVT(funding.getAssistanceType()));
 					logger.getItems().add(new DETypeAssistMissingLog(funding.getAssistanceType()));
 			}
 			//financing instrument
 			if(funding.getFinancingInstrument() != null){
 				AmpCategoryValue acv = getAmpCategoryValueFromCVT(funding.getFinancingInstrument(), Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
 				if(acv == null)
-					//errors.add(toStringCVT(funding.getFinancingInstrument()));
 					logger.getItems().add(new DEFinancInstrMissingLog(funding.getFinancingInstrument()));
 			}
 			
@@ -2020,7 +2059,6 @@ public class DEImportBuilder {
 						AmpCategoryValue acv = getAmpCategoryValueFromCVT(cvt, Constants.CATEG_VALUE_MTEF_PROJECTION);
 						if(acv==null)
 							logger.getItems().add(new DEMTEFMissingLog(cvt));
-							//errors.add(toStringCVT(cvt));
 					}
 				}
 			}

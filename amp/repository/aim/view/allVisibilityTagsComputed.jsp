@@ -17,6 +17,7 @@
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
@@ -54,7 +55,8 @@
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display> 
-<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
+<module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
+<feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
 <feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -486,6 +488,8 @@
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
 <field:display name="Funding Status" feature="Funding Information"></field:display>  
+<field:display name="Funding start date" feature="Funding Information"></field:display>  
+<field:display name="Funding end date" feature="Funding Information"></field:display>  
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
@@ -543,7 +547,7 @@
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off Budget" feature="Budget"></field:display> 
+ <field:display name="On/Off/Treasure Budget" feature="Budget"></field:display>
 <field:display name="Organizations Selector" feature="Funding Information"></field:display> 
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
@@ -559,6 +563,7 @@
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
+<field:display name="Validate Mandatory Primary Sector" feature="Sectors"></field:display> 
 <field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Program Background" feature="Admin NPD"></field:display> 
@@ -636,7 +641,8 @@
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Secondary Sector" feature="Sectors"></field:display> 
+<field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Secondary Sector" feature="Sectors"></field:display> 
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
@@ -726,6 +732,9 @@
 <field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
@@ -737,6 +746,9 @@
 <field:display name="Pledge Location" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Pledge Program" feature="Pledge Sector and Location"></field:display>
+<field:display name="Add Pledge Program Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Remove Pledge Program Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Pledge Sector" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location"></field:display>

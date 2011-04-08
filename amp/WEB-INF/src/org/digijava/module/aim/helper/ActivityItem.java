@@ -214,7 +214,8 @@ public class ActivityItem implements Comparable<ActivityItem>{
 		String result = "";
 		if (donors != null && donors.size()>0){
 			for (LabelValueBean lvb : donors) {
-				result += "<donor id=\""+lvb.getValue()+"\" name=\""+lvb.getLabel()+"\"/>";
+				String sanitizedLabel = lvb.getLabel().replaceAll("\"","'");
+				result += "<donor id=\""+lvb.getValue()+"\" name=\""+sanitizedLabel+"\"/>";
 			}
 		}
 		return result;

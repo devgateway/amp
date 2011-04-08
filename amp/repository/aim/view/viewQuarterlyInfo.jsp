@@ -113,6 +113,9 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimQuarterlyInfoForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -152,7 +155,9 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 
 <c:set target="${urlAll}" property="tabIndex" value="2"/>
-
+<c:set target="${urlAll}" property="currency"  >
+	<bean:write name="aimQuarterlyInfoForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlQuarterlyGrouping" type="java.util.Map" class="java.util.HashMap"/>
@@ -197,7 +202,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <digi:form action="/quarterlyInfoFilter.do" name="aimQuarterlyInfoForm"
 
-type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
+type="org.digijava.module.aim.form.QuarterlyInfoForm" method="get" styleId="myForm">
 
 
 
@@ -208,7 +213,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 <html:hidden property="transactionType" />
 
 <html:hidden property="tabIndex" />
-
 
 
 <TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
@@ -592,7 +596,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 												<TD>
 
-													<html:submit value="GO" styleClass="dr-menu"/>
+													<input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
 
 			                        	</TD>
 
@@ -931,6 +935,11 @@ setHoveredTable("dataTable", false);
 
 </logic:equal>
 <script>
+function go() {
+	document.getElementById("myForm").action = "/aim/viewQuarterlyInfo.do";
+	document.getElementById("myForm").submit();
+}
+
 if(document.getElementById('showBottomBorder').value=='1'){
 	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
 }

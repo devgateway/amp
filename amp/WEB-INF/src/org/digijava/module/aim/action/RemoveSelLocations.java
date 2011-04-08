@@ -1,15 +1,11 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.RegionalFunding;
 
 public class RemoveSelLocations extends Action {
 
@@ -26,28 +22,60 @@ public class RemoveSelLocations extends Action {
 				Collection locs = new ArrayList<Location>();
 
 				Iterator itr = prevSelLocs.iterator();
+                //For regional funding check
+                Map <Long, String> regFndIdNameMap = null;
+                StringBuffer regFundingReferencedRegions = null;
+                if (eaForm.getFunding().getRegionalFundings() != null &&
+                        !eaForm.getFunding().getRegionalFundings().isEmpty()) {
+                    regFndIdNameMap = new HashMap <Long, String>();
+
+                    for (Object regFndObj : eaForm.getFunding().getRegionalFundings()) {
+                        RegionalFunding regFnd = (RegionalFunding) regFndObj;
+                        regFndIdNameMap.put(regFnd.getRegionId(), regFnd.getRegionName());
+                    }
+                }
 
 				while (itr.hasNext()) {
-						  boolean flag = false;
-						  Location loc = (Location) itr.next();
-						  for (int i = 0;i < selLocs.length;i ++) {
-									 if (loc.getLocId().equals(selLocs[i])) {
-												flag = true;
-												break;
-									 }									 
-						  }
-						  if (!flag) {
-									 locs.add(loc);
-						  }
-						  
+                  boolean flag = false;
+                  Location loc = (Location) itr.next();
+                      for (int i = 0;i < selLocs.length;i ++) {
+                          Long regId = null;
+                          if (regFndIdNameMap != null) {
+                            regId = new Long(selLocs[i]);    
+                          }
+
+                        if (loc.getLocId().equals(selLocs[i]) && (regFndIdNameMap == null || !regFndIdNameMap.containsKey(regId))) {
+                            flag = true;
+                            break;
+                        } else if (loc.getLocId().equals(selLocs[i]) && (regFndIdNameMap != null && regFndIdNameMap.containsKey(regId))) {
+                          if (regFundingReferencedRegions == null) {
+                              regFundingReferencedRegions = new StringBuffer();
+                          } else {
+                            regFundingReferencedRegions.append(", ");
+                          }
+                          regFundingReferencedRegions.append(regFndIdNameMap.get(regId));
+                          flag = false;
+                          break;
+                        }
+                      }
+                    if (!flag) {
+                             locs.add(loc);
+                    }
+
 				}
-				
-				eaForm.getLocation().setSelectedLocs(locs);
-				eaForm.getLocation().setSelLocs(null);
-				eaForm.getLocation().setCols(null);
-				eaForm.getLocation().setNumResults(0);
-				eaForm.setStep("2");
-				return mapping.findForward("forward");
+
+        if (regFundingReferencedRegions != null) {
+            eaForm.clearMessages();
+            eaForm.addError("error.aim.addActivity.locationsUsedInRegFunding",regFundingReferencedRegions.toString());
+        }
+
+        eaForm.getLocation().setSelectedLocs(locs);
+        eaForm.getLocation().setSelLocs(null);
+        eaForm.getLocation().setCols(null);
+        eaForm.getLocation().setNumResults(0);
+        eaForm.setStep("2");
+
+        return mapping.findForward("forward");
     }
 }
 

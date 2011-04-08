@@ -563,6 +563,17 @@ public class ReportsFilterPicker extends MultiAction {
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
+		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
+			Collection<AmpCategoryValue> projectImplementingUnits	=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true, request);
+			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
+			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
+			rootProjectImplementingUnit.setUniqueId("0");
+			rootProjectImplementingUnit.setChildren(projectImplementingUnits);
+			GroupingElement<HierarchyListableImplementation> projectImplUnitElement	=new GroupingElement<HierarchyListableImplementation>("Project Implementing Unit", "filter_project_impl_unit_div", 
+					rootProjectImplementingUnit, "selectedProjectImplUnit");
+			filterForm.getOtherCriteriaElements().add(projectImplUnitElement);
+			
+		}
 
 		/**
 		 * This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
@@ -789,6 +800,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setJustSearch(null);
 		filterForm.setRegionSelected(null);
 		filterForm.setApprovalStatusSelected(null);
+		filterForm.setSelectedProjectImplUnit(null);
 		// filterForm.setRegions(null);
 		if (tempSettings != null) {
 			filterForm.setRenderStartYear(tempSettings.getReportStartYear());
@@ -1118,6 +1130,18 @@ public class ReportsFilterPicker extends MultiAction {
 			}
 		} else {
 			arf.setModeOfPayment(null);
+		}
+		
+		if(filterForm.getSelectedProjectImplUnit()!=null && filterForm.getSelectedProjectImplUnit().length>0){
+			arf.setProjectImplementingUnits(new HashSet<AmpCategoryValue>());
+			for (int i = 0; i < filterForm.getSelectedProjectImplUnit().length; i++) {
+				Long id = filterForm.getSelectedProjectImplUnit()[i];
+				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+				if (value != null)
+					arf.getProjectImplementingUnits().add(value);
+			}
+		}else{
+			arf.setProjectImplementingUnits(null);
 		}
 
 		if (filterForm.getPageSize() != null) {

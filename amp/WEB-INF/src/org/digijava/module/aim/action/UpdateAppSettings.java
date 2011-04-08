@@ -147,29 +147,7 @@ public class UpdateAppSettings extends Action {
 				}
 				uForm.setAllowShareAccrossWRK(ampAppSettings.getAllowShareTeamRes());
 				uForm.setAllowPublishingResources(ampAppSettings.getAllowPublishingResources());
-				//get team members
-				Long currentTeamId=tm.getTeamId();
-				List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
-				uForm.setTeamMembers(members);
-				if(uForm.getAllowPublishingResources()!=null && uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS)){
-					//Long currentTeamId=tm.getTeamId();
-					//List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
-					//uForm.setTeamMembers(members);
-					if(members!=null){
-						List<Long> selMembersIds= null; 
-						for (TeamMember teamMember : members) {
-							if(teamMember.getPublishDocuments()!=null && teamMember.getPublishDocuments()){
-								if(selMembersIds==null){
-									selMembersIds=new ArrayList<Long>();
-								}
-								selMembersIds.add(teamMember.getMemberId());
-							}
-						}
-						if(selMembersIds!=null && selMembersIds.size()>0){
-							uForm.setSelTeamMembers(selMembersIds.toArray(new Long[selMembersIds.size()] ));
-						}
-					}
-				}
+				
 				uForm.setDefReportsPerPage(reportsPerPage);
 				uForm.setReportStartYear(reportStartYear);
 				uForm.setReportEndYear(reportEndYear);
@@ -187,8 +165,34 @@ public class UpdateAppSettings extends Action {
 				}
 					
 			}
+			
+			
+			//get team members
+			Long currentTeamId=tm.getTeamId();
+			List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
+			uForm.setTeamMembers(members);
+			if(uForm.getAllowPublishingResources()!=null && uForm.getAllowPublishingResources().equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS)){
+				//Long currentTeamId=tm.getTeamId();
+				//List<TeamMember> members =TeamMemberUtil.getAllMembersExcludingTL(currentTeamId);
+				//uForm.setTeamMembers(members);
+				if(members!=null){
+					List<Long> selMembersIds= null; 
+					for (TeamMember teamMember : members) {
+						if(teamMember.getPublishDocuments()!=null && teamMember.getPublishDocuments()){
+							if(selMembersIds==null){
+								selMembersIds=new ArrayList<Long>();
+							}
+							selMembersIds.add(teamMember.getMemberId());
+						}
+					}
+					if(selMembersIds!=null && selMembersIds.size()>0){
+						uForm.setSelTeamMembers(selMembersIds.toArray(new Long[selMembersIds.size()] ));
+					}
+				}
+			}
+			
 			/* Select only the reports that are shown as tabs */
-			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,null, null, true, tm.getMemberId());
+			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,null, null, true, tm.getMemberId(),null);
 			if (reports != null) {
 				Iterator iterator = reports.iterator();
 				while (iterator.hasNext()) {

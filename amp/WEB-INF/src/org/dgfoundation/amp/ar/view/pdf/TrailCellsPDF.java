@@ -99,15 +99,28 @@ public class TrailCellsPDF extends PDFExporter {
 			if(translatedName.compareTo("")==0 )
 				result+=grd.getName();
 			else result+=translatedName;
-				
-			PdfPCell pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
 			
-			pdfc.setColspan(grd.getSourceColsCount().intValue()-1);
-			currentBackColor=new  Color(235,235,235);
-			
-			pdfc.setBackgroundColor(currentBackColor);
-			table.addCell(pdfc);
-			
+			PdfPCell pdfc = null;
+			if (grd.getReportMetadata().getHideActivities()){
+				PdfPCell pdfc2 = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
+				pdfc2.setColspan(grd.getTotalDepth());
+				table.addCell(pdfc2);
+				currentBackColor=new  Color(235,235,235);
+				pdfc2.setBackgroundColor(currentBackColor);
+			}else{
+				pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
+				Integer sourceColsCount=grd.getSourceColsCount();
+				if( sourceColsCount!=null&&sourceColsCount>1){
+					//When a column becomes hierarchy we have to subtract it from source columns.
+					int span = sourceColsCount-grd.getReportMetadata().getHierarchies().size();
+					if (span!=0){
+						pdfc.setColspan(span);
+					}
+				}
+				currentBackColor=new  Color(235,235,235);
+				pdfc.setBackgroundColor(currentBackColor);
+				table.addCell(pdfc);
+			}
 			
 			Iterator i=grd.getTrailCells().iterator();
 			while (i.hasNext()) {

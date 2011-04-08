@@ -159,17 +159,22 @@ public class AmpComponentFunding implements Versionable, Cloneable {
 		this.transactionType = transactionType;
 	}
 
+	/**
+	 * If overriding is really needed please fully comment on the reason!
+	 *
 	@Override
 	public int hashCode() {
 		if (this.ampComponentFundingId == null)
 			return 0;
 		return ampComponentFundingId.intValue();
 	}
+	*/
 	
 	public boolean equals(Object obj) {
 		if (obj == null) throw new NullPointerException();
 		if (!(obj instanceof AmpComponentFunding)) throw new ClassCastException();
-		if(this.ampComponentFundingId==null) return false;
+		if(this.ampComponentFundingId == null) 
+			return super.equals(obj);
 		
 		AmpComponentFunding comp = (AmpComponentFunding) obj;
 		return this.ampComponentFundingId.equals(comp.ampComponentFundingId);

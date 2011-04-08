@@ -85,8 +85,10 @@ public abstract class ARDimension {
 	}
 	if (translatedTextUnallocated.compareTo("") == 0)
 		translatedTextUnallocated = text;
-	//
-	if(childCell.getValue().toString().equals(translatedTextUnallocated)) return true;
+	
+	//See AMP-9522
+	if(childCell.getValue().toString().contains(translatedTextUnallocated)) return true;
+	
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about
 	Class dimensionClass=childCell.getColumn().getDimensionClass();

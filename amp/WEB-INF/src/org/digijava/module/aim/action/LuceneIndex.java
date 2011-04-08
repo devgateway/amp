@@ -1,12 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,14 +8,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
-import org.apache.lucene.store.Directory;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.codehaus.swizzle.confluence.Confluence;
-import org.codehaus.swizzle.confluence.Page;
-import org.codehaus.swizzle.confluence.PageSummary;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
@@ -82,7 +71,7 @@ public class LuceneIndex extends Action {
 				  String field = request.getParameter("field");
 				  String search = request.getParameter("search");
 
-				  Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, field, search);
+				  Hits hits = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
 				  for(int i = 0; i < hits.length(); i++) {
 					   Document doc = hits.doc(i);
 					   AmpActivity act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
@@ -96,7 +85,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.activityIndexDirectory, field, search);
+					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
 				  }
 				  else{
 					  if ("checked".compareTo(action) == 0){

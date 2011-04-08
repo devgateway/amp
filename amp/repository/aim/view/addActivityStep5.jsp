@@ -536,19 +536,6 @@ function removeSelComponents() {
                       <tr>
                         <td>
                           <span class=crumb>
-                            <c:if test="${aimEditActivityForm.pageId == 0}">
-                              <c:set property="translation" var="trans" >
-                                <digi:trn key="aim:clickToViewAdmin">
-                                Click here to goto Admin Home
-                                </digi:trn>
-                              </c:set>
-                              <digi:link href="admin.do" styleClass="comment" title="${trans}">
-                                <digi:trn key="aim:AmpAdminHome">
-                                Admin Home
-                                </digi:trn>
-                              </digi:link>&nbsp;&gt;&nbsp;
-                            </c:if>
-                            <c:if test="${aimEditActivityForm.pageId == 1}">
                               <c:set property="translation" var="ttt">
                                 <digi:trn key="aim:clickToViewMyDesktop">
                                 Click here to view MyDesktop
@@ -567,7 +554,7 @@ function removeSelComponents() {
                                 Portfolio
                                 </digi:trn>
                               </digi:link>&nbsp;&gt;&nbsp;
-                            </c:if>
+                            
                            
                            <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
                                

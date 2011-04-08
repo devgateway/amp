@@ -60,6 +60,16 @@
 
 		</layout>
 
+		<layout name="gisSettingsLayout" extends="default" file="gisSettingsLayout.jsp">
+			<put name="title">Aid Management Platform</put>
+			<put-item name="body" module="gis" page="gisSettings"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayout"/>
+
+		</layout>
+
+
 		<layout name="gisRegReportLayout" extends="default" file="gisRegReportLayout.jsp">
 			<put name="title">GIS Regional Report</put>
 			<put-item name="body" module="gis" page="gisRegionReport"/>
@@ -390,7 +400,12 @@
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="channelOverviewObjective"/>
        </layout>
-
+		
+		<layout name="layoutRegionalObservations" extends="tabLayout">
+        	<put name="title">Activity - Regional Observations </put>
+        	<put-item name="tabBody" module="aim" instance="default" teaser="regionalObservations"/>
+       	</layout>
+		
 	   <layout name="layoutPhysicalProgress" extends="tabLayout">
         <put name="title">Activity - Physical Progress </put>
         <put-item name="tabBody" module="aim" instance="default"
@@ -726,6 +741,7 @@
 				<page>tabManagerData</page>
 				<page>aim_filterPicker2</page>
 				<page>selectPledgeLocation</page>
+				<page>selectPledgeProgram</page>
 			</module>
             <module name="orgProfile">
                 <page>orgSummary</page>

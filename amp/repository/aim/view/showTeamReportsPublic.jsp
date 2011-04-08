@@ -61,6 +61,7 @@ function popup(mylink, windowname)
 </style>
 
 <digi:instance property="aimTeamReportsForm" />
+<digi:form action="/viewTeamReports.do" method="post">
 
 <c:if test="${!aimTeamReportsForm.showTabs}">
   <c:set var="pageTitle">
@@ -478,6 +479,7 @@ function popup(mylink, windowname)
     </td>
   </tr>
 </table>
+             </digi:form>
 <br/>
 	<hr />
 	<div class="t_sm">

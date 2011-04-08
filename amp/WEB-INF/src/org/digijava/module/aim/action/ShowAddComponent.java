@@ -98,6 +98,7 @@ public class ShowAddComponent extends Action {
 				AmpComponent helperComponent = new AmpComponent();
 				helperComponent.setAmpComponentId(comp.getAmpComponentId());
 				helperComponent.setName(comp.getTitle());
+				helperComponent.setDescription(comp.getDescription());
 				if(comp.getTitle() != null)
 					helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
 				componentsList.add(helperComponent);
@@ -185,6 +186,7 @@ public class ShowAddComponent extends Action {
 				AmpComponent helperComponent = new AmpComponent();
 				helperComponent.setAmpComponentId(comp.getAmpComponentId());
 				helperComponent.setName(comp.getTitle());
+				helperComponent.setDescription(comp.getDescription());
 				if(comp.getTitle() != null)
 					helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
 				componentsList.add(helperComponent);
@@ -219,15 +221,18 @@ public class ShowAddComponent extends Action {
 	public ActionForward addNewComponent(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		String name = eaForm.getComponents().getNewCompoenentName();
+		String description = eaForm.getComponents().getComponentDesc();
 		AmpComponentType type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
 		org.digijava.module.aim.dbentity.AmpComponent newCompo = new org.digijava.module.aim.dbentity.AmpComponent();
 
 		newCompo.setType(type);
 		newCompo.setTitle(name);
+		newCompo.setDescription(description);
 
 		ComponentsUtil.addNewComponent(newCompo);
 		eaForm.getComponents().setComponentId(newCompo.getAmpComponentId());
 		eaForm.getComponents().setComponentTitle(newCompo.getTitle());
+		eaForm.getComponents().setComponentDesc(newCompo.getDescription());
 		eaForm.getComponents().setNewCompoenentName(null);
 		return switchType(mapping, form, request, response);
 	}
@@ -242,11 +247,14 @@ public class ShowAddComponent extends Action {
 			eaForm.setStep("5");
 			
 			String name 							= eaForm.getComponents().getNewCompoenentName();
+			String description 							= eaForm.getComponents().getComponentDesc();
 			AmpComponentType type		= ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
 			org.digijava.module.aim.dbentity.AmpComponent ampComp 	= ComponentsUtil.getComponentById( eaForm.getComponents().getComponentId() );
 			ampComp.setTitle( name );
+			ampComp.setDescription( description );
 			ampComp.setType( type );
 			eaForm.getComponents().setComponentTitle(ampComp.getTitle());
+			eaForm.getComponents().setComponentDesc(ampComp.getDescription());
 			eaForm.getComponents().setNewCompoenentName(null);
 			ComponentsUtil.updateComponents(ampComp);
 			

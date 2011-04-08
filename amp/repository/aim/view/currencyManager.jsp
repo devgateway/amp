@@ -61,10 +61,14 @@ function validate(){
 
 }
 function applyFilter() {
-    <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
+	
+	if(document.getElementsByName('numRecords')[0].value>0)
+	{   <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
     document.aimCurrencyForm.action = "${manager}";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
+}
+	else alert("<digi:trn>Number of records per page should be greater than 0</digi:trn>");
 }
 
 function sortSubmit(value){

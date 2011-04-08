@@ -44,6 +44,7 @@ function resetFilter(){
         
         resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
         resetElement(aimReportsFilterPickerForm.selectedModeOfPayment);
+        resetElement(aimReportsFilterPickerForm.selectedProjectImplUnit);
  		resetElement(aimReportsFilterPickerForm.selectedDonorGroups);
  		resetElement(aimReportsFilterPickerForm.selectedDonorTypes);
  		resetElement(aimReportsFilterPickerForm.selectedProjectCategory);
@@ -127,7 +128,7 @@ YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 		 			var divYuiEl    = new YAHOO.util.Element(listOfDivs[i]);
 		 			if ( divYuiEl.hasClass("grouping_selector_wrapper") ) {
 		 				var buttonEl    = listOfDivs[i].getElementsByTagName("button")[0];
-		 					buttonEl.click();
+		 					if(typeof(buttonEl) != "undefined") buttonEl.click();
 		 					break;
 		 				}
 		 		}

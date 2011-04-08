@@ -99,10 +99,10 @@ public class ExportWorkspaceManager2XSL extends Action {
                 nameCell.setCellValue(teamName);
                 Collection<AmpActivity> activityList =null;
                 if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                    activityList = TeamUtil.getManagementTeamActivities(team.getAmpTeamId());
+                    activityList = TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null);
 
                 } else {
-                    activityList = TeamUtil.getAllTeamActivities(team.getAmpTeamId());
+                    activityList = TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null);
 
                 }       
                 

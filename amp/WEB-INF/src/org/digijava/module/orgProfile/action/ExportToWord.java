@@ -896,11 +896,11 @@ public class ExportToWord extends Action {
                                             RtfCell indicator5bName = new RtfCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system", langCode, siteId), OrgProfileUtil.PLAINFONT));
 
                                             ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
-                                            RtfCell indicator5bAllBaseline = new RtfCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix, OrgProfileUtil.PLAINFONT));
-                                            RtfCell indicator5bAllCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix, OrgProfileUtil.PLAINFONT));
-                                            RtfCell indicator5bAllTargetValue = new RtfCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix, OrgProfileUtil.PLAINFONT));
-                                            RtfCell indicator5bOrgBaseline = new RtfCell(new Paragraph(piInd5bHelper.getOrgBaseLineValue() + sufix, OrgProfileUtil.PLAINFONT));
-                                            RtfCell indicator5bOrgCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getOrgValue() + sufix, OrgProfileUtil.PLAINFONT));
+                                            RtfCell indicator5bAllBaseline = new RtfCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + "", OrgProfileUtil.PLAINFONT));
+                                            RtfCell indicator5bAllCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + "", OrgProfileUtil.PLAINFONT));
+                                            RtfCell indicator5bAllTargetValue = new RtfCell(new Paragraph(piInd5bHelper.getAllTargetValue() + "", OrgProfileUtil.PLAINFONT));
+                                            RtfCell indicator5bOrgBaseline = new RtfCell(new Paragraph(piInd5bHelper.getOrgBaseLineValue() +"", OrgProfileUtil.PLAINFONT));
+                                            RtfCell indicator5bOrgCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getOrgValue() + "", OrgProfileUtil.PLAINFONT));
 
                                             if (count % 2 == 1) {
                                                 indicator5bAllBaseline.setBackgroundColor(OrgProfileUtil.CELLCOLOR);

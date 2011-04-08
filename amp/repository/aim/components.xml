@@ -436,6 +436,7 @@
 	<page name="addPledge" page="addPledge" title =" - Add Pledge " />
 	<page name="viewPledgesList" page="viewPledgesList" title =" - Pledges List " />
 	<page page="selectPledgeLocation" name="selectPledgeLocation" title="AMP - Select Location" />
+	<page page="selectPledgeProgram" name="selectPledgeProgram" title="AMP - Select Location" />
 
 <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
 	
@@ -587,6 +588,10 @@
 	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
                 viewChannelOverviewObjective.jsp
     </teaser>
+    
+    <teaser name="regionalObservations" action="regionalObservations.do">
+    	viewRegionalObservations.jsp
+	</teaser>
 
 	<teaser name="physicalProgress" action="physicalProgress.do">
                 viewPhysicalProgress.jsp

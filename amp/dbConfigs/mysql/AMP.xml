@@ -218,7 +218,7 @@
 					case when cached_v_donor_funding.transaction_type=0
 					and cached_v_donor_funding.adjustment_type=1 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -229,7 +229,7 @@
 					case when cached_v_donor_funding.transaction_type=1
 					and cached_v_donor_funding.adjustment_type=1 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -241,7 +241,7 @@
 					case when cached_v_donor_funding.transaction_type=2
 					and cached_v_donor_funding.adjustment_type=1 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -252,7 +252,7 @@
 					case when cached_v_donor_funding.transaction_type=0
 					and cached_v_donor_funding.adjustment_type=0 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -263,7 +263,7 @@
 					case when cached_v_donor_funding.transaction_type=1
 					and cached_v_donor_funding.adjustment_type=0 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -274,7 +274,7 @@
 					case when cached_v_donor_funding.transaction_type=2
 					and cached_v_donor_funding.adjustment_type=0 then
 					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
-					getExchangeWithFixed('@currency',cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate)
+					getExchange('@currency',cached_v_donor_funding.transaction_date)
 					else 0 end
 				</SQL>
 			</MeasureExpression>

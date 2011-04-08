@@ -15,6 +15,7 @@ public class TokenRepository {
 		public static final String UNCOMMITTED = "uncommittedLogicalToken";
 
 		public static final String COSTING_GRAND_TOTAL = "grandTotalToken";
+		public static final String MTEF = "mtefToken";
 
 		public static final String PLANED_COMMITMENTS = "plannedCommitmentsLogicalToken";
 		public static final String ACTUAL_COMMITMENTS = "actualCommitmentsLogicalToken";
@@ -278,6 +279,35 @@ public class TokenRepository {
 		return te;
 	}
 
+	public static TokenExpression buildMtefColumnToken(String columnName, int year) {
+		GregorianCalendar c1=new GregorianCalendar();
+		c1.set(Calendar.YEAR, year);
+		c1.set(Calendar.DAY_OF_MONTH,1);
+		c1.set(Calendar.MONTH, 0);
+		c1.set(Calendar.HOUR_OF_DAY, 0);
+		c1.set(Calendar.MINUTE, 0);
+		c1.set(Calendar.SECOND, 0);
+		c1.set(Calendar.MINUTE,-1);
+		
+		GregorianCalendar c2=new GregorianCalendar();
+		c2.set(Calendar.YEAR, year);
+		c2.set(Calendar.DAY_OF_MONTH,31);
+		c2.set(Calendar.MONTH, 11);
+		c2.set(Calendar.HOUR_OF_DAY, 23);
+		c2.set(Calendar.MINUTE, 59);
+		c2.set(Calendar.SECOND, 59);
+		
+		PresentLogicalToken mtefPresentToken 	= new PresentLogicalToken( columnName , false);
+		DateRangeLogicalToken drLogicalToken	= new DateRangeLogicalToken(c1.getTime(), c2.getTime(), ArConstants.TRANSACTION_DATE );
+		ANDBinaryLogicalToken andLogicalToken	= new ANDBinaryLogicalToken(mtefPresentToken, drLogicalToken, false);
+		
+		TokenExpression te = new TokenExpression(new LogicalToken[] { andLogicalToken });
+		if (tokens == null)
+			tokens = new Hashtable<String, TokenExpression>();
+		tokens.put(TokenNames.MTEF, te);
+		return te;
+	}
+	
 	public static TokenExpression buildCostingGrandTotalToken() {
 		PresentLogicalToken grandTotal = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, false);
 		TokenExpression te = new TokenExpression(new LogicalToken[] { grandTotal });

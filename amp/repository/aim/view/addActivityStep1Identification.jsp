@@ -23,7 +23,7 @@
     	document.aimEditActivityForm.submit();
 	}
 </script>
-
+<digi:instance property="aimEditActivityForm" />
 <%@page import="org.digijava.module.aim.helper.Constants"%><script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
@@ -205,6 +205,28 @@ function toggleBudgetFields(show) {
 	<field:display name="Code Chapitre Dropdown" feature="Budget">	
 		toggleElement("CodeChapitreDrop", show);
 	</field:display> 
+	<field:display name="Budget Sector" feature="Budget">
+		if (document.getElementById("budgetCV").value!=${aimEditActivityForm.identification.budgetCVOff}){
+			toggleElement("budgsector", show);
+			toggleElement("budgsector1", show);
+			toggleElement("bctd", show);
+			toggleElement("bctd1", show);
+		}else{
+			toggleElement("budgsector", true);
+			toggleElement("budgsector1", true);
+			toggleElement("bctd", true);
+			toggleElement("bctd1", true);
+		}
+	</field:display>
+	<field:display name="Budget Organization" feature="Budget">
+		if (document.getElementById("budgetCV").value!=${aimEditActivityForm.identification.budgetCVOff}){
+			toggleElement("budgetorg", show);
+			toggleElement("budgetorg1", show);
+		}else{
+			toggleElement("budgetorg", true);
+			toggleElement("budgetorg1", true);
+		}
+	</field:display>
 	<field:display name="Budget Department" feature="Budget">
 		toggleElement("budgetdepart", show);
 		toggleElement("budgetdepart1", show);
@@ -244,11 +266,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	function budgetCheckboxClick()
 	{
 		
-		if (document.getElementById("budget") != null) {
-			var l = document.getElementById("budget").options.length;
+		if (document.getElementById("budgetCV") != null) {
+			var l = document.getElementById("budgetCV").options.length;
 			var bud=false;
 			for(i=0; i<l; i++){
-				if(document.getElementById("budget").options[i].selected && document.getElementById("budget").options[i].value=='1'){
+				if(document.getElementById("budgetCV").options[i].selected && document.getElementById("budgetCV").options[i].value=='${aimEditActivityForm.identification.budgetCVOn}'){
 					toggleBudgetFields ( true );
 				 	bud=true;
 				}
@@ -260,7 +282,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	}
 
 function InitBud(){
-	if(document.getElementById("budget").value=="1"){
+	if(document.getElementById("budgetCV").value=="${aimEditActivityForm.identification.budgetCVOn}"){
 		 toggleBudgetFields ( true );
 	}
 	else{
@@ -287,29 +309,27 @@ function disableSelection1(target){
 			nownode=target.childNodes[i];
 			alert("ad "+i+" ::"+nownode);
 			if (typeof nownode.onselectstart!="undefined") //IE route
-				nownode.onselectstart=function(){return false}
+				nownode.onselectstart=function(){return false;};
 			else if (typeof nownode.style.MozUserSelect!="undefined") //Firefox route
 					nownode.style.MozUserSelect="none"
 				else //All other route (ie: Opera)
-			nownode.onmousedown=function(){return false}
+			nownode.onmousedown=function(){return false;};
 			
 	}
 
 if (typeof target.onselectstart!="undefined") //IE route
-	target.onselectstart=function(){return false}
+	target.onselectstart=function(){return false;};
 else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
 	target.style.MozUserSelect="none"
 else //All other route (ie: Opera)
-	target.onmousedown=function(){return false}
+	target.onmousedown=function(){return false;};
 	//alert("Ad");
 target.style.cursor = "default"
 }
 
 </script>
 
-
-<digi:instance property="aimEditActivityForm" />
-
+<html:hidden styleId="FYs" value="${aimEditActivityForm.identification.resetselectedFYs}" name="aimEditActivityForm" property="identification.resetselectedFYs"/>
 											<bean:define id="contentDisabled">false</bean:define>
 											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
 											</c:set>
@@ -643,6 +663,22 @@ target.style.cursor = "default"
 											
 											
 																		
+											<field:display name="Project Implementing Unit" feature="Identification">
+												<tr bgcolor="#ffffff">
+													<td valign="top" align="left">
+														<a title="<digi:trn>Information about project implementation unit</digi:trn>">
+															<digi:trn>Project Implementing Unit</digi:trn>
+														</a>
+													</td>
+													<td valign="top" align="left">
+															<c:set var="translation">
+																<digi:trn>Please select from below</digi:trn>
+															</c:set>															
+															<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.projectImplUnitId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY %>" styleClass="inp-text" />
+													</td>
+												</tr>
+											</field:display>
+											
 											
 											<field:display name="Accession Instrument" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
@@ -736,13 +772,13 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td>
-												<field:display name="On/Off Budget" feature="Budget">	
-													<html:select styleClass="inp-text" property="identification.budget" styleId="budget" value="${aimEditActivityForm.identification.budget}" onchange="budgetCheckboxClick();">
-											 			<html:option value="-1"><digi:trn>No Answer</digi:trn></html:option>
-											 			<html:option value="0"><digi:trn>Off</digi:trn></html:option>
-											 			<html:option value="1"><digi:trn>On</digi:trn></html:option>
-											 		</html:select>
-													</field:display>
+												<field:display name="On/Off/Treasure Budget" feature="Budget">
+													<c:set var="noanswer">
+														<digi:trn>No Answer</digi:trn>
+													</c:set>
+											 		<category:showoptions firstLine="${noanswer}" name="aimEditActivityForm" property="identification.budgetCV" outeronchange="budgetCheckboxClick();"
+											 		  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_BUDGET_KEY %>" styleClass="inp-text" outerid="budgetCV" />	
+												</field:display>
 												</td>
 											</tr>
 											<tr bgcolor="#ffffff"/>
@@ -752,20 +788,23 @@ target.style.cursor = "default"
 											
 											<td>
 											<table id="budgetTable" class="box-border" cellspacing="1" cellpadding="1" border="0" width="350">
-											<field:display name="Imputation" feature="Budget">
-											<tr valign="top" id="Imputation" align="left"  >
-												<td>
-													<a title="<digi:trn>Imputation</digi:trn>">
-													<digi:trn>
-														Imputation
-													</digi:trn>
-													</a>
-												</td>
-												<td align="right">
-													<html:text property="identification.FY" size="18" styleId="ImputationField" styleClass="inp-text" onkeyup="imputationRules.check();"/>
-												</td>
-											</tr>
-											</field:display>
+											<%--
+												<field:display name="Imputation" feature="Budget">
+												<tr valign="top" id="Imputation" align="left"  >
+													<td>
+														<a title="<digi:trn>Imputation</digi:trn>">
+														<digi:trn>
+															Imputation
+														</digi:trn>
+														</a>
+													</td>
+													<td align="right">
+														<html:text property="identification.FY" size="18" styleId="ImputationField" styleClass="inp-text" onkeyup="imputationRules.check();"/>
+													</td>
+												</tr>
+												</field:display>
+											 --%>
+											
 											
 											<field:display name="Code Chapitre" feature="Budget">
 											<tr valign="top" id="CodeChapitre" align="left"  >
@@ -792,7 +831,18 @@ target.style.cursor = "default"
 													</a>
 												</td>
 												<td align="right">
-													<html:text property="identification.FY" size="18" styleClass="inp-text"/>
+													<html:select name="aimEditActivityForm" property="identification.selectedFYs" multiple="true" styleId="FYsSel" size="5" style="width:120px">
+															<logic:empty name="aimEditActivityForm" property="identification.yearsRange">
+																<html:option value="0"><digi:trn>Not applicable</digi:trn></html:option>
+															</logic:empty>					                        			
+						                        			<logic:notEmpty name="aimEditActivityForm" property="identification.yearsRange">
+						                        				<html:optionsCollection name="aimEditActivityForm" property="identification.yearsRange" value="value" label="label"/>
+						                        			</logic:notEmpty>						                        			
+						                			</html:select>
+												
+													
+													<%-- <html:text property="identification.FY" size="18" styleClass="inp-text"/> --%>
+													
 												</td>
 											</tr>
 											</field:display>
@@ -878,20 +928,20 @@ target.style.cursor = "default"
 											<!-- Budget classification -->
 											<field:display name="Budget Classification" feature="Budget">		
 											<tr bgcolor="#ffffff">
-												<td valign="top" align="left">
+												<td valign="top" align="left" id="bctd" >
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn>Budget Classification</digi:trn>
 													</a>
 												</td>
-												<td>
+												<td id="bctd1">
 													<table class="box-border" cellspacing="1" cellpadding="1" border="0" width="350">
                                                   		<field:display name="Budget Sector" feature="Budget">
                                                   		<tr>
-                                                  			<td width="75">
+                                                  			<td width="75" id="budgsector1">
                                                   				<digi:trn>Sector</digi:trn>
                                                   			</td>
 		                                                    <td>
-		                                                    	<html:select name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" style="max-width:250; min-width:250;">
+		                                                    	<html:select styleId="budgsector" name="aimEditActivityForm" styleClass="inp-text" property="identification.selectedbudgedsector" onchange="getBudgetOptions(this.value,'orgselect');" style="max-width:250; min-width:250;">
 		                                                    		<html:option value="0"><digi:trn>Select</digi:trn></html:option>
 		                                                    		<html:optionsCollection name="aimEditActivityForm" property="identification.budgetsectors" value="idsector" label="sectorname"/>
 		                                                    	</html:select>

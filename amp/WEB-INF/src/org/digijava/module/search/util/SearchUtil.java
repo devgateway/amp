@@ -301,6 +301,9 @@ public class SearchUtil {
 		String link = n.getWebLink();
 		String name = n.getName();
 
+		if (title == null)
+			return false;
+		
 		if (title!=null&&title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 			return true;
 		}

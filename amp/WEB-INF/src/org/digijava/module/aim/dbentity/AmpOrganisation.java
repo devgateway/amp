@@ -30,6 +30,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
+	private String fundingorgid;
 	
 	private String budgetOrgCode;
 	
@@ -664,7 +665,15 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public Set<AmpOrganisationContact> getOrganizationContacts() {
 		return organizationContacts;
 	}
+	
+	public String getFundingorgid() {
+		return fundingorgid;
+	}
 
+	public void setFundingorgid(String fundingorgid) {
+		this.fundingorgid = fundingorgid;
+	}
+	
 	@Override
 	public Collection<AmpOrganisation> getChildren() {
 		return null;

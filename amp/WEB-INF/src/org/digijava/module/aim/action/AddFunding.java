@@ -109,6 +109,7 @@ public class AddFunding extends Action {
 			FundingOrganization fundingOrganization = (FundingOrganization)iter.next();
 			if ( orgId.equals( fundingOrganization.getAmpOrgId() ) )	{
 				formBean.getFunding().setOrgName(fundingOrganization.getOrgName());
+				formBean.getFunding().setOrgFundingId(fundingOrganization.getFundingorgid());
 				break;
 			}
 		}

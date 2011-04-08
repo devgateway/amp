@@ -54,6 +54,12 @@ function addEvent() {
   </html:select></td>
 </tr>
 <tr>
+<td colspan="2" align="center">&nbsp</td>
+</tr>
+<tr>
+<td colspan="2" align="center">&nbsp</td>
+</tr>
+<tr>
 <td colspan="2" align="center">
     <input type="button" value="<digi:trn key="aim:add">Add</digi:trn>" class="inp-text" onclick="return addEvent();"/>
 

@@ -24,9 +24,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
@@ -58,8 +62,8 @@ import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Documents;
@@ -88,7 +92,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
-import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -181,14 +184,22 @@ public class AddAmpActivity extends Action {
     	eaForm.setStep(reqStep);
     //END
     
+    Long idForOriginalActivity = null; //AMP-9633
+    if(request.getSession().getAttribute("idForOriginalActivity")!=null){
+    	idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity") ;
+    	request.getSession().removeAttribute("idForOriginalActivity");
+    	if(idForOriginalActivity.equals(new Long(-1))){ //create case
+    		eaForm.setActivityId(null);
+    	}else{ //edit case
+    		eaForm.setActivityId(idForOriginalActivity);
+    	}    	
+    }
     
-    //Contacts
-
-	//if several contact types(donor and mofed for example) contained same contact,then
-	//after editing contact,edited one should be replaced in all contact types.
-	  
-		
-			ActivityContactInfo contactInfo=eaForm.getContactInformation();
+    
+    /**
+     * Contacts
+     */
+  	ActivityContactInfo contactInfo=eaForm.getContactInformation();
 			//if several contact types(donor and mofed for example) contained same contact,then
 			//after editing contact,edited one should be replaced in all contact types.
 				
@@ -569,6 +580,20 @@ public class AddAmpActivity extends Action {
           return mapping.findForward("addActivityStep1_5");
       }
       else if (eaForm.getStep().equals("2")) { // show the step 2 page.
+
+          if (eaForm.getErrors() != null && !eaForm.getErrors().isEmpty()) {
+            Set <Map.Entry<String,String>> entrySet =  eaForm.getErrors().entrySet();
+
+              ActionErrors errors = new ActionErrors();
+            for (Map.Entry<String,String> entry : entrySet) {
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(entry.getKey(), entry.getValue()));
+            }
+            saveErrors(request, errors);
+              eaForm.clearMessages();
+          }
+
+                  //HashMap<String, String>
+
      	  return showStep2(mapping, request, session, teamMember, eaForm);
       }
       else if (eaForm.getStep().equals("3")) { // show the step 3 page.
@@ -1511,11 +1536,33 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getContracts().setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContracts().getContractDetails(), request));
 	eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 	
+	try {
+	 AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);	
+     eaForm.getIdentification().setBudgetCVOff(
+   		  (budgetOff==null)?0:budgetOff.getId()
+   		  );
+     AmpCategoryValue budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);	
+     eaForm.getIdentification().setBudgetCVOn(
+   		  (budgetOn==null)?1:budgetOn.getId()
+   		  );
+	}
+	catch (Exception e) {
+		e.printStackTrace();
+	}
+	
 	//Budget classification
-	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
-	eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
-	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
-	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+	if (eaForm.getIdentification().getBudgetsectors()==null || eaForm.getIdentification().getBudgetsectors().size()==0){
+		eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
+	}
+	if (eaForm.getIdentification().getSelectedorg()==null || eaForm.getIdentification().getSelectedorg()==0){
+		eaForm.getIdentification().setSelectedorg((ActivityUtil.getBudgetOrganization(eaForm.getActivityId())));
+	}
+	if (eaForm.getIdentification().getSelecteddepartment()==null || eaForm.getIdentification().getSelecteddepartment()==0){
+		eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
+	}
+	if (eaForm.getIdentification().getSelectedprogram()==null || eaForm.getIdentification().getSelectedprogram()==0){
+		eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+	}
 	
 	
 	eaForm.getIdentification().setBudgetsectors(BudgetDbUtil.getBudgetSectors());
@@ -1802,6 +1849,11 @@ private ActionForward showStep1(ActionMapping mapping,
 	      List steps = ActivityUtil.getSteps();
 	      eaForm.setSteps(steps);
 	  }
+	  
+	//get yearsRange
+	  List<LabelValueBean> yearsRange = EditOrganisation.getYearsBeanList();
+	  eaForm.getIdentification().setYearsRange(yearsRange);
+	  
      
 	return mapping.findForward("addActivityStep1");
 }

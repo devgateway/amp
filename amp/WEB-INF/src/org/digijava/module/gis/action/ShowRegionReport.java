@@ -19,15 +19,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.form.GisRegReportForm;
 import org.digijava.module.gis.util.ActivityLocationFunding;
@@ -48,6 +46,17 @@ public class ShowRegionReport extends Action {
                                  HttpServletResponse response) throws Exception {
 
         response.setContentType("text/html");
+
+        TeamMember tm = null;
+        Long teamId = null;
+        boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+        if (curWorkspaceOnly) {
+            tm = (TeamMember)request.getSession().getAttribute("currentMember");
+            if (tm != null) {
+                AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
+                teamId = team.getAmpTeamId();
+            }
+        }
 
         GisRegReportForm gisRegReportForm = (GisRegReportForm) form;
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
@@ -71,9 +80,10 @@ public class ShowRegionReport extends Action {
                          31, 23, 59, 59);
 
         }
-        List secFundings;
+
         String secIdStr = gisRegReportForm.getSectorIdStr();
         Long secId = null;
+        Long prgId = null;
         int sectorQueryType = 0;
         if (secIdStr.startsWith("sec_scheme_id_")) {
             sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
@@ -81,17 +91,30 @@ public class ShowRegionReport extends Action {
         } else if (secIdStr.startsWith("sec_id_")) {
             sectorQueryType = DbUtil.SELECT_SECTOR;
             secId = new Long(secIdStr.substring(7));
+        } else if (secIdStr.startsWith("prj_id_")) {
+            sectorQueryType = DbUtil.SELECT_PROGRAM;
+            prgId = new Long(secIdStr.substring(7));
         } else {
             sectorQueryType = DbUtil.SELECT_DEFAULT;
             secId = new Long(secIdStr);
         }
 
-
-        if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){
+        List secFundings;
+        if (request.getParameter("donorid")!=null && !request.getParameter("donorid").equalsIgnoreCase("-1")){	
         	Long donorid =new Long(request.getParameter("donorid"));
-        	secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType);
+            if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+        	    secFundings = DbUtil.getSectorFoundingsByDonor(secId,donorid, sectorQueryType);
+            } else {
+                secFundings = DbUtil.getProgramFoundingsByDonor(prgId, donorid);
+            }
         }else{
-        	secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, null);
+
+            if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
+        	    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
+            } else {
+                secFundings = DbUtil.getProgramFoundings(prgId);
+            }
+
         }
 
         Long regLocId = Long.parseLong(request.getParameter("regLocId"));
@@ -110,14 +133,33 @@ public class ShowRegionReport extends Action {
         //FundingData totalFunding = (FundingData) fundingList[1];
 
         FundingData ammount = (FundingData) fundingLocationMap.
-                              get(gisRegReportForm.getRegCode());
+                              get(regLocId);
 
         Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
-        AmpSector selSector = SectorUtil.getAmpSector(gisRegReportForm.
-                getSectorId());
 
-        if (selSector != null) {
-            gisRegReportForm.setSelSectorName(selSector.getName());
+
+
+
+
+
+        //AmpSector selSector = SectorUtil.getAmpSector(secId, sectorQueryType);
+        String secName = null;
+        if (sectorQueryType == DbUtil.SELECT_SECTOR_SCHEME) {
+            AmpSectorScheme scheme = SectorUtil.getAmpSectorScheme(secId);
+            if (scheme != null) {
+                secName = scheme.getSecSchemeName();
+            }
+        } else {
+            AmpSector sec = SectorUtil.getAmpSector(secId);
+            if (sec != null) {
+                secName = sec.getName();
+            }
+        }
+
+
+
+        if (secName != null) {
+            gisRegReportForm.setSelSectorName(secName);
         } else {
             gisRegReportForm.setSelSectorName("All");
         }

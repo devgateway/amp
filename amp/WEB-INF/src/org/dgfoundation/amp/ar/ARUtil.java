@@ -66,7 +66,7 @@ public final class ARUtil {
 	 * @param getTabs if null gets both reports and tabs, on true only tabs, on false only reports
 	 * @return list of public reports
 	 */
-	public static ArrayList getAllPublicReports(Boolean getTabs) {
+	public static ArrayList getAllPublicReports(Boolean getTabs,String name) {
 		Session session = null;
 		ArrayList col = new ArrayList();
 		String tabFilter	= "";
@@ -79,9 +79,15 @@ public final class ARUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select r from " + AmpReports.class.getName()
 					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
+            if (name != null) {
+                queryString += " and r.name like :name ";
+            }
 			Query qry = session.createQuery(queryString);
 			if ( getTabs!=null )
 				qry.setBoolean("getTabs", getTabs);
+             if (name != null) {
+               qry.setString("name", '%' + name+ '%');
+            }
 
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ar = null;

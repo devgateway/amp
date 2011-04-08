@@ -394,7 +394,7 @@ public class ChartWidgetUtil {
 		JFreeChart chart = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
-        Font subTitleFont = new Font("Arial", Font.BOLD, 10);
+        Font subTitleFont = new Font("Arial", Font.BOLD, 11);
         CategoryDataset dataset =null;
         TextTitle subTitle=null;
         String titleType="";
@@ -485,7 +485,7 @@ public class ChartWidgetUtil {
 
 		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
 		numberAxis.setNumberFormatOverride(formatAxis);
-		numberAxis.setLabelFont(plainFont);
+		numberAxis.setLabelFont(subTitleFont);
 		Range oldRange = numberAxis.getRange();
 		Range newRange = Range.expand(oldRange, 0, 0.1);
 		numberAxis.setRange(newRange);
@@ -1989,7 +1989,7 @@ public class ChartWidgetUtil {
         oql += FundingPledgesDetails.class.getName()
                 + " fd inner join fd.pledgeid plg ";
         oql += " inner join  plg.organization org  ";
-        oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
+        oql += " where fd.fundingYear = :currentYear ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
@@ -1999,10 +1999,13 @@ public class ChartWidgetUtil {
         }
         Session session = PersistenceManager.getRequestDBSession();
         List<FundingPledgesDetails> fundingDets = null;
+        // Since there's no date for FundingPledgeDetail we use the year of the startDate from calendar
+        String currentYear = String.valueOf(startDate.getYear()+1900); 
+
         try {
             Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
+            query.setString("currentYear", currentYear);
+
             if (orgIds == null && orgGroupId != -1) {
                 query.setLong("orgGroupId", orgGroupId);
             }

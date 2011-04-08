@@ -129,81 +129,17 @@ function myclearDate(editBox, clearLink, checkboxId){
 											</logic:present>
 											</field:display>
 											
-											<field:display name="Proposed Approval Date" feature="Planning">
-											<tr>
-												<td width="20"0 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
-													<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
-													</a>
-												</td>
-												<td bgcolor="#ffffff">
-													<table cellpadding="0" cellspacing="0">
-														<tr>
-															<td>
-																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.originalAppDate" size="10"
-																styleId="originalAppDate" styleClass="inp-text" readonly="true" />
-																</a>
-															</td>
-															<td align="left" vAlign="center">&nbsp;
-																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
-																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
-																</a>
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											</field:display>
 											
-											<field:display name="Actual Approval Date" feature="Planning">
-											<tr>
-												<td width="20"0 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
-												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn>
-												</a>
-												</td>
-												<td bgcolor="#ffffff">
-													<table cellpadding="0" cellspacing="0">
-														<tr>
-															<td>
-																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
-																<html:text name="aimEditActivityForm" property="planning.revisedAppDate" size="10"
-																styleId="revisedAppDate" styleClass="inp-text" readonly="true"/>
-																</a>
-															</td>
-															<td align="left" vAlign="center">&nbsp;
-																<a id="clear2" href='javascript:myclearDate(document.getElementById("revisedAppDate"), "clear2", "sameAs1")'>
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
-																</a>
-																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
-																</a>
-															</td>
-															<td align="left" vAlign="center">&nbsp;
-																<field:display name="Same as Proposed Approval Date" feature="Planning">
-																	<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)" id="sameAs1">
-																	<digi:trn key="aim:sameAsProposedApprovalDate">Same as Proposed Approval Date</digi:trn>
-																</field:display>
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											</field:display>
-
 											<field:display name="Proposed Start Date" feature="Planning">
 											<tr>
 												<td width="20"0 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">&nbsp;
-   												<digi:trn key="aim:proposedStartDate">Proposed Start Date</digi:trn>
+													<a title="<digi:trn>Date (dd/mm/yy) when the project is expected to commence</digi:trn>">&nbsp;
+   														<digi:trn>Proposed Start Date</digi:trn>
 													</a>
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellpadding="0" cellspacing="0">
+													<table cellPadding="0" cellSpacing="0">
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">
@@ -216,7 +152,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
 																</a>
 															</td>
 														</tr>
@@ -228,9 +164,9 @@ function myclearDate(editBox, clearLink, checkboxId){
 											<field:display name="Actual Start Date" feature="Planning">
 											<tr>
 												<td width="20"0 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;
-													<digi:trn key="aim:actualStartDate">Actual Start Date </digi:trn>
-													</a>
+													<a title="<digi:trn>Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;
+														<digi:trn>Actual Start Date </digi:trn>
+												</a>
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellpadding="0" cellspacing="0">
@@ -253,6 +189,71 @@ function myclearDate(editBox, clearLink, checkboxId){
 																<field:display name="Same as Proposed Start Date" feature="Planning">
 																	<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)" id="sameAs2">
 																	<digi:trn key="aim:sameAsProposedStartDate">Same as Proposed Start Date</digi:trn>
+																</field:display>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											</field:display>
+											<field:display name="Proposed Approval Date" feature="Planning">
+											<tr>
+												<td width="20"0 bgcolor="#ffffff">
+													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
+														<digi:trn>Proposed Approval Date</digi:trn>
+													</a>
+												</td>
+												<td bgcolor="#ffffff">
+													<table cellpadding="0" cellspacing="0">
+														<tr>
+															<td>
+																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
+																<html:text name="aimEditActivityForm" property="planning.originalAppDate" size="10"
+																styleId="originalAppDate" styleClass="inp-text" readonly="true" />
+																</a>
+															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																</a>
+																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
+																</a>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											</field:display>
+											
+											<field:display name="Actual Approval Date" feature="Planning">
+											<tr>
+												<td width="20"0 bgcolor="#ffffff">
+													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
+														<digi:trn>Actual Approval Date </digi:trn>
+													</a>
+												</td>
+												<td bgcolor="#ffffff">
+													<table cellpadding="0" cellspacing="0">
+														<tr>
+															<td>
+																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
+																	<html:text name="aimEditActivityForm" property="planning.revisedAppDate" size="10"
+																	styleId="revisedAppDate" styleClass="inp-text" readonly="true"/>
+																</a>
+															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<a id="clear2" href='javascript:myclearDate(document.getElementById("revisedAppDate"), "clear2", "sameAs1")'>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
+																</a>
+																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border="0">
+																</a>
+															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<field:display name="Same as Proposed Approval Date" feature="Planning">
+																	<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)" id="sameAs1">
+																	<digi:trn key="aim:sameAsProposedApprovalDate">Same as Proposed Approval Date</digi:trn>
 																</field:display>
 															</td>
 														</tr>

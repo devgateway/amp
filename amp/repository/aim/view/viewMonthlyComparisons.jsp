@@ -108,6 +108,9 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimMonthlyInfoForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -150,7 +153,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <digi:form action="/monthlyComparisons.do" name="aimMonthlyInfoForm"
 
-type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
+type="org.digijava.module.aim.form.MonthlyInfoForm" method="get" styleId="myForm">
 
 
 
@@ -429,7 +432,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 												<TD>
 
-													<html:submit value="GO" styleClass="dr-menu"/>
+													<input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
 
 			                        	</TD>
 
@@ -828,6 +831,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 																</c:set>
 
 																<c:set target="${urlShowQuarterly}" property="tabIndex" value="2"/>
+																<c:set target="${urlShowQuarterly}" property="currency"  >
+																	<bean:write name="aimMonthlyInfoForm" property="currency"/>
+																</c:set>
 
 							<c:set var="translation">
 
@@ -940,5 +946,9 @@ setHoveredTable("dataTable", false);
 <script>
 if(document.getElementById('showBottomBorder').value=='1'){
 	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
+}
+function go() {
+	document.getElementById("myForm").action = "/aim/viewMonthlyComparisons.do";
+	document.getElementById("myForm").submit();
 }
 </script>

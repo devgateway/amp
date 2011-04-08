@@ -100,6 +100,7 @@ public class ManagePermissionMap extends MultiAction {
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 	Class permCatClass = pf.get_permissibleCategoriesMap().get(pf.getPermissibleCategory());
 	if(permCatClass==null) 	return mapping.getInputForward(); 
+	PermissionUtil.cleanGlobalPermissionMapForPermissibleClass(permCatClass);
 	Session hs= PermissionUtil.saveGlobalPermission(permCatClass,pf.getPermissionId(), pf.getPermissibleCategory());
 	if(hs!=null){
 		pf.setPermissionId(new Long(0));

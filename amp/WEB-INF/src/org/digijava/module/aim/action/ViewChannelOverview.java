@@ -234,6 +234,17 @@ public class ViewChannelOverview extends TilesAction {
 			}
 			formBean.setAllComments(allComments);
 
+			
+			try {
+				AmpCategoryValue budgetCV =  
+					CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, activity.getCategories() );
+				
+				formBean.setBudgetCV(budgetCV);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			// added by Akash
 			// desc: approval status check
 			// start
@@ -428,6 +439,13 @@ public class ViewChannelOverview extends TilesAction {
 			            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories())
 			            )
 			            );
+				        
+				        formBean.setProjectImplUnit(
+					            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+					                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+					            CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories())
+					            )
+					    );
 
 				        formBean.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
 		                CategoryManagerUtil.getAmpCategoryValueFromListByKey(

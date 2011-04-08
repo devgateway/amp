@@ -718,7 +718,7 @@ function submitForm(thisform){
 				                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
 				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
-				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
+				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;"><digi:trn>${evType.name}</digi:trn></html:option>
 				                                        </c:forEach>
 				                                 	</c:if>
 				                                 </html:select>

@@ -8,10 +8,16 @@
 		<form-bean name="gisFoundingDetailsForm" type="org.digijava.module.gis.form.GisFoundingDetailsForm"/>
 		<form-bean name="gisDemoForm" type="org.digijava.module.gis.form.GisDemoForm"/>
 		<form-bean name="gisRegReportForm" type="org.digijava.module.gis.form.GisRegReportForm"/>
+        <form-bean name="gisSettingsForm" type="org.digijava.module.gis.form.GisSettingsForm"/>
 	</form-beans>
 	
 	<action-mappings>
 		<action name="gisDashboardForm" path="/gis/pdfExport" scope="session" type="org.digijava.module.gis.action.PDFExportAction" validate="false" />
+
+
+    <action name="gisSettingsForm" path="/gis/showGisSettings" type="org.digijava.module.gis.action.ShowGisSettings" validate="false">
+        <forward name="forward" path="/showLayout.do?layout=gisSettingsLayout"/>
+    </action>
 
 	<action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=gisDashboardLayout"/>

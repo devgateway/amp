@@ -2,9 +2,12 @@ package org.dgfoundation.amp.exprlogic;
 
 import java.math.BigDecimal;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 
 /**
  * 
@@ -83,6 +86,9 @@ public class MathExpressionRepository {
 	public static final String PERCENTAGE_OF_DISBURSEMENT= "percentageOfDisbursement";
 	public static final String COMMITMENT_GAP= "commitmentGap";
 	
+	//@Deprecated
+	//public static final String MTEF_COLUMN	= "mtefColumn";
+	
 	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
 	
 	//public static final String PLEDGES_TOTAL = "totalpledge";
@@ -117,6 +123,7 @@ public class MathExpressionRepository {
 		buildUndisbursedCumulativeBalance();
 		buildUncommitedCumulativeBalance();
 		buildNumberOfProject();
+		buildMtefColumn();
 		buildCostingGrandTotal();
 		buildExecutionRate();
 		buildAverageDisbursementRate();
@@ -486,6 +493,25 @@ public class MathExpressionRepository {
 		try {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COSTING_GRAND_TOTAL, new BigDecimal(1));
 			expresions.put(COSTING_GRAND_TOTAL, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	/**
+	 * Costing MTEF column
+	 */
+	public static void buildMtefColumn() {
+		try {
+			List<AmpColumns> mtefCols	= DynamicColumnsUtil.getMtefColumns();
+			if ( mtefCols != null  ) {
+				for (AmpColumns col: mtefCols ) {
+					String colName		= col.getColumnName();
+					MathExpression m1 	= new MathExpression(MathExpression.Operation.MULTIPLY, colName, new BigDecimal(1));
+					expresions.put(colName, m1);
+				}
+			}
+			
 		} catch (Exception e) {
 			logger.error(e);
 		}

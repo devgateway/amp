@@ -358,7 +358,11 @@ public class GroupReportData extends ReportData {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
-			if(element.getItems().size()==0) i.remove(); else element.removeEmptyChildren();
+			if(element.getItems().size()==0) {
+				i.remove(); 
+			} else {
+				element.removeEmptyChildren();
+			}
 		}
 	}
 

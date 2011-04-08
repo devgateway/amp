@@ -266,6 +266,11 @@ div.fakefile2 input {
                               <html:radio property="layout" value="3" disabled="false" />
                               <br />
                               </td>
+                              <td align="center">
+                              <img src="/repository/content/view/layout_4.png" /><br />
+                              <html:radio property="layout" value="4" disabled="false" />
+                              <br />
+                              </td>
                             </tr>
                           </table>
 					</td>                      
@@ -287,7 +292,7 @@ div.fakefile2 input {
               </tr>
               <tr>
                 <td valign="top" bgcolor="#f4f4f2" align="left" style="border:1px dotted black;">
-                	<c:forEach var="layoutNumber" begin="1" end="3">
+                	<c:forEach var="layoutNumber" begin="1" end="4">
                     <c:set var="displayLayout">
                         <c:choose>
                             <c:when test="${contentForm.layout eq layoutNumber}">

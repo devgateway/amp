@@ -37,6 +37,7 @@ public class DataExchangeConstants {
 	public static final String MISSING_FINANCING_INSTRUMENT = "Missing financing instrument";
 	public static final String MISSING_TYPE_OF_ASSISTANCE = "Missing type of assistance";
 	public static final String MISSING_CURRENCY = "Missing currency";
+	public static final String MISSING_LOCATION = "Missing location";
 	
 	public static final String ACTIVITY_LOG = "Activity log";
 	

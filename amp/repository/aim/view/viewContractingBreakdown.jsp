@@ -11,7 +11,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<digi:instance property="aimViewContractingForm"/>
+
+<%@page import="java.math.BigDecimal"%><digi:instance property="aimViewContractingForm"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 
@@ -511,14 +512,81 @@ function projectFiche(id)
 											                                               </td>		
 											                                           </tr>
 										                                            </field:display>
+										                                            <field:display name="Contracting Amendments" feature="Contracting">
+		                                          		<bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>			                                              																	
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString() %>  &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td colspan="2">
+			                                                  <b><digi:trn>Amendments :</digi:trn></b>
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td>&nbsp;
+			                                              </td>
+			                                              <td>
+		                                                      <logic:notEmpty name="contract" property="amendments">
+		                                                      
+		                                                           <table width="100%">
+																    <tr>
+																		<th><digi:trn>Amount</digi:trn></th>
+																		<th><digi:trn>Currency</digi:trn></th>
+																		<th><digi:trn>Date</digi:trn></th>
+																		<th><digi:trn>Reference</digi:trn></th>																		
+																	</tr>
+			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >
+			                                                           <bean:define id="am" name="amendment" type="org.digijava.module.aim.dbentity.IPAContractAmendment"/>
+			                                                               <tr>
+			                                                                   <td align="center" valign="top">
+			                                                                    ${amendment.amoutStr}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.currency.currencyName}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                      ${amendment.amendDate} 
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.reference}
+			                                                                   </td>
+			                                                               </tr>
+			                                                           </c:forEach>
+		                                                           </table>
+		                                                       </logic:notEmpty>						
+			                                               </td>		
+			                                           </tr>
+		                                            </field:display>
                                                                                     </table>
-                                                                                    
-                                                                                    
                                                                              
                                                                                    </td></tr>
                                                                            
                                                                                   
                                                                                 </c:forEach>
+                                                                                
+                                                                                
+		                                          
                                                                                 </table>
                                                                                 
                                                                             </logic:notEmpty>

@@ -31,22 +31,21 @@ public class GetTeamActivities
 
     private static Logger logger = Logger.getLogger(GetTeamActivities.class);
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
         TeamActivitiesForm taForm = (TeamActivitiesForm) form;
-
         Long id = null;
 
         try {
-
             boolean permitted = false;
+            boolean adminView = false;
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
             if(session.getAttribute("ampAdmin") != null) {
                 String key = (String) session.getAttribute("ampAdmin");
                 if(key.equalsIgnoreCase("yes")) {
                     permitted = true;
+                    adminView = true;
                 } else {
                     if(session.getAttribute("teamLeadFlag") != null) {
                         key = (String) session.getAttribute("teamLeadFlag");
@@ -66,27 +65,34 @@ public class GetTeamActivities
             RepairDbUtil.repairDb();
 
             if(request.getParameter("id") != null){
-                id = new Long(Long.parseLong(request.getParameter("id")));
+                id = new Long(request.getParameter("id"));
             }else{
             	id=taForm.getTeamId();
             }
-            if (id!=null)
-             {
-                AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
-                if(appSettings != null) {
-                    numRecords = appSettings.getDefaultRecordsPerPage().intValue();
+           
+            if(adminView && request.getParameter("reset")==null){
+            	numRecords= taForm.getTempNumResults();
+            }else{
+            	if (id!=null){
+                    AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
+                    if(appSettings != null) {
+                        numRecords = appSettings.getDefaultRecordsPerPage().intValue();
+                    }
+                } else if(request.getAttribute("teamId") != null) {
+                    id = (Long) request.getAttribute("teamId");
+                    AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
+                    if(appSettings != null) {
+                        numRecords = appSettings.getDefaultRecordsPerPage().intValue();
+                    }
+                } else if(tm != null) {
+                    id = tm.getTeamId();
+                    if(tm.getAppSettings() != null)
+                        numRecords = tm.getAppSettings().getDefRecsPerPage();
                 }
-            } else if(request.getAttribute("teamId") != null) {
-                id = (Long) request.getAttribute("teamId");
-                AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
-                if(appSettings != null) {
-                    numRecords = appSettings.getDefaultRecordsPerPage().intValue();
-                }
-            } else if(tm != null) {
-
-                id = tm.getTeamId();
-                if(tm.getAppSettings() != null)
-                    numRecords = tm.getAppSettings().getDefRecsPerPage();
+            }
+            
+            if(request.getParameter("reset")!=null){
+            	taForm.setKeyword(null);
             }
             //taForm.setTeamId(id);
 
@@ -108,18 +114,18 @@ public class GetTeamActivities
                     Collection col = null;
                     if(tm.getTeamType() == null) {
                         if(ampTeam.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            col = TeamUtil.getManagementTeamActivities(id);
+                            col = TeamUtil.getManagementTeamActivities(id,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else if(ampTeam.getTeamCategory() != null) {
-                            col = TeamUtil.getAllTeamActivities(id);
+                            col = TeamUtil.getAllTeamActivities(id,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else {
                             //col = TeamUtil.getAllTeamActivities(id);
-                        	col = TeamUtil.getAllTeamAmpActivities(id,false);
+                        	col = TeamUtil.getAllTeamAmpActivities(id,false,taForm.getKeyword());
                             taForm.setDonorFlag(false);
                         }
                     }else {
-                        col = TeamUtil.getAllTeamActivities(id);
+                        col = TeamUtil.getAllTeamActivities(id,taForm.getKeyword());
                         taForm.setDonorFlag(false);
                     }
                     logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());
@@ -166,6 +172,9 @@ public class GetTeamActivities
                 taForm.setAllActivities(temp);
 
                 int totActivities = taForm.getAllActivities().size();
+                if(numRecords== -1 ){
+                	numRecords = totActivities;
+                }
                 int stIndex = ((page - 1) * numRecords) + 1;
                 int edIndex = 1;
                 if(page != 0) edIndex = page * numRecords;

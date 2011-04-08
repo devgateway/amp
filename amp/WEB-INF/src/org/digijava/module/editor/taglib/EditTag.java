@@ -140,7 +140,6 @@ public class EditTag
         if (admin) {
             if (getEditorBody() != null) {
                 editTag = getEditorBody() + "<a href=\"" +
-                    DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
                     "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
                         getNavigationLanguage(request).
                         getCode()+
@@ -149,7 +148,6 @@ public class EditTag
             }
             else {
               editTag = "<a href=\"" +
-                    DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
                     "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
                         getNavigationLanguage(request).
                         getCode()+"&referrer=" + refUrl +

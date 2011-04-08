@@ -121,7 +121,7 @@ function changeEventTypesState(){
 	              					</div>
 	            				</td>
 	            				<td style="padding:5px;width:140px;text-align:left;font-size:11px;" nowrap="nowrap">
-	             					<div style="white-space: nowrap;">${eventType.name}</div> 
+		             <div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
 	            				</td>
 	            				<td>
 	              					<html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>
@@ -163,7 +163,7 @@ function changeEventTypesState(){
 		<div style="padding:5px;width:210px;height:28px;">
 	 	<select id="publicFilter" class="inp-text" style="width: 200px; max-width: 200px;" onchange="changeState()" name="filter.showPublicEvents" >
 			<c:if test="${calendarViewForm.showPublicEvents == 0}">
-				<option selected="true" value="0">	
+				<option selected="selected" value="0">	
 			</c:if>
 			<c:if test="${calendarViewForm.showPublicEvents != 0}">
 				<option value="0">
@@ -172,7 +172,7 @@ function changeEventTypesState(){
 			</option>
 
 	  		<c:if test="${calendarViewForm.showPublicEvents == 1}">
-				<option selected="true" value="1">	
+				<option selected="selected" value="1">	
 			</c:if>
 			<c:if test="${calendarViewForm.showPublicEvents != 1}">
 				<option value="1">
@@ -181,7 +181,7 @@ function changeEventTypesState(){
 			</option>
 	  		
 			<c:if test="${calendarViewForm.showPublicEvents == 2}">
-				<option selected="true" value="2">	
+				<option selected="selected" value="2">	
 			</c:if>
 			<c:if test="${calendarViewForm.showPublicEvents != 2}">
 				<option value="2">

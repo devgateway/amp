@@ -54,7 +54,8 @@
 							  <tr>
 										<td align="right" valign="top">
 									  <digi:trn key="aim:issue">Issue</digi:trn>
-									  &nbsp; </td>
+									  &nbsp; 
+									 </td>
 							     <td valign="top">
 											 <a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
 												<html:textarea styleId="issue" property="issues.issue" styleClass="inp-text" rows="3" cols="60"/>
@@ -62,17 +63,18 @@
 									</tr>								
 									<field:display feature="Issues" name="Issue Date">
 									<tr>
-									  <td align="right"><digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
+									  <td align="right">
+									  	<digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
 								      &nbsp;</td>
-								      <td><html:text property="issues.issueDate" size="10"
-																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
-																
-																<a id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')">
+								     <td>
+									      	<html:text property="issues.issueDate" size="10" styleId="issueDate" styleClass="inp-text" readonly="true"/> 
+											<a class="nohoverlink" id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')" style="{display: none;}">
 	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1", document.getElementById("issueDate"),"clear1")'>
+											<a class="nohoverlink" id="date1" href='javascript:pickDateWithClear("date1", document.getElementById("issueDate"),"clear1")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-																</a></td>
+											</a>
+									</td>
 								  </tr>
 								  </field:display>
 									<tr>

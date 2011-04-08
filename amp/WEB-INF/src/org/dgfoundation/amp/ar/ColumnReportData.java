@@ -132,8 +132,6 @@ public class ColumnReportData extends ReportData {
 		 * So we use this set to verify what percentages were already summed up.*/
 		HashMap<Long,List> summedCellValues					= new HashMap<Long, List>();
 		
-		Cell fakeCell								= AmpReportGenerator.generateFakeCell(this, null);
-		
 		/* This will store the last MetaTextCell created manually -- for problem 2 */
 		MetaTextCell metaFakeCell					= null;
 		
@@ -148,6 +146,8 @@ public class ColumnReportData extends ReportData {
 
 		// create set with unique values for the filtered col:
 		Column keyCol = getColumn(columnName);
+		
+		Cell fakeCell = AmpReportGenerator.generateFakeCell(this, null, keyCol);
 
 		removeColumnsByName(columnName);
 
@@ -243,7 +243,7 @@ public class ColumnReportData extends ReportData {
 			while ( iter.hasNext() ) {
 				Entry<Long, Double> e		= iter.next();
 				if ( e.getValue() < 100.0 ) {
-					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey());
+					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol);
 					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, 100.0-e.getValue() );
 					metaFakeCell	= (MetaTextCell)fakeCell;
 					( (CellColumn)keyCol ).addCell(fakeCell);
@@ -255,7 +255,7 @@ public class ColumnReportData extends ReportData {
 		/* We create fake cells for all activities that would otherwise just disappear in the newly create GroupReportData */
 		for ( Long id: activitiesInColReport ){
 			logger.info("The following activity needs to be added to the Unallocated category: " + id );
-			fakeCell	= AmpReportGenerator.generateFakeCell(this, id);
+			fakeCell	= AmpReportGenerator.generateFakeCell(this, id, keyCol);
 			( (CellColumn)keyCol ).addCell(fakeCell);
 		}
 		/* If the unallocated category doesn't already exist we need to create it */
@@ -263,6 +263,7 @@ public class ColumnReportData extends ReportData {
 				&& !existsUnallocatedCateg  ) {
 			logger.info("Unallocated category was not created for " + keyCol.getColumnId() + ". Adding it now.");
 			ColumnReportData crd	= new ColumnReportData( (String) keyCol.getColumnId() + ": " + fakeCell.toString() );
+			//fakeCell.setValue(fakeCell.getValue() + keyCol.getName());
 			crd.setSplitterCell(fakeCell);
 			dest.addReport(crd);
 			catToIds.put(crd, new TreeSet<Long>()) ;

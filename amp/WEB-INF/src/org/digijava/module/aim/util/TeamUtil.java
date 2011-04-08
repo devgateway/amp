@@ -1581,7 +1581,7 @@ public class TeamUtil {
         return team;
     }
 
-    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft) {
+    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -1589,22 +1589,28 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "";
             Query qry = null;
+            queryString = "select act from "+ AmpActivity.class.getName() + " act where ";
             if(teamId == null) {
-            	//queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
-            	queryString ="select act from "+ AmpActivityGroup.class.getName()+" g " +
-    			" inner join g.ampActivityLastVersion act where  act.team is null";
-            	qry=session.createQuery(queryString);
+            	queryString += " act.team is null" ;
+            }else{
+            	queryString += " (act.team=:teamId)" ;
             }
-            else{
-            	//queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
-            	queryString ="select act from "+ AmpActivityGroup.class.getName()+" g " +
-            			" inner join g.ampActivityLastVersion act where (act.team=:teamId)";
-            	 if(!includedraft){
-                     queryString+="  and   (act.draft is null or act.draft=false) ";
-            	}
-            	qry=session.createQuery(queryString);
-            	qry.setParameter("teamId", teamId, Hibernate.LONG);
+            if(!includedraft){
+                queryString+="  and   (act.draft is null or act.draft=false) ";
             }
+            if(keyword!=null){
+              	queryString += " and lower(act.name) like lower(:name)" ;
+            }
+            
+            qry = session.createQuery(queryString);
+          	if(keyword!=null){
+              	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+            }
+          	if(teamId!=null){
+          		qry.setParameter("teamId", teamId, Hibernate.LONG);
+          	}       
+   
+   
             Iterator itr = qry.list().iterator();
             
             while(itr.hasNext()) {
@@ -1691,7 +1697,7 @@ public class TeamUtil {
         return flag;
     }
 
-    public static Collection getManagementTeamActivities(Long teamId) {
+    public static Collection getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
         Collection col = new ArrayList();
         String queryString = "";
@@ -1712,7 +1718,13 @@ public class TeamUtil {
                     params += id;
                 }
                 queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+") and (a.draft is null or a.draft=false)";
+                if(keyword!=null){
+                	queryString += " and lower(a.name) like lower(:name)" ;
+                }
                 qry = session.createQuery(queryString);
+                if(keyword!=null){
+                	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+                }                
 
                 itr = qry.list().iterator();
                 while(itr.hasNext()) {
@@ -1767,7 +1779,7 @@ public class TeamUtil {
 
  
     
-    public static Collection getAllTeamActivities(Long teamId) {
+    public static Collection getAllTeamActivities(Long teamId, String keyword) {
     	Session session = null;
 		Collection col = new ArrayList();
 
@@ -1783,7 +1795,13 @@ public class TeamUtil {
 				queryString+="where act.team is null";
 			}
             queryString+=" and   (act.draft is null or act.draft=false) ";
+            if(keyword!=null){
+            	queryString += " and lower(act.name) like lower(:name)" ;
+            }
 			qry = session.createQuery(queryString);
+            if(keyword!=null){
+            	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+            } 
 			
 			qry.setFetchSize(100);
 			ArrayList al=(ArrayList) qry.list();
@@ -2050,7 +2068,7 @@ public class TeamUtil {
      * @author Dare
      */
 
-    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId) {
+    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name) {
     
     	   Session session 	= null;
            List col 		= new ArrayList();
@@ -2076,12 +2094,20 @@ public class TeamUtil {
                    queryString = "select DISTINCT r from " + AmpReports.class.getName()
                        + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                        + AmpTeamReports.class.getName() 
-                       + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
+                       + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
+                      if (name != null) {
+                       queryString += " and r.name like :name ";
+                   }
+
+                   queryString +=  " order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                    qry.setParameter("teamid", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
+                   if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
                    }
@@ -2092,11 +2118,19 @@ public class TeamUtil {
                } else if (!inlcludeMemberReport){
                    queryString = "select r from "
                        + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                       + "  where " + tabFilter + " (tr.team=:teamId) order by r.name ";
+                       + "  where " + tabFilter + " (tr.team=:teamId)";
+                      if (name != null) {
+                       queryString += " and r.name like :name ";
+                   }
+
+                   queryString +=  " order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setLong("teamId", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
+                    if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
                    
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
@@ -2110,11 +2144,17 @@ public class TeamUtil {
    				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
+                  if(name!=null){
+                           queryString += " and r.name like :name";
+                  }
             	  qry = session.createQuery(queryString); 
             	  qry.setLong("ampTeamMemId", memberId);
              	  qry.setLong("teamId", teamId);
              	  if ( getTabs!=null )
              		  qry.setBoolean("getTabs", getTabs);
+                   if (name != null) {
+                       qry.setString("name", '%' + name + '%');
+                   }
             	  if (currentPage !=null){
                	   qry.setFirstResult(currentPage);
                   }
@@ -2178,7 +2218,7 @@ public class TeamUtil {
  }
 
     public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
-    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null);
+    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null,null);
     }
  
     /**
@@ -2329,7 +2369,7 @@ public class TeamUtil {
 
     public static Collection getAllUnassignedActivities() {
         //return getAllTeamActivities(null);
-    	return getAllTeamAmpActivities(null,true);
+    	return getAllTeamAmpActivities(null,true,null);
     }
 
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {

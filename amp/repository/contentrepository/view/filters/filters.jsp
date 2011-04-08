@@ -21,7 +21,7 @@
 
 <bean:define id="myFilterDivId" toScope="page" scope="request" name="filterDivId"/>
 
-<% pageContext.setAttribute("myFilterValues", new FilterValues() ); %>
+<% pageContext.setAttribute("myFilterValues", new FilterValues(request) ); %>
 
 <div id="${myFilterDivId}" style="display:none;">
 	<form>

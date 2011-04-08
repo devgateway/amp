@@ -76,6 +76,7 @@ public final class PermissionUtil {
 	    return scope;
 	}
 	
+	
 	/**
 	 * Deletes a permission and removes any references to objects associated with it
 	 * @param id the id of the permission to be removed
@@ -342,7 +343,34 @@ public final class PermissionUtil {
 
     }
     
-   
+    public static void cleanGlobalPermissionMapForPermissibleClass(Class permClass) {
+    	Session session = null;
+  	  try {
+  	    session = PersistenceManager.getRequestDBSession();
+  	    
+  	  Query query = session.createQuery("delete from "+PermissionMap.class.getName()+
+  			  " WHERE permissibleCategory=:categoryName AND objectIdentifier is null");
+  	  	query.setParameter("categoryName", permClass.getSimpleName());
+  	  	query.executeUpdate();
+  	  	
+  	  } catch (HibernateException e) {
+  	    logger.error(e);
+  	    throw new RuntimeException( "HibernateException Exception encountered", e);
+  	} catch (DgException e) {
+  		  logger.error(e);
+  		   throw new RuntimeException( "DgException Exception encountered", e);
+  	} finally { 
+  	    try {
+  		//PersistenceManager.releaseSession(session);
+  	    } catch (HibernateException e) {
+  		// TODO Auto-generated catch block
+  		throw new RuntimeException( "HibernateException Exception encountered", e);
+
+  	    }
+  	}
+    }
+	    
+  	 
     
     public static Long getGlobalPermissionMapIdForPermissibleClass(Class permClass) {
 	Session session = null;

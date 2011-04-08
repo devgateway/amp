@@ -123,17 +123,27 @@
 	                        </td>
 	                         <td width=150>  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
+	                                	<c:set var="columns">
+	                                  		<bean:write name="report" property="columns"/>
+	                                  	</c:set>
+	                                  	<c:forEach var="column" items="${fn:split(columns, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="columns"/>                                      
+	                                    		<digi:trn>${column}</digi:trn>                                    
 	                                  </li>
+	                                  	</c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="id"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
 	                                </span>
 	                                
 	                               	<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="id"/>'> 
+	                                  <c:set var="measures">
+	                                  	<bean:write name="report" property="measures"/>
+	                                  </c:set>	
+	                                  <c:forEach var="measure" items="${fn:split(measures, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="measures"/>  	                                      
+	                                    	<digi:trn>${measure}</digi:trn>                                    
 	                                   </li>
+	                                  </c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
@@ -231,17 +241,27 @@
 	                        </td>
 	                         <td width="150" class="inside">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
+	                                  	<c:set var="columns">
+	                                  		<bean:write name="report" property="columns"/>
+	                                  	</c:set>
+	                                  	<c:forEach var="column" items="${fn:split(columns, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="columns"/>                                      
+	                                    		<digi:trn>${column}</digi:trn>                                    
 	                                  </li>
+	                                  	</c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="id"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
 	                                </span>
 	                                
 	                               	<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="id"/>'> 
+	                                 	<c:set var="measures">
+		                                  	<bean:write name="report" property="measures"/>
+		                                </c:set>	
+		                                <c:forEach var="measure" items="${fn:split(measures, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="measures"/>  	                                      
+		                                    	<digi:trn>${measure}</digi:trn>                                    
 	                                   </li>
+		                                </c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
@@ -279,7 +299,7 @@
  				<br>
  				<tr>
  				</feature:display>
- 				<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports">
+ 				<feature:display name="Pledges Default Reports" module="Pledge Reports">
 					<td align="left" valign="center" style="font-size:12px; padding-bottom:10px;">
 							<span class=subtitle-blue><b>
             					<digi:trn>Pre-loaded Pledges Reports</digi:trn>
@@ -348,17 +368,27 @@
 	                        
 	                         <td width="150" class="inside" bgColor=#C0D6E2>  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
+	                            	<c:set var="columns">
+	                               		<bean:write name="report" property="columns"/>
+	                                </c:set>
+	                                <c:forEach var="column" items="${fn:split(columns, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="columns"/>                                      
+	                                    	<digi:trn>${column}</digi:trn>                                    
 	                                  </li>
+	                                </c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="id"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
 	                                </span>
 	                                
 	                               	<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="id"/>'> 
+		                            	<c:set var="measures">
+		                                  	<bean:write name="report" property="measures"/>
+		                                </c:set>	
+		                                <c:forEach var="measure" items="${fn:split(measures, ',')}">
 	                                  <li>
-	                                  	<bean:write name="report" property="measures"/>  	                                      
+		                                    	<digi:trn>${measure}</digi:trn>                                    
 	                                   </li>
+		                                </c:forEach>
 	                                </div>
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>

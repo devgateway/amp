@@ -28,10 +28,17 @@
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
   <c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
-  	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">&nbsp;</td>
+  	<td style="background-color:#EAEAEA;" class="clsTableTitleColHtml">
+  		<% if ( curDepth == 1 ) {  %>
+		<logic:notEmpty name="reportMeta" property="hierarchies">
+       		${reportMeta.hierarchiesPath}
+		</logic:notEmpty>
+		<%} %>
+		&nbsp;
+  	</td>
   </c:if>
   <%boolean first=true; %>
-    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
+    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
       <%
       column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
@@ -45,18 +52,23 @@
       	if(first && (token!=null || total!=null)){%>
       	
       	<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
-      	  <td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "> </td>	
+      	  <td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "></td>	
         <%}
         first=false;
         %>
-		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
+		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column" >
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
         
         <logic:equal name="column" property="columnDepth" value="1">
         	
-        	<td style="border-bottom:#E2E2E2 0px solid;background-color:#EAEAEA;padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>          
+        	<td style="border-bottom:#E2E2E2 0px solid;background-color:#EAEAEA;padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        	  		<logic:notEmpty name="reportMeta" property="hierarchies">
+		           		<c:if test="${colIndexId==0 && (reportMeta.hideActivities == null || !reportMeta.hideActivities)}">
+		           			${reportMeta.hierarchiesPath}<br/> 
+		           		</c:if>
+		           </logic:notEmpty>
 	        		<c:choose>
 	            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == column.name}">
 	            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", ! filterBean.getSortByAsc() ); %>
@@ -100,7 +112,7 @@
         				<td style="background-color:#EAEAEA; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
 					<%}else{%>
-						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>zzzzzzzzzz
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	
           		<%}%>
           		</c:when>

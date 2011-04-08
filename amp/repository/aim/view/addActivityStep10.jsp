@@ -254,25 +254,14 @@
 						<tr>
 							<td>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home ">
-										<digi:trn>
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
-
-
-
-<c:set var="message">
-<digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
+									<c:set var="message">
+									<digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<c:set var="quote">'</c:set>
+									<c:set var="escapedQuote">\'</c:set>
+									<c:set var="msg">
+									${fn:replace(message,quote,escapedQuote)}
+									</c:set>
 
 									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')"
 									title="Click here to view MyDesktop ">
@@ -280,7 +269,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											Portfolio
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
+								
                                                                  <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
 
                                                                      <c:set property="translation" var="trans">

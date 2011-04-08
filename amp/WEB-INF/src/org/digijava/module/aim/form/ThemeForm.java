@@ -114,7 +114,17 @@ public class ThemeForm extends ActionForm {
       	private String[] alphaPages;
         private String alpha;
 
-        public String getAlpha() {
+        private Boolean showInRMFilters;
+
+    public Boolean getShowInRMFilters() {
+        return showInRMFilters;
+    }
+
+    public void setShowInRMFilters(Boolean showInRMFilters) {
+        this.showInRMFilters = showInRMFilters;
+    }
+
+    public String getAlpha() {
             return alpha;
         }
 

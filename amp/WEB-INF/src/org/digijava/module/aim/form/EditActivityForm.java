@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -107,6 +108,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
      * This collection represents the list of surveys available in the Paris Indicator page.
      */
     private Collection<SurveyFunding> surveyFundings = null;
+    private int draftRedirectedPage;
+
+    public int getDraftRedirectedPage() {
+        return draftRedirectedPage;
+    }
+
+    public void setDraftRedirectedPage(int draftRedirectedPage) {
+        this.draftRedirectedPage = draftRedirectedPage;
+    }
 
 	public Collection<SurveyFunding> getSurveyFundings() {
 		return surveyFundings;
@@ -368,7 +378,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Identification {
 		
 		private String ampId = null;
-		private Integer budget;
+		//private Integer budget;
+		private Long budgetCV;
+		private Long budgetCVOff;
+		private Long budgetCVOn;
+		
+		
 		private AmpTeam team;
 		
 		private String title = null;
@@ -413,7 +428,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String actAthFirstName;
 		private String actAthLastName;
 		private String conditions;
+		
 		private String FY;
+		
+		private List<LabelValueBean> yearsRange;
+		private String[] selectedFYs;
+		private Boolean resetselectedFYs;
+		
 		private String vote;
 		private String subVote;
 		private String subProgram;
@@ -448,7 +469,33 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long statusId = null;
 		private String statusReason = null;
 		
+		private Long projectImplUnitId;
+		
 	
+		public List<LabelValueBean> getYearsRange() {
+			return yearsRange;
+		}
+
+		public void setYearsRange(List<LabelValueBean> yearsRange) {
+			this.yearsRange = yearsRange;
+		}
+
+		public String[] getSelectedFYs() {
+			return selectedFYs;
+		}
+
+		public Boolean getResetselectedFYs() {
+			return resetselectedFYs;
+		}
+
+		public void setResetselectedFYs(Boolean resetselectedFYs) {
+			this.resetselectedFYs = resetselectedFYs;
+		}
+
+		public void setSelectedFYs(String[] selectedFYs) {
+			this.selectedFYs = selectedFYs;
+		}
+
 		public ArrayList<AmpOrganisation> getBudgetorgs() {
 			return budgetorgs;
 		}
@@ -915,12 +962,38 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.ampId = ampId;
 		}
 
-		public Integer getBudget() {
-			return budget;
+//		public Integer getBudget() {
+//			return budget;
+//		}
+//
+//		public void setBudget(Integer budget) {
+//			this.budget = budget;
+//		}
+		
+		
+		public Long getBudgetCV() {
+			return budgetCV;
+		}
+		
+		public void setBudgetCV(Long budgetCV) {
+			this.budgetCV = budgetCV;
+		}
+		
+
+		public Long getBudgetCVOff() {
+			return budgetCVOff;
 		}
 
-		public void setBudget(Integer budget) {
-			this.budget = budget;
+		public void setBudgetCVOff(Long budgetCVOff) {
+			this.budgetCVOff = budgetCVOff;
+		}
+
+		public Long getBudgetCVOn() {
+			return budgetCVOn;
+		}
+
+		public void setBudgetCVOn(Long budgetCVOn) {
+			this.budgetCVOn = budgetCVOn;
 		}
 
 		public AmpTeam getTeam() {
@@ -1008,6 +1081,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setPreviousApprovalStatus(String previousApprovalStatus) {
 			this.previousApprovalStatus = previousApprovalStatus;
 		}
+		
 	
 		/**
 		 * @return the chapterCode
@@ -1093,6 +1167,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setStatusReason(String statusReason) {
 			this.statusReason = statusReason;
+		}
+
+		public Long getProjectImplUnitId() {
+			return projectImplUnitId;
+		}
+
+		public void setProjectImplUnitId(Long projectImplUnitId) {
+			this.projectImplUnitId = projectImplUnitId;
 		}
 
 	}
@@ -4503,6 +4585,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 				this.costing.overallContribution=null;
 				this.costing.overallCost = null;
 			}
+
+            clearMessages();
+            this.draftRedirectedPage=1; // Desktop
 		}
 		if (this.getLocation().isLocationReset()) {
 			this.getLocation().reset(mapping, request);

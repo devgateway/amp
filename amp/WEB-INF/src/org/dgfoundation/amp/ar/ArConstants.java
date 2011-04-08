@@ -43,11 +43,13 @@ public final class ArConstants {
 	
 	public final static String FUNDING_TYPE="Funding Type";
 	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
+	public final static String TERMS_OF_ASSISTANCE_TOTAL="Total";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
 	public final static String FISCAL_Y="FISCAL_Y";
 	public final static String FISCAL_M="FISCAL_M";
 	public final static String QUARTER="Quarter";
+	public final static String QUARTERS_TOTAL="Total";
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
 	public final static String SOURCE_FUNDING="Source Funding";
@@ -56,6 +58,9 @@ public final class ArConstants {
 
 	
 	public final static String DONOR="Donor Agency";
+	public final static String MODE_OF_PAYMENT="Mode of Payment";
+	public final static String FUNDING_STATUS="Funding Status";
+	
 	public final static String DONOR_GROUP="Donor Group";
 	public final static String DONOR_TYPE_COL="Donor Type";
 	
@@ -165,6 +170,7 @@ public final class ArConstants {
 	public final static String COLUMN_FUNDING="Funding";
 	public final static String COLUMN_PROPOSED_COST="Proposed Project Cost";
 	public final static String COSTING_GRAND_TOTAL="Grand Total";
+	public final static String MTEF_COLUMN = "MTEF";
 	
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
@@ -222,6 +228,8 @@ public final class ArConstants {
 	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
 	public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
 	
+	
+	public static final String PLEDGES_REPORT="pledgereport";
 	
 	//Columns order names
 	public static final String PLEDGES_COLUMNS="Pledges Columns";

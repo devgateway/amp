@@ -87,8 +87,12 @@ public class ViewMonthlyInfo extends TilesAction {
             }
         }
         session.setAttribute("filterParams", fp);
+        String fpCurrencyCode = fp.getCurrencyCode();
+		if(monthlyForm.getCurrency() != null) {
+			fp.setCurrencyCode(monthlyForm.getCurrency());
+		}
 
-        monthlyForm.setCurrency(fp.getCurrencyCode());
+        //monthlyForm.setCurrency(fp.getCurrencyCode());
         monthlyForm.setFiscalCalId(fp.getFiscalCalId().longValue());
         monthlyForm.setFromYear(fp.getFromYear());
         monthlyForm.setToYear(fp.getToYear());
@@ -145,7 +149,7 @@ public class ViewMonthlyInfo extends TilesAction {
             }
             monthlyForm.setMonthlyInfoList(monthlyInfos);
 
-        
+            fp.setCurrencyCode(fpCurrencyCode);
 
 
 

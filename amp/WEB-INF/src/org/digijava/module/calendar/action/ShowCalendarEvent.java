@@ -299,6 +299,7 @@ public class ShowCalendarEvent extends Action {
         	}        	
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
+                ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
         		return mapping.findForward("success");        		
         	}else{
         		  

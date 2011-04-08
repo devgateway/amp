@@ -62,6 +62,24 @@
 		}		  
 	}
 
+
+	function resetSearch() {
+		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivities.do"/>     
+		url = "<%= searchOrg %>?reset=true";
+	     document.aimTeamActivitiesForm.action = url;
+	     document.aimTeamActivitiesForm.submit();
+		 return true;
+
+	}
+
+	function searchActivity(teamId) {
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivities.do"/>
+		     url = "<%= searchOrg %>?id="+teamId;
+		     document.aimTeamActivitiesForm.action = url;
+		     document.aimTeamActivitiesForm.submit();
+			 return true;
+	}
+
 -->
 
 </script>
@@ -113,6 +131,42 @@
 						<bean:write name="aimTeamActivitiesForm" property="teamName" />
 					</span></td>
 				</tr>-->
+				<!-- filter -->
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td width="195">
+									<digi:trn>Keyword</digi:trn>&nbsp;
+									<html:text property="keyword" styleClass="inp-text" />
+								</td>
+								<td width="120">
+									<digi:trn>Results</digi:trn>&nbsp;
+									<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+										<html:option value="10">10</html:option>
+										<html:option value="20">20</html:option>
+										<html:option value="50">50</html:option>
+										<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+									</html:select>
+								</td>
+								<td>
+									<c:set var="trnResetBtn">
+										<digi:trn>Reset</digi:trn>
+									</c:set>
+									<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+								</td>
+								<td>					
+									<c:set var="trnGoBtn">
+										<digi:trn> GO </digi:trn>
+									</c:set>
+									<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+								</td>
+							</tr>
+						</table>
+					</td>
+					
+				</tr>
+				
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="1000" cellspacing="1" align="center">
@@ -183,6 +237,8 @@
 															<c:set var="clickToViewNextPage">
 																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
 															</c:set>	
+																<c:set target="${urlParams1}" property="keyword" value="${aimTeamActivitiesForm.keyword}"/>
+																<c:set target="${urlParams1}" property="tempNumResults" value="${aimTeamActivitiesForm.tempNumResults}"/>	
 																<digi:link href="/teamActivities.do" name="urlParams1" title="${clickToViewNextPage}" >
 																	<%=pages%>
 																</digi:link>

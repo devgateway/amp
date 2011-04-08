@@ -25,6 +25,7 @@
 	</div>
 </div>
 
+
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
 		YAHOOAmp.amptab.init = function() {
@@ -43,13 +44,27 @@
 		    context: ["showbtn", "tl", "bl"] 
 		    }
 		     );
-	
+         
 		function initScripts() {
 			var msgP5="\n<digi:trn key='aim:saving'>Saving</digi:trn>";
 			mySavePanel.setHeader(msgP5);
 			mySavePanel.setBody("");
 			mySavePanel.render(document.body);
-			savePanelStart = 0;
+            savePanelStart = 0;
+            var   saveAsDraftPanel = new YAHOOAmp.widget.Panel("saveAsDraftPanel", {
+            width: "350px",
+            fixedcenter: true,
+            constraintoviewport: true,
+            underlay: "shadow",
+            close: true,
+            visible: false,
+            modal:true,
+            draggable: false
+        });
+            saveAsDraftPanel.render();
+            YAHOOAmp.util.Event.addListener("saveAsDraft", "click", saveAsDraftPanel.show, saveAsDraftPanel, true);
+            YAHOOAmp.util.Event.addListener("saveAsDraftCanceld", "click", saveAsDraftPanel.hide, saveAsDraftPanel, true);
+
 		}
 	
 		function showLoadingSave() {
@@ -104,7 +119,44 @@
 	
 </style>
 
+<script language="JavaScript">
+var responseSuccessForCommitmentsValidation = function(o){
+    /* Please see the Success Case section for more
+     * details on the response object's properties.
+     * o.tId
+     * o.status
+     * o.statusText
+     * o.getResponseHeader[ ]
+     * o.getAllResponseHeaders
+     * o.responseText
+     * o.responseXML
+     * o.argument
+     */     
+     var respXML = o.responseText ;
+     if(respXML.indexOf("No_Alert_Needed")==-1){
+         if(confirm(respXML)==false){
+             return false;
+         }
+     }
+     save();
+}
 
+var responseFailureForCommitmentsValidation = function(o){
+    alert('<digi:trn jsFriendly="true">Connection Failure!</digi:trn>');
+}
+
+var callbackForCommitmentsValidation =
+{
+success:responseSuccessForCommitmentsValidation,
+failure:responseFailureForCommitmentsValidation
+};
+
+function validateCommitments(){
+	<digi:context name="valComm" property="context/module/moduleinstance/validateAmounts.do"/>
+    var url="<%=valComm%>";
+    YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackForCommitmentsValidation);
+}
+</script>
 
 <script language="JavaScript">
 <!--
@@ -121,11 +173,13 @@ function previewClicked() {
 }
 
 function saveClicked() {
-  var draftStatus=document.getElementById("draftFlag");
+  var draftStatus=document.getElementById("draftFlag");  
   if(draftStatus!=null){
     draftStatus.value=false;
-  }
-  save();
+    validateCommitments();
+  }else{
+	  save();  
+  }  
  
 }
 
@@ -142,7 +196,19 @@ function save() {
   var flag = true;//validateForm();
   if (flag == true) {
    /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
+   
   	showLoadingSave();
+
+  	//departments reset or not
+	var selFYs=document.getElementById('FYsSel');
+    var fy = document.getElementById('FYs');
+    if(fy!=null && fy.value!='' && fy.value!=0)
+	    if(selFYs!=null && selFYs.value!='' && selFYs.value!=0){
+	    	document.getElementById('FYs').value=false;
+	    }else{
+	    	document.getElementById('FYs').value=true;
+	    }
+
   	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";
@@ -877,7 +943,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 				<field:display name="Draft" feature="Identification">
 				<tr>
 					<td align="center">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
+						<html:button  styleClass="dr-menu" styleId="saveAsDraft" property="submitButton">
 							<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>
 						</html:button>
 					</td>
@@ -891,3 +957,24 @@ of ActivityUtil class also when change step visibility module/feature name -->
 		</td>
 	</tr>
 </table>
+<div id="saveAsDraftPanel">
+    <div class="hd" style="text-align: left"><digi:trn>Save as Draft</digi:trn></div>
+    <div class="bd" style="text-align: center">
+        <p>
+        <digi:trn>Where would you like to navigate after save action?</digi:trn>
+        </p>
+        <html:radio  value="1" property="draftRedirectedPage">
+            <digi:trn>Go to the desktop</digi:trn>
+        </html:radio>
+          <html:radio  value="2" property="draftRedirectedPage">
+            <digi:trn>Stay on the activity page</digi:trn>
+        </html:radio>
+      <br/>
+      <html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
+			<digi:trn key="aim:saveAsDraft">Save draft</digi:trn>
+       </html:button>
+       <input type="button" id="saveAsDraftCanceld" class="dr-menu" value="<digi:trn>Cancel</digi:trn>"/>
+    </div>
+    <div class="ft"></div>
+</div>
+

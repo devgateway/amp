@@ -131,7 +131,9 @@ function preview(id)
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
-
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimYearlyComparisonsForm" property="currency"/>
+</c:set>
 
 
 
@@ -176,7 +178,7 @@ function preview(id)
 
 <digi:form action="/yearlyComparisonsFilter.do" name="aimYearlyComparisonsForm"
 
-type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
+type="org.digijava.module.aim.form.YearlyComparisonsForm" method="get" styleId="myForm">
 
 <html:hidden property="ampActivityId" />
 
@@ -185,7 +187,6 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 <html:hidden property="transactionType" />
 
 <html:hidden property="tabIndex" />
-
 
 
 <TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
@@ -482,7 +483,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 												<TD>
 
-													<html:submit value="GO" styleClass="dr-menu"/>
+													<input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
 
 			                        	</TD>
 
@@ -817,6 +818,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																<c:set target="${urlShowQuarterly}" property="tabIndex"  >
 																	<bean:write name="aimYearlyComparisonsForm" property="tabIndex"/>
 																</c:set>
+																<c:set target="${urlShowQuarterly}" property="currency"  >
+																	<bean:write name="aimYearlyComparisonsForm" property="currency"/>
+																</c:set>
 
 
 
@@ -930,6 +934,11 @@ setHoveredTable("dataTable", false);
 <script>
 if(document.getElementById('showBottomBorder').value=='1'){
 	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
+}
+
+function go() {
+	document.getElementById("myForm").action = "/aim/viewYearlyComparisons.do";
+	document.getElementById("myForm").submit();
 }
 </script>
 

@@ -203,13 +203,13 @@ addLoadEvent(addpanel);
 			</a>
 		</td>
 
-<!-- 
+
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
- -->		
+		
 		<feature:display name="Show Printer Friendly option" module="Public Reports">
 			<td noWrap align=left valign="center">
 				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">

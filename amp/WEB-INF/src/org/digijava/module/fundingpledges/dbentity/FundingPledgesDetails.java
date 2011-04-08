@@ -31,6 +31,7 @@ public class FundingPledgesDetails {
 	private Long pledgetypeid;
 	private Long typeOfAssistanceid;
 	private Long aidmodalityid;
+	private String fundingYear;
 	
 	public long getId() {
 		return id;
@@ -67,14 +68,19 @@ public class FundingPledgesDetails {
 		this.setCurrency(CurrencyUtil.getAmpcurrency(currencycode));
 	}
 	public java.sql.Timestamp getFunding_date() {
-		return funding_date;
+        Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
+        return retVal;
 	}
+	
+	@Deprecated
 	public void setFunding_date(java.sql.Timestamp fundingDate) {
 		this.funding_date = fundingDate;
-		java.util.Date date1 = new java.util.Date(fundingDate.getTime());
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String fundingDateStr = formatter.format(date1);
-        this.fundingDate = fundingDateStr;
+		if (fundingDate!=null) {
+			java.util.Date date1 = new java.util.Date(fundingDate.getTime());
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        String fundingDateStr = formatter.format(date1);
+	        this.fundingDate = fundingDateStr;
+		} 
 	}
 	
 	public AmpCategoryValue getPledgetype() {
@@ -82,7 +88,11 @@ public class FundingPledgesDetails {
 	}
 	public void setPledgetype(AmpCategoryValue pledgetype) {
 		this.pledgetype = pledgetype;
-		this.pledgetypeid = pledgetype.getId();
+		if (pledgetype==null) {
+			this.pledgetypeid = -1l;
+		} else {
+			this.pledgetypeid = pledgetype.getId();
+		}
 	}
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
@@ -122,23 +132,32 @@ public class FundingPledgesDetails {
 	/**
 	 * @return the fundingDate
 	 */
+	@Deprecated
 	public String getFundingDate() {
 		return fundingDate;
 	}
 	/**
 	 * @param fundingDate the fundingDate to set
 	 */
+	@Deprecated
 	public void setFundingDate(String fundingDate) {
 		this.fundingDate = fundingDate;
-		try {
-			DateFormat formatter ;
-			java.util.Date date ;
-			formatter = new SimpleDateFormat("dd/MM/yyyy");
-			date = formatter.parse(fundingDate);
-			this.funding_date = new Timestamp(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
+		if (fundingDate!=null && fundingDate.length()>0) {
+			try {
+				DateFormat formatter ;
+				java.util.Date date ;
+				formatter = new SimpleDateFormat("dd/MM/yyyy");
+				date = formatter.parse(fundingDate);
+				this.funding_date = new Timestamp(date.getTime());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
-
+	}
+	public String getFundingYear() {
+		return fundingYear;
+	}
+	public void setFundingYear(String fundingYear) {
+		this.fundingYear = fundingYear;
 	}
 }

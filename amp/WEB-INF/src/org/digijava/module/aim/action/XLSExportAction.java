@@ -72,7 +72,7 @@ public class XLSExportAction extends Action {
 		
 		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
 	     response.setContentType("application/msexcel");
-	     	response.setHeader("Content-Disposition","attachment; filename=exportedReport.xls");
+	     	response.setHeader("Content-Disposition","attachment; filename="+ rd.getName().replace(" ","_") +".xls");
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
 	        //
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");

@@ -128,6 +128,10 @@ function preview(id)
 	<%=new String("0")%>
 </c:set>
 
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimYearlyInfoForm" property="currency"/>
+</c:set>
+
 
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -172,7 +176,9 @@ function preview(id)
 <c:set target="${urlAll}" property="tabIndex">
 	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
 </c:set>
-
+<c:set target="${urlAll}" property="currency"  >
+	<bean:write name="aimYearlyInfoForm" property="currency"/>
+</c:set>
 
 
 <jsp:useBean id="urlDiscrepancy" type="java.util.Map" class="java.util.HashMap"/>
@@ -194,7 +200,7 @@ function preview(id)
 </c:set>
 
 
-<digi:form action="/yearlyInfoFilter.do" name="aimYearlyInfoForm" type="org.digijava.module.aim.form.YearlyInfoForm" method="post">
+<digi:form action="/yearlyInfoFilter.do" name="aimYearlyInfoForm" type="org.digijava.module.aim.form.YearlyInfoForm" method="get" styleId="myForm">
 
 
 
@@ -205,7 +211,6 @@ function preview(id)
 <html:hidden property="transactionType" />
 
 <html:hidden property="tabIndex" />
-
 
 
 <TABLE cellspacing="0" cellpadding="0" align="center" vAlign="top" border="0" width="100%">
@@ -512,7 +517,8 @@ function preview(id)
 
 												<TD>
 
-													<html:submit  styleClass="dr-menu"><digi:trn key="btn:go">Go</digi:trn></html:submit>
+													<input type="button" styleClass="dr-menu" onclick="javascript:go();" value="<digi:trn>Go</digi:trn>"/>
+													
 
 			                        	</TD>
 
@@ -812,5 +818,10 @@ setHoveredTable("dataTable", false);
 <script>
 if(document.getElementById('showBottomBorder').value=='1'){
 	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
+}
+
+function go() {
+	document.getElementById("myForm").action = "/aim/viewYearlyInfo.do";
+	document.getElementById("myForm").submit();
 }
 </script>

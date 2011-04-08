@@ -34,6 +34,9 @@ import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -274,6 +277,8 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
 	
+	private Set<AmpCategoryValue> projectImplementingUnits = null; 
+	
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
@@ -293,6 +298,13 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			String siteId = site.getId().toString();
+			String locale = navigationLanguage.getCode();
+			ampReport.setSiteId(siteId);
+			ampReport.setLocale(locale);
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
 					this.generatedFilterQuery = initialPledgeFilterQuery;
 			}
@@ -362,13 +374,13 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		
-		Long defaulCalenadarId=null;
+		Long defaultCalendarId=null;
 		
 		if (tempSettings!=null){
 			if (tempSettings.getFiscalCalendar()!=null){
-				defaulCalenadarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+				defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
 			}else{
-				defaulCalenadarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
+				defaultCalendarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
 			}
 		}	
 		///Set the range depending of workspase setup / global setting and selected calendar
@@ -393,8 +405,7 @@ public class AmpARFilter extends PropertyListable {
 			
 			
 			
-			if (renderStartYear!=null && calendarType != null && renderStartYear!=-1
-					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
@@ -423,8 +434,7 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 			
-			if (renderEndYear!=null && calendarType != null && renderStartYear!=-1 
-					&& defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
+			 if (renderEndYear!=null && renderEndYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
@@ -464,7 +474,8 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request) {
-		if (request.getSession().getAttribute("pledgereport") != null && request.getSession().getAttribute("pledgereport").toString().equalsIgnoreCase("true")){
+		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
+				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
 		
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
@@ -517,6 +528,7 @@ public class AmpARFilter extends PropertyListable {
 		Set<String> activityStatus = new HashSet<String>();
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
+		activityStatus.add(Constants.STARTED_APPROVED_STATUS);
 		String NO_MANAGEMENT_ACTIVITIES="";
 		if("Management".equals(this.getAccessType()))
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +
@@ -705,6 +717,9 @@ public class AmpARFilter extends PropertyListable {
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
 
+		String PROJECT_IMPL_UNIT_FILTER = "SELECT amp_activity_id FROM v_project_impl_unit WHERE proj_impl_unit_id IN ("
+			+ Util.toCSString(projectImplementingUnits) + ")";
+
 //		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
 //				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
 //				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
@@ -842,7 +857,7 @@ public class AmpARFilter extends PropertyListable {
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.activityIndexDirectory, "all", indexText);
+				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {
@@ -926,6 +941,9 @@ public class AmpARFilter extends PropertyListable {
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
 		
+		if(projectImplementingUnits!=null && projectImplementingUnits.size() > 0){
+			queryAppend(PROJECT_IMPL_UNIT_FILTER);
+		}
 		
 		if (donorGroups != null && donorGroups.size() > 0)
 			queryAppend(DONOR_GROUP_FILTER);
@@ -1698,6 +1716,15 @@ public class AmpARFilter extends PropertyListable {
 	public void setRelatedLocations(
 			Collection<AmpCategoryValueLocations> relatedLocations) {
 		this.relatedLocations = relatedLocations;
+	}
+
+	public Set<AmpCategoryValue> getProjectImplementingUnits() {
+		return projectImplementingUnits;
+	}
+
+	public void setProjectImplementingUnits(
+			Set<AmpCategoryValue> projectImplementingUnits) {
+		this.projectImplementingUnits = projectImplementingUnits;
 	}
 
 

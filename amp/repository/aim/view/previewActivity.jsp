@@ -19,7 +19,8 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-<script language="JavaScript1.2" type="text/javascript"
+
+<%@page import="java.math.BigDecimal"%><script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -395,6 +396,7 @@ function collapseAll() {
 											</td>
 									</tr>
 								</field:display>
+ 
 									<field:display name="Contract Number" feature="Planning">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" class="t-name" >                                        
@@ -413,29 +415,19 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.identification.title}"/>&nbsp;										</td>
 									</tr>
 									</field:display>
-								                  
-						 			<field:display feature="Identification" name="Project Comments">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
-										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
-										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-                                        <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
-											<digi:edit key="${projcomKey}"></digi:edit>
-                                            </c:if>&nbsp;										</td>
-									</tr>
-									</field:display>
-                                  
-                                  <field:display name="NPD Clasification" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
-										<td class="v-name" bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>&nbsp;										
-										</td>
-									</tr>
-									</field:display>
-                                  
-                                    
+									
+								     <field:display name="Status" feature="Identification">
+                                        <tr>
+	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0"  class="t-name" ><digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
+	                                        <td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+	                                        	<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
+	                                        </td>
+                                        </tr>
+                                        <tr>
+	                                        <td valign="top" nowrap="nowrap" bgcolor="#f0f0f0"></td>
+	                                        <td bgcolor="#f0f0f0" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
+                                        </tr>
+                                    </field:display> 
                                     <!--Begin Objectives --->
 			     					<field:display feature="Identification" name="Objectives">
 			      					<field:display feature="Identification" name="Objective">
@@ -500,7 +492,8 @@ function collapseAll() {
 						 			<field:display feature="Identification" name="Description">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:description">
-											 Description</digi:trn>										</td>
+											 Description</digi:trn>
+										</td>
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
                                         <c:if test="${aimEditActivityForm.identification.description!=null}">
 											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
@@ -509,6 +502,30 @@ function collapseAll() {
 										&nbsp;</td>
 									</tr>
 									</field:display>
+
+								                  
+						 			<field:display feature="Identification" name="Project Comments">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
+										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
+										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+                                        <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
+											<digi:edit key="${projcomKey}"></digi:edit>
+                                            </c:if>&nbsp;										</td>
+									</tr>
+									</field:display>
+                                  
+                                  <field:display name="NPD Clasification" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
+										<td class="v-name" bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>&nbsp;										
+										</td>
+									</tr>
+									</field:display>
+                                  
+                                    
 									
 									<field:display name="Lessons Learned" feature="Identification">
 										<TR>
@@ -685,6 +702,21 @@ function collapseAll() {
 &nbsp;										&nbsp;</td>
 									</tr>
 									</field:display>
+									
+									<field:display name="Project Implementing Unit" feature="Identification">
+										<tr>
+											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">
+												<digi:trn>Project Implementing Unit</digi:trn>
+											</td>
+											<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+												<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
+												</c:if>
+												&nbsp;&nbsp;
+											</td>
+										</tr>
+									</field:display>
+									
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name"><digi:trn key="aim:acChapter">A.C. Chapter</digi:trn>										</td>
@@ -776,22 +808,29 @@ function collapseAll() {
 										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
 										<div id="budget_dots">...</div>
 										<div id="act_budget" style="display: none;">
-										<field:display name="On/Off Budget" feature="Budget">	
+										<field:display name="On/Off/Treasure Budget" feature="Budget">
 
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="1">
-										<digi:trn>Activity is On Budget</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="0">
-										<digi:trn>Activity is Off Budget</digi:trn>
-										</logic:equal>
-										<logic:equal name="aimEditActivityForm" property="identification.budget" value="-1">
-										<digi:trn>Budget Unallocated</digi:trn>
-										</logic:equal>
-										
+											<c:choose>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+												<digi:trn>Activity is On Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOff}">
+												<digi:trn>Activity is Off Budget</digi:trn>
+												</c:when>
+												<c:when test="${aimEditActivityForm.identification.budgetCV==0}">
+												<digi:trn>Budget Unallocated</digi:trn>
+												</c:when>
+												<c:otherwise>
+													<digi:trn>Activity is On</digi:trn>  
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.budgetCV}" />
+												</c:otherwise>
+											</c:choose>	
+										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 										<p/>
 										<field:display name="Project Code" feature="Budget">
 											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/> 
 										</field:display>										
+										</c:if>									
 																					
                                         <c:if test="${!empty aimEditActivityForm.identification.chapterForPreview}">
 										<digi:trn>Code Chapitre</digi:trn>:
@@ -934,33 +973,51 @@ function collapseAll() {
 													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
+												
+												<field:display name="Proposed Start Date" feature="Planning">
+													<tr>
+														<td width="32%"><digi:trn>Proposed Start Date</digi:trn></td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.originalStartDate}
+														</td>
+													</tr>
+												</field:display>
+												<field:display name="Actual Start Date" feature="Planning">
+													<tr>
+														<td width="32%">
+															<digi:trn>Actual Start Date </digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.revisedStartDate}
+														</td>
+													</tr>
+												</field:display>												
 
 												<field:display name="Proposed Approval Date" feature="Planning">
-												<tr>
-													<td width="32%">
-														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
-													</td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalAppDate}													</td>
-												</tr>
+													<tr>
+														<td width="32%">
+															<digi:trn>Proposed Approval Date</digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.originalAppDate}
+														</td>
+													</tr>
 												</field:display>
 												<field:display name="Actual Approval Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedAppDate}													</td>
-												</tr>
+													<tr>
+														<td width="32%">
+															<digi:trn>Actual Approval Date </digi:trn>
+														</td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.revisedAppDate}
+														</td>
+													</tr>
 												</field:display>
-												<field:display name="Proposed Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.originalStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%">													
@@ -975,37 +1032,35 @@ function collapseAll() {
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>
+													</td>
 												</tr>
 												</field:display>
-												<field:display name="Actual Start Date" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.revisedStartDate}													</td>
-												</tr>
-												</field:display>
+												
 												<field:display name="Proposed Completion Date" feature="Planning">
-												<c:if test="${!aimEditActivityForm.editAct}">
-												<tr>
-													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
-													Proposed Completion Date</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-														${aimEditActivityForm.planning.proposedCompDate}													</td>
-												</tr>
-												</c:if>
+												<%--<c:if test="${!aimEditActivityForm.editAct}">--%>
+													<tr>
+														<td width="32%">
+															<digi:trn>Proposed Completion Date</digi:trn></td>
+														<td width="1">:</td>
+														<td align="left">
+															${aimEditActivityForm.planning.proposedCompDate}
+														</td>
+													</tr>
+												<%--</c:if>--%>
 												</field:display>
 												<field:display name="Current Completion Date" feature="Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:currentCompletionDate">
-													Current Completion Date</digi:trn></td>
+													<td width="32%">
+														<digi:trn>Current Completion Date</digi:trn>
+													</td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>
+													</td>
 												</tr>
 												</field:display>
+												<!-- 
 												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
@@ -1029,24 +1084,14 @@ function collapseAll() {
 												</tr>
 												</c:if>
 												</field:display>
+												 -->
 											</table>
 											</div>										</td>
 									</tr>
                                     <!--END 15-->
                                      </feature:display>
                                     <!--16-->
-                                    <field:display name="Status" feature="Identification">
-                                        <tr>
-	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
-	                                        <td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
-	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/>
-	                                        </td>
-                                        </tr>
-                                        <tr>
-	                                        <td valign="top" nowrap="nowrap" bgcolor="#f0f0f0"></td>
-	                                        <td bgcolor="#f0f0f0" ><c:out value="${aimEditActivityForm.identification.statusReason}"/></td>
-                                        </tr>
-                                    </field:display>                                   
+                                 
                                    
 								<module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
@@ -1147,15 +1192,59 @@ function collapseAll() {
                                     
                                     <field:display name="Implementation Level" feature="Location">	  
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f0f0f0" class="t-name">											<digi:trn key="aim:level">Level</digi:trn>										</td>
-										<td bgcolor="#FFFFFF" style="border-bottom:2px solid #f0f0f0">
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+											<digi:trn key="aim:level">Implementation Level</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.location.levelId>0}" >
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
 											</c:if>										</td>
 									</tr>
 									</field:display>
+									
+									<field:display name="Implementation Location" feature="Location">	  
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+											<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
+											</c:if>										</td>
+									</tr>
+									</field:display>
                             </feature:display>   
                             <!--19-->
+                            
+                            <feature:display name="Program" module="Program">
+                            <field:display name="National Planning Objectives" feature="NPD Programs">                       
+                          	<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">	
+                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
+                                                  <img id="npo_plus"  onclick="toggleGroup('npo')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="npo_minus" onclick="toggleGroup('npo')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
+							</td>
+							<td bgcolor="#ffffff">
+							<div id="npo_dots">...</div>
+							<div id="act_npo" style="display: none;">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
+                                                          <p/>
+                                                                                 ${nationalPlanObjectivePrograms.hierarchyNames}
+                                                                    ${nationalPlanObjectivePrograms.programPercentage}%
+                                                                                                                            
+                                                          </c:forEach>
+
+                                                        </c:if>
+							</div>
+							</td>
+							</tr>
+						</field:display>
+                        </feature:display>    
+                          
+                            
+                            
                             <feature:display name="Sectors" module="Project ID and Planning">
                                             
                                             <tr>
@@ -2720,6 +2809,72 @@ function collapseAll() {
                                                                                         </tr>		
                                                                                         
                                                                                         
+		                                          <field:display name="Contracting Amendments" feature="Contracting">
+		                                          		<bean:define id="ct" name="contract" type="org.digijava.module.aim.dbentity.IPAContract"/>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:IPA:newPopup:donorContractFundinAmount">Part du contrat financé par le bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>			                                              																	
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getDonorContractFundinAmount()).toPlainString() %>  &nbsp;&nbsp;&nbsp;&nbsp;${contract.donorContractFundingCurrency.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat part du bailleur</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountDonorContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyDonor.currencyName}
+			                                              </td>
+			                                          </tr>
+		                                          		<tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn>Montant total du contrat comprise la part de l'Etat</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; <%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString() %> &nbsp;&nbsp;&nbsp;&nbsp;${contract.totalAmountCurrencyCountry.currencyName}
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td colspan="2">
+			                                                  <b><digi:trn>Amendments :</digi:trn></b>
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td>&nbsp;
+			                                              </td>
+			                                              <td>
+		                                                      <logic:notEmpty name="contract" property="amendments">
+		                                                      
+		                                                           <table width="100%">
+																    <tr>
+																		<th><digi:trn>Amount</digi:trn></th>
+																		<th><digi:trn>Currency</digi:trn></th>
+																		<th><digi:trn>Date</digi:trn></th>
+																		<th><digi:trn>Reference</digi:trn></th>																		
+																	</tr>
+			                                                           <c:forEach  items="${contract.amendments}" var="amendment" >
+			                                                           <bean:define id="am" name="amendment" type="org.digijava.module.aim.dbentity.IPAContractAmendment"/>
+			                                                               <tr>
+			                                                                   <td align="center" valign="top">
+			                                                                    ${amendment.amoutStr}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.currency.currencyName}
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                      ${amendment.amendDate} 
+			                                                                   </td>
+			                                                                   <td align="center" valign="top">
+			                                                                       ${amendment.reference}
+			                                                                   </td>
+			                                                               </tr>
+			                                                           </c:forEach>
+		                                                           </table>
+		                                                       </logic:notEmpty>						
+			                                               </td>		
+			                                           </tr>
+		                                            </field:display>
                                                                                     </table>
                                                                                     
                                                                                     

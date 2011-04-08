@@ -153,7 +153,7 @@ public class ImportBuilder {
 		ArrayList<FreeTextType> titlesList=(ArrayList<FreeTextType>) actType.getTitle();
 		for (Iterator iterator = titlesList.iterator(); iterator.hasNext();) {
 			FreeTextType title = (FreeTextType) iterator.next();
-			AmpActivity act = ActivityUtil.getActivityByName(title.getValue());
+			AmpActivity act = ActivityUtil.getActivityByName(title.getValue(),null);
 			if (act != null) {
 				logger.debug("Activity with the name " + actType + " already exist.");
 				return true;
@@ -904,7 +904,13 @@ public class ImportBuilder {
 					activity.setProjectCode(aft.getValue().substring(8, 11));
 				}
 				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					activity.setBudget(new Integer(1));
+					try{
+						AmpCategoryValue onCV	= CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+						CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -1034,7 +1040,7 @@ public class ImportBuilder {
 			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
 			//else 
-				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
+			ampFundDet.setTransactionAmount(new Double(fundDet.getAmount().doubleValue()));
 			fundDetails.add(ampFundDet);
 		}
 		

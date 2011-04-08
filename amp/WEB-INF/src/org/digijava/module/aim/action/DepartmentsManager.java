@@ -7,19 +7,18 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.form.DepartmentsManagerForm;
-import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.budget.form.BudgetManagerForm;
 import org.digijava.module.budget.helper.BudgetDbUtil;
 
 public class DepartmentsManager extends MultiAction{
 
 	@Override
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		
 		HttpSession session = request.getSession();
 	     if (session.getAttribute("ampAdmin") == null) {
@@ -37,9 +36,7 @@ public class DepartmentsManager extends MultiAction{
 	}
 
 	@Override
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (request.getParameter("new")!=null && request.getParameter("new").equalsIgnoreCase("true")){
 			return modeNew(mapping, form, request, response);
 		}
@@ -47,14 +44,27 @@ public class DepartmentsManager extends MultiAction{
 			return modeDelete(mapping, form, request, response);
 		}
 		
+		if(request.getSession().getAttribute("duplicateDepratment")!=null){
+			ActionMessages errors= new ActionMessages();
+			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists", request)));
+			saveErrors(request, errors);
+			
+			request.getSession().removeAttribute("duplicateDepratment");
+		}
+		
 		 return mapping.findForward("forward");
 		
 	}
 	
-	public ActionForward modeNew(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward modeNew(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		DepartmentsManagerForm dform = (DepartmentsManagerForm) form;
+		if(BudgetDbUtil.existsDepartment(dform.getDepartmentname(), dform.getDepartmentcode(), null)){
+			ActionMessages errors= new ActionMessages();
+			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists", request)));
+			saveErrors(request, errors);			
+			dform.setDepartments(BudgetDbUtil.getDepartments());
+			return mapping.findForward("forward");
+		}
 		
 		AmpDepartments dep = new AmpDepartments();
 		dep.setName(dform.getDepartmentname());
@@ -64,9 +74,7 @@ public class DepartmentsManager extends MultiAction{
 		return modeFinalize(mapping, form, request, response);
 	}
 	
-	public ActionForward modeFinalize(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+	public ActionForward modeFinalize(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		DepartmentsManagerForm dform = (DepartmentsManagerForm) form;
 		dform.setDepartmentcode(null);
 		dform.setDepartmentname(null);
@@ -74,9 +82,7 @@ public class DepartmentsManager extends MultiAction{
 		return mapping.findForward("forward");
 	}
 	
-	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Long id = new Long(request.getParameter("id"));
 		BudgetDbUtil.DeleteDepartment(id);
 		

@@ -39,18 +39,22 @@ public class EditDepartment extends Action {
 		}
 		
 		if (request.getParameter("edit") != null) {
-			modeEdit(eform);
+			modeEdit(eform,request);
 			return mapping.findForward("forward");
 		}
 		return mapping.findForward("forward");
 	}
 
-	public void modeEdit(EditDepartmentForm eform) {
+	public void modeEdit(EditDepartmentForm eform,HttpServletRequest request) {
 		if (eform.getId() != null) {
-			AmpDepartments dep = BudgetDbUtil.getBudgetDepartmentById(eform.getId());
-			dep.setName(eform.getDepname());
-			dep.setCode(eform.getDepcode());
-			BudgetDbUtil.UpdateBudgetDepartment(dep);
+			if(BudgetDbUtil.existsDepartment(eform.getDepname(), eform.getDepcode(), eform.getId())){
+				request.getSession().setAttribute("duplicateDepratment", "exists") ;
+			}else{
+				AmpDepartments dep = BudgetDbUtil.getBudgetDepartmentById(eform.getId());
+				dep.setName(eform.getDepname());
+				dep.setCode(eform.getDepcode());
+				BudgetDbUtil.UpdateBudgetDepartment(dep);
+			}
 		}
 	}
 }

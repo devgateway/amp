@@ -115,7 +115,12 @@ function unload() {
 								<tr>
 							<% } %>
 							<td class="inside">
-								<c:out value="${info}"/>
+										<logic:equal value="Workspace Manager" name="info">
+											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
+										</logic:equal>
+										<logic:equal value="Workspace Member" name="info">
+											<digi:trn key="aim:workspaceMember">Workspace Member</digi:trn>
+										</logic:equal>
 							</td>
 							
 							<% if ((i%2) != 0) { %>

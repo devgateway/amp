@@ -23,7 +23,7 @@
   .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
   <%boolean first=true; %>
-    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
+    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
      <%
       column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
@@ -62,6 +62,9 @@
             	</c:choose>				
 	            <logic:equal name="widget" scope="request" value="true">
 	              <a class="ins_title_reg" style="cursor:pointer;color:#000000; text-align: center;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>~${sortAscString}');">
+	              		<logic:notEmpty name="reportMeta" property="hierarchies">
+			           		<c:if test="${colIndexId==0}">${reportMeta.hierarchiesPath}<br/> </c:if>
+			           </logic:notEmpty>
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>

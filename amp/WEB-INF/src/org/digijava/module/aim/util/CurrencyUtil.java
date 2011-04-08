@@ -568,8 +568,9 @@ public class CurrencyUtil {
 	 * Saves currency rates to the database
 	 * @param currRates Collection of CurrencyRates object which need
 	 * to be saved
+	 * @throws Exception 
 	 */
-	public static void saveCurrencyRates(Collection currRates, String baseCurrencyCode) {
+	public static void saveCurrencyRates(Collection currRates, String baseCurrencyCode) throws Exception {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
@@ -613,17 +614,21 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");
 			e.printStackTrace(System.out);
+			
 			if (tx != null) {
 				try {
 					tx.rollback();
+					
 				} catch (Exception rbf) {
 					logger.error("Rollback failed");
 				}
 			}
+			throw e;
 		} finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
+					
 				} catch (Exception rsf) {
 					logger.error("Release session failed");
 				}

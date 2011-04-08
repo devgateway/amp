@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,5 +114,17 @@ public class IPAContractAmendment implements Serializable, Cloneable {
 	protected Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+	public String getAmoutStr() {
+		String amountStr = "";
+		if (amount != null) {
+			amountStr = BigDecimal.valueOf(amount).toPlainString();
+		}
+		return amountStr;
+	}
+
+	public void setAmoutStr(String amountStr) {
+		amount = Double.valueOf(amountStr);
 	}
 }

@@ -32,6 +32,14 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.mondrian.query.QueryThread;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,6 +55,8 @@ import com.tonbeller.wcf.component.RendererParameters;
 import com.tonbeller.wcf.controller.RequestContext;
 import com.tonbeller.wcf.controller.RequestContextFactoryFinder;
 import com.tonbeller.wcf.utils.XmlUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 
 public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 	/**
@@ -67,6 +77,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 				&& request.getParameter("type") != null) {
 			try {
 				String xslUri = null;
+				String currency = QueryThread.getCurrency();
 				int type = Integer.parseInt(request.getParameter("type"));
 				switch (type) {
 				case XML:
@@ -173,10 +184,38 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							ExporterHelper helper = new ExporterHelper(wb);
 							
 							NodeList rowslist = document.getElementsByTagName("row");
+							
+							String textamount = null;
+							String textcurrency = null;
+							String currencytext = null;
+							//for translation purposes
+							Site site = QueryThread.getSite();
+							Locale navigationLanguage = QueryThread.getLocale();
+							
+							if (site != null && location !=null){
+								String siteId=site.getId().toString();
+								String locale=navigationLanguage.getCode();	
+							
+								if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+									textamount = TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
+								}
+							
+								if(currency!= null) {
+									AmpCurrency currobj = CurrencyUtil.getCurrencyByCode(currency);
+									textcurrency=TranslatorWorker.translateText(currobj.getCountryName(),locale,siteId);
+									currencytext = TranslatorWorker.translateText("Currency",locale,siteId);
+								}
+							
+								helper.addMergenoBorder(rowslist.getLength()+1, 0, rowslist.getLength()+1, 1);
+								HSSFRow currencyrow = wb.getSheet("data").createRow((short) (rowslist.getLength()+1));
+								helper.addCellBlue(textamount + " - " + currencytext +" : " + textcurrency,0 , currencyrow);
+							}
+							
+							
 							for (int i = 0; i < rowslist.getLength(); i++) {
 								HSSFRow row = wb.getSheet("data").createRow((short) (i));
 								NodeList rownode = rowslist.item(i).getChildNodes();
-								int coloffset = 0;
+								
 								for (int j = 0; j < rownode.getLength(); j++) {
 									Node currentnode = rownode.item(j);
 									int rowspan=0;
@@ -184,62 +223,37 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 									if (currentnode.getNodeName().equalsIgnoreCase("corner")){
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										if (rowspan >1 && colspan<=1){
-											helper.addMerge(i, j, rowspan-1, j);
-											for (int k = i; k < rowspan; k++) {
-												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
-													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
-													Attr offset = document.createAttribute("offset");
-													offset.setNodeValue("1");
-													if (element.getParentNode()!=currentnode.getParentNode()){
-														element.setAttributeNode(offset);
-													}
-												}
-											}
-										}else if (colspan >1 && rowspan<=1){
-											helper.addMerge(i, j, i, colspan-1);
-											coloffset = colspan;
-										}else if (colspan >1 && rowspan>1){
+										if (colspan >1){
 											helper.addMerge(i, j, rowspan-1, colspan-1);
 											for (int k = i; k < rowspan; k++) {
 												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
 													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
 													Attr offset = document.createAttribute("offset");
 													offset.setNodeValue(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-													if (element.getParentNode()!=currentnode.getParentNode()){
-														element.setAttributeNode(offset);
-													}
+													element.setAttributeNode(offset);
 												}
 											}
 										}
-										
-										
-									}else if (currentnode.getNodeName().equalsIgnoreCase("column-heading")|| 
-													currentnode.getNodeName().equalsIgnoreCase("heading-heading")){
+									}else if (currentnode.getNodeName().equalsIgnoreCase("column-heading")){
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										if (colspan >1){
+											//Temporal Fix for AMP-6656 TODO :Review the exportation process.
+											if (i>rowspan)rowspan = i;
+											if (j>colspan)rowspan = j;
+											helper.addMerge(i, j, rowspan, colspan);
+										}
 										int colid =j;
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
 										}
-										if (coloffset>0){
-											colid = colid + coloffset; 
-										}
-										
-										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
-										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										String style = "column-heading-"+ currentnode.getAttributes().getNamedItem("style").getNodeValue();
-										if (colspan >1){
-											helper.addMerge(i, colid, i, colspan+colid-1);
-											coloffset =coloffset + colspan-1;
-										}
-										
 										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
-										helper.addCaption(text, colid, row,style);
+										helper.addCaption(text, colid, row);
 										
 									}else if (currentnode.getNodeName().equalsIgnoreCase("row-heading")){
 										int colid =j;
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
-										String style = "row-heading-"+ currentnode.getAttributes().getNamedItem("style").getNodeValue();
 										if (rowspan >1){
 											helper.addMerge(i, j, (rowspan+i)-1, j);
 											for (int k = i+1; k < rowspan+i; k++) {
@@ -262,20 +276,32 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
 										}
 										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
-										helper.addCaption(text, colid, row,style);
-									
+										helper.addCaption(text, colid, row);
+										
+									}else if (currentnode.getNodeName().equalsIgnoreCase("heading-heading")){
+										int colid =j;
+										if(currentnode.getAttributes().getNamedItem("offset")!=null){
+											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
+										}
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										
+										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
+										helper.addCaption(text, colid, row);
+										
 									}else if (currentnode.getNodeName().equalsIgnoreCase("cell")){
 										int colid =j;
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
 										}
-										String style = currentnode.getAttributes().getNamedItem("style").getNodeValue();
 										if(currentnode.getAttributes().getNamedItem("rawvalue")!=null){
-											helper.addCell(currentnode.getAttributes().getNamedItem("rawvalue").getNodeValue(), colid, row,style);
+											helper.addCell(currentnode.getAttributes().getNamedItem("rawvalue").getNodeValue(), colid, row);
 										}else{
-											helper.addCell("0", colid, row,style);
+											helper.addCell("0", colid, row);
 										}
 									}
+									
+									
 										sheet.autoSizeColumn((short)j);
 									}
 								}

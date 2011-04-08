@@ -645,10 +645,35 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</feature:display>
+						
+						<module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Regional Observations" module="Regional Observations">
+								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="10">
+									<LI>
+		                               	<a name="node">
+		                                    <div>
+												<digi:trn>Regional Observations</digi:trn>								
+		                                    </div>
+		                                </a>
+									</LI>
+								</logic:equal>
+								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="10">
+		                        	<c:set target="${urlTabs}" property="tabIndex" value="10"/>
+		                            	<LI>
+		                                	<span>
+		                                		<digi:link href="/viewRegionalObservations.do" name="urlTabs">
+			                                		<div title='<digi:trn>Click here to view Regional Observations</digi:trn>'>
+			                                    		<digi:trn>Regional Observations</digi:trn>
+			                                		</div>
+		                                		</digi:link>
+		                                	</span>
+										</LI>
+								</logic:notEqual>
+							</feature:display>
+						</module:display>
 					</UL>		
 				</DIV>	
             	</DIV>
-				</TD></TR>
 			</TABLE>
 		</TD>
 	</TR>

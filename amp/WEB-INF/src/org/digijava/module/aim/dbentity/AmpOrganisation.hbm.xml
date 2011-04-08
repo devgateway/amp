@@ -17,7 +17,7 @@
 		<property name="orgCode" column="org_code" type="java.lang.String" />
 		<property name="budgetOrgCode" column="budget_org_code" type="java.lang.String" />
 		<property name="orgGroup" column="org_group" type="java.lang.String" />
-
+		<property name="fundingorgid" column="funding_org_id" type="java.lang.String" />
 		<property name="address" column="address" type="java.lang.String" />
 		<property name="orgUrl" column="org_url" type="java.lang.String" />
 		<property name="acronym" column="acronym" type="java.lang.String" />

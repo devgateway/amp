@@ -154,37 +154,24 @@ else {
 									<tr>
 										<td>
 											<span class=crumb>
-												<c:if test="${aimEditActivityForm.pageId == 0}">
-													<c:set var="translation">
-														<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-													</c:set>
-													<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-														<digi:trn key="aim:AmpAdminHome">
-															Admin Home
-														</digi:trn>
-													</digi:link>&nbsp;&gt;&nbsp;
-												</c:if>
-												<c:if test="${aimEditActivityForm.pageId == 1}">
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 													</c:set>
 													<c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
+													<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+													</c:set>
+													<c:set var="quote">'</c:set>
+													<c:set var="escapedQuote">\'</c:set>
+													<c:set var="msg">
+													${fn:replace(message,quote,escapedQuote)}
+													</c:set>
 													<digi:link href="/viewMyDesktop.do" styleClass="comment"
 													onclick="return quitRnot1('${msg}')" title="${translation}" >
 														<digi:trn key="aim:portfolio">
 															Portfolio
 														</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-												</c:if>
-                                                                                                           
-                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+								<c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
                                
                                <c:set property="translation" var="trans">
                                    <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
@@ -333,15 +320,14 @@ ${fn:replace(message,quote,escapedQuote)}
 																					<field:display name="Total Donor Commitments" feature="Regional Funding">
 																					<tr>
                                                                                         <td>
-                                                                                            &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>
-                                                                                                
+                                                                                            &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>                                                                                                
                                                                                             <html:select property="regFundingPageCurrCode" styleClass="inp-text" onchange="totalsPage()">
                                                                                                 <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
                                                                                                     <c:if test="${currency.currencyCode!=aimEditActivityForm.regFundingPageCurrCode}">
                                                                                                         <option value="<c:out value="${currency.currencyCode}"/>">
                                                                                                     </c:if>
                                                                                                     <c:if test="${currency.currencyCode==aimEditActivityForm.regFundingPageCurrCode}">
-                                                                                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
+                                                                                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="selected">
                                                                                                         </c:if>
                                                                                                         <c:out value="${currency.currencyName}" />
                                                                                                     </option>

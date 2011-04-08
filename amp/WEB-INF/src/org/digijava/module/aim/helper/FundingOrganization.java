@@ -18,7 +18,17 @@ public class FundingOrganization implements Comparable{
 	String delegatedCooperationString;
 	Boolean delegatedPartner;
 	String delegatedPartnerString;
+	String fundingorgid;
 	
+	public String getFundingorgid() {
+		return fundingorgid;
+	}
+
+	public void setFundingorgid(String fundingorgid) {
+		this.fundingorgid = fundingorgid;
+	}
+
+
 	
 	
 	public Long getAmpOrgId() {

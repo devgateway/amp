@@ -32,7 +32,7 @@
 <digi:instance property="aimEditActivityForm" />
 	<module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT">
 		<feature:display name="Regional Observations" module="Regional Observations">
-
+			<field:display name="Regional Observations" feature="Regional Observations">
 				<table width="95%" bgcolor="#f4f4f2">
 					<tr>
 						<td>
@@ -66,10 +66,10 @@
 													<td vAlign="center" align="left" bgcolor="#dbe5f1">
 																  <div style="display:block;padding:2px;font-size:10pt;">
 																	<c:out value="${observations.name}"/>
-																	
-	  																<br/>
+																	<field:display name="Regional Observations Date" feature="Regional Observations">
+	  																	<br/>
 																		<strong><c:out value="${observations.issueDate}"/></strong>
-																	
+																	</field:display>
 																	<br/>
 																	</div>
 																	<button onclick="updateObservations('<c:out value="${observations.id}"/>');return false;" title='<digi:trn>Edit this observation</digi:trn>' class="buton"><digi:trn>Edit observation</digi:trn></button>
@@ -79,7 +79,7 @@
 																	<a href="javascript:removeObservation('${observations.id}')" title="Delete this issue"><digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" /></a>
 	-->
 																	<field:display feature="Regional Observations" name="Measures Taken">
-																		<field:display name="Add Measures Link" feature="Regional Observations">
+																		<field:display name="Regional Observations Add Measures Link" feature="Regional Observations">
 																			<button onclick="javascript:addMeasures('<c:out value="${observations.id}"/>'); return false;" class="buton" title='<digi:trn>Add Measures</digi:trn>'>
 																				<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
 																			</button>
@@ -111,7 +111,7 @@
 	      																</div>
 	      																<button class="buton" onclick="updateMeasures('<c:out value="${observations.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Edit this measure</digi:trn>'><digi:trn>Edit measure</digi:trn></button>
 	      																<button class="buton" onclick="removeMeasure('<c:out value="${observations.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Delete this measure</digi:trn>'><digi:trn>Delete measure</digi:trn></button>
-																				<field:display name="Add Actors Link" feature="Regional Observations">
+																				<field:display name="Regional Observations Add Actors Link" feature="Regional Observations">
 																					<button class="buton" onclick="addActors('<c:out value="${observations.id}"/>','<c:out value="${measure.id}"/>');return false;" title='<digi:trn>Add Actors</digi:trn>'><digi:trn key="aim:addActors">Add Actors</digi:trn></button>
 																				</field:display>
 																			</td>
@@ -120,7 +120,7 @@
 																			<td vAlign="center" align="left" width="3">
 																			</td>
 																			<td vAlign="center" align="left" >
-																			  <field:display name="Actors" feature="Regional Observations">
+																			  <field:display name="Regional Observations Actors" feature="Regional Observations">
 																				<table width="100%" cellPadding=4 cellspacing="1" vAlign="top" border="0"
 																				bgcolor="#dddddd">
 																					<logic:notEmpty name="measure" property="actors">
@@ -156,7 +156,7 @@
 												<tr>
 													<td align="center">
 															
-															<field:display name="Add Observations Button" feature="Regional Observations">
+															<field:display name="Regional Observations Add Button" feature="Regional Observations">
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="addObservations()" title="${trnAddObservations}">
 																		<digi:trn key="btn:addObservations">Add Observations</digi:trn>
 																</html:button>
@@ -167,7 +167,7 @@
 											</table>
 										</logic:notEmpty>
 										<logic:empty name="aimEditActivityForm" property="observations.issues">
-											<field:display name="Add Observations Button" feature="Regional Observations">
+											<field:display name="Regional Observations Add Button" feature="Regional Observations">
 											<table width="100%" cellspacing="1" cellPadding=5 class="box-border-nopadding">
 												<tr><td>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="addObservations()" title="${trnAddObservations}">
@@ -180,6 +180,6 @@
 										</logic:empty>
 									</td></tr>
 									</table>
-
+								</field:display>
 							</feature:display>
 						</module:display>

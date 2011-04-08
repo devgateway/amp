@@ -14,12 +14,15 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -67,45 +70,57 @@ public class UpdateCurrencyRate extends Action {
 		 *	CAD,1.1264,10/07/2006
 		 *	....goes on
 		 */
-		if (crForm.getDoAction() == null ||
-				crForm.getDoAction().equals("file"))
-		{
-			FormFile f = crForm.getCurrRateFile();
-			InputStream is = f.getInputStream();
-			BufferedReader in = new BufferedReader(new InputStreamReader(is));
-			String line = null;
-			StringTokenizer st = null;
-
-			while ((line = in.readLine()) != null)
-			{
-				String separator=FeaturesUtil.getGlobalSettingValue("Default Exchange Rate Separator");
-				if(separator==null || "".compareTo(separator)==0)
-					st = new StringTokenizer(line,",");
-				else st = new StringTokenizer(line, separator);
-				if(st.countTokens()==3)
+		
+			
+				if (crForm.getDoAction() == null ||
+						crForm.getDoAction().equals("file"))
 				{
-					String code = st.nextToken().trim();
-					double rate = FormatHelper.parseDouble(st.nextToken().trim());
-					String date = st.nextToken().trim();
-					currencyRates = new CurrencyRates();
-					currencyRates.setCurrencyCode(code);
-					currencyRates.setExchangeRate(new Double(rate));
-					//DateTimeUtil.parseDate(date).toString();
-					currencyRates.setExchangeRateDate(date);
-					col.add(currencyRates);
+				try {
+							FormFile f = crForm.getCurrRateFile();
+							InputStream is = f.getInputStream();
+							BufferedReader in = new BufferedReader(new InputStreamReader(is));
+							String line = null;
+							StringTokenizer st = null;
+				
+							while ((line = in.readLine()) != null)
+							{
+								String separator=FeaturesUtil.getGlobalSettingValue("Default Exchange Rate Separator");
+								if(separator==null || "".compareTo(separator)==0)
+									st = new StringTokenizer(line,",");
+								else st = new StringTokenizer(line, separator);
+								if(st.countTokens()==3)
+								{
+									String code = st.nextToken().trim();
+									double rate = FormatHelper.parseDouble(st.nextToken().trim());
+									String date = st.nextToken().trim();
+									currencyRates = new CurrencyRates();
+									currencyRates.setCurrencyCode(code);
+									currencyRates.setExchangeRate(new Double(rate));
+									//DateTimeUtil.parseDate(date).toString();
+									currencyRates.setExchangeRateDate(date);
+									col.add(currencyRates);
+								} 
+							}
+							CurrencyUtil.saveCurrencyRates(col, baseCurrency);
+				
+							Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
+							long stDt = toDate.getTime();
+							stDt -= SEVEN_DAYS;
+							Date fromDate = new Date(stDt);
+							crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate,toDate));
+		
+					//return mapping.findForward("fileload");
+					} catch (Exception e) {
+								// TODO: handle exception
+						ActionMessages errors = new ActionMessages();
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+								"error.aim.uploadCurrencyRates.fileCorrupted"));
+						HttpSession httpSession = request.getSession();
+						httpSession.setAttribute("CurrencyRateFileUploadError", errors);
+						//saveErrors(request, errors);
+						//e.printStackTrace();
+						}
 				}
-			}
-			CurrencyUtil.saveCurrencyRates(col, baseCurrency);
-
-			Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
-			long stDt = toDate.getTime();
-			stDt -= SEVEN_DAYS;
-			Date fromDate = new Date(stDt);
-			crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate,toDate));
-
-			//return mapping.findForward("fileload");
-		}
-
                   /*
                    * 	Ends here
                    */

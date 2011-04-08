@@ -311,7 +311,9 @@ body {
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
 											<div id="reportGroupDiv" class="inputx">
-												<c:if test='${param.type == null}'>
+										<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
+										<c:choose>
+										<c:when test="${param.type==null || param.type!=pledges_type_const}">								
 													<feature:display name="Donor Report" module="Report Types">                                      	
 				                                    	<html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
 				                                           	${donorFunding}
@@ -336,14 +338,19 @@ body {
 				                                      	</html:radio>
 				                                        <br />   	
 				                                   	</feature:display>
-												</c:if>
-				                                <c:if test='${param.type != null}'>
-				                                	<html:radio property="reportType" value="pledge" onclick="repManager.checkSteps()">
-				                                    	${PledgesFunding}
-				                                   	</html:radio>
-				                                    <br />   	
-				                               	</c:if>
-			                               	</div>
+												</c:when>
+                           						<c:otherwise>
+                                              <c:set var="disablePledgeType">true</c:set>
+                                              	<tr>
+                                              		<td>
+                                                		<html:radio property="reportType" disabled="${disablePledgeType}" value="pledge" onclick="repManager.checkSteps()">
+                                                   			${PledgesFunding}
+                                                     	</html:radio>
+                                                   </td>
+                                                </tr>
+                                           </c:otherwise>
+                                         </c:choose>
+                                         </div>
 										</fieldset>
 									</td>
 									<td width="16">&nbsp;</td>
@@ -369,6 +376,7 @@ body {
 														<digi:trn key="aim:AnnualReport">Annual Report</digi:trn>
 													</html:radio>
 													<br />
+													<c:if test="${param.type==null || param.type!=pledges_type_const}">
 													<html:radio property="reportPeriod" value="Q">
 														<digi:trn key="aim:QuarterlyReport">Quarterly Report</digi:trn>
 													</html:radio>
@@ -376,6 +384,7 @@ body {
 													<html:radio property="reportPeriod" value="M">
 														<digi:trn key="aim:MonthlyReport">Monthly Report</digi:trn>
 													</html:radio>
+													</c:if>
 													<br />
 													<html:radio property="reportPeriod" value="N">
 														<digi:trn>Totals Only</digi:trn>

@@ -16,7 +16,7 @@
 		<property name="budgetorganization" column="budget_organization" type="java.lang.Long"/>
 		<property name="budgetdepartment" column="budget_department" type="java.lang.Long"/>
 		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
-		<property name="budget" column="budget" type="java.lang.Integer" />
+		
 		
 		<property name="description" column="description" type="text" />
 		<property name="lessonsLearned" column="lessons_learned" type="text" />

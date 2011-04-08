@@ -310,7 +310,7 @@
 
 									<tr><td>
 
-
+						<field:display name="Paris Survey" feature="Paris Indicators">
 
 								<!-- Indicator Table starts here -->
 
@@ -392,12 +392,9 @@
 
 								</table>
 
-
-						
-
 								<!-- Indicator Table ends here -->
 
-
+					</field:display> 
 
 									</td></tr>
 

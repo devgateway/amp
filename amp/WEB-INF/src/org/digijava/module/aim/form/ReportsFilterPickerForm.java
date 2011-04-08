@@ -4,15 +4,12 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.springframework.beans.BeanWrapperImpl;
@@ -164,7 +161,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Integer computedYear=-1;
 	
-	
+	private Long[] selectedProjectImplUnit;
 
 
 	public Integer getComputedYear() {
@@ -398,7 +395,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.CRISNumber=null;
 				this.budgetNumber=null;
 				this.selectedArchivedStatus=new Object[]{"1"};
-				
+				this.selectedProjectImplUnit=null;
 			}
 		}
 		
@@ -1003,8 +1000,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedArchivedStatus = selectedArchivedStatus;
 	}
 
+	public Long[] getSelectedProjectImplUnit() {
+		return selectedProjectImplUnit;
+	}
 
-	
-	
+	public void setSelectedProjectImplUnit(Long[] selectedProjectImplUnit) {
+		this.selectedProjectImplUnit = selectedProjectImplUnit;
+	}	
 	
 }

@@ -194,8 +194,8 @@ function calculer1() {
 				for (var i=0; i<elems.length; i++) {
 					//contractAmendment[0].amount
 					var str = elems[i].name;
-					var debut = str.length - 6;
-					if (str.substring(debut, str.length) == "amount") {
+					var debut = str.length - 8;
+					if (str.substring(debut, str.length) == "amoutStr") {
 						if (isNaN(elems[i].value)) {
 							alert("${errMsgAddNumericValue}");
 							elems[i].value = 0;
@@ -1023,14 +1023,14 @@ window.onload=autosum;
 							<html:hidden property="${contractAmendment}" value="${id}"/>
 							&nbsp;
 							<html:multibox property="selContractAmendments" value="${idx.count}"/>
-							<html:text indexed="true" name="contractAmendment" property="amount" onkeyup="fnChk(this);calculer1();"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							<html:text indexed="true" name="contractAmendment" property="amoutStr" onkeyup="fnChk(this);calculer1();"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							&nbsp;			
 							<html:select indexed="true" name="contractAmendment" disabled="true" property="currCode" styleClass="inp-text">
 								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 							</html:select>
 							&nbsp;
-							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date${idx.count}"/>
-							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
+							<html:text readonly="true" size="9" indexed="true" name="contractAmendment" property="amendDate" styleClass="inp-text" styleId="date_a${idx.count}"/>
+							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date_a${idx.count}",-250,-230)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							&nbsp;

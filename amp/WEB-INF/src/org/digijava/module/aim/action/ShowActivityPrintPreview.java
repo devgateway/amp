@@ -353,11 +353,22 @@ public class ShowActivityPrintPreview
                 if (ampCategoryValueForStatus != null)
             		eaForm.getIdentification().setStatusId( ampCategoryValueForStatus.getId() );
                 
+                AmpCategoryValue ampCatValForProjectImplUnit	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, activity.getCategories());
+                if (ampCatValForProjectImplUnit != null)
+            		eaForm.getIdentification().setProjectImplUnitId(ampCatValForProjectImplUnit.getId() );
+                
                 AmpCategoryValue ampCategoryValueForLevel	= 
                 	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
                 if(ampCategoryValueForLevel != null)
                     eaForm.getLocation().setLevelId(ampCategoryValueForLevel.getId());
 
+                AmpCategoryValue ampCategoryValueLocationForLevel	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
+                if(ampCategoryValueLocationForLevel != null)
+                    eaForm.getLocation().setImplemLocationLevel(ampCategoryValueLocationForLevel.getId());
+
+                
                 // loading the locations
                 int impLevel = 0;
                 
@@ -475,18 +486,18 @@ public class ShowActivityPrintPreview
                         eaForm.setImplementationLevel("country");
                 }*/
                 
-                if (impLevel >= 0) {
-                	eaForm.getLocation().setImplemLocationLevel( 
-                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
-                													new Long(impLevel) ).getId()
-                	);
-                }
-                else
-                	eaForm.getLocation().setImplemLocationLevel( 
-                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
-									new Long(0) ).getId()
-                	);
-                
+//                if (impLevel >= 0) {
+//                	eaForm.getLocation().setImplemLocationLevel( 
+//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
+//                													new Long(impLevel) ).getId()
+//                	);
+//                }
+//                else
+//                	eaForm.getLocation().setImplemLocationLevel( 
+//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
+//									new Long(0) ).getId()
+//                	);
+//                
                 
 
         		Collection sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());
@@ -687,10 +698,10 @@ public class ShowActivityPrintPreview
               	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
               	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
                 }
+
                 
 
         
-
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;
                 if(activity.getRegionalFundings()!=null) {

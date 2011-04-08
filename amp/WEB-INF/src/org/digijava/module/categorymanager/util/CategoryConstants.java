@@ -22,6 +22,9 @@ public class CategoryConstants {
 	public static final String ACTIVITY_STATUS_NAME		= "Activity Status";
 	public static final String ACTIVITY_STATUS_KEY			= "activity_status";
 	
+	public static final String PROJECT_IMPLEMENTING_UNIT_NAME = "Project Implementing Unit";
+    public static final String PROJECT_IMPLEMENTING_UNIT_KEY = "project_impl_unit";
+	
 	public static final String IMPLEMENTATION_LEVEL_NAME			= "Implementation Level";
 	public static final String IMPLEMENTATION_LEVEL_KEY			= "implementation_level";
 	
@@ -38,6 +41,9 @@ public class CategoryConstants {
 	
 	public static final String PLEDGES_TYPES_NAME		= "Pledges Types";
 	public static final String PLEDGES_TYPES_KEY		= "pledges_types";
+	
+	public static final String PLEDGES_NAMES_NAME		= "Pledges Names";
+	public static final String PLEDGES_NAMES_KEY		= "pledges_names";
 	
 	public static final String FINANCING_INSTRUMENT_NAME		= "Financing Instrument";
 	public static final String FINANCING_INSTRUMENT_KEY		= "financing_instrument";
@@ -68,6 +74,9 @@ public class CategoryConstants {
 	
 	public static final String DATA_EXCHANGE_NAME		= "Data Echange Category";
 	public static final String DATA_EXCHANGE_KEY		= "data_exchange";
+	
+	public static final String ACTIVITY_BUDGET_NAME			= "Activity Budget";
+	public static final String ACTIVITY_BUDGET_KEY			= "activity_budget";
 	
 	//--- IPA Contracting Step 13
 	
@@ -111,7 +120,7 @@ public class CategoryConstants {
 		new CategoryConstants.HardCodedCategoryValue("team_type","Bilateral", false);
 	
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PROJECTION	= 
-		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", false);
+		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", true);
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PIPELINE	= 
 		new CategoryConstants.HardCodedCategoryValue("mtef_projection","pipeline", false);
 	
@@ -130,9 +139,16 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
 	
-	 public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
+	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_INTERNATIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "International", true);
-	
+	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_REGIONAL = 
+		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "Regional", true);
+	 
+	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_ON = 
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On", true);
+	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
+		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off", true);
+	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
 	 public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";

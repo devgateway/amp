@@ -442,6 +442,25 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 document.aimAddOrgForm.acronym.focus();
                 return false;
             }
+            
+            var fundingorgid = document.aimAddOrgForm.fundingorgid.value;
+            var mandatoryFundOrgId = document.getElementById("mandatoryFundOrgId");
+            var alertError=false;
+            if(type.value=='NGO'){
+            	if (mandatoryFundOrgId!=null && (fundingorgid == null||fundingorgid.length == 0)) {
+            		alertError=true;
+                }
+            }else{
+            	if (fundingorgid == null||fundingorgid.length == 0) {
+            		alertError=true;                    
+                }
+            }
+            if(alertError==true){
+            	alert('<digi:trn  jsFriendly="true">Please enter a funding id for this Organization.</digi:trn>');
+                document.aimAddOrgForm.fundingorgid.focus();
+                return false;
+            }
+            
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
                 alert('<digi:trn  jsFriendly="true">Please Select Organization Type.</digi:trn>');
@@ -457,42 +476,50 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             // We have different mandatory fields for NGOs and others....
             if(type.value=='NGO'){
                 var orgPrimaryPurpose= document.aimAddOrgForm.orgPrimaryPurpose.value;
-                if (orgPrimaryPurpose == null||orgPrimaryPurpose.length == 0 ) {
+                var mandatoryPrimPurp = document.getElementById('mandatoryPrimPurp');
+                if (mandatoryPrimPurp!= null && (orgPrimaryPurpose == null||orgPrimaryPurpose.length == 0 )) {
                     alert('<digi:trn  jsFriendly="true">Please enter primary purpose for this Organization.</digi:trn>');
                     document.aimAddOrgForm.orgPrimaryPurpose.focus();
                     return false;
                 }
                                     
                 var selSectors= document.getElementsByName("selSectors");
-                if ( selSectors == null||selSectors.length == 0 ) {
+                var mandatorySectPref = document.getElementById('mandatorySectPref');
+                if (mandatorySectPref!=null && (selSectors == null||selSectors.length == 0 )) {
                     alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
                     return false;
                 }
                 var selRecipients= document.getElementsByName("selRecipients");
-                if ( selRecipients == null||selRecipients.length == 0) {
+                var mandatoryRecipients = document.getElementById('mandatoryRecipients');
+                if (mandatoryRecipients!=null && (selRecipients == null||selRecipients.length == 0)) {
                     alert('<digi:trn  jsFriendly="true">Please Select Recipients for this Organization.</digi:trn>');
                     return false;
                 }
 
                 var countryId= document.aimAddOrgForm.countryId.value;
-                if (countryId == null||countryId == '-1') {
+                var mandatoryCountryOfOrigin = document.getElementById('mandatoryCountryOfOrigin');
+                if (mandatoryCountryOfOrigin!=null && (countryId == null||countryId == '-1')) {
                     alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
                     document.aimAddOrgForm.countryId.focus();
                     return false;
                 }
      
                 var address= document.aimAddOrgForm.address.value;
-                if (address == null||address.length == 0 ) {
+                var mandatoryHeadquartersAddr = document.getElementById('mandatoryHeadquartersAddr');
+                if (mandatoryHeadquartersAddr!=null && (address == null||address.length == 0 )) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Address for this Organization.</digi:trn>');
                     document.aimAddOrgForm.address.focus();
                     return false;
                 }
+                
+                var mandatoryInterventionLoc = document.getElementById('mandatoryInterventionLoc');
                 var selLocs= document.getElementsByName("selLocs");
-                if ( selLocs == null||selLocs.length == 0 ) {
+                if (mandatoryInterventionLoc!=null && (selLocs == null||selLocs.length == 0 )) {
                     alert('<digi:trn  jsFriendly="true">Please Select Locations for this Organization.</digi:trn>');
                     return false;
                 }
                 else{
+                    if(mandatoryInterventionLoc!=null){
                     var sum=0;
                     for(var i=0;i<selLocs.length;i++){
                         var locName="selectedLocs["+i+"].percent"
@@ -510,6 +537,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                             return false;
                     }
                 }
+            }
             }
             else{
                 var orgCode= document.aimAddOrgForm.orgCode.value;
@@ -622,6 +650,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         	if(document.getElementById('description')!=null){
         		params+="&description="+document.getElementById('description').value;
         	}                            
+        	if(document.getElementById('fundingorgid')!=null){
+        		params+="&fundingorgid="+document.getElementById('fundingorgid').value;
+        	}
             return params;
             
         }
@@ -858,6 +889,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 	<html:hidden styleId="departments" value="${aimAddOrgForm.resetDepartments}" name="aimAddOrgForm" property="resetDepartments"/>
 	<html:hidden styleId="budgSects" value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm" property="resetBudgetSectors"/>
 
+	<feature:display name="NGO Form" module="Organization Manager"></feature:display>
+	
     <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000 align=center>
         <tr>
             <td align=left valign="top" width="100%">
@@ -981,7 +1014,20 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                     </html:select></td>
                                             </tr>
                                             <tr>
-                                              
+                                                <td style="text-align:left; " class="tdBoldClass" nowrap>
+                                                    <digi:trn>Funding Org Id</digi:trn>
+                                                     <c:if test="${aimAddOrgForm.type=='NGO'}">
+                                                     	<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form">
+                                                     		<span id="mandatoryFundOrgId"><font size="2" color="#FF0000">*</font></span>
+                                                     	</field:display>
+                                                     </c:if>
+                                                     <c:if test="${aimAddOrgForm.type!='NGO'}">
+                                                     	<font size="2" color="#FF0000">*</font>
+                                                     </c:if>                                                    
+                                                </td>
+                                                <td>    
+                                                    <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>
+                                                </td>
                                                 <td height="1" align="center" colspan="5"><digi:img
                                                         src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
@@ -1016,7 +1062,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                         <tr>
                                             <td  class="tdBoldClass" style="font-size:11px;" nowrap width=50% align=right>
                                                 <digi:trn>Organization Primary Purpose</digi:trn>
-                                                <font size="2" color="#FF0000">*</font>
+                                                <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form">
+                                                     <span id="mandatoryPrimPurp"><font size="2" color="#FF0000">*</font></span>
+                                                </field:display>                                                
                                             </td>
                                             <td width=50% style="padding-right:15px;">
                                                 <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>
@@ -1084,7 +1132,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Sectors Scheme</digi:trn><font color="red">*</font></td>
+                                                                    <td  style="text-align:right" class="tdBoldClass">
+                                                                    	<digi:trn>Sectors Scheme</digi:trn>
+                                                                    	<field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form">
+                                                                    		<span id="mandatorySectScheme"><font color="red">*</font></span>
+                                                                    	</field:display>
+                                                                    </td>
                                                                     <td>
                                                                         <html:select property="ampSecSchemeId" styleClass="selectStyle" styleId="ampSecSchemeId">
                                                                             <c:set var="translation">
@@ -1098,7 +1151,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn><font color="red">*</font></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass">
+                                                                    	<digi:trn>Sector Preferences</digi:trn>
+                                                                    	<field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form">
+                                                                    		<span id="mandatorySectPref"><font color="red">*</font></span>
+                                                                    	</field:display>
+                                                                    </td>
                                                                     <td>
                                                                         <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
@@ -1181,7 +1239,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Organization Headquarters Address</digi:trn><font color="red">*</font></td>
+                                                                    <td  style=" text-align:right" class="tdBoldClass">
+                                                                    	<digi:trn>Organization Headquarters Address</digi:trn>
+                                                                    	<field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form">
+                                                                    		<span id="mandatoryHeadquartersAddr"><font color="red">*</font></span>
+                                                                    	</field:display>
+                                                                    </td>
                                                                     <td>
                                                                         <html:textarea property="address"  cols="40" styleId="address"/>
                                                                     </td>
@@ -1235,7 +1298,12 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass">
+                                                                    	<digi:trn>Recipients</digi:trn>
+                                                                    	<field:display name="Mandatory Indicator For Recipients" feature="NGO Form">
+                                                                    		<span id="mandatoryRecipients"><font color="red">*</font></span>
+                                                                    	</field:display>
+                                                                   	</td>
                                                                     <td>
                                                                         <c:if test="${empty aimAddOrgForm.recipients}">
                                                                     <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="dr-menu" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
@@ -1271,7 +1339,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Country Of Origin</digi:trn><font color="red">*</font></td>
+                                                        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Country Of Origin</digi:trn>
+                                                        	<field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form">
+                                                            	<span id="mandatoryCountryOfOrigin"><font color="red">*</font></span>
+                                                            </field:display>
+                                                        </td>
                                                         <td>
                                                             <c:set var="translation">
                                                                 <digi:trn>Select Country</digi:trn>
@@ -1289,7 +1361,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization Intervention Level</digi:trn><font color="red">*</font></td>
+                                                        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization Intervention Level</digi:trn>
+                                                        </td>
                                                         <td>
                                                             <c:set var="translation">
                                                                 <digi:trn>Please select from below</digi:trn>
@@ -1306,7 +1379,11 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" text-align:right" class="tdBoldClass"><digi:trn>Organization Intervention Location</digi:trn><font color="red">*</font></td>
+                                            <td style=" text-align:right;white-space: nowrap;" class="tdBoldClass"><digi:trn>Organization Intervention Location</digi:trn>
+                                            	<field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form">
+                                                	<span id="mandatoryInterventionLoc"><font color="red">*</font></span>
+                                                </field:display>
+                                            </td>
                                             <td>
 
                                                 <c:if test="${empty aimAddOrgForm.selectedLocs}">

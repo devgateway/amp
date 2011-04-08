@@ -30,9 +30,12 @@
 	</tr>
 </table>
 
+ <c:set var="translation">
+ 	<digi:trn>Public Documents</digi:trn>
+ </c:set>
 <script type="text/javascript">
 	function afterPageLoad(e) {
-		windowController	= newWindow( 'Public Documents', false, 'otherDocumentsDiv');
+		windowController	= newWindow('${translation}', false, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 

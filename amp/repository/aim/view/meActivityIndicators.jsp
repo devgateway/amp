@@ -415,12 +415,17 @@ document.aimUpdateIndicatorValuesForm.submit();
 
                                  
 						</td>
-
 					</tr>
-
 </div>
                                 </div>
-
+										<tr>
+											<td align="right">
+												<a onClick="history.go(-1);return true;" style="cursor: pointer;color: blue;text-decoration: underline;">
+													<digi:trn>Go Back</digi:trn>
+												</a>
+												&nbsp;&nbsp;&nbsp;&nbsp;
+											</td>
+										</tr>
 
 </table>
 

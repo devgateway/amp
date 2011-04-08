@@ -191,6 +191,13 @@
 </script>
 
 
+<script language="JavaScript">
+	var sectorTitleTrn = "<digi:trn>Sector</digi:trn>";
+	var programTitleTrn = "<digi:trn>Program</digi:trn>";
+</script>
+
+
+
 <bean:define id="isDevInfoMode">true</bean:define>
 	<c:set var="isDevInfoMode"><feature:display name="Show DevInfo data" module="GIS DASHBOARD">true</feature:display>
 </c:set>
@@ -206,7 +213,7 @@
 	
 	<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;">
 		<div class="sec_map_filter_container">
-			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;  font-size: 12px;">
+			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
 				<tr><td colspan="3" class="sec_map_filter_title"><digi:trn>Map filters</digi:trn></td></tr>
 				<field:display name="Source of Data" feature="GIS DASHBOARD">
 				<tr>
@@ -300,15 +307,15 @@
 				<tr>
 					<td colspan="3">
 						<div id="sector_selector_hider">
-					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black; font-size:12px;"></div>
+					    <div id="filtrSectorSelectorContainer" style="background-color:#edf5ff; width:504px; border: 1px solid black;"></div>
 					  </div>
 					</td>
 				</tr>
 				
 				<tr><td align='right' colspan="3">
-				<input type='button' class="buttonx" value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
+				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
 					&nbsp;
-				<input type='button' class="buttonx" value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
+				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
 				</td></tr>
 				
 				
@@ -316,6 +323,8 @@
 	  </div>
 	</div>
 </div>
+
+
 
 
 
@@ -641,9 +650,9 @@
     
     <tr>
        <td nowrap width="200" style="font-size:12px">
-            <b><digi:trn>Selected Donor</digi:trn>:</b>
+            <digi:trn>Selected Donor</digi:trn>:
         </td>    
-        <td id="donorSelected" style="font-size:12px">&nbsp;
+        <td id="donorSelected">&nbsp;
         	<%--
         <select id="donorsCombo" onchange="" style="width:250px">    
             <option value=-1><digi:trn>All donors</digi:trn></option>
@@ -653,7 +662,7 @@
     </tr>
     
     <tr>
-    	<td><input type="button" class="buttonx" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
+    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
     </tr>
     
     <c:set var="translation">

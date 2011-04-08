@@ -45,25 +45,29 @@
 </script>
 
 
-
+<c:set var="translationxls">
+	<digi:trn>Export to Excel</digi:trn>
+</c:set>
+<c:set var="translationPrinter">
+	<digi:trn>Printer Friendly</digi:trn>
+</c:set>
 <form action="/aim/exportAdminTable.do" method="post" name="exportTableForm" >
- <input type="hidden" name="data" class="reportData"/>
- 	<table cellspacing="0" class="report_indicator" cellpadding="0" border="0" align="center" width="100%" >
- 	<tbody><tr>
-<td valign="top">
-		<div class="tab_opt_box">
-			<div class="tab_opt">
-			<div class="tab_opt_cont">
-			<a href="#" target="_blank" onclick="exportXSL(); return false;" class="l_sm">
-			<img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a href="#" onclick="exportXSL(); return false;" class="l_sm">Export to Excel</a> &nbsp;&nbsp; 
-			<a href="#" onclick="window.print(); return false;" class="l_sm"><img border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
-			</div>
-			</div>
-		</div>
-</td>
-</tr>
-</tbody>
-</table>
+    <input type="hidden" name="data" class="reportData"/>
+    <div class="toolbar" align="center">
+        <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+            <tr>
+                <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
+                    <a target="_blank" onclick="exportXSL(); return false;">
+                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="${translationxls}" />
+                    </a>
+                </td>
 
+                <td noWrap align=left valign="middle">
+                    <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="${translationPrinter}"/>
+                    </digi:link>
+                </td>
+            </tr>
+        </table>
+    </div>
 </form>
-

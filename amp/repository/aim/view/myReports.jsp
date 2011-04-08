@@ -52,9 +52,12 @@
 				</li>
 			</logic:iterate>
 			<bean:size id="repCount" name="myReports" scope="session" />
-            	<digi:link href="/viewTeamReports.do?tabs=false" title="${translation2}">
-					<digi:trn key="aim:moreReports">More Reports</digi:trn>
-               	</digi:link>
+                   <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
+                  
+                    	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true">
+                            <digi:trn key="aim:moreReports">More Reports...</digi:trn>
+                        </digi:link>
+                    </div>
            	</logic:notEmpty>
 			<logic:present name="currentMember" scope="session">
             	<logic:empty name="myReports" scope="session">

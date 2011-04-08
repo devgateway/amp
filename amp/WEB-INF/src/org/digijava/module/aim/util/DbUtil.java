@@ -1483,9 +1483,9 @@ public class DbUtil {
             c = q.list();
            
             if ( c != null ) {
-            	Object[] details = new Object[5];
             	Iterator<AmpFundingDetail> iter	= c.iterator();
             	while ( iter.hasNext() ) {
+            		Object[] details = new Object[5];
             		AmpFundingDetail afd	= iter.next();
             		details[0] = afd.getThousandsTransactionAmount();
             		details[1] = afd.getTransactionDate();
@@ -2948,6 +2948,7 @@ public class DbUtil {
                 String address = org.getAddress();
                 String orgUrl = org.getOrgUrl();
                 String acronym = org.getAcronym();
+                String fundingorgid = org.getFundingorgid();
                 AmpLevel levelId = org.getLevelId();
                 AmpCategoryValueLocations region = org.getRegion();
                 AmpCategoryValue implemLocationLevel = org.getImplemLocationLevel();
@@ -2982,6 +2983,7 @@ public class DbUtil {
                 org.setBudgetOrgCode(budgetOrgCode);
                 org.setAcronymAndName(acronymAndName);
                 org.setAcronym(acronym);
+                org.setFundingorgid(fundingorgid);
                 org.setAddress(address);
                 org.setOrgUrl(orgUrl);
                 org.setOrgGrpId(orgGrpId);

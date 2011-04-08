@@ -8,9 +8,7 @@
 		<action login-required="false" pattern="/showPublicGis" />
 		<action login-required="false" pattern="/ShowRegionReport" />
 		<action login-required="false" pattern="/pdfExport" />
-
-		
-
+		<action login-required="true" pattern="/showGisSettings" />
 	</security>
 	
 	<hibernate-classes required="false">
@@ -18,6 +16,7 @@
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMapPoint</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMapSegment</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMapShape</hibernate-class>
+        <hibernate-class>org.digijava.module.gis.dbentity.GisSettings</hibernate-class>
 	</hibernate-classes>
 	
 </module-config>

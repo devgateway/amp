@@ -3,6 +3,7 @@ package org.digijava.module.fundingpledges.dbentity;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -18,7 +19,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class FundingPledges implements Comparable<FundingPledges>{
 	private Long id;
-	private String title;
+	private AmpCategoryValue title;
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
@@ -54,6 +55,9 @@ public class FundingPledges implements Comparable<FundingPledges>{
  	private String contactAlternativeName_1; 
 	private String contactAlternativeTelephone_1; 
 	private String contactAlternativeEmail_1; 
+	
+	private Double totalAmount;
+	private TreeSet<String> yearsList;
 	
 	public String getContactName() {
 		return contactName;
@@ -159,10 +163,10 @@ public class FundingPledges implements Comparable<FundingPledges>{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getTitle() {
+	public AmpCategoryValue getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+	public void setTitle(AmpCategoryValue title) {
 		this.title = title;
 	}
 	public AmpOrganisation getOrganization() {
@@ -303,6 +307,18 @@ public class FundingPledges implements Comparable<FundingPledges>{
 	 */
 	public void setFurtherApprovalNedded(String furtherApprovalNedded) {
 		this.furtherApprovalNedded = furtherApprovalNedded;
+	}
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	public TreeSet<String> getYearsList() {
+		return yearsList;
+	}
+	public void setYearsList(TreeSet<String> yearsList) {
+		this.yearsList = yearsList;
 	}
 	@Override
 	public int compareTo(FundingPledges o) {

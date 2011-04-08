@@ -311,6 +311,22 @@
                           </tr>
                            -->
 						  <!-- -->
+						  
+                          <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn>Click here to view Result Matrix/GIS Settings page</digi:trn>
+                              </c:set>
+                              <digi:link href="/showGisSettings.do" module="gis" title="${translation}" >
+                                <digi:trn>
+                                	Result Matrix/GIS Settings
+                                </digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          </module:display>
                         </table>
                       </td>
                     </tr>
@@ -736,6 +752,7 @@
                             </td>
                           </tr>
                           </module:display>
+							<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION">
 						<tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
@@ -744,6 +761,7 @@
 							   </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                         </table>
                       </td>
                     </tr>

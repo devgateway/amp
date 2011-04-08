@@ -1,6 +1,7 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -13,13 +14,18 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -27,6 +33,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class AddPledge extends Action {
 
@@ -48,9 +55,25 @@ public class AddPledge extends Action {
     		
     		plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
     		
+    		plForm.setPledgeNames(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY));
+    		
     		plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
 
     		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
+    		
+    		String yearToSpecify = TranslatorWorker.translateText("unspecified", request);
+            
+            if (plForm.getYear() == null) {     
+               plForm.setYear(yearToSpecify);
+            }
+    		plForm.setYears(new ArrayList<String>());
+            long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+            long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+            long maxYear = yearFrom + countYear;
+            //plForm.getYears().add(yearToSpecify);
+            for (long i = yearFrom; i <= maxYear; i++) {
+            	plForm.getYears().add(String.valueOf(i));
+            }
     		
     		Collection currencies = CurrencyUtil.getAmpCurrency();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -73,6 +96,7 @@ public class AddPledge extends Action {
 	        	plForm.setFundingPledges(fp);
 				plForm.setPledgeId(fp.getId());
 				plForm.setPledgeTitle(fp.getTitle());
+				plForm.setPledgeTitleId(fp.getTitle().getId());
 				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
 				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
 	        	plForm.setSelectedOrgName(pledgeOrg.getName());
@@ -121,11 +145,12 @@ public class AddPledge extends Action {
 	        	while (it.hasNext()) {
 					FundingPledgesSector fps = (FundingPledgesSector) it.next();
 					AmpSector ampSec = fps.getSector();
+					
 					ActivitySector actSec = new ActivitySector();
 					actSec.setId(fps.getId());
 					actSec.setSectorId(ampSec.getAmpSectorId());
 					actSec.setSectorPercentage(fps.getSectorpercentage());
-					actSec.setSectorScheme(ampSec.getAmpSecSchemeId().getSecSchemeName());
+					actSec.setSectorScheme(SectorUtil.getAmpSectorScheme(ampSec.getAmpSecSchemeId().getAmpSecSchemeId()).getSecSchemeName());
 					actSec.setConfigId(ampSec.getAmpSecSchemeId().getAmpSecSchemeId());
 					if (ampSec.getParentSectorId()==null) {
 						actSec.setSectorName(ampSec.getName());
@@ -142,6 +167,7 @@ public class AddPledge extends Action {
 	        	
 	        	plForm.setPledgeSectors(asl);
 	        	plForm.setSelectedLocs(PledgesEntityHelper.getPledgesLocations(fp.getId()));
+	        	plForm.setSelectedProgs(PledgesEntityHelper.getPledgesPrograms(fp.getId()));
 	        	plForm.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
 	        	request.getSession().removeAttribute("pledgeId");
 			}
@@ -153,7 +179,7 @@ public class AddPledge extends Action {
 				}
 			}
 			
-			plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
+			//plForm.setPledgeNames(PledgesEntityHelper.getPledgeNames());
 	        request.getSession().setAttribute("pledgeForm", plForm);
 	        
 	        ActionMessages errors = (ActionMessages)request.getSession().getAttribute("duplicatedTitleError");
@@ -169,7 +195,8 @@ public class AddPledge extends Action {
     private void resetForm(PledgeForm plForm){
     	plForm.setPledgeId(null);
 		plForm.setPledgeTitle(null);
-    	plForm.setFundingPledges(null);
+		plForm.setPledgeTitleId(null);
+		plForm.setFundingPledges(null);
 		plForm.setSelectedOrgId(null);
     	plForm.setSelectedOrgName(null);
     	plForm.setAdditionalInformation(null);
@@ -202,6 +229,7 @@ public class AddPledge extends Action {
     	plForm.setFundingPledgesDetails(null);
     	plForm.setPledgeSectors(null);
     	plForm.setSelectedLocs(null);
+    	plForm.setSelectedProgs(null);
     }
     
     private ActionForward addSector(ActionMapping mapping, HttpSession session,

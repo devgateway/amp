@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -484,6 +485,26 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 
 	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
+	}
+	
+	public String getHierarchiesPath() {
+		String ret	= "";
+		try{
+			if ( this.getHierarchies() != null ) {
+				for (AmpReportHierarchy arh: this.getHierarchies() ) {
+					String colName			= arh.getColumn().getColumnName();
+					String translColName	= TranslatorWorker.translateText(colName, this.locale, this.siteId);
+					ret						+= " / " + translColName;
+				}
+				ret		+= " /";
+				if ( ret.length() > 0 )
+					ret		= ret.substring(1);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	
 }

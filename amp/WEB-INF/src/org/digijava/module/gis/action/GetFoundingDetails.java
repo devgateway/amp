@@ -189,6 +189,7 @@ public class GetFoundingDetails extends Action {
                     String secIdStr = request.getParameter("sectorId");
 
 
+
                     TeamMember tm = null;
                     //AmpTeam team = null;
                     Long teamId = null;
@@ -204,6 +205,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     Long secId = null;
+                    Long prgId = null;
                     int sectorQueryType = 0;
                     if (secIdStr.startsWith("sec_scheme_id_")) {
                         sectorQueryType = DbUtil.SELECT_SECTOR_SCHEME;
@@ -211,10 +213,15 @@ public class GetFoundingDetails extends Action {
                     } else if (secIdStr.startsWith("sec_id_")) {
                         sectorQueryType = DbUtil.SELECT_SECTOR;
                         secId = new Long(secIdStr.substring(7));
+                    } else if (secIdStr.startsWith("prj_id_")) {
+                        sectorQueryType = DbUtil.SELECT_PROGRAM;
+                        prgId = new Long(secIdStr.substring(7));
                     } else {
                         sectorQueryType = DbUtil.SELECT_DEFAULT;
                         secId = new Long(secIdStr);
                     }
+
+
 
 
                     String donorIdStr = request.getParameter("donorId");
@@ -293,6 +300,8 @@ public class GetFoundingDetails extends Action {
                         //Get segments with funding for dashed paint map
                         List secFundings = null;
 
+
+                        if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
                         if (request.getSession().getAttribute("publicuser")!=null){
                             secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
                         }else{
@@ -301,6 +310,9 @@ public class GetFoundingDetails extends Action {
                             } else {
                                 secFundings = new ArrayList();
                             }
+                        }
+                        } else {
+                            secFundings = DbUtil.getProgramFoundings(prgId);
                         }
                         Object[] fundingList = getFundingsByLocations(secFundings,
                                 Integer.parseInt(mapLevel),
@@ -399,6 +411,7 @@ public class GetFoundingDetails extends Action {
                     graph.flush();
 
                 } else if (action.equalsIgnoreCase("getFinansialDataXML")) {
+                    response.setCharacterEncoding("UTF-8");
                         response.setContentType("text/xml");
                         String secIdStr = request.getParameter("sectorId");
                         
@@ -430,6 +443,7 @@ public class GetFoundingDetails extends Action {
                         FundingData totalFunding = (FundingData) fundingList[1];
 
                         XMLDocument segmendDataInfo = new XMLDocument();
+                    segmendDataInfo.setCodeset("UTF-8");
 
                         String numberFormat = FeaturesUtil.getGlobalSettingValue(
                                 "Default Number Format");
@@ -988,7 +1002,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     indicators.output(sos);
-                } else if (action.equalsIgnoreCase("getSectorTree")) {
+                }  else if (action.equalsIgnoreCase("getSectorTree")) {
                     response.setContentType("text/xml");
                     XMLDocument tree = null;
                     int treeMode = (request.getParameter("mode") != null && request.getParameter("mode").
@@ -999,7 +1013,7 @@ public class GetFoundingDetails extends Action {
 
                     boolean showSecondaryScheme = FeaturesUtil.getFieldVisibility("Secondary Sector").isFieldActive(ampTreeVisibility);
 
-                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme);
+                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme, DbUtil.getGisSettings(request).getSectorSchemeFilterMode());
                     tree.output(sos);
                 }
             }  else if (map == null) {
@@ -1180,7 +1194,7 @@ public class GetFoundingDetails extends Action {
                         if (level == GisMap.MAP_LEVEL_REGION &&
                             loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
 
-                            String regCode = loc.getLocation().getRegionLocation().getName();
+                                String regCode = loc.getLocation().getRegionLocation().getName().trim();
 
                             if (locationFundingMap.containsKey(regCode)) {
                                 FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
@@ -1205,7 +1219,7 @@ public class GetFoundingDetails extends Action {
                             //District level
                             //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                            String regCode = loc.getLocation().getRegionLocation().getName();
+                                String regCode = loc.getLocation().getRegionLocation().getName().trim();
 
                             if (locationFundingMap.containsKey(regCode)) {
                                 FundingData existingVal = (FundingData)
@@ -1246,71 +1260,6 @@ public class GetFoundingDetails extends Action {
         Object[] retVal = new Object[2];
         retVal[0] = locationFundingMap;
         retVal[1] = totalFundingForSector;
-        return retVal;
-    }
-
-    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
-            Date start, Date end) {
-    	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
-    }
-    
-    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
-            Date start, Date end, Long donorId) {
-        FundingData retVal = null;
-        Set fundSet = activity.getFunding();
-        Iterator<AmpFunding> fundIt = fundSet.iterator();
-
-        BigDecimal commitment = null;
-        BigDecimal disbursement = null;
-        BigDecimal expenditure = null;
-
-        Timestamp startTs = new Timestamp(start.getTime());
-        startTs.setNanos(0);
-        Timestamp endTs = new Timestamp(end.getTime());
-        endTs.setNanos(0);
-
-        FundingCalculationsHelper fch = new FundingCalculationsHelper();
-//        fch.doCalculations();
-
-        Set fundDetSet = new HashSet();
-
-
-        try {
-            while (fundIt.hasNext()) {
-                AmpFunding fund = fundIt.next();
-                
-                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
-                
-                Set fundDetails = fund.getFundingDetails();
-
-                Iterator fdIt = fundDetails.iterator();
-                while (fdIt.hasNext()) {
-                    AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
-                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
-                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
-                        fundDetSet.add(fd);
-                    }
-                }
-            }
-        }
-
-           String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        	if ( baseCurr == null ){
-        		baseCurr	= "USD";
-            }
-            fch.doCalculations(fundDetSet, baseCurr);
-
-            commitment = fch.getTotActualComm().getValue();
-            disbursement = fch.getTotActualDisb().getValue();
-            expenditure = fch.getTotActualExp().getValue();
-
-        } catch (Exception ex1) {
-            ex1.printStackTrace();
-            //Add exception reporting
-        }
-
-        retVal = new FundingData(commitment, disbursement, expenditure);
-
         return retVal;
     }
 
@@ -1424,6 +1373,71 @@ public class GetFoundingDetails extends Action {
         Object[] retVal = new Object[2];
         retVal[0] = locationFundingMap;
         retVal[1] = totalFundingForSector;
+        return retVal;
+    }
+
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
+            Date start, Date end) {
+    	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
+    }
+    
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
+            Date start, Date end, Long donorId) {
+        FundingData retVal = null;
+        Set fundSet = activity.getFunding();
+        Iterator<AmpFunding> fundIt = fundSet.iterator();
+
+        BigDecimal commitment = null;
+        BigDecimal disbursement = null;
+        BigDecimal expenditure = null;
+
+        Timestamp startTs = new Timestamp(start.getTime());
+        startTs.setNanos(0);
+        Timestamp endTs = new Timestamp(end.getTime());
+        endTs.setNanos(0);
+
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+//        fch.doCalculations();
+
+        Set fundDetSet = new HashSet();
+
+
+        try {
+            while (fundIt.hasNext()) {
+                AmpFunding fund = fundIt.next();
+                
+                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
+                
+                Set fundDetails = fund.getFundingDetails();
+
+                Iterator fdIt = fundDetails.iterator();
+                while (fdIt.hasNext()) {
+                    AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
+                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
+                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
+                        fundDetSet.add(fd);
+                    }
+                }
+            }
+        }
+
+           String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        	if ( baseCurr == null ){
+        		baseCurr	= "USD";
+            }
+            fch.doCalculations(fundDetSet, baseCurr);
+
+            commitment = fch.getTotActualComm().getValue();
+            disbursement = fch.getTotActualDisb().getValue();
+            expenditure = fch.getTotActualExp().getValue();
+
+        } catch (Exception ex1) {
+            ex1.printStackTrace();
+            //Add exception reporting
+        }
+
+        retVal = new FundingData(commitment, disbursement, expenditure);
+
         return retVal;
     }
 

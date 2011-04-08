@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -9,6 +10,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -182,11 +184,11 @@ function setHoveredRow(rowId) {
 								</b>							</td>
 							<td width="25%" align="center" class="inside">
 								<b> 
-									<digi:trn>Contact Name</digi:trn>
+									<digi:trn>Total Amount</digi:trn>
 								</b>							</td>
 							<td width="19%" align="center" class="inside">
 								<b> 
-									<digi:trn>Contact Email</digi:trn>
+									<digi:trn>Years</digi:trn>
 								</b>							</td>
 							<td colspan="2" align="center" class="inside">
 								<b> 
@@ -195,7 +197,7 @@ function setHoveredRow(rowId) {
 						</tr>
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
-							<tr>
+							<tr style="height: 25px">
 								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.title" />								</td>
 								<td width="25%" align="center" class="inside">
@@ -204,6 +206,15 @@ function setHoveredRow(rowId) {
 									<bean:write name="allFundingPledges" property="key.contactName" />								</td>
 								<td width="19%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.contactEmail" />								</td>
+								<td width="25%" align="center">
+										<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />
+									
+								</td>
+								<td width="19%" align="center">
+									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">
+										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
+									</c:forEach>
+								</td>	
 								<td width="6%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />

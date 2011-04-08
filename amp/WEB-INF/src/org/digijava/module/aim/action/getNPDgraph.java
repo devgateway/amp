@@ -248,9 +248,10 @@ public class getNPDgraph extends Action {
                                                        actualValue = new Double(0);
                                                        targetYear=year;
                                                    } else {
+                                                	   actualValue = actValue.getValue();
                                                        if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                            targValue = value;
-                                                           actualValue = actValue.getValue();
+                                                           //actualValue = actValue.getValue();
                                                            targetYear=year;
                                                        }
                                                    }

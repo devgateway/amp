@@ -1,19 +1,49 @@
 package org.digijava.module.gis.util;
 
-import java.text.Collator;
-import java.util.*;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.collections.CollectionUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorConnection;
+import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.gis.dbentity.GisSettings;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -37,12 +67,14 @@ public class DbUtil {
     public static final int SELECT_DEFAULT = 0;
     public static final int SELECT_SECTOR_SCHEME = 1;
     public static final int SELECT_SECTOR = 2;
+    public static final int SELECT_PROGRAM = 3;
 
     public  static final int SECTORS_FOR_ACTIVITIES = 0;
     public  static final int SECTORS_FOR_PLEDGES = 1;
 
     public  static final int MAP_MODE_ACTIVITIES = 0;
     public  static final int MAP_MODE_PLEDGES = 1;
+
 
 
     public DbUtil() {
@@ -243,6 +275,55 @@ public class DbUtil {
         return getSectorFoundings(sectorId, SELECT_DEFAULT, null);
     }
     
+        public static Long getLocationIdByName (String locationName, int mapLevel) {
+        Long retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select reg.id from ");
+            queryStr.append(AmpCategoryValueLocations.class.getName());
+            queryStr.append(" as reg where reg.name = :REG_NAME ");
+            queryStr.append(" and reg.parentCategoryValue.value = :MAP_LEVEL");
+
+            Query q = sess.createQuery(queryStr.toString());
+
+
+            String mapLevelParam = null;
+            if (mapLevel == 2) {
+                mapLevelParam = "Region";
+            } else if (mapLevel == 3) {
+                mapLevelParam = "District";
+            } else {
+                throw new DgException("Incorrect map level parameter");
+            }
+            q.setString("REG_NAME", locationName);
+            q.setString("MAP_LEVEL", mapLevelParam);
+            retVal = (Long) q.uniqueResult();
+        } catch (Exception ex) {
+            logger.debug("Unable to get region ID from DB", ex);
+        }
+
+
+        return retVal;
+    }
+
+    public static String getLocationNameById (Long locId) {
+        String retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuilder queryStr = new StringBuilder("select reg.name from ");
+            queryStr.append(AmpCategoryValueLocations.class.getName());
+            queryStr.append(" as reg where reg.id = :REG_ID");
+            Query q = sess.createQuery(queryStr.toString());
+            q.setLong("REG_ID", locId);
+            retVal = (String) q.uniqueResult();
+        } catch (Exception ex) {
+            logger.debug("Unable to get region name from DB", ex);
+        }
+        return retVal;
+    }
+    
     public static List getSectorFoundings(Long sectorId, int sectorQueryType, Long teamId) {
         List subSectorIds = null;
         if (sectorId > -1) {
@@ -359,6 +440,35 @@ public class DbUtil {
         return retVal;
     }
 
+
+    
+	public static List getProgramFoundings(Long prgId) {
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer qs = new StringBuffer("select prg.activity, prg.programPercentage from ");
+            qs.append(AmpActivityProgram.class.getName());
+            qs.append(" prg where prg.program.ampThemeId = :PRG_ID or prg.program.parentThemeId.ampThemeId = :PRG_ID ");
+            qs.append(" or prg.program.parentThemeId.parentThemeId.ampThemeId = :PRG_ID ");
+            qs.append(" and prg.activity.team is not null");
+            q = session.createQuery(qs.toString());
+            q.setLong("PRG_ID", prgId);
+            retVal = q.list();
+
+            //Convert double percentages to floats
+            for (Object o : retVal) {
+                Object[] o1 = (Object[]) o;
+                o1[1] = new Float(((Long)o1[1]).floatValue());
+            }
+
+        } catch (Exception ex) {
+            logger.debug("Unable to get program fundings from DB", ex);
+        }
+        return retVal;
+    }
+
     public static List getActIdsHavingRegionalAndDistrictLevels() {
         List<Long> retVal = null;
         Session session = null;
@@ -394,8 +504,8 @@ public class DbUtil {
         }
         return retVal;
     }
-    
 
+    
     public static List getSectorFoundingsPublic(Long sectorId, int sectorQueryType) {
 
         List subSectorIds = null;
@@ -448,10 +558,33 @@ public class DbUtil {
                 whereClause.append(")");
 
 
-                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from "
-                		+AmpActivitySector.class.getName()
+                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " 
+                		+AmpActivitySector.class.getName() 
                 		+ " sec where sec.activityId in ("+publicwhere+")" + whereClause);
             }
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get sector fundings from DB", ex);
+        }
+        return retVal;
+    }
+
+    public static List getProgramFoundingsByDonor(Long prgId, Long donorid) {
+        List retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = null;
+            StringBuffer donorwhere = new StringBuffer("select f.ampActivityId from "+ AmpFunding.class.getName()
+            		+" f where f.ampDonorOrgId ="+donorid);
+
+            StringBuffer qs = new StringBuffer("select prg.activity, prg.programPercentage from ");
+            qs.append(AmpActivityProgram.class.getName());
+            qs.append(" prg where prg.program.ampThemeId = :PRG_ID ");
+            qs.append(" and prg.activity.team is not null and prg.activity in ("+donorwhere+")");
+            q = session.createQuery(qs.toString());
+            q.setLong("PRG_ID", prgId);
+
             retVal = q.list();
         } catch (Exception ex) {
             logger.debug("Unable to get sector fundings from DB", ex);
@@ -476,6 +609,14 @@ public class DbUtil {
         /*
     	List subSectorIds = null;
         if (sectorId > -1) {
+            if (sectorQueryType == SELECT_SECTOR_SCHEME) {
+                //In this case we have sector scheme id in sectorId parameter
+                List <AmpSector> schemeSecs = SectorUtil.getAllSectorsFromScheme(sectorId);
+                subSectorIds = new ArrayList();
+                for (AmpSector iterSec: schemeSecs) {
+                    subSectorIds.add(iterSec.getAmpSectorId());
+                }
+            } else if (sectorQueryType == SELECT_SECTOR || sectorQueryType == SELECT_DEFAULT) {
             subSectorIds = getSubSectorIdsWhereclause(sectorId);
         }
         */
@@ -1226,10 +1367,122 @@ public class DbUtil {
         return xmlDoc;
     }
 
+  
+    
+   
+
+    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showSecondarySectorSchemes, int sectorFilterMode) {
+        Collection <AmpSectorScheme> schemes = SectorUtil.getAllSectorSchemes();
+        Long primarySchemeId = null;
+        List<AmpClassificationConfiguration> allClassificationConfigs  = null;
+        try {
+            primarySchemeId = SectorUtil.getPrimaryConfigClassificationId();
+            allClassificationConfigs  = SectorUtil.getAllClassificationConfigs();
+        } catch (DgException ex) {
+
+        }
+
+        Set multySectorSchemIDs = new HashSet();
+        for (AmpClassificationConfiguration ampccs : allClassificationConfigs) {
+            if (ampccs.isMultisector()) {
+                multySectorSchemIDs.add(ampccs.getClassification().getAmpSecSchemeId());
+            }
+        }
+
+        XMLDocument xmlDoc = new XMLDocument();
+        XML root = new XML("data");
+        xmlDoc.addElement(root);
+
+
+        XML secRoot = new XML("sector-tree");
+        root.addElement(secRoot);
+
+
+        for (AmpSectorScheme scheme : schemes) {
+            boolean primary = (primarySchemeId != null && primarySchemeId.equals(scheme.getAmpSecSchemeId()));
+           if ( (sectorFilterMode == GisSettings.SECTOR_SCHEME_AUTOMATIC &&
+                   (primary || (multySectorSchemIDs.contains(scheme.getAmpSecSchemeId()) && showSecondarySectorSchemes)))
+              || (sectorFilterMode == GisSettings.SECTOR_SCHEME_CONFIGURABLE && scheme.getShowInRMFilters())) {
+
+            XML schemeNode = new XML("scheme");
+            schemeNode.addAttribute("name", scheme.getSecSchemeName());
+            schemeNode.addAttribute("code", scheme.getSecSchemeCode());
+            schemeNode.addAttribute("id", scheme.getAmpSecSchemeId());
+
+
+
+            schemeNode.addAttribute("primary", primary);
+
+            Collection <AmpSector> sectors =
+                    SectorUtil.getSectorLevel1(Integer.valueOf(scheme.getAmpSecSchemeId().intValue()));
+            if (sectors != null && !sectors.isEmpty()) {
+                Set subSet = null;
+                if (sectorMode == SECTORS_FOR_ACTIVITIES) {
+                    subSet = getSectorsInActivitiesSublist (sectors);
+                } else if (sectorMode == SECTORS_FOR_PLEDGES) {
+                    subSet = getSectorsInPledgesSublist(sectors);
+                }
+                populateSectorTree(sectors, schemeNode, subSet, sectorMode);
+            }
+
+            secRoot.addElement(schemeNode);
+           }
+        }
+
+        //Programs
+        Collection<AmpTheme> allPrograms = null;
+        try {
+            allPrograms = ProgramUtil.getAllThemes(true);
+        } catch (DgException ex) {
+
+        }
+        Collection programsFlatTree = CollectionUtils.getHierarchy(
+                allPrograms,
+                new ProgramUtil.ProgramHierarchyDefinition(),
+                new ProgramUtil.XMLtreeItemFactory());
+        XML prgRoot = new XML("programs-tree");
+        root.addElement(prgRoot);
+        populateProgramsTree (programsFlatTree, prgRoot, getUsedPrograms());
+
+        return xmlDoc;
+    }
+
     private static boolean populateSectorTree (Collection <AmpSector> sectors, XML parentNode,
                                             Set usedSectorSublist) {
         return populateSectorTree (sectors, parentNode, usedSectorSublist, SECTORS_FOR_ACTIVITIES);
 
+    }
+
+    private static boolean populateProgramsTree (Collection<TreeItem> programs, XML parentNode, Set usedProgramSublist) {
+        boolean oneOfPrgsHasFounding = false;
+        for (TreeItem prgTreeItem: programs) {
+            AmpTheme theme = (AmpTheme) prgTreeItem.getMember();
+            if (theme.getParentThemeId() != null || (theme.getShowInRMFilters() != null && theme.getShowInRMFilters().booleanValue())) {
+                XML sectorTag = new XML("program");
+                sectorTag.addAttribute("name", theme.getName());
+                sectorTag.addAttribute("id", theme.getAmpThemeId());
+
+                boolean curentPrjHasFunding = usedProgramSublist.contains(theme.getAmpThemeId());
+                boolean oneOfChildrenHasFounding = false;
+                if (!oneOfPrgsHasFounding && oneOfPrgsHasFounding) {
+                    oneOfPrgsHasFounding = true;
+                }
+
+                Collection<TreeItem> childPrgs = prgTreeItem.getChildren();
+                if (childPrgs != null && !childPrgs.isEmpty()) {
+                    oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag,usedProgramSublist);;
+                    if (!oneOfPrgsHasFounding && oneOfChildrenHasFounding) {
+                        oneOfPrgsHasFounding = oneOfChildrenHasFounding;
+                    }
+                }
+
+                sectorTag.addAttribute("hasFoundings", curentPrjHasFunding || oneOfChildrenHasFounding);
+                parentNode.addElement(sectorTag);
+            }
+
+        }
+
+        return oneOfPrgsHasFounding;
     }
 
     private static boolean populateSectorTree (Collection <AmpSector> sectors, XML parentNode,
@@ -1246,7 +1499,7 @@ public class DbUtil {
                 oneOfSecsHasFounding = true;
             }
 
-            //Better to have lazy collections for child sectors IMHO
+
             Collection<AmpSector> childSecs = SectorUtil.getAllChildSectors(sector.getAmpSectorId());
             if (childSecs != null && !childSecs.isEmpty()) {
                 Set actSec = null;
@@ -1265,6 +1518,26 @@ public class DbUtil {
             parentNode.addElement(sectorTag);
         }
         return oneOfSecsHasFounding;
+    }
+
+    private static Set getUsedPrograms() {
+        Set retVal = null;
+        Session sess = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+        } catch (DgException ex) {
+
+        }
+
+        StringBuffer queryStr = new StringBuffer("select distinct prj.ampActivityProgramId from ");
+        queryStr.append(AmpActivityProgram.class.getName());
+        queryStr.append(" as prj");
+
+        Query q = sess.createQuery(queryStr.toString());
+        retVal = new HashSet(q.list());
+
+        return retVal;
     }
 
     public static Set getSectorsInActivitiesSublist (Collection <AmpSector> listToFilter) {
@@ -1353,67 +1626,6 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Long getLocationIdByName (String locationName, int mapLevel) {
-        Long retVal = null;
-        Session sess = null;
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select reg.id from ");
-            queryStr.append(AmpCategoryValueLocations.class.getName());
-            queryStr.append(" as reg where reg.name = :REG_NAME ");
-            queryStr.append(" and reg.parentCategoryValue.value = :MAP_LEVEL");
-
-            Query q = sess.createQuery(queryStr.toString());
-
-
-            String mapLevelParam = null;
-            if (mapLevel == 2) {
-                mapLevelParam = "Region";
-            } else if (mapLevel == 3) {
-                mapLevelParam = "District";
-            } else {
-                throw new DgException("Incorrect map level parameter");
-            }
-            q.setString("REG_NAME", locationName);
-            q.setString("MAP_LEVEL", mapLevelParam);
-            retVal = (Long) q.uniqueResult();
-        } catch (Exception ex) {
-            logger.debug("Unable to get region ID from DB", ex);
-        }
-
-
-        return retVal;
-    }
-
-    public static String getLocationNameById (Long locId) {
-        String retVal = null;
-        Session sess = null;
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select reg.name from ");
-            queryStr.append(AmpCategoryValueLocations.class.getName());
-            queryStr.append(" as reg where reg.id = :REG_ID");
-            Query q = sess.createQuery(queryStr.toString());
-            q.setLong("REG_ID", locId);
-            retVal = (String) q.uniqueResult();
-        } catch (Exception ex) {
-            logger.debug("Unable to get region name from DB", ex);
-        }
-        return retVal;
-    }
-
-    private static StringBuffer getLongIdsWhereclause (List <Long> idList) {
-        StringBuffer retVal = new StringBuffer();
-        Iterator <Long> it = idList.iterator();
-        while (it.hasNext()) {
-            retVal.append(it.next());
-            if (it.hasNext()) {
-                retVal.append(",");
-            }
-        }
-        return retVal;
-    }
-
     public static List <FundingPledgesSector> getPledgesBySector (Long sectorId, int sectorQueryType) {
         List retVal = null;
         Session session = null;
@@ -1470,4 +1682,56 @@ public class DbUtil {
         return retVal;
     }
 
+    private static StringBuffer getLongIdsWhereclause (List <Long> idList) {
+        StringBuffer retVal = new StringBuffer();
+        Iterator <Long> it = idList.iterator();
+        while (it.hasNext()) {
+            retVal.append(it.next());
+            if (it.hasNext()) {
+                retVal.append(",");
+            }
+        }
+        return retVal;
+    }
+
+    public static GisSettings getGisSettings (HttpServletRequest request) {
+        Site site = RequestUtils.getSite(request);
+        ModuleInstance modInst = RequestUtils.getModuleInstance(request);
+        return getGisSettings (site.getSiteId(), modInst.getInstanceName());
+    }
+
+    public static GisSettings getGisSettings (String siteId, String instanceId) {
+        GisSettings retVal = null;
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            StringBuffer queryStr = new StringBuffer("from ");
+            queryStr.append(GisSettings.class.getName());
+            queryStr.append(" as gs where gs.siteId = :SITE_ID and gs.instanceId = :INSTANCE_ID ");
+
+            Query q = sess.createQuery(queryStr.toString());
+            q.setString("SITE_ID", siteId);
+            q.setString("INSTANCE_ID", instanceId);
+
+            retVal = (GisSettings)q.uniqueResult();
+
+            //If settings do not exist
+            if (retVal == null) {
+                GisSettings newOne = new GisSettings(siteId, instanceId);
+                createGisSettings (newOne);
+                retVal = newOne;
+            }
+
+        } catch (DgException ex) {
+          logger.error("Error getting GIS settings from database " + ex);
+        }
+
+
+        return retVal;
+    }
+
+    private static void createGisSettings (GisSettings sets) throws DgException {
+        Session sess = PersistenceManager.getRequestDBSession();
+        sess.save(sets);
+    }
 }

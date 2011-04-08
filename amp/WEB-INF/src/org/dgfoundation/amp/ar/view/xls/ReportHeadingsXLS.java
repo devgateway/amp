@@ -70,8 +70,30 @@ public class ReportHeadingsXLS extends XLSExporter {
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
 			
-			HSSFCell cell1 =  this.getCell(row,this.getRegularStyle());
-			cell1.setCellValue("");
+			HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+			if (curDepth == 0) {
+				cell1.setCellValue( this.getMetadata().getHierarchiesPath() );
+				int maxRowSpan		= 1;
+				Boolean summaryReport		= this.getMetadata().getHideActivities();
+				if (  summaryReport == null  || !summaryReport ) {
+					Column tempCol			= (Column)columnReport.getItems().get(0);
+					maxRowSpan				= (tempCol.getRowSpan()>maxRowSpan)?tempCol.getRowSpan():maxRowSpan;
+                                        if(maxRowSpan>1) maxRowSpan-=1;
+				}
+				else {
+					Iterator<Column> colIter	= columnReport.getItems().iterator();
+					while ( colIter.hasNext() ) {
+						Column tempCol	= colIter.next();
+						maxRowSpan		= (tempCol.getCurrentRowSpan()>maxRowSpan)?tempCol.getCurrentRowSpan():maxRowSpan;
+					}
+					if ( maxRowSpan > 3 ) maxRowSpan = 3;
+                                        
+				}
+                                makeRowSpan(maxRowSpan,true);
+				sheet.setColumnWidth((short)colId.value, (short)5120);
+			}
+			else
+				cell1.setCellValue("");
 			colId.inc();			
 			Iterator i = columnReport.getItems().iterator();
 			//int cellCount = 0;

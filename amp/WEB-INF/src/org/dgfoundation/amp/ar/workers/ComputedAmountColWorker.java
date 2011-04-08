@@ -87,6 +87,7 @@ public class ComputedAmountColWorker extends ColumnWorker {
 		String currencyCode = rs.getString(4);
 		Date currencyDate = rs.getDate(5);
 		double exchangeRate = rs.getDouble(6);
+		
 
 		ComputedAmountCell ret = new ComputedAmountCell(ownerId);
 		ret.setId(id);
@@ -97,6 +98,39 @@ public class ComputedAmountColWorker extends ColumnWorker {
 		ret.setToExchangeRate(1);
 		MetaInfo costMs = getCachedMetaInfo(this.getColumnName(), null);
 		ret.getMetaData().add(costMs);
+		
+		MetaInfo dateMi	= getCachedMetaInfo(ArConstants.TRANSACTION_DATE, currencyDate);
+		ret.getMetaData().add(dateMi);
+
+		if ( this.columnsMetaData.contains("donor_name") ) {
+			String donorName		= rs.getString("donor_name");
+			MetaInfo donorNameMi	= getCachedMetaInfo(ArConstants.DONOR, donorName);
+			ret.getMetaData().add(donorNameMi);
+		}
+		if (columnsMetaData.contains("terms_assist_name")){
+			String termsAssist = rs.getString("terms_assist_name");
+			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
+					termsAssist);
+			ret.getMetaData().add(termsAssistMeta);
+		}
+		if (columnsMetaData.contains("financing_instrument_name")){			
+		    String financingInstrument = rs.getString("financing_instrument_name");
+			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
+					financingInstrument);
+			ret.getMetaData().add(termsAssistMeta);
+		}
+		if(columnsMetaData.contains("donor_type_name")) {
+			String donorTypeName=rs.getString("donor_type_name");
+			MetaInfo donorTypeMeta = this.getCachedMetaInfo(ArConstants.DONOR_TYPE_COL,
+					donorTypeName );
+			ret.getMetaData().add(donorTypeMeta);
+		}
+		if (columnsMetaData.contains("org_grp_name")) {
+			String donorGroupName	= rs.getString("org_grp_name");
+			MetaInfo donorGroupMeta = this.getCachedMetaInfo(ArConstants.DONOR_GROUP,
+					donorGroupName );
+			ret.getMetaData().add(donorGroupMeta);
+		}
 
 		// UGLY get exchage rate if cross-rates are needed (if we need to
 		// convert from X to USD and then to Y)

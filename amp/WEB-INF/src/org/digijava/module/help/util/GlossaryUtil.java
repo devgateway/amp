@@ -1,10 +1,15 @@
 package org.digijava.module.help.util;
 
+import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
@@ -69,9 +74,30 @@ public class GlossaryUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, String siteId, String locale) throws DgException{
-		
+
+        StringBuffer trnTitlesWhr = new StringBuffer();
+
+        if (locale != null && !locale.isEmpty() && !locale.equalsIgnoreCase("en")) {
+            List matchingTranslations = getMatchingTitles(keyWords, moduleInstance, siteId, locale);
+            //Build translated titles whereclause
+            if (matchingTranslations != null && !matchingTranslations.isEmpty()) {
+                trnTitlesWhr.append(" or ht.helpTopicId in (");
+                Iterator <Long> it = matchingTranslations.iterator();
+                while (it.hasNext()) {
+                    trnTitlesWhr.append(it.next());
+                    if (it.hasNext()) {
+                        trnTitlesWhr.append(",");
+                    }
+                }
+                trnTitlesWhr.append(") ");
+            }
+        }
+
+
+
+
 		List<HelpTopic> result = null;
-		String oql = "select ht from "; 
+		String oql = "select distinct ht from ";
 		oql += HelpTopic.class.getName()+ " as ht, ";
 		oql += Editor.class.getName()+" as e ";
 		oql += " where ht.topicType=:GLOSS_TYPE";
@@ -85,11 +111,16 @@ public class GlossaryUtil {
 			for (int i=0;i<keyWords.size();i++){
 				if (c>0) oql += " or ";
 				oql += " ht.topicKey like :KEY_WORD_"+c;
-				oql += " or   e.body like :KEY_WORD_"+c;
+				oql += " or e.body like :KEY_WORD_"+c;
 				c++;
 			}
 			oql+=" )";
 		}
+
+
+        //Translated help topic search
+        oql += trnTitlesWhr.toString();
+
 		if (moduleInstance != null){
 			oql += " and ht.moduleInstance=:MOD_INST";
 		}
@@ -118,7 +149,82 @@ public class GlossaryUtil {
 		result = query.list();
 		return result;
 	}
-	
+
+
+    private static List<Long> getMatchingTitles (List<String> keyWords, String moduleInstance, String siteId, String locale) throws DgException {
+        Long siteIdLong = SiteUtils.getSite(siteId).getId();
+
+        List retVal = null;
+        StringBuffer queryStr = new StringBuffer ("select distinct ht.helpTopicId from ");
+        queryStr.append(Message.class.getName());
+        queryStr.append(" as trn, ");
+        queryStr.append(Message.class.getName());
+        queryStr.append(" as eng, ");
+        queryStr.append(HelpTopic.class.getName());
+        queryStr.append(" as ht ");
+        queryStr.append(" where trn.key = eng.key and ");
+        queryStr.append(" ht.topicKey = eng.message");
+
+
+        if (keyWords!=null && keyWords.size()>0){
+			queryStr.append(" and (");
+			int c = 0;
+			for (int i=0;i<keyWords.size();i++){
+				if (c>0) {
+                    queryStr.append(" or ");
+                }
+				queryStr.append("trn.message like :KEY_WORD_");
+                queryStr.append(c);
+				c++;
+			}
+			queryStr.append(" )");
+		}
+
+        if (moduleInstance != null){
+			queryStr.append(" and ht.moduleInstance=:MOD_INST");
+		}
+
+        if (siteId != null){
+			queryStr.append(" and trn.siteId = :SITE_ID_LONG");
+            queryStr.append(" and eng.siteId = :SITE_ID_LONG");
+            queryStr.append(" and ht.siteId = :SITE_ID");
+
+		}
+        if (locale!=null && locale.length()>0){
+            queryStr.append(" and trn.locale = :LANG");
+		}
+
+        Session session = PersistenceManager.getRequestDBSession();
+		Query query = session.createQuery(queryStr.toString());
+
+
+
+        if (keyWords!=null && keyWords.size()>0){
+			int c = 0;
+			for (String kw : keyWords) {
+				query.setString("KEY_WORD_"+c, "%"+kw+"%");
+				c++;
+			}
+		}
+
+        if (moduleInstance != null){
+			query.setString("MOD_INST", moduleInstance);
+		}
+
+        if (siteId != null){
+			query.setString("SITE_ID", siteId);
+            query.setLong("SITE_ID_LONG", siteIdLong);
+		}
+
+        if (locale!=null && locale.length()>0){
+			query.setString("LANG", locale);
+		}
+
+        retVal = query.list();
+
+        return retVal;
+    }
+
 	/**
 	 * Loads glossary topic object by ID.
 	 * @param id pk in db.
@@ -136,13 +242,13 @@ public class GlossaryUtil {
 	}
 	
 	/**
-	 * Creates ne glossary topic.
+	 * Creates new glossary topic.
 	 * @param topic
 	 * @throws DgException
 	 */
-	public static void createOrUpdateGlossaryTopic(HelpTopic topic) throws DgException{
+	public static void createOrUpdateGlossaryTopic(HelpTopic topic,HttpServletRequest request) throws DgException{
 		topic.setTopicType(TYPE_GLOSSARY);
-		HelpUtil.saveOrUpdateHelpTopic(topic);
+		HelpUtil.saveOrUpdateHelpTopic(topic, request);
 	}
 	
 	/**

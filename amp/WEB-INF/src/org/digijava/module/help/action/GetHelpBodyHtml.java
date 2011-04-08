@@ -48,7 +48,7 @@ public class GetHelpBodyHtml extends Action {
 			String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
 			editorKey="glossary-" + moduleInstance + "-"+request.getSession().getId().hashCode() + "-" + String.valueOf(System.currentTimeMillis());
 			topic.setBodyEditKey(editorKey);
-			GlossaryUtil.createOrUpdateGlossaryTopic(topic);
+			GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
 		}
 		//get body for help topic
 		String body = DbUtil.getEditorBody(siteId, editorKey, language);

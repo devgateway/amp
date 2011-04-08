@@ -30,6 +30,8 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -39,6 +41,9 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.hibernate.HibernateException;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -333,6 +338,21 @@ public class AmpReportGenerator extends ReportGenerator {
 								.next();
 						cac.applyMetaFilter(c.getName(), fakeMc, cac);
 					}
+					
+					for ( CellColumn tempCellColumn: rawColumnsByName.values() ) {
+						if (tempCellColumn.getName().toLowerCase().contains("mtef")) {
+							Iterator<Cell> mtefCellIt	= tempCellColumn.iterator();
+							while (mtefCellIt.hasNext()) {
+								CategAmountCell cacParent = (CategAmountCell) mtefCellIt.next();
+								if ( cacParent.getMergedCells() != null ) 
+									for ( Object cacObj: cacParent.getMergedCells() ) {
+										CategAmountCell cac	= (CategAmountCell) cacObj;
+										cac.applyMetaFilter(c.getName(), fakeMc, cac); 
+									}
+							}
+						}
+					}
+					
 				}
 			}
 
@@ -378,6 +398,30 @@ public class AmpReportGenerator extends ReportGenerator {
 			ColumnFilterGenerator.attachHardcodedFilters(acProp);
 			reportMetadata.getOrderedColumns().add(arcProp);
 		}
+		
+		Iterator<AmpReportColumn> iterRC	= reportMetadata.getColumns().iterator();
+		while ( iterRC.hasNext() ) {
+			
+			AmpReportColumn tempRC	= iterRC.next();
+			AmpColumns tempCol		= tempRC.getColumn();
+			if ( tempCol.getColumnName().toLowerCase().contains("mtef") ) {
+				AmpColumns clonedCol	= new AmpColumns();
+				clonedCol.setColumnName( tempCol.getColumnName() );
+				clonedCol.setColumnId( tempCol.getColumnId() );
+				clonedCol.setAliasName( tempCol.getAliasName() );
+				clonedCol.setCellType( tempCol.getCellType() );
+				clonedCol.setDescription( tempCol.getDescription() );
+				clonedCol.setExtractorView( tempCol.getExtractorView() );
+				clonedCol.setFilterRetrievable( tempCol.getFilterRetrievable() );
+				clonedCol.setRelatedContentPersisterClass( tempCol.getRelatedContentPersisterClass() );
+				clonedCol.setTokenExpression( tempCol.getTokenExpression() );
+				clonedCol.setTotalExpression( tempCol.getTotalExpression() );
+				
+				tempRC.setColumn(clonedCol);
+				
+				ColumnFilterGenerator.attachHardcodedFilters(clonedCol);
+			}
+		}
 	}
 
 	/**
@@ -390,11 +434,20 @@ public class AmpReportGenerator extends ReportGenerator {
 		boolean categorizeByFundingType = false;
 		if (reportMetadata.getType().intValue() != 4)
 			categorizeByFundingType = true;
-
+		
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
+		
+		//get the MTEF columns
+		List<TotalComputedAmountColumn> mtefCols	= new ArrayList<TotalComputedAmountColumn>();
+		for ( Object tempObj:rawColumns.getItems() ) {
+			Column tempCol		= (Column) tempObj;
+			if ( tempCol.getAbsoluteColumnName().contains("MTEF") ) {
+				mtefCols.add( (TotalComputedAmountColumn) tempCol );
+			}
+		}
 
-		Column newcol = new GroupColumn();
+		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
 			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
@@ -450,6 +503,14 @@ public class AmpReportGenerator extends ReportGenerator {
 					AmountCell element = (AmountCell) i.next();
 					cTac.addCell(element);
 				}
+				
+				for (TotalComputedAmountColumn tcaCol: mtefCols ) {
+					Iterator <ComputedAmountCell>	iterCac = tcaCol.getItems().iterator();
+					while ( iterCac.hasNext() ) {
+						ComputedAmountCell cac	= iterCac.next();
+						cTac.addCell(cac);
+					}
+				}
 
 				newcol.getItems().add(cTac);
 			}
@@ -478,6 +539,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
 		Collections.sort(listMeasurement);
 
+		
+		
 		List<Column> columnlist = newcol.getItems();
 		List<Column> tmpColumnList = new ArrayList<Column>(columnlist.size());
 		// add columns as measurements order
@@ -504,6 +567,29 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// replace items by ordered items
 		newcol.setItems(tmpColumnList);
+				
+		// add subcolumns for type of assistance
+		//split column for type of assistance ONLY when TOA is added as column	
+		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
+				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+		//iterate each column in newcol
+		for (int i=0; i< newcol.getItems().size();i++){
+			Column nestedCol = (Column) newcol.getItems().get(i);
+			if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
+			
+			List<String> cat = new ArrayList<String>();
+			cat.add(ArConstants.TERMS_OF_ASSISTANCE);
+			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
+					true, reportMetadata);
+			
+			nestedCol2.addColumn(nestedCol);
+			nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
+			
+			}
+		}
+		
 		rawColumns.addColumn(newcol);
 	}
 
@@ -646,18 +732,19 @@ public class AmpReportGenerator extends ReportGenerator {
 				String siteId = rd.getParent().getReportMetadata().getSiteId();
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
+				String text2 = c.getColumnName();
 				String translatedText = null;
+				String translatedText2 = null;
 				//String prefix = "aim:reportGenerator:"; not used cos hash keys
 				try {
 					translatedText = TranslatorWorker.translateText(text, locale, siteId);
+					translatedText2 = TranslatorWorker.translateText(text2, locale, siteId);
 				} catch (WorkerException e) {
 					e.printStackTrace();
 				}
-				if (translatedText.compareTo("") == 0)
-					translatedText = text;
-				//
-				fakeC.setValue(translatedText);
-				//
+				
+				fakeC.setValue(translatedText2 + " " + translatedText);
+				
 				hc.addCell(fakeC);
 			}
 
@@ -720,10 +807,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount = 0;
 		
 		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
+			request.getSession().removeAttribute(ArConstants.PLEDGES_REPORT);
 			filter.generateFilterQuery(request);
 		}else {
 			pledgereport = true;
-			request.getSession().setAttribute("pledgereport", "true");
+			request.getSession().setAttribute(ArConstants.PLEDGES_REPORT, "true");
 			filter.generateFilterQuery(request);
 		}
 		
@@ -767,7 +855,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		attachFundingMeta();
 	}
 	
-	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId) {
+	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId, Column column) {
 		TextCell fakeC = new TextCell();
 		fakeC.setValue(ArConstants.UNALLOCATED);
 		fakeC.setOwnerId( activityId );
@@ -777,16 +865,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		String locale = rd.getParent().getReportMetadata().getLocale();
 		String text = fakeC.getValue().toString();
 		String translatedText = null;
+		String translatedText2 = null;
 		//String prefix = "aim:reportGenerator:"; not used cos hash keys
 		try {
 			translatedText = TranslatorWorker.translateText(text, locale, siteId);
-		} catch (WorkerException e) {
+			translatedText2 = TranslatorWorker.translateText(column.getName(), locale, siteId);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (translatedText.compareTo("") == 0)
-			translatedText = text;
-		//
-		fakeC.setValue(translatedText);
+
+		fakeC.setValue(translatedText2 + " " + translatedText);
 		return fakeC;
 	}
 	

@@ -439,7 +439,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
         oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
         oldActivity.setName(activity.getName());
-        oldActivity.setBudget(activity.getBudget());
+        //oldActivity.setBudget(activity.getBudget());
         oldActivity.setBudgetsector(activity.getBudgetsector());
         oldActivity.setBudgetorganization(activity.getBudgetorganization());
         oldActivity.setBudgetdepartment(activity.getBudgetdepartment());
@@ -2850,6 +2850,35 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
 //end functino to get components
+  
+  public static ArrayList getRegionalObservations(Long id) {
+		ArrayList<AmpRegionalObservation> list = new ArrayList<AmpRegionalObservation>();
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+			Set regObs = activity.getRegionalObservations();
+			Iterator<AmpRegionalObservation> iRegObs = regObs.iterator();
+			while (iRegObs.hasNext()) {
+				AmpRegionalObservation auxRegOb = iRegObs.next();
+				Iterator<AmpRegionalObservationMeasure> iRegMeasures = auxRegOb.getRegionalObservationMeasures()
+						.iterator();
+				while (iRegMeasures.hasNext()) {
+					AmpRegionalObservationMeasure auxRegMeasure = iRegMeasures.next();
+					Iterator<AmpRegionalObservationActor> iRegActors = auxRegMeasure.getActors().iterator();
+					while (iRegActors.hasNext()) {
+						iRegActors.next();
+					}
+				}
+
+				list.add(auxRegOb);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return list;
+	}
+  
   public static ArrayList getIssues(Long id) {
     ArrayList list = new ArrayList();
 
@@ -2952,13 +2981,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return col;
   }
 
-  public static AmpActivity getActivityByName(String name) {
+  public static AmpActivity getActivityByName(String name , Long actId) {
     AmpActivity activity = null;
     Session session = null;
     try {
       session = PersistenceManager.getSession();
       String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
           "where lower(a.name) = :lowerName";
+      if(actId!=null){
+    	  qryStr+=" and a.ampActivityId!="+actId;
+      }
       Query qry = session.createQuery(qryStr);
       qry.setString("lowerName", name.toLowerCase());
       Iterator itr = qry.list().iterator();

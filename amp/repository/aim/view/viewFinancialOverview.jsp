@@ -48,6 +48,9 @@ function preview(id)
 <c:set target="${urlSubTabs}" property="tabIndex"  >
 	<bean:write name="aimFinancialOverviewForm" property="tabIndex"/>
 </c:set>
+<c:set target="${urlSubTabs}" property="currency"  >
+	<bean:write name="aimFinancialOverviewForm" property="currency"/>
+</c:set>
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
 <jsp:useBean id="urlAll" type="java.util.Map" class="java.util.HashMap"/>

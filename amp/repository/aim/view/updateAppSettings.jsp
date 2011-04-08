@@ -225,12 +225,16 @@ function loadShareRules(){
 								<td class="inside">
 									<bean:define id="newOnly" value=""/>
 									<bean:define id="allEdits" value=""/>
+															<bean:define id="validationOff" value=""/>
 									<c:if test="${aimUpdateAppSettingsForm.validation=='newOnly'}">
 										<bean:define id="newOnly" value="selected"/>
 									</c:if>
 									<c:if test="${aimUpdateAppSettingsForm.validation=='allEdits'}">
 										<bean:define id="allEdits" value="selected"/>
 									</c:if>
+															<c:if test="${aimUpdateAppSettingsForm.validation=='validationOff'}">
+																<bean:define id="validationOff" value="selected"/>
+															</c:if>
 									<c:if test="${aimUpdateAppSettingsForm.validation=='allOff'}">
 										<bean:define id="allOff" value="selected"/>
 									</c:if>

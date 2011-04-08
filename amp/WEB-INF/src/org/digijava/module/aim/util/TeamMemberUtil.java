@@ -43,6 +43,8 @@ import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.mondrian.dbentity.EntityHelper;
+import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1771,6 +1773,11 @@ public class TeamMemberUtil {
                         }
                     }
                     
+                    ArrayList<OffLineReports> reports = new ArrayList<OffLineReports>();
+            		reports = (ArrayList<OffLineReports>) EntityHelper.getReports(ampMember);
+            		for (OffLineReports report : reports) {
+            			EntityHelper.DeleteReport(report);
+					}
                     session.delete(ampMember);
                 }
             }

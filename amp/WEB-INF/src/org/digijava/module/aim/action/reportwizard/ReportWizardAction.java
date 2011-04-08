@@ -344,7 +344,7 @@ public class ReportWizardAction extends MultiAction {
 			if ( numOfCols == numOfHiers ) {
 				for ( AmpColumns tempCol: availableCols ) {
 					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
-						if (!isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
+						if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
 							AmpReportColumn titleCol			= new AmpReportColumn();
 							titleCol.setLevel(level1);
 							titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
@@ -353,7 +353,8 @@ public class ReportWizardAction extends MultiAction {
 							break;
 						}else{
 							/*if Project Title column is already added then remove it from hierarchies list*/
-							removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
+							if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
+							AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
 							break;
 						}
 					}
@@ -433,29 +434,6 @@ public class ReportWizardAction extends MultiAction {
 		//modeReset(mapping, form, request, response);
 		
 		return null;
-	}
-	
-	private boolean isColumnAdded (Set <AmpReportColumn> columns, String colName){
-		
-		for ( AmpReportColumn tempCol: columns ) {
-			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private void removeColumnFromHierarchies (Set <AmpReportHierarchy> columns, String colName){
-		AmpReportHierarchy hierarchy = null;
-		for ( AmpReportHierarchy tempCol: columns ) {
-			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
-				hierarchy = tempCol;
-				break;
-			}
-		}
-		if (hierarchy!=null) {
-			columns.remove(hierarchy);
-		}
 	}
 	
 	private void addFields (Long [] sourceVector, Collection availableFields, Collection container, 
@@ -551,8 +529,9 @@ public class ReportWizardAction extends MultiAction {
 									}
 								}else{
 									if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0 &&
-											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)){
-										ampThemesOrdered.add(aco);
+											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
+											&& !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
+												ampThemesOrdered.add(aco);
 										//System.out.println("	----------------ADDED!");
 									}
 								}

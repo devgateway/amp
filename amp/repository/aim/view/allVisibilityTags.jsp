@@ -20,6 +20,7 @@
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -62,7 +63,8 @@
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
-<feature:display name="Pledges Default Reports" module="Multi-dimensional Reports"></feature:display>
+<module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
+<feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
 <feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
@@ -79,6 +81,7 @@
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="PUBLIC VIEW"></module:display> 
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
@@ -245,6 +248,7 @@
 <feature:display name="Event Approve" module="Calendar"></feature:display>
 <feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
 <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
+<feature:display name="NGO Form" module="Organization Manager"></feature:display>
 <%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 --%>
@@ -260,12 +264,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
 <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
  
-<field:display name="Add Observations Button" feature="Regional Observations"></field:display>
-<field:display name="Measures Taken" feature="Regional Observations"></field:display>
-<field:display name="Add Measures Link" feature="Regional Observations"></field:display>
-<field:display name="Add Actors Link" feature="Regional Observations"></field:display>
-<field:display name="Actors" feature="Regional Observations"></field:display>
-<field:display name="Observation Date" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations" feature="Regional Observations"></field:display> 
+<field:display name="Regional Observations Add Button" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Measures Taken" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Add Measures Link" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Add Actors Link" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
+<field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
@@ -305,6 +310,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Audit System" feature="Identification"></field:display> 
 <field:display name="Institutions" feature="Identification"></field:display> 
 <field:display name="Accession Instrument" feature="Identification"></field:display> 
+<field:display name="Project Implementing Unit" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Activity Approved By" feature="Identification"></field:display> 
 <field:display name="Activity Approved On" feature="Identification"></field:display> 
@@ -329,6 +335,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Activity Button" feature="Edit Activity"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Commitments"></field:display> 
+<field:display name="Pipeline" feature="Commitments"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Add Disbursement Button" feature="Disbursement"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 
@@ -681,7 +688,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off Budget" feature="Budget"></field:display> 
+ <field:display name="On/Off/Treasure Budget" feature="Budget"></field:display>
 <field:display name="Organizations Selector" feature="Funding Information"></field:display> 
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
@@ -780,9 +787,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Secondary Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Validate Mandatory Tertiary Sector" feature="Sectors"></field:display>
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
@@ -905,6 +914,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
@@ -917,6 +929,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Pledge Location" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Pledge Program" feature="Pledge Sector and Location"></field:display>
+<field:display name="Add Pledge Program Button" feature="Pledge Sector and Location"></field:display>
+<field:display name="Remove Pledge Program Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Pledge Sector" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
@@ -980,3 +995,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
+<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Recipients" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form"></field:display>
+<field:display name="Mandatory Indicator For Organization Intervention Location" feature="NGO Form"></field:display>

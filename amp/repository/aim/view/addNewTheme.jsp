@@ -121,7 +121,7 @@
 			if (temp == true) 
 			{
 			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-			document.aimThemeForm.action = "<%=addThm%>~event=save";				
+			document.aimThemeForm.action = "<%=addThm%>";
 			document.aimThemeForm.submit();
 			window.opener.location.reload();
 			//window.close();
@@ -308,6 +308,13 @@
 			      <td align="left"><html:textarea
 						property="programEnvironmentConsiderations" cols="35" rows="2"
 						styleClass="inp-text" /></td>
+				</tr>
+				<tr bgColor=#ffffff>
+					<td width="30%" height="20" align="right" valign="middle">
+						<digi:trn>Show in RM Filter list</digi:trn>
+					</td>
+				  <td width="2" align="left">&nbsp;</td>
+			      <td align="left"><html:checkbox property="showInRMFilters"/></td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5"></td></tr>	
 				<tr bgColor=#ffffff><td height="30" colspan="3"></td></tr>

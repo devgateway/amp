@@ -188,8 +188,6 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgI
 
 		alert (errmsg);
 
-		document.getElementById("orgFundingId").focus();
-
 		return false;
 
 	}

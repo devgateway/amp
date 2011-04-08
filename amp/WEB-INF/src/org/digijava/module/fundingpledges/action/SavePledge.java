@@ -1,7 +1,6 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,16 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -45,7 +41,8 @@ public class SavePledge extends Action {
 			}
     		
     		pledge.setId(plForm.getPledgeId());
-    		pledge.setTitle(plForm.getPledgeTitle());
+    		//pledge.setTitle(plForm.getPledgeTitle());
+    		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
     		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
@@ -106,9 +103,14 @@ public class SavePledge extends Action {
 	     			}
 	    			fpd.setPledgetypeid(Long.parseLong(token[1]));
 	    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
-	    			fpd.setAmount(Double.parseDouble(token[3]));
+	    			fpd.setAmount((FormatHelper.parseDouble(token[3])));
 	    			fpd.setCurrencycode(token[4]);
-	    			fpd.setFundingDate(token[5]);
+	    			//TODO find another way to do it this is not very elegant
+	    			if (token[5].equalsIgnoreCase("unspecified")){
+	    				fpd.setFundingYear(null);
+	    			}else{
+	    				fpd.setFundingYear(token[5]);
+	    			}
 	    			fpd.setAidmodalityid(Long.parseLong(token[6]));
 	    			plForm.getFundingPledgesDetails().add(fpd);
     			}
@@ -141,17 +143,17 @@ public class SavePledge extends Action {
     		
     		
     		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
-    			if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
+    			/*if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
     					PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getOrganization().getAmpOrgId() != Long.parseLong(plForm.getSelectedOrgId())) {
     				if (isTitleDuplicated(mapping,request,plForm)) {
     					return mapping.findForward("success");
     				}
-				}
+				}*/
     			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
 			} else {
-				if (isTitleDuplicated(mapping,request,plForm)) {
+				/*if (isTitleDuplicated(mapping,request,plForm)) {
 					return mapping.findForward("success");
-				}
+				}*/
 				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
 			}
     		
@@ -160,7 +162,7 @@ public class SavePledge extends Action {
 		}
 
 
-	private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
+	/*private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
 		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
 		if (fpByNameAndOrg != null) {
 			if (fpByNameAndOrg.size()!=0) {
@@ -173,5 +175,5 @@ public class SavePledge extends Action {
 			}
 		}
 		return false;
-	}
+	}*/
 }

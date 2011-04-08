@@ -1,8 +1,10 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 public class ReportsForm extends ActionForm {
 
@@ -33,6 +35,63 @@ public class ReportsForm extends ActionForm {
     private boolean showReportList;
 
     private Boolean showTabs	= false;
+    private String keyword;
+    private String action;
+    private boolean tabs;
+    private int sortBy;
+    private boolean reset;
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public void setReset(boolean reset) {
+        this.reset = reset;
+    }
+    
+
+    public int getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public ReportSortBy getSortByColumn() {
+        return sortByColumn;
+    }
+
+    public void setSortByColumn(ReportSortBy sortByColumn) {
+        this.sortByColumn = sortByColumn;
+    }
+    private ReportSortBy sortByColumn;
+
+   
+
+    public boolean getTabs() {
+        return tabs;
+    }
+
+    public void setTabs(boolean tabs) {
+        this.tabs = tabs;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
 	public int getPagesToShow() {
 		return pagesToShow;
@@ -242,7 +301,21 @@ public class ReportsForm extends ActionForm {
 	public boolean isShowReportList() {
 		return showReportList;
 	}
-	
-	
-
+    public enum ReportSortBy{
+     NAME_ASC(1),
+     NAME_DESC(2),
+     OWNER_ASC(3),
+     OWNER_DESC(4),
+     DATE_ASC(5),DATE_DESC(6),
+     NONE(7);
+     private final int sortBy;
+     ReportSortBy(int sortBy) {
+         this.sortBy = sortBy;
+     }
+     public int getSortBy(){
+         return sortBy;
+     }
+     
+ }
 }
+

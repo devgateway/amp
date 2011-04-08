@@ -29,6 +29,8 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
@@ -238,7 +240,7 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 		activity.setAmpId(eaForm.getIdentification().getAmpId());
 		processActivityMustHaveInfo(eaForm, activity);
-		activity.setBudget(eaForm.getIdentification().getBudget());
+		//activity.setBudget(eaForm.getIdentification().getBudget());
 		if (eaForm.getIdentification().getDescription() == null
 				|| eaForm.getIdentification().getDescription().trim().length() == 0) {
 			activity.setDescription(new String(" "));
@@ -266,7 +268,7 @@ public class SaveActivity extends Action {
 		} else {
 			activity.setProjectImpact(eaForm.getIdentification().getProjectImpact());
 		}
-		if(eaForm.getIdentification().getBudget() != null && (eaForm.getIdentification().getBudget().intValue()==-1 || eaForm.getIdentification().getBudget().intValue()==0))
+		if(eaForm.getIdentification().getBudgetCV() != null && (eaForm.getIdentification().getBudgetCV().intValue()==0 || eaForm.getIdentification().getBudgetCV().intValue()==1))
 			activity.setChapter(null);
 		else
 			activity.setChapter(ChapterUtil.getChapterByCode(eaForm.getIdentification().getChapterCode()));
@@ -349,11 +351,28 @@ public class SaveActivity extends Action {
 		/*
 		 * tanzania adds
 		 */
-		if (eaForm.getIdentification().getFY() == null
-				|| eaForm.getIdentification().getFY().trim().length() == 0)
+//		if (eaForm.getIdentification().getFY() == null || eaForm.getIdentification().getFY().trim().length() == 0)
+//			activity.setFY(new String(" "));
+//		else
+//			activity.setFY(eaForm.getIdentification().getFY());
+		if(eaForm.getIdentification().getResetselectedFYs()!=null && eaForm.getIdentification().getResetselectedFYs()){
+			eaForm.getIdentification().setSelectedFYs(null);
+		}
+		
+		if (eaForm.getIdentification().getSelectedFYs() == null || eaForm.getIdentification().getSelectedFYs().length == 0){
 			activity.setFY(new String(" "));
-		else
-			activity.setFY(eaForm.getIdentification().getFY());
+		}else{
+			String [] selectedFYs = eaForm.getIdentification().getSelectedFYs();
+			String fy ="";
+			for(int i=0;i<selectedFYs.length;i++){
+				fy+=selectedFYs[i];
+				if(i!=selectedFYs.length-1){
+					fy+=",";
+				}				
+			}
+			activity.setFY(fy);
+		}
+		
 
 		if (eaForm.getIdentification().getVote() == null
 				|| eaForm.getIdentification().getVote().trim().length() == 0)
@@ -400,7 +419,7 @@ public class SaveActivity extends Action {
 		if (eaForm.getIdentification().getSelectedorg() != null){
 			activity.setBudgetorganization(eaForm.getIdentification().getSelectedorg());
 		}
-		if(eaForm.getIdentification().getBudget() != null && (eaForm.getIdentification().getBudget().intValue()!=-1 || eaForm.getIdentification().getBudget().intValue()!=0 )){
+		if(eaForm.getIdentification().getBudgetCV() != null && (eaForm.getIdentification().getBudgetCV().intValue()!=0 || eaForm.getIdentification().getBudgetCV().intValue()!=1 )){
 			if (eaForm.getIdentification().getSelecteddepartment()!=null){
 				activity.setBudgetdepartment(eaForm.getIdentification().getSelecteddepartment());
 			}
@@ -547,6 +566,8 @@ public class SaveActivity extends Action {
         CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getImplemLocationLevel(), activity.getCategories() );
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getActivityLevel(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
+        CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectImplUnitId(), activity.getCategories());
+        CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getBudgetCV(), activity.getCategories());
 		/* END - Saving categories to AmpActivity */
 			
         
@@ -660,28 +681,34 @@ public class SaveActivity extends Action {
 						
 						if (isPrimarySectorEnabled() && isInConfig(eaForm,"Primary")){
 							if(!hasPrimarySectorsAdded){
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Primary Sector", ampContext)){
 								errors.add("noPrimarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
 							}
-							if(primaryPrc!=100)
+							}
+							else if(primaryPrc!=100)
 								errors.add("primarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
 						}
 
 						
 						if (isSecondarySectorEnabled() && isInConfig(eaForm, "Secondary")){
 							if(!hasSecondarySectorsAdded){
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Secondary Sector", ampContext)){
 								errors.add("noSecondarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
 							}
-							if(hasSecondarySectorsAdded && secondaryPrc!=100)
+							}
+							else if(hasSecondarySectorsAdded && secondaryPrc!=100)
 								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 						}
                         if (Boolean.parseBoolean(eaForm.getSectors().getTertiarySectorVisible()) && isInConfig(eaForm, "Tertiary")){
 							if(!hasTertiarySectorsAdded){
+								if (FeaturesUtil.isVisibleField("Validate Mandatory Tertiary Sector", ampContext)){
 								errors.add("noTertiarySectorsAdded",
 										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors",locale,siteId)));
 							}
-							if(hasTertiarySectorsAdded && tertiaryPrc!=100)
+							}
+							else if(hasTertiarySectorsAdded && tertiaryPrc!=100)
 								errors.add("tertiarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.tertiarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all tertiary sector percentage must be 100",locale,siteId)));
 						}
 
@@ -695,7 +722,9 @@ public class SaveActivity extends Action {
 						Double totalPercentage = 0d;
 						while (itr.hasNext()) {
 							Location loc = itr.next();
-							Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							// Not yet implemented.
+							//Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							Double percentage = new Double(loc.getPercent());							
 							if(percentage != null)
 								totalPercentage += percentage;
 						}
@@ -947,7 +976,8 @@ public class SaveActivity extends Action {
 				actLoc.setLocation(ampLoc);
 				Double percent=null;
 				if(loc.getPercent()!=null && loc.getPercent().length()>0) {
-					percent=FormatHelper.parseDouble(loc.getPercent());
+					//percent=FormatHelper.parseDouble(loc.getPercent());
+					percent = new Double(loc.getPercent());
 					actLoc.setLocationPercentage(percent.floatValue());
 				}
 				locations.add(actLoc);
@@ -995,7 +1025,20 @@ public class SaveActivity extends Action {
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
-			//Do the checks here
+//			//Do the checks here
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<FundingDetail> fundDets = eaForm.getFunding().getFundingDetails();
+//				if(fundDets!=null && fundDets.size()>0){
+//					for (FundingDetail fundingDetail : fundDets) {
+//						Date transDate = DateConversion.getDate(fundingDetail.getTransactionDate());
+//						if(transDate.before(activityActualStartDate)){
+//							errors.add("",new ActionError("error.aim.invalidFundingDate", TranslatorWorker.translateText("Funding contains transaction, which precedes activity actual start date. Please change date", request)));
+//						}
+//					}
+//				}
+//			}
+			
 			
 			end:
 			if (errors.size() > 0){
@@ -1086,6 +1129,10 @@ public class SaveActivity extends Action {
 						ampFunding.setModeOfPayment( fund.getModeOfPayment() );
 						ampFunding.setDonorObjective( fund.getDonorObjective() );
 						ampFunding.setGroupVersionedFunding(fund.getGroupVersionedFunding());
+						if ( fund.getActStartDate() != null && fund.getActStartDate().length() > 0 )
+							ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+						if ( fund.getActCloseDate() != null && fund.getActCloseDate().length() > 0 )
+							ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 						
 						ampFunding.setAmpActivityId(activity);
 
@@ -1099,8 +1146,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 								// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
 								ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
-								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
-														.getTransactionDate()));
+								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet.getTransactionDate()));
 								boolean useFixedRate = false;
 								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {
 									double fixedExchangeRate		=  FormatHelper.parseDouble( fundDet.getFixedExchangeRate() );
@@ -1186,6 +1232,10 @@ public class SaveActivity extends Action {
 					}
 					ampFunding.setComments(new String(" "));
 					ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+					if(fund.getActStartDate()!=null)
+						ampFunding.setActualStartDate( FormatHelper.parseDate(fund.getActStartDate()).getTime() );
+					if(fund.getActCloseDate()!=null)
+						ampFunding.setActualCompletionDate( FormatHelper.parseDate(fund.getActCloseDate()).getTime() );
 					ampFunding.setAmpActivityId(activity);
 					this.saveMTEFProjections(fund, ampFunding);
 					fundings.add(ampFunding);
@@ -1219,6 +1269,70 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
+//				if(regFundDets!=null && regFundDets.size()>0){
+//					for (RegionalFunding fundingDetail : regFundDets) {
+//						Date transDate = null;
+//						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
+//						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
+//						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
+//						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
+//						if(commitments!=null && commitments.size()>0){
+//							allFundDets.addAll(commitments);
+//						}
+//						if(disbursements!=null && disbursements.size() >0){
+//							allFundDets.addAll(disbursements);
+//						}
+//						if(expenditures!=null && expenditures.size() >0){
+//							allFundDets.addAll(expenditures);
+//						}
+//						
+//						if(allFundDets!=null && allFundDets.size() > 0){
+//							for (FundingDetail commitmentsFundDet : allFundDets) {
+//								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
+//								if(transDate.before(activityActualStartDate)){
+//									errors.add("",new ActionError("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//			Date activityActualStartDate= DateConversion.getDate(eaForm.getPlanning().getRevisedStartDate());
+//			if(activityActualStartDate!=null){
+//				Collection<RegionalFunding> regFundDets = eaForm.getFunding().getRegionalFundings();
+//				if(regFundDets!=null && regFundDets.size()>0){
+//					for (RegionalFunding fundingDetail : regFundDets) {
+//						Date transDate = null;
+//						Collection<FundingDetail> commitments = fundingDetail.getCommitments();
+//						Collection<FundingDetail> disbursements = fundingDetail.getDisbursements();
+//						Collection<FundingDetail> expenditures = fundingDetail.getExpenditures();
+//						Collection<FundingDetail> allFundDets= new ArrayList<FundingDetail>();
+//						if(commitments!=null && commitments.size()>0){
+//							allFundDets.addAll(commitments);
+//						}
+//						if(disbursements!=null && disbursements.size() >0){
+//							allFundDets.addAll(disbursements);
+//						}
+//						if(expenditures!=null && expenditures.size() >0){
+//							allFundDets.addAll(expenditures);
+//						}
+//						
+//						if(allFundDets!=null && allFundDets.size() > 0){
+//							for (FundingDetail commitmentsFundDet : allFundDets) {
+//								transDate = DateConversion.getDate(commitmentsFundDet.getTransactionDate());
+//								if(transDate.before(activityActualStartDate)){
+//									errors.add("",new ActionError("error.aim.invalidRegionalFundingDate", TranslatorWorker.translateText("Regional Funding contains transaction, which precedes activity actual start date. Please change transaction date", request)));
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 			
 			end:
 			if (errors.size() > 0){
@@ -2073,6 +2187,7 @@ public class SaveActivity extends Action {
 				logger.error(e);
 			}
 			teamId=aAct.getTeam().getAmpTeamId();
+			String validation = DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation();
 			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
@@ -2084,31 +2199,42 @@ public class SaveActivity extends Action {
 						activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
-				if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+				if("newOnly".equals(validation))
 				{
 					if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
 
-				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+				if("allEdits".equals(validation)){
 					if(!tm.getTeamHead()){
 						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()) || Constants.STARTED_APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 						else activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
+				
+				if("validationOff".equals(validation))
+				{
+					activity.setApprovalStatus(Constants.APPROVED_STATUS);
+				}
+				
 				if(tm.getTeamHead()||tm.isApprover()) activity.setApprovalStatus(Constants.APPROVED_STATUS);
 			}
 			else{
-				if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+				if("newOnly".equals(validation))
 				{
 					if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
 
-				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+				if("allEdits".equals(validation)){
 					if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 					else activity.setApprovalStatus(aAct.getApprovalStatus());
 				}
+				
+				if("validationOff".equals(validation))
+				{
+					activity.setApprovalStatus(Constants.APPROVED_STATUS);
+			}
 			}
 			activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
 		}
@@ -2119,7 +2245,12 @@ public class SaveActivity extends Action {
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
-			if (activity.getDraft() && (tm.getTeamHead()||tm.isApprover())){
+			Long ampTeamId = null;
+			if(activity!=null && activity.getTeam()!=null && activity.getTeam().getAmpTeamId() !=null)
+				ampTeamId = activity.getTeam().getAmpTeamId();
+			else ampTeamId = teamMember.getAmpTeamMemId();
+			String validation = DbUtil.getTeamAppSettingsMemberNotNull(ampTeamId).getValidation();
+			if (activity.getDraft() && tm.getTeamHead() || (validation!=null&&"validationOff".equals(validation))||tm.isApprover()){
 				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}else{
 				activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
@@ -2562,19 +2693,29 @@ public class SaveActivity extends Action {
 		processPreStep(eaForm, activity, tm, createdAsDraft);
 
 		String toDelete = request.getParameter("delete");
+		Long idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity");
 		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
+			AmpActivity act = null;
 			if (eaForm.isEditAct() == false) {
 				/*AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
 				if (act != null) {
+				//storing original id is needed if user decides not to overwrite activity,but cancel.
+				//otherwise incorrect actId is set in form and editing/create will work incorrect
+				if(eaForm.isEditAct()==true && idForOriginalActivity==null){ //need to keep edited activity id
+					request.getSession().setAttribute("idForOriginalActivity",eaForm.getActivityId());
+				}
+				if(eaForm.isEditAct()==false && idForOriginalActivity==null){
+					request.getSession().setAttribute("idForOriginalActivity",new Long(-1));
+				}
 					request.setAttribute("existingActivity", act);
 					eaForm.setActivityId(act.getAmpActivityId());
-					logger.debug("Activity with the name "
-							+ eaForm.getIdentification().getTitle() + " already exist.");
+				logger.debug("Activity with the name "	+ eaForm.getIdentification().getTitle() + " already exist.");
 					return mapping.findForward("activityExist");
 				}*/
 			}
 		} else if (toDelete.trim().equals("true")) {
 			eaForm.setEditAct(true);
+			request.getSession().removeAttribute("idForOriginalActivity");
 		} else {
 			logger.debug("No duplicate found");
 		}
@@ -2696,6 +2837,12 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
+			
+			// in case it was "overwrite" existing activity,need to remove previous act(that was opened for editing)...
+			if(toDelete!=null && toDelete.trim().equals("true") && idForOriginalActivity!=null && ! idForOriginalActivity.equals(new Long(-1))){
+				ActivityUtil.deleteActivity(idForOriginalActivity);
+			}
+			
 			String additionalDetails="approved";
 			//if validation is off in team setup no messages should be generated
 			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
@@ -2767,6 +2914,7 @@ public class SaveActivity extends Action {
 
 				}
 			}
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 		} else {
 			// create a new activity
 			
@@ -2838,6 +2986,8 @@ public class SaveActivity extends Action {
 					AuditLoggerUtil.logObject(request, activity, "add",additionalDetails);
 				}
 			//AuditLoggerUtil.logObject(request, activity, "add",additionalDetails);
+			
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 		}
 
 		//If we're adding an activity, create system/admin message
@@ -2886,6 +3036,7 @@ public class SaveActivity extends Action {
 		/**
 		 *  Perform session & form cleanup
 		 */
+        int redirectDraft=eaForm.getDraftRedirectedPage();
 		cleanup(eaForm, session, request, mapping, actId, tm);
 
 		//OLD!!!
@@ -2907,7 +3058,7 @@ public class SaveActivity extends Action {
             if (rsp.isDidRecover()) {
                 return mapping.findForward("saveErrors");
             } else {
-            	if (activity.getDraft()!=null && !activity.getDraft()) {
+            	if ((activity.getDraft()!=null && !activity.getDraft()) || redirectDraft==Constants.DRAFRT_GO_TO_DESKTOP) {
             		return mapping.findForward("viewMyDesktop");
                 } else {
                     //eaForm.setActivityId(ActivityVersionUtil.getLastActivityFromGroup(activity.getAmpActivityGroup().getAmpActivityGroupId()).getAmpActivityId());

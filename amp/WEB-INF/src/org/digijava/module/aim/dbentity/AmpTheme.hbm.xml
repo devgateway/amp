@@ -29,6 +29,8 @@
 		<property name="environmentConsiderations" column="environment_considerations"
 			type="java.lang.String" />
 
+        <property name="showInRMFilters" column="show_in_rm" type="java.lang.Boolean" />
+
 		<property access="field" name="externalFinancing" column="external_financing"
 			type="java.lang.Double" />
 		<property access="field" name="internalFinancing" column="internal_financing"

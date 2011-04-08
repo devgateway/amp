@@ -29,7 +29,7 @@ function FilterWrapper() {
 	this.filterOwners		= new Array();
 	this.filterTeamIds		= new Array();
 }
-FilterWrapper.prototype.labelsToHTML	= function() {
+FilterWrapper.prototype.labelsToHTML	= function(text) {
 	var ret	= "";
 	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>Labels:</b><span> "; 
 	if ( this.filterLabels.length > 0) {
@@ -100,6 +100,10 @@ function AbstractDynamicList (containerEl, thisObjName, fDivId) {
 	this.filterInfoDivId	= null;
 }
 
+AbstractDynamicList.prototype.clearBody		= function () {
+	this.containerEl.innerHTML	= "";
+}
+
 AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	this.reqString		= "";
 	if ( shouldRetrieveFilters != null && !shouldRetrieveFilters) 
@@ -117,8 +121,7 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	
 	if ( this.filterInfoDivId != null ) {
 		var divEl	= document.getElementById( this.filterInfoDivId );
-		divEl.innerHTML =
-				this.filterWrapper.labelsToHTML() + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML();
+		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext());
 	}
 }
 

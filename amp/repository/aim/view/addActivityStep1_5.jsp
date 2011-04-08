@@ -124,39 +124,22 @@ function toggleDiv(num){
 						<tr>
 							<td><jsp:include page="t.jsp"/>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</c:set>
-									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</c:set>
-
-
-
-
-
-<c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
-
+									<c:set var="message">
+									<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<c:set var="quote">'</c:set>
+									<c:set var="escapedQuote">\'</c:set>
+									<c:set var="msg">
+									${fn:replace(message,quote,escapedQuote)}
+									</c:set>
 									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot1('${msg}')" title="${translation}">
 
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
+								
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
 								title="Click here to goto Add Activity Step 1">
 								<c:if test="${aimEditActivityForm.editAct == true}">

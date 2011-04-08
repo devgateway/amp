@@ -13,13 +13,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -45,7 +50,15 @@ public class ShowCurrencyRates extends Action {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();
-
+        HttpSession httpSession = request.getSession();
+        
+        ActionMessages errors = null;
+        errors = (ActionMessages) httpSession.getAttribute("CurrencyRateFileUploadError");
+        if(errors!=null) {
+        	saveErrors(request, errors);
+        	httpSession.setAttribute("CurrencyRateFileUploadError",null);
+        }
+        
         String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
         if ( baseCurrency == null )
       	  baseCurrency			= "USD";
@@ -55,6 +68,8 @@ public class ShowCurrencyRates extends Action {
 		if (crForm.getDoAction() != null &&
 				crForm.getDoAction().equals("delete")) {
 			CurrencyUtil.deleteCurrencyRates(crForm.getSelectedRates());
+			AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
+            ratesCache.clear();
 			crForm.setAllRates(null);
 			crForm.setDoAction("");
 		}

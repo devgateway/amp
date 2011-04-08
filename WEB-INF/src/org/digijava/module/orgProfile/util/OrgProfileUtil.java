@@ -839,7 +839,7 @@ public class OrgProfileUtil {
                 // apply calendar filter
                 Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
                 Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
-                Double fundingPledge = ChartWidgetUtil.getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), startDate, endDate, currCode);
+                Double fundingPledge = ChartWidgetUtil.getPledgesFunding(filter.getOrgIds(), filter.getOrgGroupId(), i, currCode,filter.getLocationIds());
                 pledgesHelper.getValues().add(FormatHelper.formatNumber(fundingPledge));
                 DecimalWraper fundingComm = ChartWidgetUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
                 commHelper.getValues().add(FormatHelper.formatNumber(fundingComm.doubleValue()));

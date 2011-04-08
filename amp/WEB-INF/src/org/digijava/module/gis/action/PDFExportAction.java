@@ -45,15 +45,12 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
-import org.digijava.module.gis.util.ColorRGB;
-import org.digijava.module.gis.util.CoordinateRect;
-import org.digijava.module.gis.util.DateInterval;
-import org.digijava.module.gis.util.FundingData;
-import org.digijava.module.gis.util.GisUtil;
-import org.digijava.module.gis.util.HilightData;
-import org.digijava.module.gis.util.SegmentData;
+import org.digijava.module.gis.util.*;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -174,6 +171,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (request.getParameter("sectorId") != null && !request.getParameter("sectorId").equals("-1")) {
 			secIdStr = request.getParameter("sectorId");
 		}
+
+        boolean isPledgesMode = request.getParameter("mapModeFin") != null && request.getParameter("mapModeFin").equals("pledgesData");
+
 
         Long secId = null;
         Long prgId = null;
@@ -341,23 +341,6 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             }
 
 
-
-            /*
-        	if (secId.longValue() == -1f) {
-        		sectorName = "All Sectors";
-        	} else {
-        		sectorName = SectorUtil.getAmpSector(secId).getName();
-        	}*/
-        		//Old if, when the <select> had -2 as "select sector".
-//            if (secId.longValue() == -2f) {
-//                sectorName = "None";
-//            } else if (secId.longValue() == -1f) {
-//                sectorName = "All";
-//            } else {
-//                sectorName = SectorUtil.getAmpSector(secId).getName();
-//            }
-
-
             String fromYear = request.getParameter("selectedFromYear");
             Calendar fStartDate = null;
             if (fromYear != null) {
@@ -376,12 +359,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
                 Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
 
-                if (mapCode != null && mapCode.trim().length() > 0) {
-
-                    outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
-                } else {
-                    outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                if (mapCode == null || mapCode.isEmpty()) {
+                    mapCode = "TZA";
                 }
+                outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel, isPledgesMode);
         }
 
 		// Get the Map Image
@@ -1508,7 +1489,7 @@ private int matchesId(Long ptableId) {
 		return outByteStream;
 	}
 
-    private ByteArrayOutputStream getMapImageFinancial(String mapCode, Long secId, int mapMode, Long donorId, String fundingType, Date fStartDate, Date fEndDate, String mapLevel) throws Exception {
+    private ByteArrayOutputStream getMapImageFinancial(String mapCode, Long secId, int mapMode, Long donorId, String fundingType, Date fStartDate, Date fEndDate, String mapLevel, boolean isPledgesMode) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1527,21 +1508,47 @@ private int matchesId(Long ptableId) {
 
                     //Get segments with funding for dashed paint map
                     List secFundings = null;
-                    if (secId.longValue() > -2l) {
+
+
+                    Object[] fundingList = null;
+
+                    if (isPledgesMode) {
                         if (mapMode != org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM) {
-                            secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null);
+                            List <FundingPledgesSector> selPledges = org.digijava.module.gis.util.DbUtil.getPledgesBySector(secId, mapMode);
+                            fundingList = GetFoundingDetails.getPledgesByLocations (selPledges,
+                                Integer.parseInt(mapLevel),
+                                fStartDate,
+                                fEndDate, donorId);
                         } else {
-                            secFundings = org.digijava.module.gis.util.DbUtil.getProgramFoundings(secId);
+                            List <FundingPledgesProgram> selPledges = org.digijava.module.gis.util.DbUtil.getPledgesByProgram(secId);
+                            fundingList = GetFoundingDetails.getPledgesByLocationsForPrograms (selPledges,
+                                Integer.parseInt(mapLevel),
+                                fStartDate,
+                                fEndDate, donorId);
+
                         }
                     } else {
-                        secFundings = new ArrayList();
+                        if (secId.longValue() > -2l) {
+                            if (mapMode != org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM) {
+                                secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null);
+                            } else {
+                                secFundings = org.digijava.module.gis.util.DbUtil.getProgramFoundings(secId);
+                            }
+                        } else {
+                            secFundings = new ArrayList();
+                        }
+
                     }
 
-                    Object[] fundingList = GetFoundingDetails.getFundingsByLocations(secFundings,
+
+                    if (!isPledgesMode) {
+                        fundingList = GetFoundingDetails.getFundingsByLocations(secFundings,
                             Integer.parseInt(mapLevel),
                             fStartDate,
                             fEndDate,
                             donorId);
+
+                    }
 
 
                     Map fundingLocationMap = (Map) fundingList[0];

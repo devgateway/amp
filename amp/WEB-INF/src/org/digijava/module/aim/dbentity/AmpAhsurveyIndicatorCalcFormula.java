@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-public class AmpAhsurveyIndicatorCalcFormula {
+import java.io.Serializable;
+
+public class AmpAhsurveyIndicatorCalcFormula implements Serializable {
 
     private Long id;
     private String calcFormula;

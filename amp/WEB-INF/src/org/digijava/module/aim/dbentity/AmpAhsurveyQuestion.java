@@ -6,7 +6,9 @@
  */
 package org.digijava.module.aim.dbentity;
 
-public class AmpAhsurveyQuestion {
+import java.io.Serializable;
+
+public class AmpAhsurveyQuestion implements Serializable{
 
 	private Long ampQuestionId;
 	private String questionText;

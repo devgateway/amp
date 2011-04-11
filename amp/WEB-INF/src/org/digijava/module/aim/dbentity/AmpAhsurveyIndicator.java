@@ -6,9 +6,10 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class AmpAhsurveyIndicator {
+public class AmpAhsurveyIndicator implements Serializable {
 
     private Long ampIndicatorId;
     private String name;

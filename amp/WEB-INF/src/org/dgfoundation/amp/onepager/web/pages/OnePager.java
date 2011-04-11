@@ -16,6 +16,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIds
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
@@ -91,6 +92,10 @@ public class OnePager extends OnePagerWrapper {
 			
 			AmpMEFormSectionFeature me = new AmpMEFormSectionFeature("me", "M&E", am);
 			activityForm.add(me);
+
+			AmpPIFormSectionFeature pi = new AmpPIFormSectionFeature("pi", "Paris Indicators", am);
+			activityForm.add(pi);
+
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);

@@ -28,6 +28,16 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 	private Serializable _id;
 	private PersistenceManager _myDao;
 
+	
+	/**
+	 * Method returns a simple Model if the object
+	 * has not been saved in the db yet (it's identifier is null)
+	 * or a PersistenObjectModel if the object is loaded
+	 * from the database
+	 *  
+	 * @param object
+	 * @return
+	 */
 	public static IModel getModel(Serializable object){
 		IModel ret = null;
 		

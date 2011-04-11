@@ -353,4 +353,8 @@ div.tabpanel div.tab-row a:hover {
     color: black;
 }
 
+.paris_question {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-top:10px; margin-bottom:2px;}
+.paris_answer {background-color:#FFFFFF; border:1px solid #E0E5EB; padding:3px; margin-bottom:5px; line-height:18px;}
+
+
 /* -- ONE PAGER END -- */

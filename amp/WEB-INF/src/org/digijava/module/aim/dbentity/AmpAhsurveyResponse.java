@@ -6,10 +6,17 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.util.Output;
 
-public class AmpAhsurveyResponse implements Versionable, Cloneable {
+public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Long ampReponseId;
 	private AmpAhsurvey ampAHSurveyId;
 	private AmpAhsurveyQuestion ampQuestionId;

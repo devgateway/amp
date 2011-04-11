@@ -6,7 +6,9 @@
  */
 package org.digijava.module.aim.dbentity;
 
-public class AmpAhsurveyQuestionType {
+import java.io.Serializable;
+
+public class AmpAhsurveyQuestionType implements Serializable{
 
 	private Long ampTypeId;
 	private String name;	// 'yes-no', 'calculated'

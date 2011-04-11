@@ -28,8 +28,13 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 	 * @param id
 	 * @param fmName
 	 */
-	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete) {
-		super(id, fmName);
+	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete){
+		this(id, fmName, false, autoComplete);
+	}
+	
+	
+	public AmpComboboxFieldPanel(String id, String fmName, boolean hideLabel, final AbstractAmpAutoCompleteTextField<T> autoComplete) {
+		super(id, fmName, hideLabel);
 		this.autoComplete = autoComplete;
 		newLine.setVisible(false);
 		add(autoComplete);

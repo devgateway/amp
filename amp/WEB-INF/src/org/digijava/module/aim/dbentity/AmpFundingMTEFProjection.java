@@ -1,11 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpFundingMTEFProjection implements Cloneable {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable {
 
 		private Long ampFundingMTEFProjectionId ;
 		private AmpCategoryValue projected; 

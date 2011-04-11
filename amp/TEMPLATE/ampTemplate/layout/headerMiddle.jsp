@@ -99,7 +99,7 @@ if("On".equals(publicView)) {
 	                	<div class="bd bd_drop">
 	                		<ul class="first-of-type"> 
 	                			<li class="yuiampmenuitem_drop">
-	           						<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false"  onclick="return canExit()">
+	           						<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true"  onclick="return canExit()">
                    						 <digi:trn>Public Reports</digi:trn>
                 					</a>
 	               				</li>                   
@@ -515,7 +515,7 @@ function adminHelp(){
                                   <div class="bd bd_drop">                    
                                       <ul class="first-of-type">  
                                       	<li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false"  onclick="return canExit()">
+                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true"  onclick="return canExit()">
                                                 <b><digi:trn>Report List</digi:trn></b>
                                             </a>
                                     	</li>

@@ -153,6 +153,8 @@ public class ShowTeamReports extends Action {
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
         Locale currentLocale = new Locale(locale);
         Collator collator = Collator.getInstance(currentLocale);
+        collator.setStrength(Collator.PRIMARY);
+
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}

@@ -269,16 +269,70 @@ function confirmFunc() {
 					                          								<td align="center" class="inside_header">&nbsp;
 					                            								
 					                            							</td>
-					                            							<td align="center" class="inside_header">
-					                              								<b>${titleColumn}</b>
-					                            							</td>
-					                            							<td align="center" class="inside_header">
-					                            								<b><digi:trn key="aim:reportOwnerName">Owner</digi:trn></b>
-					                            							</td>
-					                            							<td align="center" class="inside_header">
-					                              								<b><digi:trn key="aim:reportCreationDate">Creation Date</digi:trn></b>
-					                            							</td>
-					                            							<td align="center" class="inside_header">
+																					<td align="center" class="inside_header"><c:if
+																							test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
+																							<digi:link href="/viewTeamReports.do?sortBy=1">
+																								<b><digi:trn>${titleColumn}</digi:trn>
+																								</b>
+																							</digi:link>
+																							<c:if test="${aimTeamReportsForm.sortBy==2}">
+																								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+																									alt="down" />
+																							</c:if>
+																						</c:if> <c:if
+																							test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
+																							<digi:link href="/viewTeamReports.do?sortBy=2">
+																								<b><digi:trn key="aim:organizationName">${titleColumn}</digi:trn>
+																								</b>
+																							</digi:link>
+																							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
+																						</c:if></td>
+																					<td align="center" class="inside_header"><b>
+																							<c:if
+																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=3}">
+																								<digi:link href="/viewTeamReports.do?sortBy=3">
+																									<digi:trn key="aim:reportOwnerName">
+														                                          Owner
+														                                      </digi:trn>
+																								</digi:link>
+																								<c:if test="${aimTeamReportsForm.sortBy==4}">
+																									<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+																										alt="down" />
+																								</c:if>
+																							</c:if> <c:if
+																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==3}">
+																								<digi:link href="/viewTeamReports.do?sortBy=4">
+																									<digi:trn key="aim:reportOwnerName">
+														                                          Owner
+														                                      </digi:trn>
+																								</digi:link>
+																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
+																									alt="up" />
+																							</c:if> </b></td>
+																					<td align="center" class="inside_header"><b>
+																							<c:if
+																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
+																								<digi:link href="/viewTeamReports.do?sortBy=5">
+																									<digi:trn key="aim:reportCreationDate">
+															                                          Creation Date
+															                                      </digi:trn>
+																								</digi:link>
+																								<c:if test="${aimTeamReportsForm.sortBy==6}">
+																									<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
+																										alt="down" />
+																								</c:if>
+																							</c:if> <c:if
+																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
+																								<digi:link href="/viewTeamReports.do?sortBy=6">
+																									<digi:trn key="aim:reportCreationDate">
+														                                            Creation Date
+														                                        </digi:trn>
+																								</digi:link>
+																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
+																									alt="up" />
+																							</c:if> </b></td>
+
+																					<td align="center" class="inside_header">
 					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
 					                            							</td>
 					                            							<td align="center" class="inside_header">

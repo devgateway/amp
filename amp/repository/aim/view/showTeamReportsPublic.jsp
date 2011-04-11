@@ -233,9 +233,21 @@ function popup(mylink, windowname)
     	<table class="inside" width="100%" cellpadding="0" cellspacing="0">
     		<thead>
 	              <tr>
-	              	<td background="img_2/ins_bg.gif" class="inside" width="450px">
-	              		<b class="ins_title">${titleColumn}</b>
-	              	</td>
+	               <td background="img_2/ins_bg.gif" class="inside" width="450px">
+                      <c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
+                                      <digi:link href="/viewTeamReports.do?sortBy=1">
+                                        <b class="ins_title"><digi:trn>${titleColumn}</digi:trn></b>
+                                    </digi:link>
+                                   <c:if test="${aimTeamReportsForm.sortBy==2}"><img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down"/></c:if>
+                         </c:if>
+                         <c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==1}">
+                           <digi:link href="/viewTeamReports.do?sortBy=2">
+                               <b class="ins_title"><digi:trn key="aim:organizationName">${titleColumn}</digi:trn></b>
+                            </digi:link>
+                                <img  src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up"/>
+                         </c:if>
+                     </td>
+
 	                <td background="img_2/ins_bg.gif" class="inside" align="center">
 	                 	<b class="ins_title"><digi:trn>Type</digi:trn></b>
 	                 </td>

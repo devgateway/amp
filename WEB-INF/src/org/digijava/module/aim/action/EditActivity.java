@@ -1076,7 +1076,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
                 if(actLoc.getLocationPercentage()!=null){
                 	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
-                	location.setPercent( strPercentage );
+                	//TODO Check the right why to show numbers in percentages, here it calls formatNumberNotRounded but so the format
+                	//depends on global settings which is not correct
+                	
+                	location.setPercent( strPercentage.replace(",", ".") );
                 }
                 
                 if ( setFullPercForDefaultCountry && actLoc.getLocationPercentage() == 0.0 &&

@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -713,20 +714,22 @@ public class SaveActivity extends Action {
 				if (FeaturesUtil.isVisibleField("Validate Mandatory Regional Percentage", ampContext)){
 					if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
 						Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
-						Double totalPercentage = 0d;
+						//Double totalPercentage = 0d;
+						BigDecimal totalPercentage = new BigDecimal(0);
 						while (itr.hasNext()) {
 							Location loc = itr.next();
 							// Not yet implemented.
 							//Double percentage=FormatHelper.parseDouble(loc.getPercent());
 							Double percentage = new Double(loc.getPercent());							
 							if(percentage != null)
-								totalPercentage += percentage;
+								totalPercentage = totalPercentage.add(new BigDecimal(percentage));
 						}
-						
+						Double totaltocompare = totalPercentage.setScale(1,BigDecimal.ROUND_UP).doubleValue();
 						//Checks if it's 100%
-						if (totalPercentage != 100)
+						if (totaltocompare!=100){
 							errors.add("locationPercentageSumWrong",
 									new ActionMessage("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
+						}
 					}
 				}
 				

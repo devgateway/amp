@@ -470,7 +470,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	}
 
 	// Compare by transaction type, then amount, then date.
-	private Comparator fundingDetailsComparator = new Comparator() {
+	// (transient in order to be wicket friendly, no need to serialize this field)
+	private transient Comparator fundingDetailsComparator = new Comparator() {
 		public int compare(Object o1, Object o2) {
 			AmpFundingDetail aux1 = (AmpFundingDetail) o1;
 			AmpFundingDetail aux2 = (AmpFundingDetail) o2;
@@ -485,7 +486,6 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			}
 		}
 	};
-
 
 	@Override
 	public Output getOutput() {

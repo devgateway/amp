@@ -9,11 +9,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
@@ -39,10 +44,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	 * @throws Exception
 	 */
 	
-	private ListView<AmpContactProperty> detailsList;
-        protected ListView<AmpContactProperty> getDetailsList(){
-            return detailsList;
-        }
 	
 	public AmpContactDetailFeaturePanel(String id, String fmName)
 			throws Exception {
@@ -103,19 +104,21 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 						}
 						
 		};
-		          detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
+                final WebMarkupContainer resultcontainer = new   WebMarkupContainer("resultcontainer");
+		final ListView<AmpContactProperty> detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 
                 @Override
                 protected void populateItem(final ListItem<AmpContactProperty> item) {
                     AmpContactProperty property = item.getModelObject();
-                    final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link") {
+                    final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeContact", "Remove Contact Link",new Model<String>( "Are you sure you want to delete this?")) {
 
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             setModel.getObject().remove(item.getModelObject());
-                            detailsList.removeAll();
-                            target.addComponent(detailsList.getParent().getParent());
+                            target.addComponent(resultcontainer);
                         }
+                        
+
                     };
                     if (!property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(property, "value");
@@ -145,11 +148,12 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     //item.add(new Label("detail", item.getModelObject().getValue()));
                 }
             };
-		detailsList.setReuseItems(true);
-		add(detailsList);
-		
+		//detailsList.setReuseItems(true);
+                
+		resultcontainer.add(detailsList);
+                resultcontainer.setOutputMarkupId(true);
+                add(resultcontainer);
 		AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
-		
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				if(detailsList.getModelObject().size() >= 3) 
@@ -166,9 +170,14 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                                     setModel.setObject(contactProperties);
                                 }
 				contactProperties.add(fakeContact1);
-				detailsList.removeAll();
-				target.addComponent(this.getParent());//.getParent());
+				//detailsList.removeAll();
+                                target.addComponent(resultcontainer);
+				
+
 			}
+
+            
+
 		};
 		add(addLink);
 		

@@ -10,15 +10,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -52,6 +61,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
     private List<TransparentWebMarkupContainer> sliders;
     private AmpAddContactFeaturePanel newContactDetails;
     private AmpActivityVersion activity;
+    
     /**
      * @param id
      * @param fmName
@@ -66,6 +76,9 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         activity=am.getObject();
         newContactDetails = new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact",  new AmpActivityContact(),true);
         newContactDetails.setVisible(false);
+      
+
+
 
         final IModel<List<AmpActivityContact>> listModel = new AbstractReadOnlyModel<List<AmpActivityContact>>() {
 
@@ -125,13 +138,17 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
 
 
         final AmpTextFieldPanel<String> contactname = new AmpTextFieldPanel<String>("contactname", new Model<String>(), "Contact name",true,true);
+        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        feedback.setFilter(new ContainerFeedbackMessageFilter(AmpContactsSubsectionFeaturePanel.this));
+        feedback.setOutputMarkupId(true);
+
         final AmpTextFieldPanel<String> contactLast = new AmpTextFieldPanel<String>("contactlastname", new Model<String>(), "Contact lastname",true,true);
         final AmpContactFormTableFeature contactDuplicationTable = new AmpContactFormTableFeature("duplicationTable", am, "Duplications table", null);
         final WebMarkupContainer buttonsContainer = new WebMarkupContainer("contactButtonContainer");
         buttonsContainer.setOutputMarkupPlaceholderTag(true);
         buttonsContainer.setOutputMarkupId(true);
         
-        final AmpButtonField addContact = new AmpButtonField("addContactButton", "Add Existed Contact") {
+        final AjaxButton  addContact = new  AjaxButton("addContactButton") {
 
             private static final long serialVersionUID = 1L;
 
@@ -142,25 +159,35 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     AmpActivityContact aaContact = new AmpActivityContact();
                     AmpActivityVersion act = am.getObject();
                     aaContact.setActivity(act);
-                    AmpContact choice = (AmpContact) contactDuplicationTable.getContactsGroup().getDefaultModelObject();
-                    aaContact.setContact(choice);
-                    if (act.getActivityContacts() == null) {
-                        act.setActivityContacts(new HashSet<AmpActivityContact>());
-                    }
-                    aaContact.setContactType(contactType);
-                    act.getActivityContacts().add(aaContact);
-                    idsList.removeAll();
-                    form.clearInput();
-                    contactname.setDefaultModel(new Model<String>());
-                    contactname.setDefaultModelObject(null);
-                    contactLast.setDefaultModel(new Model<String>());
-                    contactLast.setDefaultModelObject(null);
-                    buttonsContainer.setVisible(false);
-                    contactDuplicationTable.setVisible(false);
-                    target.addComponent(form);
-                    target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-                    //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
-                    target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
+                    RadioGroup<AmpContact> group=contactDuplicationTable.getContactsGroup();
+				    if(group.getDefaultModelObject()==null){
+				    	  info("Please select contact!");
+				    }
+				    else{
+				    	Session.get().cleanupFeedbackMessages(); 
+				    	AmpContact choice =  (AmpContact) group.getDefaultModelObject();
+	                    aaContact.setContact(choice);
+	                    if (act.getActivityContacts() == null) {
+	                        act.setActivityContacts(new HashSet<AmpActivityContact>());
+	                    }
+	                    aaContact.setContactType(contactType);
+	                    act.getActivityContacts().add(aaContact);
+	                    idsList.removeAll();
+	                    form.clearInput();
+	                    contactname.setDefaultModel(new Model<String>());
+	                    contactname.setDefaultModelObject(null);
+	                    contactLast.setDefaultModel(new Model<String>());
+	                    contactLast.setDefaultModelObject(null);
+	                    buttonsContainer.setVisible(false);
+	                    contactDuplicationTable.setVisible(false);
+	                    target.addComponent(form);
+	                    target.addComponent(AmpContactsSubsectionFeaturePanel.this);
+	                    //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+	                    target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
+				    	
+				    }
+				    target.addComponent(feedback);
+                    
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -169,7 +196,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         };
 
 
-        final AmpButtonField createContact = new AmpButtonField("createContactButton", "Create Contact Button") {
+        final AjaxButton createContact = new AjaxButton("createContactButton") {
 
             private static final long serialVersionUID = 1L;
 
@@ -245,9 +272,12 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                 }
             }
         };
-
-
+        searchContact.getButton().setDefaultFormProcessing(false);
+        addContact.setDefaultFormProcessing(false);
+        createContact.setDefaultFormProcessing(false);
        
+
+        add(feedback);
         add(contactname);
         add(contactLast);
         add(searchContact);

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -20,6 +22,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressPatternValidator;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.validation.validator.NumberValidator;
+import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -123,7 +130,19 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     if (!property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(property, "value");
                         Fragment frg1 = new Fragment("detailPanel", "frag1",this);
-                        frg1.add(new AmpTextFieldPanel<String>("detail", value, fmName, true));
+                        AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true);
+                        if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+                        	TextField<String> detailTextField=detailField.getTextContainer();
+                        	detailTextField.setRequired(true);
+                        	detailTextField.add(EmailAddressValidator.getInstance());
+                        }
+                        else{
+                        	TextField<String> detailTextField=detailField.getTextContainer();
+                        	String expression = "^\\+?\\s?\\d+[\\s\\d]*";
+                        	detailTextField.add(new PatternValidator(expression));
+                        	detailTextField.setRequired(true);
+                        }
+                        frg1.add(detailField);
                         frg1.add(propertyDeleteLink);
                         item.add(frg1);
                     } else {
@@ -132,7 +151,12 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             IModel<AmpCategoryValue> catValueModel = new PropertyModel(property, "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
                             AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true);
+                            TextField<String> detailTextField=phn.getTextContainer();
+                        	detailTextField.setRequired(true);
+                        	String expression = "^\\+?\\s?\\d+[\\s\\d]*";
+                        	detailTextField.add(new PatternValidator(expression));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
+                            phoneTitle.getChoiceContainer().setRequired(true);
                             frg2.add(phoneTitle);
                             frg2.add(phn);
                             frg2.add(propertyDeleteLink);

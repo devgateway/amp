@@ -1,4 +1,5 @@
 <wicket:extend>
+<div wicket:id="feedback"></div>
     <div class="funding_name" wicket:id="contactsList"><a href="#"
                                                           class="slider"><b><span wicket:id="contactName" /></b></a> <span
                                                           wicket:id="removeContact" />
@@ -10,8 +11,8 @@
     <span wicket:id="searchContact"/>
     <div wicket:id="duplicationTable"></div>
     <div wicket:id="contactButtonContainer">
-        <span wicket:id="addContactButton"/>
-        <span wicket:id="createContactButton"/>
+        <button type="button" wicket:id="addContactButton" class="button_green_btm"><wicket:trn key="trn:add">Add</wicket:trn></button>
+        <button type="button" wicket:id="createContactButton" class="button_green_btm"><wicket:trn key="trn:create">Create New Contact</wicket:trn></button>
     </div>
     <div wicket:id="createContactContainer"></div>
 </wicket:extend>

@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -23,6 +26,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.ContactPropertyHelper;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -48,6 +53,9 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
         act = ampActivity;
         actContact = activityContact;
         AmpContact newContact = null;
+        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        feedback.setFilter(new ContainerFeedbackMessageFilter(AmpAddContactFeaturePanel.this));
+        feedback.setOutputMarkupId(true);
         if (activityContact.getContact() == null) {
             newContact = new AmpContact();
         } else {
@@ -71,47 +79,77 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
        
         contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactPropertyModel, "Contact Organizations", true);
         contactOrganizations.setOutputMarkupId(true);
+        add(feedback);
         add(contactTitle);
-        add(new TextField("name"));
-        add(new TextField("lastname"));
+        TextField<String> name=new TextField<String>("name");
+        name.setRequired(true);
+        TextField<String> lastname=new TextField<String>("lastname");
+        lastname.setRequired(true);
+        add(name);
+        add(lastname);
         add(detailEmail);
-        add(new TextField("function"));
-        add(new TextField("organisationName"));
+        add(new TextField<String>("function"));
+        add(new TextField<String>("organisationName"));
         add(contactOrganizations);
         add(detailPhone);
         add(detailFax);
-        add(new TextArea("officeaddress"));
-        final AmpButtonField saveContactButton = new AmpButtonField("saveContact", "Save Contact") {
+        add(new TextArea<String>("officeaddress"));
+        final AjaxButton saveContactButton = new AjaxButton("saveContact") {
+			private static final long serialVersionUID = 1L;
 
-            @Override
+			@Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 AmpContact contact = (AmpContact) this.getParent().getDefaultModelObject();
                 if (act.getActivityContacts() == null) {
                     act.setActivityContacts(new HashSet<AmpActivityContact>());
                 }
                 final Set<AmpContactProperty> contactProperties = contact.getProperties();
+                boolean duplication=false;
                 for (AmpContactProperty property : contactProperties) {
-                    if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
-                        String value = property.getActualValue();
-                        if (property.getActualValue() != null && property.getCategoryValue() != null) {
-                            value = property.getCategoryValue().getId() + " " + property.getActualValue();
+                	if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+                		int contactWithSameEmail=-1;
+                		try {
+							contactWithSameEmail=ContactInfoUtil.getContactsCount(property.getValue(),null);
+							if(contactWithSameEmail>0){
+								info("Contact with the given email already exists");
+								duplication=true;
+								target.addComponent(feedback);
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                	}
+                	else{
+                		if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                            String value = property.getActualValue();
+                            if (property.getActualValue() != null && property.getCategoryValue() != null) {
+                                value = property.getCategoryValue().getId() + " " + property.getActualValue();
+                            }
+                            property.setValue(value);
                         }
-                        property.setValue(value);
-                    }
+                	}
+                	if(duplication){
+                		break;
+                	} 
                 }
-                if (actContact.getId() == null) {
-                    act.getActivityContacts().add(actContact);
-                    actContact.setActivity(act);
+                if(!duplication){
+                	 if (actContact.getId() == null) {
+                         act.getActivityContacts().add(actContact);
+                         actContact.setActivity(act);
+                     }
+                     AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)this.getParent().getParent();
+                     section.getIdsList().removeAll();
+                     target.appendJavascript(OnePagerConst.getToggleChildrenJS(section));
+                     this.getParent().setVisible(false);
+                     target.addComponent(section);
+                     target.addComponent(this.getParent());
                 }
-                AmpContactsSubsectionFeaturePanel section=(AmpContactsSubsectionFeaturePanel)this.getParent().getParent();
-                section.getIdsList().removeAll();
-                target.appendJavascript(OnePagerConst.getToggleChildrenJS(section));
-                this.getParent().setVisible(false);
-                target.addComponent(section);
-                target.addComponent(this.getParent());
+               
             }
         };
-        final AmpButtonField cancelContactButton = new AmpButtonField("cancelSave", "Cancel Save Contact") {
+        final AjaxButton cancelContactButton = new AjaxButton("cancelSave") {
+        	private static final long serialVersionUID = 1L;
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -122,6 +160,7 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
                 target.addComponent(this.getParent());
             }
         };
+        cancelContactButton.setDefaultFormProcessing(false);
         saveContactButton.setVisible(visible);
         cancelContactButton.setVisible(visible);
         add(saveContactButton);

@@ -847,7 +847,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount" feature="Contracting"></field:display> 
 <field:display name="Total Committed" feature="Commitments"></field:display> 
-<field:display name="Total Disbursed" feature="Disbursement"></field:display> 
+<field:display name="Total Disbursed" feature="Disbursement"></field:display>
+<field:display name="Total Planned Committed" feature="Commitments"></field:display>
+<field:display name="Total Planned Disbursed" feature="Disbursement"></field:display>
 <field:display name="Total Disbursements of Contract" feature="Contracting"></field:display> 
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display> 

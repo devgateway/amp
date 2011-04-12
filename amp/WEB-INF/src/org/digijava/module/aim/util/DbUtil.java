@@ -1090,6 +1090,27 @@ public class DbUtil {
                    + (ampFundings != null ? ampFundings.size() : 0));
         return ampFundings;
     }
+     public static ProposedProjCostHelper getActivityProposedProjCost(Long ampActivityId) {
+        Session session = null;
+        Query q = null;
+        ProposedProjCostHelper projectCost = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            StringBuilder queryString = new StringBuilder("select new  org.digijava.module.aim.util.ProposedProjCostHelper(act.currencyCode,act.funAmount,act.funDate) from ");
+            queryString.append( AmpActivity.class.getName());
+            queryString.append(" act where act.ampActivityId=:ampActivityId ");
+            queryString.append(" and  act.funAmount is not null ");
+            queryString.append(" and  act.funDate is not null ");
+            queryString.append(" and  act.currencyCode is not null ");
+            q = session.createQuery(queryString.toString());
+            q.setLong("ampActivityId", ampActivityId);
+            projectCost =( ProposedProjCostHelper) q.uniqueResult();
+        } catch (Exception ex) {
+            logger.error("Unable to get AmpFunding collection from database",
+                         ex);
+        }
+        return projectCost;
+    }
 
     /**
      *  Return total amount using the exchange for each funding according with funding date

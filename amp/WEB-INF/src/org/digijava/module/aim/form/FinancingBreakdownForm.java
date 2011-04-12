@@ -21,6 +21,12 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	private String totalExpended ;
 	private String totalUnExpended ;
         private String totalDisbOrdered ;
+        private String totalPlannedCommitted;
+
+
+        private String totalPlannedDisbursed;
+        private String proposedProjectCostAmount;
+        private String proposedProjectCostDate;
 
 
 	/*For projection*/
@@ -161,5 +167,37 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 		AmpCurrency c = CurrencyUtil.getCurrencyByCode(this.getCurrency());
 		return c.getCurrencyName();
 	}
+        public String getTotalPlannedCommitted() {
+            return totalPlannedCommitted;
+        }
+
+        public void setTotalPlannedCommitted(String totalPlannedCommitted) {
+            this.totalPlannedCommitted = totalPlannedCommitted;
+        }
+
+        public String getTotalPlannedDisbursed() {
+            return totalPlannedDisbursed;
+        }
+
+        public void setTotalPlannedDisbursed(String totalPlannedDisbursed) {
+            this.totalPlannedDisbursed = totalPlannedDisbursed;
+        }
+        public String getProposedProjectCostAmount() {
+            return proposedProjectCostAmount;
+        }
+
+        public void setProposedProjectCostAmount(String proposedProjectCostAmount) {
+            this.proposedProjectCostAmount = proposedProjectCostAmount;
+        }
+
+        public String getProposedProjectCostDate() {
+            return proposedProjectCostDate;
+        }
+
+        public void setProposedProjectCostDate(String proposedProjectCostDate) {
+            this.proposedProjectCostDate = proposedProjectCostDate;
+        }
+
+
 }
 

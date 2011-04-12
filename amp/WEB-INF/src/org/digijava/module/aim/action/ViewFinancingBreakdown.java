@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.FinancingBreakdownForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
@@ -31,6 +32,10 @@ import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.ProposedProjCostHelper;
 
 public class ViewFinancingBreakdown extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewFinancingBreakdown.class);
@@ -66,8 +71,10 @@ public class ViewFinancingBreakdown extends TilesAction {
 			String overallTotalExpenditure = "";
 			String overallTotalUnExpended = "";
                         String overallTotalDibsOrders="";
+                        String overallTotalPlannedCommitted = "";
+			String overallTotalPlannedDisbursed = "";
 			double fromExchangeRate = 0.0;
-
+                      
 			Collection ampFundings = DbUtil.getAmpFunding(id);
 			FilterParams fp = (FilterParams) session
 					.getAttribute(Constants.FILTER_PARAMS);
@@ -101,8 +108,19 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute(Constants.FILTER_PARAMS, fp);
-			
-			
+
+                        ProposedProjCostHelper projectCost=DbUtil.getActivityProposedProjCost(id);
+                        if (projectCost != null) {
+                            String currencyCode=projectCost.getCurrencyCode();
+                            Double amount=projectCost.getFunAmount();
+                            java.sql.Date dt = new java.sql.Date(projectCost.getFunDate().getTime());
+                            double frmExRt = Util.getExchange(currencyCode, dt);
+                            double toExRt = Util.getExchange(fp.getCurrencyCode(), dt);
+                            DecimalWraper amt = CurrencyWorker.convertWrapper(amount, frmExRt, toExRt, dt);
+                            formBean.setProposedProjectCostAmount(FormatHelper.formatNumber(amt.doubleValue()));
+                            formBean.setProposedProjectCostDate(FormatHelper.formatDate(projectCost.getFunDate()));
+                        }
+                      						
 			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 						id, ampFundings, fp,debug);
 			logger.debug("The size of the Collection fb is " + fb.size());
@@ -111,25 +129,30 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 
 			overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
-					fb, Constants.COMMITMENT,false);
+					fb, Constants.COMMITMENT,Constants.ACTUAL,false);
 			formBean.setTotalCommitted(overallTotalCommitted);
+                        overallTotalPlannedCommitted = FinancingBreakdownWorker.getOverallTotal(
+					fb, Constants.COMMITMENT,Constants.PLANNED,false);
+			formBean.setTotalPlannedCommitted(overallTotalPlannedCommitted);
 			overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
-					fb, Constants.DISBURSEMENT,false);
-			formBean.setTotalDisbursed(overallTotalDisbursed);
+					fb, Constants.DISBURSEMENT,Constants.ACTUAL,false);
+                        overallTotalPlannedDisbursed = FinancingBreakdownWorker.getOverallTotal(
+					fb, Constants.DISBURSEMENT,Constants.PLANNED,false);
+			formBean.setTotalPlannedDisbursed(overallTotalPlannedDisbursed);
 			overallTotalUnDisbursed = FormatHelper.getDifference(
 					overallTotalCommitted, overallTotalDisbursed);
 			formBean.setTotalUnDisbursed(overallTotalUnDisbursed);
 			overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
-					fb, Constants.EXPENDITURE,false);
+					fb, Constants.EXPENDITURE,Constants.ACTUAL,false);
 			formBean.setTotalExpended(overallTotalExpenditure);
 			overallTotalUnExpended = FormatHelper.getDifference(
 					overallTotalDisbursed, overallTotalExpenditure);
 			formBean.setTotalUnExpended(overallTotalUnExpended);
                         overallTotalDibsOrders= FinancingBreakdownWorker.getOverallTotal(
-					fb, Constants.DISBURSEMENT_ORDER,false);
+					fb, Constants.DISBURSEMENT_ORDER,Constants.ACTUAL,false);
                         formBean.setTotalDisbOrdered(overallTotalDibsOrders);
 
-			formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION,false) );
+			formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION,Constants.ACTUAL,false) );
 		}
 		return null;
 	}

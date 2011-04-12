@@ -232,7 +232,28 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TD>
 								</TR>
 							</logic:equal>
-							</feature:display>
+                                                        </feature:display>
+                                                        <feature:display name="Proposed Project Cost" module="Funding">
+                                                            <tr>
+                                                                <td>
+                                                                    <table cellSpacing=1 cellPadding="3" width="50%">
+                                                                        <tr>
+                                                                            <td><b><digi:trn>Proposed Project Cost</digi:trn></b></td>
+                                                                            <td  align="left" >
+                                                                                    ${aimFinancingBreakdownForm.proposedProjectCostAmount}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr >
+                                                                            <td><b><digi:trn>Proposed Completion Date</digi:trn></b></td>
+                                                                            <td align="left">
+                                                                                    ${aimFinancingBreakdownForm.proposedProjectCostDate}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    &nbsp;</td>
+                                                            </tr>
+                                                        </feature:display>
+
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
@@ -273,12 +294,18 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                <field:display name="Total Committed" feature="Commitments">
 											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
 										</field:display>
+                                                                 <field:display name="Total Planned Committed" feature="Commitments">
+                                                                    <TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn>Total Commitments (Planned)</digi:trn></TD>
+								</field:display>
                                         <field:display name="Total Ordered" feature="Disbursement Orders">
 			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
 			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Disbursement">
 			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalDisbursementsActual">Total Disbursements (Actual)</digi:trn></TD>
 			                	        </field:display>
+                                                                <field:display name="Total Planned Disbursed" feature="Disbursement">
+                                                                    <TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn>Total Disbursements (Planned)</digi:trn></TD>
+                                                                </field:display>
 			                	        <field:display name="Undisbursed Funds" feature="Funding Information">
 											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
 										</field:display>
@@ -300,7 +327,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TR>
 								<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
-                                    <TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
+                                    <TD align="center" colspan="11"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">
@@ -359,11 +386,17 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                  	<field:display name="Total Committed" feature="Commitments">
 							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                </field:display>
+                                                                          <field:display name="Total Planned Committed" feature="Commitments">
+							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalPlannedCommitted"/></TD>
+							                </field:display>
                                                                           <field:display name="Total Ordered" feature="Disbursement Orders">
 							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalDisbOrdered"/></TD>
 							                </field:display>
 							                <field:display name="Total Disbursed" feature="Disbursement">
 							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalDisbursed"/></TD>
+							                </field:display>
+                                                                           <field:display name="Total Planned Disbursed" feature="Disbursement">
+							                  <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="totalPlannedDisbursed"/></TD>
 							                </field:display>
 							                <field:display name="Undisbursed Funds" feature="Funding Information">
 								                <TD align="center" nowrap="nowrap"><bean:write name="breakdown" property="unDisbursed"/></TD>
@@ -399,9 +432,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
                                                         </feature:display>
 														<field:display name="Total Committed" feature="Commitments"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD>
 														</field:display>
+                                                                                                                <field:display name="Total Planned Committed" feature="Commitments"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalPlannedCommitted"/></TD>
+														</field:display>
                                                                                                                 <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD>
                                                                                                                 </field:display>
 														<field:display name="Total Disbursed" feature="Disbursement"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
+														</field:display>
+                                                                                                                <field:display name="Total Planned Disbursed" feature="Disbursement"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalPlannedDisbursed"/></TD>
 														</field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Information"><TD align="center" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
                                                         

@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +15,8 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -90,62 +94,66 @@ public class ExportWorkspaceManager2XSL extends Action {
             
             for (String teamId :  teams) {
                 AmpTeam team=TeamUtil.getAmpTeam(Long.valueOf(teamId));
-                cellIndex = 0;
-                HSSFRow row = sheet.createRow(rowIndex++);
-                
-                HSSFCell nameCell = row.createCell(cellIndex++);
-                HSSFRichTextString teamName = new HSSFRichTextString(team.getName());
-                nameCell.setCellStyle(style);
-                nameCell.setCellValue(teamName);
-                Collection<AmpActivity> activityList =null;
+                List<AmpActivity> activityList =null;
                 if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                    activityList = TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null);
+                    activityList =new ArrayList<AmpActivity>(TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null));
 
                 } else {
-                    activityList = TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null);
-
-                }       
-                
-                HSSFCell membCell = row.createCell(cellIndex++);
-                String actString = "";
-                String teamMembersString = "";
-                Collection<TeamMember> teamMembers = TeamMemberUtil.getAllTeamMembers(team.getAmpTeamId());
-                if (teamMembers != null) {
-                    for (TeamMember teamMember : teamMembers) {
-                        teamMembersString += BULLETCHAR + teamMember.getMemberName();
-                    }
-
-                    HSSFRichTextString membValue = new HSSFRichTextString(teamMembersString);
-                    membCell.setCellStyle(style);
-                    membCell.setCellValue(membValue);
+                    activityList = new ArrayList<AmpActivity>(TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null));
 
                 }
-
-
-                if (activityList != null) {
-                    for (AmpActivity activity : activityList) {
-                        actString += BULLETCHAR + activity.getName();
-                    }
-                    int size =(int) Math.ceil(actString.length() / 30000.0);
-                    String activity = "";
-                    for (int i = 0; i <= size; i++) {
-                        HSSFCell actCell = row.createCell(cellIndex++);
-                        actCell.setCellStyle(style);
-                        if (actString.length() <= 30000.0) {
-                            activity = actString;
-                        } else {
-                            activity = actString.substring(0, 30001);
-                            actString = actString.substring(30001);
-                        }
-                        HSSFRichTextString actValue = new HSSFRichTextString(activity);
-                        actCell.setCellValue(actValue);
-
-
-                    }
-               
+                List<TeamMember> teamMembers = new ArrayList<TeamMember>(TeamMemberUtil.getAllTeamMembers(team.getAmpTeamId()));
+                int merge=1;
+                int activitySize=1;
+                int memberSize=1;
+                if(activityList!=null&&!activityList.isEmpty()){
+                    activitySize=activityList.size();
                 }
+                if(teamMembers!=null&&!teamMembers.isEmpty()){
+                    memberSize=teamMembers.size();
+                }
+                merge=(activitySize>memberSize)?activitySize:memberSize;
+                cellIndex = 0;
+                HSSFRow row = sheet.createRow(rowIndex++);
+                HSSFCell nameCell = row.createCell(cellIndex++);
+                HSSFRichTextString teamName = new HSSFRichTextString(team.getName());
+                nameCell.setCellValue(teamName);
+                row.createCell(cellIndex++);
+                row.createCell(cellIndex++);
+
+                for(int j=1;j<merge;j++){
+
+                    row = sheet.createRow(rowIndex++);
+                    cellIndex = 0;
+                    row.createCell(cellIndex++);
+                    if (memberSize > j) {
+                        HSSFCell membCell = row.createCell(cellIndex++);
+                        String teamMembersString = BULLETCHAR + teamMembers.get(j-1).getMemberName();
+                        HSSFRichTextString membValue = new HSSFRichTextString(teamMembersString);
+                        membCell.setCellStyle(style);
+                        membCell.setCellValue(membValue);
+                    }
+                    else{
+                        row.createCell(cellIndex++);
+                    }
+                    if (activitySize > j) {
+                        HSSFCell activityCell = row.createCell(cellIndex++);
+                        String activityName = BULLETCHAR + activityList.get(j-1).getName();
+                        HSSFRichTextString membValue = new HSSFRichTextString(activityName);
+                        activityCell.setCellStyle(style);
+                        activityCell.setCellValue(membValue);
+                    }
+                    else{
+                        row.createCell(cellIndex++);
+                    }
+
+                }
+                          
             }
         }
+        sheet.autoSizeColumn(0); //adjust width of the first column
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
         wb.write(response.getOutputStream());
         return null;
     }

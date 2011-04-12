@@ -216,7 +216,7 @@ function cancel() {
 							
 						</td></tr>
 						<tr><td align="center">
-							<input type="button" value="Return" class="dr-menu" onclick="cancel()"
+                                                        <input type="button" value="<digi:trn>Return</digi:trn>" class="dr-menu" onclick="cancel()"
 							name="submitButton">
 						</td></tr>
                         </c:if>

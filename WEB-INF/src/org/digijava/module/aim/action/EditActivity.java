@@ -1196,13 +1196,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            /* END - Get MTEF Projections */
 
 			            Collection fundDetails = ampFunding.getFundingDetails();
-			            
+
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			            //  Iterator fundDetItr = fundDetails.iterator();
 			             // long indexId = System.currentTimeMillis();
 			        
 			            calculations.doCalculations(fundDetails, toCurrCode);
-			            
+                                        
 			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
 			            if(isPreview){
                         Iterator fundingIterator = fundDetail.iterator();
@@ -1988,11 +1988,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       String overallTotalDisburOrder = "";
       
       overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.COMMITMENT,debug);
+          fb, Constants.COMMITMENT,Constants.ACTUAL,debug);
       overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT,debug);
+          fb, Constants.DISBURSEMENT,Constants.ACTUAL,debug);
       overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT_ORDER,debug);      
+          fb, Constants.DISBURSEMENT_ORDER,Constants.ACTUAL,debug);
       if(!debug){
       overallTotalUnDisbursed = FormatHelper.getDifference(
           overallTotalCommitted, overallTotalDisbursed);
@@ -2001,7 +2001,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  overallTotalUnDisbursed =overallTotalCommitted +"-" +overallTotalDisbursed; 
       }
       overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.EXPENDITURE,debug);
+          fb, Constants.EXPENDITURE,Constants.ACTUAL,debug);
       if(!debug){
       overallTotalUnExpended = FormatHelper.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);

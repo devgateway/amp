@@ -8,6 +8,15 @@ public class FilterParams {
   	private Long fiscalCalId;
   	private int fromYear;
   	private int toYear;
+        private int adjustmentType;
+
+        public int getAdjustmentType() {
+            return adjustmentType;
+        }
+
+        public void setAdjustmentType(int adjustmentType) {
+            this.adjustmentType = adjustmentType;
+        }
 
 	/**
 	 * @return

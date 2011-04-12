@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-9867</jira>
+  <keyword>xmlpatcher</keyword>
+  <author>Mauricio</author>
+  <description>This patch add program column to pledge reports</description>
+  
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+     	INSERT INTO amp_columns (columnid, columnName, aliasName, cellType, extractorView)
+		VALUES(nextval('amp_columns_seq'), 'Pledges Programs', '', 'org.dgfoundation.amp.ar.cell.TextCell','v_pledges_programs');
+		
+		CREATE OR REPLACE VIEW v_pledges_programs AS 
+		select 
+		    p.id AS pledge_id,
+		    t.name AS name,
+		    fp.amp_program_id AS amp_program_id,
+		    fp.program_percentage AS program_percentage 
+		  from 
+		    ((amp_funding_pledges p join amp_funding_pledges_program fp on(((p.id = fp.pledge_id)))) join amp_theme t on((t.amp_theme_id = fp.amp_program_id))) 
+		  order by 
+		    p.id, t.name;
+		   
+    	</lang>
+    </script>
+  </apply>
+
+</tns:patch>

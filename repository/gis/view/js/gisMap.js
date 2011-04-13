@@ -900,9 +900,8 @@
 		
 	}
 	
-	function mapModeFinChanged(obj) {
-		
-		if (obj.value == "pledgesData") {
+	function mapModeFinChanged() {
+		if ($("#mapModeFin").val() == "pledgesData") {
 			$("#commitmentRowTotal").hide();
 			$("#disbursementRowTotal").hide();
 			$("#expenditureRowTotal").hide();
@@ -1217,7 +1216,7 @@
 		$("#donorsCombo").attr("selectedIndex", 0);
 		$("#fundingType").attr("selectedIndex", 0);
 		$("#mapModeFin").attr("selectedIndex", 0);
-		mapModeFinChanged($("#mapModeFin")[0]);
+		mapModeFinChanged();
 	}
 	
 	function getSectorSelectionText (selId) {

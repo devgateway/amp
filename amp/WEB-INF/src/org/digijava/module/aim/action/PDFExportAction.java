@@ -106,6 +106,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		 
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		
+		ARUtil.cleanReportOfHtmlCodes(rd);
+		
 		rd.setCurrentView(GenericViews.PDF);
 		HttpSession session = request.getSession();
 		

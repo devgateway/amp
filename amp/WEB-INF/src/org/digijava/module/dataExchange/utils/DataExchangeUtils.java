@@ -59,13 +59,13 @@ public class DataExchangeUtils {
 	
 	static String entityNames[]={
 			"&",	"'",	"\"",	"¢",	"£",	"¤",	"¥",	"¦",	"§",
-			"¨",	"©",	"ª",	"«",	"¬",	"­",	"®",	"¯",	"°",	"±",	"²",	"³",	"´",
+			"¨",	"©",	"ª",	"«",	"¬",	"­",	    "®",	"¯",	"°",	"±",	"²",	"³",	"´",
 			"µ",	"¶",	"·",	"¸",	"¹",	"º",	"»",	"¼",	"½",	"¾",	"¿",	"×",	"÷",
 			"À",	"Á",	"Â",	"Ã",	"Ä",	"Å",	"Æ",	"Ç",	"È",	"É",	"Ê",	"Ë",	"Ì",
 			"Í",	"Î",	"Ï",	"Ð",	"Ñ",	"Ò",	"Ó",	"Ô",	"Õ",	"Ö",	"Ø",	"Ù",	"Ú",
 			"Û",	"Ü",	"Ý",	"Þ",	"ß",	"à",	"á",	"â",	"ã",	"ä",	"å",	"æ",	"ç",
 			"è",	"é",	"ê",	"ë",	"ì",	"í",	"î",	"ï",	"ð",	"ñ",	"ò",	"ó",	"ô",
-			"õ",	"ö",	"ø",	"ù",	"ú",	"û",	"ü",	"ý",	"þ",	"ÿ", "","","","",""};
+			"õ",	"ö",	"ø",	"ù",	"ú",	"û",	"ü",	"ý",	"þ",	"ÿ", "","","","",""," ", "'", " ","'" , "-", "\"","\"", "œ" };
 		//entity names to replace entity charactersentityCharacters
 	static String entityCharacters[]={
 			"&amp;",	"&apos;",	"\"",	
@@ -82,8 +82,8 @@ public class DataExchangeUtils {
 			"&ccedil;",	"&egrave;",	"&eacute;",	"&ecirc;",	"&euml;",	"&igrave;",	"&iacute;",
 			"&icirc;",	"&iuml;",	"&eth;",	"&ntilde;",	"&ograve;",	"&oacute;",	"&ocirc;",
 			"&otilde;",	"&ouml;",	"&oslash;",	"&ugrave;",	"&uacute;",	"&ucirc;",	"&uuml;",	
-			"&yacute;",	"&thorn;",	"&yuml;",  
-			"&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;"};
+			"&yacute;",	"&thorn;",	"&yuml;", "&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;", "&nbsp;" , "&rsquo;", "&bull;", "&lsquo;" ,"&ndash;" , "&rdquo;" ,"&ldquo;",
+			"&oelig;"};
 
 	
 	

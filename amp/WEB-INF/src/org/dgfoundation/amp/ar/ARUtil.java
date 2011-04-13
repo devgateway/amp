@@ -20,12 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.cell.ListCell;
+import org.dgfoundation.amp.ar.cell.MetaTextCell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
@@ -53,6 +53,9 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * 
@@ -461,4 +464,42 @@ public final class ARUtil {
         clearDimension(DonorTypeDimension.class);
 	}
 	
+	public static void cleanReportOfHtmlCodes(GroupReportData rd){
+		for (Iterator it = rd.getItems().iterator(); it.hasNext();) {
+			Object o  = it.next();
+			if(o instanceof GroupReportData) cleanReportOfHtmlCodes((GroupReportData)o);
+			if(o instanceof ColumnReportData) {
+				ColumnReportData crd = (ColumnReportData) o;
+				for (Iterator j = crd.getItems().iterator(); j.hasNext();) {
+					Object oo = j.next();
+					if(oo instanceof CellColumn){
+						CellColumn cellColumn  = (CellColumn)oo;
+						for (Iterator k = cellColumn.getItems().iterator(); k.hasNext();) {
+							Object cell = k.next();
+							ARUtil.cleanCell(cell);
+						}
+					}
+				}
+		
+			}
+	
+		}
+	}
+
+	private static void cleanCell(Object cell) {
+		if(cell instanceof TextCell) ARUtil.cleanTextCell((TextCell)cell);
+		if(cell instanceof MetaTextCell) ARUtil.cleanTextCell((TextCell)cell);
+		if(cell instanceof ListCell) ARUtil.cleanListCell((ListCell)cell);
+	}
+
+	private static void cleanListCell(ListCell cell) {
+		List<TextCell> listCells = (List)cell.getValue();
+		for (TextCell tCell : listCells) {
+			ARUtil.cleanTextCell(tCell);
+		}
+	}
+
+	private static void cleanTextCell(TextCell cell) {
+		cell.setValue(DataExchangeUtils.convertHTMLtoChar((String)cell.getValue()));
+	}
 }

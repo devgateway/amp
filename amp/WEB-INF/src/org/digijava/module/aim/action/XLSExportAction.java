@@ -66,6 +66,8 @@ public class XLSExportAction extends Action {
 		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
 				response);
 
+		ARUtil.cleanReportOfHtmlCodes(rd);
+		
 		rd.setCurrentView(GenericViews.XLS);
 		HttpSession session = request.getSession();
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);

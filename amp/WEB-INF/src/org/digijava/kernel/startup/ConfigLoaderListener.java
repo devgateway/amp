@@ -119,7 +119,7 @@ public class ConfigLoaderListener
 
             checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             
-            checkOtherVMParameters();
+            //checkOtherVMParameters();
           
             SiteCache.getInstance();
             DigiPolicy policy = new DigiPolicy();

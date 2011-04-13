@@ -66,10 +66,10 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
-	
-	<div class="main_menu">
+	<center>
+	<div class="main_menu"style="height:25px;" >
 		<digi:insert attribute="headerMiddle"/>
-	</div>
+	</div></center>
 
 <div class="breadcrump_1">&nbsp;</div>	
 			

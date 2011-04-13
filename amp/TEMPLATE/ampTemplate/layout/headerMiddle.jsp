@@ -57,7 +57,8 @@ if("On".equals(publicView)) {
 	cursor:pointer;
 }
 </style>
-<div class="yuiamp-skin-amp" style="clear:both;">
+
+<div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd bd_drop">   
       	 <ul class="first-of-type">
@@ -88,11 +89,11 @@ if("On".equals(publicView)) {
             
             <module:display name="Public Reports" parentModule="PUBLIC VIEW">
 			<li class="yuiampmenuitem" style="float:left;">
-				<a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;">
+				<a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;;">
                     <digi:trn>Reports</digi:trn>
                 </a>
                 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-                	<a  style="margin-left:-1px;position:relative;text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<a  style="margin-left:-1px;position:relative;text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                 		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -134,7 +135,7 @@ if("On".equals(publicView)) {
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
 	                    </span>
-	                    <a  style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                    <a  style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 	                    	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br/>
 	                    </a>
 	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
@@ -175,11 +176,11 @@ if("On".equals(publicView)) {
           --%> 	
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
-		              <li class="yuiampmenuitem" style="float:left;">
+		              <li class="yuiampmenuitem" style="float:left;margin:-4px 0px 0px 0px;_margin:0px;">
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                	<digi:trn>Language</digi:trn>
 		                </span>
-		                 <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                 <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>               
 		                <div id="language" class="yuiampmenu">
@@ -228,7 +229,7 @@ else  //In case the public view aren't activated
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
 		                <digi:trn key="aim:deflanguage">Language</digi:trn>
 		                </span>
-		                <a   style="text-decoration:none; padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+		                <a   style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 		                </a>
 		                <div id="reports2" class="yuiampmenu">
@@ -277,7 +278,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -312,7 +313,7 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
@@ -438,7 +439,7 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
                                  <digi:trn>Desktop</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 4px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
@@ -508,7 +509,7 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -557,7 +558,7 @@ function adminHelp(){
                                 <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 	                          	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                          </a>
                              <div id="Resources" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
@@ -609,7 +610,7 @@ function adminHelp(){
 	                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
 	                                  <digi:trn>Calendar</digi:trn>
 	                              </a>
-	                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+	                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
 	                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                              </a>
 						  		 <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">

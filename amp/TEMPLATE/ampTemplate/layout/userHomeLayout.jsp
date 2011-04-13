@@ -81,7 +81,7 @@
 			</div>
 			
 			
-		<digi:insert attribute="headerMiddle"/>
+		<div style="float:left;"><digi:insert attribute="headerMiddle"/></div>
 	</div>
 	<div class="breadcrump_1">
 	

@@ -900,7 +900,36 @@
 		
 	}
 	
-	function mapModeFinChanged() {
+	function mapModeFinChanged(obj) {
+		
+		if (obj.value == "pledgesData") {
+			$("#commitmentRowTotal").hide();
+			$("#disbursementRowTotal").hide();
+			$("#expenditureRowTotal").hide();
+			$("#pledgeRowTotal").show();
+			
+			$("#commitmentRow").hide();
+			$("#disbursementRow").hide();
+			$("#expenditureRow").hide();
+			$("#pledgeRow").show();
+			
+			$("#fundingTypeRow").hide();
+			$("#selectedFundingtypeRow").hide();
+		} else {
+			$("#commitmentRowTotal").show();
+			$("#disbursementRowTotal").show();
+			$("#expenditureRowTotal").show();
+			$("#pledgeRowTotal").hide();
+			
+			$("#commitmentRow").show();
+			$("#disbursementRow").show();
+			$("#expenditureRow").show();
+			$("#pledgeRow").hide();
+			
+			$("#fundingTypeRow").show();
+			$("#selectedFundingtypeRow").show();
+		}
+		
 		getSectorHierarchy();
 		/*
 		var mapModeCombo = $("#mapModeFin");
@@ -1183,6 +1212,14 @@
 		//$("#sector_selector_expander").find("img").attr("src", "/repository/gis/view/images/sec_filter_expand.png");
 	}
 	
+	function resetSectorFilter() {
+		$("#showOnlyCurentWS").attr("checked", false);
+		$("#donorsCombo").attr("selectedIndex", 0);
+		$("#fundingType").attr("selectedIndex", 0);
+		$("#mapModeFin").attr("selectedIndex", 0);
+		mapModeFinChanged($("#mapModeFin")[0]);
+	}
+	
 	function getSectorSelectionText (selId) {
 		return $("#" + selId).html();
 	}
@@ -1308,7 +1345,9 @@
 			}
 		}
 	}
-	
+
+
+	/*
 	$("#mapModeFin").change (function () {
 		if (this.value == "pledgesData") {
 			$("#commitmentRowTotal").hide();
@@ -1323,9 +1362,6 @@
 			
 			$("#fundingTypeRow").hide();
 			$("#selectedFundingtypeRow").hide();
-			
-			
-			
 		} else {
 			$("#commitmentRowTotal").show();
 			$("#disbursementRowTotal").show();
@@ -1341,7 +1377,7 @@
 			$("#selectedFundingtypeRow").show();
 		}
 		
-	})
+	})*/
     
 
 	

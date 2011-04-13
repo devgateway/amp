@@ -56,12 +56,8 @@
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
 	<div class="main_menu">
-	a,sd;asd;'a
-		<digi:insert attribute="headerMiddle"/>
-	</div>
-	<div class="breadcrump_1">
 	
-				<div style="margin-left: auto; margin-right: auto; width: 1000px;">
+		<div style="float:right;">
 			<logic:notEmpty name="currentMember" scope="session">
 				<feature:display name="Change Workspace" module="My Desktop">
 					<div class="workspace_info">
@@ -83,6 +79,13 @@
 			</feature:display>
 			</logic:notEmpty>
 			</div>
+			
+			
+		<digi:insert attribute="headerMiddle"/>
+	</div>
+	<div class="breadcrump_1">
+	
+		
 	
 	
 	

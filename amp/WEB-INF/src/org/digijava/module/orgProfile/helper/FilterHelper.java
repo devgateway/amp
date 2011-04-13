@@ -45,6 +45,7 @@ public class FilterHelper implements Serializable {
     private boolean pledgeVisible;
     private boolean fromPublicView;
     private boolean showOnlyApprovedActivities;
+    private Boolean showComplexLabel;
 
     public boolean isExpendituresVisible() {
         return expendituresVisible;
@@ -192,6 +193,7 @@ public class FilterHelper implements Serializable {
         this.expendituresVisible=form.getExpendituresVisible();
         this.fromPublicView=form.getFromPublicView();
         this.showOnlyApprovedActivities=form.getShowOnlyApprovedActivities();
+        this.showComplexLabel=form.getShowComplexLabel();
         initDerivedProperties();
     }
      public FilterHelper(FilterHelper helper) throws DgException {
@@ -213,6 +215,7 @@ public class FilterHelper implements Serializable {
         this.locationIds=helper.getLocationIds();
         this.fromPublicView=helper.getFromPublicView();
         this.showOnlyApprovedActivities=helper.getShowOnlyApprovedActivities();
+        this.showComplexLabel=helper.getShowComplexLabel();
     }
 
     public FilterHelper(Long orgGroupId, Long year, Long fiscalCalendarId) {
@@ -304,5 +307,12 @@ public class FilterHelper implements Serializable {
 
 	public void setShowOnlyApprovedActivities(boolean showOnlyApprovedActivities) {
 		this.showOnlyApprovedActivities = showOnlyApprovedActivities;
+	}
+
+	public Boolean getShowComplexLabel() {
+		return this.showComplexLabel;
+	}
+	public void setShowComplexLabel(Boolean showComplexLabel) {
+		this.showComplexLabel = showComplexLabel;
 	}
 }

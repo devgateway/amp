@@ -493,8 +493,9 @@
                                           </tr>
                                         </table>
                                       </feature:display>
-                                      <feature:display name="Funding Information" module="Funding">
-                                      
+                                     
+                                     
+                                    <feature:display name="Funding Information" module="Funding">
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0" >
                                         <tr>
                                           <td>

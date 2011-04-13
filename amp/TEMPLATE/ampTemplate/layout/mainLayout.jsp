@@ -68,6 +68,7 @@
 	</digi:secure>
 	
 	<div class="main_menu">
+	dlkjkslkjdl
 		<digi:insert attribute="headerMiddle"/>
 	</div>
 

@@ -36,7 +36,7 @@ table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: col
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
 .ins_title {font-size:11px; font-weight:bold; color:#767676; white-space:nowrap;}
-.ins_title_reg {font-size:11px; color:#767676; font-weight:bold;}
+.ins_title_reg {font-size:9px; color:#767676; font-weight:bold; font-family:Verdana, Arial, Helvetica, sans-serif;}
 .ins_title_sm {font-size:9px; color:#767676;}
 .ins_title_mid {font-size:10px; color:#767676;}
 .ins_header {color:#767676; font-size:12px; font-weight:bold;}

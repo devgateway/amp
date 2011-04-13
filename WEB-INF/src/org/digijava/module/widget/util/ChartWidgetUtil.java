@@ -60,6 +60,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
+import org.digijava.module.orgProfile.helper.PieChartCustomLabelGeneratorUnrestricted;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
@@ -922,9 +923,17 @@ public class ChartWidgetUtil {
 		DecimalFormat format = FormatHelper.getDecimalFormat();
 		format.setMaximumFractionDigits(3);
         format.setMinimumIntegerDigits(1);
-		PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator(new DecimalFormat("0.0%"));
-		plot.setLabelGenerator(gen);
-		plot.setSimpleLabels(true);
+		if(filter.getShowComplexLabel()){
+			PieSectionLabelGenerator gen = new PieChartCustomLabelGeneratorUnrestricted(new DecimalFormat("0.0%"));
+			plot.setLabelGenerator(gen);
+			plot.setSimpleLabels(false);
+		}
+		else
+		{
+			PieSectionLabelGenerator gen = new PieChartCustomLabelGenerator(new DecimalFormat("0.0%"));
+			plot.setLabelGenerator(gen);
+			plot.setSimpleLabels(true);
+		}	
 		plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
 		plot.setLabelGap(0);
 		plot.setLabelLinkMargin(0.05);
@@ -1999,14 +2008,14 @@ public class ChartWidgetUtil {
             oql.append(" fd inner join fd.pledgeid plg ");
             oql.append(" inner join  plg.organization org  ");
             oql.append(" where fd.fundingYear = :currentYear ");
-            if (orgIds == null) {
-                if (orgGroupId != -1) {
+        if (orgIds == null) {
+            if (orgGroupId != -1) {
                     oql.append(" and  org.orgGrpId.ampOrgGrpId=:orgGroupId ");
-                }
-            } else {
-                oql.append(" and org.ampOrgId in (:organizations) ");
             }
-            List<FundingPledgesDetails> fundingDets = null;
+        } else {
+                oql.append(" and org.ampOrgId in (:organizations) ");
+        }
+        List<FundingPledgesDetails> fundingDets = null;
             query = session.createQuery(oql.toString());
             query.setString("currentYear", currentYear);
 
@@ -2015,7 +2024,7 @@ public class ChartWidgetUtil {
             } else {
                 if (orgIds != null) {
                     query.setParameterList("organizations", orgs);
-                }
+            }
             }
             fundingDets = query.list();
             Iterator<FundingPledgesDetails> fundDetIter = fundingDets.iterator();

@@ -50,6 +50,7 @@ public class OrgProfileFilterForm extends ActionForm {
     private Boolean expendituresVisible;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
+    private Boolean showComplexLabel;
 
     public Boolean getExpendituresVisible() {
         return expendituresVisible;
@@ -229,6 +230,7 @@ public class OrgProfileFilterForm extends ActionForm {
             setYearsInRange(3);
             setFromPublicView(false);
             setShowOnlyApprovedActivities(false);
+            setShowComplexLabel(false);
         }
         if(reset!=null&&reset.equals("true")){
             setExpendituresVisible(FeaturesUtil.isVisibleFeature("Expenditures", ampContext));
@@ -326,5 +328,13 @@ public class OrgProfileFilterForm extends ActionForm {
 
 	public void setShowOnlyApprovedActivities(Boolean showOnlyApprovedActivities) {
 		this.showOnlyApprovedActivities = showOnlyApprovedActivities;
+	}
+
+	public void setShowComplexLabel(Boolean showComplexLabel) {
+		this.showComplexLabel = showComplexLabel;
+	}
+
+	public Boolean getShowComplexLabel() {
+		return showComplexLabel;
 	}
 }

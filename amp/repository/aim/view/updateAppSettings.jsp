@@ -232,6 +232,7 @@ function loadShareRules(){
                                                             </a>
 														</td>
 													</tr>
+													
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defLanguage">
@@ -239,9 +240,19 @@ function loadShareRules(){
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="language" styleClass="inp-text">
-										                <bean:define id="languages" name="aimUpdateAppSettingsForm"
-															 property="languages" type="java.util.Collection" />
-										                <html:options collection="languages" property="code" labelProperty="name" />
+										               			<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
+										               			<!--AMP-10000 
+										                		<html:options collection="languages" property="code" labelProperty="name" />
+										                		 -->
+										                		<c:forEach var="element" items="${aimUpdateAppSettingsForm.languages}">
+																	<c:set var="trn">
+																		<digi:trn>${element.name}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.code}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+										                		
 															</html:select>
 														</td>
 													</tr>
@@ -308,8 +319,17 @@ function loadShareRules(){
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="fisCalendarId" styleClass="inp-text">
 															<html:option value="">------ <digi:trn key="aim:selFisCalendar">Select Fiscal Calendar</digi:trn> ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm"
-															property="fisCalendars" value="ampFiscalCalId" label="name" />
+															<!--  AMP-10000
+															<html:optionsCollection name="aimUpdateAppSettingsForm" property="fisCalendars" value="ampFiscalCalId" label="name" />
+															-->
+															<c:forEach var="element" items="${aimUpdateAppSettingsForm.fisCalendars}">
+																	<c:set var="trn">
+																		<digi:trn>${element.name}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.ampFiscalCalId}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
 															</html:select>
 														</td>
 													</tr>

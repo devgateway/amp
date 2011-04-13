@@ -314,6 +314,8 @@
 				
 				<tr><td align='right' colspan="3">
 				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
+				&nbsp;
+				<input type='button' value='<digi:trn>Reset</digi:trn>' onClick='resetSectorFilter()'>
 					&nbsp;
 				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
 				</td></tr>

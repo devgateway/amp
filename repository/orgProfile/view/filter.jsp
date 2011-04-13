@@ -452,6 +452,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><b><digi:trn>Show complex labels for pie charts</digi:trn>:</b></td>
+                    <td align="left">
+                        <html:checkbox property="showComplexLabel"/><br/>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2">&nbsp;
                         
                     </td>

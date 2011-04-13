@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,25 +18,27 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.form.FinancingBreakdownForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
+import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.AmpFundingComparatorByDonor;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ProposedProjCostHelper;
+import org.digijava.module.gateperm.core.GatePermConst;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ViewFinancingBreakdown extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewFinancingBreakdown.class);
@@ -76,6 +79,8 @@ public class ViewFinancingBreakdown extends TilesAction {
 			double fromExchangeRate = 0.0;
                       
 			Collection ampFundings = DbUtil.getAmpFunding(id);
+			Collections.sort((List)ampFundings, new AmpFundingComparatorByDonor());
+			
 			FilterParams fp = (FilterParams) session
 					.getAttribute(Constants.FILTER_PARAMS);
 
@@ -121,8 +126,7 @@ public class ViewFinancingBreakdown extends TilesAction {
                             formBean.setProposedProjectCostDate(FormatHelper.formatDate(projectCost.getFunDate()));
                         }
                       						
-			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
-						id, ampFundings, fp,debug);
+			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id, ampFundings, fp,debug);
 			logger.debug("The size of the Collection fb is " + fb.size());
 			formBean.setFinancingBreakdown(fb);
 			formBean.setYears(YearUtil.getYears());

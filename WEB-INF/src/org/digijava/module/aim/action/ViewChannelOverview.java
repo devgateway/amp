@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ChannelOverviewForm;
-import org.digijava.module.aim.form.EditActivityForm.CrossCuttingIssues;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -361,7 +361,7 @@ public class ViewChannelOverview extends TilesAction {
 						    ));
 						
 						formBean.setGovAgreementNumber(activity.getGovAgreementNumber());
-						
+				        TreeSet relOrgsAux = new TreeSet();
 				        Collection relOrgs = new ArrayList();
 				        if (activity.getOrgrole() != null) {
 				          Iterator orgItr = activity.getOrgrole().iterator();
@@ -383,9 +383,10 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                relOrg.setAdditionalInformation( orgRole.getAdditionalInfo() );
-				                if (!relOrgs.contains(relOrg)) {
-				                	relOrgs.add(relOrg);
-				                }
+//				                if (!relOrgs.contains(relOrg)) {
+//				                	relOrgs.add(relOrg);
+				                	relOrgsAux.add(relOrg);
+//				                }
 				            }
 				          }
 				          if ( formBean.getFinancingBreakdown() != null ) {
@@ -400,13 +401,17 @@ public class ViewChannelOverview extends TilesAction {
 					                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
 					                relOrg.setOrgTypeId(auxOrgRel.getOrgGrpId().getOrgType());
 					                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
-					                if (!relOrgs.contains(relOrg)) {
-					                	relOrgs.add(relOrg);
-					                }
+//					                if (!relOrgs.contains(relOrg)) {
+//					                	relOrgs.add(relOrg);
+					                	relOrgsAux.add(relOrg);
+//					                }
 				        	  }
 				          }
 				        }
-				        formBean.setRelOrgs(relOrgs);
+
+				        formBean.setRelOrgs(relOrgsAux);
+				        
+				        
 				        Collection col = activity.getClosingDates();
 				        List dates = new ArrayList();
 				        if (col != null && col.size() > 0) {

@@ -1260,13 +1260,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 			            if (index > -1) {
 			              fundingOrgs.set(index, fundOrg);
-			              //	logger
-			              //		.info("Setting the fund org obj to the index :"
-			              //			+ index);
+			              //logger.info("!!!! Setting the fund org obj to the index :"	+ index);
 			            }
 			            else {
 			              fundingOrgs.add(fundOrg);
-			              //	logger.info("Adding new fund org object");
+			              //logger.info("???? Adding new fund org object");
 			            }
           }
                  
@@ -1303,6 +1301,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
                     
           //logger.info("size = " + fundingOrgs);
+          Collections.sort(fundingOrgs);
           eaForm.getFunding().setFundingOrganizations(fundingOrgs);
           //get the total depend of the 
          

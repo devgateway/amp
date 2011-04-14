@@ -646,7 +646,7 @@ function submitForm(thisform){
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table cellpadding="3" cellspacing="3" class="t_mid" align="center">
 			                    	<tr>
-			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
+			                    		<td nowrap="nowrap" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
 			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                                
 			                    		</td>
@@ -692,7 +692,7 @@ function submitForm(thisform){
 			                    		</feature:display>			                    		
 			                    	</tr>
 			                    	<tr>
-			                    		<td align="right" nowrap="nowrap" style="text-align: right;">
+			                    		<td nowrap="nowrap" style="text-align: right;">
 			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
@@ -710,7 +710,7 @@ function submitForm(thisform){
 			                    	
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
-			                    			<td valign="top" align="right" nowrap="nowrap" rowspan="1">
+			                    			<td valign="top" nowrap="nowrap" rowspan="1">
 				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>
 				                    		</td>
 				                    		<td width="2px">&nbsp;</td>
@@ -725,7 +725,7 @@ function submitForm(thisform){
 				                    		</td>
 			                    		</feature:display>
 			                    		<td width="30px"><div style="width:30px;">&nbsp;</div> </td>			                    		
-			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
+			                    		<td rowspan="4" nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
@@ -735,7 +735,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>			                    	
 			                    	<tr style="height: 25px;">
-			                    		<td nowrap="nowrap" align="right" style="text-align: right;vertical-align: top;" >
+			                    		<td nowrap="nowrap" style="vertical-align: top;" >
 			                    			<digi:trn key="calendar:StDate"><b>Start date</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px" valign="top">&nbsp;</td>
@@ -870,7 +870,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>
 			                    	</tr>			                    	
 			                    	<tr height="25px;">
-			                    		<td  nowrap="nowrap" align="right" style="text-align: right">
+			                    		<td  nowrap="nowrap">
 			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px" valign="top">&nbsp;</td>
@@ -1018,7 +1018,16 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>
 			                    	<tr height="25px;">
-			                    		<td colspan="8">&nbsp; </td>
+			                    		<td colspan="8">
+										
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="100"><font color="red" size="3px">*</font>
+    <digi:trn key="calendar:Attendee">Attendee</digi:trn></td>
+    <td><div class="msg_receivers">aaa</div></td>
+  </tr>
+</table>
+</td>
 			                    	</tr>
 			                    	<tr>
 			                    		<td colspan="2">&nbsp;</td>

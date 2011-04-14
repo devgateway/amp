@@ -1061,7 +1061,7 @@ function submitForm(thisform){
 
 </td>
 			                    	</tr>
-			                    	<tr>
+			                    	<!--<tr>
 			                    		<td colspan="2">&nbsp;</td>
 			                    		<td>
 			                    			<font color="red" size="3px">*</font>
@@ -1116,7 +1116,7 @@ function submitForm(thisform){
 			                                        	<input type="button" class="buttonx" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
-			                    	</tr>
+			                    	</tr>	-->
 			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>			                    	
 			                    	<tr>
 			                          <td colspan="8" style="text-align:center;">
@@ -1141,7 +1141,7 @@ function submitForm(thisform){
 			</td>    	
         	</table>
     	</td>
-	</tr>	
+	</tr>
 </table>
 
 <div id="myEvent" style="display:none;" >

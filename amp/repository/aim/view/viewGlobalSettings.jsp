@@ -223,10 +223,9 @@ function setIndex(index){
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=760px>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750px>
+		<td align=left valign="top" width=750px>
 		<table cellPadding=5 cellspacing="0" width="100%" border="0">
 			<tr>
 				<td height=33>

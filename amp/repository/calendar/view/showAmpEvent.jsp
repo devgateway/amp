@@ -1027,16 +1027,20 @@ function submitForm(thisform){
     <td>
 	<div class="msg_receivers">
 	<div class="rec_group_container">
-	<div class="msg_grp_name">
+	
+	<div class="msg_grp_name" style="font-size:11px">
 	<input type="checkbox" style="float: left;" value="t:10" class="group_checkbox">
 	<div class="msg_lbl">---Team Name---</div>
+	</div>
+	
 	<div class="msg_grp_mem_name">
 	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
 	</div>
+	
 	</div>
 	</div>
 	
-	</div></td>
+	</td>
   </tr>
 </table>
 </td>

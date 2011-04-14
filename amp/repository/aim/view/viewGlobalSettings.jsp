@@ -280,7 +280,7 @@ function setIndex(index){
 									<font style="color:black;font-size:14pt;font-weight:bold">									
 									<center><digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn></center>
 									</font>
-									<br /> <br />
+									<br />
 									<table width="975" border="0" id="${sectionName}" align=center style="font-size:11px;" class="inside">
 										<tr>
 			                               <td width="50%" bgcolor="#c7d4db" style="color:black;font-size:10pt;font-weight:bold" class="inside" align=right>
@@ -746,7 +746,7 @@ function setIndex(index){
 					                              	<html:hidden property="allValues"/>
 					                              	<html:hidden property="indexTab"/>
 					                              	<html:submit property="saveAll">
-					                                    <digi:trn key="aim:saveAll">
+					                                    <digi:trn key="aim:saveAll" styleClass="buttonx">
 					                                    	Save All                                    
 					                                    </digi:trn>
 					                                </html:submit>			                                

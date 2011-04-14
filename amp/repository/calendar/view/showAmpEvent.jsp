@@ -1046,6 +1046,15 @@ function submitForm(thisform){
 	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
 	</div>
 	</div>
+	
+	<br />
+				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
+	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
+			<div class="msg_add">
+				
+				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
+				<div id="extContactAutocom"></div>
+				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 	</div>
 	
 	</td>

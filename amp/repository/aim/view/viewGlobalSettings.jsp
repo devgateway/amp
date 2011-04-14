@@ -746,7 +746,7 @@ function setIndex(index){
 					                              	<html:hidden property="allValues"/>
 					                              	<html:hidden property="indexTab"/>
 					                              	<html:submit property="saveAll">
-					                                    <digi:trn key="aim:saveAll" styleClass="buttonx">
+					                                    <digi:trn key="aim:saveAll">
 					                                    	Save All                                    
 					                                    </digi:trn>
 					                                </html:submit>			                                

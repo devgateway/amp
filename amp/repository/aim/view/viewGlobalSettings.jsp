@@ -278,15 +278,15 @@ function setIndex(index){
 								<logic:iterate name="sections"  id="sectionName">
 								<div>
 									<font style="color:black;font-size:14pt;font-weight:bold">									
-									<digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn>
+									<center><digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn></center>
 									</font>
 									<br /> <br />
-									<table width="975" border="0" id="${sectionName}" align=center style="font-size:11px;">
+									<table width="975" border="0" id="${sectionName}" align=center style="font-size:11px;" class="inside">
 										<tr>
-			                               <td width="60%" bgcolor="#c7d4db" style="color:black;font-size:10pt;font-weight:bold">
+			                               <td width="60%" bgcolor="#c7d4db" style="color:black;font-size:10pt;font-weight:bold" class="inside">
 												<digi:trn key="aim:globalsettings:setting">Setting</digi:trn>
 										   </td>
-			                               <td width="40%" bgcolor="#c7d4db" style="color:black;font-size:10pt;font-weight:bold">
+			                               <td width="40%" bgcolor="#c7d4db" style="color:black;font-size:10pt;font-weight:bold" class="inside">
 												<digi:trn key="aim:globalsettings:value">Value</digi:trn>
 										   </td>
 										</tr>
@@ -299,14 +299,14 @@ function setIndex(index){
 									    	int g_range = 0, g_year = 0;
 									    %>
 			                            <tr>
-			                               <td width="60%">
+			                               <td width="60%" class="inside">
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
 			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
 			                                 </logic:notEmpty>
 			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>
 										<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
-			                                <td width="40%">
+			                                <td width="40%" class="inside">
 			                                  <html:hidden property="globalId" name="globalSett"/>
 			                                  <html:hidden property="globalSettingsName" name="globalSett"/>
 											

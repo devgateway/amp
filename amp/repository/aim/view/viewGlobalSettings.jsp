@@ -31,8 +31,7 @@
 	min-height:200px;
 	_height:200px;
 	padding:10px 10px 10px 10px;
- 	background-color: #EEEEEE;
-	border:1px solid black;
+ 	background-color: #FFFFFF;
 }
 </style>
 
@@ -244,7 +243,7 @@ function setIndex(index){
 				
 			<tr>
           		<td height=16 valign="center">
-			            <div id="demo" class="yui-navset" style="width:800px">
+			            <div id="demo" class="yui-navset" style="width:1000px;">
 			                <ul class="yui-nav">
 								<c:set var="indexTab" value="0"/>
 								<logic:iterate name="sections"  id="sectionName">

@@ -1033,10 +1033,18 @@ function submitForm(thisform){
 	<div class="msg_lbl">---Team Name---</div>
 	</div>
 	
-	<div class="msg_grp_mem_name">
+	<div class="msg_grp_mem_name" style="font-size:11px;">
 	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
 	</div>
-	
+	<div class="msg_grp_mem_name" style="font-size:11px;">
+	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+	</div><div class="msg_grp_mem_name" style="font-size:11px;">
+	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+	</div><div class="msg_grp_mem_name" style="font-size:11px;">
+	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+	</div><div class="msg_grp_mem_name" style="font-size:11px;">
+	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+	</div>
 	</div>
 	</div>
 	

@@ -1024,7 +1024,7 @@ function submitForm(thisform){
   <tr>
     <td width="103" valign=top><font color="red" size="3px">*</font>
     <digi:trn key="calendar:Attendee"><b style="font-size:12px;">Attendee</b></digi:trn></td>
-    <td>
+    <td style="font-size:11px;">
 	<div class="msg_receivers">
 	<div class="rec_group_container">
 	
@@ -1046,7 +1046,7 @@ function submitForm(thisform){
 	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
 	</div>
 	</div>
-	
+	</div>
 	<br />
 				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
 	<b>Additional Receivers: </b>Type first letter of contact to view suggestions or enter e-mail to send message to<br />
@@ -1055,7 +1055,6 @@ function submitForm(thisform){
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
 				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
-	</div>
 	
 	</td>
   </tr>

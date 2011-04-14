@@ -1022,9 +1022,21 @@ function submitForm(thisform){
 										
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="100"><font color="red" size="3px">*</font>
-    <digi:trn key="calendar:Attendee">Attendee</digi:trn></td>
-    <td><div class="msg_receivers">aaa</div></td>
+    <td width="103" valign=top><font color="red" size="3px">*</font>
+    <digi:trn key="calendar:Attendee"><b style="font-size:12px;">Attendee</b></digi:trn></td>
+    <td>
+	<div class="msg_receivers">
+	<div class="rec_group_container">
+	<div class="msg_grp_name">
+	<input type="checkbox" style="float: left;" value="t:10" class="group_checkbox">
+	<div class="msg_lbl">---Team Name---</div>
+	<div class="msg_grp_mem_name">
+	<input type="checkbox" value="m:82" checkbox="" id="t:10 type=" name="receiversIds">UATtl UATtl@amp.org<br>
+	</div>
+	</div>
+	</div>
+	
+	</div></td>
   </tr>
 </table>
 </td>

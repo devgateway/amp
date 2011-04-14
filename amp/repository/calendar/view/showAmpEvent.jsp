@@ -1053,8 +1053,7 @@ function submitForm(thisform){
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-				<div id="extContactAutocom"></div>
-				<input type="button" value="Add" class="buttonx_sm" style="margin-top:7px;" onClick="addContact(document.getElementById('contactInput'))">
+				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
 	<hr />
 	</td>
   </tr>

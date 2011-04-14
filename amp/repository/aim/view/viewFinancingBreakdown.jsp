@@ -244,7 +244,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
                                                                             </td>
                                                                         </tr>
                                                                         <tr >
-                                                                            <td><b><digi:trn>Proposed Completion Date</digi:trn></b></td>
+                                                                            <td><b><digi:trn>Planned Commitment Date</digi:trn></b></td>
                                                                             <td align="left">
                                                                                     ${aimFinancingBreakdownForm.proposedProjectCostDate}
                                                                             </td>

@@ -2301,7 +2301,7 @@ function collapseAll() {
 																<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
 																		  <tr bgcolor="#f0f0f0">
-															<td><digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn></td>
+															<td><digi:trn>Planned Commitment Date</digi:trn></td>
                                                         <td bgcolor="#f0f0f0" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
                                                              ${aimEditActivityForm.funding.proProjCost.funDate}                                                          </c:if>                                                        </td>

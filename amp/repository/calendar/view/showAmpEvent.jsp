@@ -1054,7 +1054,6 @@ function submitForm(thisform){
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
-	<hr />
 	</td>
   </tr>
 </table>
@@ -1116,8 +1115,8 @@ function submitForm(thisform){
 			                                        	<input type="button" class="buttonx" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
-			                    	</tr>	-->
-			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>			                    	
+			                    	</tr>	
+			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>-->			                    	
 			                    	<tr>
 			                          <td colspan="8" style="text-align:center;">
 			                          	<feature:display name="Preview Event button" module="Calendar">

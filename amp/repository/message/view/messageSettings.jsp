@@ -188,7 +188,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px;">
+													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																<digi:trn>

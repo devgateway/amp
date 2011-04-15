@@ -26,7 +26,7 @@
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
+<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left style="font-size:12px;">	
 
 		<tr><td bgColor=#c7d4db height="25" align="center" colspan="3">
 	<!-- Table title -->
@@ -40,8 +40,8 @@
 	
 	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0" style="font-size:12px;" class="inside">
 		<tr>
-			<th class="inside"><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
-			<th class="inside"><digi:trn key="aim:ampAction">Action</digi:trn></th>
+			<td class="inside" height=20><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
+			<td class="inside" height=20><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelModule" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"

@@ -16,13 +16,13 @@
 	<tr><td bgColor=#c7d4db  height="25" align="center" colspan="3" class="inside">
 	<!-- Table title -->
 	<digi:trn key="aim:ampNewTemplate">
-		AMP New Template 
+		<b>AMP New Template</b> 
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" >
 
-	<tr><td colspan="2" class="inside">
+	<tr><td colspan="2" class="inside" align=center>
 	<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30"/>
 	</td></tr>
 	
@@ -30,7 +30,7 @@
 		<c:set var="translation">
 			<digi:trn key="aim:newFeatureTemplateSaveNewTemplate">Save New Template</digi:trn>
 		</c:set>
-		<html:submit style="buttonx" value="${translation}" property="newTemplate"/>
+		<html:submit styleClass="buttonx" value="${translation}" property="newTemplate"/>
 	</td></tr>
 	</digi:form>
 	

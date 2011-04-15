@@ -152,14 +152,14 @@
 					<digi:trn key="<%="fm:"+field.getNameTrimmed() %>">
 						<bean:write name="field" property="name"/>
 					</digi:trn></td>
-				<td class="inside">
+				<td class="inside" align=center>
 					<i>
 					<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
 						<bean:write name="feature" property="name"/>
 					</digi:trn>
 					</i>
 				</td>
-				<td class="inside">
+				<td class="inside" align=center>
 					<i>
 					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
 						<bean:write name="module" property="name"/>
@@ -168,7 +168,7 @@
 				</td>
 				<c:set target="${urlParamsDelField}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelField}" property="fieldId" value="<%=field.getId()%>"/>
-				<td class="inside">
+				<td class="inside" align=center>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteField">Click here to Delete Field</digi:trn>
 					</c:set>

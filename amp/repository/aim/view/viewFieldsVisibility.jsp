@@ -78,22 +78,22 @@
 
 	<tr><td>
 	
-	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="1px" >
+	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left class="inside" style="font-size:12px;">
 		<tr>
-			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>
-			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
-			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=80%><digi:trn key="aim:ampSection"><b>Section</b></digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10%><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10%><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelFeature" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFeatures" id="feature"
 			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
-				<td align="left">
+				<td align="left" class="inside">
 				<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
 					<bean:write name="feature" property="name"/>
 				</digi:trn>
 				</td>
-				<td>
+				<td class="inside" align=center>
 					<i>
 					<%if(feature.getParent() != null){%>
 						<digi:trn key="<%="fm:"+feature.getParent().getNameTrimmed()%>">
@@ -104,7 +104,7 @@
 				</td>
 				<c:set target="${urlParamsDelFeature}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelFeature}" property="featureId" value="<%=feature.getId()%>"/>
-				<td>
+				<td class="inside" align=center>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteFeature">Click here to Delete Feature</digi:trn>
 					</c:set>

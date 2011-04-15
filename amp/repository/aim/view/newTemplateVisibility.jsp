@@ -12,8 +12,8 @@
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
-	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left class="inside">	
+	<tr><td bgColor=#c7d4db  height="25" align="center" colspan="3" class="inside">
 	<!-- Table title -->
 	<digi:trn key="aim:ampNewTemplate">
 		AMP New Template 
@@ -22,15 +22,15 @@
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" >
 
-	<tr><td>&nbsp;</td><td colspan="2">
+	<tr><td colspan="2" class="inside">
 	<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30"/>
 	</td></tr>
 	
-	<tr><td>&nbsp;</td><td colspan="2">
+	<tr><td colspan="2" class="inside" align=center>
 		<c:set var="translation">
 			<digi:trn key="aim:newFeatureTemplateSaveNewTemplate">Save New Template</digi:trn>
 		</c:set>
-		<html:submit style="dr-menu" value="${translation}" property="newTemplate"/>
+		<html:submit style="buttonx" value="${translation}" property="newTemplate"/>
 	</td></tr>
 	</digi:form>
 	

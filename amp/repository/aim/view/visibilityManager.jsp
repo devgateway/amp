@@ -81,7 +81,7 @@
 				
 				
 				<tr>
-					<td noWrap width=80% vAlign="top"  class="yui-skin-sam">
+					<td noWrap width=80% vAlign="top" class="yui-skin-sam">
 						<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 							<jsp:include page="manageTreeVisibility.jsp" />
 						</logic:equal>
@@ -104,7 +104,7 @@
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="10"0>
+										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title style="font-size:12px;">
 													<digi:trn key="aim:otherLinks">

@@ -26,12 +26,12 @@
 
 
 <digi:instance property="aimVisibilityManagerForm" />
-<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
+<table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left style="font-size:12px;">	
 
-		<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+		<tr><td bgColor=#c7d4db height="25" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampFeatures">
-		AMP Features
+		<b>AMP Features</b>
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
@@ -68,10 +68,10 @@
 	
 	
 	<tr><td>&nbsp;</td></tr>
-	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+	<tr><td bgColor=#c7d4db height="25" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampSections">
-		AMP Sections
+		<b>AMP Sections</b>
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
@@ -121,10 +121,10 @@
 	</td></tr>
 	<tr><td>&nbsp;</td></tr>
 	
-	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
+	<tr><td bgColor=#c7d4db height="25" align="center" colspan="3">
 	<!-- Table title -->
 	<digi:trn key="aim:ampFields">
-		AMP Fields 
+		<b>AMP Fields</b> 
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>

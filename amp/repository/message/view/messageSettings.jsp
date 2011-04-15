@@ -109,52 +109,52 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 								</tr><%-- End navigation --%>
 								<TR>
 									<TD width=750>
-										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">											
+										<TABLE border="0" cellPadding="3" cellSpacing="3" width="100%" rules="all" class="inside" style="font-size:12px;">											
 											<tr>
-												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn>Message Settings</digi:trn> </td>
+												<td colspan="4" align="center" bgcolor=#c7d4db><digi:trn><b>Message Settings</b></digi:trn> </td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn>Setting</digi:trn> </td>
-												<td align="center"><digi:trn>Current Value</digi:trn></td>
-												<td align="center"><digi:trn>New Value</digi:trn></td>
-												<td>&nbsp;</td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>Setting</digi:trn> </td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>Current Value</digi:trn></td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>New Value</digi:trn></td>
+												<td class="inside" bgcolor=#F2F2F2>&nbsp;</td>
 											</tr>
 											<tr>
-												<td align="center" >
+												<td align="center" class="inside">
 													<digi:trn>Message Refresh Time(minutes)</digi:trn> &nbsp;
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
-												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
-												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
-												<td align="center">
+												<td align="center" class="inside">${messageForm.msgRefreshTimeCurr}</td>
+												<td align="center" class="inside"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
+												<td align="center" class="inside">
 													<c:set var="saveBtn"><digi:trn>Save</digi:trn></c:set>
 													<input type="button" value="${saveBtn}" onclick="saveRecord('refreshTime')"/>
 												</td>
 											</tr>
 											<tr>
-												<td align="center">
+												<td align="center" class="inside">
 													<digi:trn>Message Storage Per Message Type</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
 												</td>
-												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
-												<td align="center"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
-												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('storage')" /></td>
+												<td align="center" class="inside">${messageForm.msgStoragePerMsgTypeCurr} </td>
+												<td align="center" class="inside"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
+												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('storage')" /></td>
 											</tr>
 											<tr>
-												<td align="center">
+												<td align="center" class="inside">
 													<digi:trn>Days of Advance Alert Warnings</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
 												</td>
-												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
-												<td align="center"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
-												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
+												<td align="center" class="inside">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
+												<td align="center" class="inside"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
+												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
 											</tr>
 											<tr>
-												<td align="center">
+												<td align="center" class="inside">
 													<digi:trn>Email Alerts</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
 												</td>
-												<td align="center">
+												<td align="center" class="inside">
 													<c:if test="${messageForm.emailMsgsCurrent==-1}">
 														&nbsp;
 													</c:if>
@@ -165,14 +165,14 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 														<digi:trn>Yes</digi:trn>
 													</c:if>
 												</td>
-												<td align="center">
+												<td align="center" class="inside">
 													<html:select property="emailMsgsNew" name="messageForm">
 														<html:option value="-1"><digi:trn>please select</digi:trn></html:option>
 														<html:option value="0"><digi:trn>No</digi:trn></html:option>
 														<html:option value="1"><digi:trn>Yes</digi:trn></html:option>
 													</html:select>
 												</td>
-												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
+												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
 											</tr>
 											<tr>
 												<td colspan="4" align="right">
@@ -184,11 +184,11 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									</TD>
 									<TD width=15>&nbsp;</TD>
 									<td  vAlign="top">
-										<table align="center" cellpadding="0" cellspacing="0" width="70%" border="0">
+										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
+													<table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																<digi:trn>

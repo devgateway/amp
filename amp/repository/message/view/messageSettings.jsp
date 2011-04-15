@@ -88,14 +88,14 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 </script>
 
 
-	<TABLE align="center" border="0" cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+	<TABLE align="center" border="0" cellPadding=0 cellSpacing=0 width="1000">
 		<TR>
-			<TD class=r-dotted-lg-buttom valign="top">
+			<TD valign="top">
 				<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" >
 						<TR><TD bgColor="#ffffff" class="box-border" align="left">
 							<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%">
 								<tr><%-- Start Navigation --%>
-									<td height=33><span class=crumb>
+									<td height=33 colspan=5><span class=crumb>
 										<c:set var="translation">
 											<digi:trn>Click here to goto Admin Home</digi:trn>
 										</c:set>
@@ -108,7 +108,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									</td>
 								</tr><%-- End navigation --%>
 								<TR>
-									<TD>
+									<TD width=750>
 										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">											
 											<tr>
 												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn>Message Settings</digi:trn> </td>
@@ -182,21 +182,21 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 											</tr>
 										</TABLE>
 									</TD>
-									<TD>&nbsp;</TD>
+									<TD width=15>&nbsp;</TD>
 									<td  vAlign="top">
 										<table align="center" cellpadding="0" cellspacing="0" width="70%" border="0">
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="10"0>
+													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																<digi:trn>
-																Other links
+																<b style="padding-left:5px;">Other links</b>
 																</digi:trn>
 															</td>
-															<td background="module/aim/images/corner-r.gif" height="17" width=17>
-																&nbsp;
+															<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+																
 															</td>
 														</tr>
 													</table>
@@ -204,9 +204,9 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=3 cellspacing="1" width="100%">
+													<table cellPadding=3 cellspacing="1" width="100%" class="inside">
 														<tr>
-															<td>
+															<td class="inside">
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="translation">
 																	<digi:trn>Click here to goto Admin Home</digi:trn>
@@ -217,7 +217,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 															</td>
 														</tr>
 														<tr>
-															<td>
+															<td class="inside">
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="trn">
 								                                  <digi:trn>Click here to view TemplateAlerts Manager</digi:trn>

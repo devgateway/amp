@@ -84,7 +84,7 @@ public class TrailCellsXLS extends XLSExporter {
 
 			int pos = modifiedName.indexOf(':'); 
 			if (pos >= 0)
-				modifiedName = modifiedName.substring(pos + 1);
+				modifiedName = modifiedName.substring(pos + 1).trim();
 			
 			//requirements for translation purposes
 			String siteId=this.getMetadata().getSiteId();

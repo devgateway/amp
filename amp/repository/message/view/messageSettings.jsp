@@ -114,9 +114,9 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 												<td colspan="4" align="center" height=25 bgcolor=#c7d4db><digi:trn><b>Message Settings</b></digi:trn> </td>
 											</tr>
 											<tr>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>Setting</b></digi:trn> </td>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>Current Value</b></digi:trn></td>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>New Value</b></digi:trn></td>
+												<td align="center" class="inside" bgcolor=#F2F2F2 style="font-size:11px; color:#666666;"><digi:trn><b>Setting</b></digi:trn> </td>
+												<td align="center" class="inside" bgcolor=#F2F2F2 style="font-size:11px; color:#666666;"><digi:trn><b>Current Value</b></digi:trn></td>
+												<td align="center" class="inside" bgcolor=#F2F2F2 style="font-size:11px; color:#666666;"><digi:trn><b>New Value</b></digi:trn></td>
 												<td class="inside" bgcolor=#F2F2F2>&nbsp;</td>
 											</tr>
 											<tr>

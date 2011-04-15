@@ -80,9 +80,9 @@ public abstract class AmpCategoryFieldPanel extends
 	 * @see CategoryConstants#IMPLEMENTATION_LOCATION_NAME
 	 * @throws Exception
 	 */
-	public AmpCategoryFieldPanel(String id, String categoryKey, String fmName,
+	public AmpCategoryFieldPanel(String id, final String categoryKey, String fmName,
 			boolean ordered, Boolean isMultiselect,
-			IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel) throws Exception {
+			final IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel) throws Exception {
 		super(id, fmName,hideLabel);
 		selectedMultiselect = isMultiselect;
 		this.categoryKey = categoryKey;
@@ -93,40 +93,33 @@ public abstract class AmpCategoryFieldPanel extends
 			selectedMultiselect = categoryClass.isMultiselect();
 		}
 		
-		final Collection<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-		try {
-			collectionByKey.addAll(CategoryManagerUtil
-					.getAmpCategoryValueCollectionByKey(categoryKey));
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-
-		// create reunion of the related choices and retain only choices that
-		// are also in the related reunion collection
-		if (relatedChoicesModel != null) {
-			Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
-			Collection<AmpCategoryValue> collection = relatedChoicesModel
-					.getObject();
-			for (AmpCategoryValue ampCategoryValue : collection) {
-				relatedReunion.addAll(CategoryManagerUtil
-						.getAmpCategoryValueFromDb(ampCategoryValue.getId(),
-								true).getUsedByValues());
+		choices = new AbstractReadOnlyModel<List<? extends AmpCategoryValue>>() {
+			@Override
+			public List<AmpCategoryValue> getObject() {
+				List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
+				try {
+					collectionByKey.addAll(CategoryManagerUtil
+							.getAmpCategoryValueCollectionByKey(categoryKey));
+					if (relatedChoicesModel != null) {
+						Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
+						Collection<AmpCategoryValue> collection = relatedChoicesModel
+								.getObject();
+						for (AmpCategoryValue ampCategoryValue : collection) {
+							relatedReunion.addAll(CategoryManagerUtil
+									.getAmpCategoryValueFromDb(ampCategoryValue.getId(),
+											true).getUsedByValues());
+						}
+						collectionByKey.retainAll(relatedReunion);
+					}
+				} catch (Exception e) {
+					logger.error(e);
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				return collectionByKey;
 			}
-			collectionByKey.retainAll(relatedReunion);
-		}
-
-		choices = new AbstractReadOnlyModel<List<? extends AmpCategoryValue>>()
-        {
-            @Override
-            public List<AmpCategoryValue> getObject()
-            {
-                ArrayList<AmpCategoryValue> list = new ArrayList<AmpCategoryValue>(collectionByKey);
-                return list;
-            }
-
-        };
+		};
+		
 	}
 	
 	public AmpCategoryFieldPanel(String id, String categoryKey, String fmName,

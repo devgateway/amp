@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 
 import bsh.This;
@@ -58,7 +59,7 @@ public abstract class AmpPercentageValidationHiddenField<T> extends
 		createHiddenContainer(model);
 		
 		hiddenContainer.setType(Double.class);
-		//hiddenContainer.add(new RangeValidator<Double>(100d, 100d));
+		hiddenContainer.add(new RangeValidator<Double>(100d, 100d));
 	}
 	
 	/**

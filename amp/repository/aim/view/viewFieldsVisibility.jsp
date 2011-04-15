@@ -40,8 +40,8 @@
 	
 	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0" style="font-size:12px;" class="inside">
 		<tr>
-			<td class="inside" height=20><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
-			<td class="inside" height=20><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
+			<td class="inside" height=20 bgcolor=#F2F2f2 align=center width=85%><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
+			<td class="inside" height=20 bgcolor=#F2F2f2 align=center width=15%><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelModule" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"
@@ -50,7 +50,7 @@
 				<td align="left" class="inside"><digi:trn key="<%="fm:"+module.getNameTrimmed() %>"><bean:write name="module" property="name"/></digi:trn></td>
 				<c:set target="${urlParamsDelModule}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
-				<td class="inside">
+				<td class="inside" align=center>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteModule">Click here to Delete Module</digi:trn>
 					</c:set>

@@ -80,9 +80,9 @@
 	
 	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left class="inside" style="font-size:12px;">
 		<tr>
-			<td height=20 bgcolor=#F2F2f2 align=center width=80%><digi:trn key="aim:ampSection"><b>Section</b></digi:trn></th>
-			<td height=20 bgcolor=#F2F2f2 align=center width=10%><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
-			<td height=20 bgcolor=#F2F2f2 align=center width=10%><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=80% class="inside"><digi:trn key="aim:ampSection"><b>Section</b></digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampAction"><b>Action</b></digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelFeature" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFeatures" id="feature"
@@ -131,12 +131,16 @@
 	<digi:form action="/visibilityManager.do" method="post" >
 	<tr><td>
 	
-	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="1px" >
+	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0" style="font-size:12px;" class="inside">
 		<tr>
-			<th><digi:trn key="aim:ampField">Field</digi:trn></th>
-			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>
-			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
-			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=70% class="inside"><digi:trn key="aim:ampField"><b>Field</b></digi:trn>
+			</th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampSection"><b>Section</b></digi:trn>
+			</th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn>
+			</th>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampAction"><b>Action</b></digi:trn>
+			</th>
 		</tr>
 		<jsp:useBean id="urlParamsDelField" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFields" id="field"
@@ -144,18 +148,18 @@
 			<tr>
 				<bean:define id="feature" name="field" property="parent" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-				<td align="left">
+				<td align="left" class="inside">
 					<digi:trn key="<%="fm:"+field.getNameTrimmed() %>">
 						<bean:write name="field" property="name"/>
 					</digi:trn></td>
-				<td>
+				<td class="inside">
 					<i>
 					<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
 						<bean:write name="feature" property="name"/>
 					</digi:trn>
 					</i>
 				</td>
-				<td>
+				<td class="inside">
 					<i>
 					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
 						<bean:write name="module" property="name"/>
@@ -164,7 +168,7 @@
 				</td>
 				<c:set target="${urlParamsDelField}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelField}" property="fieldId" value="<%=field.getId()%>"/>
-				<td>
+				<td class="inside">
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteField">Click here to Delete Field</digi:trn>
 					</c:set>

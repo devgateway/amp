@@ -111,12 +111,12 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									<TD width=750>
 										<TABLE border="0" cellPadding="3" cellSpacing="3" width="100%" rules="all" class="inside" style="font-size:12px;">											
 											<tr>
-												<td colspan="4" align="center" bgcolor=#c7d4db><digi:trn><b>Message Settings</b></digi:trn> </td>
+												<td colspan="4" align="center" height=25 bgcolor=#c7d4db><digi:trn><b>Message Settings</b></digi:trn> </td>
 											</tr>
 											<tr>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>Setting</digi:trn> </td>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>Current Value</digi:trn></td>
-												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn>New Value</digi:trn></td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>Setting</b></digi:trn> </td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>Current Value</b></digi:trn></td>
+												<td align="center" class="inside" bgcolor=#F2F2F2><digi:trn><b>New Value</b></digi:trn></td>
 												<td class="inside" bgcolor=#F2F2F2>&nbsp;</td>
 											</tr>
 											<tr>
@@ -128,7 +128,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 												<td align="center" class="inside"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
 												<td align="center" class="inside">
 													<c:set var="saveBtn"><digi:trn>Save</digi:trn></c:set>
-													<input type="button" value="${saveBtn}" onclick="saveRecord('refreshTime')"/>
+													<input type="button" value="${saveBtn}" class="buttonx" onclick="saveRecord('refreshTime')"/>
 												</td>
 											</tr>
 											<tr>
@@ -138,7 +138,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 												</td>
 												<td align="center" class="inside">${messageForm.msgStoragePerMsgTypeCurr} </td>
 												<td align="center" class="inside"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
-												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('storage')" /></td>
+												<td align="center" class="inside"><input type="button" class="buttonx" value="${saveBtn}" onclick="saveRecord('storage')" /></td>
 											</tr>
 											<tr>
 												<td align="center" class="inside">
@@ -147,7 +147,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 												</td>
 												<td align="center" class="inside">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
 												<td align="center" class="inside"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
-												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
+												<td align="center" class="inside"><input type="button" class="buttonx" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
 											</tr>
 											<tr>
 												<td align="center" class="inside">
@@ -172,12 +172,12 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 														<html:option value="1"><digi:trn>Yes</digi:trn></html:option>
 													</html:select>
 												</td>
-												<td align="center" class="inside"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
+												<td align="center" class="inside"><input type="button" class="buttonx" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
 											</tr>
 											<tr>
 												<td colspan="4" align="right">
 													<c:set var="saveAllBtn"><digi:trn>Save All</digi:trn></c:set>
-													<input type="button" value="${saveAllBtn}" onclick="saveAll()" />
+													<input type="button" value="${saveAllBtn}" class="buttonx" onclick="saveAll()" />
 												</td>
 											</tr>
 										</TABLE>

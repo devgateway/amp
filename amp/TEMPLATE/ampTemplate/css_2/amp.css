@@ -1,8 +1,8 @@
 
 /* GLOBAL */
-html{}
-body {font-family: Arial, Verdana, Helvetica, sans-serif;}
-html.ie body, html.gecko body, html.chrome body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
+html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
+body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
+html.ie body, html.gecko body, html.chrome body {font-family: Arial, Verdana, Helvetica, sans-serif;}
 div#ampcontainer{width:1000px;margin:0 auto;}
 a {color:#376091;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}

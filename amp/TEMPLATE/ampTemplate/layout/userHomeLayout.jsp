@@ -54,42 +54,12 @@
 	</digi:secure>
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
-	</digi:secure>
+	</digi:secure><center>
 	<div class="main_menu">
-	
-		<div style="float:right;">
-			<logic:notEmpty name="currentMember" scope="session">
-				<feature:display name="Change Workspace" module="My Desktop">
-					<div class="workspace_info">
-						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-				 		 <select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
-				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
-								</logic:equal>
-								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<option value="<bean:write name="item" property="ampTeamMemId"/>">
-											<bean:write name="team" property="name"/>
-										</option>
-								</logic:notEqual>
-							</logic:iterate>
-						</select>
-				 	</div>			
-			</feature:display>
-			</logic:notEmpty>
-			</div>
-			
-			
-		<div style="float:left; width:710px; margin-top:-5px;"><digi:insert attribute="headerMiddle"/></div>
+		<digi:insert attribute="headerMiddle"/>
 	</div>
 	<div class="breadcrump_1">
-	
-		
-	
-	
-	
-	</div>
+	</div></center>
 	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
 	<!-- BREADCRUMP START -->
 	<div class="breadcrump">
@@ -148,7 +118,33 @@
     		<%}%>
 			</div>
 		</div>
-	</div>
+	</div>	
+    <center>
+    <div class="workspace_info">
+   
+			<logic:notEmpty name="currentMember" scope="session">
+				<feature:display name="Change Workspace" module="My Desktop">
+				
+						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
+				 		 <select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
+				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
+								</logic:equal>
+								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option value="<bean:write name="item" property="ampTeamMemId"/>">
+											<bean:write name="team" property="name"/>
+										</option>
+								</logic:notEqual>
+							</logic:iterate>
+						</select>
+				 			
+			</feature:display>
+			</logic:notEmpty>
+			</div>	
+			
+            </center>
 	<!-- BREADCRUMP END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>

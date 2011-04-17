@@ -125,28 +125,22 @@
 		 	</div>			
 		</feature:display>
 		</logic:notEmpty> -->
-		<div>
-			<table class="top_nav">
-				<tr>
-					<td>
+		<div id="usr_menu_logged">
+		
 						<logic:notEmpty name="currentMember" scope="session">
 							<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>
 						</logic:notEmpty>
 						<img src="img_2/top_sep.gif" class="top_sep">
-					</td>
-					<td valign=bottom>
+					
 						<feature:display name="Language Option" module="Tools">
 	               			<digi:insert flush="false" attribute="dropdownLangSwitch" />
 	               	 	</feature:display>
-	                </td>
-					<td style="text-transform: uppercase;">
+	               
 						<img src="img_2/top_sep.gif" class="top_sep">
 						<digi:link styleClass="loginWidget" href="/j_acegi_logout" module="aim">
 							<digi:trn key="aim:logout">LOGOUT</digi:trn>
 						</digi:link>
-					</td>
-				</tr>
-			</table>
+			
 		</div>
 	</div>
 </div>

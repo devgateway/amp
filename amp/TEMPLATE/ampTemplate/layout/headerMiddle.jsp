@@ -176,8 +176,8 @@ if("On".equals(publicView)) {
           --%> 	
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
-		              <li class="yuiampmenuitem" style="float:left;margin:-4px 0px 0px 0px;_margin:0px;">
-		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
+		              <li class="yuiampmenuitem" style="float:left;margin:0px 0px 0px 0px;_margin:0px;">
+		                <span class="yuiampmenuitemlabel" href="#" style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 		                	<digi:trn>Language</digi:trn>
 		                </span>
 		                 <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">

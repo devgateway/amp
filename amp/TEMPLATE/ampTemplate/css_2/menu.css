@@ -1,5 +1,5 @@
 /*Copyright (c) 2008, Yahoo! Inc. All rights reserved.Code licensed under the BSD License:http://developer.yahoo.net/yuiamp/license.txtversion: 2.5.1*/
-.main_menu .yuiamp-skin-amp{margin:0 auto;}
+.main_menu .yuiamp-skin-amp{margin:0 auto;clar:both;}
 .yuiamp-skin-amp ul{background:none;border:none;}
 .mainmenucontainer{width:1000px; margin:0 auto;}
 .yuiampmenubar {
@@ -131,16 +131,24 @@
 	font-size: 100%;
 }
 .yuiamp-skin-amp .yuiampmenu .bd {
-	background-color: #fff;
+
 	line-height:1.5em;!important
 }
 .yuiamp-skin-amp .yuiampmenu ul {
 	padding: 0px 0;
 
 }
-.yuiamp-skin-amp .yuiampmenu ul.first-of-type {
+ul.first-of-type {
 	border-width: 0;
-	background-color:#FFFFFF;
+	margin-top:5px;
+
+}ul.first-of-type ul {
+	border-width: 0;
+	margin-top:0px;
+	background:#fff;
+	border-right:2px solid #ccc;
+	border-bottom:2px solid #ccc;
+
 }
 .yuiamp-skin-amp .yuiampmenu h6 {
 	font-weight: bold;
@@ -182,6 +190,20 @@
 	border:1px solid #E8E8E8;
 	float:left;
 	display:block;
+	
+}
+
+.yuiamp-skin-amp .yuiampmenuitem li {
+padding:3px;
+	border-bottom:1px solid #E8E8E8;
+	border-left:1px solid #E8E8E8;
+	display:block;
+
+	
+}
+.yuiamp-skin-amp .yuiampmenuitem li a:hover{
+text-decoration:underline;
+
 	
 }
 
@@ -242,4 +264,12 @@
 
 
 .yuiampmenuitem_drop {}
-.bd_drop  {background-color:#FFFFFF; line-height:25px;height:25px;padding:3px 0px 0px 0px;}
+#usr_menu_logged{width:400px;float:right;}
+#usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
+#usr_menu_logged a:hover {color:#fff; font-size:12px;text-decoration:underline;}
+/*-------menu fixes by rafy
+html.gecko li#yui-gen10, html.gecko li#yui-gen14 {margin-top:-3px;}
+ html.chrome li#yui-gen14 {margin-top:-2px;}
+html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type,  html.gecko .bd_drop ul.first-of-type {border:none;margin-top:3px;}
+html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;}
+html.ie div.header {height:46px;}-------*/

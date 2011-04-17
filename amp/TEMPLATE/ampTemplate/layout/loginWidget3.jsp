@@ -10,19 +10,59 @@
 
 <digi:secure authenticated="false">
 <logic:notPresent name="currentMember" scope="session">
-	<form action="/j_acegi_security_check" method="post" style="margin:0;">
-		<table border="0" cellspacing="0" cellpadding="0">
-  			<tr>
-  				<td>
+<script type="text/javascript">
+	        $(document).ready(function() {
+
+            $("#show_login_pop").click(function(e) {          
+				e.preventDefault();
+                $("div#show_login_pop_box").toggle();
+				$("#show_login_pop").toggleClass("menu-open");
+            });
+			
+			$("div#show_login_pop_box").mouseup(function() {
+				return false
+			});
+			$(document).mouseup(function(e) {
+				if($(e.target).parent("a#show_login_pop").length==0) {
+					$("#show_login_pop").removeClass("menu-open");
+					$("div#show_login_pop_box").hide();
+				}
+			});			
+			
+        });	
+</script>
+<div id="show_login_pop_box">
+						<form action="/j_acegi_security_check" method="post" style="margin:0;z-index:9999">
+				    				<label for="j_username">
+				    					<digi:trn>Username</digi:trn>:
+				    				</label>
+				    			
+				    				<input name="j_username" type="text" class="inputx" style="width:150px" id="j_username">
+				    		
+    								<label for="j_password">
+    									<digi:trn>Password</digi:trn>:</label>
+    							
+	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
+	    				
+	    							<html:submit  styleClass="buttonx_sm_lgn" property="submitButton">
+  										<digi:trn key="btn:signIn">Login</digi:trn>
+  									</html:submit>
+	    			</form>
+		
+	
+    </div>
+<div id="logincontainer">
+
+	
   					<div class="login_here">
   						<div class="login_here_cont">
-  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;" onclick="toggle('show_login_pop_box');">
+  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;" >
   								<digi:trn>Login Here</digi:trn>
   							</a>
   						</div>
+                        
   					</div>
-  				</td>
-				<td style="font-size: 11px;color: #ffffff">
+  					<div id="login_menu">
 					<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 					</c:set>
@@ -43,46 +83,9 @@
                 	<digi:link href="/showEmailForm.do" module="aim" title="${trn1}">
                    		<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn>
 					</digi:link>
-				</td>
-  			</tr>
-  			<tr>
-    			<td>
-					<div id="show_login_pop_box">
-						<table cellpadding="2" cellspacing="2">
-							<tr>
-				    			<td>
-				    				<div class="login_label" style="font-size: 11px;">
-				    					<digi:trn>Username</digi:trn>:
-				    				</div>
-				    			</td>
-				    			<td>
-				    				<input name="j_username" type="text" class="inputx" style="width:150px">
-				    			</td>
-							</tr>
-							<tr>
-    							<td>
-    								<div class="login_label" style="font-size: 11px;">
-    									<digi:trn>Password</digi:trn>:</div>
-    							</td>
-	    						<td>
-	    							<input name="j_password" type="password" class="inputx" style="width:150px">
-	    						</td>
-							</tr>
-							<tr>
-								<td>&nbsp;</td>
-	    						<td>
-	    							<html:submit  styleClass="buttonx_sm_lgn" property="submitButton">
-  										<digi:trn key="btn:signIn">Login</digi:trn>
-  									</html:submit>
-	    						</td>
-							</tr>
-						</table>
+                   
 					</div>
-				</td>
-    			<td>&nbsp;</td>
-  			</tr>
-		</table>
-	</form>
+					</div>
 	<c:if test="${param['loginError'] != null}">
 		<div class="error_login">
 			<c:if test="${param['loginError'] == 'invalidLogin'}">
@@ -110,7 +113,7 @@
 </logic:notPresent>
 </digi:secure>
 
-  <script type="text/javascript">
+  <!--<script type="text/javascript">
   function toggle(obj) {
 		var el = document.getElementById(obj);
 		if (el.style.display == 'none' || el.style.display == '') {
@@ -120,5 +123,5 @@
 			el.style.display = 'none';
 		}
 	}
-</script>
+</script>-->
   

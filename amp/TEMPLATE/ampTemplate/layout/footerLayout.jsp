@@ -4,7 +4,8 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+</div>
+</center>
 
 <!-- FOOTER START -->
 	<div class="footer">
@@ -18,6 +19,6 @@
 			</logic:notEmpty>
 		</center>
 	 </div>
-	 
+	  
 <!-- FOOTER END  -->
 	

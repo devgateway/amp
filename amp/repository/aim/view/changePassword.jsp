@@ -11,7 +11,10 @@
 <html:javascript formName="aimChangePasswordForm"/>
 
 <digi:form action="/changePassword.do" method="post" onsubmit="return validateAimChangePasswordForm(this);">
-
+<div class="reg_form_container">
+<div class="reg_form_title"><h2><digi:trn key="aim:changePassword">
+						Change Password
+						</digi:trn></h2></div>
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr><td width="100%" valign="top" align="left">
 <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -20,24 +23,7 @@
 		</td>
 		<td align=left valign="top" width="60%"><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="100%">
-				<tr>
-					<td width="3">&nbsp;</td>
-					<td vAlign=left>
-						<digi:errors />
-					</td>
-					<td>&nbsp;
-					</td>
-				</tr>
-				<tr>
-					<td width="3">&nbsp;</td>
-					<td class=subtitle-blue valign="top">
-						<digi:trn key="aim:changePassword">
-						Change Password
-						</digi:trn>
-					</td>
-					<td>&nbsp;
-					</td>
-				</tr>
+				
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap width="40%">
@@ -117,7 +103,7 @@
         		</tr>
         		<tr>
 	          	<td valign="top">
-                <strong>
+                <span class="formnote">
 						<digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for
         			    official business. You have been granted the right to access these
@@ -126,7 +112,7 @@
 						 responsibility. Do not share them with anyone.
 						 </digi:trn>
 						<BR><BR>
-				</strong>
+				</span>
           		</td>
   				</tr>
         		<tr>
@@ -138,6 +124,7 @@
 </table>
 </td></tr>
 </table>
+</div>
 </digi:form>
 
 

@@ -1,5 +1,9 @@
+
 /* GLOBAL */
+html{}
 body {font-family: Arial, Verdana, Helvetica, sans-serif;}
+html.ie body, html.gecko body, html.chrome body {font-family: Arial, Verdana, Helvetica, sans-serif;background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;}
+div#ampcontainer{width:1000px;margin:0 auto;}
 a {color:#376091;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 .hr_3 {border: 0; color: #D0D0D0; background-color: #D0D0D0; height: 1px; width: 100%; text-align: left;}
@@ -62,28 +66,33 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 .wlcm_txt_menu_spc {margin-left:10px; margin-right:10px;}
 .welcome_info {font-size:12px; line-height:17px;}
 .welcome_title {font-size:18px; font-weight:bold; margin-bottom:10px;}
+#logincontainer {z-index:9999;}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
-.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center; margin-right:10px;}
-.login_here_cont {padding:5px; font-size:12px;}
+.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;float:left;margin-left:50px;}
+html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;position:absolute;top:15px; left:10px;}
+.login_here_cont { font-size:12px;}
 .login_here a {color:#000000;}
 .wlc_aid_map {background-color:#F4F4F4; border:1px solid #CCCCCC; padding:10px; font-size:12px; width:650px; margin-left:auto; margin-right:auto;}
 .wlc_aid_map_dates {font-size:11px; margin-top:10px;}
 .min_max_info {font-size:11px; width:500px; margin-left:auto; margin-right:auto; text-align:left;}
 
 /* HEADER */
-.header {background-image:url(/TEMPLATE/ampTemplate/img_2/top_bg.gif); height:51px;text-align:center;}
-.centering {width:1000px; margin:0 auto;}
+.header { height:51px;text-align:center;overflow:hidden;}
+.centering {width:1000px; margin:0 auto;text-align:left;}
 .logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;}
 .amp_label {padding-top:5px;float:left;}
-.top_nav {float:right; color:#FFFFFF; font-size:12px; font-weight:bold;}
+.top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
-.login_nav {float:right; color:#FFFFFF; font-size:11px; padding-top:13px;}
+.login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;}
+html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:relative;}
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
-.workspace_info {float:right; color:#000000; font-size:11px; padding-top:1px;}
+.workspace_info {width:1000px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;text-align:left;}
+html.ie .workspace_info {width:1000px; margin:0 auto; height:20px; color:#000000; font-size:11px; padding:5px 5px 10px 5px;text-align:left;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
+#login_menu{width:350px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
 .main_menu {height:25px;  width:1000px; margin:0 auto;text-align:center;border:none;position:relative;}
@@ -96,8 +105,8 @@ top_nav a {color:#FFFFFF;}
 
 
 /* BREADCRUMP */
-.breadcrump {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:40px; display:none;}
-.breadcrump_1 {background-image:url(/TEMPLATE/ampTemplate/img_2/bread_bg.gif); height:25px;margin:5px 0px 0px 0px;}
+.breadcrump { height:40px; display:none;}
+.breadcrump_1 { height:25px;margin:5px 0px 0px 0px;}
 .breadcrump_cont {padding-top:11px; padding-bottom:10px; font-size:12px;}
 .sec_name {font-size:12px; font-weight:bold;}
 .breadcrump_sep {color:#CCCCCC; margin-left:7px; margin-right:7px; font-size:11px;}
@@ -187,7 +196,10 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}
-#show_login_pop_box {display:none; position:absolute; width:240px; padding:10px; border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:1;}
+#show_login_pop_box {display:none; margin:30px 0px 0px 55px;width:240px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
+html.ie #show_login_pop_box{ border:1px solid #CCCCCC;position:absolute;left:0px; top:15px;}
+html.ie div.header {overflow:visible;}
+#show_login_pop_box label{color:#000; padding:5px;display:inline-block;}
 .resource_label_gr a {color:#FFFFFF;}
 .resource_label_or a {color:#FFFFFF;}
 .resource_label_red a {color:#FFFFFF;}
@@ -306,3 +318,14 @@ table.report_indicator{margin-bottom:15px}
 
 ul.first-of-type li.yui-gen14 {border:1px solid red;}
 
+/*-----rafy-----*/
+.login_here{position:absolute;}
+div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
+div.reg_form_container table {margin:0 auto; }
+div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px;}
+div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
+div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
+div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
+span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
+td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
+div.reg_form_container .f-names {color:#7f7f7f; font-size:11px; font-weight:bold;}

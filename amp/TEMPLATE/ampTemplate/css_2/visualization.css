@@ -1,7 +1,7 @@
 .dash_left {padding-left:8px; padding-right:8px; padding-bottom:8px; line-height:22px; font-size:11px;}
 .dash_left TD {font-size:11px;}
-.dashboard_header {background-color:#F0F0F0; height:auto; border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;}
-.dashboard_name {float:left; font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;}
+.dashboard_header {background-color:#F0F0F0; height:auto; border-top:5px solid #4A687A; width:1000px; margin:0 auto;text-align:left;}
+.dashboard_name { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;}
 .dash_ico {float:left; margin-right:15px;}
 .dash_ico_link {float:left; padding-top:5px;}
 .dashboard_total {float:right; font-size:11px; margin-right:15px; margin-top:18px; text-align:right; line-height:22px;}

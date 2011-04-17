@@ -9,7 +9,10 @@
 
 <digi:instance property="aimUserEmailForm" />
 
-
+<div class="reg_form_container">
+<div class="reg_form_title"><h2><digi:trn key="aim:changePassword">
+						Reset your e-mail address
+						</digi:trn></h2></div>
 <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width=772>
 	<tr>
 		<td width=14>&nbsp;
@@ -47,7 +50,7 @@
         		</tr>
         		<tr>
 	          	<td valign="top">
-						 <strong>
+						 <span class="formnote">
 						 <digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for        
 	        		     official business. You have been granted the right to access these        
@@ -55,7 +58,7 @@
         	   			 your official business. Your accounts and passwords are your        
 						 responsibility. Do not share them with anyone.        
 						 </digi:trn>
-						 </strong>
+						 </span>
 						<BR><BR>
           		</td>
   				</tr> 
@@ -66,3 +69,4 @@
 		</td>
 		</tr>
 </table>
+</div>

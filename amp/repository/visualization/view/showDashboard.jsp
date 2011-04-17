@@ -129,7 +129,7 @@ function hidePopin() {
 -->
 </script>
 
-
+<center>
 <!-- BREADCRUMB START -->
 <div class="centering">
 <span class="sec_name"><digi:trn>Donor Profile Dashboard</digi:trn></span><span class="breadcrump_sep">|</span><a href=# class="l_sm"><digi:trn>Dashboards</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
@@ -358,11 +358,11 @@ function changeTab (selected){
 		</table>
 	</div>
 	</div>
-<center>
+
 <input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" onclick="hidePopin()" id="applyButton">
 <input type="button" value="Reset to defaults" class="buttonx" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="Close" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
-</center>
+
 
 </div>
 
@@ -373,6 +373,7 @@ function changeTab (selected){
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
+
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
@@ -398,6 +399,7 @@ function changeTab (selected){
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
+</center>
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
     <td width=296 bgcolor="#F4F4F4" valign="top">

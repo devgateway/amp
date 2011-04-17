@@ -8,7 +8,10 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="globalsettings" %>
 
 <digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >
-
+<div class="reg_form_container">
+<div class="reg_form_title"><h2><digi:trn key="aim:changePassword">
+						Reset your e-mail address
+						</digi:trn></h2></div>
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 
 <tr><td width="100%" valign="top" align="left">
@@ -56,7 +59,7 @@
         		</tr>
         		<tr>
 	          	<td valign="top">
-<strong>
+<span class="formnote">
 						 <digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for
 	        		     official business. You have been granted the right to access these
@@ -64,7 +67,7 @@
         	   			 your official business. Your accounts and passwords are your
 						 responsibility. Do not share them with anyone.
 						 </digi:trn>
-</strong>						<BR><BR>
+</span>						<BR><BR>
           		</td>
   				</tr>
         		<tr>
@@ -81,3 +84,4 @@
 
 
 
+</div>

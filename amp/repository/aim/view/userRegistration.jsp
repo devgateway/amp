@@ -182,13 +182,15 @@
 
 
 </script>
-
+<center>
+<div class="reg_form_container">
+<div class="reg_form_title"><h2><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></h2></div>
 <digi:instance property="aimUserRegisterForm" />
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
   <html:hidden property="orgType" />
   <html:hidden property="orgGrp" />
   <input type="hidden" name="actionFlag" value="">
-  <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
+  <table cellpadding="0" cellspacing="0" border="0">
 	<tr>
     <td width="100%" valign="top" align="left">
     <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -215,7 +217,7 @@
             </logic:notEmpty>
             <tr>
               <td width="3%">&nbsp;</td>
-              <td align=left class="subtitle-blue" noWrap colspan="5"><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn>
+              <td align=left class="subtitle-blue" noWrap colspan="5">
               </td>
             </tr>
             <tr>
@@ -384,7 +386,7 @@
                 </tr>
                 <tr>
                   <td valign="top">
-                  	<strong>
+                  	<span class="formnote">
                     <digi:trn key="aim:loginWarning"> You are signing-in to one or more secure applications for
                       
                       official business. You have been granted the right to access these
@@ -394,7 +396,7 @@
                       your official business. Your accounts and passwords are your
                       
                       responsibility. Do not share them with anyone. </digi:trn>
-                    </strong>
+                    </span>
                     <BR />
                     <BR />
                   </td>
@@ -410,3 +412,5 @@
     </tr>
   </table>
 </digi:form>
+</div>
+</center>

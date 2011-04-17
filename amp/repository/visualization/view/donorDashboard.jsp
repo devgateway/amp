@@ -292,9 +292,11 @@ function hidePopin() {
 <digi:form action="/filters.do">
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
-<div class="dashboard_header">
+<center> 
+<div class="dashboard_header" style="border:1px solid red;">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
+</center> 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
@@ -318,6 +320,7 @@ function hidePopin() {
 <!--<div class="dashboard_stat">Total Disbursements: <div id="divTotalDisbs"></div> <span class="breadcrump_sep">|</span>Total Number of Projects: <div id="divNumOfProjs"></div><span class="breadcrump_sep">|</span>Total Number of Sectors: <div id="divNumOfSecs"></div><span class="breadcrump_sep">|</span>Total Number of Regions: <div id="divNumOfRegs"></div><span class="breadcrump_sep">|</span>Average Project Size: <div id="divAvgProjSize"></div></div>-->
 
 </div>
+</center> 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:15px;">
   <tr>
     <td width=296 bgcolor="#F4F4F4" valign="top">

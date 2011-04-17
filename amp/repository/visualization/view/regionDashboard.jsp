@@ -99,9 +99,11 @@ yuiLoadingPanel.prototype = {
 <digi:form action="/filters.do">
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
+<center>
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
+</center>
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>

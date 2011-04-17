@@ -68,7 +68,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0; background-color:
 .amp_label {padding-top:5px;float:left;}
 .top_nav {float:right; color:#FFFFFF; font-size:12px; font-weight:bold;}
 .top_nav a {color:#FFFFFF;}
-.login_nav {float:right; color:#FFFFFF; font-size:11px; padding-top:13px;}
+.login_nav {float:right;  font-size:11px; padding-top:13px;}
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
@@ -171,7 +171,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}
-#show_login_pop_box {display:none; position:absolute; width:240px; padding:10px; border:1px solid #CCCCCC; background-color:#FFFFFF;}
+#show_login_pop_box {display:none; position:absolute; width:240px; padding:10px; border:1px solid #CCCCCC; background-color:#FFFFFF; z-index:9999;}
 .resource_label_gr a {color:#FFFFFF;}
 .resource_label_or a {color:#FFFFFF;}
 .resource_label_red a {color:#FFFFFF;}

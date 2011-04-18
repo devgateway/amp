@@ -236,7 +236,7 @@
 																                                    </table>
 																                                </td>
 																                                <td>
-																                                  <input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add >></digi:trn>">
+																                                  <input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add >></digi:trn>">
 																                                  <br><br>
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn>Remove</digi:trn>" >	
 																                                </td>
@@ -271,13 +271,13 @@
 																									<c:set var="trnSavetBtn">
 																										<digi:trn>save</digi:trn>
 																									</c:set> 
-																									<input type="button" value="${trnSavetBtn }" onclick="save();" />
+																									<input type="button" class="buttonx" value="${trnSavetBtn }" onclick="save();" />
 																								</td>																									
 																								<td align="left" width="47%">
 																									<c:set var="trnCancelBtn">
 																										<digi:trn>Cancel</digi:trn>
 																									</c:set>
-																									<input type="button" value="${trnCancelBtn}" onclick="cancel();">																																							
+																									<input type="button" class="buttonx" value="${trnCancelBtn}" onclick="cancel();">																																							
 																								</td>
 																							</tr>
 																						</table>

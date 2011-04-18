@@ -128,21 +128,21 @@ div.fakefile2 input{
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellpadding="1" border="0">
 					<tr><td noWrap width=750 vAlign="top">
-						<table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+						<table cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
-										<tr><td bgColor="#c7d4db" class="box-title" height="20" align="center">
+										<tr><td bgColor="#c7d4db" height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="message:templates"><b>Templates</b></digi:trn>
 											<!-- end table title -->
 										</td></tr>										
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" bgcolor="#cccccc" style="font-size:12px;">
+											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="font-size:12px;" class="inside">
 													<logic:empty name="messageForm" property="templates">
 														<tr bgcolor="#ffffff">
-															<td colspan="5" align="center"><b>
+															<td colspan="5" align="center" class="inside"><b>
 																<digi:trn key="message:noTemplates">No templates present</digi:trn>
 															</b></td>
 														</tr>
@@ -150,10 +150,10 @@ div.fakefile2 input{
 													<logic:notEmpty name="messageForm" property="templates">
 														<logic:iterate name="messageForm" property="templates" id="template">
 														<tr>
-															<td bgcolor="#ffffff">
+															<td bgcolor="#ffffff" class="inside">
 																${template.name}
 															</td>															
-															<td bgcolor="#ffffff" width="65" align="center">
+															<td bgcolor="#ffffff" width="65" align="center" class="inside">
 																<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams1}" property="templateId">
 																	<bean:write name="template" property="id" />
@@ -165,7 +165,7 @@ div.fakefile2 input{
 																	<digi:trn key="messgae:templateEditLink">Edit</digi:trn>
 																</digi:link> ]
 															</td>
-															<td bgcolor="#ffffff" width="75" align="center">
+															<td bgcolor="#ffffff" width="75" align="center" class="inside">
 																<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams2}" property="templateId">
 																	<bean:write name="template" property="id" />
@@ -196,16 +196,14 @@ div.fakefile2 input{
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding="0" cellSpacing="0" width="100" style="fomt-size:12px;">
+									<table cellPadding="0" cellSpacing="0" width="100" style="font-size:12px;">
 										<tr>
 											<td bgColor="#c9c9c7" class="box-title">
 												<digi:trn key="aim:otherLinks">
 												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width="17">&nbsp;
-												
-											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>

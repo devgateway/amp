@@ -201,6 +201,7 @@ public class EditOrganisation extends DispatchAction {
               editForm.setOrgIsoCode(organization.getOrgIsoCode());
               editForm.setOrgCode(organization.getOrgCode());
               editForm.setBudgetOrgCode(organization.getBudgetOrgCode());
+              editForm.setDescription(organization.getDescription());
 
               // Pledges
               Collection<AmpPledge> funding = organization.getFundingDetails();

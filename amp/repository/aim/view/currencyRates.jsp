@@ -222,7 +222,7 @@ function fnSubmit() {
 
 								<table cellpadding="1" cellspacing="1" align="left" width="100%">
 								<tr><td>
-								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px;">
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>
 										<td vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
@@ -283,9 +283,9 @@ function fnSubmit() {
 								</table>
 								</td></tr>
 								<tr><td>
-								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px;">
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px;">
 									<tr>
-										<td vAlign="left" width="170" align="center">
+										<td vAlign="left" width="170">
 											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
 										</td>
 										<td vAlign="left" width="50" align="center">
@@ -304,9 +304,9 @@ function fnSubmit() {
 
                                 <tr>
                                   <td>
-                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px;">
+                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px;">
                                       <tr>
-                                        <td vAlign="left" align="center">
+                                        <td vAlign="left">
                                           <FONT color=red>*</FONT>
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>
@@ -324,7 +324,7 @@ function fnSubmit() {
                                         <a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 										 	<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 												<input id="currRateFile" name="currRateFile" type="file" class="file"/>
-												<input type="button" value="${trnUpdateValues}" class="button" onclick="return updateRates()">
+												
 											</div>
                                         </a>
                                        
@@ -334,45 +334,45 @@ function fnSubmit() {
                                   
                                 </tr>
                                 </table>
-
+<input type="button" value="${trnUpdateValues}" class="buttonx" onclick="return updateRates()">
 
 							</td></tr>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
 								<div style="clear:both;">&nbsp;</div>
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" class="inside" width="100%" style="font-size:12px;">
-									<tr>
-										<td align="center" width="3" class="inside" bgcolor=#F2F2F2>
+								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="100%" style="font-size:12px;">
+									<tr bgcolor="eeeeee">
+										<td align="center" width="3">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
 										</td>
 										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
 										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
 										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn> Source Currency Code</digi:trn></b>
 										</td>
 										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn>Source Currency Name</digi:trn></b>
 										</td>
 										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
 										</td>
 										<td align="center" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
+										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
 										</td>
 									</tr>
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
-									<tr>
-										<td colspan="7" align="center" class="inside">
+									<tr bgcolor="#f4f4f2">
+										<td colspan="7" align="center">
 											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
 										</td>
 									</tr>
@@ -387,29 +387,29 @@ function fnSubmit() {
 									<tr class="rowAlternate">
 									<% }
 									index++;%>
-										<td align="center" width="3" class="inside">
+										<td align="center" width="3">
 											<html:multibox property="selectedRates">
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
 										</td>
-										<td align="left" class="inside">
+										<td align="left">
                                           <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
-										<td align="left" class="inside">
+										<td align="left">
 											<c:out value="${cRates.currencyName}"/>
 										</td>
-										<td align="left" class="inside">
+										<td align="left">
                                          	${cRates.fromCurrencyCode}
 										</td>
-										<td align="left" class="inside">
+										<td align="left">
 											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
-										<td align="center" class="inside">
+										<td align="center">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>
 										</td>
-										<td align="right" nowrap="nowrap" class="inside">
+										<td align="right" nowrap="nowrap">
 											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
@@ -423,11 +423,11 @@ function fnSubmit() {
                                   <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
                                 </c:set>
                                 <input type="button" value="${trnDelBtn}" class="buttonx" onclick="deleteRates()">
-								<hr />
                               </td>
                             </tr>
 							<c:if test="${!empty aimCurrencyRateForm.pages}">
-							<tr><td>
+							<tr><td><hr>
+							
 								<!-- Pagination -->
 								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
 									<tr>
@@ -480,7 +480,7 @@ function fnSubmit() {
 
 							<tr><td>
 							<hr />
-								<table width="450" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+								<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" style="font-size:12px;">
 									<tr>
 										<td align="left">
 											<a href="javascript:addExchangeRate()">

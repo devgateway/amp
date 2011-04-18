@@ -692,7 +692,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 }
                
     			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
-                document.aimAddOrgForm.action = "${delete}";
+                document.aimAddOrgForm.action = "${save}";
                 document.aimAddOrgForm.actionFlag.value = "save";
                 document.aimAddOrgForm.submit();
             }

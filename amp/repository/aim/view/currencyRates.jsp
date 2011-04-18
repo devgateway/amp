@@ -189,11 +189,10 @@ function fnSubmit() {
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
-			<table cellPadding=5 cellSpacing=3 width="100%">
+			<table cellPadding=5 cellSpacing=3 width="100%" style="font-size:12px;">
 				<tr>
 					<!-- Start Navigation -->
 					<td colspan="2"><span class=crumb>
@@ -208,20 +207,20 @@ function fnSubmit() {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td colspan="2" height=16 valign="center" width=571><span class=subtitle-blue>
+					<td colspan="2" height=25 valign="center" bgcolor=#c7d4db align=center><span class=subtitle-blue>
 						<digi:trn>
-							Exchange Rates
+							<b>Exchange Rates</b>
 						</digi:trn>
 						</span>
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width="75%" vAlign="top">
+					<td noWrap width="750" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr><td>
 								<!-- Filters -->
 
-								<table cellpadding="1" cellspacing="1" align="left" bgcolor="#dddddd" width="600">
+								<table cellpadding="1" cellspacing="1" align="left" bgcolor="#dddddd" width="100%">
 								<tr><td bgcolor="#f4f4f2">
 								<table cellpadding="0" cellSpacing=2 align="left" width="600" border="0">
 									<tr>
@@ -530,23 +529,22 @@ function fnSubmit() {
 												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="10"0>
+													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">
-															Other links
+															<b style="padding-left:5px;">Other links</b>
 															</digi:trn></td>
-															<td background="module/aim/images/corner-r.gif" height="17"
-																width=17>&nbsp;</td>
+															<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 														</tr>
 													</table>
 													</td>
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellspacing="1" width="100%">
+													<table cellPadding=5 cellspacing="1" width="100%" style="font-size:12px;" class="inside">
 														<tr>
-															<td><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -555,7 +553,7 @@ function fnSubmit() {
 															</digi:link></td>
 														</tr>
 														<tr>
-															<td>
+															<td class="inside">
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
@@ -567,7 +565,7 @@ function fnSubmit() {
 															</td>
 														</tr>
 														<tr>
-															<td>
+															<td class="inside">
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">

@@ -133,12 +133,12 @@
 </style>
 <html:hidden name="messageForm" property="templateId"/>
 <digi:form action="/templatesManager.do">
-			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
+			<table width="1000" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
 <!--					<td class="r-dotted-lg" width="10"/>-->
 <!--					<td class="r-dotted-lg" valign="top" align="left">-->
 						<td>
-						<table width="98%" cellspacing="3" cellpadding="1" align="left" valign="top">
+						<table width="100%" cellspacing="3" cellpadding="1" align="left" valign="top">
 						<td/>
 						<td>
 							<table width="100%" cellspacing="5" cellpadding="3" border="0" valign="top">
@@ -165,10 +165,8 @@
 												<!-- End navigation -->
 											</tr>											
 											<tr>
-								               <td height=16 valign="center" width=571>
-									              <span class=subtitle-blue>							
-											        <digi:trn>Add/Edit Template Wizard</digi:trn>						
-									              </span>
+								               <td height=16 valign="center" width=571 align-center>
+									              
 								               </td>
 							                </tr>
 											
@@ -177,19 +175,21 @@
 													<table width="100%" cellspacing="1" cellpadding="4" align="left" valign="top">
 														<tr>
 															<td valign="top">
-																<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
+																<table width="100%" border="0" bgcolor="#f4f4f2">
 							                                        <tr>			
 							                                           <td align="center">
 							                                         	  <table width="100%">
 							                                                  <tr>
-							                                                	<td style="background-color: #CCDBFF;height: 18px;"/>
+							                                                	<td style="background-color: #CCDBFF;height: 18px;"/><span class=subtitle-blue>							
+											        <digi:trn>Add/Edit Template Wizard</digi:trn>						
+									              </span>
 							                                                  </tr>
 							                                              </table>
 							                                           </td>
 							                                        </tr>
 																	<tr>
 																		<td valign="top" bgcolor="#f4f4f2" align="center">
-																			<table width="100%" cellspacing="3" cellpadding="5">																				
+																			<table width="100%" cellspacing="3" cellpadding="5" style="font-size:12px;">																				
 																				<tr>
 																					<td align="right" width="25%"><digi:trn>Template Name</digi:trn><font color="red">*</font> </td>
 																					<td align="left" width="90%"><html:text property="messageName" styleClass="inp-text" style="width:600px;"/></td>

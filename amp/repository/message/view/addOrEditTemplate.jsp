@@ -180,7 +180,7 @@
 							                                           <td align="center" class="inside">
 							                                         	  <table width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;">
 							                                                  <tr>
-							                                                	<td style="background-color: #CCDBFF;height: 18px;" align="center"/><span class=subtitle-blue>							
+							                                                	<td style="background-color: #c7d4db;height: 18px;" align="center"/><span class=subtitle-blue>							
 											        <digi:trn><b>Add/Edit Template Wizard</b></digi:trn>						
 									              </span>
 							                                                  </tr>
@@ -188,7 +188,7 @@
 							                                           </td>
 							                                        </tr>
 																	<tr>
-																		<td valign="top" bgcolor="#f4f4f2" align="center">
+																		<td valign="top" align="center" class="inside">
 																			<table width="100%" cellspacing="3" cellpadding="5" style="font-size:12px;">																				
 																				<tr>
 																					<td align="right" width="25%"><digi:trn>Template Name</digi:trn><font color="red">*</font> </td>
@@ -290,45 +290,45 @@
 																		</td>
 																	</tr>
 																	<tr>
-																		<td>
-																			<TABLE width="100%">
+																		<td class="inside">
+																			<TABLE width="100%" style="font-size:11px; border:1px solid #CCCCCC;">
 																				<TR>
 																					<TD COLSPAN="2">
 																						<strong><digi:trn>Patterns Reference</digi:trn></strong>
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
-																						<digi:trn> {name} - Stands for the name of the activity &nbsp;</digi:trn>
+																					<TD nowrap="nowrap">
+																						<digi:trn> <b>{name}</b> - Stands for the name of the activity &nbsp;</digi:trn>
 																						<br />
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
-																						<digi:trn> {Created By} - Stands for the name of the creator of the activity &nbsp;</digi:trn>
+																					<TD nowrap="nowrap">
+																						<digi:trn> <b>{Created By}</b> - Stands for the name of the creator of the activity &nbsp;</digi:trn>
 																						<br />
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9"><digi:trn> {approved by} - Stands for activity approver &nbsp; &nbsp;</digi:trn>
+																					<TD nowrap="nowrap"><digi:trn> <b>{approved by}</b> - Stands for activity approver &nbsp; &nbsp;</digi:trn>
 																					<br />
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
-																						<digi:trn> {url} - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
+																					<TD nowrap="nowrap">
+																						<digi:trn> <b>{url}</b> - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
 																						<br />
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
-																						<digi:trn> {start date} - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
+																					<TD nowrap="nowrap">
+																						<digi:trn> <b>{start date}</b> - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
 																						<br />
 																					</TD>
 																				</TR>
 																				<TR>
-																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
-																						<digi:trn> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
+																					<TD nowrap="nowrap">
+																						<digi:trn> <b>{end date}</b> - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
 																						<br />
 																					</TD>
 																				</TR>

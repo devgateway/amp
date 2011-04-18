@@ -220,24 +220,24 @@ function fnSubmit() {
 							<tr><td>
 								<!-- Filters -->
 
-								<table cellpadding="1" cellspacing="1" align="left" bgcolor="#dddddd" width="100%">
-								<tr><td bgcolor="#f4f4f2">
-								<table cellpadding="0" cellSpacing=2 align="left" width="600" border="0">
+								<table cellpadding="1" cellspacing="1" align="left" width="100%">
+								<tr><td>
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px;">
 									<tr>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
 											<digi:trn key="aim:currencyCode">Currency Code</digi:trn>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
 											<html:select property="filterByCurrCode" styleClass="inp-text">
 												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
 												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
 											</html:select>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
 											<digi:trn key="aim:ratesOfDate">Rates of date</digi:trn>
 										</td>
 										<%--
@@ -260,7 +260,7 @@ function fnSubmit() {
 												</tr>
 											</table>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 											<%--<digi:trn key="aim:andPrev7Days">and previous</digi:trn>--%>
 											<html:select property="timePeriod" styleClass="inp-text">
@@ -273,7 +273,7 @@ function fnSubmit() {
 											</html:select>
 										</td>
 										
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
@@ -282,16 +282,16 @@ function fnSubmit() {
 									</tr>
 								</table>
 								</td></tr>
-								<tr><td bgcolor="#f4f4f2">
-								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center">
+								<tr><td>
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px;">
 									<tr>
-										<td bgcolor="#f4f4f2" vAlign="left" width="170" align="center">
+										<td vAlign="left" width="170" align="center">
 											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="left" width="50" align="center">
+										<td vAlign="left" width="50" align="center">
 											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="left" align="center">
+										<td  vAlign="left" align="center">
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:viewBtn"> View </digi:trn>
                                           </c:set>
@@ -303,19 +303,19 @@ function fnSubmit() {
                                 </tr>
 
                                 <tr>
-                                  <td bgcolor="#f4f4f2">
+                                  <td>
                                     <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center">
                                       <tr>
-                                        <td bgcolor="#f4f4f2" vAlign="left" align="center">
+                                        <td vAlign="left" align="center">
                                           <FONT color=red>*</FONT>
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>
                                         </td>
-                                        <td bgcolor="#f4f4f2" vAlign="middle" align="center">
+                                        <td vAlign="middle" align="center">
 										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
 										</td>                                   
                                         
-                                        <td bgcolor="#f4f4f2" vAlign="left" align="left">
+                                        <td vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
                                         <c:set var="trnUpdateValues">
                                             <digi:trn key="aim:UpdateValues">Update Values</digi:trn>
@@ -339,7 +339,7 @@ function fnSubmit() {
 							</td></tr>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
+								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="100%" style="font-size:12px;">
 									<tr bgcolor="eeeeee">
 										<td align="center" width="3">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
@@ -421,7 +421,7 @@ function fnSubmit() {
                                 <c:set var="trnDelBtn">
                                   <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
                                 </c:set>
-                                <input type="button" value="${trnDelBtn}" class="dr-menu" onclick="deleteRates()">
+                                <input type="button" value="${trnDelBtn}" class="buttonx" onclick="deleteRates()">
                               </td>
                             </tr>
 							<c:if test="${!empty aimCurrencyRateForm.pages}">

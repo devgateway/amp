@@ -347,7 +347,7 @@ window.onload=init;
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>
 	<div id="scheduler_here" class="dhx_cal_container"  style='padding:2% 0% 2% 0%; width:100%; height:93%;max-height:570;  position:relative'>
-		<div class="dhx_cal_navline">
+		<div class="dhx_cal_navline" style="z-index:10">
 <!--			<div class="dhx_cal_prev_button" style="">&nbsp;</div>-->
 <!--			<div class="dhx_cal_date" style=""></div>-->
 <!--			<div class="dhx_cal_next_button" style="">&nbsp;</div>-->
@@ -358,29 +358,44 @@ window.onload=init;
 			<div class="dhx_cal_tab" name="day_tab" style="left:203px;"></div>
 			
 		</div>
-		<div id="newContainer" style="width: 100%; height: 110%; position: relative; top: 15px; border: 1px #CCCCCC solid; z-index: -1;">
-			<table cellpadding="5" cellspacing="5">
-				<tr style="margin-bottom: 10px;">
-					<td>
-						<div class="dhx_cal_prev_button" style="">&nbsp;</div>
-					</td>
-					<td>
-						<div class="dhx_cal_date" style=""></div>
-					</td>
-					<td>
-						<div class="dhx_cal_next_button" style="">&nbsp;</div>
-					</td>
-					<td align="right">
-						<div class="dhx_cal_today_button" style=""></div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="dhx_cal_header" style=""></div>
-						<div class="dhx_cal_data"></div>
-					</td>
-				</tr>
-			</table>
-		</div>		
+		<div id="newContainer" style="width: 100%; height: 110%; position: relative; top: 15px; border: 1px #CCCCCC solid;">
+			<div style="z-index: 1">
+				<table cellpadding="5" cellspacing="5">
+					<tr style="margin-bottom: 10px;">
+						<td>
+							<div class="dhx_cal_prev_button" style="">&nbsp;</div>
+						</td>
+						<td>
+							<div class="dhx_cal_date" style=""></div>
+						</td>
+						<td>
+							<div class="dhx_cal_next_button" style="">&nbsp;</div>
+						</td>
+						<td align="right">
+							<div class="dhx_cal_today_button" style=""></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="dhx_cal_header" style=""></div>
+							<div class="dhx_cal_data"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<feature:display name="Filter" module="Calendar">
+			<div style="padding-top:30px;width:200px;height:28px;">
+				<field:display name="Run Filter Button" feature="Filter">
+					<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
+				</field:display>
+		    	&nbsp;
+		    	<field:display name="Reset Filter Button" feature="Filter">
+		    		<input class="buttonx" type="reset" value="<digi:trn>Reset</digi:trn>" />
+		    	</field:display>
+		    	&nbsp;
+		      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
+			</div>
+		</feature:display>		
 	</div>
 </body>

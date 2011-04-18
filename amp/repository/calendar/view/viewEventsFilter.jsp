@@ -111,7 +111,7 @@ function changeEventTypesState(){
 					<digi:trn>Event Types</digi:trn>
 				</div>
 			</div>
-			<div class="right_menu_box" style="width:220px;">
+			<div class="right_menu_box" >
 	    		<c:if test="${!empty calendarViewForm.filter.eventTypes}">
 	      			<table cellpadding="0" cellspacing="0">
 	        			<c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}" varStatus="stat">
@@ -120,8 +120,8 @@ function changeEventTypesState(){
 	              					<div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
 	              					</div>
 	            				</td>
-	            				<td style="padding:5px;width:140px;text-align:left;font-size:11px;" nowrap="nowrap">
-		             <div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
+	            				<td style="padding:5px;text-align:left;font-size:11px; width: 80px;" nowrap="nowrap">
+		             				<div style="white-space: nowrap;"><digi:trn>${eventType.name}</digi:trn></div> 
 	            				</td>
 	            				<td>
 	              					<html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>
@@ -133,7 +133,7 @@ function changeEventTypesState(){
 			</div>
 		</div>
 	</field:display>	
-	<div style="width:220px;height:5px;font-family:Tahoma;">
+	<div style="height:5px;font-family:Tahoma;">
 	&nbsp;
 	</div>
 	<field:display name="Donor Filter" feature="Filter">
@@ -141,9 +141,9 @@ function changeEventTypesState(){
 			<div class="right_menu_header">
 				<div class="right_menu_header_cont"><digi:trn>Donors</digi:trn></div>
 		  	</div>
-		  	<div class="right_menu_box" style="width:220px; overflow: auto;">
+		  	<div class="right_menu_box" style="overflow: auto;">
 			    <c:if test="${!empty calendarViewForm.filter.donors}">
-			    	<ul style="width: 350px; list-style-type: none outside none; padding: 0px; font-size: 11px;white-space: nowrap;">
+			    	<ul style="height:175px; width: 350px; list-style-type: none outside none; padding: 0px; font-size: 11px;white-space: nowrap;">
 			        	<li style="white-space: nowrap; margin: 5px;">
 			            	<html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>
 			            	<digi:trn>None</digi:trn>
@@ -160,8 +160,8 @@ function changeEventTypesState(){
 		</div>
 	</field:display>
 	<c:if test="${not empty sessionScope.currentMember}">
-		<div style="padding:5px;width:210px;height:28px;">
-	 	<select id="publicFilter" class="inp-text" style="width: 200px; max-width: 200px;" onchange="changeState()" name="filter.showPublicEvents" >
+		<div style="padding:5px;height:28px;">
+	 	<select id="publicFilter" style="width:160px;" class="inp-text" onchange="changeState()" name="filter.showPublicEvents" >
 			<c:if test="${calendarViewForm.showPublicEvents == 0}">
 				<option selected="selected" value="0">	
 			</c:if>
@@ -191,18 +191,6 @@ function changeEventTypesState(){
 		</select>
 	</div>
 	</c:if>
-	
-	<div style="padding:5px;width:200px;height:28px;">
-		<field:display name="Run Filter Button" feature="Filter">
-			<input class="buttonx" type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
-		</field:display>
-	    &nbsp;
-	    <field:display name="Reset Filter Button" feature="Filter">
-	    	<input class="buttonx" type="reset" value="<digi:trn>Reset</digi:trn>" />
-	    </field:display>
-	    &nbsp;
-	      <input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
-	</div>
 </feature:display>
 
 

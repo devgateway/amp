@@ -29,11 +29,11 @@ function selectCalendarType(view, type) {
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                 	<td nowrap="nowrap">
-	                	<div class="right_menu">
+	                	<div class="right_menu" style="margin-bottom: 0px;">
 							<div class="right_menu_header">
 								<div class="right_menu_header_cont">Calendar Type</div>
 							</div>
-							<div class="right_menu_box" style="width:220px;">
+							<div class="right_menu_box">
 								<div class="right_menu_cont">
 									<digi:trn>Type</digi:trn>&nbsp;
 									<html:select styleClass="selector_type" name="calendarViewForm" property="selectedCalendarType" onchange="selectCalendarType('${calendarViewForm.view}', '${calendarViewForm.selectedCalendarType}')">
@@ -42,7 +42,7 @@ function selectCalendarType(view, type) {
                         			</html:select>
                         			
                         			<c:if test="${calendarViewForm.view == 'custom'}">
-									    <table width="100%" style="width: 220px">
+									    <table width="100%">
 									        <tr>
 									            <td nowrap="nowrap">
 									                <table border="0" cellpadding="0" cellspacing="0">
@@ -160,7 +160,7 @@ function selectCalendarType(view, type) {
 									    </table>
 									</c:if>
 									<c:if test="${calendarViewForm.view != 'custom'}">
-									    <table width="100%" style="padding:2px;width: 220px">
+									    <table width="100%" style="padding:2px;">
 									        <tr>
 									            <td style="text-align:right;">
 									                <a href="#" style="color: #FFFFFF" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
@@ -196,7 +196,7 @@ function selectCalendarType(view, type) {
 									            </td>
 									        </tr>
 									    </table>
-									    <table width="100%" style="width: 220px">
+									    <table width="100%">
 									        <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 									            <tr>
 									                <c:forEach var="item" items="${row}">

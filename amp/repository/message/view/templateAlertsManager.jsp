@@ -90,7 +90,6 @@ div.fakefile2 input{
 
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
-		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
 			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
 				<tr>
@@ -133,7 +132,7 @@ div.fakefile2 input{
 								<td vAlign="top" width="100%">
 
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
-										<tr><td bgColor="#c7d4db" height="20" align="center">
+										<tr><td bgColor="#c7d4db" height="25" align="center">
 											<!-- Table title -->
 											<digi:trn key="message:templates"><b>Templates</b></digi:trn>
 											<!-- end table title -->
@@ -265,37 +264,37 @@ div.fakefile2 input{
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn key="message:patternName"> {name} - Stands for the name of the activity &nbsp;</digi:trn>
+							<digi:trn key="message:patternName"> <b>{name}</b> - Stands for the name of the activity &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn key="message:patternCreatedBy"> {Created By} - Stands for the name of the creator of the activity &nbsp;</digi:trn>
+							<digi:trn key="message:patternCreatedBy"> <b>{Created By}</b> - Stands for the name of the creator of the activity &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn> {approved by} - Stands for activity approver &nbsp; &nbsp;</digi:trn>
+							<digi:trn> <b>{approved by}</b> - Stands for activity approver &nbsp; &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn key="message:patternUrl"> {url} - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
+							<digi:trn key="message:patternUrl"> <b>{url}</b> - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn key="message:patternstartDate"> {start date} - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
+							<digi:trn key="message:patternstartDate"> <b>{start date}</b> - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
-							<digi:trn key="message:patternEndDate"> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
+							<digi:trn key="message:patternEndDate"> <b>{end date}</b> - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>				

@@ -346,19 +346,19 @@ window.onload=init;
 </script>
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>
-	<div id="scheduler_here" class="dhx_cal_container"  style='padding:1% 0% 1% 0%; width:100%; height:93%;max-height:570;  position:relative'>
+	<div id="scheduler_here" class="dhx_cal_container"  style='padding:2% 0% 2% 0%; width:100%; height:93%;max-height:570;  position:relative'>
 		<div class="dhx_cal_navline">
 <!--			<div class="dhx_cal_prev_button" style="">&nbsp;</div>-->
 <!--			<div class="dhx_cal_date" style=""></div>-->
 <!--			<div class="dhx_cal_next_button" style="">&nbsp;</div>-->
 <!--			<div class="dhx_cal_today_button" style=""></div>-->	
 	 		<div class="dhx_cal_tab" name="year_tab" style="left:0px;"></div>  	 
-			<div class="dhx_cal_tab" name="month_tab" style="left:75px;"></div>
-			<div class="dhx_cal_tab" name="week_tab" style="left:150px;"></div>
-			<div class="dhx_cal_tab" name="day_tab" style="left:225px;"></div>
+			<div class="dhx_cal_tab" name="month_tab" style="left:60px;"></div>
+			<div class="dhx_cal_tab" name="week_tab" style="left:136px;"></div>
+			<div class="dhx_cal_tab" name="day_tab" style="left:203px;"></div>
 			
 		</div>
-		<div id="newContainer" style="width: 100%; height: 110%; background-color: #F5F5F5; position: relative; top: 13px; border: 1px #CCCCCC solid;">
+		<div id="newContainer" style="width: 100%; height: 110%; position: relative; top: 15px; border: 1px #CCCCCC solid; z-index: -1;">
 			<table cellpadding="5" cellspacing="5">
 				<tr style="margin-bottom: 10px;">
 					<td>

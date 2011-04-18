@@ -12,7 +12,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 .dhx_cal_container div{
 	-moz-user-select:none;    
 	-moz-user-select:-moz-none;  
-	font-size:11px;
+	font-size:12px;
 }
 .dhx_cal_navline{
 	height:20px;
@@ -23,7 +23,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 }
 .dhx_cal_navline div{ 
 	position:absolute;
-	top:2px; 
+	top:1px; 
 	white-space:nowrap;
 }
 .dhx_cal_navline .dhx_cal_date{
@@ -66,27 +66,53 @@ To use it on other terms please contact us at sales@dhtmlx.com
 }
 .dhx_cal_tab{
 	/*background-image:url(../images/white_tab.png);*/
-	width:61px; 
+	/*width:61px; 
 	height:19px;
 	text-align:center;
-	/*text-decoration:underline;*/
 	padding-top:3px; 
 	cursor:pointer;
 	color: #376091;
 	border-top: solid 1px #D0D0D0;
 	border-right: solid 1px #D0D0D0;
 	border-left: solid 1px #D0D0D0;
-	font-weight:bold;
+	font-weight:bold;*/
+	border-top:1px solid #D0D0D0;
+	border-left:1px solid #D0D0D0;
+	border-right:1px solid #D0D0D0;
+	border-bottom:1px solid #D0D0D0;
+	float:left;
+	cursor:pointer; 
+	text-decoration: none; 
+	font-size: 12px; 
+	color:#376091;
+	font-weight: bold;
+	background-color: #EBEBEB;
+	margin:0pt 5px 0pt 0pt;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	padding: 0.6em 1em;
+	top: 1px;
 }
 .dhx_cal_tab.active{
 	/*background-image:url(../images/blue_tab.png);*/
-	text-decoration:none;
+	/*text-decoration:none;
 	height:20px;
 	padding-top:2px; 
 	cursor:default;
 	background-color: #F5F5F5;
 	color:#FF6000;
-	border-bottom: 0px;
+	border-bottom: 0px;*/
+	background-color: #FFFFFF;
+    color: #FF6000;
+    cursor: pointer;
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 5px solid #FFFFFF;
+    top: -1px;
 }
 .dhx_cal_header{
 	position:absolute;

@@ -258,43 +258,43 @@ div.fakefile2 input{
 					</td>
 				</tr>
 				<tr><td>
-				<TABLE width="600px">
+				<TABLE width="750" style="font-size:11px; border:1px solid #CCCCCC;">
 					<TR>
 						<TD COLSPAN="2"><strong><digi:trn
 							key="message:PatternsReference">Patterns Reference</digi:trn></strong></TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternName"> {name} - Stands for the name of the activity &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternCreatedBy"> {Created By} - Stands for the name of the creator of the activity &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn> {approved by} - Stands for activity approver &nbsp; &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternUrl"> {url} - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternstartDate"> {start date} - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
 						<br />
 						</TD>
 					</TR>
 					<TR>
-						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternEndDate"> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
 						<br />
 						</TD>

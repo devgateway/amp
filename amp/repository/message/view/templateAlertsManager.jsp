@@ -88,7 +88,7 @@ div.fakefile2 input{
 <!-- End of Logo -->
 
 
-<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
@@ -112,13 +112,13 @@ div.fakefile2 input{
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height="16" vAlign="center" width="571">
                         <span class="subtitle-blue">
                         	<digi:trn key="message:templatesManager">Templates Manager</digi:trn>
                         </span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<digi:errors />
@@ -126,20 +126,20 @@ div.fakefile2 input{
 				</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
-					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+					<table width="100%" cellspacing="1" cellpadding="1" border="0">
+					<tr><td noWrap width=750 vAlign="top">
+						<table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 
-									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor="#d7eafd" class="box-title" height="20" align="center">
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
+										<tr><td bgColor="#c7d4db" class="box-title" height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="message:templates">Templates	</digi:trn>
+											<digi:trn key="message:templates"><b>Templates</b></digi:trn>
 											<!-- end table title -->
 										</td></tr>										
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" bgcolor="#d7eafd">
+											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" bgcolor="#cccccc" style="font-size:12px;">
 													<logic:empty name="messageForm" property="templates">
 														<tr bgcolor="#ffffff">
 															<td colspan="5" align="center"><b>
@@ -196,15 +196,15 @@ div.fakefile2 input{
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding="0" cellSpacing="0" width="100">
+									<table cellPadding="0" cellSpacing="0" width="100" style="fomt-size:12px;">
 										<tr>
 											<td bgColor="#c9c9c7" class="box-title">
 												<digi:trn key="aim:otherLinks">
-												Other links
+												<b style="padding-left:5px;">Other links</b>
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width="17">
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width="17">&nbsp;
+												
 											</td>
 										</tr>
 									</table>
@@ -212,9 +212,9 @@ div.fakefile2 input{
 							</tr>
 							<tr>
 								<td bgColor="#ffffff" class="box-border">
-									<table cellPadding="5" cellSpacing="1" width="100%">
+									<table cellPadding="5" cellSpacing="1" width="100%" class="inside">
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddTemplate">Click here to Add New Template</digi:trn>
@@ -227,7 +227,7 @@ div.fakefile2 input{
 											</td>
 										</tr>										
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="message:clickToGoToExportImport">Click here to goto Templates Export/Import Manager</digi:trn>
@@ -238,7 +238,7 @@ div.fakefile2 input{
 											</td>
 										</tr>																				
 										<tr>
-											<td>
+											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

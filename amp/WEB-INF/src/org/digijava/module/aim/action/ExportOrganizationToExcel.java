@@ -17,10 +17,14 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.util.Region;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -33,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -47,13 +52,8 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
 
 
-    public ActionForward exportStaffInfo(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward exportStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String locale = RequestUtils.getNavigationLanguage(request).getCode();
-
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationStaffExport.xls");
 
@@ -62,7 +62,6 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();
         String sheetName = getSheetName(name);
-
         HSSFSheet sheet = wb.createSheet(sheetName);
 
          // setting width of columns
@@ -71,85 +70,50 @@ public class ExportOrganizationToExcel extends DispatchAction {
              sheet.setColumnWidth(i , COLUMN_WIDTH);
         }
 
-
-
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
 
+        HSSFCellStyle subHeaderCS = wb.createCellStyle();
+        subHeaderCS.setWrapText(true);
+        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontSubHeader.setFontHeightInPoints((short) 12);
+        fontSubHeader.setFontHeightInPoints((short) 10);
         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        subHeaderCS.setFont(fontSubHeader);
+        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
+        HSSFCellStyle regularCS = wb.createCellStyle();
+        regularCS.setWrapText(true);
+        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        regularCS.setFont(font);
+        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        
         HSSFCellStyle style= wb.createCellStyle();
         style.setWrapText(true);
-
-
-
         short rowNum = 0;
-        short cellNum = 0;
+        int cellNum = 0;
+        
         HSSFRow row = sheet.createRow(rowNum++);
-
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("Staff Information for", locale, siteId);
+        String headerPrefix = TranslatorWorker.translateText("Staff Information for", request);
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
         cell.setCellStyle(style);
 
 
-        if (editForm.getStaff() != null && editForm.getStaff().size() > 0) {
-
-            // table header
-            row = sheet.createRow(rowNum++);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Year", locale, siteId);
-            HSSFRichTextString headerYear = new HSSFRichTextString(headerPrefix);
-            headerYear.applyFont(fontSubHeader);
-            cell.setCellValue(headerYear);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Type Of Staff", locale, siteId);
-            HSSFRichTextString headerType = new HSSFRichTextString(headerPrefix);
-            headerType.applyFont(fontSubHeader);
-            cell.setCellValue(headerType);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Number Of Staff", locale, siteId);
-            HSSFRichTextString headerNumber = new HSSFRichTextString(headerPrefix);
-            headerNumber.applyFont(fontSubHeader);
-            cell.setCellValue(headerNumber);
-            cell.setCellStyle(style);
-
-            Iterator<AmpOrgStaffInformation> staffInfoIter = editForm.getStaff().iterator();
-            while (staffInfoIter.hasNext()) {
-                AmpOrgStaffInformation staffInfo = staffInfoIter.next();
-                cellNum = 0;
-                row = sheet.createRow(rowNum++);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(staffInfo.getYear());
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                String value = TranslatorWorker.translateText(staffInfo.getType().getValue(), locale, siteId);
-                HSSFRichTextString typeValue = new HSSFRichTextString(value);
-                cell.setCellValue(typeValue);
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(staffInfo.getStaffNumber());
-                cell.setCellStyle(style);
-
-            }
+        if (editForm.getStaff() != null && editForm.getStaff().size() > 0) {            
+            exportStaffInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
         }
         wb.write(response.getOutputStream());
         return null;
@@ -157,13 +121,8 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
     }
 
-    public ActionForward exportBudgetInfo(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward exportBudgetInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String locale = RequestUtils.getNavigationLanguage(request).getCode();
-
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationBudgetExport.xls");
 
@@ -180,36 +139,42 @@ public class ExportOrganizationToExcel extends DispatchAction {
              sheet.setColumnWidth(i , COLUMN_WIDTH);
         }
 
-
-
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
-
+        HSSFCellStyle subHeaderCS = wb.createCellStyle();
+        subHeaderCS.setWrapText(true);
+        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontSubHeader.setFontHeightInPoints((short) 12);
+        fontSubHeader.setFontHeightInPoints((short) 10);
         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        subHeaderCS.setFont(fontSubHeader);
+        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
+        HSSFCellStyle regularCS = wb.createCellStyle();
+        regularCS.setWrapText(true);
+        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        regularCS.setFont(font);
+        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 
         HSSFCellStyle style= wb.createCellStyle();
         style.setWrapText(true);
 
 
-
         short rowNum = 0;
         short cellNum = 0;
         HSSFRow row = sheet.createRow(rowNum++);
-
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("Budget Information for", locale, siteId);
+        String headerPrefix = TranslatorWorker.translateText("Budget Information for", request);
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -217,78 +182,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
 
         if (editForm.getOrgInfos() != null && editForm.getOrgInfos().size() > 0) {
-
-            // table header
-            row = sheet.createRow(rowNum++);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Year", locale, siteId);
-            HSSFRichTextString headerYear = new HSSFRichTextString(headerPrefix);
-            headerYear.applyFont(fontSubHeader);
-            cell.setCellValue(headerYear);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Type of Organization", locale, siteId);
-            HSSFRichTextString headerType = new HSSFRichTextString(headerPrefix);
-            headerType.applyFont(fontSubHeader);
-            cell.setCellValue(headerType);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization(s)", locale, siteId);
-            HSSFRichTextString headerPercent = new HSSFRichTextString(headerPrefix);
-            headerPercent.applyFont(fontSubHeader);
-            cell.setCellValue(headerPercent);
-            cell.setCellStyle(style);
-
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Amount", locale, siteId);
-            HSSFRichTextString headerNumber = new HSSFRichTextString(headerPrefix);
-            headerNumber.applyFont(fontSubHeader);
-            cell.setCellValue(headerNumber);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Currency", locale, siteId);
-            HSSFRichTextString headerCurrency = new HSSFRichTextString(headerPrefix);
-            headerCurrency.applyFont(fontSubHeader);
-            cell.setCellValue(headerCurrency);
-            cell.setCellStyle(style);
-
-            Iterator<AmpOrganizationBudgetInformation> budgetInfoIter = editForm.getOrgInfos().iterator();
-            while (budgetInfoIter.hasNext()) {
-                AmpOrganizationBudgetInformation budgetInfo = budgetInfoIter.next();
-                cellNum = 0;
-                row = sheet.createRow(rowNum++);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(budgetInfo.getYear());
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                String value = TranslatorWorker.translateText(budgetInfo.getType().getValue(), locale, siteId);
-                HSSFRichTextString typeValue = new HSSFRichTextString(value);
-                cell.setCellValue(typeValue);
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                String organizations="";
-                if(budgetInfo.getOrganizations()!=null){
-                    for(AmpOrganisation organisation:budgetInfo.getOrganizations() ){
-                         organizations+=BULLETCHAR+organisation.getName()+NEWLINECHAR;
-
-                    }
-                }
-                HSSFRichTextString organizationsValue = new HSSFRichTextString(organizations);
-                cell.setCellValue(organizationsValue);
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(budgetInfo.getAmount());
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(budgetInfo.getCurrency().getCurrencyCode()));
-                cell.setCellStyle(style);
-
-            }
+            exportBudgetInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
         }
         wb.write(response.getOutputStream());
         return null;
@@ -296,40 +190,42 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
     }
 
-    public ActionForward exportContactInfo(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward exportContactInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
        AddOrgForm editForm = (AddOrgForm) form;
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String locale = RequestUtils.getNavigationLanguage(request).getCode();
-
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "inline; filename=OrganizationContactExport.xls");
-
+       
+       response.setContentType("application/vnd.ms-excel");
+       response.setHeader("Content-disposition", "inline; filename=OrganizationContactExport.xls");
  //       XLSExporter.resetStyles();
-
         HSSFWorkbook wb = new HSSFWorkbook();
         String name = editForm.getName();
         String sheetName = getSheetName(name);
         HSSFSheet sheet = wb.createSheet(sheetName);
-
-
 
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
-
+        HSSFCellStyle subHeaderCS = wb.createCellStyle();
+        subHeaderCS.setWrapText(true);
+        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontSubHeader.setFontHeightInPoints((short) 12);
+        fontSubHeader.setFontHeightInPoints((short) 10);
         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        subHeaderCS.setFont(fontSubHeader);
+        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
+        HSSFCellStyle regularCS = wb.createCellStyle();
+        regularCS.setWrapText(true);
+        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        regularCS.setFont(font);
+        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 
         // setting width of columns
         sheet.setColumnWidth((short) 0, TITLE_WIDTH);
@@ -340,12 +236,11 @@ public class ExportOrganizationToExcel extends DispatchAction {
         style.setWrapText(true);
 
         short rowNum = 0;
-        short cellNum = 0;
+        int cellNum = 0;
+        
         HSSFRow row = sheet.createRow(rowNum++);
-
         HSSFCell cell = row.createCell(cellNum);
-
-        String headerPrefix = TranslatorWorker.translateText("Contact Information for", locale, siteId);
+        String headerPrefix = TranslatorWorker.translateText("Contact Information for", request);
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -353,109 +248,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
 
         if (editForm.getOrgContacts()!= null &&editForm.getOrgContacts().size() > 0) {
-
-            // table header
-            row = sheet.createRow(rowNum++);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("LAST NAME", locale, siteId);
-            HSSFRichTextString headerlLastname = new HSSFRichTextString(headerPrefix);
-            headerlLastname.applyFont(fontSubHeader);
-            cell.setCellValue(headerlLastname);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("FIRST NAME", locale, siteId);
-            HSSFRichTextString headerFirstName = new HSSFRichTextString(headerPrefix);
-            headerFirstName.applyFont(fontSubHeader);
-            cell.setCellValue(headerFirstName);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("EMAIL", locale, siteId);
-            HSSFRichTextString headerEmail = new HSSFRichTextString(headerPrefix);
-            headerEmail.applyFont(fontSubHeader);
-            cell.setCellValue(headerEmail);
-            cell.setCellStyle(style);
-
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("TELEPHONE", locale, siteId);
-            HSSFRichTextString headerTele = new HSSFRichTextString(headerPrefix);
-            headerTele.applyFont(fontSubHeader);
-            cell.setCellValue(headerTele);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("FAX", locale, siteId);
-            HSSFRichTextString headerFax = new HSSFRichTextString(headerPrefix);
-            headerFax.applyFont(fontSubHeader);
-            cell.setCellValue(headerFax);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("TITLE", locale, siteId);
-            HSSFRichTextString headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("PRIMARY CONTACT", locale, siteId);
-            HSSFRichTextString headerPrimaryContact = new HSSFRichTextString(headerPrefix);
-            headerPrimaryContact.applyFont(fontSubHeader);
-            cell.setCellValue(headerPrimaryContact);
-            cell.setCellStyle(style);
-            String primary= TranslatorWorker.translateText("Primary", locale, siteId);
-            String nonPrimary= TranslatorWorker.translateText("Non Primary Contact", locale, siteId);
-
-            Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
-            while (contactInfoIter.hasNext()) {
-            	AmpOrganisationContact orgContact = contactInfoIter.next();
-                cellNum = 0;
-                row = sheet.createRow(rowNum++);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getLastname()));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(orgContact.getContact().getName()));
-                cell.setCellStyle(style);
-                String emails="";
-                String phones="";
-                String faxes="";
-                for (AmpContactProperty property : orgContact.getContact().getProperties()) {
-					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-						emails+=property.getValue()+";\n";
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-						phones+= TranslatorWorker.translateText(property.getPhoneCategory(), locale, siteId)+property.getActualPhoneNumber()+";\n";
-					}else{
-						faxes+=property.getValue()+";\n";
-					}
-				}
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(emails));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(phones));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(faxes));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                String title="";
-                if(orgContact.getContact().getTitle()!=null){
-                    title=orgContact.getContact().getTitle().getValue();
-                }
-                cell.setCellValue(new HSSFRichTextString(title));
-                cell.setCellStyle(style);
-                cell = row.createCell(cellNum++);
-                String isprimaryContact=nonPrimary;
-                if(orgContact.getPrimaryContact()!=null&&orgContact.getPrimaryContact()){
-                    isprimaryContact=primary;
-                }
-                cell.setCellValue(new HSSFRichTextString(isprimaryContact));
-
-            }
+            exportContactInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
         }
         wb.write(response.getOutputStream());
         return null;
@@ -463,35 +256,8 @@ public class ExportOrganizationToExcel extends DispatchAction {
 
     }
 
-    private String getSheetName(String name) {
-        String sheetName = null;
-        if (name.length() > 31) {
-            sheetName = name.substring(0, 31);
-        } else {
-            if (name.length() == 0) {
-                // should not be possible, but still...
-                sheetName = "blank";
-            } else {
-                sheetName = name;
-            }
-        }
-        // replacing odd symbols for sheet name...
-        sheetName = sheetName.replace("/", "|");
-        sheetName = sheetName.replace("*", "+");
-        sheetName = sheetName.replace("?", " ");
-        sheetName = sheetName.replace("\\", "|");
-        sheetName = sheetName.replace("[", "(");
-        sheetName = sheetName.replace("]", ")");
-        sheetName = sheetName.replace(":", "-");
-        return sheetName;
-    }
-
-     public ActionForward exportGeneralInfo(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    public ActionForward exportGeneralInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
-         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=OrganizationGeneraInformationExport.xls");
@@ -517,286 +283,940 @@ public class ExportOrganizationToExcel extends DispatchAction {
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
 
+        HSSFCellStyle subHeaderCS = wb.createCellStyle();
+        subHeaderCS.setWrapText(true);
+        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        subHeaderCS.setFont(fontSubHeader);
+        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
+        HSSFCellStyle regularCS = wb.createCellStyle();
+        regularCS.setWrapText(true);
+        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        regularCS.setFont(font);
+        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 
 
         short rowNum = 0;
-        short cellNum = 0;
+        int cellNum = 0;
         HSSFRow row = sheet.createRow(rowNum++);
-
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("General Information for", locale, siteId);
+        String headerPrefix = TranslatorWorker.translateText("General Information for", request);
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
         cell.setCellStyle(style);
 
-            row = sheet.createRow(rowNum++);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Registration Number in MinPlan", locale, siteId);
-            HSSFRichTextString  headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            HSSFRichTextString  value = new HSSFRichTextString(editForm.getRegNumbMinPlan());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Legal Personality Number", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getLegalPersonNum());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Registration Date in MinPlan", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getMinPlanRegDate());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getLegalPersonRegDate());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-
-           
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Operation approval  date in the country of origin ", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getOperFuncApprDate());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Registration date of Line Ministry ", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getLineMinRegDate());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Receipt of legal personality act/form in DRC", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getReceiptLegPersonalityAct());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Recipients", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            List<AmpOrgRecipient> orgs=editForm.getRecipients();
-            String organizations="";
-            if(orgs!=null){
-                Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
-                while(orgIter.hasNext()){
-                    AmpOrgRecipient organisation=orgIter.next();
-                    organizations+=BULLETCHAR+organisation.getOrganization().getName()+" ("+organisation.getDescription()+")"+NEWLINECHAR;
-
-                }
-            }
-          
-            value = new HSSFRichTextString(organizations);
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Fiscal Calendar", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            if (editForm.getFiscalCalId() != null&&editForm.getFiscalCalId()!=-1) {
-             value = new HSSFRichTextString(FiscalCalendarUtil.getAmpFiscalCalendar(editForm.getFiscalCalId()).getName());
-             value.applyFont(font);
-             cell.setCellValue(value);
-             cell.setCellStyle(style);
-            }
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Sector Prefernces", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            Collection<ActivitySector> activitySectors=editForm.getSectors();
-            String sectors="";
-            if(activitySectors!=null){
-                Iterator<ActivitySector> activitySectorsIter=activitySectors.iterator();
-                while(activitySectorsIter.hasNext()){
-                    ActivitySector activitySector=activitySectorsIter.next();
-                    sectors+=BULLETCHAR+activitySector.getSectorName()+NEWLINECHAR;
-
-                }
-            }
-            value = new HSSFRichTextString(sectors);
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Country of Origin", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell = row.createCell(cellNum++);
-            if (editForm.getCountryId() != null && editForm.getCountryId() != -1) {
-             value = new HSSFRichTextString(DynLocationManagerUtil.getLocation(editForm.getCountryId(), false).getName());
-             value.applyFont(font);
-             cell.setCellValue(value);
-             cell.setCellStyle(style);
-         }
-           
-
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization website", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getOrgUrl());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Tax Number", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getTaxNumber());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization Headquarters Address", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getAddress());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization Intervention Level", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            if (editForm.getImplemLocationLevel() != null && editForm.getImplemLocationLevel() != 0) {
-             value = new HSSFRichTextString(CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getImplemLocationLevel()).getValue());
-             value.applyFont(font);
-             cell.setCellValue(value);
-             cell.setCellStyle(style);
-
-            }
-           
-
-            row = sheet.createRow(rowNum++);
-            cellNum=0;
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization Address Abroad(Internation NGO)", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellStyle(style);
-            cell.setCellValue(headerTitle);
-            cell = row.createCell(cellNum++);
-            value = new HSSFRichTextString(editForm.getAddressAbroad());
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("Organization Intervention Location", locale, siteId);
-            headerTitle = new HSSFRichTextString(headerPrefix);
-            headerTitle.applyFont(fontSubHeader);
-            cell.setCellValue(headerTitle);
-            cell.setCellStyle(style);
-            cell = row.createCell(cellNum++);
-            Collection<Location> selectedLocations=editForm.getSelectedLocs();
-            String locations="";
-            if(selectedLocations!=null){
-                Iterator<Location> locationIter=selectedLocations.iterator();
-                while(locationIter.hasNext()){
-                    Location location=locationIter.next();
-                    locations+=BULLETCHAR+location.getAmpCVLocation().getName()+NEWLINECHAR;
-
-                }
-            }
-            value = new HSSFRichTextString(locations);
-            value.applyFont(font);
-            cell.setCellValue(value);
-            cell.setCellStyle(style);
-            
+        exportGeneralInfo(request,editForm,sheet, subHeaderCS,regularCS, rowNum);
 
         wb.write(response.getOutputStream());
         return null;
 
-
     }
+
+	public ActionForward exportNGOForm(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+         AddOrgForm editForm = (AddOrgForm) form;
+         
+         response.setContentType("application/vnd.ms-excel");
+         response.setHeader("Content-disposition", "inline; filename=OrganizationGeneraInformationExport.xls");         
+         
+         
+         HSSFWorkbook wb = new HSSFWorkbook();
+         String name = editForm.getName();
+         String sheetName = getSheetName("NGO Form");
+         HSSFSheet sheet = wb.createSheet(sheetName);
+         
+         HSSFCellStyle headerCS = wb.createCellStyle();
+         headerCS.setWrapText(true);
+         //headerCS.setFillForegroundColor(HSSFColor.BLUE.index);
+         HSSFFont fontHeader = wb.createFont();
+         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
+         fontHeader.setFontHeightInPoints((short) 14);
+         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+         fontHeader.setColor( HSSFColor.BLUE.index );
+         headerCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+         headerCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         headerCS.setFont(fontHeader);
+
+         HSSFCellStyle subHeaderCS = wb.createCellStyle();
+         subHeaderCS.setWrapText(true);
+         subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+         HSSFFont fontSubHeader = wb.createFont();
+         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
+         fontSubHeader.setFontHeightInPoints((short) 10);
+         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+         subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         subHeaderCS.setFont(fontSubHeader);
+
+         HSSFCellStyle regularCS = wb.createCellStyle();
+         regularCS.setWrapText(true);
+         regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+         HSSFFont font = wb.createFont();
+         font.setFontName(HSSFFont.FONT_ARIAL);
+         font.setFontHeightInPoints((short) 10);
+         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+         regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         regularCS.setFont(font);
+         
+         short rowNum = 0;
+         int cellNum = 0;
+         String text=null;
+         
+         Region r=new Region(rowNum, new Integer(cellNum).shortValue(),rowNum, new Integer(cellNum+8).shortValue()); //colspan for header
+         HSSFRow row = sheet.createRow(rowNum++);
+         row.setHeightInPoints(row.getHeightInPoints()*2);
+         HSSFCell cell = row.createCell(cellNum);
+         HSSFRichTextString value=new HSSFRichTextString(TranslatorWorker.translateText("Organization Data", request));
+         cell.setCellStyle(headerCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         //Organization Name
+         text = TranslatorWorker.translateText("Organization Name", request);
+         setColspan(sheet, cellNum, text);
+         row = sheet.createRow(rowNum++);         
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = editForm.getName();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         
+         //Acronym
+         text = TranslatorWorker.translateText("Organization Acronym", request);
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = editForm.getAcronym();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         
+         // next row 
+         cellNum=0;
+         //org. type
+         row = sheet.createRow(rowNum++);
+         text = TranslatorWorker.translateText("Organization Type", request);
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = (DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId())).getOrgType();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);         
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         
+         //org. group         
+         text = TranslatorWorker.translateText("Organization Group", request);
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);         
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         if (editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().intValue()>0){
+        	 text = (DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()).getOrgGrpName());
+             setColspan(sheet, cellNum, text);
+        	 cell = row.createCell(cellNum++);
+             value=new HSSFRichTextString(text);
+             cell.setCellStyle(regularCS);
+             cell.setCellValue(value);
+         }
+        
+         
+         // next row 
+         cellNum=0;
+         //fund. org.id
+         row = sheet.createRow(rowNum++);
+         text = TranslatorWorker.translateText("Funding Org Id", request);
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = editForm.getFundingorgid();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         
+         // next row 
+         cellNum=0;
+         //Organization Primary Purpose
+         r=new Region(rowNum, new Integer(cellNum+1).shortValue(),rowNum, new Integer(cellNum+3).shortValue()); //colspan for primary purpose         
+         row = sheet.createRow(rowNum++);
+         text = TranslatorWorker.translateText("Organization Primary Purpose ", request);
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = editForm.getOrgPrimaryPurpose();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         //next row
+         cellNum=0;
+         r=new Region(rowNum, new Integer(cellNum).shortValue(),rowNum, new Integer(cellNum+8).shortValue()); //colspan for header
+         row = sheet.createRow(rowNum++);
+         row.setHeightInPoints(row.getHeightInPoints()*2);
+         cell = row.createCell(cellNum);
+         value=new HSSFRichTextString(TranslatorWorker.translateText("General Information", request));
+         cell.setCellStyle(headerCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         rowNum = exportGeneralInfo(request,editForm,sheet,subHeaderCS, regularCS, rowNum);
+         
+         //next row         
+         cellNum=0;
+         r=new Region(rowNum, new Integer(cellNum).shortValue(),rowNum, new Integer(cellNum+8).shortValue()); //colspan for header
+         row = sheet.createRow(rowNum++);
+         row.setHeightInPoints(row.getHeightInPoints()*2);
+         cell = row.createCell(cellNum);
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Staff Information ", request));
+         cell.setCellStyle(headerCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         if (editForm.getStaff() != null && editForm.getStaff().size() > 0) {            
+        	 rowNum = exportStaffInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
+         }
+         
+         //next row         
+         cellNum=0;
+         r=new Region(rowNum, new Integer(cellNum).shortValue(),rowNum, new Integer(cellNum+8).shortValue()); //colspan for header
+         row = sheet.createRow(rowNum++);
+         row.setHeightInPoints(row.getHeightInPoints()*2);
+         cell = row.createCell(cellNum);
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Budget Information ", request));
+         cell.setCellStyle(headerCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         if (editForm.getOrgInfos() != null && editForm.getOrgInfos().size() > 0) {
+        	 rowNum = exportBudgetInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
+         }
+         
+         //next row
+         cellNum=0;
+         r=new Region(rowNum, new Integer(cellNum).shortValue(),rowNum, new Integer(cellNum+8).shortValue()); //colspan for header
+         row = sheet.createRow(rowNum++);
+         row.setHeightInPoints(row.getHeightInPoints()*2);
+         cell = row.createCell(cellNum);
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Contact Information  ", request));
+         cell.setCellStyle(headerCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         if (editForm.getOrgContacts()!= null &&editForm.getOrgContacts().size() > 0) {
+        	 rowNum = exportContactInfo(request, editForm, sheet, subHeaderCS, regularCS,rowNum);
+         }
+         
+         //next row
+         cellNum=0;
+         //Other Information
+         r=new Region(rowNum, new Integer(cellNum+1).shortValue(),rowNum, new Integer(cellNum+3).shortValue()); //colspan for Other Information        
+         row = sheet.createRow(rowNum++);         
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Other Information ", request));
+         cell.setCellStyle(subHeaderCS);
+         cell.setCellValue(value);
+         
+         text = editForm.getOtherInformation();
+         setColspan(sheet, cellNum, text);
+         cell = row.createCell(cellNum++);
+         value=new HSSFRichTextString(text);
+         cell.setCellStyle(regularCS);
+         cell.setCellValue(value);
+         sheet.addMergedRegion(r);
+         
+         wb.write(response.getOutputStream());
+         return null;
+     }
+	
+	private String getSheetName(String name) {
+        String sheetName = null;
+        if (name.length() > 31) {
+            sheetName = name.substring(0, 31);
+        } else {
+            if (name.length() == 0) {
+                // should not be possible, but still...
+                sheetName = "blank";
+            } else {
+                sheetName = name;
+            }
+        }
+        // replacing odd symbols for sheet name...
+        sheetName = sheetName.replace("/", "|");
+        sheetName = sheetName.replace("*", "+");
+        sheetName = sheetName.replace("?", " ");
+        sheetName = sheetName.replace("\\", "|");
+        sheetName = sheetName.replace("[", "(");
+        sheetName = sheetName.replace("]", ")");
+        sheetName = sheetName.replace(":", "-");
+        return sheetName;
+    }
+	
+	private void setColspan (HSSFSheet sheet , int cellNum, String textToWrite) {
+		int defaultColumnWidth = 2560; //at least 10 chars
+		int newWidth = 0;
+		if (textToWrite.length() > 10) {
+			if(textToWrite.length()<35){
+				newWidth = textToWrite.length()*256;
+			}else{
+				newWidth = 35*256;
+			}
+			
+		}else {
+			newWidth = defaultColumnWidth;
+		}
+		if (sheet.getColumnWidth(cellNum) < newWidth) {
+			sheet.setColumnWidth(cellNum, newWidth);
+		}
+	}
+	
+    private short exportGeneralInfo(HttpServletRequest request,AddOrgForm editForm, HSSFSheet sheet,HSSFCellStyle subHeaderCS,HSSFCellStyle regularCS, short rowNum)throws WorkerException {
+		HSSFRow row;
+		HSSFCell cell;
+		HSSFRichTextString value;
+		int cellNum =0;
+		
+		//registration number		
+		row = sheet.createRow(rowNum++);
+		String text = TranslatorWorker.translateText("Registration Number in MinPlan", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getRegNumbMinPlan();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//legal personality number
+		text = TranslatorWorker.translateText("Legal Personality Number", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getLegalPersonNum();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//new row
+		cellNum=0;
+		//reg. date
+		row = sheet.createRow(rowNum++);
+		text = TranslatorWorker.translateText("Registration Date in MinPlan", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getMinPlanRegDate();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//Legal Personality Registration Date in the country of origin
+		text = TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getLegalPersonRegDate();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);	
+		
+		//new row 		
+		cellNum=0;
+		row = sheet.createRow(rowNum++);
+		text = TranslatorWorker.translateText("Operation approval  date in the country of origin", request);
+        setColspan(sheet, cellNum, text);
+		// Operation approval  date in the country of origin
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getOperFuncApprDate();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+         
+		// Registration date of Line Ministry
+		text = TranslatorWorker.translateText("Registration date of Line Ministry", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getLineMinRegDate();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);		
+				
+		//new row
+		cellNum=0;		
+		row = sheet.createRow(rowNum++);
+		text = TranslatorWorker.translateText("Receipt of legal personality act/form in DRC", request);
+        setColspan(sheet, cellNum, text);
+		// Receipt of legal personality act/form in DRC
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getReceiptLegPersonalityAct();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		// Recipients
+		text = TranslatorWorker.translateText("Recipients", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		List<AmpOrgRecipient> orgs=editForm.getRecipients();
+		String organizations="";
+		String longestOrgRecord = "";
+		String currentRecord = null;
+		if(orgs!=null){
+		    Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
+		    while(orgIter.hasNext()){
+		        AmpOrgRecipient organisation=orgIter.next();
+		        currentRecord= BULLETCHAR+organisation.getOrganization().getName()+" ("+organisation.getDescription()+")";
+		        if(currentRecord.length() > longestOrgRecord.length()){
+		        	longestOrgRecord = currentRecord;
+		        }
+		        organizations+= currentRecord+NEWLINECHAR;
+
+		    }
+		}
+		
+		setColspan(sheet, cellNum, longestOrgRecord);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(organizations);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//new row		
+		cellNum=0;
+		text = TranslatorWorker.translateText("Fiscal Calendar", request);
+        setColspan(sheet, cellNum, text);
+		row = sheet.createRow(rowNum++);
+		//Fiscal Calendar
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+			
+		if (editForm.getFiscalCalId() != null&&editForm.getFiscalCalId()!=-1) {
+			text = FiscalCalendarUtil.getAmpFiscalCalendar(editForm.getFiscalCalId()).getName();
+	        setColspan(sheet, cellNum, text);
+			cell = row.createCell(cellNum++);
+			value = new HSSFRichTextString(text);
+			cell.setCellValue(value);
+			cell.setCellStyle(regularCS);
+		}
+		
+		//new row
+		cellNum=0;
+		row = sheet.createRow(rowNum++);
+		//Sector Prefernces
+		text = TranslatorWorker.translateText("Sector Prefernces", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		String longestSectRecord = "";
+		currentRecord = null;		
+		Collection<ActivitySector> activitySectors=editForm.getSectors();
+		String sectors="";
+		if(activitySectors!=null){
+		    Iterator<ActivitySector> activitySectorsIter=activitySectors.iterator();
+		    while(activitySectorsIter.hasNext()){
+		        ActivitySector activitySector=activitySectorsIter.next();
+		        currentRecord = BULLETCHAR+activitySector.getSectorName(); 
+		        sectors+= currentRecord + NEWLINECHAR;
+		        if(currentRecord.length() > longestSectRecord.length()){
+		        	longestSectRecord = currentRecord;
+		        }
+		    }
+		}
+		setColspan(sheet, cellNum, longestSectRecord);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(sectors);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//Country of Origin
+		text = TranslatorWorker.translateText("Country of Origin", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		
+		if (editForm.getCountryId() != null && editForm.getCountryId() != -1) {
+			text = DynLocationManagerUtil.getLocation(editForm.getCountryId(), false).getName();
+	        setColspan(sheet, cellNum, text);
+			cell = row.createCell(cellNum++);
+			value = new HSSFRichTextString(text);
+			cell.setCellValue(value);
+			cell.setCellStyle(regularCS);
+		}
+         
+		//new row
+		cellNum=0;		
+		row = sheet.createRow(rowNum++);
+		text = TranslatorWorker.translateText("Organization website ", request);
+        setColspan(sheet, cellNum, text);
+		// Organization website 
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);		
+		
+		text =editForm.getOrgUrl();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		// Tax Number
+		text = TranslatorWorker.translateText("Tax Number ", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text =editForm.getTaxNumber();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		//new row
+		cellNum=0;
+		row = sheet.createRow(rowNum++);
+		text =TranslatorWorker.translateText("Organization Headquarters Address ", request);
+        setColspan(sheet, cellNum, text);
+		// Organization Headquarters Address
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text =TranslatorWorker.translateText("Organization Intervention Level ", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(editForm.getAddress());
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);	
+		//	Organization Intervention Level	
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		
+		if (editForm.getImplemLocationLevel() != null && editForm.getImplemLocationLevel() != 0) {
+			text =CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getImplemLocationLevel()).getValue();
+	        setColspan(sheet, cellNum, text);
+			cell = row.createCell(cellNum++);
+			value = new HSSFRichTextString(text);
+			cell.setCellValue(value);
+			cell.setCellStyle(regularCS);
+		}
+         
+		//new row
+		cellNum=0;
+		row = sheet.createRow(rowNum++);
+		// Organization Address Abroad(Internation NGO
+		text = TranslatorWorker.translateText("Organization Address Abroad(Internation NGO) ", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = editForm.getAddressAbroad();
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		//Organization Intervention Location
+		text = TranslatorWorker.translateText("Organization Intervention Location ", request);
+        setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value=new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		
+		Collection<Location> selectedLocations=editForm.getSelectedLocs();
+		String locations="";
+		String longestLocRecord = "";
+		currentRecord = null;	
+		if(selectedLocations!=null){
+		    Iterator<Location> locationIter=selectedLocations.iterator();
+		    while(locationIter.hasNext()){
+		        Location location=locationIter.next();
+		        currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() ; 
+		        locations+= currentRecord +NEWLINECHAR;
+		        if(currentRecord.length() > longestLocRecord.length()){
+		        	longestLocRecord = currentRecord;
+		        }
+
+		    }
+		}
+		setColspan(sheet, cellNum, longestLocRecord);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(locations);
+		cell.setCellValue(value);
+		cell.setCellStyle(regularCS);
+		
+		return rowNum;
+	}
+    
+    private short exportBudgetInfo(HttpServletRequest request,AddOrgForm editForm, HSSFSheet sheet, HSSFCellStyle subHeaderCS,HSSFCellStyle regularCS, short rowNum)throws WorkerException {
+		HSSFRow row;
+		HSSFCell cell;
+		int cellNum=0;
+		HSSFRichTextString value = null;
+		// table header
+		row = sheet.createRow(rowNum++);
+		String text = TranslatorWorker.translateText("Year", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value= new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("Type of Organization", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value= new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("Organization(s)", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value= new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("Amount", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value= new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("Currency", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value= new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+
+		Iterator<AmpOrganizationBudgetInformation> budgetInfoIter = editForm.getOrgInfos().iterator();
+		while (budgetInfoIter.hasNext()) {
+		    AmpOrganizationBudgetInformation budgetInfo = budgetInfoIter.next();
+		    cellNum = 0;
+		    row = sheet.createRow(rowNum++);		    
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(budgetInfo.getYear().toString());
+		    cell.setCellStyle(regularCS);
+		    
+		    text = TranslatorWorker.translateText(budgetInfo.getType().getValue(), request);
+			setColspan(sheet, cellNum, text);
+		    cell = row.createCell(cellNum++);
+		    value = new HSSFRichTextString(text);
+		    cell.setCellValue(value);
+		    cell.setCellStyle(regularCS);
+		   
+		    String organizations="";
+		    String longestOrgRecord = "";
+			String currentRecord = null;
+		    if(budgetInfo.getOrganizations()!=null){
+		        for(AmpOrganisation organisation:budgetInfo.getOrganizations() ){
+		        	currentRecord = BULLETCHAR+organisation.getName();
+		            organizations+= currentRecord + NEWLINECHAR;
+		            if(currentRecord.length() > longestOrgRecord.length()){
+		            	longestOrgRecord = currentRecord;
+			        }
+		        }
+		    }
+		    setColspan(sheet, cellNum, longestOrgRecord);
+		    cell = row.createCell(cellNum++);
+		    HSSFRichTextString organizationsValue = new HSSFRichTextString(organizations);
+		    cell.setCellValue(organizationsValue);
+		    cell.setCellStyle(regularCS);
+		    
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(budgetInfo.getAmount().toString());
+		    cell.setCellStyle(regularCS);
+		    
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(budgetInfo.getCurrency().getCurrencyCode()));
+		    cell.setCellStyle(regularCS);
+
+		}
+		return rowNum;
+	}
+    
+    private short exportStaffInfo(HttpServletRequest request,AddOrgForm editForm, HSSFSheet sheet, HSSFCellStyle subHeaderCS,HSSFCellStyle regularCS, short rowNum)	throws WorkerException {
+		HSSFRow row;
+		HSSFCell cell;
+		int cellNum =0;
+		HSSFRichTextString value =null;		
+	
+		// table header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(TranslatorWorker.translateText("Year", request));
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);		
+		
+		String text = TranslatorWorker.translateText("Type Of Staff", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("Number Of Staff", request);
+		setColspan(sheet, cellNum, text);
+		cell = row.createCell(cellNum++);
+		value = new HSSFRichTextString(text);
+		cell.setCellValue(value);
+		cell.setCellStyle(subHeaderCS);
+
+		Iterator<AmpOrgStaffInformation> staffInfoIter = editForm.getStaff().iterator();
+		while (staffInfoIter.hasNext()) {
+		    AmpOrgStaffInformation staffInfo = staffInfoIter.next();
+		    cellNum = 0;
+		    row = sheet.createRow(rowNum++);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(staffInfo.getYear().toString());
+		    cell.setCellStyle(regularCS);
+		    
+		    text = TranslatorWorker.translateText(staffInfo.getType().getValue(),request);
+			setColspan(sheet, cellNum, text);
+		    cell = row.createCell(cellNum++);
+		    value = new HSSFRichTextString(text);
+		    cell.setCellValue(value);
+		    cell.setCellStyle(regularCS);
+		    
+		    text = staffInfo.getStaffNumber().toString();
+			setColspan(sheet, cellNum, text);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(text);
+		    cell.setCellStyle(regularCS);
+
+		}
+		return rowNum;
+	}
+
+    private short exportContactInfo(HttpServletRequest request,AddOrgForm editForm, HSSFSheet sheet, HSSFCellStyle subHeaderCS,HSSFCellStyle regularCS, short rowNum) throws WorkerException {
+		HSSFRow row;
+		HSSFCell cell;
+		int cellNum =0;
+		HSSFRichTextString value = null;
+		// table header
+		row = sheet.createRow(rowNum++);
+		
+		String text = TranslatorWorker.translateText("LAST NAME", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("FIRST NAME", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("EMAIL", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("TELEPHONE", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("FAX", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("TITLE", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		text = TranslatorWorker.translateText("PRIMARY CONTACT", request);
+		setColspan(sheet, cellNum, text);
+	    cell = row.createCell(cellNum++);
+	    cell.setCellValue(text);
+		cell.setCellStyle(subHeaderCS);
+		
+		String primary= TranslatorWorker.translateText("Primary", request);
+		String nonPrimary= TranslatorWorker.translateText("Non Primary Contact", request);
+
+		Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
+		while (contactInfoIter.hasNext()) {
+			AmpOrganisationContact orgContact = contactInfoIter.next();
+		    cellNum = 0;
+		    row = sheet.createRow(rowNum++);
+		    text = orgContact.getContact().getLastname();
+		    setColspan(sheet, cellNum, text);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(text));
+		    cell.setCellStyle(regularCS);
+		    
+		    text = orgContact.getContact().getName();
+		    setColspan(sheet, cellNum, text);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(text));
+		    cell.setCellStyle(regularCS);
+		  		    
+		    
+		    String emails="";
+		    String longestEmailRecord = "";			
+		    String phones="";
+		    String longestPhoneRecord = "";
+		    String faxes="";
+		    String longestFaxRecord = "";
+		    String currentRecord = null;
+		    for (AmpContactProperty property : orgContact.getContact().getProperties()) {
+				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+					currentRecord = property.getValue(); 
+					emails+= currentRecord + ";\n";
+					if(currentRecord.length() > longestEmailRecord.length()){
+						longestEmailRecord = currentRecord;
+			        }
+				}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+					currentRecord = TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber(); 
+					phones+= currentRecord + ";\n";
+					if(currentRecord.length() > longestEmailRecord.length()){
+						longestPhoneRecord = currentRecord;
+			        }
+				}else{
+					currentRecord = property.getValue(); 
+					faxes+=currentRecord+";\n";
+					if(currentRecord.length() > longestEmailRecord.length()){
+						longestFaxRecord = currentRecord;
+			        }
+				}
+			}
+		    
+		    setColspan(sheet, cellNum, longestEmailRecord);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(emails));
+		    cell.setCellStyle(regularCS);
+		    
+		    setColspan(sheet, cellNum, longestPhoneRecord);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(phones));
+		    cell.setCellStyle(regularCS);
+		    
+		    setColspan(sheet, cellNum, longestFaxRecord);
+		    cell = row.createCell(cellNum++);
+		    cell.setCellValue(new HSSFRichTextString(faxes));
+		    cell.setCellStyle(regularCS);
+		    cell = row.createCell(cellNum++);
+		    String title="";
+		    if(orgContact.getContact().getTitle()!=null){
+		        title=orgContact.getContact().getTitle().getValue();
+		    }
+		    cell.setCellValue(new HSSFRichTextString(title));
+		    cell.setCellStyle(regularCS);
+		    
+		    cell = row.createCell(cellNum++);
+		    String isprimaryContact=nonPrimary;
+		    if(orgContact.getPrimaryContact()!=null&&orgContact.getPrimaryContact()){
+		        isprimaryContact=primary;
+		    }
+		    setColspan(sheet, cellNum, isprimaryContact);
+		    cell.setCellValue(new HSSFRichTextString(isprimaryContact));
+		    cell.setCellStyle(regularCS);
+		}
+		return rowNum;
+	}
 }

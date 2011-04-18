@@ -257,7 +257,7 @@ div.fakefile2 input{
 					</td>
 				</tr>
 				<tr><td>
-				<TABLE width="750" style="font-size:11px; border:1px solid #CCCCCC;">
+				<TABLE width="750" style="font-size:11px; border:1px solid #CCCCCC; margin-left:4px;">
 					<TR>
 						<TD COLSPAN="2"><strong><digi:trn
 							key="message:PatternsReference">Patterns Reference</digi:trn></strong></TD>

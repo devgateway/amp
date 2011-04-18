@@ -277,7 +277,7 @@ function fnSubmit() {
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="dr-menu"/>
+                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="buttonx"/>
 										</td>
 									</tr>
 								</table>
@@ -295,7 +295,7 @@ function fnSubmit() {
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:viewBtn"> View </digi:trn>
                                           </c:set>
-                                          <html:submit value="${trnViewBtn}" styleClass="dr-menu"/>
+                                          <html:submit value="${trnViewBtn}" styleClass="buttonx"/>
 										</td>
 									</tr>
 								</table>
@@ -304,7 +304,7 @@ function fnSubmit() {
 
                                 <tr>
                                   <td>
-                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center">
+                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px;">
                                       <tr>
                                         <td vAlign="left" align="center">
                                           <FONT color=red>*</FONT>
@@ -339,39 +339,40 @@ function fnSubmit() {
 							</td></tr>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="100%" style="font-size:12px;">
-									<tr bgcolor="eeeeee">
-										<td align="center" width="3">
+								<div style="clear:both;">&nbsp;</div>
+								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" class="inside" width="100%" style="font-size:12px;">
+									<tr>
+										<td align="center" width="3" class="inside" bgcolor=#F2F2F2>
 											<input type="checkbox" name="checkAll" onclick="checkall()">
 										</td>
 										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
 										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
 										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn> Source Currency Code</digi:trn></b>
 										</td>
 										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn>Source Currency Name</digi:trn></b>
 										</td>
 										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
 										</td>
 										<td align="center" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
+										onMouseOut="this.className='colHeaderLink'" class="inside" bgcolor=#F2F2F2>
 											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
 										</td>
 									</tr>
 									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
-									<tr bgcolor="#f4f4f2">
-										<td colspan="7" align="center">
+									<tr>
+										<td colspan="7" align="center" class="inside">
 											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
 										</td>
 									</tr>
@@ -386,29 +387,29 @@ function fnSubmit() {
 									<tr class="rowAlternate">
 									<% }
 									index++;%>
-										<td align="center" width="3">
+										<td align="center" width="3" class="inside">
 											<html:multibox property="selectedRates">
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
                                           <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
 											<c:out value="${cRates.currencyName}"/>
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
                                          	${cRates.fromCurrencyCode}
 										</td>
-										<td align="left">
+										<td align="left" class="inside">
 											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
-										<td align="center">
+										<td align="center" class="inside">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>
 										</td>
-										<td align="right" nowrap="nowrap">
+										<td align="right" nowrap="nowrap" class="inside">
 											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
@@ -422,6 +423,7 @@ function fnSubmit() {
                                   <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
                                 </c:set>
                                 <input type="button" value="${trnDelBtn}" class="buttonx" onclick="deleteRates()">
+								<hr />
                               </td>
                             </tr>
 							<c:if test="${!empty aimCurrencyRateForm.pages}">
@@ -477,6 +479,7 @@ function fnSubmit() {
 
 
 							<tr><td>
+							<hr />
 								<table width="450" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 									<tr>
 										<td align="left">

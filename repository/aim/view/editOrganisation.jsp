@@ -788,8 +788,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 document.aimAddOrgForm.target = "_self";
                 document.aimAddOrgForm.submit();
 
-            }
-            function exportInfo(method){
+         }
+
+         function exportInfo(method){
             <digi:context name="information" property="/exportOrganizationToxsl.do" />;
              // adding staff or budget or contact is submit, that is why we don't need to attach this data
               var url="${information}?actionMethod="+method+"&"+ "name="+document.getElementById('orgName').value;
@@ -798,6 +799,23 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 document.aimAddOrgForm.submit();
 
             }
+
+         function exportWholeNGOInfo(){
+             <digi:context name="wholeInfo" property="/exportOrganizationToxsl.do?actionMethod=exportNGOForm" />;
+              //user may click on the export icon before submitting,saving data, this is why we are collecting data manually.
+              var url="${wholeInfo}"+"&"+ getWholeInfoParamsForNGO();
+                 document.aimAddOrgForm.action = url;
+                 document.aimAddOrgForm.target = "_self";
+                 document.aimAddOrgForm.submit();
+
+          }
+
+         function getWholeInfoParamsForNGO(){
+			var params = getGeneralInfoParams();
+			if(document.getElementById('acronym')!=null){
+          	  params+="&acronym="+document.getElementById('acronym').value;
+            }
+         }
 
             function getGeneralInfoParams(){
                       var params="";
@@ -963,9 +981,13 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                     <tr>
                         <td>
                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-
                                 <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Print"/>
                             </digi:link>
+                            <digi:link href="#" onclick="javascript:exportWholeNGOInfo(); return false;">
+                            	<digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
+                            </digi:link>
+                            
+                            
 
                         </td>
 

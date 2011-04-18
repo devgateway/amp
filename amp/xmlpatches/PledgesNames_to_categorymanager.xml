@@ -4,9 +4,6 @@
   <keyword>Pledge Names</keyword>
   <author>Mauricio</author>
   <description>This patch add a new category for Pledges Names</description>
-  <trigger type="all">
-      <condition type="appliedPatch">AMP-9867_Pledges_Views.xml</condition>
-  </trigger>
   <apply>
     <script>
       <lang delimiter=";" type="postgres">

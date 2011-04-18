@@ -238,7 +238,7 @@
 																                                <td>
 																                                  <input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add >></digi:trn>">
 																                                  <br><br>
-																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn>Remove</digi:trn>" >	
+																                       			  <input type="button" class="buttonx" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn>Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
 																                                    <table border="0" width="100%" cellpadding="0">																                                       

@@ -177,14 +177,11 @@
 															<td valign="top">
 																<table width="100%" border="0" class="inside">
 							                                        <tr>			
-							                                           <td align="center" class="inside">
-							                                         	  <table width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;">
-							                                                  <tr>
-							                                                	<td style="background-color: #c7d4db;height: 18px;" align="center"/><span class=subtitle-blue>							
+							                                           <td align="center" class="inside" bgcolor=#c7d4db height=25>
+																	   <span class=subtitle-blue>							
 											        <digi:trn><b>Add/Edit Template Wizard</b></digi:trn>						
 									              </span>
-							                                                  </tr>
-							                                              </table>
+							                                         	  
 							                                           </td>
 							                                        </tr>
 																	<tr>
@@ -291,7 +288,7 @@
 																	</tr>
 																	<tr>
 																		<td class="inside">
-																			<TABLE width="100%" style="font-size:11px; border:1px solid #CCCCCC;">
+																			<TABLE width="100%" style="font-size:11px;">
 																				<TR>
 																					<TD COLSPAN="2">
 																						<strong><digi:trn>Patterns Reference</digi:trn></strong>

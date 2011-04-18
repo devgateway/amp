@@ -175,13 +175,13 @@
 													<table width="100%" cellspacing="1" cellpadding="4" align="left" valign="top">
 														<tr>
 															<td valign="top">
-																<table width="100%" border="0" bgcolor="#f4f4f2">
+																<table width="100%" border="0" class="inside">
 							                                        <tr>			
-							                                           <td align="center">
-							                                         	  <table width="100%">
+							                                           <td align="center" class="inside">
+							                                         	  <table width="100%" cellpadding="0" cellspacing="0" style="font-size:12px;">
 							                                                  <tr>
-							                                                	<td style="background-color: #CCDBFF;height: 18px;"/><span class=subtitle-blue>							
-											        <digi:trn>Add/Edit Template Wizard</digi:trn>						
+							                                                	<td style="background-color: #CCDBFF;height: 18px;" align="center"/><span class=subtitle-blue>							
+											        <digi:trn><b>Add/Edit Template Wizard</b></digi:trn>						
 									              </span>
 							                                                  </tr>
 							                                              </table>

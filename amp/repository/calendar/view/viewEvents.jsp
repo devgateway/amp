@@ -25,7 +25,7 @@
 					</digi:link>&nbsp;&gt;&nbsp;
 					<digi:trn>Calendar</digi:trn>
 					<c:if test="${calendarViewForm.view!='none'}">&nbsp;&gt;&nbsp;</c:if>
-					<span class="crumb" id="viewSpan">
+					<span class="crumb" id="viewSpan" style="color: #FF6000">
 						<digi:trn>Monthly View</digi:trn>
 					</span>					
 				</span>

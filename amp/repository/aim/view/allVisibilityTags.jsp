@@ -994,7 +994,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
-<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>

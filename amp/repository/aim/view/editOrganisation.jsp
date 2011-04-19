@@ -443,24 +443,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 return false;
             }
             
-            var fundingorgid = document.aimAddOrgForm.fundingorgid.value;
-            var mandatoryFundOrgId = document.getElementById("mandatoryFundOrgId");
-            var alertError=false;
-            if(type.value=='NGO'){
-            	if (mandatoryFundOrgId!=null && (fundingorgid == null||fundingorgid.length == 0)) {
-            		alertError=true;
-                }
-            }else{
-            	if (fundingorgid == null||fundingorgid.length == 0) {
-            		alertError=true;                    
-                }
-            }
-            if(alertError==true){
-            	alert('<digi:trn  jsFriendly="true">Please enter a funding id for this Organization.</digi:trn>');
-                document.aimAddOrgForm.fundingorgid.focus();
-                return false;
-            }
-            
+           
+  
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
                 alert('<digi:trn  jsFriendly="true">Please Select Organization Type.</digi:trn>');
@@ -1075,15 +1059,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                                             </tr>
                                             <tr>
                                                 <td style="text-align:left; " class="tdBoldClass" nowrap>
-                                                    <digi:trn>Funding Org Id</digi:trn>
-                                                     <c:if test="${aimAddOrgForm.type=='NGO'}">
-                                                     	<field:display name="Mandatory Indicator For Funding Org Id" feature="NGO Form">
-                                                     		<span id="mandatoryFundOrgId"><font size="2" color="#FF0000">*</font></span>
-                                                     	</field:display>
-                                                     </c:if>
-                                                     <c:if test="${aimAddOrgForm.type!='NGO'}">
-                                                     	<font size="2" color="#FF0000">*</font>
-                                                     </c:if>                                                    
+                                                    <digi:trn>Funding Org Id</digi:trn>            
                                                 </td>
                                                 <td>    
                                                     <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>

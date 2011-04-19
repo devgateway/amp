@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -24,6 +25,8 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
@@ -125,7 +128,7 @@ public class DbUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static double getPledgesFunding(Long[] orgIds, Long orgGroupId,
+    public static double getPledgesFunding(Long[] orgIds, Long[] orgGroupIds,
             Date startDate, Date endDate,
             String currCode) throws DgException {
         double totalPlannedPldges = 0;
@@ -136,8 +139,8 @@ public class DbUtil {
         oql += " inner join  plg.organization org  ";
         oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
         if (orgIds == null || orgIds.length==0 || orgIds[0] == -1) {
-            if (orgGroupId != -1) {
-                oql += " and  org.orgGrpId.ampOrgGrpId=:orgGroupId ";
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += " and  org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
             }
         } else {
             oql += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
@@ -148,9 +151,9 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
+            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+            //    query.setLong("orgGroupId", orgGroupId);
+            //}
             fundingDets = query.list();
             Iterator<FundingPledgesDetails> fundDetIter = fundingDets.iterator();
             while (fundDetIter.hasNext()) {
@@ -178,7 +181,7 @@ public class DbUtil {
     public static List<AmpFundingDetail> getUnallocatedFunding(DashboardFilter filter)
             throws DgException {
         Long[] orgIds = filter.getOrgIds();
-        Long orgGroupId = filter.getOrganizationGroupId();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
         int transactionType = filter.getTransactionType();
         TeamMember tm = filter.getTeamMember();
         Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -201,11 +204,11 @@ public class DbUtil {
         }
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupId != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds);
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
             }
         } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds);
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
      
         if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
@@ -225,9 +228,9 @@ public class DbUtil {
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
-        if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-            query.setLong("orgGroupId", orgGroupId);
-        }
+        //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+        //    query.setLong("orgGroupId", orgGroupId);
+        //}
         if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
             query.setLong("transactionType", transactionType);
         }
@@ -238,170 +241,197 @@ public class DbUtil {
     
     
     public static List<AmpCategoryValueLocations> getRegions(DashboardFilter filter) throws DgException {
-        Long orgGroupId = filter.getOrganizationGroupId();
-        List<AmpCategoryValueLocations> locations=null;
-        Long[] orgIds = filter.getOrgIds();
-        
-        int transactionType = filter.getTransactionType();
-        TeamMember teamMember = filter.getTeamMember();
-        // apply calendar filter
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-        Long[] sectorIds = filter.getSelSectorIds();
-        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-        /*
-         * We are selecting regions which are funded
-         * In selected year by the selected organization
-         *
-         */
-        try {
-            String oql = "select distinct loc  from ";
-            oql += AmpFundingDetail.class.getName()
-                    + " as fd inner join fd.ampFundingId f ";
-            oql += "   inner join f.ampActivityId act ";
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-            oql += " inner join loc.parentCategoryValue parcv ";
-            if (sectorCondition) {
-                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            }
-            oql += "  where fd.adjustmentType = 1";
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                oql += " and fd.transactionType =:transactionType  ";
-            } else {
-                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-            }
-            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupId != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds);
-                }
-            } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds);
-            }
-            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            
-            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-                oql += DashboardUtil.getTeamQueryManagement();
-            }
-            else
-            {
-                oql += DashboardUtil.getTeamQuery(teamMember);
-            }
-            if (sectorCondition) {
-                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            }
-
-            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
+    	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
+    	if (filter.getSelLocationIds()!=null && filter.getSelLocationIds().length > 0 && filter.getSelLocationIds()[0] != -1) {
+			if (filter.getSelLocationIds().length == 1) {
+				AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[0]);
+				locations.addAll(loc.getChildLocations());
+				return locations;
+			} else {
+				for (int i = 0; i < filter.getSelLocationIds().length; i++) {
+					AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[i]);
+					locations.add(loc);
+				}
+				return locations;
 			}
-            oql += "  and parcv.value = 'Region'";// get only regions
-            
-            oql+=" order by loc.parentCategoryValue";
-            Session session = PersistenceManager.getRequestDBSession();
-            Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                query.setLong("transactionType", transactionType);
-            }
-            locations = query.list();
-        }
-        catch (Exception e) {
-            logger.error(e);
-            throw new DgException("Cannot load regions from db", e);
-        }
-        return locations;
-
+		} else {
+			
+	        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+	        Long[] orgIds = filter.getOrgIds();
+	        
+	        int transactionType = filter.getTransactionType();
+	        TeamMember teamMember = filter.getTeamMember();
+	        // apply calendar filter
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Long[] sectorIds = filter.getSelSectorIds();
+	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        /*
+	         * We are selecting regions which are funded
+	         * In selected year by the selected organization
+	         *
+	         */
+	        try {
+	            String oql = "select distinct loc  from ";
+	            oql += AmpFundingDetail.class.getName()
+	                    + " as fd inner join fd.ampFundingId f ";
+	            oql += "   inner join f.ampActivityId act ";
+	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+	            oql += " inner join loc.parentCategoryValue parcv ";
+	            if (sectorCondition) {
+	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            }
+	            oql += "  where fd.adjustmentType = 1";
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                oql += " and fd.transactionType =:transactionType  ";
+	            } else {
+	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            }
+	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                }
+	            } else {
+	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	            }
+	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+	            
+	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+	                oql += DashboardUtil.getTeamQueryManagement();
+	            }
+	            else
+	            {
+	                oql += DashboardUtil.getTeamQuery(teamMember);
+	            }
+	            if (sectorCondition) {
+	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	            }
+	
+	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+					oql += ActivityUtil.getApprovedActivityQueryString("act");
+				}
+	            oql += "  and parcv.value = 'Region'";// get only regions
+	            
+	            oql+=" order by loc.parentCategoryValue";
+	            Session session = PersistenceManager.getRequestDBSession();
+	            Query query = session.createQuery(oql);
+	            query.setDate("startDate", startDate);
+	            query.setDate("endDate", endDate);
+	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+	            //    query.setLong("orgGroupId", orgGroupId);
+	            //}
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                query.setLong("transactionType", transactionType);
+	            }
+	            locations = query.list();
+	        }
+	        catch (Exception e) {
+	            logger.error(e);
+	            throw new DgException("Cannot load regions from db", e);
+	        }
+	        return locations;
+		}
      }
     
     public static List<AmpSector> getSectors(DashboardFilter filter) throws DgException {
-        Long orgGroupId = filter.getOrganizationGroupId();
-        List<AmpSector> sectors = null;
-        Long[] orgIds = filter.getOrgIds();
-        
-        int transactionType = filter.getTransactionType();
-        TeamMember teamMember = filter.getTeamMember();
-        // apply calendar filter
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-        Long[] locationIds = filter.getSelLocationIds();
-        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
-        /*
-         * We are selecting sectors which are funded
-         * In selected year by the selected organization
-         *
-         */
-        try {
-            String oql = "select distinct sec  from ";
-            oql += AmpFundingDetail.class.getName()
-                    + " as fd inner join fd.ampFundingId f ";
-            oql += "   inner join f.ampActivityId act ";
-            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            if (locationCondition) {
-                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-            }
-            oql += "  where fd.adjustmentType = 1";
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                oql += " and fd.transactionType =:transactionType  ";
-            } else {
-                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-            }
-            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupId != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds);
-                }
-            } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds);
-            }
-            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            
-            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-                oql += DashboardUtil.getTeamQueryManagement();
-            }
-            else
-            {
-                oql += DashboardUtil.getTeamQuery(teamMember);
-            }
-            if (locationCondition) {
-                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-            }
-
-            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
+    	List<AmpSector> sectors = new ArrayList<AmpSector>();
+        if (filter.getSelSectorIds()!=null && filter.getSelSectorIds().length > 0 && filter.getSelSectorIds()[0] != -1) {
+			if (filter.getSelSectorIds().length == 1) {
+				List<AmpSector> sector = getSubSectors(filter.getSelSectorIds()[0]);
+				sectors.addAll(sector);
+				return sectors;
+			} else {
+				for (int i = 0; i < filter.getSelSectorIds().length; i++) {
+					AmpSector sector = SectorUtil.getAmpSector(filter.getSelSectorIds()[i]);
+					sectors.add(sector);
+				}
+				return sectors;
 			}
-            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
-            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.name = 'Primary') " 
-            	+ " and sec.parentSectorId is null";// get only primary sectors
-            
-            Session session = PersistenceManager.getRequestDBSession();
-            Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                query.setLong("transactionType", transactionType);
-            }
-
-            sectors = query.list();
-        }
-        catch (Exception e) {
-            logger.error(e);
-            throw new DgException("Cannot load sectors from db", e);
-        }
-        return sectors;
-
+		} else {
+			Long[] orgGroupIds = filter.getSelOrgGroupIds();
+	        Long[] orgIds = filter.getOrgIds();
+	        
+	        int transactionType = filter.getTransactionType();
+	        TeamMember teamMember = filter.getTeamMember();
+	        // apply calendar filter
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Long[] locationIds = filter.getSelLocationIds();
+	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+	        /*
+	         * We are selecting sectors which are funded
+	         * In selected year by the selected organization
+	         *
+	         */
+	        try {
+	            String oql = "select distinct sec  from ";
+	            oql += AmpFundingDetail.class.getName()
+	                    + " as fd inner join fd.ampFundingId f ";
+	            oql += "   inner join f.ampActivityId act ";
+	            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            if (locationCondition) {
+	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+	            }
+	            oql += "  where fd.adjustmentType = 1";
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                oql += " and fd.transactionType =:transactionType  ";
+	            } else {
+	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            }
+	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                }
+	            } else {
+	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	            }
+	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+	            
+	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+	                oql += DashboardUtil.getTeamQueryManagement();
+	            }
+	            else
+	            {
+	                oql += DashboardUtil.getTeamQuery(teamMember);
+	            }
+	            if (locationCondition) {
+	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+	            }
+	
+	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+					oql += ActivityUtil.getApprovedActivityQueryString("act");
+				}
+	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
+	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.name = 'Primary') " 
+	            	+ " and sec.parentSectorId is null";// get only primary sectors
+	            
+	            Session session = PersistenceManager.getRequestDBSession();
+	            Query query = session.createQuery(oql);
+	            query.setDate("startDate", startDate);
+	            query.setDate("endDate", endDate);
+	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+	            //    query.setLong("orgGroupId", orgGroupId);
+	            //}
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                query.setLong("transactionType", transactionType);
+	            }
+	
+	            sectors = query.list();
+	        }
+	        catch (Exception e) {
+	            logger.error(e);
+	            throw new DgException("Cannot load sectors from db", e);
+	        }
+	        return sectors;
+    	}
      }
     
     public static List<AmpActivity> getActivities(DashboardFilter filter) throws DgException {
-        Long orgGroupId = filter.getOrganizationGroupId();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpActivity> activities = null;
         Long[] orgIds= filter.getOrgIds();
         
@@ -439,12 +469,12 @@ public class DbUtil {
             } else {
                 oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
             }
-            if (orgGroupId == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupId != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds);
+            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
                 }
             } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds);
+                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
             }
             oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
             
@@ -470,9 +500,9 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
+            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+            //    query.setLong("orgGroupId", orgGroupId);
+            //}
             if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
                 query.setLong("transactionType", transactionType);
             }
@@ -488,91 +518,103 @@ public class DbUtil {
      }
     
     public static List<AmpOrganisation> getDonors(DashboardFilter filter) throws DgException {
-        Long orgGroupId = filter.getOrganizationGroupId();
-        List<AmpOrganisation> donors = null;
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+        List<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
         Long[] orgIds= filter.getOrgIds();
-        
-        int transactionType = filter.getTransactionType();
-        TeamMember teamMember = filter.getTeamMember();
-        // apply calendar filter
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-        Long[] locationIds = filter.getSelLocationIds();
-        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
-        Long[] sectorIds = filter.getSelSectorIds();
-        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-        /*
-         * We are selecting sectors which are funded
-         * In selected year by the selected organization
-         *
-         */
-        try {
-            String oql = "select distinct donor from ";
-            oql += AmpFundingDetail.class.getName()
-                    + " as fd inner join fd.ampFundingId f ";
-            oql += "   inner join f.ampActivityId act ";
-            oql += "   inner join f.ampDonorOrgId donor ";
-            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            if (locationCondition) {
-                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-            }
-            if (sectorCondition) {
-                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            }
-            oql += "  where fd.adjustmentType = 1";
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                oql += " and fd.transactionType =:transactionType  ";
-            } else {
-                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
-            }
-            if (orgGroupId == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupId != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds);
-                }
-            } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds);
-            }
-            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            
-            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-                oql += DashboardUtil.getTeamQueryManagement();
-            }
-            else
-            {
-                oql += DashboardUtil.getTeamQuery(teamMember);
-            }
-            if (locationCondition) {
-                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-            }
-            if (sectorCondition) {
-                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            }
-
-            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
-				oql += ActivityUtil.getApprovedActivityQueryString("act");
+        if (orgGroupIds!=null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+			if (orgGroupIds.length == 1) {
+				List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[0]);
+				donors.addAll(donorsByGrp);
+				return donors;
+			} else {
+				for (int i = 0; i < filter.getSelLocationIds().length; i++) {
+					List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[i]);
+					donors.addAll(donorsByGrp);
+				}
+				return donors;
 			}
-           
-            Session session = PersistenceManager.getRequestDBSession();
-            Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
-            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
-                query.setLong("transactionType", transactionType);
-            }
-            
-            donors = query.list();
-        }
-        catch (Exception e) {
-            logger.error(e);
-            throw new DgException("Cannot load activities from db", e);
-        }
-        return donors;
-
+		} else {
+	        int transactionType = filter.getTransactionType();
+	        TeamMember teamMember = filter.getTeamMember();
+	        // apply calendar filter
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Long[] locationIds = filter.getSelLocationIds();
+	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+	        Long[] sectorIds = filter.getSelSectorIds();
+	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        /*
+	         * We are selecting sectors which are funded
+	         * In selected year by the selected organization
+	         *
+	         */
+	        try {
+	            String oql = "select distinct donor from ";
+	            oql += AmpFundingDetail.class.getName()
+	                    + " as fd inner join fd.ampFundingId f ";
+	            oql += "   inner join f.ampActivityId act ";
+	            oql += "   inner join f.ampDonorOrgId donor ";
+	            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            if (locationCondition) {
+	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+	            }
+	            if (sectorCondition) {
+	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            }
+	            oql += "  where fd.adjustmentType = 1";
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                oql += " and fd.transactionType =:transactionType  ";
+	            } else {
+	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            }
+	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                }
+	            } else {
+	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	            }
+	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+	            
+	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+	                oql += DashboardUtil.getTeamQueryManagement();
+	            }
+	            else
+	            {
+	                oql += DashboardUtil.getTeamQuery(teamMember);
+	            }
+	            if (locationCondition) {
+	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+	            }
+	            if (sectorCondition) {
+	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	            }
+	
+	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+					oql += ActivityUtil.getApprovedActivityQueryString("act");
+				}
+	           
+	            Session session = PersistenceManager.getRequestDBSession();
+	            Query query = session.createQuery(oql);
+	            query.setDate("startDate", startDate);
+	            query.setDate("endDate", endDate);
+	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+	            //    query.setLong("orgGroupId", orgGroupId);
+	            //}
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                query.setLong("transactionType", transactionType);
+	            }
+	            
+	            donors = query.list();
+	        }
+	        catch (Exception e) {
+	            logger.error(e);
+	            throw new DgException("Cannot load activities from db", e);
+	        }
+	        return donors;
+		}
      }
     
     /**
@@ -598,7 +640,7 @@ public class DbUtil {
 		} 
         
         Long[] orgIds = filter.getOrgIds();
-        Long orgGroupId = filter.getOrganizationGroupId();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();
         Long[] locationIds = filter.getSelLocationIds();
@@ -629,11 +671,11 @@ public class DbUtil {
 
         oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupId != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds);
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
             }
         } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds);
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
             oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
@@ -672,9 +714,9 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            if ((orgIds == null || orgIds.length == 0 || orgIds[0] == -1) && orgGroupId != -1) {
-                query.setLong("orgGroupId", orgGroupId);
-            }
+            //if ((orgIds == null || orgIds.length == 0 || orgIds[0] == -1) && orgGroupId != -1) {
+            //    query.setLong("orgGroupId", orgGroupId);
+            //}
             if (assistanceTypeId != null) {
                 query.setLong("assistanceTypeId", assistanceTypeId);
             }

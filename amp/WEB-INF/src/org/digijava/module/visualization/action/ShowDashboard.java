@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,10 +14,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -114,16 +118,16 @@ public class ShowDashboard extends Action {
 		filter.setOrgGroups(orgGroups);
 		List<AmpOrganisation> orgs = null;
 
-		if (filter.getOrganizationGroupId() == null
-				|| filter.getOrganizationGroupId() == -1) {
+		if (filter.getOrgGroupId() == null
+				|| filter.getOrgGroupId() == -1) {
 
-			filter.setOrganizationGroupId(-1l);// -1 option denotes
+			filter.setOrgGroupId(-1l);// -1 option denotes
 												// "All Groups", which is the
 												// default choice.
 		}
 
 		orgs = DbUtil.getDonorOrganisationByGroupId(
-				filter.getOrganizationGroupId(), false); // TODO: Determine how
+				filter.getOrgGroupId(), false); // TODO: Determine how
 															// this will work in
 															// the public view
 		filter.setOrganizations(orgs);
@@ -199,7 +203,7 @@ public class ShowDashboard extends Action {
 				e.printStackTrace();
 			}
 		}
-		Long[] regionId = filter.getSelRegionIds();
+		Long[] regionId = filter.getRegionIds();
 		List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
 		if (regionId != null && regionId.length!=0 && regionId[0] != -1) {
@@ -217,7 +221,21 @@ public class ShowDashboard extends Action {
 
 		}
 		filter.setZones(zones);
-
+		Collection currency = CurrencyUtil.getAmpCurrency();
+        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+        filter.setCurrencies(validcurrencies);
+        //Only currencies which have exchanges rates
+        for (Iterator iter = currency.iterator(); iter.hasNext();) {
+            AmpCurrency element = (AmpCurrency) iter.next();
+            try {
+				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
+					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+				}
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 	}
 
 	private void prepareSectorDashboard(VisualizationForm visualizationForm) {

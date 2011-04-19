@@ -89,53 +89,17 @@ yuiLoadingPanel.prototype = {
     }
 };
 
-YAHOO.namespace("YAHOO.amp");
-
-var myPanel = new YAHOO.widget.Panel("newmySectors", {
-	width:"750px",
-	fixedcenter: true,
-    constraintoviewport: false,
-    underlay:"none",
-    close:true,
-    visible:false,
-    modal:true,
-    draggable:true,
-    context: ["showbtn", "tl", "bl"]
-    });
-var panelStart=0;
-
-function initPanel() {
-	
-    var msg='\n<digi:trn>Advanced Filters</digi:trn>';
-	myPanel.setHeader(msg);
-	myPanel.setBody("");
-	myPanel.beforeHideEvent.subscribe(function() {
-		panelStart=1;
-	}); 
-	
-	myPanel.render(document.body);
-}
-
-function showPopin() {
-	var element = document.getElementById("dialog2");
-	element.style.display 	= "inline";
-	myPanel.setBody(element);
-	myPanel.show();
-}
-function hidePopin() {
-	myPanel.hide();
-}
-
 -->
 </script>
 
-<center>
+
 <!-- BREADCRUMB START -->
 <div class="centering">
 <span class="sec_name"><digi:trn>Donor Profile Dashboard</digi:trn></span><span class="breadcrump_sep">|</span><a href=# class="l_sm"><digi:trn>Dashboards</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
 </div>
 <br/>
 <!-- BREADCRUMB END -->
+<digi:instance property="visualizationform"/>
 <digi:form action="/filters.do">
 <!-- POPUPS START -->
 <script language="javascript">
@@ -223,7 +187,9 @@ function changeTab (selected){
 
 -->
 </script>
-
+<table>
+<tr>
+<td>
 <div id="dialog2" class="dialog" title="Advanced Filters">
 <div id="popinContent" class="content">
 	<div id="selectDiv" class="yui-navset">
@@ -244,48 +210,69 @@ function changeTab (selected){
 				<td class="inside" valign="top" style="background-color:#F9F9F9;">
 					<div id="divGeneralFilter">
 						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
-						
-						<input name="" type="checkbox" value="" /> <b>Show Data From All Workspaces</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;<input name="" type="checkbox" value="" /> <b>Show Decimals</b>
+						<html:checkbox  property="filter.workspaceOnly" styleId="workspace_only"><b><digi:trn>Show Only Data From This Workspace</digi:trn></b></html:checkbox> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;
+						<b><digi:trn>Decimals to show</digi:trn>: </b>
+							<html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:45px;">
+	                            <html:option value="0">0</html:option>
+	                            <html:option value="1">1</html:option>
+	                            <html:option value="2">2</html:option>
+	                            <html:option value="3">3</html:option>
+	                            <html:option value="4">4</html:option>
+	                            <html:option value="5">5</html:option>
+	                        </html:select>
 						<hr />
 						<b>For Time Series Comparison, what data do you want to show?</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<input name="" type="checkbox" value="" />Commitements &nbsp;&nbsp;<input name="" type="checkbox" value="" />Distributements&nbsp;&nbsp;<input name="" type="checkbox" value="" />Expenditures&nbsp;&nbsp;<input name="" type="checkbox" value="" />Pledges<br />
+						<html:checkbox  property="filter.commitmentsVisible" styleId="commitments_visible"><digi:trn>Commitments</digi:trn>&nbsp;&nbsp;</html:checkbox>
+						<html:checkbox  property="filter.disbursementsVisible" styleId="disbursements_visible"><digi:trn>Disbursements</digi:trn>&nbsp;&nbsp;</html:checkbox>
+						<html:checkbox  property="filter.expendituresVisible" styleId="expenditures_visible"><digi:trn>Expenditures</digi:trn>&nbsp;&nbsp;</html:checkbox>
+						<html:checkbox  property="filter.pledgeVisible" styleId="pledge_visible"><digi:trn>Pledges</digi:trn>&nbsp;&nbsp;</html:checkbox><br />
 						<b>What data should the dashboard show? </b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<input name="" type="radio" value="" />Commitements&nbsp;&nbsp;<input name="" type="radio" value="" />Distributements&nbsp;&nbsp;<input name="" type="radio" value="" />Expenditures&nbsp;&nbsp;<input name="" type="radio" value="" />Pledges
+						<fieldset>
+                            <html:radio property="filter.transactionType" styleId="transaction_type_0" value="0"><digi:trn>Commitments</digi:trn></html:radio>
+                            <html:radio property="filter.transactionType" styleId="transaction_type_1" value="1"><digi:trn>Disbursements</digi:trn></html:radio>
+                            <html:radio property="filter.transactionType" styleId="transaction_type_2" value="2"><digi:trn>Expenditures</digi:trn></html:radio>
+<!--                            <html:radio property="filter.transactionType" value="3"><digi:trn>Pledges</digi:trn></html:radio>-->
+                        </fieldset>
 						<hr />
 							<table border="0" cellspacing="0" cellpadding="0">
 								<tr>
 								  	<td><b>Currency Type:</b></td>
-								  	<td>	
-									  	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-									 		<option value="Na">US Dollar</option>
-										</select>
+								  	<td>
+								  		<html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
+	           								<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
+	       								</html:select> 	
 									</td>
 								   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
 								</tr>
 							    <tr>
 								    <td><b>Fiscal Calendar:</b></td>
 								    <td>
-								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-							  				<option value="Na">Gregorian Calendar</option>
-										</select>
+								    	 <html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:145px;">
+				                            <html:option value="-1"><digi:trn>None</digi:trn></html:option>
+				                            <html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
+				                        </html:select>
 									</td>
 							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
 							 	</tr>
 							    <tr>
 							    	<td><b>Fiscal Year Start:</b></td>
 							    	<td>
-							    		<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-							  				<option value="Na">Gregorian Calendar</option>
-										</select>
+							    		 <html:select property="filter.year" styleId="year_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+				                            <html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+				                        </html:select>
 									</td>
 							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
 							  	</tr>
 				      			<tr>
 								    <td><b>Time Scale:</b></td>
 								    <td>
-								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-								 			<option value="Na">Gregorian Calendar</option>
-										</select>
+										<html:select property="filter.yearsInRange" styleId="yearsInRange_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+				                            <html:option value="1">1</html:option>
+				                            <html:option value="2">2</html:option>
+				                            <html:option value="3">3</html:option>
+				                            <html:option value="4">4</html:option>
+				                            <html:option value="5">5</html:option>
+				                        </html:select>
 									</td>
 								    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
 								</tr>
@@ -295,62 +282,76 @@ function changeTab (selected){
 					<div id="divOrganizationsFilter">
 						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
 						<b>Organization Group:</b><br />
-							<html:select property="filter.orgGroupIds" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-          	 					<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-       						</html:select> 
+							<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+								<html:select property="filter.orgGroupIds" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
+	           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+	          	 					<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+	       						</html:select> 
+       						</c:if>	
+       						<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+       							<html:select property="filter.orgGroupIds" multiple="true" styleId="org_group_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
+	           						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
+	          	 					<html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+	       						</html:select> 
+       						</c:if>
 							<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
 							<hr />
-						<b>Organization:</b><br />
-							<html:select property="filter.orgIds" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+							<div id="divOrgDrpdwn">
+							<b>Organization:</b><br />
+							<html:select property="filter.orgIds" multiple="true" styleId="org_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;max-height:140;">
            						<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-       						</html:select>		
+       						</html:select>	
+       						</div>	
 						</div>
 					</div>
 					<div id="divRegionsFilter">
 						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
 							<b>Region:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 								<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-		    						<html:select property="filter.regionIds" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+		    						<html:select property="filter.regionIds" styleId="region_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
 	           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	           							<html:optionsCollection property="filter.regions" value="id" label="name" />
 	       							</html:select>
        							</c:if>	
        							<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-		    						<html:select property="filter.regionIds" multiple="true" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+		    						<html:select property="filter.regionIds" multiple="true" styleId="region_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
 	           							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	           							<html:optionsCollection property="filter.regions" value="id" label="name" />
 	       							</html:select>
        							</c:if>	
 							<hr />
+							<div id="divZoneDrpdwn">
 							<b>Zone:</b><br />
-								<html:select property="filter.zoneIds" multiple="true" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+								<html:select property="filter.zoneIds" multiple="true" styleId="zone_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
            							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
        							</html:select>		
 							<hr />
+							</div>
 						</div>
 					</div>
 					<div id="divSectorsFilter">
 						<div class="selector_content_org_prof" style="line-height:25px;width:490px;">
 							<b>Sector:</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 								<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-		    						<html:select property="filter.sectorIds" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+		    						<html:select property="filter.sectorIds" styleId="sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
 							           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 							           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
 							    	</html:select>
 							   	</c:if>	
        							<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-		    						<html:select property="filter.sectorIds" multiple="true" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+		    						<html:select property="filter.sectorIds" multiple="true" styleId="sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
 							           <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 							           <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
 							    	</html:select>
 							   	</c:if> 	
 							<hr />
+							<div id="divSubSectorDrpdwn">
 							<b>Sub-Sectors:</b><br />
-								<html:select property="filter.subSectorIds" multiple="true" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+								<html:select property="filter.subSectorIds" multiple="true" styleId="sub_sector_dropdown_ids" styleClass="dropdwn_sm" style="width:145px;">
            							<html:option value="-1"><digi:trn>All</digi:trn></html:option>
        							</html:select>	
 							<hr />
+							</div>
 						</div>
 					</div>
 				</td>
@@ -359,24 +360,35 @@ function changeTab (selected){
 	</div>
 	</div>
 
-<input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" onclick="hidePopin()" id="applyButton">
+<input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
 <input type="button" value="Reset to defaults" class="buttonx" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="Close" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
 
 
 </div>
-
+</td>
+</tr>
+</table>
 <!-- POPUPS END -->
 
 <!-- MAIN CONTENT PART START -->
 
+<html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
+<html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
+<html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
+<html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
+<html:hidden property="filter.expendituresVisible" styleId="expendituresVisible" />
+<html:hidden property="filter.pledgeVisible" styleId="pledgeVisible"/>
+<html:hidden property="filter.transactionType" styleId="transactionType" />
+<html:hidden property="filter.currencyId" styleId="currencyId" />
+<html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
 
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
-<div class="dashboard_total"><div id="divTotalComms"></div><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>
+<div class="dashboard_total" id="divTotalComms"></div>
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
@@ -804,6 +816,30 @@ var callbackChildrenCall = {
 			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
+			    	case "Organizations":
+			    		var orgDropdown = document.getElementById("org_dropdown_ids");
+			    		orgDropdown.options.length = 0;
+			    		orgDropdown.options[0] = new Option("All", -1);
+			    		for(var i = 0; i < results.children.length; i++){
+			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
+				    case "Sectors":
+			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_ids");
+			    		subSectorDropdown.options.length = 0;
+			    		subSectorDropdown.options[0] = new Option("All", -1);
+			    		for(var i = 1; i < results.children.length; i++){
+			    			subSectorDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
+			    	case "Regions":
+			    		var zonesDropdown = document.getElementById("zone_dropdown_ids");
+			    		zonesDropdown.options.length = 0;
+			    		zonesDropdown.options[0] = new Option("All", -1);
+			    		for(var i = 1; i < results.children.length; i++){
+			    			zonesDropdown.options[i] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
 			    
 			    }
 			}
@@ -825,6 +861,7 @@ function callbackChildren(e) {
 	{
 		parentId = e.target.value;
 		targetId = e.target.id;
+		targetObj = e.target;
 	}
 	
 	var objectType = "";
@@ -839,12 +876,47 @@ function callbackChildren(e) {
 		case "org_group_dropdown_id":
 			objectType = "Organization";
 			break;
+		case "sector_dropdown_ids":
+			if (countSelected(targetObj) > 1) {
+				document.getElementById("divSubSectorDrpdwn").style.display = "none";
+			} else {
+				document.getElementById("divSubSectorDrpdwn").style.display = "block";
+			}
+			objectType = "Sectors";
+			break;
+		case "region_dropdown_ids":
+			if (countSelected(targetObj) > 1) {
+				document.getElementById("divZoneDrpdwn").style.display = "none";
+			} else {
+				document.getElementById("divZoneDrpdwn").style.display = "block";
+			}
+			objectType = "Regions";
+			break;
+		case "org_group_dropdown_ids":
+			if (countSelected(targetObj) > 1) {
+				document.getElementById("divOrgDrpdwn").style.display = "none";
+			} else {
+				document.getElementById("divOrgDrpdwn").style.display = "block";
+			}
+			objectType = "Organizations";
+			break;
 	}
 
 	if (parentId != "" && objectType != ""){
 		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + parentId, callbackChildrenCall, null);
 	}
 }
+
+function countSelected (selector){
+	var count = 0;
+	for (i=0; i<selector.options.length; i++) {
+	  if (selector.options[i].selected) {
+	    count++;
+	  }
+	}
+	return count;
+}
+
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  try {
@@ -880,22 +952,71 @@ function callbackApplyFilter(e){
 	}
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
-/*	var orgIds = null;
-	var secIds = null;
-//	if (document.getElementById("org_dropdown_id").value != -1) {
-		orgIds = document.getElementById("org_dropdown_id").value;
-//	}
-	if (document.getElementById("sub_sector_dropdown_id").value == -1) {
-		if (document.getElementById("sector_dropdown_id").value != -1) {
-			secIds = document.getElementById("sector_dropdown_id").value;
-		}
-	} else {
-		secIds = document.getElementById("sub_sector_dropdown_id").value;
-	}*/
-	//var sUrl="/visualization/filters.do?orgIds="+orgIds+"&secIds="+secIds;
+
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+}
+
+function applyFilterPopin(e){
+	
+var allGraphs = document.getElementsByName("flashContent");
+
+	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
+	document.getElementById("currentYear").value = document.getElementById("year_dropdown").options[document.getElementById("year_dropdown").selectedIndex].value;
+	document.getElementById("yearsInRange").value = document.getElementById("yearsInRange_dropdown").options[document.getElementById("yearsInRange_dropdown").selectedIndex].value;
+	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
+
+	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
+	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
+	document.getElementById("expendituresVisible").value = document.getElementById("expenditures_visible").checked;
+	document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
+	document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	
+	if (document.getElementById("transaction_type_0").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_0").value;
+	}
+	if (document.getElementById("transaction_type_1").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_1").value;
+	}
+	if (document.getElementById("transaction_type_2").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
+	}
+	
+	var params = "";
+	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_group_dropdown_ids");
+	params = params + "&orgIds=" + getSelectionsFromElement("org_dropdown_ids");
+	params = params + "&regionIds=" + getSelectionsFromElement("region_dropdown_ids");
+	params = params + "&zoneIds=" + getSelectionsFromElement("zone_dropdown_ids");
+	params = params + "&sectorIds=" + getSelectionsFromElement("sector_dropdown_ids");
+	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_dropdown_ids");
+	
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		allGraphs[idx].style.display = "none";
+	}
+	loadingPanel.show();
+	YAHOO.util.Connect.setForm('visualizationform');
+	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;
+
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+	hidePopin();
+}
+
+function getSelectionsFromElement(elementId){
+	var sels = "";
+	var cnt = 0;
+	var elem=document.getElementById(elementId).options;
+	for(i=0;i<elem.length;i++){
+		if (elem[i].selected==true){
+			if(sels != ""){
+				sels = sels + ",";
+			}
+			sels = sels + elem[i].value;
+			cnt++;
+		}
+	}
+	return sels;
 }
 
 function refreshGraphs(){
@@ -999,7 +1120,7 @@ function refreshBoxes(o){
 				}
 				break;
 			case "TotalComms":
-				inner = "<b class='dashboard_total_num'>" + child.value + "</b>";
+				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br /><digi:trn>Total Commitments</digi:trn>(" + child.curr + ")";
 				var div = document.getElementById("divTotalComms");
 				div.innerHTML = inner;
 				break;
@@ -1059,6 +1180,12 @@ function refreshBoxes(o){
 }
 
 
+YAHOO.util.Event.addListener("region_dropdown_ids", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("region_dropdown_ids", callbackChildren);
+YAHOO.util.Event.addListener("org_group_dropdown_ids", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("org_group_dropdown_ids", callbackChildren);
+YAHOO.util.Event.addListener("sector_dropdown_ids", "change", callbackChildren);
+YAHOO.util.Event.onAvailable("sector_dropdown_ids", callbackChildren);
 YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("region_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
@@ -1066,13 +1193,14 @@ YAHOO.util.Event.onAvailable("org_group_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.onAvailable("sector_dropdown_id", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
+YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
 YAHOO.util.Event.onDOMReady(initDashboard);
 window.onload=initPanel;
 
 function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'FundingChart');
+	//changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');

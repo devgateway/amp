@@ -26,5 +26,6 @@
 			<forward name="donor" path="/visualization/showDashboard.do" />
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
+    
 	</action-mappings>
 </struts-config>

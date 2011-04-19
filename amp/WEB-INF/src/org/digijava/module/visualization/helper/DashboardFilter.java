@@ -26,57 +26,58 @@ public class DashboardFilter {
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
-
     private List<AmpOrganisation>organizationsSelected;
-    private Long[] orgIds;
-
-    private List<AmpSector>sectors;
-    private List<AmpSector>sectorsSelected;
-    private Long[] selSectorIds;
-    private Long[] sectorIds;
-    private Long[] subSectorIds;
-    private Long sectorId; //used to fill subsectors list
-
-    private List<AmpCategoryValueLocations> locationsSelected;
-    private Long[] selLocationIds;
-
-    private Collection<BeanWrapperImpl> years;
-    private int transactionType;
     private List<AmpOrgGroup> orgGroups;
-    private Long organizationGroupId;
-    private List<AmpFiscalCalendar> fiscalCalendars;
-    private Long fiscalCalendarId;
-    private Integer largestProjectNumber;
-    private Boolean divideThousands;
-    private Integer divideThousandsDecimalPlaces;
-    private Long[] selRegionIds;
-    private Long[] selZoneIds;
+    private List<AmpSector>sectors;
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
 
     private Long[] orgGroupIds;
     private Long orgGroupId;
+    private Long[] orgIds;
     private Long orgId;
+    private Long[] sectorIds;
+    private Long sectorId;
+    private Long[] subSectorIds;
     private Long subSectorId;
     private Long[] regionIds;
     private Long regionId;
     private Long[] zoneIds;
     private Long zoneId;
+    
+    private Long[] selSectorIds;
+    private Long[] selLocationIds;
+    private Long[] selOrgGroupIds;
 
+    private List<AmpSector>sectorsSelected;
+    
+    private List<AmpCategoryValueLocations> locationsSelected;
+   
+    private Collection<BeanWrapperImpl> years;
+    private int transactionType;
+    private List<AmpFiscalCalendar> fiscalCalendars;
+    private Long fiscalCalendarId;
+    private Integer largestProjectNumber;
+    private Boolean divideThousands;
+    private Integer divideThousandsDecimalPlaces;
+   
     private int yearsInRange;
-    private Boolean pledgeVisible;
-    private Boolean expendituresVisible;
+    private Boolean commitmentsVisible = true;
+    private Boolean disbursementsVisible= true;
+    private Boolean pledgeVisible= true;
+    private Boolean expendituresVisible= true;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
 
     private Long activityId;
+    private int decimalsToShow;
     
     public DashboardFilter getCopyFilterForFunding(){
     	DashboardFilter newFilter = new DashboardFilter();
     	
     	newFilter.setCurrencyId(this.getCurrencyId());
     	newFilter.setOrgIds(this.getOrgIds());
-    	newFilter.setOrganizationGroupId(this.getOrganizationGroupId());
+    	newFilter.setOrgGroupId(this.getOrgGroupId());
     	newFilter.setTeamMember(this.getTeamMember());
     	newFilter.setSelLocationIds(this.getSelLocationIds());
     	newFilter.setSelSectorIds(this.getSelSectorIds());
@@ -86,7 +87,23 @@ public class DashboardFilter {
     	return newFilter;
     }
 
-    public Boolean getExpendituresVisible() {
+    public Boolean getCommitmentsVisible() {
+		return commitmentsVisible;
+	}
+
+	public void setCommitmentsVisible(Boolean commitmentsVisible) {
+		this.commitmentsVisible = commitmentsVisible;
+	}
+
+	public Boolean getDisbursementsVisible() {
+		return disbursementsVisible;
+	}
+
+	public void setDisbursementsVisible(Boolean disbursementsVisible) {
+		this.disbursementsVisible = disbursementsVisible;
+	}
+
+	public Boolean getExpendituresVisible() {
         return expendituresVisible;
     }
 
@@ -118,20 +135,20 @@ public class DashboardFilter {
         this.regions = regions;
     }
 
-    public Long[] getSelRegionIds() {
-        return selRegionIds;
+    public Long[] getRegionIds() {
+        return regionIds;
     }
 
-    public void setSelRegionIds(Long[] selRegionIds) {
-        this.selRegionIds = selRegionIds;
+    public void setRegionIds(Long[] regionIds) {
+        this.regionIds = regionIds;
     }
 
-     public Long[] getSelZoneIds() {
-        return selZoneIds;
+     public Long[] getZoneIds() {
+        return zoneIds;
     }
 
-    public void setSelZoneIds(Long[] selZoneIds) {
-        this.selZoneIds = selZoneIds;
+    public void setZoneIds(Long[] zoneIds) {
+        this.zoneIds = zoneIds;
     }
 
     public List<AmpCategoryValueLocations> getZones() {
@@ -165,12 +182,20 @@ public class DashboardFilter {
         this.fiscalCalendarId = fiscalCalendarId;
     }
 
-    public Long getOrganizationGroupId() {
-        return organizationGroupId;
+    public Long getOrgGroupId() {
+        return orgGroupId;
     }
 
-    public void setOrganizationGroupId(Long orgGroupId) {
-        this.organizationGroupId = orgGroupId;
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
+    }
+
+    public Long[] getOrgGroupIds() {
+        return orgGroupIds;
+    }
+
+    public void setOrgGroupIds(Long[] orgGroupIds) {
+        this.orgGroupIds = orgGroupIds;
     }
 
     public List<AmpOrgGroup> getOrgGroups() {
@@ -199,6 +224,9 @@ public class DashboardFilter {
     }
 
     public Long getCurrencyId() {
+    	if (currencyId == null) {
+    		currencyId = CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
+		}
         return currencyId;
     }
 
@@ -239,7 +267,7 @@ public class DashboardFilter {
     public void setWorkspaceOnly(Boolean workspaceOnly) {
         this.workspaceOnly = workspaceOnly;
     }
-
+    /*
     public String getOrgGroupName() {
         AmpOrgGroup group= DbUtil.getAmpOrgGroup(organizationGroupId);
         String name=null;
@@ -248,7 +276,7 @@ public class DashboardFilter {
         }
         return name;
     }
-    /*
+    
     public String getOrgsName() {
         String name = "";
         if (orgIds != null) {
@@ -393,11 +421,7 @@ public class DashboardFilter {
 		this.locationsSelected = locationsSelected;
 	}
 
-	public boolean isPledgeVisible() {
-		// TODO CHANGE THIS!
-		return true;
-	}
-    public Long[] getOrgIds() {
+	public Long[] getOrgIds() {
         return orgIds;
     }
 
@@ -421,9 +445,20 @@ public class DashboardFilter {
         this.selLocationIds = locationIds;
     }
 
+	public boolean isCommitmentsVisible() {
+		return commitmentsVisible;
+	}
+
+	public boolean isDisbursementsVisible() {
+		return disbursementsVisible;
+	}
+    
 	public boolean isExpendituresVisible() {
-		// TODO CHANGE THIS!
-		return true;
+		return expendituresVisible;
+	}
+    
+	public boolean isPledgeVisible() {
+		return pledgeVisible;
 	}
 
 	public void setSectorIds(Long[] sectorIds) {
@@ -442,68 +477,52 @@ public class DashboardFilter {
 		this.activityId = activityId;
 	}
 
-	public void setOrgGroupIds(Long[] orgGroupIds) {
-		this.orgGroupIds = orgGroupIds;
-	}
-
-	public Long[] getOrgGroupIds() {
-		return orgGroupIds;
-	}
-
-	public void setOrgGroupId(Long orgGroupId) {
-		this.orgGroupId = orgGroupId;
-	}
-
-	public Long getOrgGroupId() {
-		return orgGroupId;
+	public Long getOrgId() {
+		return orgId;
 	}
 
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
 	}
 
-	public Long getOrgId() {
-		return orgId;
+	public Long getSubSectorId() {
+		return subSectorId;
 	}
 
 	public void setSubSectorId(Long subSectorId) {
 		this.subSectorId = subSectorId;
 	}
 
-	public Long getSubSectorId() {
-		return subSectorId;
-	}
-
-	public void setRegionIds(Long[] regionIds) {
-		this.regionIds = regionIds;
-	}
-
-	public Long[] getRegionIds() {
-		return regionIds;
+	public Long getRegionId() {
+		return regionId;
 	}
 
 	public void setRegionId(Long regionId) {
 		this.regionId = regionId;
 	}
 
-	public Long getRegionId() {
-		return regionId;
-	}
-
-	public void setZoneIds(Long[] zoneIds) {
-		this.zoneIds = zoneIds;
-	}
-
-	public Long[] getZoneIds() {
-		return zoneIds;
+	public Long getZoneId() {
+		return zoneId;
 	}
 
 	public void setZoneId(Long zoneId) {
 		this.zoneId = zoneId;
 	}
-
-	public Long getZoneId() {
-		return zoneId;
+	public Long[] getSelOrgGroupIds() {
+		return selOrgGroupIds;
 	}
 
+	public void setSelOrgGroupIds(Long[] selOrgGroupIds) {
+		this.selOrgGroupIds = selOrgGroupIds;
+	}
+
+	public int getDecimalsToShow() {
+		return decimalsToShow;
+	}
+
+	public void setDecimalsToShow(int decimalsToShow) {
+		this.decimalsToShow = decimalsToShow;
+	}
+
+	
 }

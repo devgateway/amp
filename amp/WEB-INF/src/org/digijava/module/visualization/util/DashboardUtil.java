@@ -60,7 +60,7 @@ public class DashboardUtil {
 			newFilter.setOrgIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
             //filter.setOrgIds(oldIds);
-            BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampOrg, total);
 		}
 		return sortByValue (map);
@@ -82,7 +82,7 @@ public class DashboardUtil {
 			newFilter.setActivityId(ampActivity.getAmpActivityId());
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
             //filter.setActivityId(oldActivityId);
-            BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampActivity, total);
 		}
 		return sortByValue (map);
@@ -105,7 +105,7 @@ public class DashboardUtil {
 			newFilter.setSelLocationIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
             //filter.setSelLocationIds(oldIds);
-            BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+            BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(location, total);
 		}
 		return sortByValue (map);
@@ -128,7 +128,7 @@ public class DashboardUtil {
 			newFilter.setSelSectorIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
             //filter.setSectorIds(oldIds);
-	        BigDecimal total = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+	        BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}
 		return sortByValue (map);
@@ -167,14 +167,14 @@ public class DashboardUtil {
 		if (activityList.size()>0) {
 			DecimalWraper fundingCal = null;
 			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL);
-			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator));
+			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator));
+			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
 			form.getSummaryInformation().setNumberOfRegions(regionList.size());
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
-			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator).divide(new BigDecimal(activityList.size()), 3, RoundingMode.HALF_UP)).setScale(3, RoundingMode.HALF_UP));
+			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 				form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter()));
 				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter()));
@@ -283,10 +283,10 @@ public class DashboardUtil {
         return calendar;
     }
 
-    public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations) {
+    public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups) {
         String qry = "";
         if (orgGroupView) {
-            qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId=:orgGroupId ";
+            qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
         } else {
             qry = " and f.ampDonorOrgId in (" + getInStatement(selectedOrganizations) + ") ";
         }

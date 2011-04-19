@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class TeamMemberForm extends ActionForm {
 
@@ -24,6 +25,13 @@ public class TeamMemberForm extends ActionForm {
 	private int fromPage;
 	private Long headId;
 	private Long workspaceManId;
+	private boolean someError;
+	
+	private AmpTeamMember teamHead; //hold's workspace manager
+	private String teamLeaderExists; //TL exists or not
+	private Long workspaceManagerRoleId;  // Holds the "Team Head" role's id (amp_team_member_roles)
+	private String[] userIdsWithRoles;    // userId_RoleId
+	
 
 	
 	/**
@@ -228,4 +236,36 @@ public class TeamMemberForm extends ActionForm {
 	public void setWokspaceManId(Long wmId) {
 		this.workspaceManId = wmId;
 	}
+	public void setSomeError(boolean b) {
+		this.someError = b;
+		
+	}
+	public boolean getSomeError() {
+		return this.someError;
+		
+	}
+	public String[] getUserIdsWithRoles() {
+		return userIdsWithRoles;
+	}
+	public void setUserIdsWithRoles(String[] userIdsWithRoles) {
+		this.userIdsWithRoles = userIdsWithRoles;
+	}
+	public Long getWorkspaceManagerRoleId() {
+		return workspaceManagerRoleId;
+	}
+	public void setWorkspaceManagerRoleId(Long workspaceManagerRoleId) {
+		this.workspaceManagerRoleId = workspaceManagerRoleId;
+	}
+	public String getTeamLeaderExists() {
+		return teamLeaderExists;
+	}
+	public void setTeamLeaderExists(String teamLeaderExists) {
+		this.teamLeaderExists = teamLeaderExists;
+	}
+	public AmpTeamMember getTeamHead() {
+		return teamHead;
+	}
+	public void setTeamHead(AmpTeamMember teamHead) {
+		this.teamHead = teamHead;
+	}	
 }

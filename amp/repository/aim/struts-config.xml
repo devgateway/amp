@@ -1834,11 +1834,47 @@
 
    <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
    <action name="aimWorkspaceForm" path="/aim/exportWorkspaceManager2XSL" scope="session" type="org.digijava.module.aim.action.ExportWorkspaceManager2XSL"  validate="false"/>
-
    <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
    <action name="saveFmDescriptionForm" path="/aim/saveFMDescription"  scope="request" type="org.digijava.module.aim.action.SaveFmDescription"/>
 
 	<action path="/aim/getLastVersions" name="lastVersionsForm" scope="session" type="org.digijava.module.versioning.action.ViewLastVersions" />
+	<action name="aimWorkspaceForm" path="/aim/searchWorkspaces" scope="session" type="org.digijava.module.aim.action.SearchWorkspaces" validate="false"/>
+     <action name="aimTeamMemberForm" path="/aim/updateTeamMemberJSON" scope="request" type="org.digijava.module.aim.action.UpdateTeamMembers" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=aim_updateTeamMembersJSON" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action> 
+      <action name="aimTeamMemberForm" path="/aim/getTeamMemberDetailsJSON" scope="request" type="org.digijava.module.aim.action.GetTeamMemberDetails" validate="false">
+      <forward name="showUpdate" path="/showLayout.do?layout=aim_updateTeamMembersJSON" />
+      <forward name="forward" path="/aim/teamMembers.do" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>   
+     <action name="aimTeamMemberForm" path="/aim/showAddTeamMemberJSON" scope="session" type="org.digijava.module.aim.action.ShowAddTeamMember">
+      <forward name="showAddFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+      <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />
+    </action>
+        <action name="aimTeamMemberForm" path="/aim/addTeamMemberJSON" scope="session" type="org.digijava.module.aim.action.AddTeamMember" validate="false">
+      <forward name="addedFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+      <forward name="showAddFromAdmin" path="/showLayout.do?layout=aim_teamMembersAddFromAdminJSON" />
+    </action>
+     <action name="aimAssignActivityForm" path="/aim/assignActivityJSON" scope="request" type="org.digijava.module.aim.action.AssignActivity" validate="false">
+      <forward name="showAssignActivity" path="/showLayout.do?layout=aim_assignActivitiesJSON" />
+      <forward name="forward" path="/aim/teamActivitiesJSON.do"/>
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+      <action name="aimTeamMemberForm" path="/aim/searchAvailableUsers" scope="session" type="org.digijava.module.aim.action.GetAvailableUsersForWorkspaceJSON">
+    	 <forward name="addedFromAdmin" path="/aim/teamMembers.do" />
+    </action>
+    
+    <action name="aimTeamMemberForm" path="/aim/assignUsersToWorkspace" scope="session" type="org.digijava.module.aim.action.AssignUsersToWorkspace">
+    	 <forward name="error" path="/aim/showAddTeamMemberJSON.do?fromPage=1" />
+    	  <forward name="showAddFromAdmin" path="/aim/workspaceManager.do" />
+    	  <forward name="showAddFromTeam" path="/aim/teamMemberList.do" />
+    </action>
+     <action name="aimTeamMemberForm" path="/aim/teamMembersJSON" scope="request" type="org.digijava.module.aim.action.GetTeamMembersJSON" validate="false"/>
+      <action name="aimTeamActivitiesForm" path="/aim/teamActivitiesJSON" scope="request" type="org.digijava.module.aim.action.GetTeamActivitiesJSON" validate="false"/>
+     <action name="aimTeamActivitiesForm" path="/aim/removeTeamActivityJSON" scope="request" type="org.digijava.module.aim.action.RemoveTeamActivity" validate="false">
+	  <forward name="forward" path="/aim/teamActivitiesJSON.do" />
+    </action>
 	    
   </action-mappings>
 </struts-config>

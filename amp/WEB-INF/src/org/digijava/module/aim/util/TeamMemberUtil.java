@@ -25,7 +25,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -40,9 +39,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
-import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.hibernate.FlushMode;
@@ -1671,7 +1668,7 @@ public class TeamMemberUtil {
                     AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
                     
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
-                    removeLinksFromATMToActivity(relatedActivities, ampMember, teamHead);
+                    removeLinksFromATMToActivity(session,relatedActivities, ampMember, teamHead);
                    
                     String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
                     qry = session.createQuery(queryString);
@@ -1892,13 +1889,16 @@ public class TeamMemberUtil {
             }
         }
 
-    private static void removeLinksFromATMToActivity (Collection activities, AmpTeamMember atm, AmpTeamMember teamHead) {
+    private static void removeLinksFromATMToActivity (Session session,Collection activities, AmpTeamMember atm, AmpTeamMember teamHead) {
     	if (activities == null || atm == null) {
     		return;
     	}
     	Iterator iter 	= activities.iterator();
     	while ( iter.hasNext() ) {
     		AmpActivity act	= (AmpActivity) iter.next();
+    		if ( act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			act.setModifiedBy(null);
+    		}
     		if ( act.getUpdatedBy() != null && act.getUpdatedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setUpdatedBy(null);
     		}
@@ -1923,6 +1923,7 @@ public class TeamMemberUtil {
     				}
     			}
     		}
+    		session.update(act);
     	}
     }
 

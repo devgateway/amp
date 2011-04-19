@@ -6889,4 +6889,38 @@ public class DbUtil {
     
         }
     }
+	   public static class HelperUserNameComparatorAsc implements Comparator {
+	        public int compare(Object obj1, Object obj2) {
+	            User user1 = (User) obj1;
+	            User user2 = (User) obj2;
+	            return user1.getName().compareTo(user2.getName());
+	        }
+	    }
+	    public static class HelperUserNameComparatorDesc implements Comparator {
+	        public int compare(Object obj1, Object obj2) {
+	            User user1 = (User) obj1;
+	            User user2 = (User) obj2;
+	            return user2.getName().compareTo(user1.getName());
+	        }
+	    }
+
+	    /**
+	     * //for sorting users by Email
+	     * @author dare
+	     *
+	     */
+	    public static class HelperEmailComparatorAsc implements Comparator {
+	        public int compare(Object obj1, Object obj2) {
+	            User user1 = (User) obj1;
+	            User user2 = (User) obj2;
+	            return user1.getEmail().compareTo(user2.getEmail());
+	        }
+	    }
+	    public static class HelperEmailComparatorDesc implements Comparator {
+	        public int compare(Object obj1, Object obj2) {
+	            User user1 = (User) obj1;
+	            User user2 = (User) obj2;
+	            return user2.getEmail().compareTo(user1.getEmail());
+	        }
+	    }
 }

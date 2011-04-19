@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -131,18 +133,31 @@ public class AddTeamMember extends Action {
 				return mapping.findForward("showAddFromTeam");	
 			}				
 		}
+		/**
+		 *Incorrect checking, cos admin can have another emails !!!
+		 */	
 		/*check if user is not admin; as admin he can't be part of a workspace*/
-		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
-			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
-				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
-			}
-			else{
-				roles=TeamMemberUtil.getAllTeamMemberRoles();
-			}
-			upMemForm.setAmpRoles(roles);
-			errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberIsAdmin"));
-			saveErrors(request, errors);
-			logger.debug("Member is already existing");
+//		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
+//			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+//			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
+//			saveErrors(request, errors);
+//			upMemForm.setSomeError(true);
+//			logger.debug("Member is already existing");
+//			if (upMemForm.getFromPage() == 1) {
+//				logger.debug("Forwarding to showAddFromAdmin");
+//				return mapping.findForward("showAddFromAdmin");	
+//			} else {
+//				logger.debug("Forwarding to showAddFromTeam");
+//				return mapping.findForward("showAddFromTeam");	
+//			}
+//		}
+        Site site = RequestUtils.retreiveSiteDomain(request).getSite();        
+        boolean siteAdmin = UserUtils.isAdmin(user, site);
+        if(siteAdmin){ // should be impossible to ban admin
+        	errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamMemberIsAdmin"));
+        	saveErrors(request, errors);
+        	upMemForm.setSomeError(true);
+			logger.debug("Member is Admin");
 			if (upMemForm.getFromPage() == 1) {
 				logger.debug("Forwarding to showAddFromAdmin");
 				return mapping.findForward("showAddFromAdmin");	
@@ -182,7 +197,6 @@ public class AddTeamMember extends Action {
 			newAppSettings.setFiscalCalendar(ampAppSettings.getFiscalCalendar());
 			newAppSettings.setLanguage(ampAppSettings.getLanguage());
 			newAppSettings.setUseDefault(new Boolean(true));
-			Site site = RequestUtils.getSite(request);
 			try{
 				TeamUtil.addTeamMember(newMember,newAppSettings,site);
 			}catch (Exception e){

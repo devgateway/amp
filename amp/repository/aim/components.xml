@@ -439,6 +439,9 @@
 	<page page="selectPledgeProgram" name="selectPledgeProgram" title="AMP - Select Location" />
 
 <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
+	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
+	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
+	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />
 	
 </secondary-pages>
 <module>

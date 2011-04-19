@@ -714,6 +714,8 @@
                 <page>editdepartment</page>
                 <page>viewActivityHistory</page>
                 <page>myLastVersions</page>
+                <page>aim_assignActivitiesJSON</page>
+				<page>aim_updateTeamMembersJSON</page> 
             </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

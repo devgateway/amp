@@ -3201,32 +3201,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       logger.debug("Id is " + id);
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
 
       // modified by Priyajith
       // Desc: removed the usage of session.load and used the select query
       // start
-      String queryString = "select a from " + AmpActivity.class.getName()
+      String queryString = "select a from " + AmpActivityVersion.class.getName()
           + " a " + "where (a.ampActivityId=:id)";
       Query qry = session.createQuery(queryString);
-      qry.setParameter("id", id, Hibernate.LONG);
-      Iterator itr = qry.list().iterator();
-      while (itr.hasNext())
-        activity = (AmpActivity) itr.next();
+      qry.setLong("id", id);
+      activity =(AmpActivity)qry.uniqueResult();
       // end
     }
     catch (Exception ex) {
       logger
           .error("Unable to get Amp Activity getProjectChannelOverview() :"
                  + ex);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception ex2) {
-        logger.error("releaseSession() failed ");
-      }
     }
     return activity;
   }
@@ -4218,8 +4208,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	
 	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
 		  try {
-	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a left join a.member m WHERE " +
-	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)";
+	            String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName()  + " a left join a.member m WHERE " +
+	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
 	            Query qry = session.createQuery(queryStr);
 	            qry.setLong("atmId", ampTeamMemberId);
 	            

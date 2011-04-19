@@ -6,17 +6,516 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
+<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
 
 
-<script langauage="JavaScript">
+
+<style>
+.yui-skin-sam .yui-dt thead th,.yui-skin-sam .yui-dt .yui-dt-data td {
+	border-color: #CCC;
+	border-style: none solid solid none;
+	border-width: medium 1px 1px medium;
+}
+
+.yui-skin-sam .yui-dt thead th {
+	border-color: #FFF;
+	background-color: #C7D4DB;
+	color: #000;
+	height: 30px;
+	text-align: center;
+}
+
+.yui-skin-sam .yui-dt th .yui-dt-liner {
+	font-size: 12px;
+	text-align: center;
+	font-weight: bold;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	border-color: #CCC;
+}
+
+.yui-skin-sam .yui-dt td .yui-dt-liner {
+	font-size: 12px;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+.yui-skin-sam a.yui-pg-page {
+	padding-right: 10px;
+	font-size: 11px;
+	border-right: 1px solid rgb(208, 208, 208);
+}
+
+.yui-skin-sam .yui-pg-pages {
+	border: 0px;
+	padding-left: 0px;
+}
+
+.yui-pg-current-page {
+	background-color: #FFFFFF;
+	color: rgb(208, 208, 208);
+	padding: 0px;
+}
+
+.current-page {
+	background-color: #FF6000;
+	color: #FFFFFF;
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.yui-pg-last {
+	border: 0px
+}
+
+.yui-skin-sam span.yui-pg-first,.yui-skin-sam span.yui-pg-previous,.yui-skin-sam span.yui-pg-next,.yui-skin-sam span.yui-pg-last
+	{
+	display: none;
+}
+
+.yui-skin-sam a.yui-pg-first {
+	margin-left: 2px;
+	padding-right: 7px;
+	border-right: 1px solid rgb(208, 208, 208);
+}
+
+
+</style>
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
+
+            
+ <style type="text/css" media="print">
+ .yui-skin-sam tr.yui-dt-selected td {
+   border-style:solid;
+   border-color:#000000;
+   }
+ </style>
+ <digi:ref href="css/printTable.css" type="text/css" rel="stylesheet" media="print" />
+
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+   .toolbar{
+	width: 50px;
+	background: #addadd;
+	background-color: #addadd;
+	padding: 3px 3px 3px 3px;
+	position: relative;
+	top: 10px;
+	left: 10px;
+	bottom: 100px;
+}
+.toolbartable{
+	border-color: #FFFFFF;
+	border-width: 2px;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-style: solid;
+}
+.yui-tt {
+	visibility: hidden;
+	position: absolute;
+	color: #000;
+	background-color: #FFF;
+	font-size: 11px;
+	padding: 2px;
+	border: 1px solid #CCC;
+	width: auto;
+}
+		
+</style>
+<!-- Individual YUI JS files --> 
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript">
+
+
+		YAHOO.namespace("YAHOO.amp");
+
+		var myPanel = new YAHOO.widget.Panel("newpopins", {
+			width:"450px",
+			height:"250px",
+			fixedcenter: true,
+		    constraintoviewport: false,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"]
+		    });
+	var panelStart;
+	var checkAndClose=false;
+	var lastFunction="";
+   
+	    
+	function initWorkspaceManagerPopinScript() {
+		var msg='\n<digi:trn>Select Indicator</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			myclose();
+		}); 
+		myPanel.render(document.body);
+		panelStart = 0;
+		
+	}
+	
+	
+
+</script>
+<script language="JavaScript">
+    var tooltipPanel;
+    var viewTeamDetails='';
+   
+
+    
+
+    function initWorkspaceManagerScript(){
+    	initWorkspaceManagerPopinScript();
+    	 initDynamicTable();
+    }
+
+YAHOO.util.Event.addListener(window, "load", initWorkspaceManagerScript);
+	function initDynamicTable() {
+		
+    YAHOO.example.XHR_JSON = new function() {
+ 	
+       	         
+        this.formatActions = function(elCell, oRecord, oColumn, sData) {
+        	elCell.innerHTML = 
+        	"<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"<a onclick='setViewTemDetails()' href=/aim/deleteWorkspace.do~event=delete~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+        	"[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
+        };
+        
+        this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
+        	elCell.innerHTML = 
+        	'<a href="JavaScript:showTeamDetails(' +oRecord.getData( 'ID' )+',  \''+oRecord.getData( 'name' )+'\');" title="<digi:trn>Click here to view Details</digi:trn>">' + oRecord.getData( 'name' ) + '</a>'
+        };
+
+        this.formatTeamName = function(elCell, oRecord, oColumn, sData) {
+            var childrenWorkspaces=oRecord.getData( 'childrenWorkspaces' );
+            var children="";
+            if(childrenWorkspaces.length>0){
+                children+='<ul>';
+                for(var i=0;i<childrenWorkspaces.length;i++){
+                    var childrenWorkspace=childrenWorkspaces[i];
+                    children+='<li>'+childrenWorkspace.name+'</li>';
+                }
+                children+='</ul>';
+            }
+            var childrenOrganizations=oRecord.getData( 'childrenOrganizations' );
+            var compOrgs='';
+            if(childrenOrganizations.length>0){
+                compOrgs='<br/><digi:trn jsFriendly="true">Children Organization(s)</digi:trn>';
+                compOrgs+='<ul>';
+                for(var i=0;i<childrenOrganizations.length;i++){
+                    var childOrg=childrenOrganizations[i];
+                    compOrgs+='<li>'+childOrg.name+'</li>';
+                }
+                compOrgs+='</ul>';
+            }
+         var name=oRecord.getData( 'name' ).replace("\'", "\\'");
+            elCell.innerHTML =
+               oRecord.getData( 'name' ) 
+                +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
+                '<ul>'+
+                '<li><digi:trn>'+oRecord.getData( 'accessType' )+'</digi:trn></li>'+
+                '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
+                '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+oRecord.getData( 'computation' )+compOrgs+'</digi:trn></li>'+
+                 '</ul>'+
+                '</div>';
+        };
+       
+        this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
+        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+        this.myDataSource.connMethodPost = true;
+        //this.myDataSource.connXhrMode = "queueRequests";
+        this.myDataSource.responseSchema = {
+            resultsList: "workspaces",
+            fields: ["ID","name","accessType","computation","childrenOrganizations","childrenWorkspaces"],
+            metaFields: {
+            	totalRecords: "totalRecords" // Access to value in the server response
+        	}    
+        };
+        
+        
+        var myColumnDefs = [
+            {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250,formatter:this.formatTeamName},
+            {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 150, formatter:this.formatActions,className:"ignore"}
+        ];
+  
+        var div = document.getElementById('errors');
+
+        var handleSuccess = function(o){
+        	if(o.responseText != undefined){
+        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
+        	}
+        }
+
+        var handleFailure = function(o){
+        	if(o.responseText !== undefined){
+        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+        		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+        	}
+        }
+        // Create the Paginator 
+        var myPaginator = new YAHOO.widget.Paginator({ 
+        	rowsPerPage:10,
+        	containers : ["dt-pag-nav"], 
+        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
+        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startIndex} - {endIndex} <digi:trn>of</digi:trn> {totalRecords}</span>", 
+        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
+        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+        	firstPageLinkClass : "yui-pg-first l_sm",
+        	lastPageLinkClass: "yui-pg-last l_sm",
+        	nextPageLinkClass: "yui-pg-next l_sm",
+        	previousPageLinkClass: "yui-pg-previous l_sm",
+        	rowsPerPageDropdownClass:"l_sm",
+        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
+        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>'
+        });   
+        var myConfigs = {
+            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
+            dynamicData: true, // Enables dynamic server-driven data
+            sortedBy : {key:"name", dir:YAHOO.widget.DataTable.CLASS_ASC}, // Sets UI initial sort arrow
+            //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
+            paginator:myPaginator
+        };
+    	 
+        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
+        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+        this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
+ 		this.myDataTable.subscribe("rowClickEvent", function (ev) {
+				var target = YAHOO.util.Event.getTarget(ev);
+				var record = this.getRecord(target);
+				showTeamDetails(record.getData('ID'), record.getData('name'));
+				hideToolTip();
+			});
+        
+        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+        // Programmatically bring focus to the instance so arrow selection works immediately 
+        this.myDataTable.focus(); 
+
+        // Update totalRecords on the fly with value from server
+        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+           oPayload.totalRecords = oResponse.meta.totalRecords;
+           return oPayload;
+       }
+      //further lines are for generating tooltips
+        var showTimer,hideTimer;				
+        var tt = new YAHOO.widget.Tooltip("myTooltip");
+    	
+        this.myDataTable.on('cellMouseoverEvent', function (oArgs) {
+    		if (showTimer) {
+    			window.clearTimeout(showTimer);
+    			showTimer = 0;
+    		}
+
+    		var target = oArgs.target;
+    		var column = this.getColumn(target);
+    		if (column.key == 'name') {
+    			var record = this.getRecord(target);
+    			
+    	
+    		var tooltipid="tooltip"+record.getData('ID');
+  		      var tooltipDiv=document.getElementById(tooltipid);
+  		      var tooltipText=tooltipDiv.innerHTML;
+    		      
+
+                if(tooltipText!=null && tooltipText.length > 0){
+                    var event=oArgs.event;
+                    var x = 0;
+                    var y = 0;
+
+                    if (document.all) { //IE
+                        x = event.clientX + document.body.scrollLeft;
+                        y = event.clientY + document.body.scrollTop;
+                    }
+                    else {
+                        x = event.pageX;
+                        y = event.pageY;
+                    }
+    				var xy = [x,y];
+
+    				showTimer = window.setTimeout(function() {
+    					tt.setBody(tooltipText);
+                        tt.cfg.setProperty('xyoffset',[10,10]);
+                        tt.cfg.setProperty('xy',xy);
+    					tt.show();
+    					hideTimer = window.setTimeout(function() {
+    						tt.hide();
+    					},5000);
+    				},500);
+    					
+    			}
+    			
+    		}
+    	});
+    	
+        this.myDataTable.on('cellMouseoutEvent', function (oArgs) {
+    		if (showTimer) {
+    			window.clearTimeout(showTimer);
+    			showTimer = 0;
+    		}
+    		if (hideTimer) {
+    			window.clearTimeout(hideTimer);
+    			hideTimer = 0;
+    		}
+    		tt.hide();
+    	});
+       
+    };
+  
+	       
+   
+};
+    
+
+
+	function setViewTemDetails() {
+		viewTeamDetails='false';
+	}
+</script>
+
+
+
+<script language="JavaScript">
+    <!--
+   
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    
+    
+    var responseSuccess = function(o){
+		var response = o.responseText; 
+		var content = document.getElementById("popinContent");
+		content.innerHTML = response;
+		showContent();
+	}
+ 
+	var responseFailure = function(o){ 
+		alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+	}
+	function refreshPage(){
+		if(lastFunction==="showDetails"){
+			showDetails();
+		}
+		lastFunction="";
+	}
+
+	function myclose(){
+		var content = document.getElementById("popinContent");
+		content.innerHTML="";
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+	}
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+		showContent();
+	}
+	function addNewUser()	{
+		var msg='\n<digi:trn>AMP View Settings</digi:trn>';
+		showPanelLoading(msg);
+		<digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
+		var url = "<%=commentUrl %>";
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+	}
+
+	-->
+
+</script>
+
+
+<script language="JavaScript">
+	var oldKeyword="", oldWorkspaceType="";
 	function onDelete() {
 		var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
 		return flag;
 	}
 	function openNpdSettingsWindow(ampTeamId){
-		var url=addActionToURL('npdSettingsAction.do');
-        url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId;
-        openURLinResizableWindow(url,600,400);
+		var msg='\n<digi:trn>AMP View Settings</digi:trn>';
+		myPanel.cfg.setProperty("width","450px");
+		myPanel.cfg.setProperty("height","250px"); 			
+		showPanelLoading(msg);
+		<digi:context name="commentUrl" property="context/module/moduleinstance/npdSettingsAction.do"/>  
+		var url = "<%=commentUrl %>";
+		url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
 	}
 	function addActionToURL(actionName){
 		var fullURL=document.URL;
@@ -24,111 +523,528 @@
 		var partialURL=fullURL.substring(0,lastSlash);
 		return partialURL+"/"+actionName;
 	}
-
-	function exportXSL() {
-		var teams = "";
-		$(".teamsOnpage").each(function(i, element) {
-			teams += "~team=" + element.id;
-		});
-		<digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
-		document.aimWorkspaceForm.action = "${exportUrl}" + teams;
-		document.aimWorkspaceForm.target = "_blank";
-		document.aimWorkspaceForm.submit();
+	function getParams(){
+		ret = "";
+		ret += "keyword="+document.getElementsByName('keyword')[0].value+"&workspaceType="+document.getElementsByName('workspaceType')[0].value;
+		return ret;
+	}
+	
+	function resetPage(){
+		if(oldKeyword != document.getElementsByName('keyword')[0].value  || oldWorkspaceType != document.getElementsByName('workspaceType')[0].value){
+			oldKeyword=document.getElementsByName('keyword')[0].value;
+			oldWorkspaceType=document.getElementsByName('workspaceType')[0].value;
+			<digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>  
+			var url = "<%=commentUrl %>";
+			url += "?"+getParams();
+			var async=new Asynchronous();
+			async.complete=initDynamicTable;
+			async.call(url);
+		}
 	}
 </script>
-<DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<script langauage="JavaScript" type="text/javascript">
 	
+
+	function validateValues(){
+		 var errmsg='';
+                 var ampTeamId=document.getElementById('ampTeamId').value;
+		 var width=document.getElementById('width').value;
+		 var height=document.getElementById('height').value;
+		 var angle=document.getElementById('angle').value;
+                 var pageSize=document.getElementById('pageSize').value;
+		 //*** Validate width
+		 if(parseInt(width)==(width-0)){		   	
+			 if(parseInt(width)<10 || parseInt(width)>1000){
+			 	errmsg+='\n<digi:trn>Width must be in range from 10 to 1000</digi:trn>';
+			 }
+		 }else{
+		 	errmsg+='\n<digi:trn>Please enter correct width</digi:trn>';
+		 }		 
+		 //***Validate height
+		 if(parseInt(height)==(height-0)) {
+		 	if(parseInt(height)<10 || parseInt(height)>1000){
+			 	errmsg+='\n<digi:trn>Height must be in range from 10 to 1000</digi:trn>';
+		 	}
+		 }else{
+		 	errmsg+='\n<digi:trn>Please enter correct height</digi:trn>';
+		 }		 
+		 //***Validate angle	
+
+			if(angle!=''){
+		  		if(parseInt(angle)==(angle-0)) {
+		 			if(parseInt(angle)<0 || parseInt(angle)>90){
+			 			errmsg+='\n<digi:trn>Angle of inclination must be in range from 0 to 90</digi:trn>';
+					}
+		 		}else{
+		 			errmsg+='\n<digi:trn>Please enter correct angle</digi:trn>';
+		 		}
+			}
+
+		//***validate activities per page
+		if(pageSize!=''){
+			var validChars='^[0-9]*$';
+			if(!pageSize.match(validChars)){
+				errmsg+='\n<digi:trn>Please enter correct number of pages</digi:trn>';
+			}
+		}
+		 
+		 //***Validate error messages
+		 if (errmsg==''){
+			saveSettings(ampTeamId,width,height,angle,pageSize);
+		 } else{
+			alert(errmsg);
+			return false;
+		 }
+	}
+
+    function saveSettings(ampTeamId,width,height,angle,pageSize){
+		lastTimeStamp = new Date().getTime();
+        <digi:context name="changeSett" property="context/module/moduleinstance/npdSettingsAction.do?actionType=changeSettings"/>
+        var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
+		var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
+		checkAndClose=true;
+		YAHOO.util.Connect.asyncRequest("POST",url+"?"+params, callback, '');
+	}
+</script>
+<script language="JavaScript">
+
+function updateTableMembers(members){
+
+    var demo       = YAHOO.util.Dom.get('demo'),
+        tbl        = demo.getElementsByTagName('table')[0],
+        tbody      = tbl.getElementsByTagName('tbody')[0],
+        tmp        = document.createElement('div'),
+        html       = ["<table id=\"dataTable\"><tbody>"],i,j = 1,l,item;
+
+    if (members && members.length>0) {
+        for (i = 0, l = members.length; i < l; ++i) {
+            item = members[i];
+            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
+            html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
+            html[j++] = '</td><td align=\'center\' width="100" class="reportsBorderTD">';
+            html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
+            html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
+            html[j++] = '</td></tr>';
+        }
+        document.getElementById('footerMessage').innerHTML='<em><digi:trn>* Worskpace Manager</digi:trn></em>';
+    } else {
+        html[j++] = '<tr><td colspan="2"><em><digi:trn>No Member data</digi:trn><em></td></tr>';
+        document.getElementById('footerMessage').innerHTML='';
+    }
+    html[j] = "</tbody></table>";
+
+    tmp.innerHTML = html.join('');
+
+    tbl.replaceChild(tmp.getElementsByTagName('tbody')[0], tbody);
+    
+       
+}
+function memberAction(action, id){
+	var msg='<digi:trn>Delete Member</digi:trn>';
+	if(action==='edit'){
+		msg='<digi:trn>Edit Member</digi:trn>'
+	}
+	myPanel.cfg.setProperty("width","400px");
+	myPanel.cfg.setProperty("height","350px"); 
+	showPanelLoading(msg);	
+	<digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
+	var url = "<%=commentUrl %>";
+	url += "?action="+action+"&id="+id;
+	YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+}
+function confirmActionMember(){
+	if(validateAction()){
+		checkAndClose=true;
+		lastFunction="showDetails";
+		<digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>  
+		var url = "<%=commentUrl %>";
+		url += "?teamId="+document.getElementsByName('teamId')[0].value+
+		"&teamMemberId="+document.getElementsByName('teamMemberId')[0].value+
+		"&action="+document.getElementsByName('action')[0].value+
+		"&userId="+document.getElementsByName('userId')[0].value+
+		"&name="+document.getElementsByName('name')[0].value+
+		"&role="+document.getElementsByName('role')[0].value;
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+	}	
+}
+
+function validateAction(){
+	if(document.getElementsByName('action')[0].value==='edit' && document.getElementsByName('role')[0].selectedIndex==0){
+		alert("<digi:trn>Please select the role</digi:trn>");
+		return false;
+	}
+	return true;			
+}
+function updateTableActivities(members){
+
+    var demo       = YAHOO.util.Dom.get('demo'),
+        tbl        = demo.getElementsByTagName('table')[0],
+        tbody      = tbl.getElementsByTagName('tbody')[0],
+        tmp        = document.createElement('div'),
+        html       = ["<table id=\"dataTable\"><tbody>"],i,j = 1,l,item;
+
+    if (members && members.length>0) {
+        for (i = 0, l = members.length; i < l; ++i) {
+            item = members[i];
+            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
+            html[j++] = item.name;
+            html[j++] = '</td ><td align=\'center\' width="100" class="reportsBorderTD">';
+            html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn>Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/images/deleteIcon.gif\'/>' + '</a>';
+            html[j++] = '</td></tr>';
+        }
+        
+    } else {
+        html[j++] = '<tr><td colspan="2"><em><digi:trn>No Activities</digi:trn></em></td></tr>';
+    }
+    document.getElementById('footerMessage').innerHTML='';
+    html[j] = "</tbody></table>";
+
+    tmp.innerHTML = html.join('');
+
+    tbl.replaceChild(tmp.getElementsByTagName('tbody')[0], tbody);
+    
+        
+}
+function removeActivity(id){
+	<digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
+	var url = "<%=commentUrl %>";
+	url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
+    YAHOO.util.Connect.asyncRequest('GET',url,{
+
+        success : function (res) {
+    		document.getElementById('ws_go').disabled=true;
+            var activities;
+            try {
+            	activities = YAHOO.lang.JSON.parse(res.responseText);
+                updateTableActivities(activities);
+            }
+            catch(e) {
+                alert("<digi:trn>Error getting activity data</digi:trn>");
+            }
+            finally {
+                document.getElementById('ws_go').disabled=false;
+            }
+        },
+        failure : function () {
+            alert("<digi:trn>Error getting activity data</digi:trn>");
+        }
+        
+    });
+}
+
+
+function showTeamMembers(id, description){
+	var timestamp=new Date().getTime();
+
+    YAHOO.util.Connect.asyncRequest('GET','/aim/teamMembersJSON.do?teamId='+id+"&timestamp="+timestamp,{
+
+        success : function (res) {
+    		document.getElementById('ws_go').disabled=true;
+            var members;
+            try {
+                members = YAHOO.lang.JSON.parse(res.responseText);
+                updateTableMembers(members);
+            	document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
+            	document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
+            }
+            catch(e) {
+                alert("<digi:trn>Error getting members data</digi:trn>");
+            }
+            finally {
+                document.getElementById('ws_go').disabled=false;
+            }
+        },
+        failure : function () {
+            alert("<digi:trn>Error getting members data</digi:trn>");
+        }
+        
+    });
+}
+function showActivities(id, description){
+	
+	var timestamp=new Date().getTime();
+    YAHOO.util.Connect.asyncRequest('GET','/aim/teamActivitiesJSON.do?id='+id+"&timestamp="+timestamp,{
+
+        success : function (res) {
+    		document.getElementById('ws_go').disabled=true;
+            var members;
+            try {
+                members = YAHOO.lang.JSON.parse(res.responseText);
+                updateTableActivities(members);
+            	document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
+            	document.getElementById('addNew').innerHTML='<a title="Click here to Assign Activity" href=\'JavaScript:addActivities('+id+')\'>Assign an activity</a>';
+
+            }
+            catch(e) {
+                alert("Error getting members data");
+            }
+            finally {
+                document.getElementById('ws_go').disabled=false;                            
+            }
+        },
+        failure : function () {
+            alert("Error getting members data");
+        }
+        
+    });
+}
+
+var responseSuccessJson = function(o){
+	//initDynamicTable1();
+	var response = o.responseText; 
+	var content = document.getElementById("popinContent");
+	content.innerHTML = response;
+	showContent();
+}
+
+var responseFailureJson = function(o){ 
+	alert("Connection Failure!"); 
+}  
+var jsonCallback = 
+{ 
+	success:responseSuccessJson, 
+	failure:responseFailureJson 
+};
+
+function assignNewMember(){
+	<digi:context name="exportUrl" property="context/module/moduleinstance/showAddTeamMemberJSON.do"/>;
+    document.aimWorkspaceForm.action="${exportUrl}?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value;
+    document.aimWorkspaceForm.target="_self";
+    document.aimWorkspaceForm.submit();	
+}
+function saveAddedMember(){
+	if(validateAddedMember()){
+		checkAndClose=true;
+		lastFunction="showDetails";
+		var msg='<digi:trn>Assign Member</digi:trn>';
+		<digi:context name="commentUrl" property="context/module/moduleinstance/addTeamMemberJSON.do"/>;
+		var url = "<%=commentUrl %>";
+		url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value+"&email="+document.getElementsByName('email')[0].value+"&role="+document.getElementsByName('role')[0].value;
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+	}	
+}
+function validateAddedMember(){
+	if(document.getElementsByName('role')[0].selectedIndex==0){
+		alert("<digi:trn>Role not entered</digi:trn>");
+		return false;
+	}
+	return true;
+}
+function addActivities(id){
+	var msg='<digi:trn>Assign Activities</digi:trn>';
+	myPanel.cfg.setProperty("width","500px");
+	myPanel.cfg.setProperty("height","400px"); 
+	showPanelLoading(msg);
+
+	<digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>  
+	var url = "<%=commentUrl %>";
+	url += "~id="+id;
+	
+
+	YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+
+}
+
+function showDetails(){
+	id = document.getElementsByName('teamId')[0].value;
+	desc = document.getElementsByName('teamName')[0].value;
+	if(id===""||desc===""){
+		alert("<digi:trn>Select a Team First</digi:trn>");
+		return;
+	}
+	
+	value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
+	if(value==0){
+		showTeamMembers(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);			
+	}
+	else{
+		showActivities(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);		
+	}
+}
+function showTeamDetails(id, description){
+
+	document.getElementsByName('teamId')[0].value=id;
+	document.getElementsByName('teamName')[0].value=description;
+	
+	if(viewTeamDetails!='false'){
+		value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
+		if(value==0){
+			showTeamMembers(id, description);			
+		}
+		else{
+			showActivities(id, description);		
+		}
+	}else{
+		viewTeamDetails='true';
+	}
+	
+}
+
+</script>
+<script language=javascript>
+function showMemberProfile(id){
+	var param = "~edit=true~id="+id;
+    previewWorkspaceframe('/aim/default/userProfile.do',param);
+	
+}
+function confirmDelete() {
+	var flag = confirm("<digi:trn>Are you sure you want to remove the selected activity</digi:trn>");
+	if(flag == false)
+		return false;
+	else 
+		return true;
+}
+</script>
+<script language="javascript">
+ function validate(){
+	var result=false
+	if(document.getElementsByName("selectedActivities")!=null){
+		var sectors = document.getElementsByName("selectedActivities").length;
+		for(var i=0; i< sectors; i++){
+			if(document.getElementsByName("selectedActivities")[i].checked){
+				result=true;
+				break;
+			}
+		}
+	} 
+	if(!result){
+		alert('<digi:trn>Please, Select an Activity First</digi:trn>')
+	}
+	return result;
+}
+
+function checkall() {
+	var selectbox = document.aimAssignActivityForm.checkAll;
+	if (document.aimAssignActivityForm.selectedActivities.type=="checkbox"){
+		document.aimAssignActivityForm.selectedActivities.checked=selectbox.checked;
+	}else{
+		var items = document.aimAssignActivityForm.selectedActivities;
+		for(i=0;i<items.length;i++){
+		 	document.aimAssignActivityForm.selectedActivities[i].checked = selectbox.checked;
+		}
+	}
+  }
+function assignActivityList(){
+	ret="";
+	if(document.getElementsByName("selectedActivities")!=null){
+		var sectors = document.getElementsByName("selectedActivities").length;
+		for(var i=0; i< sectors; i++){
+			if(document.getElementsByName("selectedActivities")[i].checked){
+				ret+=document.getElementsByName("selectedActivities")[i].name+"="+document.getElementsByName("selectedActivities")[i].value+"&";
+			}
+		}
+	} 
+	if(validate()){
+		checkAndClose=true;
+		lastFunction="showDetails";
+		<digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
+		var url = "<%=commentUrl %>";
+		url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
+		YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+	}
+	else{
+		alert('<digi:trn>Validation Error</digi:trn>')
+	}
+	
+}
+</script>
+<script language="javascript">
+  function exportXSL(){
+    var teams=""
+   $(".teamsOnpage").each(function (i,element){
+       teams+="~team="+element.value;
+   })
+     <digi:context name="exportUrl" property="context/module/moduleinstance/exportWorkspaceManager2XSL.do"/>;
+        document.aimWorkspaceForm.action="${exportUrl}"+teams;
+        document.aimWorkspaceForm.target="_blank";
+        document.aimWorkspaceForm.submit();
+  }
+
+</script> 
+
+<DIV id="TipLayer"	style="absolute;z-index:1000;"></DIV>
+
 <digi:instance property="aimWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
-<!-- End of Logo -->
-<table cellPadding=0 cellspacing="0" width="1000" border="0" align=center>
+
+
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=900>
+	<tr>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=850>
+			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2F2 style="padding-left:5px;"><span class=crumb>
+					<td height=33><span class=crumb>
 						<c:set var="translation">
 							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn>Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn><b>Workspace Manager</b></digi:trn>	
+						<digi:trn>Workspace Manager</digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td style="padding-top:15px;" align="center">
-                    	<span class=subtitle-blue><digi:trn><b style="font-size:12px;">Workspace Manager</b></digi:trn></span>
-						<hr />
+					<td height="16" vAlign="center" width="571">
+                    	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
-					<td height="16" vAlign="center">
+					<td height="16" vAlign="center" width="571">
 						<digi:errors />
 					</td>
 				</tr>
+				<tr><td align="left">              
+                            <div class="otherLinks toolbar" align="center">
+                                <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+                                    <tr>
+                                        <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
+                                            <a target="_blank" onclick="exportXSL(); return false;">
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+                                            </a>
+                                        </td>
 
-			<tr>
-			<td>
-			<table cellspacing="0" class="report_indicator" cellpadding="0" border="0" align="center" width="1000">
-				<tbody>
-					<tr>
-						<td valign="top">
-						<div class="tab_opt_box">
-						<div class="tab_opt">
-						<div class="tab_opt_cont"><a href="#" target="_blank"
-							onclick="exportXSL(); return false;" class="l_sm"> <img
-							border="0" src="/TEMPLATE/ampTemplate/img_2/ico-excel.png"></a>&nbsp;<a
-							href="#" onclick="exportXSL(); return false;" class="l_sm">Export
-						to Excel</a> &nbsp;&nbsp; <a href="#"
-							onclick="window.print(); return false;" class="l_sm"><img
-							border="0" src="/TEMPLATE/ampTemplate/img_2/ico-print.png"></a>&nbsp;<a
-							href="#" onclick="window.print(); return false;" class="l_sm">Print</a>
-						</div>
-						</div>
-						</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<td>
-			</tr>
-
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
-	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
-			
-
-
-			<tr>
+                                        <td noWrap align=left valign="middle">
+                                            <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly"/>
+                                            </digi:link>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                </td></tr>
+				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
-					<tr><td noWrap width="750" vAlign="top">
-						<table cellPadding="1" cellSpacing="1" width="100%" valign="top">
+					<tr><td noWrap width="50%" vAlign="top">
+						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor=#C7D4DB class=box-title height="25" align="center">
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn><b style="font-size:12px;">Teams</b></digi:trn>
+											<digi:trn>Teams</digi:trn>
 											<!-- end table title -->
-										</td></tr>
+										</td>
+										</tr>
 										<tr><td>&nbsp;</td></tr>
 										
 										<digi:form action="/workspaceManager.do?page=1" method="post">
-										<tr><td class="box-title" align="center">
+										<tr><td class="box-title" align="left">
 											<!-- Table title -->
-											<table width="100%" style="font-size:12px;" bgcolor=#F2F2F2>
+											<table width="100%" class="filter" >
 												<tr>
+						
 													<td>
 													<digi:trn>keyword</digi:trn>:&nbsp;
 										              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
 													</td>
 													
 													<td align="center">
-														<digi:trn>Workspace Type</digi:trn>:&nbsp;
+														<digi:trn>Type</digi:trn>:&nbsp;
 														<html:select property="workspaceType" styleClass="inp-text">
 															<html:option value="all"><digi:trn>All</digi:trn></html:option>
 															<html:option value="team"><digi:trn>Team</digi:trn></html:option>
@@ -136,134 +1052,50 @@
 															<html:option value="computed"><digi:trn>Computed</digi:trn></html:option>
 														</html:select>
 													</td>
-													
-													<td align="center">
-														<digi:trn>Results</digi:trn>:&nbsp;
-														<html:select property="numPerPage" styleClass="inp-text">
-															<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-															<html:option value="5">5</html:option>
-															<html:option value="10">10</html:option>
-															<html:option value="20">20</html:option>
-															<html:option value="50">50</html:option>
-														</html:select>
-													</td>													
-													<td align="right">
+													<td align="left">
 													<c:set var="translation">
 										                <digi:trn>Show</digi:trn>
 										            </c:set>
-										            <input type="submit" value="${translation}"  class="buttonx" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
+										            <input type="button" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
 													</td>
 												</tr>
 											</table>
 											<!-- end table title -->
 										</td></tr>
 										</digi:form>
-										<tr><td>&nbsp;</td></tr>
 										<tr><td>
-											<table width="100%" valign="top" align="left" class="inside">
+											<c:set var="translation">
+										       <digi:trn>Click here to Add Teams</digi:trn>
+										    </c:set>
+											<digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
+												<digi:trn>Add Team</digi:trn>
+											</digi:link>
+										</td></tr>
+										<tr><td>
+											<table width="100%" cellspacing="1" cellpadding="0" valign="top" align="left" >
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
 													<tr bgcolor="#ffffff">
-														<td colspan="5" align="center" class="inside"><b>
+														<td colspan="5" align="center"><b>
 															<digi:trn>No teams present</digi:trn>
 														</b></td>
 													</tr>
 													</logic:empty>
 													<logic:notEmpty name="aimWorkspaceForm" property="workspaces">
-													<logic:iterate name="aimWorkspaceForm" property="workspaces"id="workspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
-													<tr class="teamsOnpage" id="${workspaces.ampTeamId}">
-														<td bgcolor="#ffffff" class="inside">
-															<c:set var="teamWrk" value="${workspaces}" target="request" scope="request" />
-															<jsp:include page="teamDetailsPopup.jsp" />
-														</td>
-														<td bgcolor="#ffffff" width="70" align="center" class="inside">
-										 					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams}" property="teamId">
-															<bean:write name="workspaces" property="ampTeamId" />
-															</c:set>
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>
-															</c:set>
-															[ <digi:link href="/teamMembers.do" name="urlParams" title="${translation}" >
-																<digi:trn>Members</digi:trn>
-															</digi:link> ]
-														</td>
-														<td bgcolor="#ffffff" width="70" align="center" class="inside">
-															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams1}" property="id">
-															<bean:write name="workspaces" property="ampTeamId" />
-															</c:set>
-															<c:set var="translation">
-																<digi:trn>Click here to view Activities</digi:trn>
-															</c:set>
-															[ <digi:link href="/teamActivities.do" name="urlParams1" title="${translation}" >
-																<digi:trn>Activities</digi:trn>
-															</digi:link> ]
-														</td>
-														<td bgcolor="#ffffff" width="65" align="center" class="inside">
-															<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams22}" property="tId">
-																<bean:write name="workspaces" property="ampTeamId" />
-															</c:set>
-															<c:set target="${urlParams22}" property="event" value="edit" />
-															<c:set target="${urlParams22}" property="dest" value="admin" />
-															
-															<c:set var="translation">
-																<digi:trn>Click here to Edit Workspace</digi:trn>
-															</c:set>
-															[ <digi:link href="/getWorkspace.do" name="urlParams22" title="${translation}" >
-																<digi:trn>Edit</digi:trn>
-															</digi:link> ]
-														</td>
-														<td bgcolor="#ffffff" width="75" align="center" class="inside">
-															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="tId">
-																<bean:write name="workspaces" property="ampTeamId" />
-															</c:set>
-															<c:set target="${urlParams4}" property="event" value="delete"/>
-															<c:set var="translation">
-																<digi:trn>Click here to Delete Workspace</digi:trn>
-															</c:set>
-															[ <digi:link href="/deleteWorkspace.do" name="urlParams4"
-																title="${translation}" onclick="return onDelete()">
-																<digi:trn>Delete</digi:trn>
-																</digi:link> ]
-														</td>
-														<td bgcolor="#ffffff" align="center" nowrap class="inside">
-															[<a href="JavaScript:openNpdSettingsWindow(${workspaces.ampTeamId});">
-																<digi:trn>Npd Settings</digi:trn>
-															</a>]
+													<tr>
+														<td width="70%">
+															<div class='yui-skin-sam'>
+                                                                <div id="dynamicdata" class="report"></div>
+																<div id="dt-pag-nav"></div>
+																<div id="errors"></div>
+																<div id="tooltipsCtx"></div>
+															</div>
 														</td>
 													</tr>
-													</logic:iterate>
-
-													<!-- page logic for pagination -->
-													<logic:notEmpty name="aimWorkspaceForm" property="pages">
-													<tr bgcolor="#ffffff">
-														<td colspan="5" class="inside">
-															<digi:trn>Pages :</digi:trn>
-															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
-															type="java.lang.Integer">
-															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
-															<c:set var="translation">
-																<digi:trn>Click here to view All pages</digi:trn>
-															</c:set>
-															<c:if test="${aimWorkspaceForm.page==pages}">
-																<font color="red"><%=pages%></font> |&nbsp;
-															</c:if>
-															<c:if test="${aimWorkspaceForm.page!=pages}">
-																<digi:link href="/workspaceManager.do" name="urlParams3"title="${translation}" ><%=pages%></digi:link> |&nbsp;
-															</c:if>
-															</logic:iterate>
-														</td>
-													</tr>
-													</logic:notEmpty>
-													<!-- end page logic for pagination -->
-
 													</logic:notEmpty>
 													<!-- end page logic -->
 											</table>
-										</td></tr>
+										</td>
+										</tr>
 									</table>
 
 								</td>
@@ -271,63 +1103,92 @@
 						</table>
 					</td>
 
-					<td noWrap width="100%" vAlign="top">
-						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
-							<tr>
-								<td>
-									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="100">
+<!--details-->
+					<td  width="50%" vAlign="top">
+						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+							<tr bgColor="#ffffff">
+								<td vAlign="top" width="100%">
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center" id="teamTitle">
+											<digi:trn>Team Name</digi:trn>
+										</td>
+										</tr>
+										<tr><td>&nbsp;</td></tr>
+										<tr><td class="box-title" align="left">
+                                                <table width="100%"  class="filter">
+												<tr>
+												<td>&nbsp;</td>
+													<td align="right">
+														<digi:trn>Select</digi:trn>:&nbsp;
+													   <select id="showdataWs" class="inp-text"> 
+														    <option value="0"><digi:trn>Members</digi:trn></option> 
+														    <option value="1"><digi:trn>Activities</digi:trn></option> 
+														</select> &nbsp;&nbsp;&nbsp;
+											            <input type="button" id="ws_go" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
+													</td>
+												</tr>
+											</table>
+										</td></tr>
+
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title height=17>
-												<digi:trn key="aim:otherLinks">
-												<b style="font-size:12px; padding-left:5px;">Other links</b>
-												</digi:trn>
+										<td>
+										<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
+										<tr>
+										<td id="addNew" align="left">&nbsp;
+										</td>
+										</tr>
+										</table>
+										</td>
+										</tr>
+										<tr><td>
+										<div>
+										<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0" >
+										<tr>
+										<td>
+											<input type="hidden" name="teamId" value=""/>
+											<input type="hidden" name="teamName" value=""/>
+											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
+											<tr><td>
+											<div class="reportHead" style="width: 100%px; height: 22px; max-height: 22px; ">
+											<table width="100%" class="reportsBorderTable">																				
+										        <tr class="headTableTr">
+										            <td align="center" width="300" align="center" class="clsTableTitleCol"><digi:trn>Name</digi:trn></td>
+										            <td align="center" width="100" align="center" class="clsTableTitleCol"><digi:trn>Actions</digi:trn></td>
+										        </tr>
+											</table>
+											</div>
+											<div id="demo" class="report box-border-nopadding scrollable" >
+												<table class="box-border-nopadding" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
+											    <tbody>
+											        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
+											    </tbody>
+											 	</table>
+											</div>
+										    <table cellspacing="1" cellpadding="2" align="left" width="100%">
+											    <tbody>
+											        <tr><td colspan="2" id="footerMessage">&nbsp;
+											        </td></tr>
+											    </tbody>
+											 	</table>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											</tr>
+											</table>
+										</td>
 										</tr>
 									</table>
-								</td>
-							</tr>
-							<tr>
-								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
-												</c:set>
-												<digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
-												<digi:trn key="aim:addTeam">
-												Add Teams
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
-																				
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</c:set>
-												<digi:link href="/admin.do" title="${translation}" >
-												<digi:trn key="aim:AmpAdminHome">
-												Admin Home
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
-										<!-- end of other links -->
-									</table>
+									</div>
 								</td>
 							</tr>
 						</table>
-					</td></tr>
+						</td>
+					</tr>
 					</table>
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
+</table>
+</td>
+</tr>
 </table>

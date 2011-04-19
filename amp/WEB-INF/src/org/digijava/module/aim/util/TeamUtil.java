@@ -29,6 +29,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -391,7 +392,7 @@ public class TeamUtil {
                 //link shared resources with team
                 List sharedDocs=null;
                 String qstr="select c.nodeUUID,c.sharedNodeVersionUUID from " +CrSharedDoc.class.getName()  +" c where " +
-                		" c.state="+CrConstants.SHARED_AMONG_WORKSPACES +  " group by c.nodeUUID";
+                		" c.state="+CrConstants.SHARED_AMONG_WORKSPACES +  " group by c.nodeUUID,c.sharedNodeVersionUUID";
                 qry = session.createQuery(qstr);
                 sharedDocs = qry.list();
                 if(sharedDocs!=null && sharedDocs.size()>0){
@@ -1071,30 +1072,15 @@ public class TeamUtil {
     public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
         Session session = null;
         Transaction tx = null;
-        AmpTeamMember member = null;
-
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
 
             for(int i = 0; i < activities.length; i++) {
-                AmpActivity activity = (AmpActivity) session.load(
-                    AmpActivity.class, activities[i]);                
+            	AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activities[i]);                
                 activity.setTeam(null); 
-                if(teamId!=null){
-                	AmpTeam ampTeam=(AmpTeam)session.load(AmpTeam.class,teamId);
-                    ampTeam.getActivityList().remove(activity);
-                }                
-                Iterator membersItr = activity.getMember().iterator();
-                while(membersItr.hasNext()) {
-                    member = (AmpTeamMember) membersItr.next();
-                    member.getActivities().remove(activity);
-                    session.update(member);
-                }
                 activity.setMember(null);
                 session.update(activity);               
-               // session.flush();
-                // UpdateDB.updateReportCache(activities[i]);
             }
 
             tx.commit();
@@ -1580,85 +1566,44 @@ public class TeamUtil {
         }
         return team;
     }
+ 
 
     public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpActivity> col = new ArrayList();
 
         try {
-            session = PersistenceManager.getSession();
-            String queryString = "";
+            session = PersistenceManager.getRequestDBSession();
+            StringBuilder queryString = new StringBuilder("select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where");
             Query qry = null;
-            queryString = "select act from "+ AmpActivity.class.getName() + " act where ";
             if(teamId == null) {
-            	queryString += " act.team is null" ;
+            	queryString.append(" g.ampActivityLastVersion.team is null") ;
             }else{
-            	queryString += " (act.team=:teamId)" ;
+            	queryString.append(" (g.ampActivityLastVersion.team=:teamId)") ;
             }
             if(!includedraft){
-                queryString+="  and   (act.draft is null or act.draft=false) ";
+            	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
             if(keyword!=null){
-              	queryString += " and lower(act.name) like lower(:name)" ;
+            	queryString.append(" and lower(g.ampActivityLastVersion.name) like lower(:name)") ;
             }
             
-            qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString.toString());
           	if(keyword!=null){
-              	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+              	qry.setString("name", "%" + keyword + "%");
             }
           	if(teamId!=null){
-          		qry.setParameter("teamId", teamId, Hibernate.LONG);
+          		qry.setLong("teamId", teamId);
           	}       
    
    
-            Iterator itr = qry.list().iterator();
-            
-            while(itr.hasNext()) {
-
-                AmpActivity activity = (AmpActivity) itr.next();
-                Collection temp1 = activity.getOrgrole();
-                Collection temp2 = new ArrayList();
-                Iterator temp1Itr = temp1.iterator();
-                while(temp1Itr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
-                    if(!temp2.contains(orgRole))
-                        temp2.add(orgRole);
-                }
-
-                Iterator orgItr = temp2.iterator();
-
-                String donors = "";
-
-                while(orgItr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                    if(orgRole.getRole().getRoleCode().equals(
-                        Constants.FUNDING_AGENCY)) {
-                        if(donors.trim().length() > 0) {
-                            donors += ", ";
-                        }
-                        donors += orgRole.getOrganisation().getName();
-                    }
-                }
-
-                activity.setDonors(donors);
-                col.add(activity);
-
-            }
-            
+            col  = qry.list();
+                
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamAmpActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
-        }
+        } 
         return col;
     }
 
@@ -2577,6 +2522,14 @@ public class TeamUtil {
             return team1.getName().compareTo(team2.getName());
         }
 
+    }
+
+    public static class HelperAmpTeamNameComparatorDesc implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            AmpTeam team1 = (AmpTeam) obj1;
+            AmpTeam team2 = (AmpTeam) obj2;
+            return team2.getName().compareTo(team1.getName());
+        }
     }
     
     public static List<AmpTeam> getTeamByOrg(Long orgId) {

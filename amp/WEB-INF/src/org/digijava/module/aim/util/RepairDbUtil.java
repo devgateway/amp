@@ -29,7 +29,7 @@ public class RepairDbUtil {
 				session				= PersistenceManager.getSession();
 				Connection	conn	= session.connection();
 				Statement st		= conn.createStatement();
-				qryStr 				= "UPDATE amp_activity SET activity_creator=NULL WHERE activity_creator NOT IN (SELECT amp_team_mem_id FROM amp_team_member)" ;
+				qryStr 				= "UPDATE amp_activity_version SET activity_creator=NULL WHERE activity_creator NOT IN (SELECT amp_team_mem_id FROM amp_team_member)" ;
 				int result			= st.executeUpdate(qryStr);
 				conn.close();
 				

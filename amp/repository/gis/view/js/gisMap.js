@@ -236,9 +236,13 @@
             	onlyCurWS = false;
             }
             
+            var natProjects = $("#includeNationalPrjs").attr("checked");
+						if (natProjects == null) {
+							natProjects = false;
+						}
             
             //setBusy(true);
-            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+            var newUrl = "../../gis/getFoundingDetails.do?action=getDataForSectorFin&mapCode=TZA&mapLevel=" + mapLevel + "&mapMode=" + mapMode + "&curWorkspaceOnly=" + onlyCurWS + "&natProjects=" + natProjects + "&donorId=" + donorId + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sect + "&fundingType=" + fundingType + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 
             $("#testMap").attr({src: newUrl});
             
@@ -839,8 +843,14 @@
 	getSectorHierarchy = function() {
 		var uniqueStr = (new Date()).getTime();
 		var mode = $("#mapModeFin").val();
+		var natProjects = $("#includeNationalPrjs").attr("checked");
+		if (natProjects == null) {
+			natProjects = false;
+		}
 		
-		var requestURL = "../../gis/getFoundingDetails.do?action=getSectorTree&mode=" + mode + "&mapCode=TZA&mapLevel=2&uniqueStr=" + uniqueStr;
+		
+		
+		var requestURL = "../../gis/getFoundingDetails.do?action=getSectorTree&mode=" + mode + "&natProjects="+ natProjects + "&mapCode=TZA&mapLevel=2&uniqueStr=" + uniqueStr;
 		$.get(requestURL, sectorHierarchyReady, "xml");
 		
 	}
@@ -885,6 +895,7 @@
 			}
 		});
 		
+		$("#includeNationalPrjs").change(getSectorHierarchy);
 		$("#sector_selector_expander").bind('change', showFinFilters);
 		$("#mapModeFin").bind('change', mapModeFinChanged);
 		
@@ -1213,6 +1224,7 @@
 	
 	function resetSectorFilter() {
 		$("#showOnlyCurentWS").attr("checked", false);
+		$("#includeNationalPrjs").attr("checked", false);
 		$("#donorsCombo").attr("selectedIndex", 0);
 		$("#fundingType").attr("selectedIndex", 0);
 		$("#mapModeFin").attr("selectedIndex", 0);

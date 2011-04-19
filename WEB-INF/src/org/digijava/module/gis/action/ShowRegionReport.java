@@ -110,7 +110,7 @@ public class ShowRegionReport extends Action {
         }else{
 
             if (sectorQueryType != DbUtil.SELECT_PROGRAM) {
-        	    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
+        	    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId, false);
             } else {
                 secFundings = DbUtil.getProgramFoundings(prgId);
             }

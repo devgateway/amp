@@ -1530,7 +1530,7 @@ private int matchesId(Long ptableId) {
                     } else {
                         if (secId.longValue() > -2l) {
                             if (mapMode != org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM) {
-                                secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null);
+                                secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId, mapMode, null, false);
                             } else {
                                 secFundings = org.digijava.module.gis.util.DbUtil.getProgramFoundings(secId);
                             }

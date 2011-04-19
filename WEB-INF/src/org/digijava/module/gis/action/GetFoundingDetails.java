@@ -210,6 +210,8 @@ public class GetFoundingDetails extends Action {
                     Long teamId = null;
 
                     boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
+                    boolean includeNatProjects = request.getParameter("natProjects") != null &&
+                            request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
 
                     if (curWorkspaceOnly) {
                         tm = (TeamMember)request.getSession().getAttribute("currentMember");
@@ -332,7 +334,7 @@ public class GetFoundingDetails extends Action {
                                 secFundings = DbUtil.getSectorFoundingsPublic(secId, sectorQueryType);
                             }else{
                                 if (secId.longValue() > -2l) {
-                                    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId);
+                                    secFundings = DbUtil.getSectorFoundings(secId, sectorQueryType, teamId, includeNatProjects);
                                 } else {
                                     secFundings = new ArrayList();
                                 }
@@ -1049,12 +1051,15 @@ public class GetFoundingDetails extends Action {
                     int treeMode = (request.getParameter("mode") != null && request.getParameter("mode").
                             equalsIgnoreCase("pledgesData")) ? DbUtil.SECTORS_FOR_PLEDGES : DbUtil.SECTORS_FOR_ACTIVITIES;
 
+                    boolean includeNatProjects = request.getParameter("natProjects") != null &&
+                            request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
+
                     ServletContext ampContext = getServlet().getServletContext();
                     AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
                     boolean showSecondaryScheme = FeaturesUtil.getFieldVisibility("Secondary Sector").isFieldActive(ampTreeVisibility);
 
-                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, showSecondaryScheme, DbUtil.getGisSettings(request).getSectorSchemeFilterMode());
+                    tree = DbUtil.getAllSectorsAsHierarchyXML(treeMode, includeNatProjects, showSecondaryScheme, DbUtil.getGisSettings(request).getSectorSchemeFilterMode());
                     tree.output(sos);
                 }
 

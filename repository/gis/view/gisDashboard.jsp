@@ -287,6 +287,17 @@
 				</tr>
 			</field:display>
 				
+				<tr>
+					<td>
+						<digi:trn>Include national projects</digi:trn>
+					</td>
+					<td align="right">
+            <input id="includeNationalPrjs" type="checkbox" value="true">
+	        </td>
+	        <td width="10">
+			        &nbsp;
+					</td>
+				</tr>
 				
 				
 				<tr>

@@ -260,7 +260,7 @@ public class DbUtil {
     }
 
     public static List getSectorFoundings(Long sectorId) {
-        return getSectorFoundings(sectorId, SELECT_DEFAULT, null);
+        return getSectorFoundings(sectorId, SELECT_DEFAULT, null, false);
     }
 
     public static Long getLocationIdByName (String locationName, int mapLevel) {
@@ -312,7 +312,7 @@ public class DbUtil {
         return retVal;
     }
 
-    public static List getSectorFoundings(Long sectorId, int sectorQueryType, Long teamId) {
+    public static List getSectorFoundings(Long sectorId, int sectorQueryType, Long teamId, boolean includeNational) {
         List subSectorIds = null;
         if (sectorId > -1) {
             if (sectorQueryType == SELECT_SECTOR_SCHEME) {
@@ -379,13 +379,15 @@ public class DbUtil {
                 qs.append(whereCaluse);
                 qs.append(")");
                 qs.append(" and sec.activityId.team is not null ");
-                if (sectorQueryType == SELECT_SECTOR_SCHEME) {
+                if (includeNational) {
                     qs.append(actWhereClause);
                 }
 
                 if (teamId != null) {
                     qs.append(" and sec.activityId.team.ampTeamId = :TEAM_ID");
                 }
+
+
 
                 q = session.createQuery(qs.toString());
                 if (teamId != null) {
@@ -456,7 +458,7 @@ public class DbUtil {
         return retVal;
     }
 
-    public static List getActIdsHavingRegionalAndDistrictLevels() {
+    public static List<Long> getActIdsHavingRegionalAndDistrictLevels() {
         List<Long> retVal = null;
         Session session = null;
         try {
@@ -1279,7 +1281,7 @@ public class DbUtil {
    }
 
 
-    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showSecondarySectorSchemes, int sectorFilterMode) {
+    public static XMLDocument getAllSectorsAsHierarchyXML(int sectorMode, boolean showNatProjects, boolean showSecondarySectorSchemes, int sectorFilterMode) {
         Collection <AmpSectorScheme> schemes = SectorUtil.getAllSectorSchemes();
         Long primarySchemeId = null;
         List<AmpClassificationConfiguration> allClassificationConfigs  = null;
@@ -1296,6 +1298,25 @@ public class DbUtil {
                 multySectorSchemIDs.add(ampccs.getClassification().getAmpSecSchemeId());
             }
         }
+
+        String regDistrictActIds = null;
+
+        if (!showNatProjects) {
+            List<Long> acts = getActIdsHavingRegionalAndDistrictLevels();
+            if (acts != null) {
+                StringBuilder actWhereClause = new StringBuilder("(");
+                Iterator <Long> it = acts.iterator();
+                while (it.hasNext()) {
+                    actWhereClause.append(it.next());
+                    if (it.hasNext()) {
+                        actWhereClause.append(",");
+                    }
+                }
+             actWhereClause.append(")");
+             regDistrictActIds = actWhereClause.toString();
+            }
+        }
+
 
         XMLDocument xmlDoc = new XMLDocument();
         XML root = new XML("data");
@@ -1326,11 +1347,11 @@ public class DbUtil {
             if (sectors != null && !sectors.isEmpty()) {
                 Set subSet = null;
                 if (sectorMode == SECTORS_FOR_ACTIVITIES) {
-                    subSet = getSectorsInActivitiesSublist (sectors);
+                    subSet = getSectorsInActivitiesSublist (sectors, regDistrictActIds);
                 } else if (sectorMode == SECTORS_FOR_PLEDGES) {
                     subSet = getSectorsInPledgesSublist(sectors);
                 }
-                populateSectorTree(sectors, schemeNode, subSet, sectorMode);
+                populateSectorTree(sectors, schemeNode, subSet, regDistrictActIds, sectorMode);
             }
 
             secRoot.addElement(schemeNode);
@@ -1353,23 +1374,18 @@ public class DbUtil {
 
         Set usedPrograms = null;
         if (sectorMode == SECTORS_FOR_ACTIVITIES) {
-            usedPrograms = getUsedPrograms();
+            usedPrograms = getUsedPrograms(regDistrictActIds);
         } else if (sectorMode == SECTORS_FOR_PLEDGES) {
             usedPrograms = getUsedProgramsForPledges();
         }
 
-        populateProgramsTree (programsFlatTree, prgRoot, usedPrograms);
+        populateProgramsTree (programsFlatTree, prgRoot, usedPrograms, regDistrictActIds);
 
         return xmlDoc;
     }
 
-    private static boolean populateSectorTree (Collection <AmpSector> sectors, XML parentNode,
-                                            Set usedSectorSublist) {
-        return populateSectorTree (sectors, parentNode, usedSectorSublist, SECTORS_FOR_ACTIVITIES);
 
-    }
-
-    private static boolean populateProgramsTree (Collection<TreeItem> programs, XML parentNode, Set usedProgramSublist) {
+    private static boolean populateProgramsTree (Collection<TreeItem> programs, XML parentNode, Set usedProgramSublist, String actWhereclause) {
         boolean oneOfPrgsHasFounding = false;
         for (TreeItem prgTreeItem: programs) {
             AmpTheme theme = (AmpTheme) prgTreeItem.getMember();
@@ -1386,7 +1402,7 @@ public class DbUtil {
 
                 Collection<TreeItem> childPrgs = prgTreeItem.getChildren();
                 if (childPrgs != null && !childPrgs.isEmpty()) {
-                    oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag,usedProgramSublist);;
+                    oneOfChildrenHasFounding = populateProgramsTree (childPrgs, sectorTag, usedProgramSublist, actWhereclause);;
                     if (!oneOfPrgsHasFounding && oneOfChildrenHasFounding) {
                         oneOfPrgsHasFounding = oneOfChildrenHasFounding;
                     }
@@ -1402,7 +1418,7 @@ public class DbUtil {
     }
 
     private static boolean populateSectorTree (Collection <AmpSector> sectors, XML parentNode,
-                                            Set usedSectorSublist, int sectorMode) {
+                                            Set usedSectorSublist, String actWhereclause, int sectorMode) {
         boolean oneOfSecsHasFounding = false;
         for (AmpSector sector : sectors) {
             XML sectorTag = new XML("sector");
@@ -1420,11 +1436,11 @@ public class DbUtil {
             if (childSecs != null && !childSecs.isEmpty()) {
                 Set actSec = null;
                 if (sectorMode == SECTORS_FOR_ACTIVITIES) {
-                    actSec = getSectorsInActivitiesSublist (childSecs);
+                    actSec = getSectorsInActivitiesSublist (childSecs, actWhereclause);
                 } else if (sectorMode == SECTORS_FOR_PLEDGES) {
                     actSec = getSectorsInPledgesSublist(childSecs);
                 }
-                oneOfChildrenHasFounding = populateSectorTree(childSecs, sectorTag, actSec, sectorMode);
+                oneOfChildrenHasFounding = populateSectorTree(childSecs, sectorTag, actSec, actWhereclause, sectorMode);
                 if (!oneOfSecsHasFounding && oneOfChildrenHasFounding) {
                     oneOfSecsHasFounding = oneOfChildrenHasFounding;
                 }
@@ -1436,7 +1452,7 @@ public class DbUtil {
         return oneOfSecsHasFounding;
     }
 
-    private static Set getUsedPrograms() {
+    private static Set getUsedPrograms(String actWhereclause) {
         Set retVal = null;
         Session sess = null;
 
@@ -1446,9 +1462,13 @@ public class DbUtil {
 
         }
 
-        StringBuffer queryStr = new StringBuffer("select distinct prj.ampActivityProgramId from ");
+        StringBuffer queryStr = new StringBuffer("select distinct prg.ampActivityProgramId from ");
         queryStr.append(AmpActivityProgram.class.getName());
-        queryStr.append(" as prj");
+        queryStr.append(" as prg");
+        if (actWhereclause != null) {
+            queryStr.append(" where prg.activity.ampActivityId in ");
+            queryStr.append(actWhereclause);
+        }
 
         Query q = sess.createQuery(queryStr.toString());
         retVal = new HashSet(q.list());
@@ -1476,7 +1496,7 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Set getSectorsInActivitiesSublist (Collection <AmpSector> listToFilter) {
+    public static Set getSectorsInActivitiesSublist (Collection <AmpSector> listToFilter, String actsWhereCaluse) {
         Set retVal = null;
         List queryResults = null;
         Session session = null;
@@ -1499,6 +1519,10 @@ public class DbUtil {
             queryStr.append(" as actSec where actSec.sectorId.ampSectorId in (");
             queryStr.append(sectorsWhereclause);
             queryStr.append(") and actSec.sectorPercentage > 0");
+            if (actsWhereCaluse != null) {
+                queryStr.append(" and actSec.activityId.ampActivityId in ");
+                queryStr.append(actsWhereCaluse);
+            }
 
             Query qry = session.createQuery(queryStr.toString());
 			queryResults = qry.list();

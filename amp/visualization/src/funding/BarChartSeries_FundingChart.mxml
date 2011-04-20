@@ -405,10 +405,6 @@
 			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
 			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>
 		</degrafa:LinearGradientFill>
-		<degrafa:LinearGradientFill id="stackFill" angle="90">
-			<degrafa:GradientStop color="{outerPalette.currentColor}" alpha=".5"/>
-			<degrafa:GradientStop color="{outerPalette.currentColor | 0x333333}" alpha=".1"/>
-		</degrafa:LinearGradientFill>
 		<degrafa:SolidFill id="legendFill" 
 						   color="{legendPalette.currentColor}" /> 
 	</mx:Array>

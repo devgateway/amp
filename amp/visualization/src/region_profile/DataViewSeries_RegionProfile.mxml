@@ -6,9 +6,9 @@
 				>
 	
 	<mx:Style source="styles/Axiis_Examples.css"/>
-	<mx:HTTPService id="service" url="" result="service_resultHandler(event)" >
+	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getRegionProfileGraphData" result="service_resultHandler(event)" >
 		<mx:request>
-			<typeofaid>true</typeofaid>
+			<linechart>true</linechart>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -17,7 +17,7 @@
 			import mx.controls.dataGridClasses.DataGridColumn;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
-
+			
 			public function start():void
 			{
 				var str:String = String(service.lastResult);

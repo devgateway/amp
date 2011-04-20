@@ -38,7 +38,6 @@
 	layout="absolute"
 	creationComplete="application1_creationCompleteHandler(event);"
 >
-
 	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getAidTypeGraphData" result="service_resultHandler(event)" >
 		<mx:request>
 			<format>xml</format>
@@ -53,9 +52,9 @@
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
-
+			
 			private var ds:DataSet = new DataSet();
-
+			
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -65,35 +64,43 @@
 			 */
 			public function start():void
 			{
-				/** Sums up all the counts of medals within a country ( you also get min, max, avg) This will be used to draw the overlaid total
-				 *    bar that shows up on the chart, one for each country.
-				 *  This only works for data that is read in through the axiis DataSet object otherwise you'd need to provide your own approach to aggregate
-				 	Provides 4 values under ds.data.object where is X is the final drill point and Y is each of the array elements
-						object.aggregates.X_Y_sum  EG: aggregates.medal_count_sum
-						object.aggregates.X_Y_avg
-						object.aggregates.X_Y_min
-						object.aggregates.X_Y_max
-				 */ 
-				ds.aggregateData(service.lastResult, "aidtype.year", ["amount"]);
-				/**
-				 * Now aggregate all the sums per country. Ultimately to get the max value so we can scale the chart appropriately
-				 */
-				ds.aggregateData(service.lastResult, "aidtype", ["aggregates.year_amount_sum"]);
-				/**
-				 * Note the odd syntax regarding how you access aggregates of aggregated data
-				 */
-				vScale.maxValue = service.lastResult.aggregates['aidtype_aggregates:year_amount_sum_max'];
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				
+				//service.lastResult.year[x].aidtype[y].amount
+				var maxValue:Number = 0;
+				var fillCategories:Boolean = false;
+				for(var i:Number = 0; i < service.lastResult.year.length; i++){
+					for(var j:Number = 0; j < service.lastResult.year[i].aidtype.length; j++){
+						var currentValue:Number = service.lastResult.year[i].aidtype[j].amount;
+						//Just add the categories in the last iteration
+						if(i == service.lastResult.year.length-1)
+							categoriesLocal.addItem(service.lastResult.year[i].aidtype[j]);
+						if (maxValue < currentValue) maxValue = currentValue;
+					}
+				}
+				categories = categoriesLocal; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = 0;
-				/**
-				 * So each iteration of the repeater in the graph will have a country node
-				 */
-				dataProvider = service.lastResult.aidtype;
-				/**
-				 * Anytime the DataCanvas dp is set this must be called
-				 */
+				dataProvider = service.lastResult.year;
+				dc.visible = true;
 				dc.invalidateDisplayList();
 			}
-
+			
+			protected function labelRender(object:Object):String {
+				var wrappedLabel:String = null;
+				
+				if (object != null){
+					if(object[childLabelField].length > maxLabelWidth){
+						wrappedLabel = "Corto" + object[childLabelField].replace(" ", "\n"); 
+					}
+					else
+					{
+						wrappedLabel = object[childLabelField]; 
+					}
+				}
+				return wrappedLabel;
+			}
+			
 			protected function myStack_preRenderHandler(event:Event):void
 			{
 				// TODO Auto-generated method stub
@@ -130,176 +137,158 @@
 				service.send();
 				start();
 			}
-
+			
 		]]>
 	</mx:Script>
-
+	
 	<!-- 
 	Provide nice background to chart 
 	-->
-
-
+	
+	
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
+	<mx:Object id="categories"/>
 	<mx:String id="verticalField"/>
-	<mx:String id="dataField">year</mx:String>
+	<mx:String id="dataField">aidtype</mx:String>
 	<mx:String id="labelField">name</mx:String>
 	<mx:String id="childDataField">amount</mx:String>
 	<mx:String id="childLabelField">category</mx:String>
+	<mx:Number id="maxLabelWidth">8</mx:Number>
 	<mx:Number id="percentGap">.02</mx:Number>
-
+	
+	
 	<!--  
 	A scale that deals with linear numeric data.
 	-->
 	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{hLayout.height}" />
-
+	
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
 	<axiis:DataCanvas top="20"
-		bottom="50"
-		width="{this.width*.9}"
-		id="dc"
-		verticalCenter="0"
-		horizontalCenter="0" 
-		showDataTips="true"
-		strokes="{strokes}"
-		fills="{fills}"
-		palettes="{palettes}">
-
+					  bottom="0"
+					  width="{this.width*.9}"
+					  id="dc"
+					  verticalCenter="0"
+					  horizontalCenter="0" 
+					  showDataTips="true"
+					  strokes="{strokes}"
+					  fills="{fills}"
+					  palettes="{palettes}"
+					  visible="false"
+					  >
+		
 		<!-- Background -->
 		<!-- backgrounds appear behind the graph. There are also foregroundGeometries for doing annotations on top of the graph 
-			verticalScale="{vScale}"			The vertical scale used for scaling data to actual screen units		
-			tickStroke="{axisStroke}"			The stroke used to put the hash or tick marks on an axis
-			width="{dc.width}"
-			height="{myLineGroup.height}"
-			showDataTips="false"				A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
-			showGridArea="false"				Whether or not the grid cells are displayed
-			showGridLine="false"				Whether or not lines are drawn between grid cells
-			showLabels="false"					Whether or not to show labels on the axis
-			fontFamily="Myriad Pro"
-			fontColor="0"
-			fontSize="14"
-			tickGap="5"
-			majorTickSpacing="50"				The space between successive major tick marks. There is also a minorTickSpacing. Length of marks can be adjusted as well majorTickLength
-			labelFunction="{axisLabel}"			A function that is used to determine how each item in the dataProvider should be labeled along the axis.
+		verticalScale="{vScale}"			The vertical scale used for scaling data to actual screen units		
+		tickStroke="{axisStroke}"			The stroke used to put the hash or tick marks on an axis
+		width="{dc.width}"
+		height="{myLineGroup.height}"
+		showDataTips="false"				A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
+		showGridArea="false"				Whether or not the grid cells are displayed
+		showGridLine="false"				Whether or not lines are drawn between grid cells
+		showLabels="false"					Whether or not to show labels on the axis
+		fontFamily="Myriad Pro"
+		fontColor="0"
+		fontSize="14"
+		tickGap="5"
+		majorTickSpacing="50"				The space between successive major tick marks. There is also a minorTickSpacing. Length of marks can be adjusted as well majorTickLength
+		labelFunction="{axisLabel}"			A function that is used to determine how each item in the dataProvider should be labeled along the axis.
 		-->
 		<axiis:backgroundGeometries>
 			<axis:VAxis verticalScale="{vScale}"
-				tickStroke="{axisStroke}"
-				width="{dc.width}"
-				height="{hLayout.height}"
-				showDataTips="false"
-				fontFamily="Myriad Pro"
-				fontColor="0"
-				fontSize="12"
-				tickGap="5"/>
+						tickStroke="{axisStroke}"
+						
+						width="{dc.width}"
+						height="{hLayout.height}"
+						showDataTips="false"
+						fontFamily="Myriad Pro"
+						fontColor="0"
+						fontSize="12"
+						tickGap="5"/>
 		</axiis:backgroundGeometries>
-
+		
 		<!-- Layouts -->
 		<!--
-				Layouts are composite components consisting of ReferenceRepeaters (the
-				loop that defines a repeated bounding pattern)  DrawingGeometries
-				(what you are going to draw) and Layouts (child layouts) 
-
+		Layouts are composite components consisting of ReferenceRepeaters (the
+		loop that defines a repeated bounding pattern)  DrawingGeometries
+		(what you are going to draw) and Layouts (child layouts) 
+		
 		-->
 		<axiis:layouts>
-
+			
 			<!--HBoxLayout
-				The HBoxLayout is a layout with a referenceRepeater that produces RegularRectangles for each item in its dataProvider. 
-				The RegularRectangles are sized and spaced evenly across the width of the layout. This behavior can be used to create column chart-like visualizations.
-		
-				x="12"											x-location relative to paren
-				y="0"											y-location relative to parent
-				height="{dc.height-70}"							height of display essentially
-				width="{dc.width}"								width
-				dataFilterFunction="{filterRows}"				This provides a way to further refine a layouts dataProvider by providing access to a custom filter data filter function. 
-																This allows developers to easily visualize subsets of the data without having to change the underlying data structure. 
-				dataProvider="{dataProvider}"					EG: var myLines is an ArrayCollection || Array of Line
-																	Line is an object that has a name property, a plotPointsCollection property of PlotPoint, and an optional index which would be it's order in myLines
-																	PlotPoint is an object with an index property, an xvalue property used for display of text or the x-value, and a yvalue property which is the y-value
-				dataField="value"								The property within each item in the dataProvider that contains the field used to determine the value of the item. (essentially the y value)							
-				labelField="pivotName"							The property within each item in the dataProvider that contains the field used to determine the label for the item.
-				stroke="{myStroke}"								The stroke used to render lines
-				percentGap="{percentGap}"						The amount of whitespace that should be left between RegularRectangles as a percentage of the width of the HBoxLayout
-				showDataTips="false"							A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
-				currentDatum									The item in the dataProvider that the layout is currently rendering.
-				currentIndex									The index of the item in the dataProvider that the layout is currently rendering.
-				currentLabel									The label of the item in the dataProvider that the layout is currently rendering, as determine by taking currentDatum[labelField], if a labelField is defined.
-				currentReference								The geometry that is being used to render the current data item as it appears after the necessary iterations of the referenceRepeater have been executed.
-				currentValue									The value of the item in the dataProvider that the layout is currently rendering, as determined by taking currentDatum[dataField], if a dataField is defined.
-
+			The HBoxLayout is a layout with a referenceRepeater that produces RegularRectangles for each item in its dataProvider. 
+			The RegularRectangles are sized and spaced evenly across the width of the layout. This behavior can be used to create column chart-like visualizations.
+			
+			x="12"											x-location relative to paren
+			y="0"											y-location relative to parent
+			height="{dc.height-70}"							height of display essentially
+			width="{dc.width}"								width
+			dataFilterFunction="{filterRows}"				This provides a way to further refine a layouts dataProvider by providing access to a custom filter data filter function. 
+			This allows developers to easily visualize subsets of the data without having to change the underlying data structure. 
+			dataProvider="{dataProvider}"					EG: var myLines is an ArrayCollection || Array of Line
+			Line is an object that has a name property, a plotPointsCollection property of PlotPoint, and an optional index which would be it's order in myLines
+			PlotPoint is an object with an index property, an xvalue property used for display of text or the x-value, and a yvalue property which is the y-value
+			dataField="value"								The property within each item in the dataProvider that contains the field used to determine the value of the item. (essentially the y value)							
+			labelField="pivotName"							The property within each item in the dataProvider that contains the field used to determine the label for the item.
+			stroke="{myStroke}"								The stroke used to render lines
+			percentGap="{percentGap}"						The amount of whitespace that should be left between RegularRectangles as a percentage of the width of the HBoxLayout
+			showDataTips="false"							A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
+			currentDatum									The item in the dataProvider that the layout is currently rendering.
+			currentIndex									The index of the item in the dataProvider that the layout is currently rendering.
+			currentLabel									The label of the item in the dataProvider that the layout is currently rendering, as determine by taking currentDatum[labelField], if a labelField is defined.
+			currentReference								The geometry that is being used to render the current data item as it appears after the necessary iterations of the referenceRepeater have been executed.
+			currentValue									The value of the item in the dataProvider that the layout is currently rendering, as determined by taking currentDatum[dataField], if a dataField is defined.
+			
 			This layout will use the width of the dc and cut it up into dataProvider.length equal parts
 			The x value here is the distance from the graphing starts from the vertical axis
 			-->
 			<axiis:HBoxLayout id="hLayout"
-				x="25"
-				y="0"
-				showDataTips="false"
-				height="{dc.height-70}"
-				width="{dc.width-25}"
-				percentGap="{percentGap}"
-				dataProvider="{dataProvider}" 
-				dataField="{dataField}"
-				labelField="{labelField}"
-				>
+							  x="25"
+							  y="0"
+							  showDataTips="false"
+							  height="{dc.height-50}"
+							  width="{dc.width-25}"
+							  percentGap="{percentGap}"
+							  dataProvider="{dataProvider}" 
+							  dataField="{dataField}"
+							  labelField="{labelField}"
+							  >
 				<!--
 				Layouts can hold layouts
 				-->
 				<axiis:layouts>
-					 
+					
 					<!--ColumnCluster
-					    ColumnCluster groups a series of vertical columns horizontally and labels them. This class is intended to be used to produce multi-series column charts.
-						
-						x="0"													x-location relative to paren
-						y="0"													y-location relative to parent
-						width="{hLayout.currentReference.width}"				Using the current geometry reference to set this value in this example
-						height="{hLayout.currentReference.height}"				Ditto for height
-						dataProvider="{[hLayout.currentDatum.aggregates]}"		Here we're going to use the aggregated data for this datum
-						dataField="medal_count_sum"								Using the medal_count_sum value in the aggregate
-						labelField="medal_count_sum"							Ditto
-						fill="{stackFill}"
-						stroke="{colStroke}"
-						verticalScale="{vScale}"
-						fontFamily="Arial"
-						dataFontColor="{outerPalette.currentColor}"
-						showLabel="false"										Whether or not labels are shown for each drawingGeometry.				
-						showDataLabel="true"									?? Has the same description as showLabel in the docs
-						showValueLabel="false"									Whether or not the labels indicating the the value each bar represents are shown.						
+					ColumnCluster groups a series of vertical columns horizontally and labels them. This class is intended to be used to produce multi-series column charts.
+					
+					x="0"													x-location relative to paren
+					y="0"													y-location relative to parent
+					width="{hLayout.currentReference.width}"				Using the current geometry reference to set this value in this example
+					height="{hLayout.currentReference.height}"				Ditto for height
+					dataProvider="{[hLayout.currentDatum.aggregates]}"		Here we're going to use the aggregated data for this datum
+					dataField="medal_count_sum"								Using the medal_count_sum value in the aggregate
+					labelField="medal_count_sum"							Ditto
+					fill="{stackFill}"
+					stroke="{colStroke}"
+					verticalScale="{vScale}"
+					fontFamily="Arial"
+					dataFontColor="{outerPalette.currentColor}"
+					showLabel="false"										Whether or not labels are shown for each drawingGeometry.				
+					showDataLabel="true"									?? Has the same description as showLabel in the docs
+					showValueLabel="false"									Whether or not the labels indicating the the value each bar represents are shown.						
 					-->					
-					<!-- Total Column 
-					     This is the outter column around all the columns for a given country that provides a total of all those columns
-					     Note that it uses the aggregates as a data provider and uses the X_Y_sum value, or medal_count_sum for the dataField
-					     Also, note the way you need to access the aggregates through []
-					-->
-					<groupings:ColumnCluster 
-						id="myStack"
-						x="0"
-						y="0"
-						width="{hLayout.currentReference.width}"
-						height="{hLayout.currentReference.height}"
-						dataProvider="{hLayout.currentDatum.aggregates}"
-						dataField="year_amount_sum"
-						labelField="year_amount_sum"
-						fill="{stackFill}"
-						stroke="{colStroke}"
-						verticalScale="{vScale}"
-						fontFamily="Myriad Pro"
-						fontSize="12"
-						showLabel="false"
-						dataFontColor="{outerPalette.currentColor}"
-						preRender="myStack_preRenderHandler(event)"
-						showDataLabel="false"
-						/>
-						
+					
 					<!-- Cluster Group
-						 These are the individual medal columns within a country 
-							NOTE: In this example, the width is only .9 of the reference geometry to provide some clearance
-								  You'll see that the x value is at .05 of that geometry to squeeze it in a bit for the surrounding total column.
-								  Setting minColumnWidth to width/itemCount otherwise the default value of 15 is implied. If you don't do this, there'll
-								  	be odd behavior for large datasets. This may become the default approach in future builds -->					
+					These are the individual medal columns within a country 
+					NOTE: In this example, the width is only .9 of the reference geometry to provide some clearance
+					You'll see that the x value is at .05 of that geometry to squeeze it in a bit for the surrounding total column.
+					Setting minColumnWidth to width/itemCount otherwise the default value of 15 is implied. If you don't do this, there'll
+					be odd behavior for large datasets. This may become the default approach in future builds -->					
 					<groupings:ColumnCluster 
 						id="myCluster"
 						x="{hLayout.currentReference.width*.05}"
@@ -314,44 +303,72 @@
 						stroke="{colStroke}"
 						verticalScale="{vScale}"
 						fontFamily="Myriad Pro"
+						fontSize="11"
 						dataFontColor="{outerPalette.currentColor}"
 						fontColor="{outerPalette.currentColor &amp; -0x333333}"
 						showDataLabel="false"
-					    minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
-
-
+						showLabel="false"
+						minColumnWidth="{myCluster.width/myCluster.itemCount}"/>
+					
+					
+					
 				</axiis:layouts>
-
+				
 				<!--HBracket
-					A bracket that can be used to denote a group and label items that are laid out horizontally.
-
-					height="60"										The height of the bracket from the base of the bracket, how far the sides extend upwards.
-					fontFamily="Myriad Pro"							The fontFamily of the label
-					fontSize="14"									The font size of the label
-					fontColor="{outerPalette.currentColor}"			The color of the label
-					y="{hLayout.height+5}"
-					x="{hLayout.currentReference.x}"
-					labelValue="{hLayout.currentLabel}"				The text of the label placed beneath the bracket.
-					markerStroke="{myStroke}"						The stroke used to draw lines of the bracket.					
+				A bracket that can be used to denote a group and label items that are laid out horizontally.
+				
+				height="60"										The height of the bracket from the base of the bracket, how far the sides extend upwards.
+				fontFamily="Myriad Pro"							The fontFamily of the label
+				fontSize="14"									The font size of the label
+				fontColor="{outerPalette.currentColor}"			The color of the label
+				y="{hLayout.height+5}"
+				x="{hLayout.currentReference.x}"
+				labelValue="{hLayout.currentLabel}"				The text of the label placed beneath the bracket.
+				markerStroke="{myStroke}"						The stroke used to draw lines of the bracket.					
 				-->
 				<!-- Bottom Bracket -->
 				<axiis:drawingGeometries>
 					<labels:HBracket 
 						x="{hLayout.currentReference.x}"
-						y="{hLayout.height+5}"
+						y="{hLayout.height}"
 						width="{hLayout.currentReference.width}"
-						height="60"
+						height="3"
 						fontFamily="Myriad Pro"
-						fontSize="14"
+						fontSize="12"
 						fontColor="{outerPalette.currentColor}"
 						labelValue="{hLayout.currentLabel}"
-						markerStroke="{myStroke}"/>
+						markerStroke="{myStroke}"
+						id="hBracket"/>
 				</axiis:drawingGeometries>
-
+				
 			</axiis:HBoxLayout>
+			<axiis:HBoxLayout id="legendLayout" 
+							  y="{hLayout.height+25}"
+							  width="{hLayout.width}" 
+							  height="300"
+							  dataProvider="{categories}"
+							  dataField="category" 
+							  showDataTips="false"
+							  
+							  > 
+				<axiis:drawingGeometries> 
+					<degrafa:RasterText 
+						id="legendText" 
+						y="{legendLayout.currentReference.y}" 
+						x="{legendLayout.currentReference.x+12}" 
+						text="{legendLayout.currentDatum['category']}" 
+						fontFamily="Myriad Pro"
+						fontSize="12"
+						/> 
+					<degrafa:RegularRectangle 
+						id="legendSquare" width="10" height="10" fill="{legendFill}" 
+						y="{legendLayout.currentReference.y+4}" 
+						x="{legendLayout.currentReference.x}"/> 
+				</axiis:drawingGeometries> 
+			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
-
+	
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
 	and will contain x values where x is the number of objects in the Layout's dataProvider. As the Layout renders and its currentIndex property is incremented, 
@@ -363,15 +380,18 @@
 	the array. If the layout needs more colors than the array contains, the colors wraps around the array using the mod operator.
 	
 	NOTE: The major difference between Layout and LayoutAuto: 
-			Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
-			LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
-			If you want a series with repeating colors from series to series use Layout. 
-			If you want different colors for all bars, use LayoutAuto
+	Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
+	LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
+	If you want a series with repeating colors from series to series use Layout. 
+	If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
 		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
-		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
-		<paint:LayoutAutoPalette id="stackPalette" layout="{myStack}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+		<axiis:LayoutAutoPalette id="clusterPalette" colorFrom="0xCC3333" 
+								 colorTo="0x3333CC" layout="{myCluster}"/> 
+		<!--		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>-->
+		<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xCC3333" 
+								 colorTo="0x3333CC" layout="{legendLayout}"/> 
 	</mx:Array>
 	
 	<!--
@@ -384,10 +404,8 @@
 			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
 			<degrafa:GradientStop color="{clusterPalette.currentColor | 0x333333}" alpha=".85"/>
 		</degrafa:LinearGradientFill>
-		<degrafa:LinearGradientFill id="stackFill" angle="90">
-			<degrafa:GradientStop color="{outerPalette.currentColor}" alpha=".5"/>
-			<degrafa:GradientStop color="{outerPalette.currentColor | 0x333333}" alpha=".1"/>
-		</degrafa:LinearGradientFill>
+		<degrafa:SolidFill id="legendFill" 
+						   color="{legendPalette.currentColor}" /> 
 	</mx:Array>
 	
 	<!--
@@ -407,9 +425,9 @@
 			color="0x222222" 
 			pixelHinting="true"/>
 		<degrafa:SolidStroke
-			 id="myStroke" 
-			 color="{outerPalette.currentColor}" 
-			 alpha=".5"/>
+			id="myStroke" 
+			color="{outerPalette.currentColor}" 
+			alpha=".5"/>
 		<degrafa:SolidStroke 
 			id="myStroke2"
 			color="{outerPalette.currentColor}"

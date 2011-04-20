@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	 Copyright (c) 2009 Team Axiis
+Copyright (c) 2009 Team Axiis
 
-	 Permission is hereby granted, free of charge, to any person
-	 obtaining a copy of this software and associated documentation
-	 files (the "Software"), to deal in the Software without
-	 restriction, including without limitation the rights to use,
-	 copy, modify, merge, publish, distribute, sublicense, and/or sell
-	 copies of the Software, and to permit persons to whom the
-	 Software is furnished to do so, subject to the following
-	 conditions:
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
 
-	 The above copyright notice and this permission notice shall be
-	 included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-	 OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:charts="org.axiis.charts.*"
-	layout="absolute"
-	backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
-	creationComplete="application1_creationCompleteHandler(event)"
-	xmlns:axiis="http://www.axiis.org/2009"
-	xmlns:series="org.axiis.charts.series.*"
-	xmlns:groupings="org.axiis.charts.groupings.*"
-	xmlns:degrafa="http://www.degrafa.com/2007"
-	xmlns:states="org.axiis.states.*"
-	xmlns:paint="org.axiis.paint.*"
-	xmlns:Examples="Examples.*"
-	xmlns:axis="org.axiis.charts.axis.*"
-	xmlns:labels="org.axiis.charts.labels.*"
-	xmlns:utils="org.axiis.utils.*">
-
+				xmlns:charts="org.axiis.charts.*"
+				layout="absolute"
+				backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
+				creationComplete="application1_creationCompleteHandler(event)"
+				xmlns:axiis="http://www.axiis.org/2009"
+				xmlns:series="org.axiis.charts.series.*"
+				xmlns:groupings="org.axiis.charts.groupings.*"
+				xmlns:degrafa="http://www.degrafa.com/2007"
+				xmlns:states="org.axiis.states.*"
+				xmlns:paint="org.axiis.paint.*"
+				xmlns:Examples="Examples.*"
+				xmlns:axis="org.axiis.charts.axis.*"
+				xmlns:labels="org.axiis.charts.labels.*"
+				xmlns:utils="org.axiis.utils.*">
+	
 	<mx:Style source="styles/Axiis_Examples.css"/>
 	<mx:HTTPService id="service" url="http://localhost:8081/visualization/dataDispatcher.do?action=getRegionProfileGraphData" result="service_resultHandler(event)" >
 		<mx:request>
-			<typeofaid>true</typeofaid>
+			<linechart>true</linechart>
 		</mx:request>
 	</mx:HTTPService>
 	
@@ -55,7 +55,7 @@
 			import mx.utils.ArrayUtil;
 			
 			import org.axiis.data.DataSet;
-
+			
 			private var ds:DataSet = new DataSet();
 			/**
 			 * This example is using xml data read from the file system. 
@@ -92,7 +92,7 @@
 				myLineGroup.invalidateDataProvider();
 				dc.invalidateDisplayList(); 
 			}
-
+			
 			/**
 			 * The labelFunction property of the LineSeriesGroup, and other components, allow you to 
 			 * to determine how each to format each label the component displays
@@ -101,7 +101,7 @@
 			{
 				return formatter.format(Number(obj));
 			}
-
+			
 			/**
 			 * This function determines whether or not a point in the plotCollection should be graphed
 			 * This particular one looks at the index property of the obj to see if it should be included. This assumes there's an index property
@@ -118,7 +118,7 @@
 				else
 					return true;
 			}
-
+			
 			/**
 			 * The dataFilterFunction property of a LineSeriesGroup allows you to specify a filter such as this that allows you to decide
 			 * on the fly, which lines to include in rendering so you don't need to manipulate the underlying data set
@@ -157,99 +157,99 @@
 					//Fail silently when running standalone
 				}
 			}
-
+			
 			public function refreshGraph():void
 			{
 				service.send();
 				start();
 			}
-
+			
 		]]>
 	</mx:Script>
 	
 	<!-- places a convenient background on the chart -->
-
+	
 	<mx:CurrencyFormatter currencySymbol=""
-		precision="0"
-		id="formatter"
-		alignSymbol="right"
-		useThousandsSeparator="true"/>
-
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
+	
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
-
+	
 	<!--   
 	NumericExpression provides a convenient place to store the results of numeric calculations used in multiple places within an MXML document. 
 	By binding the results of a complex numeric computation to a NumericExpression's value property, you allow other objects to bind on that 
 	value without the overhead of re-running the original computation.
 	-->
 	<utils:NumericExpression id="tension" value="{slider/210}" valueChanged="{if (myLineGroup) dc.invalidateDisplayList();}"/>
-
+	
 	<!--
 	BooleanExpression provides a convenient place to store the results of boolean calculations used in multiple places within an MXML document. 
 	By binding the results of a complex boolean expression to a BooleanExpression's value property, you allow other objects to bind on that 
 	value without the overhead of re-running the original expression.
 	
 	For example, this markup will populate two labels with the text "true" but (a || b || c || d || e || true) will only have been evaluated once.
-	                 
+	
 	<BooleanExpression id="be0" value="{a || b || c || d || e || true}" />
 	<mx:Label text="{be0.value}" />
 	<mx:Label text="{be0.value}" />
 	-->
-	              
-
+	
+	
 	<!--  
 	A scale that deals with linear numeric data.
 	-->
 	<axiis:LinearScale id="vScale"
-		dataProvider="{dataProvider}"
-		minLayout="0"
-		maxLayout="{myLineGroup.height}"
-		/>
+					   dataProvider="{dataProvider}"
+					   minLayout="0"
+					   maxLayout="{myLineGroup.height}"
+					   />
 	
 	<!--
 	A scale that converts categorical (String) data into layout space. The categories are assumed to be sorted alphabetically. 
 	-->
 	<axiis:CategoricalScale id="hScale"
-		minLayout="0"
-		maxLayout="{myLineGroup.width}"
-	 />
-
+							minLayout="0"
+							maxLayout="{myLineGroup.width}"
+							/>
+	
 	<!--
 	DataCanvas manages the placement and the rendering of layouts.
 	They can have backgroundGeometries, foregroundGeometries, and layouts.
 	They inherit from Canvas
 	-->
 	<axiis:DataCanvas width="100%"
-		id="dc"
-		top="10"
-		bottom="0"
-		left="40"
-		right="80"
-		horizontalCenter="0"
-		strokes="{strokes}"
-		fills="{fills}"
-		palettes="{palettes}"
-		showDataTips="true">
-
+					  id="dc"
+					  top="10"
+					  bottom="0"
+					  left="40"
+					  right="80"
+					  horizontalCenter="0"
+					  strokes="{strokes}"
+					  fills="{fills}"
+					  palettes="{palettes}"
+					  showDataTips="true">
+		
 		<!-- Background -->
 		<!-- backgrounds appear behind the graph. There are also foregroundGeometries for doing annotations on top of the graph 
-			verticalScale="{vScale}"			The vertical scale used for scaling data to actual screen units		
-			tickStroke="{axisStroke}"			The stroke used to put the hash or tick marks on an axis
-			width="{dc.width}"
-			height="{myLineGroup.height}"
-			showDataTips="false"				A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
-			showGridArea="false"				Whether or not the grid cells are displayed
-			showGridLine="false"				Whether or not lines are drawn between grid cells
-			showLabels="false"					Whether or not to show labels on the axis
-			fontFamily="Myriad Pro"
-			fontColor="0"
-			fontSize="14"
-			tickGap="5"
-			majorTickSpacing="50"				The space between successive major tick marks. There is also a minorTickSpacing. Length of marks can be adjusted as well majorTickLength
-			labelFunction="{axisLabel}"			A function that is used to determine how each item in the dataProvider should be labeled along the axis.
+		verticalScale="{vScale}"			The vertical scale used for scaling data to actual screen units		
+		tickStroke="{axisStroke}"			The stroke used to put the hash or tick marks on an axis
+		width="{dc.width}"
+		height="{myLineGroup.height}"
+		showDataTips="false"				A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
+		showGridArea="false"				Whether or not the grid cells are displayed
+		showGridLine="false"				Whether or not lines are drawn between grid cells
+		showLabels="false"					Whether or not to show labels on the axis
+		fontFamily="Myriad Pro"
+		fontColor="0"
+		fontSize="14"
+		tickGap="5"
+		majorTickSpacing="50"				The space between successive major tick marks. There is also a minorTickSpacing. Length of marks can be adjusted as well majorTickLength
+		labelFunction="{axisLabel}"			A function that is used to determine how each item in the dataProvider should be labeled along the axis.
 		-->
 		<axiis:backgroundGeometries>
 			<!--
@@ -289,83 +289,83 @@
 				y1="{myLineGroup.height}"
 				stroke="{axisStroke}"/>
 		</axiis:backgroundGeometries>
-
+		
 		<!-- Layouts -->
 		<!--
-				Layouts are composite components consisting of ReferenceRepeaters (the
-				loop that defines a repeated bounding pattern)  DrawingGeometries
-				(what you are going to draw) and Layouts (child layouts) 
+		Layouts are composite components consisting of ReferenceRepeaters (the
+		loop that defines a repeated bounding pattern)  DrawingGeometries
+		(what you are going to draw) and Layouts (child layouts) 
 		-->
 		<axiis:layouts>
-		
+			
 			<!-- LineSeriesGroup
-				 Line series group renders multiple lines for a series of data points. This can be used to create visualizations that use curved surfaces such as stream graphs and line charts.
-				 
-					x="12"											x-location relative to paren
-					y="0"											y-location relative to parent
-					height="{dc.height-70}"							height of display essentially
-					width="{dc.width}"								width
-					tension="{tension.value}"						The tension used to render the curves in this chart. A value of 0 results in straight lines while a value of 1 results in exaggerated Bezier curves.
-					markerColor="{areaPalette.currentColor}"		The color at the center of the markers.		
-					dataFilterFunction="{filterRows}"				This provides a way to further refine a layouts dataProvider by providing access to a custom filter data filter function. 
-																	This allows developers to easily visualize subsets of the data without having to change the underlying data structure. 
-					showArea="{area.selected}"						Whether the area beneath the lines should be filled.
-					plotFilterFunction="{filterColumns}"			A filter function that will be used to determine whether a given data point should be included in the rendering.			
-					markerSize="8"									The diameter in pixels of the markers shown at each data point.			
-					showMarker="{showMarker.selected}"				Whether or not markers should be displayed at each data point
-					mode="{int(layoutGroup.selectedValue)}"			The layout mode used to render the lines. One of {MODE_BASELINE,MODE_STACK_ZERO,MODE_STACK_FLOW}.	
-					dataProvider="{dataProvider}"					EG: var myLines is an ArrayCollection || Array of Line
-																		Line is an object that has a name property, a plotPointsCollection property of PlotPoint, and an optional index which would be it's order in myLines
-																		PlotPoint is an object with an index property, an xvalue property used for display of text or the x-value, and a yvalue property which is the y-value
-					plotCollection="columns"						The name of the property on the objects in the dataProvider that contains the data to plot 
-																	It is expected that the plot collection is a collection of objects - like Array or ArrayCollection and contains the series of data to be plotted. 
-																	i.e. dataProvider=myLines is Array || ArrayCollection myLines[0].myPlotCollection is Array || ArrayCollection
-					dataField="value"								The property within each item in the dataProvider that contains the field used to determine the value of the item. (essentially the y value)							
-					labelField="pivotName"							The property within each item in the dataProvider that contains the field used to determine the label for the item.
-					xDataField="name"								The property within each item in the dataProvider that contains the field used to determine the value of the item on the horizontal axis.
-					plotLabelField="name"							The property on the items in the dataProvider that contains the label field for the entire plot.				
-					verticalScale="{vScale}"						The vertical scale, IScale, used to scale data values to chart values 
-					horizontalScale="{hScale}"						The horizontal scale, IScale, used to scale data values to chart values
-					stroke="{myStroke}"								The stroke used to render lines
-					fill="{areaFill}"								The fill used to render the area beneath the lines if area rendering is enabled.
-					enableRollOver="true"							Turns on/off the default roll-over state
-					currentDatum									The item in the dataProvider that the layout is currently rendering.
-					currentIndex									The index of the item in the dataProvider that the layout is currently rendering.
-					currentLabel									The label of the item in the dataProvider that the layout is currently rendering, as determine by taking currentDatum[labelField], if a labelField is defined.
-					currentReference								The geometry that is being used to render the current data item as it appears after the necessary iterations of the referenceRepeater have been executed.
-					currentValue									The value of the item in the dataProvider that the layout is currently rendering, as determined by taking currentDatum[dataField], if a dataField is defined.								
+			Line series group renders multiple lines for a series of data points. This can be used to create visualizations that use curved surfaces such as stream graphs and line charts.
+			
+			x="12"											x-location relative to paren
+			y="0"											y-location relative to parent
+			height="{dc.height-70}"							height of display essentially
+			width="{dc.width}"								width
+			tension="{tension.value}"						The tension used to render the curves in this chart. A value of 0 results in straight lines while a value of 1 results in exaggerated Bezier curves.
+			markerColor="{areaPalette.currentColor}"		The color at the center of the markers.		
+			dataFilterFunction="{filterRows}"				This provides a way to further refine a layouts dataProvider by providing access to a custom filter data filter function. 
+			This allows developers to easily visualize subsets of the data without having to change the underlying data structure. 
+			showArea="{area.selected}"						Whether the area beneath the lines should be filled.
+			plotFilterFunction="{filterColumns}"			A filter function that will be used to determine whether a given data point should be included in the rendering.			
+			markerSize="8"									The diameter in pixels of the markers shown at each data point.			
+			showMarker="{showMarker.selected}"				Whether or not markers should be displayed at each data point
+			mode="{int(layoutGroup.selectedValue)}"			The layout mode used to render the lines. One of {MODE_BASELINE,MODE_STACK_ZERO,MODE_STACK_FLOW}.	
+			dataProvider="{dataProvider}"					EG: var myLines is an ArrayCollection || Array of Line
+			Line is an object that has a name property, a plotPointsCollection property of PlotPoint, and an optional index which would be it's order in myLines
+			PlotPoint is an object with an index property, an xvalue property used for display of text or the x-value, and a yvalue property which is the y-value
+			plotCollection="columns"						The name of the property on the objects in the dataProvider that contains the data to plot 
+			It is expected that the plot collection is a collection of objects - like Array or ArrayCollection and contains the series of data to be plotted. 
+			i.e. dataProvider=myLines is Array || ArrayCollection myLines[0].myPlotCollection is Array || ArrayCollection
+			dataField="value"								The property within each item in the dataProvider that contains the field used to determine the value of the item. (essentially the y value)							
+			labelField="pivotName"							The property within each item in the dataProvider that contains the field used to determine the label for the item.
+			xDataField="name"								The property within each item in the dataProvider that contains the field used to determine the value of the item on the horizontal axis.
+			plotLabelField="name"							The property on the items in the dataProvider that contains the label field for the entire plot.				
+			verticalScale="{vScale}"						The vertical scale, IScale, used to scale data values to chart values 
+			horizontalScale="{hScale}"						The horizontal scale, IScale, used to scale data values to chart values
+			stroke="{myStroke}"								The stroke used to render lines
+			fill="{areaFill}"								The fill used to render the area beneath the lines if area rendering is enabled.
+			enableRollOver="true"							Turns on/off the default roll-over state
+			currentDatum									The item in the dataProvider that the layout is currently rendering.
+			currentIndex									The index of the item in the dataProvider that the layout is currently rendering.
+			currentLabel									The label of the item in the dataProvider that the layout is currently rendering, as determine by taking currentDatum[labelField], if a labelField is defined.
+			currentReference								The geometry that is being used to render the current data item as it appears after the necessary iterations of the referenceRepeater have been executed.
+			currentValue									The value of the item in the dataProvider that the layout is currently rendering, as determined by taking currentDatum[dataField], if a dataField is defined.								
 			-->
 			<groupings:LineSeriesGroup id="myLineGroup"
-				x="12"
-				y="0"
-				height="{dc.height-70}"
-				width="{dc.width}"
-				tension="{tension.value}"
-				markerColor="{areaPalette.currentColor}"		
-				dataFilterFunction="{filterRows}"
-				showArea="{area}"
-				plotFilterFunction="{filterColumns}"
-				markerSize="8"
-				showMarker="{showMarker}"
-				mode="{int(layoutGroup)}"
-				dataProvider="{dataProvider}"
-				plotCollection="columns"
-				dataField="value"
-				labelField="pivotName"
-				xDataField="name"
-				plotLabelField="name"
-				verticalScale="{vScale}"
-				horizontalScale="{hScale}"
-				stroke="{myStroke}"
-				fill="{areaFill}"
-				 enableRollOver="true"/>
-				 
+									   x="12"
+									   y="0"
+									   height="{dc.height-70}"
+									   width="{dc.width}"
+									   tension="{tension.value}"
+									   markerColor="{areaPalette.currentColor}"		
+									   dataFilterFunction="{filterRows}"
+									   showArea="{area}"
+									   plotFilterFunction="{filterColumns}"
+									   markerSize="8"
+									   showMarker="{showMarker}"
+									   mode="{int(layoutGroup)}"
+									   dataProvider="{dataProvider}"
+									   plotCollection="columns"
+									   dataField="value"
+									   labelField="pivotName"
+									   xDataField="name"
+									   plotLabelField="name"
+									   verticalScale="{vScale}"
+									   horizontalScale="{hScale}"
+									   stroke="{myStroke}"
+									   fill="{areaFill}"
+									   enableRollOver="true"/>
+			
 		</axiis:layouts>
 		
 	</axiis:DataCanvas>
-
+	
 	<!--  PALLETTES & FILLS & STROKES -->
-
+	
 	<!--
 	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
 	and will contain x values where x is the number of objects in the Layout's dataProvider. As the Layout renders and its currentIndex property is incremented, 
@@ -377,10 +377,10 @@
 	the array. If the layout needs more colors than the array contains, the colors wraps around the array using the mod operator.
 	
 	NOTE: The major difference between Layout and LayoutAuto: 
-			Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
-			LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
-			If you want a series with repeating colors from series to series use Layout. 
-			If you want different colors for all bars, use LayoutAuto
+	Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
+	LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
+	If you want a series with repeating colors from series to series use Layout. 
+	If you want different colors for all bars, use LayoutAuto
 	-->
 	<mx:Array id="palettes">
 		<paint:LayoutAutoPalette id="outerPalette" layout="{myLineGroup}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
@@ -428,7 +428,7 @@
 			caps="none"
 			pixelHinting="true"/>
 	</mx:Array>
-
+	
 	<!-- DISPLAY OBJECTS -->
 	<mx:Number id="dataSlice">20</mx:Number>
 	<mx:Number id="slider">35</mx:Number>
@@ -436,65 +436,65 @@
 	<mx:Boolean id="area">true</mx:Boolean>
 	<mx:Boolean id="showMarker">false</mx:Boolean>
 	<mx:Number id="layoutGroup">{LineSeriesGroup.MODE_BASELINE}</mx:Number>
-
-<!--
+	
+	<!--
 	<mx:HBox id="myBox" bottom="50" horizontalCenter="0">
-		<mx:HBox>
-			<mx:Label text="Line Curve" textAlign="right" verticalCenter="0"/>
-			<mx:HSlider width="80"
-				id="slider"
-				minimum="1"
-				maximum="80"
-				value="35"
-				liveDragging="true"
-				showTrackHighlight="false"
-				verticalCenter="-5"/>
-		</mx:HBox>
-		<mx:Label text="|"/>
-		<mx:HBox>
-			<mx:Label text="% Data" textAlign="right" verticalCenter="0"/>
-			<mx:HSlider
-				id="dataSlice"
-				width="80"
-				minimum="3"
-				maximum="220"
-				value="30"
-				snapInterval="1"
-				change="{sliceData();}"
-				showTrackHighlight="false"
-				verticalCenter="-5"/>
-		</mx:HBox>
-		<mx:HBox>
-		<mx:Label text="Label Rotation" textAlign="right" verticalCenter="0"/>
-			<mx:HSlider
-				id="labelRotate" 
-				width="80"
-				minimum="0"
-				maximum="90"
-				value="0"
-				snapInterval="1"
-				change="{hAxis.labelRotation=labelRotate.value;dc.invalidateDisplayList();}"
-				showTrackHighlight="false"
-				verticalCenter="-5"/>
-		</mx:HBox>
-		<mx:Label text="|"/>
-		<mx:HBox>
-			<mx:Label text="Area" textAlign="right" verticalCenter="0"/>
-			<mx:CheckBox id="area" change="{dc.invalidateDisplayList();}" selected="true"/>
-		</mx:HBox>
-		<mx:Label text="|"/>
-		<mx:HBox>
-			<mx:Label text="Marker" textAlign="right" verticalCenter="0"/>
-			<mx:CheckBox id="showMarker" change="{dc.invalidateDisplayList();}"/>
-		</mx:HBox>
-		<mx:Label text="|"/>
-		<mx:Spacer width="20"/>
-		<mx:HBox>
-			<mx:RadioButtonGroup id="layoutGroup" change="{dc.invalidateDisplayList();}"/>
-			<mx:RadioButton label="Overlay" group="{layoutGroup}" value="{LineSeriesGroup.MODE_BASELINE}" selected="true"/>
-			<mx:RadioButton label="Stack" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_ZERO}"/>
-			<mx:RadioButton label="Flow" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_FLOW}"/>
-		</mx:HBox>
+	<mx:HBox>
+	<mx:Label text="Line Curve" textAlign="right" verticalCenter="0"/>
+	<mx:HSlider width="80"
+	id="slider"
+	minimum="1"
+	maximum="80"
+	value="35"
+	liveDragging="true"
+	showTrackHighlight="false"
+	verticalCenter="-5"/>
 	</mx:HBox>
--->
+	<mx:Label text="|"/>
+	<mx:HBox>
+	<mx:Label text="% Data" textAlign="right" verticalCenter="0"/>
+	<mx:HSlider
+	id="dataSlice"
+	width="80"
+	minimum="3"
+	maximum="220"
+	value="30"
+	snapInterval="1"
+	change="{sliceData();}"
+	showTrackHighlight="false"
+	verticalCenter="-5"/>
+	</mx:HBox>
+	<mx:HBox>
+	<mx:Label text="Label Rotation" textAlign="right" verticalCenter="0"/>
+	<mx:HSlider
+	id="labelRotate" 
+	width="80"
+	minimum="0"
+	maximum="90"
+	value="0"
+	snapInterval="1"
+	change="{hAxis.labelRotation=labelRotate.value;dc.invalidateDisplayList();}"
+	showTrackHighlight="false"
+	verticalCenter="-5"/>
+	</mx:HBox>
+	<mx:Label text="|"/>
+	<mx:HBox>
+	<mx:Label text="Area" textAlign="right" verticalCenter="0"/>
+	<mx:CheckBox id="area" change="{dc.invalidateDisplayList();}" selected="true"/>
+	</mx:HBox>
+	<mx:Label text="|"/>
+	<mx:HBox>
+	<mx:Label text="Marker" textAlign="right" verticalCenter="0"/>
+	<mx:CheckBox id="showMarker" change="{dc.invalidateDisplayList();}"/>
+	</mx:HBox>
+	<mx:Label text="|"/>
+	<mx:Spacer width="20"/>
+	<mx:HBox>
+	<mx:RadioButtonGroup id="layoutGroup" change="{dc.invalidateDisplayList();}"/>
+	<mx:RadioButton label="Overlay" group="{layoutGroup}" value="{LineSeriesGroup.MODE_BASELINE}" selected="true"/>
+	<mx:RadioButton label="Stack" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_ZERO}"/>
+	<mx:RadioButton label="Flow" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_FLOW}"/>
+	</mx:HBox>
+	</mx:HBox>
+	-->
 </mx:Application>

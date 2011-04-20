@@ -66,32 +66,19 @@ OTHER DEALINGS IN THE SOFTWARE.
 			 */
 			public function start():void
 			{
-				/** Sums up all the counts of medals within a country ( you also get min, max, avg) This will be used to draw the overlaid total
-				 *    bar that shows up on the chart, one for each country.
-				 *  This only works for data that is read in through the axiis DataSet object otherwise you'd need to provide your own approach to aggregate
-				 Provides 4 values under ds.data.object where is X is the final drill point and Y is each of the array elements
-				 object.aggregates.X_Y_sum  EG: aggregates.medal_count_sum
-				 object.aggregates.X_Y_avg
-				 object.aggregates.X_Y_min
-				 object.aggregates.X_Y_max
-				 */ 
-				ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
-				/**
-				 * Now aggregate all the sums per country. Ultimately to get the max value so we can scale the chart appropriately
-				 */
-				ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
-				/**
-				 * Note the odd syntax regarding how you access aggregates of aggregated data
-				 */
-				vScale.maxValue = service.lastResult.aggregates['sector_aggregates:amount_amount_sum_max'];
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				
+				var maxValue:Number = 0;
+				var fillCategories:Boolean = false;
+				for(var i:Number = 0; i < service.lastResult.sector.length; i++){
+					var currentValue:Number = service.lastResult.sector[i].value;
+					if (maxValue < currentValue) maxValue = currentValue;
+				}
+//				categories = categoriesLocal; 
+				vScale.maxValue = Math.round(maxValue * 1.05);
 				vScale.minValue = 0;
-				/**
-				 * So each iteration of the repeater in the graph will have a country node
-				 */
 				dataProvider = service.lastResult.sector;
-				/**
-				 * Anytime the DataCanvas dp is set this must be called
-				 */
+				dc.visible = true;
 				dc.invalidateDisplayList();
 			}
 			
@@ -143,10 +130,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<!--  GLOBAL VARIABLES -->
 	<mx:Object id="dataProvider"/>
 	<mx:String id="verticalField"/>
-	<mx:String id="dataField">amount</mx:String>
+	<mx:String id="dataField">value</mx:String>
 	<mx:String id="labelField">name</mx:String>
-	<mx:String id="childDataField">amount</mx:String>
-	<mx:String id="childLabelField">category</mx:String>
+	<mx:String id="childDataField">value</mx:String>
+	<mx:String id="childLabelField">label</mx:String>
 	<mx:Number id="percentGap">.02</mx:Number>
 	
 	<!--  
@@ -275,25 +262,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 					Note that it uses the aggregates as a data provider and uses the X_Y_sum value, or medal_count_sum for the dataField
 					Also, note the way you need to access the aggregates through []
 					-->
-					<groupings:ColumnCluster 
-						id="myStack"
-						x="0"
-						y="0"
-						width="{hLayout.currentReference.width}"
-						height="{hLayout.currentReference.height}"
-						dataProvider="{hLayout.currentDatum.aggregates}"
-						dataField="amount_amount_sum"
-						labelField="amount_amount_sum"
-						fill="{stackFill}"
-						stroke="{colStroke}"
-						verticalScale="{vScale}"
-						fontFamily="Myriad Pro"
-						fontSize="12"
-						showLabel="false"
-						dataFontColor="{outerPalette.currentColor}"
-						preRender="myStack_preRenderHandler(event)"
-						showDataLabel="false"
-						/>
 					
 					<!-- Cluster Group
 					These are the individual medal columns within a country 
@@ -307,9 +275,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 						y="0"
 						width="{hLayout.currentReference.width*.9}"
 						height="{hLayout.currentReference.height}"
-						dataProvider="{hLayout.currentValue}"
+						dataProvider="{hLayout.currentDatum}"
 						dataField="{childDataField}"
 						labelField="{childLabelField}"
+						showLabel="false"
 						percentGap=".1"
 						fill="{clusterFill}"
 						stroke="{colStroke}"
@@ -343,7 +312,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 						width="{hLayout.currentReference.width}"
 						height="60"
 						fontFamily="Myriad Pro"
-						fontSize="14"
+						fontSize="10"
 						fontColor="{outerPalette.currentColor}"
 						labelValue="{hLayout.currentLabel}"
 						markerStroke="{myStroke}"/>
@@ -372,7 +341,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 	<mx:Array id="palettes">
 		<paint:LayoutAutoPalette id="outerPalette" layout="{hLayout}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
 		<paint:LayoutAutoPalette id="clusterPalette" layout="{myCluster}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
-		<paint:LayoutAutoPalette id="stackPalette" layout="{myStack}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
 	</mx:Array>
 	
 	<!--

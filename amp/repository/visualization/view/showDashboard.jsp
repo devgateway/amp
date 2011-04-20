@@ -704,7 +704,6 @@ function changeTab (selected){
 				</div>
 			</div>
 		</fieldset>
-<!-- 
 		<fieldset>
 			<legend><span class=legend_label>Financing Instrument</span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FinancingInstrument')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FinancingInstrument')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FinancingInstrument')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FinancingInstrument')">Data View</a></div>
@@ -717,7 +716,6 @@ function changeTab (selected){
 				</div>
 			</div>
 		</fieldset>
- -->
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
  			<fieldset>
 				<legend><span class=legend_label>Donor Profile</span></legend>

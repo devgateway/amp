@@ -311,14 +311,15 @@ public class ExportNGOToPdf extends Action {
 		
 		columnName= TranslatorWorker.translateText("Number Of Staff", request);
 		generateTableHeaders(columnName, StaffInfoTable);
-		
-		Iterator<AmpOrgStaffInformation> staffInfoIter = editForm.getStaff().iterator();
-		while (staffInfoIter.hasNext()) {
-		    AmpOrgStaffInformation staffInfo = staffInfoIter.next();
-		    generateTableCell(staffInfo.getYear().toString(), StaffInfoTable);
-		    generateTableCell(TranslatorWorker.translateText(staffInfo.getType().getValue(),request), StaffInfoTable);
-		    generateTableCell(staffInfo.getStaffNumber().toString(), StaffInfoTable);
-		}		
+		if(editForm.getStaff()!=null){
+			Iterator<AmpOrgStaffInformation> staffInfoIter = editForm.getStaff().iterator();
+			while (staffInfoIter.hasNext()) {
+			    AmpOrgStaffInformation staffInfo = staffInfoIter.next();
+			    generateTableCell(staffInfo.getYear().toString(), StaffInfoTable);
+			    generateTableCell(TranslatorWorker.translateText(staffInfo.getType().getValue(),request), StaffInfoTable);
+			    generateTableCell(staffInfo.getStaffNumber().toString(), StaffInfoTable);
+			}
+		}				
 		
 		StaffInfoCell.addElement(StaffInfoTable);
 		mainLayout.addCell(StaffInfoCell);

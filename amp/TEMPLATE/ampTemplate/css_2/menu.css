@@ -1,5 +1,5 @@
 /*Copyright (c) 2008, Yahoo! Inc. All rights reserved.Code licensed under the BSD License:http://developer.yahoo.net/yuiamp/license.txtversion: 2.5.1*/
-.main_menu .yuiamp-skin-amp{margin:0 auto;clar:both;}
+.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both; width:750px;float:left;}
 .yuiamp-skin-amp ul{background:none;border:none;}
 .mainmenucontainer{width:1000px; margin:0 auto;}
 .yuiampmenubar {

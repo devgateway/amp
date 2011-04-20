@@ -57,7 +57,31 @@
 	</digi:secure><center>
 	<div class="main_menu">
 		<digi:insert attribute="headerMiddle"/>
+         <div class="workspace_info">
+   
+			<logic:notEmpty name="currentMember" scope="session">
+				<feature:display name="Change Workspace" module="My Desktop">
+				
+						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
+				 		 <select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
+				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
+								</logic:equal>
+								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+										<option value="<bean:write name="item" property="ampTeamMemId"/>">
+											<bean:write name="team" property="name"/>
+										</option>
+								</logic:notEqual>
+							</logic:iterate>
+						</select>
+				 			
+			</feature:display>
+			</logic:notEmpty>
+			</div>	
 	</div>
+   
 	<div class="breadcrump_1">
 	</div></center>
 	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
@@ -120,29 +144,7 @@
 		</div>
 	</div>	
     <center>
-    <div class="workspace_info">
-   
-			<logic:notEmpty name="currentMember" scope="session">
-				<feature:display name="Change Workspace" module="My Desktop">
-				
-						<digi:trn key="aim:changeworkspace">Workspace</digi:trn>:
-				 		 <select onChange="selectwkspace(this.value)" class="dropdwn_sm_wksp">
-				 			<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-								<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-								<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<option selected="selected" value='<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></option>
-								</logic:equal>
-								<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-										<option value="<bean:write name="item" property="ampTeamMemId"/>">
-											<bean:write name="team" property="name"/>
-										</option>
-								</logic:notEqual>
-							</logic:iterate>
-						</select>
-				 			
-			</feature:display>
-			</logic:notEmpty>
-			</div>	
+    
 			
             </center>
 	<!-- BREADCRUMP END -->

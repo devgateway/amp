@@ -89,8 +89,9 @@ html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
-.workspace_info {width:1000px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;text-align:left;}
-html.ie .workspace_info {width:1000px; margin:0 auto; height:20px; color:#000000; font-size:11px; padding:5px 5px 10px 5px;text-align:left;}
+.workspace_info {width:220px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
+.workspace_info select{width:150px;font-size:10px;}
+html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
 #login_menu{width:350px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 

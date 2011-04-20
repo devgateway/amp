@@ -430,7 +430,7 @@ function adminHelp(){
 	${fn:replace(message,quote,escapedQuote)}
 </c:set>
    --> 
-             <div class="yuiamp-skin-amp" style="clear: both; width: 940px;">
+             <div class="yuiamp-skin-amp" style="clear: both; ">
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd bd_drop">   
                       <ul class="first-of-type">

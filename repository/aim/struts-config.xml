@@ -592,6 +592,8 @@
       <forward name="added" path="/aim/organisationManager.do?added=true" redirect="true" />
     </action>
     <action name="aimAddOrgForm" parameter="actionMethod" path="/aim/exportOrganizationToxsl" scope="session" type="org.digijava.module.aim.action.ExportOrganizationToExcel" validate="false" />
+    <action name="aimAddOrgForm" path="/aim/exportNGOToPdf" scope="session" type="org.digijava.module.aim.action.ExportNGOToPdf" validate="false" />
+    
     <action name="aimOrgTypeManagerForm" path="/aim/orgTypeManager" scope="request" type="org.digijava.module.aim.action.OrgTypeManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=orgTypeManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />

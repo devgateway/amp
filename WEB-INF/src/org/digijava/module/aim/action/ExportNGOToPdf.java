@@ -190,46 +190,48 @@ public class ExportNGOToPdf extends Action {
 		
 		String primary= TranslatorWorker.translateText("yes", request);
 		String nonPrimary= TranslatorWorker.translateText("no", request);
-
-		Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
-		while (contactInfoIter.hasNext()) {
-			AmpOrganisationContact orgContact = contactInfoIter.next();
-			generateTableCell(orgContact.getContact().getLastname(), contactInfoTable);
-			generateTableCell(orgContact.getContact().getName(), contactInfoTable);		  		    
-		    
-		    String emails="";			
-		    String phones="";
-		    String faxes="";
-		    String currentRecord = null;
-		    for (AmpContactProperty property : orgContact.getContact().getProperties()) {
-				if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-					currentRecord = property.getValue(); 
-					emails+= BULLETCHAR + currentRecord + ";\n";
-				}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-					currentRecord = TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber(); 
-					phones+= BULLETCHAR + currentRecord + ";\n";
-				}else{
-					currentRecord = property.getValue(); 
-					faxes+=BULLETCHAR + currentRecord + ";\n";
+		if(editForm.getOrgContacts() !=null){
+			Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
+			while (contactInfoIter.hasNext()) {
+				AmpOrganisationContact orgContact = contactInfoIter.next();
+				generateTableCell(orgContact.getContact().getLastname(), contactInfoTable);
+				generateTableCell(orgContact.getContact().getName(), contactInfoTable);		  		    
+			    
+			    String emails="";			
+			    String phones="";
+			    String faxes="";
+			    String currentRecord = null;
+			    for (AmpContactProperty property : orgContact.getContact().getProperties()) {
+					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
+						currentRecord = property.getValue(); 
+						emails+= BULLETCHAR + currentRecord + ";\n";
+					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
+						currentRecord = TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber(); 
+						phones+= BULLETCHAR + currentRecord + ";\n";
+					}else{
+						currentRecord = property.getValue(); 
+						faxes+=BULLETCHAR + currentRecord + ";\n";
+					}
 				}
+			    
+			    generateTableCell(emails, contactInfoTable);
+			    generateTableCell(phones, contactInfoTable);
+			    generateTableCell(faxes, contactInfoTable);
+			    
+			    String title="";
+			    if(orgContact.getContact().getTitle()!=null){
+			        title=orgContact.getContact().getTitle().getValue();
+			    }
+			    generateTableCell(title, contactInfoTable);
+			    
+			    String isprimaryContact=nonPrimary;
+			    if(orgContact.getPrimaryContact()!=null&&orgContact.getPrimaryContact()){
+			        isprimaryContact=primary;
+			    }
+			    generateTableCell(isprimaryContact, contactInfoTable);
 			}
-		    
-		    generateTableCell(emails, contactInfoTable);
-		    generateTableCell(phones, contactInfoTable);
-		    generateTableCell(faxes, contactInfoTable);
-		    
-		    String title="";
-		    if(orgContact.getContact().getTitle()!=null){
-		        title=orgContact.getContact().getTitle().getValue();
-		    }
-		    generateTableCell(title, contactInfoTable);
-		    
-		    String isprimaryContact=nonPrimary;
-		    if(orgContact.getPrimaryContact()!=null&&orgContact.getPrimaryContact()){
-		        isprimaryContact=primary;
-		    }
-		    generateTableCell(isprimaryContact, contactInfoTable);
 		}
+		
 		
 		
 		contactInfoCell.addElement(contactInfoTable);
@@ -269,28 +271,31 @@ public class ExportNGOToPdf extends Action {
 		columnName= TranslatorWorker.translateText("Currency", request);
 		generateTableHeaders(columnName, budgetInfoTable);
 		
-		Iterator<AmpOrganizationBudgetInformation> budgetInfoIter = editForm.getOrgInfos().iterator();
-		while (budgetInfoIter.hasNext()) {
-		    AmpOrganizationBudgetInformation budgetInfo = budgetInfoIter.next();
-		    generateTableCell(budgetInfo.getYear().toString(), budgetInfoTable);
-		    generateTableCell(TranslatorWorker.translateText(budgetInfo.getType().getValue(), request), budgetInfoTable);
-		   
-		    String organizations="";
-		    String longestOrgRecord = "";
-			String currentRecord = null;
-		    if(budgetInfo.getOrganizations()!=null){
-		        for(AmpOrganisation organisation:budgetInfo.getOrganizations() ){
-		        	currentRecord = BULLETCHAR+organisation.getName();
-		            organizations+= currentRecord + NEWLINECHAR;
-		            if(currentRecord.length() > longestOrgRecord.length()){
-		            	longestOrgRecord = currentRecord;
+		if(editForm.getOrgInfos()!= null ){
+			Iterator<AmpOrganizationBudgetInformation> budgetInfoIter = editForm.getOrgInfos().iterator();
+			while (budgetInfoIter.hasNext()) {
+			    AmpOrganizationBudgetInformation budgetInfo = budgetInfoIter.next();
+			    generateTableCell(budgetInfo.getYear().toString(), budgetInfoTable);
+			    generateTableCell(TranslatorWorker.translateText(budgetInfo.getType().getValue(), request), budgetInfoTable);
+			   
+			    String organizations="";
+			    String longestOrgRecord = "";
+				String currentRecord = null;
+			    if(budgetInfo.getOrganizations()!=null){
+			        for(AmpOrganisation organisation:budgetInfo.getOrganizations() ){
+			        	currentRecord = BULLETCHAR+organisation.getName();
+			            organizations+= currentRecord + NEWLINECHAR;
+			            if(currentRecord.length() > longestOrgRecord.length()){
+			            	longestOrgRecord = currentRecord;
+				        }
 			        }
-		        }
-		    }
-		    generateTableCell(organizations, budgetInfoTable);
-		    generateTableCell(budgetInfo.getAmount().toString(), budgetInfoTable);
-		    generateTableCell(budgetInfo.getCurrency().getCurrencyCode(), budgetInfoTable);
+			    }
+			    generateTableCell(organizations, budgetInfoTable);
+			    generateTableCell(budgetInfo.getAmount().toString(), budgetInfoTable);
+			    generateTableCell(budgetInfo.getCurrency().getCurrencyCode(), budgetInfoTable);
+			}
 		}
+		
 		
 		budgetInfoCell.addElement(budgetInfoTable);
 		mainLayout.addCell(budgetInfoCell);

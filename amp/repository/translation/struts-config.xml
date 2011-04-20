@@ -11,6 +11,7 @@
     <form-bean name="translationPermissionsForm" type="org.digijava.module.translation.form.TranslationPermissionsForm" />
     <form-bean name="translatorForm" type="org.digijava.module.translation.form.TranslatorForm" />
     <form-bean name="importExportForm" type="org.digijava.module.translation.form.ImportExportForm" />
+    <form-bean name="newAdvancedTrnForm" type="org.digijava.module.translation.form.NewAdvancedTrnForm" />
   </form-beans>
   <action-mappings>
     <!-- Action mappings added by Shamanth -->
@@ -46,6 +47,16 @@
     <!-- Default view definition -->
     <action forward="/translation/showAdvancedTranslation.do" path="/translation/index" />
     <!-- End default view definition -->
+    <!-- NEW ADVANCED TRANSLATIONS START-->
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.ShowNewAdvancedTranslations" scope="request" path="/translation/showNewAdvancedTranslation">
+      <forward name="forward" path="/showLayout.do?layout=newAdvTranslationLayout" />
+    </action>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnAddTranslation" scope="session" path="/translation/newAdvTranAdd"/>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnDeleteTranslation" scope="session" path="/translation/newAdvTranDelete"/>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnGetChanges" scope="session" path="/translation/AdvTranGetChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUndoChange" scope="session" path="/translation/AdvTranUndoChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnSaveChanges" scope="session" path="/translation/AdvTranSaveChanges"/>
+    <!-- NEW ADVANCED TRANSLATIONS END-->
     <action name="advancedTranslationForm" type="org.digijava.module.translation.action.ShowAdvancedTranslation" scope="session" path="/translation/showAdvancedTranslation">
       <forward name="forward" path="/showLayout.do?layout=advTranslationLayout" />
     </action>

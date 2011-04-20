@@ -33,7 +33,7 @@
 				</li>
             </logic:equal>
             <li class="yuiampmenuitem_drop">
-				<a class="yuiampmenuitemlabel" onclick="return canExit()" href="/translation/showAdvancedTranslation.do">
+				<a class="yuiampmenuitemlabel" onclick="return canExit()" href="/translation/showNewAdvancedTranslation.do">
 		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn>
                 </a>
 			</li>         

@@ -46,6 +46,7 @@ public class Message implements Serializable{
 	private String keyWords;
     private int hashCode;
     private boolean hasHashCode;
+    private String originalMessage;
 
 	public Message(){
         hasHashCode = false;
@@ -202,6 +203,12 @@ public class Message implements Serializable{
 	}
 	public String getKeyWords() {
 		return keyWords;
+	}
+	public void setOriginalMessage(String originalMessage) {
+		this.originalMessage = originalMessage;
+	}
+	public String getOriginalMessage() {
+		return originalMessage;
 	}
 
 }

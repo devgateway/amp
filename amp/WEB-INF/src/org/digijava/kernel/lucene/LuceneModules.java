@@ -3,6 +3,7 @@ package org.digijava.kernel.lucene;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.help.util.HelpUtil;
 
 /**
@@ -17,7 +18,7 @@ public class LuceneModules implements LuceneModuleRegistry{
 	public LuceneModules() {
 		registeredModules = new ArrayList<LucModule<?>>();
 		//TRANSLATION
-		//registeredModules.addAll(TrnUtil.getLuceneModules());
+		registeredModules.addAll(TrnUtil.getLuceneModules());
 		//HELP
 		registeredModules.addAll(HelpUtil.getLuceneModules());
 		//ORGANIZATION not used yet.

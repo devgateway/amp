@@ -1,8 +1,10 @@
 package org.digijava.module.translation.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Trn;
@@ -34,7 +37,19 @@ public class MessageGroup {
 	private String key = null;
 	private String keyWords = null;
 	private String siteId = null;
+	/**
+	 * default text from which key was generated.
+	 * Not mandatory!
+	 * Currently {@link Message} has not such property but we are going to add for AMP-6663
+	 */
+	private String defaultText;
+	
+	/**
+	 * Hit score for search results and sorting.
+	 */
+	private Float score;
 	private Map<String, Message> messages = null;
+	
 	
 	/**
 	 * Constructs group for particular key.
@@ -198,6 +213,16 @@ public class MessageGroup {
 	public Collection<Message> getAllMessages(){
 		return this.messages.values();
 	}
+	/**
+	 * Returns all messages sorted by message language weight
+	 * @return list of sorted messages of the group
+	 * @see TrnUtil.MessageLocaleWeightComparator
+	 */
+	public List<Message> getSortedMessages(){
+		List<Message> messageList = new ArrayList<Message>(this.messages.values());
+		Collections.sort(messageList, new TrnUtil.MessageLocaleWeightComparator());
+		return messageList;
+	}
 	
 	/**
 	 * Adds all messages from other group to this on.
@@ -273,5 +298,32 @@ public class MessageGroup {
 
 	public String getSiteId() {
 		return siteId;
+	}
+	public void setDefaultText(String defaultText) {
+		this.defaultText = defaultText;
+	}
+
+	public String getDefaultText() {
+		String result = defaultText;
+		if (result==null){
+			Message msg = getMessageByLocale("en");
+			if (msg != null){
+				result = msg.getMessage(); 
+			}else if (this.messages!=null && this.messages.size()>0){
+				msg = this.messages.values().iterator().next();
+				result = msg.getMessage();
+			}else{
+				result = "Empty";
+			}
+		}
+		return result;
+	}
+
+	public void setScore(Float score) {
+		this.score = score;
+	}
+
+	public Float getScore() {
+		return score;
 	}
 }

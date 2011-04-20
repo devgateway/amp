@@ -7,6 +7,7 @@
     <page page="adminUser" name="translationUserLayout" title="User Administration" />
     <page page="translator" name="translatorLayout" title="Translator Interface" />
     <page page="importExportBody" name="importExportLayout" title="Inport/Export Translations" />
+    <page page="newAdvancedTrans" name="newAdvTranslationLayout" title="Advanced Translation" />
 </secondary-pages>
 <module>
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>

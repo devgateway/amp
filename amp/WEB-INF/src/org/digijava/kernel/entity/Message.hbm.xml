@@ -12,6 +12,7 @@
 		<property name="created" type="java.sql.Timestamp" column="CREATED" />
 		<property name="lastAccessed" type="java.sql.Timestamp" column="LAST_ACCESSED" />
 		<property name="keyWords" type="java.lang.String" column="KEY_WORDS" />
+		<property name="originalMessage" type="text" column="ORIG_MESSAGE" />
 	</class>
 </hibernate-mapping>
 

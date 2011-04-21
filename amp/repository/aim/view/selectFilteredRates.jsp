@@ -54,9 +54,8 @@
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
@@ -74,19 +73,19 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td colspan="3" height="16" vAlign="center" width="571"><span class="subtitle-blue">
 						<digi:trn>
 							Select Filtered Currency Rates
 						</digi:trn></span>
 						<digi:errors/>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
+						<table width="100%" cellspacing="0" cellPadding="0" vAlign="top" align="left">
 							<tr>
-								<td valign="top">
+								<td valign="top" width=750>
 											<logic:notEmpty name="myForm" property="existingFilteredRates">
 												<table border="0px" cellpadding="1px" >
 													<tr align="center">
@@ -118,43 +117,43 @@
 											</logic:notEmpty>
 								</td>
 								<td valign="top">
-									<table border="0px"  cellpadding="1px">
+									<table width=100% cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;">
 													<tr align="center">
-														<th bgcolor="#006699" class="textalb" align="center"  colspan="2" >
+														<td bgcolor="#c7d4db" height=25 class="inside" align="center"  colspan="2" >
 															<digi:trn>
-																Add New Filtered Rate
-															</digi:trn>
-														</th>
+																<b>Add New Filtered Rate</b>															</digi:trn>														</td>
 													</tr>
 													<tr> 
-														<td><digi:trn>To Rate</digi:trn>:</td> 
+														<td class="inside" align=right><digi:trn>To Rate</digi:trn>:</td> 
 														<td>
 															<html:select property="toCurrencyCode">
 																<html:optionsCollection property="existingCurrencies" label="value" value="key" styleClass="inp-text" />
-															</html:select>
-														</td>
+															</html:select>														</td>
 													</tr>
 													<tr>
-														<td><digi:trn>From Rate</digi:trn>:</td> 
-														<td>
+														<td class="inside" align=right><digi:trn>From Rate</digi:trn>:</td> 
+														<td class="inside">
 															<html:select property="fromCurrencyCode">
 																<html:optionsCollection property="existingCurrencies" label="value" value="key"  styleClass="inp-text"/>
-															</html:select>
-														</td>
+															</html:select>														</td>
 													</tr>
+													<tr>
+													  <td class="inside" colspan="2" align=center><button type="button" onclick="return addFilteredRate();" class="buttonx" > <digi:trn>Add</digi:trn> </button></td>
+													  
+									  </tr>
 										</table>
-										<button type="button" onclick="return addFilteredRate();" class="buton" > <digi:trn>Add</digi:trn> </button>
+										
 								</td>
 								<td valign="top">
 											<table align="center" cellpadding="0" cellspacing="0" width="90%"
 												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="10"0>
+													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">
-															Other links
+															<b style="padding-left:5px;">Other links</b>
 															</digi:trn></td>
 															<td background="module/aim/images/corner-r.gif" height="17"
 																width=17>&nbsp;</td>
@@ -164,9 +163,9 @@
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellspacing="1" width="100%">
+													<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 														<tr>
-															<td><digi:img src="module/aim/images/arrow-014E86.gif"
+															<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
 																width="15" height="10" /> <c:set var="translation">
 																<digi:trn >Click here to go back to admin home page</digi:trn>
 															</c:set> <digi:link href="/admin.do"
@@ -175,7 +174,7 @@
 															</digi:link></td>
 														</tr>
 														<tr>
-															<td>
+															<td class="inside">
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">
@@ -187,7 +186,7 @@
 															</td>
 														</tr>
 														<tr>
-															<td>
+															<td class="inside">
 																	<digi:img src="module/aim/images/arrow-014E86.gif"
 																		width="15" height="10" /> 
 																	<c:set var="translation">

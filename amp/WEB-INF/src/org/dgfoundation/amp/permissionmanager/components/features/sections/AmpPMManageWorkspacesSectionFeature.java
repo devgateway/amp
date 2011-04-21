@@ -98,7 +98,7 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,true);
+		final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,false,true);
 		add(searchContacts);		
 		
 	}

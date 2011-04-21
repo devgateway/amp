@@ -82,7 +82,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<User> searchContacts=new AmpComboboxFieldPanel<User>("searchUsers", "Search Users", autoComplete,true);
+		final AmpComboboxFieldPanel<User> searchContacts=new AmpComboboxFieldPanel<User>("searchUsers", "Search Users", autoComplete,false,true);
 		add(searchContacts);
 		
 		add(new AjaxLink("addOrgsToUsers"){

@@ -10,9 +10,10 @@ import java.util.Map;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
@@ -34,14 +35,19 @@ public class AmpOrganisationSearchModel extends
 		try {
 			List<AmpOrganisation> ret = null;
 			session = PersistenceManager.getSession();
-			Query query = session.createQuery("from "
-					+ AmpOrganisation.class.getName()
-					+ " o WHERE o.name like :name OR o.acronym like :name");
-			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
-			if (maxResults != null)
-				query.setMaxResults(maxResults);
-			query.setString("name", "%" + input + "%");
-			ret = query.list();
+			Criteria crit = session.createCriteria(AmpOrganisation.class);
+			crit.add(Restrictions.disjunction()
+					.add(Restrictions.ilike("name", "%" + input + "%"))
+					.add(Restrictions.ilike("acronym", "%" + input + "%")));
+
+			if (params != null) {
+				Integer maxResults = (Integer) getParams().get(
+						PARAM.MAX_RESULTS);
+				if (maxResults != null && maxResults.intValue() != 0)
+					crit.setMaxResults(maxResults);
+			}
+			crit.setMaxResults(30);
+			ret = crit.list();
 			session.close();
 			return ret;
 		} catch (HibernateException e) {

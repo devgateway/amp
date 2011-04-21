@@ -96,7 +96,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 			}
 		};
 
-		AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("orgSearch", "Search Organizations", true, autoComplete);
+		AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("orgSearch", "Search Organizations",  autoComplete,false,true);
 		add(searchOrgs);
 
 		final AbstractReadOnlyModel<List<AmpAhsurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpAhsurveyIndicator>>() {

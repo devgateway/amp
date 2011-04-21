@@ -22,7 +22,7 @@ import org.digijava.module.aim.util.AmpComboboxDisplayable;
 public abstract class AbstractAmpAutoCompleteModel<T> extends
 		LoadableDetachableModel<java.util.List<T>> {
 	
-	private static final Integer MAX_RESULTS_VALUE=10;
+	private static final Integer MAX_RESULTS_VALUE=0;
 	
 	public enum PARAM implements AmpAutoCompleteModelParam {MAX_RESULTS};
 	
@@ -36,6 +36,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	protected String input;
 	
 	public Object getParam(AmpAutoCompleteModelParam p) {
+		if(params==null) return null;
 		return params.get(p);
 	}
 	
@@ -106,7 +107,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		super();
 		this.input = input;
 		this.params=params;
-		if(getParam(PARAM.MAX_RESULTS)==null) this.params.put(PARAM.MAX_RESULTS, MAX_RESULTS_VALUE);
+		if(params!=null && getParam(PARAM.MAX_RESULTS)==null) this.params.put(PARAM.MAX_RESULTS, MAX_RESULTS_VALUE);
 	}
 
 }

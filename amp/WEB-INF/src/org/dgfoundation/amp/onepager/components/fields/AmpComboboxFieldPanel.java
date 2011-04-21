@@ -29,42 +29,23 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 	 * @param fmName
 	 */
 	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete){
-		this(id, fmName, false, autoComplete);
+		this(id, fmName, autoComplete,false,false);
 	}
 	
-	
-	public AmpComboboxFieldPanel(String id, String fmName, boolean hideLabel, final AbstractAmpAutoCompleteTextField<T> autoComplete) {
-		super(id, fmName, hideLabel);
-		this.autoComplete = autoComplete;
-		newLine.setVisible(false);
-		add(autoComplete);
-		AjaxLink link=new AjaxLink("dropdownLink") {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				autoComplete.setModelObject("");
-				autoComplete.getChoices("");
-				String js=String.format("$('#%s').trigger('change');",autoComplete.getMarkupId());
-				target.appendJavascript(js);
-//				target.addComponent(autoComplete);
-			}
-		};
-		link.add(new Image("dropdown",new DropDownImageResourceRef()));
-		add(link);
-	}
 
-	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete, boolean newLineVisible) {
-		super(id, fmName);
+	
+	public AmpComboboxFieldPanel(String id, String fmName, final AbstractAmpAutoCompleteTextField<T> autoComplete, boolean newLineVisible, boolean hideLabel) {
+		super(id, fmName,hideLabel);
 		this.autoComplete = autoComplete;
 		newLine.setVisible(newLineVisible);
 		add(autoComplete);
 		AjaxLink link=new AjaxLink("dropdownLink") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				autoComplete.setModelObject("");
-				autoComplete.getChoices("");
-				String js=String.format("$('#%s').trigger('change');",autoComplete.getMarkupId());
+				//simulate onKeyDown event, this will trigger ajax-autocomplete.js to show all options
+				String js=String.format("e=jQuery.Event('keydown'); e.which=40; $('#%s').trigger(e);",autoComplete.getMarkupId());
+				target.focusComponent(autoComplete);
 				target.appendJavascript(js);
-//				target.addComponent(autoComplete);
 			}
 		};
 		link.add(new Image("dropdown",new DropDownImageResourceRef()));

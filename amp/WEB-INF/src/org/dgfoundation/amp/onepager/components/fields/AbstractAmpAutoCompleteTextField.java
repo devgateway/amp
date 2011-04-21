@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +86,8 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 	public AbstractAmpAutoCompleteTextField(
 			final Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
 		super("autoCompleteText", new Model<String>(DEFAULT_SEARCH_TEXT),
-				new AutoCompleteSettings().setShowListOnEmptyInput(true));
+				new AutoCompleteSettings());
+
 		setType((Class<?>) null);
 		this.objectListModelClass = objectListModelClass;
 		this.setOutputMarkupId(true);
@@ -107,6 +109,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 								"\0", "&nbsp;"));
 					if (level != null && level == 1)
 						response.write("<i>");
+					if(input.length()<2) response.write(getChoiceValue(object));else
 					response.write(Pattern
 							.compile(input, Pattern.CASE_INSENSITIVE)
 							.matcher(getChoiceValue(object))
@@ -129,8 +132,18 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		};
 
 		// create behavior for this renderer
+		
+		AutoCompleteSettings settings = new AutoCompleteSettings();
+		settings.setShowListOnEmptyInput(true);
+		settings.setUseSmartPositioning(true);
+		settings.setAdjustInputWidth(false);
+		
+//		settings.setThrottleDelay(1000);
+		settings.setShowCompleteListOnFocusGain(true);
+		settings.setShowListOnFocusGain(true);
+		
 		autoCompleteBehavior = createAutoCompleteBehavior(renderer,
-				new AutoCompleteSettings().setPreselect(false));
+				settings);
 		if (autoCompleteBehavior == null) {
 			throw new NullPointerException(
 					"Auto complete behavior cannot be null");
@@ -153,7 +166,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				target.addComponent(AbstractAmpAutoCompleteTextField.this);
+			//target.addComponent(AbstractAmpAutoCompleteTextField.this);
 				CHOICE choice = findChoice();
 				if (choice != null)
 					onSelect(target, choice);
@@ -180,10 +193,10 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 	}
 
 	@Override
-	protected List<CHOICE> getChoiceList(String input) {
+	public List<CHOICE> getChoiceList(String input) {
 		this.input = input;
-//		if (input.length() < 2)
-//			return Collections.emptyList();
+		if (input!=null && input.length()>0 && input.length() < 2)
+			return Collections.emptyList();
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
 		try {
 			constructor = objectListModelClass.getConstructor(String.class,

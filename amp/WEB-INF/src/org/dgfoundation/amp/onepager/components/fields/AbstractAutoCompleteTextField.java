@@ -226,6 +226,11 @@ public abstract class AbstractAutoCompleteTextField<CHOICE> extends TextField {
 
 		add(new SimpleAttributeModifier("autocomplete", "off"));
 
+//		settings.setShowListOnEmptyInput(true);
+//		settings.setUseSmartPositioning(true);
+//		settings.setShowCompleteListOnFocusGain(true);
+//		settings.setShowListOnFocusGain(true);
+		
 		autoCompleteBehavior = createAutoCompleteBehavior(renderer, settings);
 		if (autoCompleteBehavior == null) {
 			throw new NullPointerException("Auto complete behavior cannot be null");
@@ -298,6 +303,7 @@ public abstract class AbstractAutoCompleteTextField<CHOICE> extends TextField {
 	 */
 	public final CHOICE findChoice() {
 		try {
+			if(choiceList==null) choiceList=getChoiceList("");
 			for (final CHOICE choice : choiceList) {
 				if (getConvertedInput().equals(getChoiceValue(choice))) {
 					return choice;

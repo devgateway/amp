@@ -45,9 +45,9 @@ public class AmpLocationSearchModel
 				.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations val = (AmpCategoryValueLocations) iterator
 					.next();
-			if (val.getName().toLowerCase().indexOf(input) != -1)
+			if (val.getName().toLowerCase().indexOf(input.toLowerCase()) != -1)
 				ret.add(val);
-			if (ret.size() >= maxResults)
+			if (maxResults!=0 && ret.size() >= maxResults)
 				break;
 		}
 		return ret;

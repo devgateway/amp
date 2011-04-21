@@ -127,7 +127,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(43));
 		autoComplete.add(sizeModifier);
-		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,true);
+		final AmpComboboxFieldPanel<AmpObjectVisibility> searchFields=new AmpComboboxFieldPanel<AmpObjectVisibility>("searchFields", "Search Fields", autoComplete,false,true);
 		form.add(searchFields);
 		
 		

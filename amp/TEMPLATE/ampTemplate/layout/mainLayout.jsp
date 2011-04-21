@@ -73,7 +73,7 @@
 
 <div class="breadcrump_1">&nbsp;</div>	
 			
-	<table width="100%">
+	<table width="100%" id="homelayout">
 		<tr>
 			<td>
 				<digi:insert attribute="body"/>

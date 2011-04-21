@@ -132,6 +132,7 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:11px; font-weight:bold; }
 .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px; }
+html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:162px; }
 .right_menu_cont {padding:10px; font-size:11px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
@@ -338,3 +339,6 @@ span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
 div.reg_form_container .f-names {color:#7f7f7f; font-size:11px; font-weight:bold;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
+#amphome{width:1000px; margin:0 auto;}
+#amphometext{width:750px; float:left;}
+#amphomesidebar{width:220px; float:right;}

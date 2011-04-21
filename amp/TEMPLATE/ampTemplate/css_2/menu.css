@@ -264,7 +264,8 @@ text-decoration:underline;
 
 
 .yuiampmenuitem_drop {}
-#usr_menu_logged{width:400px;float:right;}
+#usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 60px 0px 0px;}
+html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 #usr_menu_logged, #usr_menu_logged a {color:#fff; font-size:12px;text-decoration:none;}
 #usr_menu_logged a:hover {color:#fff; font-size:12px;text-decoration:underline;}
 /*-------menu fixes by rafy

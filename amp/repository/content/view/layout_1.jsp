@@ -21,28 +21,24 @@
 <!-- BREADCRUMP END -->
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<div align="center">
-  <table width="930" class="layoutTable" border="0" style="margin-top:15px; margin-bottom:15px;">
-    <tr>
-      <td valign="top" width="740px"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
-      </td>
-      <td width="20">&nbsp;</td>
-      <td valign="top" width="240">
+<div id="amphome">
+	<div id="amphometext">
+<digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
+     
+      
+      </div>
+      <div id="amphomesidebar">
       <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
-          <table width="250" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;clear:both;">
-            <tr>
+         
               <c:forEach var='index' begin='0' end='${thumbnailCount-1}'>
-                <td valign="middle" align="center"><a style="cursor: pointer">
+               <a style="cursor: pointer">
                   <digi:secure authenticated="false"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
                   <digi:secure authenticated="true"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}&isAdmin=true" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
-                  </a> </td>
+                  </a> 
               </c:forEach>
-            </tr>
-          </table>
+           
       <br />
       </c:if>
-      </td>
-    </tr>
-  </table>
+    </div> 
 </div>

@@ -85,38 +85,8 @@
 					<td noWrap width="100%" vAlign="top">
 						<table width="100%" cellspacing="0" cellPadding="0" vAlign="top" align="left">
 							<tr>
+								
 								<td valign="top" width=750>
-											<logic:notEmpty name="myForm" property="existingFilteredRates">
-												<table border="0px" cellpadding="1px" >
-													<tr align="center">
-														<th bgcolor="#006699" class="textalb" align="center">
-															<digi:trn>
-																Selection
-															</digi:trn>
-														</th>
-														<th bgcolor="#006699" class="textalb" align="center">
-															<digi:trn>
-																To Currency
-															</digi:trn>
-														</th>
-														<th bgcolor="#006699" class="textalb" align="center">
-															<digi:trn>
-																From Currency
-															</digi:trn>
-														</th>
-													</tr>
-													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
-														<tr>
-														<td valign="top">	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
-														<td valign="top">   ${filteredRate.toCurrency.currencyName }  (${filteredRate.toCurrency.currencyCode}) &nbsp; &nbsp; </td>
-														<td valign="top">   ${filteredRate.fromCurrency.currencyName }  (${filteredRate.fromCurrency.currencyCode})</td>
-														</tr>
-													</logic:iterate>
-												</table>
-												<button type="button" onclick="return deleteSelection();" class="buton" > <digi:trn>Remove Selected Filtered Rates</digi:trn> </button>
-											</logic:notEmpty>
-								</td>
-								<td valign="top">
 									<table width=100% cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;">
 													<tr align="center">
 														<td bgcolor="#c7d4db" height=25 class="inside" align="center"  colspan="2" >
@@ -139,14 +109,10 @@
 													</tr>
 													<tr>
 													  <td class="inside" colspan="2" align=center><button type="button" onclick="return addFilteredRate();" class="buttonx" > <digi:trn>Add</digi:trn> </button></td>
-													  
 									  </tr>
-										</table>
-										
-								</td>
+										</table>								</td>
 								<td valign="top">
-											<table align="center" cellpadding="0" cellspacing="0" width="90%"
-												border="0">
+											<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 												<tr>
 													<td><!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
@@ -158,8 +124,7 @@
 															<td background="module/aim/images/corner-r.gif" height="17"
 																width=17>&nbsp;</td>
 														</tr>
-													</table>
-													</td>
+													</table>													</td>
 												</tr>
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
@@ -182,8 +147,7 @@
 																	</c:set> 
 																	<digi:link href="/currencyManager.do" title="${translation}">
 																			<digi:trn>Currency Manager</digi:trn>
-																	</digi:link>
-															</td>
+																	</digi:link>															</td>
 														</tr>
 														<tr>
 															<td class="inside">
@@ -194,17 +158,43 @@
 																	</c:set> 
 																	<digi:link href="/showCurrencyRates.do~clean=true~timePeriod=1" title="${translation}">
 																			<digi:trn>Currency Rate Manager</digi:trn>
-																	</digi:link>
-															</td>
+																	</digi:link>															</td>
 														</tr>
 		
 														<!-- end of other links -->
-													</table>
-													</td>
+													</table>													</td>
 												</tr>
-											</table>
-								</td>
+											</table>								</td>
 							</tr>
+							<tr>
+							  
+							  <td valign="top">	<logic:notEmpty name="myForm" property="existingFilteredRates">
+												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;">
+													<tr align="center">
+														<th bgcolor="#c7d4db" class="textalb" align="center" height=25>
+															<digi:trn>
+																<b>Selection</b>															</digi:trn>														</th>
+														<th bgcolor="#c7d4db" class="textalb" align="center">
+															<digi:trn>
+																<b>To Currency</b>															</digi:trn>														</th>
+														<th bgcolor="#c7d4db" class="textalb" align="center">
+															<digi:trn>
+																<b><b>From Currency</b></b>															</digi:trn>														</th>
+													</tr>
+													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
+														<tr>
+														<td valign="top" class="inside">	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
+														<td valign="top" class="inside">   ${filteredRate.toCurrency.currencyName }  (${filteredRate.toCurrency.currencyCode}) &nbsp; &nbsp; </td>
+														<td valign="top" class="inside">   ${filteredRate.fromCurrency.currencyName }  (${filteredRate.fromCurrency.currencyCode})</td>
+														</tr>
+														<tr>
+														  <td colspan="3" valign="top" class="inside" align=center style="padding-top:7px; padding-bottom:7px;"><button type="button" onclick="return deleteSelection();" class="buttonx" > <digi:trn>Remove Selected Filtered Rates</digi:trn> </button></td>
+													  </tr>
+													</logic:iterate>
+												</table>
+											</logic:notEmpty>								</td>
+							  <td valign="top">&nbsp;</td>
+						  </tr>
 						</table>
 					</td>
 				</tr>

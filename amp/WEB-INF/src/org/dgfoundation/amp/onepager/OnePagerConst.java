@@ -4,8 +4,12 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import java.util.HashSet;
 import org.apache.wicket.Component;
+import org.apache.wicket.MetaDataKey;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -18,6 +22,10 @@ public final class OnePagerConst {
 		new MetaInfo<Integer>("Planned" ,Constants.PLANNED),  new MetaInfo<Integer>("Pipeline",Constants.ADJUSTMENT_TYPE_PIPELINE )};
 	public final static MetaInfo<Integer>[] adjustmentTypesShort=new MetaInfo[] { new MetaInfo<Integer>("Actual",Constants.ACTUAL), 
 		new MetaInfo<Integer>("Planned" ,Constants.PLANNED)};
+	
+	
+	public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryDocument>>(){};
+	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
 	
 	//TODO: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function
 	public final static String slideToggle = "$('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;});";

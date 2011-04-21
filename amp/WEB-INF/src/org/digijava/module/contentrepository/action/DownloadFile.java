@@ -12,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 import org.springframework.util.FileCopyUtils;
@@ -30,9 +31,9 @@ public class DownloadFile extends Action {
 		
 		if (nodeUUID != null) {
 			Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);			
-			Property contentType	= node.getProperty("ampdoc:contentType");
-			Property name			= node.getProperty("ampdoc:name");
-			Property data			= node.getProperty("ampdoc:data");
+			Property contentType	= node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
+			Property name			= node.getProperty(CrConstants.PROPERTY_NAME);
+			Property data			= node.getProperty(CrConstants.PROPERTY_DATA);
 			if ( contentType != null && name != null && data != null) {
 				writeFile(response, contentType.getString(), name.getString(), data.getStream());
 			}

@@ -13,9 +13,7 @@ import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.dgfoundation.amp.onepager.translation.AmpComponentResolver;
-import org.dgfoundation.amp.onepager.web.pages.AmpHeaderFooter;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.hibernate.SessionFactory;
@@ -59,6 +57,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 */
 		 getSecuritySettings().setAuthorizationStrategy(new MetaDataRoleAuthorizationStrategy(this));
 		 MetaDataRoleAuthorizationStrategy.authorize(OnePager.class, "ROLE_AUTHENTICATED");
+		 //MetaDataRoleAuthorizationStrategy.authorizeAll(OnePager.class);
 		 MetaDataRoleAuthorizationStrategy.authorize(PermissionManager.class, "ROLE_AUTHENTICATED");
 		 
 		 getPageSettings().addComponentResolver(new AmpComponentResolver());

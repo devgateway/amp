@@ -3,11 +3,13 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
+
 /**
  * @author mihai
  *
  */
-public class AmpColumnsFilters {
+public class AmpColumnsFilters implements Serializable {
 	private Long id;
 	private AmpColumns column;
 	private String beanFieldName;

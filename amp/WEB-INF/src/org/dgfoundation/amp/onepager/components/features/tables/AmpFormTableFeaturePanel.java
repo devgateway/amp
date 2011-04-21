@@ -63,7 +63,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		return tableId;
 	}
 	/**
-	 * Sets the title header rowspan based on how many columns you want to show in this table
+	 * Sets the title header colspan based on how many columns you want to show in this table
 	 * The default is set in the markup to 3
 	 * @param rowspan
 	 */

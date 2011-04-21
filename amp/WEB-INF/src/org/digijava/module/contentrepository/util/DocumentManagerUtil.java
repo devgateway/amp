@@ -66,10 +66,10 @@ import org.hibernate.Query;
 
 public class DocumentManagerUtil {
 	private static Logger logger	= Logger.getLogger(DocumentManagerUtil.class);
-	public static Repository getJCRRepository (HttpServletRequest request) {
+	public static Repository getJCRRepository (HttpSession httpSession) {
 		
 //		ServletContext context			= (ServletContext)request.getAttribute("ServletContext");
-		ServletContext context			= request.getSession().getServletContext();
+		ServletContext context			= httpSession.getServletContext();
 		if (context == null) {
 			logger.error("The request doesn't contain a ServletContext");
 			return null;
@@ -88,9 +88,12 @@ public class DocumentManagerUtil {
 		}
 		return repository;
 	}
+	
 	public static Session getReadSession(HttpServletRequest request) {
-		HttpSession httpSession	= request.getSession();
-		
+		return getReadSession(request.getSession());
+	}
+	
+	public static Session getReadSession(HttpSession httpSession) {
 		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
 		
 		if ( jcrSession!=null && !jcrSession.isLive() ) {
@@ -100,7 +103,7 @@ public class DocumentManagerUtil {
 		
 		if (jcrSession == null) {
 			try {
-				jcrSession	= getJCRRepository(request).login();
+				jcrSession	= getJCRRepository(httpSession).login();
 				httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -121,9 +124,12 @@ public class DocumentManagerUtil {
 		
 		return jcrSession;
 	}
+	
 	public static Session getWriteSession(HttpServletRequest request) {
-		HttpSession httpSession	= request.getSession();
-		
+		return getReadSession(request.getSession());
+	}
+	
+	public static Session getWriteSession(HttpSession httpSession) {
 		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
 		
 		if ( jcrSession!=null && !jcrSession.isLive() ) {
@@ -147,7 +153,7 @@ public class DocumentManagerUtil {
 				
 				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
 				
-				Repository rep				= getJCRRepository(request); 
+				Repository rep				= getJCRRepository(httpSession); 
 				
 				jcrSession					= rep.login( creden );
 				
@@ -179,15 +185,20 @@ public class DocumentManagerUtil {
 	}
 	
 	public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
-		Node n 	= getReadNode(uuid, request);
+		HttpSession httpSession = request.getSession();
+		Node n 	= getReadNode(uuid, httpSession);
 		if ( n!=null ) {
 			return new NodeWrapper (n);
 		}
 		return null;
 	}
-	
+
 	public static Node getReadNode (String uuid, HttpServletRequest request) {
-		Session session	= getReadSession(request);
+		return getReadNode(uuid, request.getSession());
+	}
+	
+	public static Node getReadNode (String uuid, HttpSession httpSession) {
+		Session session	= getReadSession(httpSession);
 		try {
 			//session.getRootNode().refresh(false);
 			//session.refresh(false);
@@ -197,9 +208,12 @@ public class DocumentManagerUtil {
 			return null;
 		}
 	}
-	
 	public static Node getWriteNode (String uuid, HttpServletRequest request) {
-		Session session	= getWriteSession(request);
+		return getWriteNode(uuid, request.getSession());
+	}
+	
+	public static Node getWriteNode (String uuid, HttpSession httpSession) {
+		Session session	= getWriteSession(httpSession);
 		try {
 			//session.getRootNode().refresh(false);
 			//session.refresh(false);
@@ -295,20 +309,28 @@ public class DocumentManagerUtil {
 		
 		
 	}
-	
+
 	public static int getNextVersionNumber(String uuid, HttpServletRequest request) {
-		List versions	= getVersions(uuid, request, false);
-		return versions.size() + 1;
+		return getNextVersionNumber(uuid, request.getSession());
 	}
 	
+	public static int getNextVersionNumber(String uuid, HttpSession httpSession) {
+		List versions	= getVersions(uuid, httpSession, false);
+		return versions.size() + 1;
+	}
+
 	public static List<Version> getVersions(String uuid, HttpServletRequest request, boolean needWriteSession) {
+		return getVersions(uuid, request.getSession(), needWriteSession);
+	}
+	
+	public static List<Version> getVersions(String uuid, HttpSession httpSession, boolean needWriteSession) {
 		if (uuid != null) {
 			Node node;
 			ArrayList<Version> versions		= new ArrayList<Version>();
 			if (needWriteSession)
-				node				= DocumentManagerUtil.getWriteNode(uuid, request);
+				node				= DocumentManagerUtil.getWriteNode(uuid, httpSession);
 			else
-				node				= DocumentManagerUtil.getReadNode(uuid, request);
+				node				= DocumentManagerUtil.getReadNode(uuid, httpSession);
 			VersionHistory history;
 			try {
 				history 						= node.getVersionHistory();
@@ -342,9 +364,14 @@ public class DocumentManagerUtil {
 		else
 			return new Boolean(false);
 	}
+	
 	private static boolean deleteDocument (String uuid, HttpServletRequest request) {
+		return deleteDocument(uuid, request.getSession());
+	}
+	
+	private static boolean deleteDocument (String uuid, HttpSession httpSession) {
 		if (uuid != null) {
-			Node node		= DocumentManagerUtil.getWriteNode(uuid, request);
+			Node node		= DocumentManagerUtil.getWriteNode(uuid, httpSession);
 			try {
 				Node parent		= node.getParent();
 				node.remove();

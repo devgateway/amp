@@ -21,6 +21,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -301,7 +302,7 @@ public class NodeWrapper {
 	}	
 	
 	
-	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+	public NodeWrapper(TemporaryDocumentData tempDoc, HttpSession httpSession, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -320,7 +321,7 @@ public class NodeWrapper {
 		}
 		
 		try {
-			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+			TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
 			if (isANewVersion){
 				newNode		= parentNode;
@@ -333,7 +334,7 @@ public class NodeWrapper {
 			}
 			
 			if (isANewVersion){
-				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), httpSession);
 				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
 			}
 			else{

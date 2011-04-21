@@ -12,6 +12,6 @@
 		<property name="uuid" column="uuid" type="java.lang.String" />
 		<property name="documentType" column="document_type" type="java.lang.String" />
 		<many-to-one name="ampActivity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 	</class>
 </hibernate-mapping>

@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
 
-public class DocumentData implements Comparable<DocumentData>{
+public class DocumentData implements Comparable<DocumentData>, Serializable{
 	String name				= null;
 	String uuid				= null;
 	String title			= null;

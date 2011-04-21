@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramForm
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
 
 /**
@@ -95,6 +96,9 @@ public class OnePager extends OnePagerWrapper {
 
 			AmpPIFormSectionFeature pi = new AmpPIFormSectionFeature("pi", "Paris Indicators", am);
 			activityForm.add(pi);
+			
+			AmpResourcesFormSectionFeature resources = new AmpResourcesFormSectionFeature("resources", "Related Documents", am);
+			activityForm.add(resources);
 
 		} catch (Exception e) {
 			logger.error(e);

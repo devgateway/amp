@@ -15,7 +15,6 @@ import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -37,7 +36,6 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private AmpTeamMember ampCurrentMember;
 	private HttpSession httpSession;
 	
-
 	
 	public AmpAuthWebSession(final Request request) {
 		super(request);

@@ -443,23 +443,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 return false;
             }
             
-            var fundingorgid = document.aimAddOrgForm.fundingorgid.value;
-            var mandatoryFundOrgId = document.getElementById("mandatoryFundOrgId");
-            var alertError=false;
-            if(type.value=='NGO'){
-            	if (mandatoryFundOrgId!=null && (fundingorgid == null||fundingorgid.length == 0)) {
-            		alertError=true;
-                }
-            }else{
-            	if (fundingorgid == null||fundingorgid.length == 0) {
-            		alertError=true;                    
-                }
-            }
-            if(alertError==true){
-            	alert('<digi:trn  jsFriendly="true">Please enter a funding id for this Organization.</digi:trn>');
-                document.aimAddOrgForm.fundingorgid.focus();
-                return false;
-            }
+           
             
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {

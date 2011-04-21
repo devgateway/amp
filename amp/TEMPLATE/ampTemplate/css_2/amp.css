@@ -68,7 +68,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 .welcome_title {font-size:18px; font-weight:bold; margin-bottom:10px;}
 #logincontainer {z-index:9999;}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
-.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;float:left;margin-left:50px;}
+.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;float:left;margin-left:70px;}
 html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;position:absolute;top:15px; left:10px;}
 .login_here_cont { font-size:12px;}
 .login_here a {color:#000000;}
@@ -93,7 +93,7 @@ top_nav a {color:#FFFFFF;}
 .workspace_info select{width:150px;font-size:10px;}
 html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
-#login_menu{width:350px; float:right; margin:10px 0px 0px 0px;color:#fff;}
+#login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
 .main_menu {height:25px;  width:1000px; margin:0 auto;text-align:center;border:none;position:relative;}

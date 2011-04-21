@@ -1,4 +1,4 @@
-
+   .yui-content *{font-size:12px;}
 	#demo .yui-nav{
 
 	}
@@ -15,7 +15,7 @@
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 12px; 
+			font-size: 11px; 
 			color:#376091;
 			font-weight: bold;
 			background-color: #EBEBEB;

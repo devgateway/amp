@@ -79,11 +79,8 @@
 				<digi:insert attribute="body"/>
 			</td>
 		</tr>
-		<tr>
-			<td>
-				<digi:insert attribute="footer"/>
-			</td>
-		</tr>
+	
 	</table>
+    <digi:insert attribute="footer"/>
 </body>
 </html>

@@ -71,7 +71,7 @@
 		<td  width="60%">
 			<digi:edit key="um:welcomeAmp" maxLength="1500"></digi:edit>
 		</td>
-        rafy
+    
 		<td  width="5%" />
 		<td width="70%" bgcolor="#dbe5f1">
 			<table width="100%" height="400" cellpadding="3" cellspacing="0" >

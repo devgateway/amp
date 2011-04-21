@@ -192,10 +192,10 @@ function fnSubmit() {
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
-			<table cellPadding=5 cellSpacing=3 width="100%" style="font-size:12px;">
+			<table cellPadding=0 cellSpacing=0 width="100%" style="font-size:12px;">
 				<tr>
 					<!-- Start Navigation -->
-					<td colspan="2"><span class=crumb>
+					<td colspan="2" style="padding-bottom:15px;"><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -216,30 +216,25 @@ function fnSubmit() {
 				</tr>
 				<tr>
 					<td noWrap width="750" vAlign="top">
-						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
+						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left" style="margin-top:10px;">
 							<tr><td>
 								<!-- Filters -->
 
-								<table cellpadding="1" cellspacing="1" align="left" width="100%">
+								<table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
 								<tr><td>
 								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>
 										<td vAlign="center">
-											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
-										</td>
+											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>										</td>
 										<td vAlign="center">
-											<digi:trn key="aim:currencyCode">Currency Code</digi:trn>
-										</td>
+											<digi:trn key="aim:currencyCode">Currency Code</digi:trn>										</td>
 										<td vAlign="center">
 											<html:select property="filterByCurrCode" styleClass="inp-text">
 												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
-												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
-											</html:select>
-										</td>
+												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;											</html:select>										</td>
 										<td vAlign="center">
-											<digi:trn key="aim:ratesOfDate">Rates of date</digi:trn>
-										</td>
+											<digi:trn key="aim:ratesOfDate">Rates of date</digi:trn>										</td>
 										<%--
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<digi:trn key="aim:dateFrom">From</digi:trn>
@@ -250,16 +245,12 @@ function fnSubmit() {
 												<tr>
 													<td>
 														<html:text property="filterByDateFrom" size="10" readonly="true"
-														styleId="filterByDateFrom" styleClass="inp-text"/>
-													</td>
+														styleId="filterByDateFrom" styleClass="inp-text"/>													</td>
 													<td align="left" vAlign="center">&nbsp;
 														<a id="date1" href='javascript:pickDate("date1",document.aimCurrencyRateForm.filterByDateFrom)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-														</a>
-													</td>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">														</a>													</td>
 												</tr>
-											</table>
-										</td>
+											</table>										</td>
 										<td vAlign="center">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 											<%--<digi:trn key="aim:andPrev7Days">and previous</digi:trn>--%>
@@ -270,15 +261,13 @@ function fnSubmit() {
 													</c:set>						
 													<html:option value="${period.value}">${translation}</html:option>
 												</logic:iterate>
-											</html:select>
-										</td>
+											</html:select>										</td>
 										
 										<td vAlign="center">
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="buttonx"/>
-										</td>
+                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="buttonx"/>										</td>
 									</tr>
 								</table>
 								</td></tr>
@@ -286,17 +275,14 @@ function fnSubmit() {
 								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px;">
 									<tr>
 										<td vAlign="left" width="170">
-											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
-										</td>
+											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:										</td>
 										<td vAlign="left" width="50" align="center">
-											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
-										</td>
+											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>										</td>
 										<td  vAlign="left" align="center">
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:viewBtn"> View </digi:trn>
                                           </c:set>
-                                          <html:submit value="${trnViewBtn}" styleClass="buttonx"/>
-										</td>
+                                          <html:submit value="${trnViewBtn}" styleClass="buttonx"/>										</td>
 									</tr>
 								</table>
 								</td>
@@ -309,11 +295,9 @@ function fnSubmit() {
                                         <td vAlign="left">
                                           <FONT color=red>*</FONT>
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
-										  </a>
-                                        </td>
+										  </a>                                        </td>
                                         <td vAlign="middle" align="center">
-										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
-										</td>                                   
+										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>										</td>                                   
                                         
                                         <td vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
@@ -324,17 +308,15 @@ function fnSubmit() {
                                         <a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 										 	<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 												<input id="currRateFile" name="currRateFile" type="file" class="file"/>
-												
 											</div>
-                                        </a>
-                                       
-                                        </td>
-                                    </table>
-                                  </td>
-                                  
+                                        </a>                                        </td>
+                                    </table>                                  </td>
                                 </tr>
-                                </table>
-<input type="button" value="${trnUpdateValues}" class="buttonx" onclick="return updateRates()">
+                                <tr>
+                                  <td align=center><input type="button" value="${trnUpdateValues}" class="buttonx" onclick="return updateRates()"></td>
+                                </tr>
+                              </table>
+
 
 							</td></tr>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
@@ -429,7 +411,7 @@ function fnSubmit() {
 							<tr><td><hr>
 							
 								<!-- Pagination -->
-								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
+								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="fon-size:12px;">
 									<tr>
 										<td>
 											<bean:size name="aimCurrencyRateForm" property="pages" id="totpages"/>
@@ -465,7 +447,7 @@ function fnSubmit() {
 							<c:if test="${empty aimCurrencyRateForm.pages}">
 							<tr><td>
 								<!-- Pagination -->
-								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
+								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="fon-size:12px;">
 									<tr>
 										<td>
 											 1 <digi:trn key="aim:of">of</digi:trn> 1
@@ -532,7 +514,7 @@ function fnSubmit() {
 												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
+													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px; margin-top:10px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">

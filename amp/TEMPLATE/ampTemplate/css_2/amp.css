@@ -106,7 +106,7 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 
 
 /* BREADCRUMP */
-.breadcrump { height:40px; display:none;}
+.breadcrump { height:40px; display:none; background:#f0f0f0; margin:5px 0px 5px 0px;border:1px solid red;}
 .breadcrump_1 { height:25px;margin:5px 0px 0px 0px;}
 .breadcrump_cont {padding-top:11px; padding-bottom:10px; font-size:12px;}
 .sec_name {font-size:12px; font-weight:bold;}
@@ -140,7 +140,7 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 .desktop_tab_base {border-bottom:1px solid #F2F2F2; padding-left:1px;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
 .filter_tab {border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; float:left; background-color:#F2F2F2;}
-.desktop_tab {border-top:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-left:1px solid #D0D0D0; float:left; background-color:#F2F2F2; list-style:none; margin-top:1px; margin-left:5px;}
+.desktop_tab {border-top:1px solid #D0D0D0;  border-left:1px solid #D0D0D0; float:left; background-color:#F2F2F2; list-style:none; margin-top:1px; margin-left:5px;}
 li.desktop_tab.ui-tabs-selected {border:1px solid #D0D0D0; float:left; margin-top:1px; border-bottom:#FFFFFF; background-color:#FFFFFF; list-style:none;}
 
 li.desktop_tab.ui-tabs-selected a {color:#FF6000; text-decoration:none;}
@@ -260,7 +260,14 @@ html.ie div.header {overflow:visible;}
 
 
 /* FOOTER */
-.footer {background-color:#8B8B8B; color:#FFFFFF; font-size:11px; margin-top:25px; padding-top:10px; padding-bottom:10px;}
+.footer {
+    background-color: #8B8B8B;
+    color: #FFFFFF;
+    font-size: 11px;
+    margin-top: 25px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
 .dialog {display:none;}
 
 /* ADMIN */
@@ -330,3 +337,4 @@ div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; bac
 span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
 div.reg_form_container .f-names {color:#7f7f7f; font-size:11px; font-weight:bold;}
+div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}

@@ -133,6 +133,7 @@ function setHoveredRow(rowId) {
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
+
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
 	
 	<tr>
@@ -190,7 +191,7 @@ function setHoveredRow(rowId) {
 								<b> 
 									<digi:trn>Years</digi:trn>
 								</b>							</td>
-							<td colspan="2" align="center" class="inside">
+							<td colspan="4" align="center" class="inside">
 								<b> 
 									<digi:trn>Action</digi:trn>
 								</b>							</td>

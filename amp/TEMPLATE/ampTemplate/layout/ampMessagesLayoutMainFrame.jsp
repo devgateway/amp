@@ -16,8 +16,8 @@
 		
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/messages.js"/>"></script>
-		
-		
+	<div class="breadcrumbsplaceholder">breacrumbs should go here - replace this code </div>
+	
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width=768  valign="top">
@@ -69,7 +69,7 @@
 								</li>
 							</c:if>
 							<c:if test="${messageForm.tabIndex  != '4'}">
-								<li class="desktop_tab ui-state-default ui-corner-top">
+								<li class="desktop_tab ui-state-default ui-corner-top last_tab">
 									<a href="#tabs-4" class="tab_link"><digi:trn>Calendar Events</digi:trn></a>
 								</li>
 							</c:if>

@@ -169,17 +169,17 @@
 							<tr>
 							  
 							  <td valign="top">	<logic:notEmpty name="myForm" property="existingFilteredRates">
-												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;">
+												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;" width=100%>
 													<tr align="center">
-														<th bgcolor="#c7d4db" class="textalb" align="center" height=25>
+														<td bgcolor="#c7d4db" class="inside" align="center" height=25>
 															<digi:trn>
-																<b>Selection</b>															</digi:trn>														</th>
-														<th bgcolor="#c7d4db" class="textalb" align="center">
+																<b>Selection</b>															</digi:trn>														</td>
+														<td bgcolor="#c7d4db" class="inside" align="center">
 															<digi:trn>
-																<b>To Currency</b>															</digi:trn>														</th>
-														<th bgcolor="#c7d4db" class="textalb" align="center">
+																<b>To Currency</b>															</digi:trn>														</td>
+														<td bgcolor="#c7d4db" class="inside" align="center">
 															<digi:trn>
-																<b><b>From Currency</b></b>															</digi:trn>														</th>
+																<b><b>From Currency</b></b>															</digi:trn>														</td>
 													</tr>
 													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
 														<tr>

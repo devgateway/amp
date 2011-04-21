@@ -1,5 +1,6 @@
 package org.digijava.module.visualization.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -128,16 +129,26 @@ public class DbUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static double getPledgesFunding(Long[] orgIds, Long[] orgGroupIds,
+    public static DecimalWraper getPledgesFunding(Long[] orgIds, Long[] orgGroupIds,
             Date startDate, Date endDate,
             String currCode) throws DgException {
-        double totalPlannedPldges = 0;
+    	DecimalWraper totalPlannedPldges = new DecimalWraper();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Integer startYear = Integer.valueOf(sdf.format(startDate));
+        Integer endYear = Integer.valueOf(sdf.format(endDate));
+        String years = "";
+        for (int i = startYear; i <= endYear; i++) {
+			if(!years.equals(""))
+				years = years + ", ";
+			years = years + "'" + i + "'";
+		}
+        
         String oql = "select fd ";
         oql += " from ";
         oql += FundingPledgesDetails.class.getName()
                 + " fd inner join fd.pledgeid plg ";
         oql += " inner join  plg.organization org  ";
-        oql += " where  fd.funding_date>=:startDate and fd.funding_date<=:endDate   ";
+        oql += " where  fd.fundingYear in (" + years + ")";
         if (orgIds == null || orgIds.length==0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += " and  org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
@@ -149,8 +160,8 @@ public class DbUtil {
         List<FundingPledgesDetails> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
+            //query.setDate("startDate", startDate);
+            //query.setDate("endDate", endDate);
             //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
@@ -163,7 +174,7 @@ public class DbUtil {
                 double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
                 double toExRt = Util.getExchange(currCode, dt);
                 DecimalWraper amt = CurrencyWorker.convertWrapper(pledge.getAmount(), frmExRt, toExRt, dt);
-                totalPlannedPldges += amt.doubleValue();
+                totalPlannedPldges.setValue(totalPlannedPldges.getValue().add(amt.getValue()));
             }
 
 
@@ -790,6 +801,29 @@ public class DbUtil {
         }
         logger.debug("Getting organisation successfully ");
         return org;
+    }
+    
+    public static AmpOrgGroup getOrgGroup(Long id) {
+        Session session = null;
+        AmpOrgGroup orgGrp = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from "
+                + AmpOrgGroup.class.getName() + " o "
+                + "where (o.ampOrgGrpId=:id)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("id", id, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                orgGrp = (AmpOrgGroup) itr.next();
+            }
+
+        } catch (Exception ex) {
+            logger.error("Unable to get organisation group from database", ex);
+        }
+        logger.debug("Getting organisation successfully ");
+        return orgGrp;
     }
 
 }

@@ -200,6 +200,79 @@ public class DataDispatcher extends DispatchAction {
 		JSONObject rootNumOfDons = new JSONObject();
 		JSONObject rootAvgProjs = new JSONObject();
 		
+		JSONObject rootSelOrgGroups = new JSONObject();
+		JSONArray selOrgGroups = new JSONArray();
+		JSONObject rootSelOrgs = new JSONObject();
+		JSONArray selOrgs = new JSONArray();
+		JSONObject rootSelRegions = new JSONObject();
+		JSONArray selRegions = new JSONArray();
+		JSONObject rootSelZones = new JSONObject();
+		JSONArray selZones = new JSONArray();
+		JSONObject rootSelSectors = new JSONObject();
+		JSONArray selSectors = new JSONArray();
+		JSONObject rootSelSubSectors = new JSONObject();
+		JSONArray selSubSectors = new JSONArray();
+		
+		if (orgsGrpIds!=null && orgsGrpIds.length>0 && orgsGrpIds[0]!=-1) {
+			for (int i = 0; i < orgsGrpIds.length; i++) {
+				child.put("name", DbUtil.getOrgGroup(orgsGrpIds[i]).getOrgGrpName());
+				selOrgGroups.add(child);
+			}
+		}
+		rootSelOrgGroups.put("type", "SelOrgGroupsList");
+		rootSelOrgGroups.put("list", selOrgGroups);
+		children.add(rootSelOrgGroups);
+		
+		if (orgsIds!=null && orgsIds.length>0 && orgsIds[0]!=-1) {
+			for (int i = 0; i < orgsIds.length; i++) {
+				child.put("name", DbUtil.getOrganisation(orgsIds[i]).getName());
+				selOrgs.add(child);
+			}
+		}
+		rootSelOrgs.put("type", "SelOrgsList");
+		rootSelOrgs.put("list", selOrgs);
+		children.add(rootSelOrgs);
+		
+		if (regsIds!=null && regsIds.length>0 && regsIds[0]!=-1) {
+			for (int i = 0; i < regsIds.length; i++) {
+				child.put("name", LocationUtil.getAmpCategoryValueLocationById(regsIds[i]).getName());
+				selRegions.add(child);
+			}
+		}
+		rootSelRegions.put("type", "SelRegionsList");
+		rootSelRegions.put("list", selRegions);
+		children.add(rootSelRegions);
+		
+		if (zonesIds!=null && zonesIds.length>0 && zonesIds[0]!=-1) {
+			for (int i = 0; i < zonesIds.length; i++) {
+				child.put("name", LocationUtil.getAmpCategoryValueLocationById(zonesIds[i]).getName());
+				selZones.add(child);
+			}
+		}
+		rootSelZones.put("type", "SelZonesList");
+		rootSelZones.put("list", selZones);
+		children.add(rootSelZones);
+		
+		if (secsIds!=null && secsIds.length>0 && secsIds[0]!=-1) {
+			for (int i = 0; i < secsIds.length; i++) {
+				child.put("name", SectorUtil.getAmpSector(secsIds[i]).getName());
+				selSectors.add(child);
+			}
+		}
+		rootSelSectors.put("type", "SelSectorsList");
+		rootSelSectors.put("list", selSectors);
+		children.add(rootSelSectors);
+		
+		if (subSecsIds!=null && subSecsIds.length>0 && subSecsIds[0]!=-1) {
+			for (int i = 0; i < subSecsIds.length; i++) {
+				child.put("name", SectorUtil.getAmpSector(subSecsIds[i]).getName());
+				selSubSectors.add(child);
+			}
+		}
+		rootSelSubSectors.put("type", "SelSubSectorsList");
+		rootSelSubSectors.put("list", selSubSectors);
+		children.add(rootSelSubSectors);
+		
 		Map<AmpActivity, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
 		List list = null;
 		if (projectsList!=null) {
@@ -410,7 +483,7 @@ public class DataDispatcher extends DispatchAction {
         			newFilter.setSelSectorIds(ids);
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                    
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     String keyName = sector.getName();
                    
                     sectorTotal = sectorTotal.add(amount);
@@ -529,7 +602,7 @@ public class DataDispatcher extends DispatchAction {
     			DashboardFilter newFilter = filter.getCopyFilterForFunding();
     			newFilter.setSelSectorIds(ids);
                 DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
-                BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 amount.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 sectorTotal = sectorTotal.add(amount);
                 dataSetCSV.put(ids, amount);
@@ -555,7 +628,7 @@ public class DataDispatcher extends DispatchAction {
                     startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(allData.containsKey(i)){
                     	BigDecimal[] currentAmounts = allData.get(i);
                     	currentAmounts[index] = amount;
@@ -582,7 +655,7 @@ public class DataDispatcher extends DispatchAction {
                     startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(othersYearlyValue.containsKey(i)){
                     	BigDecimal currentAmount = othersYearlyValue.get(i);
                         othersYearlyValue.put(i, currentAmount.add(amount));
@@ -807,25 +880,19 @@ public class DataDispatcher extends DispatchAction {
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
-        double divideByDenominator;
+        BigDecimal divideByDenominator;
 
-        if (filter.getDivideThousands()) {
-        	divideByDenominator=1000000000;
-        }
+        if (filter.getDivideThousands())
+        	divideByDenominator=new BigDecimal(1000000000);
         else
-        {
-        	divideByDenominator=1000000;
-        }
+        	divideByDenominator=new BigDecimal(1000000);
         
 
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            if (filter.getDivideThousands()) {
-            	divideByDenominator=1000000;
-            }
+            if (filter.getDivideThousands())
+            	divideByDenominator=new BigDecimal(1000000);
             else
-            {
-            	divideByDenominator=1000;
-            }
+            	divideByDenominator=new BigDecimal(1000);
         }
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -862,7 +929,7 @@ public class DataDispatcher extends DispatchAction {
 		                } else {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
-						xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+						xmlString.append("<year category=\"" + i + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 					}
 					xmlString.append("</aidtype>\n");
 				}
@@ -883,7 +950,7 @@ public class DataDispatcher extends DispatchAction {
 		                } else {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
-						xmlString.append("<aidtype category=\"" + value.getValue() + "\" amount=\""+ funding.doubleValue()/divideByDenominator + "\"/>\n");
+						xmlString.append("<aidtype category=\"" + value.getValue() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 					}
 					xmlString.append("</year>\n");
 				}
@@ -927,7 +994,7 @@ public class DataDispatcher extends DispatchAction {
                 } else {
                     funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
                 }
-        		csvString.append(funding.doubleValue()/divideByDenominator);
+        		csvString.append(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
     			if(it.hasNext()) 
     				csvString.append(",");
     			else
@@ -1004,9 +1071,9 @@ public class DataDispatcher extends DispatchAction {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
-				xmlString.append("<fundingtype category=\"Planned\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator) + "\"/>\n");
+				xmlString.append("<fundingtype category=\"Planned\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 	            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
-				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator) + "\"/>\n");
+				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 				xmlString.append("</year>\n");
 			}
 			
@@ -1038,10 +1105,10 @@ public class DataDispatcher extends DispatchAction {
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
-			csvString.append(fundingActual.getValue().divide(divideByDenominator));
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			csvString.append(",");
             DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
-			csvString.append(fundingPlanned.getValue().divide(divideByDenominator));
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
             if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}
@@ -1159,28 +1226,26 @@ public class DataDispatcher extends DispatchAction {
 				.getFunding(filter, startDate, endDate, null, null,
 						Constants.DISBURSEMENT, Constants.ACTUAL);
 				xmlString
-				.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator) + "\"/>\n");
+				.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 				DecimalWraper fundingComm = DbUtil
 				.getFunding(filter, startDate, endDate, null, null,
 						Constants.COMMITMENT, Constants.ACTUAL);
 				xmlString
-				.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator) + "\"/>\n");
+				.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 				if (filter.isExpendituresVisible()) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
-					.append("<fundingtype category=\"Expenditures\" amount=\""+ fundingExp.getValue().divide(divideByDenominator) + "\"/>\n");
+					.append("<fundingtype category=\"Expenditures\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 				}
 
 				if (filter.isPledgeVisible()) {
-					Double fundingPledge = 0d;
-					fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
+					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge
-							/ divideByDenominator.doubleValue() + "\"/>\n");
+					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
 				}
 				xmlString.append("</year>\n");
 			}
@@ -1209,30 +1274,30 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, Constants.ACTUAL);
 			csvString
-					.append(fundingComm.getValue().divide(divideByDenominator));
+					.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			csvString.append(",");
 			DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,
 					endDate, null, null, Constants.DISBURSEMENT,
 					Constants.ACTUAL);
 			csvString
-					.append(fundingDisb.getValue().divide(divideByDenominator));
+					.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			DecimalWraper fundingExp = new DecimalWraper();
 			if (filter.isExpendituresVisible()) {
 				csvString.append(",");
 				fundingExp = DbUtil.getFunding(filter, startDate, endDate,
 						null, null, Constants.EXPENDITURE, Constants.ACTUAL);
 				csvString.append(fundingExp.getValue().divide(
-						divideByDenominator));
+						divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 
-			Double fundingPledge = 0d;
+			DecimalWraper fundingPledge =  new DecimalWraper();
 			if (filter.isPledgeVisible()) {
 				fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
 						filter.getSelOrgGroupIds(), startDate, endDate,
 						currCode);
 				csvString.append(",");
-				csvString.append(fundingPledge
-						/ divideByDenominator.doubleValue());
+				csvString.append(fundingPledge.getValue().divide(
+						divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			if (fundingPledge.doubleValue() != 0
 					|| fundingComm.doubleValue() != 0
@@ -1308,7 +1373,7 @@ public class DataDispatcher extends DispatchAction {
 	        } catch (Exception e) {
 	            logger.error("unable to load organizations", e);
 	        }
-		} else if (parentId != null && objectType != null && objectType.equals("Sector")) {
+		} else if (parentId != null && objectType != null && (objectType.equals("Sector") || objectType.equals("Sectors"))) {
 			Long sectorId = Long.parseLong(parentId);
 	        List<AmpSector> sectors;
 	        try {
@@ -1450,7 +1515,7 @@ public class DataDispatcher extends DispatchAction {
         			newFilter.setSelLocationIds(ids);
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
                    
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     BigDecimal oldvalue = BigDecimal.ZERO;
                     String keyName = "";
                     String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
@@ -1610,7 +1675,7 @@ public class DataDispatcher extends DispatchAction {
     			DashboardFilter newFilter = filter.getCopyFilterForFunding();
     			newFilter.setSelLocationIds(ids);
                 DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 regionalTotal = regionalTotal.add(amount);
                 dataSetCSV.put(ids, amount);
 
@@ -1637,7 +1702,7 @@ public class DataDispatcher extends DispatchAction {
                     startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(allData.containsKey(i)){
                     	BigDecimal[] currentAmounts = allData.get(i);
                     	currentAmounts[index] = amount;
@@ -1664,7 +1729,7 @@ public class DataDispatcher extends DispatchAction {
                     startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-                    BigDecimal amount = fundingCal.getValue().setScale(10, RoundingMode.HALF_UP).divide(divideByMillionDenominator);
+                    BigDecimal amount = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     if(othersYearlyValue.containsKey(i)){
                     	BigDecimal currentAmount = othersYearlyValue.get(i);
                         othersYearlyValue.put(i, currentAmount.add(amount));

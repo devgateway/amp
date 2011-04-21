@@ -517,6 +517,7 @@ public class DashboardFilter {
 	}
 
 	public int getDecimalsToShow() {
+		if(decimalsToShow == 0) decimalsToShow = 2;
 		return decimalsToShow;
 	}
 

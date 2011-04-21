@@ -151,6 +151,36 @@ function hidePopin() {
 	}
 }
 
+function resetToDefaults(){
+	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
+	document.getElementById("region_dropdown_ids").selectedIndex = 0;
+	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
+	removeOptions("org_dropdown_ids");
+	removeOptions("zone_dropdown_ids");
+	removeOptions("sub_sector_dropdown_ids");
+	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
+	document.getElementById("yearsInRange_dropdown").selectedIndex = 4;
+	
+	document.getElementById("commitments_visible").checked = true;
+	document.getElementById("disbursements_visible").checked = true;
+	document.getElementById("expenditures_visible").checked = true;
+	document.getElementById("pledge_visible").checked = true;
+	document.getElementById("workspace_only").checked = false;
+	
+	document.getElementById("transaction_type_0").value = true;
+	document.getElementById("transaction_type_1").value = false;
+	document.getElementById("transaction_type_2").value = false;
+	
+	applyFilterPopin();
+}
+
+function removeOptions (obj){
+	var elem = document.getElementById(obj);
+	  var i;
+	  for (i = elem.length - 1; i>0; i--) {
+	    elem.remove(i);
+	  }
+}
 
 function changeTab (selected){
 	document.getElementById("selGeneral").className = "selector_type";
@@ -361,7 +391,7 @@ function changeTab (selected){
 	</div>
 
 <input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
-<input type="button" value="Reset to defaults" class="buttonx" style="margin-right:10px; margin-top:10px;">
+<input type="button" value="Reset to defaults" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="Close" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
 
 
@@ -419,7 +449,7 @@ function changeTab (selected){
 	<div class="dash_left">
 	<fieldset>
 	<legend><span class=legend_label>Quick Filter</span></legend>
-	<html:checkbox property="filter.workspaceOnly">Show Data from All Workspaces</html:checkbox>
+<!--	<html:checkbox property="filter.workspaceOnly" styleId="workspace_only"><digi:trn>Show Only Data From This Workspace</digi:trn></html:checkbox>-->
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -430,6 +460,7 @@ function changeTab (selected){
 		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 		         <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
 		     </html:select>
+		     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
 		</tr>
 		<tr>
@@ -438,6 +469,7 @@ function changeTab (selected){
 			   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 			       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 			   </html:select>
+			   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
 		</tr>
 	</c:if>
@@ -449,6 +481,7 @@ function changeTab (selected){
 		       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 		       <html:optionsCollection property="filter.regions" value="id" label="name" />
 		   </html:select>
+		   <div id="region_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	 </tr> 
 	 <tr>
@@ -457,17 +490,19 @@ function changeTab (selected){
 	      <html:select property="filter.zoneId" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	          <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	      </html:select>
+	      <div id="zone_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr> 
   </c:if>
   <c:if test="${visualizationform.filter.dashboardType eq '3' }">
 	<tr>
 	<td><digi:trn>Sector</digi:trn>:</td>
-	  <td align=right>
+	  <td align="right">
 	  <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	         <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
 	     </html:select>
+	     <div id="sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr>
 	<tr>
@@ -476,6 +511,7 @@ function changeTab (selected){
 	     <html:select property="filter.subSectorId" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	     </html:select>
+	     <div id="sub_sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr>
   </c:if>
@@ -488,6 +524,7 @@ function changeTab (selected){
 		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 		         <html:optionsCollection property="filter.orgGroups" value="ampOrgGrpId" label="orgGrpName" />
 		     </html:select>
+		     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
 		</tr>
 		<tr>
@@ -496,6 +533,7 @@ function changeTab (selected){
 			   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 			       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 			   </html:select>
+			   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
 		</tr>
 	</c:if>
@@ -507,6 +545,7 @@ function changeTab (selected){
 		       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 		       <html:optionsCollection property="filter.regions" value="id" label="name" />
 		   </html:select>
+		   <div id="region_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	 </tr> 
 	 <tr>
@@ -515,17 +554,19 @@ function changeTab (selected){
 	      <html:select property="filter.zoneId" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	          <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	      </html:select>
+	      <div id="zone_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr> 
   </c:if>
   <c:if test="${visualizationform.filter.dashboardType ne '3' }">
 	<tr>
 	<td><digi:trn>Sector</digi:trn>:</td>
-	  <td align=right>
+	  <td align="right">
 	  <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	         <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
 	     </html:select>
+	     <div id="sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr>
 	<tr>
@@ -534,6 +575,7 @@ function changeTab (selected){
 	     <html:select property="filter.subSectorId" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
 	     </html:select>
+	     <div id="sub_sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 		</td>
 	</tr>
   </c:if>
@@ -850,10 +892,11 @@ var callbackChildrenCall = {
 	};
 
 function callbackChildren(e) {
-	var parentId, targetId;
+	var parentId, targetId, targetObj;
 	if (e == undefined){
 		parentId = this.value;
 		targetId = this.id;
+		targetObj = this;
 	}
 	else
 	{
@@ -907,10 +950,12 @@ function callbackChildren(e) {
 
 function countSelected (selector){
 	var count = 0;
-	for (i=0; i<selector.options.length; i++) {
-	  if (selector.options[i].selected) {
-	    count++;
-	  }
+	if (selector!=null){
+		for (i=0; i<selector.options.length; i++) {
+		  if (selector.options[i].selected) {
+		    count++;
+		  }
+		}
 	}
 	return count;
 }
@@ -1049,6 +1094,7 @@ function refreshBoxes(o){
 		var child = results.children[j];
 		switch(child.type){
 			case "ProjectsList":
+				inner = "";
 				for(var i = 0; i < child.list.length; i++){
 					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 				}
@@ -1116,6 +1162,108 @@ function refreshBoxes(o){
 					var div = document.getElementById("divTopRegions");
 					div.innerHTML = inner;
 				}
+				break;
+			case "SelOrgGroupsList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("org_group_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("org_group_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("org_group_list_id").style.display = "none";
+						document.getElementById("org_group_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelOrgsList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("org_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("org_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("org_list_id").style.display = "none";
+						document.getElementById("org_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelRegionsList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("region_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("region_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("region_list_id").style.display = "none";
+						document.getElementById("region_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelZonesList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("zone_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("zone_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("zone_list_id").style.display = "none";
+						document.getElementById("zone_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelSectorsList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("sector_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("sector_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("sector_list_id").style.display = "none";
+						document.getElementById("sector_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelSubSectorsList":
+				//if (dashboardType!=3) {
+					if (child.list.length > 0) {
+					inner = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>"
+					}
+					var div = document.getElementById("sub_sector_list_id");
+					div.innerHTML = inner;
+					div.style.display = "";
+					document.getElementById("sub_sector_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("sub_sector_list_id").style.display = "none";
+						document.getElementById("sub_sector_dropdown_id").style.display = "";
+					}
+				//}
 				break;
 			case "TotalComms":
 				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br /><digi:trn>Total Commitments</digi:trn>(" + child.curr + ")";

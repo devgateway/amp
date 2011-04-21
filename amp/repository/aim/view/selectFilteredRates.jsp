@@ -171,7 +171,7 @@
 							  <td valign="top">	<logic:notEmpty name="myForm" property="existingFilteredRates">
 												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;" width=100%>
 													<tr align="center">
-														<td bgcolor="#c7d4db" class="inside" align="center" height=25>
+														<td bgcolor="#c7d4db" class="inside" align="center" height=25 width=50>
 															<digi:trn>
 																<b>Selection</b>															</digi:trn>														</td>
 														<td bgcolor="#c7d4db" class="inside" align="center">
@@ -183,7 +183,7 @@
 													</tr>
 													<logic:iterate id="filteredRate" name="myForm" property="existingFilteredRates">
 														<tr>
-														<td valign="top" class="inside">	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
+														<td valign="top" class="inside" align=center>	<html:multibox property="selectedFilteredRates"  value="${filteredRate.id}"/> </td>
 														<td valign="top" class="inside">   ${filteredRate.toCurrency.currencyName }  (${filteredRate.toCurrency.currencyCode}) &nbsp; &nbsp; </td>
 														<td valign="top" class="inside">   ${filteredRate.fromCurrency.currencyName }  (${filteredRate.fromCurrency.currencyCode})</td>
 														</tr>

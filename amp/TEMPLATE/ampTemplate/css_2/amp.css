@@ -267,7 +267,10 @@ html.ie div.header {overflow:visible;}
     font-size: 11px;
     margin-top: 25px;
     padding-bottom: 10px;
+	width:100%;
     padding-top: 10px;
+	text-align:center;
+	
 }
 .dialog {display:none;}
 

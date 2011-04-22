@@ -12,7 +12,7 @@
 <digi:form action="/showGisSettings.do?action=update">
 	
 	
-	<table cellPadding=5 cellSpacing=0 width="500" border=0>
+	<table cellPadding=5 cellSpacing=0 width="1000" border=0 align=center>
 		<tr>
 			<!-- Start Navigation -->
 			<td height=33><span class=crumb>
@@ -26,11 +26,11 @@
 			</td>
 			<!-- End navigation -->
 		</tr>
-		<tr>
+		<!--<tr>
 			<td>
 				<span class="subtitle-blue"><digi:trn>Result Matrix/GIS settings</digi:trn></span>
 			</td>
-		</tr>
+		</tr>-->
 		<tr>
 			<td>
 	
@@ -52,7 +52,7 @@
 					</table>
 					--%>
 					<fieldset>
-						<legend><digi:trn>Sector classification settiongs</digi:trn></legend>
+						<legend><digi:trn>Sector classification settings</digi:trn></legend>
 						<html:select name="gisSettingsForm" property="gisSettings.sectorSchemeFilterMode" style="width:500px;">
 							<html:option value="0"><digi:trn>Display sectors selected</digi:trn></html:option>
 							<html:option value="1"><digi:trn>Display only primary and multisector classifications</digi:trn></html:option>
@@ -61,7 +61,7 @@
 				
 						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
 							<tr>
-								<td height="20" colspan="2" bgcolor="#d7eafd">
+								<td height="20" colspan="2" bgcolor="#c7d4db">
 									<b><digi:trn>Sector classification name</digi:trn></b>
 								</td>
 							</tr>	
@@ -83,7 +83,7 @@
 						
 						<table width="100%" style="border-collapse:collapse;" border="1" borderColor="#ECF3FD">
 							<tr>
-								<td height="20" colspan="2" bgcolor="#d7eafd">
+								<td height="20" colspan="2" bgcolor="#c7d4db">
 									<b><digi:trn>Program name</digi:trn></b>
 								</td>
 							</tr>	

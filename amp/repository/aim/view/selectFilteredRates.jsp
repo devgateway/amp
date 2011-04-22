@@ -169,7 +169,7 @@
 							<tr>
 							  
 							  <td valign="top">	<logic:notEmpty name="myForm" property="existingFilteredRates">
-												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px;" width=100%>
+												<table cellpadding="0" cellspacing="0" class="inside" style="font-size:12px; margin-top:15px;" width=100%>
 													<tr align="center">
 														<td bgcolor="#c7d4db" class="inside" align="center" height=25 width=50>
 															<digi:trn>

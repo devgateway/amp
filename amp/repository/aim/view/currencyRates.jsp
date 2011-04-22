@@ -216,13 +216,13 @@ function fnSubmit() {
 				</tr>
 				<tr>
 					<td noWrap width="750" vAlign="top">
-						<table width="100%" cellspacing="0" cellPadding="0" vAlign="top" align="left" style="margin-top:10px;">
+						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left" style="margin-top:10px;">
 							<tr><td>
 								<!-- Filters -->
 
 								<table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
 								<tr><td>
-								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px; margin-left:15px; margin-top:15px;">
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>
 										<td vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>										</td>
@@ -272,7 +272,7 @@ function fnSubmit() {
 								</table>
 								</td></tr>
 								<tr><td>
-								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-left:15px;margin-bottom:10px;">
+								<table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px;">
 									<tr>
 										<td vAlign="left" width="170">
 											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:										</td>
@@ -290,11 +290,11 @@ function fnSubmit() {
 
                                 <tr>
                                   <td>
-                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px; margin-left:15px;">
+                                    <table cellpadding="0" cellSpacing=2 align="left" border="0" vAlign="center" style="font-size:12px; margin-bottom:10px;">
                                       <tr>
                                         <td vAlign="left">
                                           <FONT color=red>*</FONT>
-                                          <a title="<digi:trn key="aim:LocationoftheFile" style="color:#000000;">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
+                                          <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>                                        </td>
                                         <td vAlign="middle" align="center">
 										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>										</td>                                   
@@ -313,7 +313,7 @@ function fnSubmit() {
                                     </table>                                  </td>
                                 </tr>
                                 <tr>
-                                  <td align=center style="padding-bottom:15px;"><input type="button" value="${trnUpdateValues}" class="buttonx" onclick="return updateRates()"></td>
+                                  <td align=center><input type="button" value="${trnUpdateValues}" class="buttonx" onclick="return updateRates()"></td>
                                 </tr>
                               </table>
 
@@ -400,7 +400,7 @@ function fnSubmit() {
 								</table>
 							</td></tr>
 							<tr>
-                              <td style="padding-top:15px; padding-bottom:15px;">
+                              <td>
                                 <c:set var="trnDelBtn">
                                   <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
                                 </c:set>

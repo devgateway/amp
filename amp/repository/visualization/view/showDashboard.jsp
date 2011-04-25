@@ -1094,7 +1094,7 @@ function refreshBoxes(o){
 		var child = results.children[j];
 		switch(child.type){
 			case "ProjectsList":
-				inner = "";
+				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>Hide Full List</a> <hr />";
 				for(var i = 0; i < child.list.length; i++){
 					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 				}
@@ -1111,7 +1111,7 @@ function refreshBoxes(o){
 				break;
 			case "DonorsList":
 				if (dashboardType!=1) {
-					inner = "";
+					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>Hide Full List</a> <hr />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}
@@ -1129,7 +1129,7 @@ function refreshBoxes(o){
 				break;
 			case "SectorsList":
 				if (dashboardType!=3) {
-					inner = "";
+					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>Hide Full List</a> <hr />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}
@@ -1147,7 +1147,7 @@ function refreshBoxes(o){
 				break;
 			case "RegionsList":
 				if (dashboardType!=2) {
-					inner = "";
+					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>Hide Full List</a> <hr />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}

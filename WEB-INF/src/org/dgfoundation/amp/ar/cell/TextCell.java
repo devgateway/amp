@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.util.regex.Pattern;
+
 import org.dgfoundation.amp.ar.workers.TextColWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -83,9 +85,11 @@ public class TextCell extends Cell {
 	}
 	
 	public String getShortTextVersion() {
+		Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
 		if (!getHasLongVersion())
-			return value;
+			return ptr.matcher(value).replaceAll("");
 		String alteredValue =  value.replaceAll("\\<.*?>","");
+		alteredValue		= ptr.matcher(alteredValue).replaceAll("");
 		if(alteredValue.length()<shortLength)
 			return alteredValue;
 		return alteredValue.substring(0, shortLength-1);
@@ -93,9 +97,12 @@ public class TextCell extends Cell {
 	
 	
 	public String getFullTextVersion() {
-		if (!getHasLongVersion())
-			return value;
-		String alteredValue = value.replaceAll("\\<.*?>", "");
+		//if (!getHasLongVersion())
+		//	return value;
+		
+		Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
+		String alteredValue	= ptr.matcher(value).replaceAll("");
+		alteredValue 		= alteredValue.replaceAll("\\<.*?>", "");
 		return alteredValue;
 
 	}

@@ -873,6 +873,7 @@ public class DataExchangeUtils {
     
 	public static String convertHTMLtoChar(String tempIdref){
 		String result = tempIdref;
+		System.out.print( "!!!" + tempIdref + " => " );
 		for(int x=0;x<entityCharacters.length;x++){
 			if(result.contains(entityCharacters[x]))
 				{
@@ -882,7 +883,10 @@ public class DataExchangeUtils {
 					else result = result.replaceAll(entityCharacters[x], entityNames[x]);
 				}
 		}
-		return result.replaceAll("\n", "");
+		//String ret	=  result.replaceAll("\n", " ").replaceAll("<[^>]*?>", " ");
+		String ret	=  result.replaceAll("\n", " ").replaceAll("\r", "").replaceAll("<!--.*-->", "").replaceAll("<[^>]*?>", " ");
+		System.out.println( ret );
+		return ret;
 	}
 	public static String convertEntityCharacters(String tempIdref){
 		System.out.println("Attempting conversion...");

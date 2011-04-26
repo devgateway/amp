@@ -626,7 +626,7 @@ function updateTableMembers(members){
             html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
             html[j++] = '</td></tr>';
         }
-        document.getElementById('footerMessage').innerHTML='<em><digi:trn>* Worskpace Manager</digi:trn></em>';
+        document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;"><digi:trn>* Worskpace Manager</digi:trn></em>';
     } else {
         html[j++] = '<tr><td colspan="2"><em><digi:trn>No Member data</digi:trn><em></td></tr>';
         document.getElementById('footerMessage').innerHTML='';
@@ -745,7 +745,7 @@ function showTeamMembers(id, description){
                 members = YAHOO.lang.JSON.parse(res.responseText);
                 updateTableMembers(members);
             	document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
-            	document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
+            	document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px;" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
             }
             catch(e) {
                 alert("<digi:trn>Error getting members data</digi:trn>");
@@ -1004,11 +1004,11 @@ function assignActivityList(){
 
                                         <td noWrap align=center valign="middle">
 				<a target="_blank" onclick="exportXSL(); return false;">
-                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif" border="0" alt="Export to Excel" />
                                             </a>
 
                                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly"/>
+                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly"/>
                                             </digi:link>
                                         </td>
                                     </tr>
@@ -1081,7 +1081,7 @@ function assignActivityList(){
 													</logic:empty>
 													<logic:notEmpty name="aimWorkspaceForm" property="workspaces">
 													<tr>
-														<td width="70%">
+														<td width="70%" style="padding-top:15px;" align=center>
 															<div class='yui-skin-sam'>
                                                                 <div id="dynamicdata" class="report"></div>
 																<div id="dt-pag-nav"></div>
@@ -1108,7 +1108,7 @@ function assignActivityList(){
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
-										<tr><td bgColor=#c7d4db class=box-title height="25" align="center" id="teamTitle">
+										<tr><td bgColor=#c7d4db class=box-title height="25" align="center" id="teamTitle" style="font-weight:bold;">
 											<digi:trn><b>Team Name</b></digi:trn>
 										</td>
 										</tr>
@@ -1151,8 +1151,8 @@ function assignActivityList(){
 											<div class="reportHead" style="width: 100%px; height: 22px; max-height: 22px; ">
 											<table width="100%" class="inside">																				
 										        <tr class="headTableTr">
-										            <td align="center" width="300" class="inside"><digi:trn>Name</digi:trn></td>
-										            <td align="center" width="100" class="inside"><digi:trn>Actions</digi:trn></td>
+										            <td align="center" width="300" class="inside" bgcolor=#F2F2f2><digi:trn><b>Name</b></digi:trn></td>
+										            <td align="center" width="100" class="inside" bgcolor=#F2F2f2><digi:trn><b>Actions</b></digi:trn></td>
 										        </tr>
 											</table>
 											</div>

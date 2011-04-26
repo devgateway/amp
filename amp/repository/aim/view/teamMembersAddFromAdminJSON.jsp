@@ -29,9 +29,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <digi:errors/>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=450>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 	<tr>
-		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=450>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -55,22 +54,22 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height="16" vAlign="middle" width="571">
                     	<span class=subtitle-blue><digi:trn>Assign Members</digi:trn></span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td noWrap width=100% vAlign="top">
-						<table width="100%" cellspacing="1" cellSpacing="1">
+						<table width="100%" cellspacing="1" cellpadding=""="1">
 							<tr>
 								<td noWrap width="450" vAlign="top">
-									<table bgColor="#ffffff" cellPadding="10" cellSpacing="5" width="100%">
+									<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="100%" style="font-size:12px;">
 										<tr>
-											<td>
+											<td width=50% align=right style="padding-bottom:15px;">
 												<strong><digi:trn>Team Name</digi:trn>:</strong>&nbsp; <bean:write name="aimTeamMemberForm" property="teamName" />									
 											</td>
-											<td>
+											<td width=50% style="padding-bottom:15px;">
 												<strong><digi:trn>Workspace Manager</digi:trn>:</strong>&nbsp; 
 												<c:if test="${not empty aimTeamMemberForm.teamHead}">
 													${aimTeamMemberForm.teamHead.user.firstNames}&nbsp;${aimTeamMemberForm.teamHead.user.lastName} - &lt; ${aimTeamMemberForm.teamHead.user.email} &gt;

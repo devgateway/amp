@@ -260,10 +260,10 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 				</logic:empty>
 				<logic:notEmpty name="aimTeamMemberForm" property="allUser">
 					<tr>
-						<td bgcolor="#f4f4f2">
+						<td align=center>
 							<div class='yui-skin-sam'>
                             	<div id="dynamicdata" class="report"></div>
-                            	<div align="center" style="border: 1px black;"><br><html:button property="" value="Add Selected Memebers" onclick="addUsersToWorkspace()"></html:button> </div>
+                            	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="Add Selected Memebers" onclick="addUsersToWorkspace()"></html:button> </div>
 								<div id="dt-pag-nav"></div>
 								<div id="errors"></div>
 							</div>

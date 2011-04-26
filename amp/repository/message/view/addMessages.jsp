@@ -784,7 +784,7 @@ span.extContactDropdownEmail {
         </c:otherwise>
     </c:choose>
 </c:set>
-
+<br/><br/>
 <digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">
 																				
 

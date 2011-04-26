@@ -125,7 +125,7 @@ function confirmFunc() {
          	<td>
           	<table cellpadding="6" cellspacing="6">
                <tr>
-               <td><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit></td> <td><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
+               <td id="reportsearchform"><digi:trn>Report Title</digi:trn>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <html:submit property="action" value="search"><digi:trn>Search</digi:trn></html:submit></td> <td id="reportsearchform2"><html:submit property="action" value="clear"><digi:trn>Clear</digi:trn></html:submit></td>
                </tr>
               </table>
              </td>

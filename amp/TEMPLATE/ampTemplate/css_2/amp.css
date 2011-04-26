@@ -345,3 +345,20 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
 #amphome{width:1000px; margin:0 auto;}
 #amphometext{width:750px; float:left;}
 #amphomesidebar{width:220px; float:right;}
+#Tab_Name td#reportsearchform {font-size: 11px;
+    font-weight: bold;}
+#Tab_Name td#reportsearchform input {color: #767676;
+    font-size: 11px;
+    margin: 5px;
+    padding: 2px;
+	background-color: #FFFFFF;
+    border: 1px solid #D0D0D0;}
+#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input	
+	{ background-color: #5E8AD1;
+    border-color: #99BAF1 #225099 #225099 #99BAF1;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px;}

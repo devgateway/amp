@@ -619,9 +619,9 @@ function updateTableMembers(members){
     if (members && members.length>0) {
         for (i = 0, l = members.length; i < l; ++i) {
             item = members[i];
-            html[j++] = '<tr><td width="300" class="reportsBorderTD">';
+            html[j++] = '<tr><td width="300" class="inside">';
             html[j++] = '<a href=\'javascript:showMemberProfile('+item.ID+')\' title=\'Click to View Member Detais\'>'+item.name+'</a>';
-            html[j++] = '</td><td align=\'center\' width="100" class="reportsBorderTD">';
+            html[j++] = '</td><td align=\'center\' width="100" class="inside">';
             html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn>Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
             html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn>Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
             html[j++] = '</td></tr>';
@@ -969,9 +969,8 @@ function assignActivityList(){
 
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=900>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 	<tr>
-		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=850>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
@@ -987,46 +986,46 @@ function assignActivityList(){
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height="16" vAlign="center" width="571">
                     	<span class=subtitle-blue><digi:trn>Workspace Manager</digi:trn></span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<digi:errors />
 					</td>
 				</tr>
 				<tr><td align="left">              
-                            <div class="otherLinks toolbar" align="center">
-                                <table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+                            
+                                <table border="0" align="center" bgcolor="#f2f2f2" width=100%>
                                     <tr>
-                                        <td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
-                                            <a target="_blank" onclick="exportXSL(); return false;">
+                                    
+
+                                        <td noWrap align=center valign="middle">
+				<a target="_blank" onclick="exportXSL(); return false;">
                                                 <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="Export to Excel" />
                                             </a>
-                                        </td>
 
-                                        <td noWrap align=left valign="middle">
                                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
                                                 <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="Printer Friendly"/>
                                             </digi:link>
                                         </td>
                                     </tr>
                                 </table>
-                            </div>
+                           
                 </td></tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
+					<table width="100%" cellspacing="1" cellpadding=""="1" border="0">
 					<tr><td noWrap width="50%" vAlign="top">
-						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+						<table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
+										<tr><td bgColor=#c7d4db class=box-title height="25" align="center">
 											<!-- Table title -->
-											<digi:trn>Teams</digi:trn>
+											<digi:trn><b>Teams</b></digi:trn>
 											<!-- end table title -->
 										</td>
 										</tr>
@@ -1035,7 +1034,7 @@ function assignActivityList(){
 										<digi:form action="/workspaceManager.do?page=1" method="post">
 										<tr><td class="box-title" align="left">
 											<!-- Table title -->
-											<table width="100%" class="filter" >
+											<table width="100%" class="filter" style="font-size:12px;">
 												<tr>
 						
 													<td>
@@ -1056,7 +1055,7 @@ function assignActivityList(){
 													<c:set var="translation">
 										                <digi:trn>Show</digi:trn>
 										            </c:set>
-										            <input type="button" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
+										            <input type="button" value="${translation}"  class="buttonx" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
 													</td>
 												</tr>
 											</table>
@@ -1072,7 +1071,7 @@ function assignActivityList(){
 											</digi:link>
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing="1" cellpadding="0" valign="top" align="left" >
+											<table width="100%" cellspacing="1" cellpadding="0" valign="top" align="left" style="font-size:12px;">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
@@ -1105,17 +1104,17 @@ function assignActivityList(){
 
 <!--details-->
 					<td  width="50%" vAlign="top">
-						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+						<table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center" id="teamTitle">
-											<digi:trn>Team Name</digi:trn>
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
+										<tr><td bgColor=#c7d4db class=box-title height="25" align="center" id="teamTitle">
+											<digi:trn><b>Team Name</b></digi:trn>
 										</td>
 										</tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td class="box-title" align="left">
-                                                <table width="100%"  class="filter">
+                                                <table width="100%"  class="filter" style="font-size:12px;">
 												<tr>
 												<td>&nbsp;</td>
 													<td align="right">
@@ -1124,7 +1123,7 @@ function assignActivityList(){
 														    <option value="0"><digi:trn>Members</digi:trn></option> 
 														    <option value="1"><digi:trn>Activities</digi:trn></option> 
 														</select> &nbsp;&nbsp;&nbsp;
-											            <input type="button" id="ws_go" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
+											            <input type="button" id="ws_go" class="buttonx" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
 													</td>
 												</tr>
 											</table>
@@ -1144,21 +1143,21 @@ function assignActivityList(){
 										<div>
 										<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0" >
 										<tr>
-										<td>
+										<td align=center>
 											<input type="hidden" name="teamId" value=""/>
 											<input type="hidden" name="teamName" value=""/>
-											<table  cellspacing="1" cellpadding="2" align="left" width="100%">
+											<table  cellspacing="1" cellpadding="2" align="left" width="100%" style="font-size:12px;">
 											<tr><td>
 											<div class="reportHead" style="width: 100%px; height: 22px; max-height: 22px; ">
-											<table width="100%" class="reportsBorderTable">																				
+											<table width="100%" class="inside">																				
 										        <tr class="headTableTr">
-										            <td align="center" width="300" align="center" class="clsTableTitleCol"><digi:trn>Name</digi:trn></td>
-										            <td align="center" width="100" align="center" class="clsTableTitleCol"><digi:trn>Actions</digi:trn></td>
+										            <td align="center" width="300" class="inside"><digi:trn>Name</digi:trn></td>
+										            <td align="center" width="100" class="inside"><digi:trn>Actions</digi:trn></td>
 										        </tr>
 											</table>
 											</div>
 											<div id="demo" class="report box-border-nopadding scrollable" >
-												<table class="box-border-nopadding" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
+												<table class="inside" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
 											    <tbody>
 											        <tr><td colspan="2"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
 											    </tbody>

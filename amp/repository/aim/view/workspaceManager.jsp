@@ -745,7 +745,7 @@ function showTeamMembers(id, description){
                 members = YAHOO.lang.JSON.parse(res.responseText);
                 updateTableMembers(members);
             	document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
-            	document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px;" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
+            	document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()">Add Workspace Member</a>'
             }
             catch(e) {
                 alert("<digi:trn>Error getting members data</digi:trn>");
@@ -1004,11 +1004,11 @@ function assignActivityList(){
 
                                         <td noWrap align=center valign="middle">
 				<a target="_blank" onclick="exportXSL(); return false;">
-                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif" border="0" alt="Export to Excel" />
+                                                <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_exc.gif" border="0" alt="Export to Excel" />
                                             </a>
 
                                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                                                <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly"/>
+                                                <digi:img hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/ico_print.gif" border="0" alt="Printer Friendly"/>
                                             </digi:link>
                                         </td>
                                     </tr>
@@ -1062,7 +1062,7 @@ function assignActivityList(){
 											<!-- end table title -->
 										</td></tr>
 										</digi:form>
-										<tr><td>
+										<tr><td style="padding-left:5px;">
 											<c:set var="translation">
 										       <digi:trn>Click here to Add Teams</digi:trn>
 										    </c:set>
@@ -1133,7 +1133,7 @@ function assignActivityList(){
 										<td>
 										<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
 										<tr>
-										<td id="addNew" align="left">&nbsp;
+										<td id="addNew" align="left" style="padding-bottom:13px;">&nbsp;
 										</td>
 										</tr>
 										</table>

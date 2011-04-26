@@ -234,10 +234,6 @@
 	<page name="viewListAppliedPatches"  title ="- List Applied Patches " />
 	<page name="viewShowPatch"  title ="- Show Patch " />
 
-	<!-- category manager  -->
-	<page name="viewCategoryManager"  title ="- Category Manager " />
-	<page name="createOrEditCategory" title= "- Category Manager - Create or Edit Category " />
-
 	<!-- invalid data lists  -->
 	<page name="invalidDataDashboard" title="- Invalid Data Dashboard" />
 	<page name="invalidSectorPercentages" title="- Invalid Sector Percentages" />

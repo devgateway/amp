@@ -21,6 +21,7 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	private String region ;
 	private String zone;
 	private String woreda;
+	private String geoCode;
 	
 	private Set activities;
 	
@@ -342,5 +343,13 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+
+	public String getGeoCode() {
+		return geoCode;
+	}
+
+	public void setGeoCode(String geoCode) {
+		this.geoCode = geoCode;
 	}
 }	

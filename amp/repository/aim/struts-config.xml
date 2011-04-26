@@ -143,7 +143,6 @@
     <form-bean name="aimNationalPlaningDashboardForm" type="org.digijava.module.aim.form.NationalPlaningDashboardForm" />
     <form-bean name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
     <form-bean name="aimListAppliedPatchesForm" type="org.digijava.module.aim.form.ListAppliedPatchesForm" />
-    <form-bean name="aimCategoryManagerForm" type="org.digijava.module.aim.form.CategoryManagerForm" />
     <form-bean name="aimDynLocationManagerForm" type="org.digijava.module.aim.form.DynLocationManagerForm" />
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
@@ -1631,10 +1630,6 @@
     </action>
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
-    </action>
-    <action name="aimCategoryManagerForm" path="/aim/categoryManager" scope="session" type="org.digijava.module.aim.action.CategoryManager" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewCategoryManager" />
-      <forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
     </action>
     <action name="aimEditActivityForm" path="/aim/addProposedFunding" scope="session" type="org.digijava.module.aim.action.AddProposedFunding" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

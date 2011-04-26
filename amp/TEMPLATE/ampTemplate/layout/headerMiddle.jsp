@@ -677,6 +677,15 @@ function adminHelp(){
                                             </a>
                                         </li>
                                         </module:display>
+                                        
+                                        <module:display name="Map Module" parentModule="MAP MODULE">
+                                        <li class="yuiampmenuitem_drop">
+                                        	<a class="yuiampmenuitemlabel" href="/esrigis/mainmap.do" target="_blank">
+			                                	<digi:trn>Map Module</digi:trn>
+			                                </a>
+			                            </li> 
+                                        </module:display>
+                                        
                                         <module:display name="Org Profile" >
                                             <li class="yuiampmenuitem_drop">
                                                 <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">

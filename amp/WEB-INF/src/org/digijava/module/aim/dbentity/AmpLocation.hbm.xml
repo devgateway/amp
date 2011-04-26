@@ -18,7 +18,7 @@
 		<property name="region" column="region" type="java.lang.String" />
 		<property name="zone" column="zone" type="java.lang.String" />
 		<property name="woreda" column="woreda" type="java.lang.String" />
-
+		<property name="geoCode" column="geo_code" type="java.lang.String" />
 
 		<many-to-one name="dgCountry" column="country_id"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />

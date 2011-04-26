@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="mainmap" title="AMP GIS"/>
+	</secondary-pages>
+</config>

@@ -4,18 +4,22 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -97,7 +101,8 @@ public class DynLocationSelected extends Action {
 				}
 				
 				if ( eaForm.getLocation().getSelectedLocs() == null ){
-					eaForm.getLocation().setSelectedLocs( new ArrayList<Location>() );
+                                    List<Location> locs = new ArrayList<Location>();
+                                    eaForm.getLocation().setSelectedLocs(locs);
 				}
 				if ( !eaForm.getLocation().getSelectedLocs().contains(location) ){
 					if (eaForm.getLocation().getSelectedLocs().size()==0 && !setFullPercForDefaultCountry ) {
@@ -113,6 +118,13 @@ public class DynLocationSelected extends Action {
 					eaForm.getFunding().getFundingRegions().add(ampRegion);
 				}
 			}
+                      if (eaForm.getLocation().getSelectedLocs() != null) {
+                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        List<Location> locs = new ArrayList<Location>();
+                        locs.addAll(eaForm.getLocation().getSelectedLocs());
+                        Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
+                        eaForm.getLocation().setSelectedLocs(locs);
+                    }
 		}
 		
 		if(request.getParameter("forwardForOrg")!=null){

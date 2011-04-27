@@ -204,13 +204,7 @@ function setHoveredRow(rowId) {
 								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.organization.name" />								</td>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.contactName" />								</td>
-								<td width="19%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.contactEmail" />								</td>
-								<td width="25%" align="center">
-										<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />
-									
-								</td>
+									<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />							</td>
 								<td width="19%" align="center">
 									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">
 										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>

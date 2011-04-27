@@ -129,17 +129,21 @@
 		
 						<logic:notEmpty name="currentMember" scope="session">
 							<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>
-						</logic:notEmpty>
+						
+							<img src="img_2/top_sep.gif" class="top_sep">
+						
+							<feature:display name="Language Option" module="Tools">
+		               			<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		               	 	</feature:display>
+		               	</logic:notEmpty>
+		               
 						<img src="img_2/top_sep.gif" class="top_sep">
-					
-						<feature:display name="Language Option" module="Tools">
-	               			<digi:insert flush="false" attribute="dropdownLangSwitch" />
-	               	 	</feature:display>
-	               
-						<img src="img_2/top_sep.gif" class="top_sep">
+						
 						<digi:link styleClass="loginWidget" href="/j_acegi_logout" module="aim">
 							<digi:trn key="aim:logout">LOGOUT</digi:trn>
 						</digi:link>
+						
+						<img src="img_2/top_sep.gif" class="top_sep">
 			
 		</div>
 	</div>

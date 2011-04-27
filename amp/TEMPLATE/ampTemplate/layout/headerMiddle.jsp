@@ -47,10 +47,7 @@ ${fn:replace(message,quote,escapedQuote)}
 <%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 
 <logic:notPresent name="currentMember">
-<% 
-String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
-if("On".equals(publicView)) { 
-%>
+
 <style>
 .yuiampmenuitemlabel
 {
@@ -126,10 +123,6 @@ if("On".equals(publicView)) {
             </module:display>
             </module:display>
             
-           	<%--
-           	<module:display name="Org Profile" >
-	           	<feature:display name="Enable Org. Profile in Public View" module="Org Profile">
-	           	--%>
 	           	<module:display name="Public Dashboards" parentModule="PUBLIC VIEW">
 	                <li class="yuiampmenuitem" style="float:left;">
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
@@ -170,10 +163,7 @@ if("On".equals(publicView)) {
 						</div>                    
 					</li>
 				</module:display>
-					<%--
-	           	</feature:display>
-           	</module:display>
-          --%> 	
+			
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
 		              <li class="yuiampmenuitem" style="float:left;margin:0px 0px 0px 0px;_margin:0px;">
@@ -198,56 +188,6 @@ if("On".equals(publicView)) {
   </div>
 </div> 
 
-<% } 
-else  //In case the public view aren't activated
-{
-%>
-<div class="yuiamp-skin-amp" style="clear:both;">
-    <div id="mainmenuHeader" class="yuiampmenu">
-      <div class="bd">
-          <ul class="first-of-type">
-            <li class="yuiampmenuitem">
-                <digi:link styleClass="yuiampmenuitemlabel" href="" module="aim" title="${trn3}">
-                <digi:trn key="aim:homePage">
-                Home Page
-                </digi:trn>
-	            </digi:link>
-            </li>
-            <module:display name="Login - User Management" parentModule="PUBLIC VIEW">
-        		<feature:display name="Enable New User Registration" module="Login - User Management">
-	            <li class="yuiampmenuitem">
-	                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
-	                <digi:trn key="aim:newUserRegistration">
-	                New user registration
-	                </digi:trn>
-		            </digi:link>
-	            </li>
-            	</feature:display>
-            </module:display>
-            <feature:display name="Language Option" module="Tools">
-		            <li>
-		                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px; border-right: 0px none;">
-		                <digi:trn key="aim:deflanguage">Language</digi:trn>
-		                </span>
-		                <a   style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-		                </a>
-		                <div id="reports2" class="yuiampmenu">
-		                    <div class="bd">                    
-		                        <ul>
-		                        <digi:insert flush="false" attribute="dropdownLangSwitch" />
-		                        </ul>
-		                    </div>
-		                </div>                              
-		            </li>
-		  </feature:display>
-          </ul>            
-      </div>
-  </div>
-</div> 
-<%
-}
-%>
 </logic:notPresent>
 <logic:present name="ampAdmin" scope="session">
 	<logic:equal name="ampAdmin" value="yes">

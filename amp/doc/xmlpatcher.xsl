@@ -120,7 +120,7 @@
 			</xsl:if>
  			<script returnVar="count">
 				<lang type="sql">
-				SELECT count(*) FROM <xsl:value-of select="@tablename"/> WHERE <xsl:value-of select="@columnname"/> = "<xsl:value-of select="@columnvalue"/>"
+				SELECT count(*) FROM <xsl:value-of select="@tablename"/>   where   <xsl:value-of select="@columnname"/> = '<xsl:value-of select="@columnvalue"/>'
 				</lang>
 			</script>
  			<test>count.intValue()==0</test>

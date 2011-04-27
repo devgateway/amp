@@ -54,7 +54,6 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -112,6 +111,7 @@ import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -987,7 +987,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           Collection ampLocs = activity.getLocations();
 
           if (ampLocs != null && ampLocs.size() > 0) {
-            Collection locs = new ArrayList();
+           List<Location> locs = new ArrayList<Location>();
 
             Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
@@ -1093,7 +1093,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 locs.add(location);
               }
             }
-            eaForm.getLocation().setSelectedLocs(locs);
+              String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+              Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
+              eaForm.getLocation().setSelectedLocs(locs);
           }
 
        

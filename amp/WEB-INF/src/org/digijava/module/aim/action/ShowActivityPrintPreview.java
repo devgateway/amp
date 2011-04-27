@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -91,7 +90,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -375,7 +374,7 @@ public class ShowActivityPrintPreview
                 Collection<AmpActivityLocation> ampLocs = ActivityUtil.getActivityLocations(activity.getAmpActivityId());
 
                 if (ampLocs != null && ampLocs.size() > 0) {
-                    Collection locs = new ArrayList();
+                    List locs = new ArrayList();
 
                     Iterator locIter = ampLocs.iterator();
                     boolean maxLevel = false;
@@ -465,6 +464,10 @@ public class ShowActivityPrintPreview
 
                         locs.add(location);
                       }
+                    }
+                    if (locs != null) {
+                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
                     }
                     eaForm.getLocation().setSelectedLocs(locs);
                   }

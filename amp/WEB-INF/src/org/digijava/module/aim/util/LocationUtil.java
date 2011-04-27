@@ -5,12 +5,13 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
@@ -1050,6 +1051,42 @@ public class LocationUtil {
             return loc;
         } else {
             return getTopAncestor(parent, beforeImpLoc);
+        }
+    }
+    public static class HelperLocationAncestorLocationNamesAsc implements Comparator<Location> {
+
+        Locale locale;
+        Collator collator;
+
+        public HelperLocationAncestorLocationNamesAsc(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperLocationAncestorLocationNamesAsc(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(Location loc1, Location loc2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            List<String> loca1AncestorLocationNames=loc1.getAncestorLocationNames();
+            List<String> loca2AncestorLocationNames=loc2.getAncestorLocationNames();
+            if(loca1AncestorLocationNames==null||loca1AncestorLocationNames.isEmpty()){
+                return -1;
+            }
+            if(loca2AncestorLocationNames==null||loca2AncestorLocationNames.isEmpty()){
+                 return 1;
+            }
+            StringBuilder location1FullName=new StringBuilder();
+            for(String name:loca1AncestorLocationNames){
+                location1FullName.append(name);
+            }
+            StringBuilder location2FullName=new StringBuilder();
+            for(String name:loca2AncestorLocationNames){
+                location2FullName.append(name);
+            }
+            return collator.compare(location1FullName.toString(), location2FullName.toString());
+
         }
     }
 }

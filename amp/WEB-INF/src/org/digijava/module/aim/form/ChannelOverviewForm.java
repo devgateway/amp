@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FinancingBreakdown;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -69,8 +71,9 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String equalOpportunity;
 	private String environment;
 	private String minorities;
-	
-        
+        private SortedSet<Location> sortedLocations;
+
+
     public Collection<FinancingBreakdown> getFinancingBreakdown() {
 		return financingBreakdown;
 	}
@@ -902,5 +905,13 @@ public String getAccessionInstrument() {
 
 		public void setProjectImplUnit(String projectImplUnit) {
 			this.projectImplUnit = projectImplUnit;
-		}		  
+		}
+                public SortedSet<Location> getSortedLocations() {
+                    return sortedLocations;
+                }
+
+                public void setSortedLocations(SortedSet<Location> sortedLocations) {
+                    this.sortedLocations = sortedLocations;
+                }
+
 }

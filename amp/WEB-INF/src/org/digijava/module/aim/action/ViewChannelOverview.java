@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.ServletException;
@@ -28,14 +29,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -50,6 +56,9 @@ import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
@@ -61,6 +70,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -196,6 +206,37 @@ public class ViewChannelOverview extends TilesAction {
 	              formBean.setSelectedOrganizations(orgProjectIds);
 	            }
 	          }
+
+                    Collection<AmpActivityLocation> ampLocs = activity.getLocations();
+                    if (ampLocs != null && ampLocs.size() > 0) {
+                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        SortedSet<Location> locs = new TreeSet<Location>(new HelperLocationAncestorLocationNamesAsc(langCode));
+                        Iterator<AmpActivityLocation> locIter = ampLocs.iterator();
+                        while (locIter.hasNext()) {
+                            AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
+                            if (actLoc == null) {
+                                continue;
+                            }
+                            AmpLocation loc = actLoc.getLocation();								//AMP-2250
+                            if (loc != null) {
+                                Location location = new Location();
+                                location.setAmpCVLocation(loc.getLocation());
+                                if (loc.getLocation() != null) {
+                                    location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc.getLocation()));
+                                    location.setLocationName(loc.getLocation().getName());
+                                    location.setLocId(loc.getLocation().getId());
+                                }
+                                if (actLoc.getLocationPercentage() != null) {
+                                    String strPercentage = FormatHelper.formatNumberNotRounded((double) actLoc.getLocationPercentage());
+                                    //TODO Check the right why to show numbers in percentages, here it calls formatNumberNotRounded but so the format
+                                    //depends on global settings which is not correct
+                                    location.setPercent(strPercentage.replace(",", "."));
+                                }
+                                locs.add(location);
+                            }
+                        }
+                         formBean.setSortedLocations(locs);
+                    }
 
 	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 					.getAmpCategoryValueFromListByKey(

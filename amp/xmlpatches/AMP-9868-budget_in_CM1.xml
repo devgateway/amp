@@ -6,7 +6,7 @@
   <author>Alex</author>
   <description>This moves the budget field backend to the category manager</description>
   <trigger type="all">
-      <condition  type="entryInTableExists" tablename="amp_category_class" columnname="keyName" columnvalue="activity_budget" />
+      <condition  type="entryInTableMissing" tablename="amp_category_class" columnname="keyName" columnvalue="activity_budget" />
   </trigger>  
   <apply>
     <script>

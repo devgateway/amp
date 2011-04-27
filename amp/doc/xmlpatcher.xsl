@@ -111,7 +111,7 @@
 	</xsl:template>
 	
 	<!-- Check if a certain entry exists in the a certain table -->
-	<xsl:template match="condition[@type='entryInTableExists']">
+	<xsl:template match="condition[@type='entryInTableMissing']">
 		<condition type="custom">
 			<xsl:if test="@inverted">
 			<xsl:attribute name="inverted">

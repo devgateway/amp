@@ -6,7 +6,7 @@
   <author>Alex</author>
   <description>This moves the budget field backend to the category manager</description>
   <trigger type="all">
-      <condition  type="entryInTableExists" tablename="amp_columns" columnname="extractorview" columnvalue="v_on_off_budget" />
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorview" columnvalue="v_on_off_budget" />
   </trigger>  
   <apply>
     <script>

@@ -9,9 +9,9 @@
 
 <digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >
 <div class="reg_form_container">
-<div class="reg_form_title"><h2><digi:trn key="aim:changePassword">
+<div class="home_sec_title"><digi:trn key="aim:changePassword">
 						Reset your e-mail address
-						</digi:trn></h2></div>
+						</digi:trn></div>
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 
 <tr><td width="100%" valign="top" align="left">
@@ -35,7 +35,7 @@
 					</td>
 					<td align="left">
 						<html:text property="email" size="20" />
-						<font color="red">
+						<br /><font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com
 						</digi:trn>
@@ -45,7 +45,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td colspan="2" align="center">
-						<html:submit property="submit" styleClass="dr-menu" ><digi:trn key="btn:submit">Submit</digi:trn> </html:submit>
+						<html:submit property="submit" styleClass="buttonx" ><digi:trn key="btn:submit">Submit</digi:trn> </html:submit>
 					</td>
 				</tr>
 			</table>

@@ -328,12 +328,11 @@
                 </html:select>              </td>
             </tr>
             <tr>
-              <td>&nbsp;</td>
-              <td align="left" colspan="3"><c:set var="btnSubmit">
-                  <digi:trn key="btn:submit">Submit</digi:trn>
-                </c:set>
+              <td colspan="54" align=center style="padding-top:20px;"><c:set var="btnSubmit">
+                <digi:trn key="btn:submit">Submit</digi:trn>
+              </c:set>
                 <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();"/>              </td>
-            </tr>
+              </tr>
             <tr>
               <td colspan=6>&nbsp;</td>
             </tr>

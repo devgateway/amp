@@ -340,7 +340,7 @@ div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 
 div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
 span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
-div.reg_form_container .f-names {color:#7f7f7f; font-size:11px; font-weight:bold;}
+div.reg_form_container .f-names {color:#000000; font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
 #amphometext{width:750px; float:left;}
@@ -362,3 +362,5 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
     font-size: 10px;
     font-weight: bold;
     padding: 2px;}
+	
+.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;} 

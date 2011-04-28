@@ -28,7 +28,7 @@
 				
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap width="40%">
+					<td align=right class=f-names noWrap width="40%" valign=top>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:email">
 							UserId:

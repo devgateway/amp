@@ -924,8 +924,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			if ( request == null )
 				return catValue1.getValue().compareTo( catValue2.getValue() );
 			
-			String transValue1		= CategoryManagerUtil.translateAmpCategoryValue(catValue1, request);
-			String transValue2		= CategoryManagerUtil.translateAmpCategoryValue(catValue2, request);
+			String transValue1		= catValue1!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue1, request):"";
+			String transValue2		= catValue2!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue2, request):"";
 			
 			return transValue1.compareTo( transValue2 );
 

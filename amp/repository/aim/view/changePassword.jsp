@@ -86,7 +86,7 @@
 					<td>&nbsp;</td>
 					<td align="left">
 
-						<html:submit styleClass="dr-menu"><digi:trn key="btn:submit">Submit</digi:trn></html:submit>
+						<html:submit styleClass="buttonx"><digi:trn key="btn:submit">Submit</digi:trn></html:submit>
 					</td>
 				</tr>
 

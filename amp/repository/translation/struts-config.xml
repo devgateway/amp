@@ -56,6 +56,7 @@
     <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnGetChanges" scope="session" path="/translation/AdvTranGetChanges"/>
 	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUndoChange" scope="session" path="/translation/AdvTranUndoChanges"/>
 	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnSaveChanges" scope="session" path="/translation/AdvTranSaveChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUpdateTranslation" scope="session" path="/translation/AdvTranUpdate"/>
     <!-- NEW ADVANCED TRANSLATIONS END-->
     <action name="advancedTranslationForm" type="org.digijava.module.translation.action.ShowAdvancedTranslation" scope="session" path="/translation/showAdvancedTranslation">
       <forward name="forward" path="/showLayout.do?layout=advTranslationLayout" />

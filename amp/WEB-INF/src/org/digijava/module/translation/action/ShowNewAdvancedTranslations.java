@@ -63,7 +63,7 @@ public class ShowNewAdvancedTranslations extends Action{
 		int totalPages = 0;
 
 		//Save submitted translations.
-		if (trnForm.getMessage()!=null && trnForm.getLocale()!=null && trnForm.getKey()!=null){
+		/*if (trnForm.getMessage()!=null && trnForm.getLocale()!=null && trnForm.getKey()!=null){
 			
 			for (int i = 0; i < trnForm.getKey().length; i++) {
 				
@@ -83,7 +83,7 @@ public class ShowNewAdvancedTranslations extends Action{
 					buffer.operationUpdate(editedMessage);
 				}
 			}
-		}
+		}*/
 		
 		if (trnForm.getSearchTerm()!=null && !trnForm.getSearchTerm().trim().equals("")){
 

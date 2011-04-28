@@ -113,7 +113,7 @@
 		font-weight: bold;
 	}
 	.trnText input{
-		width : 600px; 
+		width : 500px; 
 	}
 	.pagination{
 		margin: 50px;
@@ -183,6 +183,7 @@
 														</td>
 														<td>
 															<a class="deleteTranslation"><img alt="Delete translation" src="<digi:file src='images/deleteIcon.gif'/>"></a>
+															<input type="button" value="<digi:trn>apply</digi:trn>" onclick="updateTranslation(this)">		
 														</td>
 													</tr>
 												</table>
@@ -196,9 +197,8 @@
 													Key: ${msgGroup.key}
 												</td>
 												<td>
-													<input class="addTranslations" type="button" value="Add Translation" onclick="addTranslations(this,'${msgGroup.key}','<c:forEach items="${msgGroup.sortedMessages}" var="msg">${msg.locale},</c:forEach>')">
-													<input class="initiallyHidden changeDetector" type="button" value="Applay">
-													<input class="initiallyHidden changeDetector" type="button" value="Reset">
+													<input class="addTranslations" type="button" value="<digi:trn>Add Translation</digi:trn>" onclick="addTranslations(this,'${msgGroup.key}','<c:forEach items="${msgGroup.sortedMessages}" var="msg">${msg.locale},</c:forEach>')">
+													
 												</td>
 											</tr>
 										</table>
@@ -237,6 +237,7 @@
 	<digi:context name="delAction" property="context/module/moduleinstance/newAdvTranDelete.do" />
 	<digi:context name="getChanges" property="context/module/moduleinstance/AdvTranGetChanges.do" />
 	<digi:context name="saveChanges" property="context/module/moduleinstance/AdvTranSaveChanges.do" />
+	<digi:context name="updateChanges" property="context/module/moduleinstance/AdvTranUpdate.do" />
 	
 	var imgPlus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>';
 	var imgMinus 		= '<digi:file src="/TEMPLATE/ampTemplate/img_2/ico_minus.gif"/>';
@@ -246,6 +247,7 @@
 	var addUrl			= '<%=addAction%>';
 	var delUrl			= '<%=delAction%>';
 	var getChangesUrl	= '<%=getChanges%>';
+	var updateUrl	= '<%=updateChanges%>';
 	
 	var arrAvailableLocales = new Array();
 	<c:forEach items="${newAdvancedTrnForm.possibleLocales}" var="lng" varStatus="sts">
@@ -253,9 +255,7 @@
 	</c:forEach>
 
 	$(document).ready(function () {
-		$('input.txtTranslation').bind('keypress',function(e){
-			$(this).parents('div.msgGroup').find('changeDetector').show();
-		});
+	
 
 		$('.expandColapse').toggle(
 				function(){
@@ -319,7 +319,7 @@
 			     attachChangesButtonEvents();
 			   },
 		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get chages list.');} 
-		}).responseText;
+		});
 	}
 
 
@@ -356,8 +356,23 @@
 						loadChanges();
 				   },
 			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot delete translation.');} 
-			}).responseText;
+			});
 		}
+	}
+	function updateTranslation(but){
+			var key = $(but).parents('div.trnContainer').find('input.hiddenKey').val();
+			var loc = $(but).parents('div.trnContainer').find('input.hiddenLocale').val();
+			var newMsg = $(but).parents('div.trnContainer').find('input[name="message"]').val();
+			var resp=$.ajax({
+				   type: 'POST',
+				   url: updateUrl,
+				   data: ({updateKey : key, updateLocale : loc, updateMessage:newMsg}),
+				   cache : false,
+				   success: function(data,msg){
+						loadChanges();
+				   },
+			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot delete translation.');} 
+			});
 	}
 	
 	function attachChangesButtonEvents(){
@@ -379,7 +394,7 @@
 						     loadChanges();
 						   },
 					   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, undo is not done.');} 
-					}).responseText;
+					})
 				}
 			}else{
 				alert('Please select changes to undo.');
@@ -387,7 +402,7 @@
 		});//undo all
 
 		$('#btnSaveAllChanges').click(function(){
-			var resp=$.ajax({
+			$.ajax({
 				   type: 'GET',
 				   url: saveAllUrl,
 				   cache : false,
@@ -395,7 +410,7 @@
 				     loadChanges();
 				   },
 			   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot save changes.');} 
-			}).responseText;
+			})
 		});//save all
 		
 	}
@@ -457,20 +472,18 @@
 	}
 
 	function sendAddTranslation(locale,message, key){
-		var itwasok = false;
 		var resp=$.ajax({
 			   type: 'POST',
 			   url: addUrl,
 			   data: ({addLocale : locale, addMessage : message, addKey : key}),
 			   cache : false,
 			   success: function(data,msg){
-			   		itwasok=true;
 			   		loadChanges();
 			   },
 		   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot add.');} 
-		}).responseText;
-		return itwasok;
+		})
 	}
+	
 
 	function cancelAddTranslation(but){
 		$(but).parents('div.msgGroupBodyOpened').find('input.addTranslations').removeAttr('disabled');

@@ -29,6 +29,9 @@ public class NewAdvancedTrnForm extends ActionForm {
 	private String addLocale;
 	private String addMessage;
 	private String[] undoChanges;
+	private String updateKey;
+	private String updateLocale;
+	private String updateMessage;
 	
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
@@ -140,6 +143,30 @@ public class NewAdvancedTrnForm extends ActionForm {
 
 	public String[] getUndoChanges() {
 		return undoChanges;
+	}
+
+	public void setUpdateKey(String updateKey) {
+		this.updateKey = updateKey;
+	}
+
+	public String getUpdateKey() {
+		return updateKey;
+	}
+
+	public void setUpdateLocale(String updateLocale) {
+		this.updateLocale = updateLocale;
+	}
+
+	public String getUpdateLocale() {
+		return updateLocale;
+	}
+
+	public void setUpdateMessage(String updateMessage) {
+		this.updateMessage = updateMessage;
+	}
+
+	public String getUpdateMessage() {
+		return updateMessage;
 	}
 	
 }

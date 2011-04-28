@@ -40,8 +40,6 @@ public class AdvTrnGetChanges extends Action {
 				rsp.append(changedItem.getOperation().toString());
 				rsp.append("</td><td>");
 				rsp.append(changedItem.getElement().getMessage());
-				rsp.append("</td><td>");
-				rsp.append(changedItem.getOperation().toString());
 				rsp.append("</td></tr>");
 			}
 			rsp.append("</table>");

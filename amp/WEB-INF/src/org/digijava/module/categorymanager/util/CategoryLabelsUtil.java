@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
 
 public class CategoryLabelsUtil {
@@ -86,6 +87,17 @@ public class CategoryLabelsUtil {
 			form.getUsedCategories().add(lCat);
 			addCategoryToPossibleVals(lCat, form);
 			labelsMap.put( lCat.getId(), new ArrayList<Long>() );
+			
+			//get state
+			if(category.getId()!=null){
+				AmpLinkedCategoriesState stateForUsedCat= CategoryManagerUtil.getState(category, lCat);
+				if (stateForUsedCat != null){
+					lCat.setUsedByCategorySingleSelect(stateForUsedCat.getSingleChoice());
+				}
+				
+			}
+			
+
 			
 		}
 		

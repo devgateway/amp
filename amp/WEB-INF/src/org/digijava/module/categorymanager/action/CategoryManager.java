@@ -29,6 +29,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
 import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -288,13 +289,15 @@ public class CategoryManager extends Action {
 			dbSession		= PersistenceManager.getSession();
 			transaction		= dbSession.beginTransaction();
 			
-			String queryString 	= "select c from "
-				+ AmpCategoryClass.class.getName()
-				+ " c where c.id=:id";
+			dbSession.createQuery("delete from " + AmpLinkedCategoriesState.class.getName() +" s where s.mainCategory.id=:categoryId")
+			.setLong("categoryId", categoryId).executeUpdate();
+			transaction.commit();
+			
+			String queryString 	= "select c from "	+ AmpCategoryClass.class.getName()+ " c where c.id=:id";
 			Query qry			= dbSession.createQuery(queryString);
 			qry.setParameter("id", categoryId, Hibernate.LONG);
-			dbSession.delete( qry.uniqueResult() );
-			transaction.commit();
+			dbSession.delete( qry.uniqueResult() );			
+			
 		} 
 		catch (Exception ex) {
 			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.cannotDeleteCategory");
@@ -463,6 +466,18 @@ public class CategoryManager extends Action {
 					}
 					else{
 						dbSession.flush();
+						//label category states updates
+						String queryString	= "delete from " + AmpLinkedCategoriesState.class.getName() + " s where s.mainCategory=:dbCategory";
+						dbSession.createQuery(queryString).setEntity("dbCategory", dbCategory).executeUpdate();
+						List<AmpCategoryClass> usedCategories = dbCategory.getUsedCategories();
+						for (AmpCategoryClass ampCategoryClass : usedCategories) {
+							AmpLinkedCategoriesState newState = new AmpLinkedCategoriesState ();
+							newState.setMainCategory(dbCategory);
+							newState.setLinkedCategory(ampCategoryClass);
+							newState.setSingleChoice(ampCategoryClass.getUsedByCategorySingleSelect());
+							dbSession.saveOrUpdate( newState );
+						}						
+
 					}
 					
 					tx.commit();

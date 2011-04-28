@@ -9,5 +9,8 @@
 		<hibernate-class>
 			org.digijava.module.categorymanager.dbentity.AmpCategoryValue
 		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState
+		</hibernate-class>
 	</hibernate-classes>
 </module-config>

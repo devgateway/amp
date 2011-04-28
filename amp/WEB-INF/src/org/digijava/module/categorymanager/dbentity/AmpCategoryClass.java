@@ -23,6 +23,8 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	private List<AmpCategoryClass> usedCategories;
 	private Set<AmpCategoryClass> usedByCategories;
 	
+	private Boolean usedByCategorySingleSelect; //how this category class is linked with current usedByCategory
+	
 	public String getDescription() {
 		return description;
 	}
@@ -94,6 +96,13 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 		if(o instanceof AmpCategoryClass)
 		return compareTo( (AmpCategoryClass)o ) == 0;
 		else return false;
+	}
+	
+	public Boolean getUsedByCategorySingleSelect() {
+		return usedByCategorySingleSelect;
+	}
+	public void setUsedByCategorySingleSelect(Boolean usedByCategorySingleSelect) {
+		this.usedByCategorySingleSelect = usedByCategorySingleSelect;
 	} 
 		
 	

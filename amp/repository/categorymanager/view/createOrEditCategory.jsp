@@ -252,6 +252,9 @@
 						<html:select name="cmCategoryManagerForm" property="usedCategoryId" style="font-size: 11px;">
 							<html:optionsCollection  name="cmCategoryManagerForm" property="availableCategories" value="key" label="value" />
 						</html:select>
+						
+						<html:checkbox name="cmCategoryManagerForm" property="usedCatIsSingleSelect" style="font-size: 11px;">Single Select</html:checkbox>
+						
 						<button type="button" onclick="return addLabelCategory()" class="buttonx" 
 							style="vertical-align:bottom; padding: 1px;">
 							<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
@@ -376,7 +379,14 @@
 									<logic:iterate name="usedCateg" property="possibleValues" id="usedVal" indexId="countVal">
 										<tr> 
 											<td>
-											<html:multibox property="possibleVals[${index.count-1}].labelCategories[${countCateg}].labelsId" value="${usedVal.id}" />
+												<c:choose>
+													<c:when test="${not empty usedCateg.usedByCategorySingleSelect && usedCateg.usedByCategorySingleSelect == true}">
+														<html:radio property="possibleVals[${index.count-1}].labelCategories[${countCateg}].labelsId" value="${usedVal.id}" />
+													</c:when>
+													<c:otherwise>
+														<html:multibox property="possibleVals[${index.count-1}].labelCategories[${countCateg}].labelsId" value="${usedVal.id}" />
+													</c:otherwise>
+												</c:choose>
 											</td>
 											<td><category:getoptionvalue categoryValueId="${usedVal.id}"/></td>
 										</tr>

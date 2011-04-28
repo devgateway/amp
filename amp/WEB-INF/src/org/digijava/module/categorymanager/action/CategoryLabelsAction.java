@@ -35,6 +35,7 @@ public class CategoryLabelsAction extends Action {
 				myForm.setUsedCategories( new ArrayList<AmpCategoryClass>() );
 			
 			AmpCategoryClass category	= CategoryManagerUtil.loadAmpCategoryClass(myForm.getUsedCategoryId());
+			category.setUsedByCategorySingleSelect(myForm.getUsedCatIsSingleSelect());
 			myForm.getUsedCategories().add( category );
 			
 			CategoryLabelsUtil.removeCategoryFromKeyValueList(myForm.getUsedCategoryId(), myForm.getAvailableCategories() );

@@ -46,6 +46,16 @@ public class CategoryManagerForm extends ActionForm {
     private String useAction							= null;
     
     private int numOfAdditionalFields	= 0;
+    
+    private Boolean usedCatIsSingleSelect;
+	public Boolean getUsedCatIsSingleSelect() {
+		return usedCatIsSingleSelect;
+	}
+
+	public void setUsedCatIsSingleSelect(Boolean usedCatIsSingleSelect) {
+		this.usedCatIsSingleSelect = usedCatIsSingleSelect;
+	}
+
 	/**
 	 * End - The properties below are used for adding a new category
 	 */
@@ -138,6 +148,7 @@ public class CategoryManagerForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		this.isMultiselect	= false;
 		this.isOrdered		= false;
+		this.usedCatIsSingleSelect = false;
 		
 		/* This is for removing all labels in a category for a certain category value. 
 		 * If no checkbox is selected the code below is needed */

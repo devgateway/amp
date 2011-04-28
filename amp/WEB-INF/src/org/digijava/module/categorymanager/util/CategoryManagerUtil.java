@@ -27,6 +27,7 @@ import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -828,6 +829,26 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			return false;
 		}
 	}
+	
+	public static AmpLinkedCategoriesState getState(AmpCategoryClass mainCategory, AmpCategoryClass usedCategory){
+		AmpLinkedCategoriesState retVal = null;
+		Session dbSession	= null;
+		Query qry = null;
+		String queryString =null;
+		try {
+			dbSession = PersistenceManager.getRequestDBSession();
+			queryString = "select c from "	+ AmpLinkedCategoriesState.class.getName()+ " c where c.mainCategory=:mainCategory and c.linkedCategory=:usedCategory";
+			qry			= dbSession.createQuery(queryString);
+			qry.setEntity("mainCategory", mainCategory);
+			qry.setEntity("usedCategory", usedCategory);
+			retVal = (AmpLinkedCategoriesState)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Failed to get state ", e);
+		}
+		return retVal;
+	}
+	
+
 	
 	public static String checkImplementationLocationCategory ()  {
 			String errorString			= "The following values were not found: ";

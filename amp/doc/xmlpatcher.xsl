@@ -127,6 +127,23 @@
 		</condition>
 	</xsl:template>	
 	
+	<!-- Check if a certain entry exists in the a certain table -->
+	<xsl:template match="condition[@type='entryInTableExists']">
+		<condition type="custom">
+			<xsl:if test="@inverted">
+			<xsl:attribute name="inverted">
+				<xsl:value-of select="@inverted"/>
+			</xsl:attribute>
+			</xsl:if>
+ 			<script returnVar="count">
+				<lang type="sql">
+				SELECT count(*) FROM <xsl:value-of select="@tablename"/>   where   <xsl:value-of select="@columnname"/> = '<xsl:value-of select="@columnvalue"/>'
+				</lang>
+			</script>
+ 			<test>count.intValue()!=0</test>
+		</condition>
+	</xsl:template>	
+	
 	<!-- Standard copy template. Copy the rest of the nodes, unchanged -->
 	<xsl:template match="@*|node()">
 		<xsl:copy>

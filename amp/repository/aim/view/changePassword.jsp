@@ -12,11 +12,13 @@
 
 <digi:form action="/changePassword.do" method="post" onsubmit="return validateAimChangePasswordForm(this);">
 <div class="reg_form_container">
-<div class="reg_form_title"><h2><digi:trn key="aim:changePassword">
+<div class="home_sec_title"><digi:trn key="aim:changePassword">
 						Change Password
-						</digi:trn></h2></div>
+						</digi:trn></div>
+						
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
-<tr><td width="100%" valign="top" align="left">
+<tr>
+<td width="100%" valign="top" align="left">
 <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
 		<td width="5%">&nbsp;
@@ -35,7 +37,7 @@
 					</td>
 					<td align="left">
 						<html:text property="userId" size="20" /><br>
-						<font color="red">
+						<font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com
 						</digi:trn>

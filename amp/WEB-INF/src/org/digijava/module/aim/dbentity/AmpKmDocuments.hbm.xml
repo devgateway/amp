@@ -20,7 +20,7 @@
 			<set name="activities" table="amp_activity_km_documents" lazy="true" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_km_id"/>
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" column="amp_activity_id"/>
 			</set>-->
 	</class>
 </hibernate-mapping>

@@ -14,7 +14,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.ViewIndicatorForm;
@@ -35,7 +35,7 @@ public class ViewIndicatorValues extends TilesAction {
 		String ind =request.getParameter("ind");
 		String risk = request.getParameter("risk");
 
-		AmpActivity activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
+		AmpActivityVersion  activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
 		//Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(viForm.getAmpActivityId()));
 		Collection<IndicatorActivity> indicators=activity.getIndicators();
 

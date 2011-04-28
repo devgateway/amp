@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.form.MainProjectDetailsForm;
 import org.digijava.module.aim.helper.COverSubString;
 import org.digijava.module.aim.helper.Constants;
@@ -53,7 +53,7 @@ public class ViewMainProjectDetails extends TilesAction {
 			String documentsTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
 			formBean.setAmpActivityId(id.longValue());
 			formBean.setTabIndex(tabIndex);
-			AmpActivity activity = ActivityUtil.getProjectChannelOverview(id);
+			AmpActivityVersion  activity = ActivityUtil.getProjectChannelOverview(id);
 			if(activity!=null){
 				if (activity.getProjectComments() == null)
 					formBean.setProjectComments("");

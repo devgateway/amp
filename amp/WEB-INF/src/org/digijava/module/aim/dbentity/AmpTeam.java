@@ -41,7 +41,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	@Deprecated
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
-	private Set<AmpActivity> activityList;		// activities assigned to donor team
+	private Set<AmpActivityVersion> activityList;		// activities assigned to donor team
 	
 	private Set organizations;		// activities assigned to donor team
 	private NpdSettings npdSettings;
@@ -151,13 +151,13 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	/**
 	 * @return Returns the activityList.
 	 */
-	public Set<AmpActivity> getActivityList() {
+	public Set<AmpActivityVersion> getActivityList() {
 		return activityList;
 	}
 	/**
 	 * @param activityList The activityList to set.
 	 */
-	public void setActivityList(Set<AmpActivity> activityList) {
+	public void setActivityList(Set<AmpActivityVersion> activityList) {
 		this.activityList = activityList;
 	}
 	/**
@@ -275,8 +275,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activityList = new HashSet<AmpActivity>();
+	public Object prepareMerge(AmpActivityVersion newActivity) {
+		this.activityList = new HashSet<AmpActivityVersion>();
 		this.activityList.add(newActivity);
 		return this;
 	}

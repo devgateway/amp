@@ -16,7 +16,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -435,7 +435,7 @@ public class IndicatorUtil {
 		}
 	}
 
-	public static IndicatorActivity assignIndicatorToActivity(AmpActivity activity, AmpIndicator indicator) throws DgException{
+	public static IndicatorActivity assignIndicatorToActivity(AmpActivityVersion  activity, AmpIndicator indicator) throws DgException{
 		IndicatorActivity connection=new IndicatorActivity();
 		connection.setIndicator(indicator);
 		connection.setActivity(activity);
@@ -762,7 +762,7 @@ public class IndicatorUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static IndicatorActivity findActivityIndicatorConnection(AmpActivity activity,AmpIndicator indicator) throws DgException{
+	public static IndicatorActivity findActivityIndicatorConnection(AmpActivityVersion activity,AmpIndicator indicator) throws DgException{
 		IndicatorActivity result=null;
 		//these two line may throw null pointer exception, but don't fix here, fix caller of this method to not path null here!
 		Long activityId=activity.getAmpActivityId();
@@ -791,7 +791,7 @@ public class IndicatorUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static IndicatorActivity findActivityIndicatorConnection(AmpActivity activity,AmpIndicator indicator, Session session) throws DgException{
+	public static IndicatorActivity findActivityIndicatorConnection(AmpActivityVersion activity,AmpIndicator indicator, Session session) throws DgException{
 		IndicatorActivity result=null;
 		//these two line may throw null pointer exception, but don't fix here, fix caller of this method to not path null here!
 		Long activityId=activity.getAmpActivityId();
@@ -1016,7 +1016,7 @@ public class IndicatorUtil {
 	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(Long activityId) throws DgException{
 		if(activityId == null)
 			return null;
-		AmpActivity activity=ActivityUtil.loadActivity(activityId);
+		AmpActivityVersion  activity=ActivityUtil.loadActivity(activityId);
 		return getActivityIndicatorHelperBeans(activity);
 	}
 	
@@ -1027,7 +1027,7 @@ public class IndicatorUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
+	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivityVersion  activity) throws DgException{
 		List<ActivityIndicator> result = new ArrayList<ActivityIndicator>();;
 		if (activity==null) return null;
 		Set<IndicatorActivity> indicators =activity.getIndicators();
@@ -1622,12 +1622,12 @@ public class IndicatorUtil {
 
 		Session session = null;
 		Query qry = null;
-		AmpActivity tempAmpactivity = null;
+		AmpActivityVersion  tempAmpactivity = null;
 		Collection coll = new ArrayList();
 		try {
 			if(ampActivityId!=null&&ampActivityId>0){
 			session = PersistenceManager.getRequestDBSession();
-			tempAmpactivity = (AmpActivity) session.load(AmpActivity.class,
+			tempAmpactivity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
 					ampActivityId);
 			Set activityIndiSet = tempAmpactivity.getIndicators();
 			Iterator itrIndSet = activityIndiSet.iterator();

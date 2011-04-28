@@ -26,7 +26,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -81,7 +81,7 @@ public class ProjectFicheExport extends Action {
 		Long id=new Long(request.getParameter("ampActivityId"));
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		
-		AmpActivity act = ActivityUtil.loadActivity(id);
+		AmpActivityVersion act = ActivityUtil.loadActivity(id);
 		String currencyName = CurrencyUtil.getCurrencyName(tm.getAppSettings().getCurrencyId());
 		
 		HashMap allComments=new HashMap();		

@@ -18,7 +18,7 @@ import edu.emory.mathcs.backport.java.util.TreeSet;
 public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,  AmpComboboxDisplayable
 {
 	private static final long serialVersionUID = 1L;
-	private AmpActivity activityId;
+	private AmpActivityVersion activityId;
     private Long ampThemeId ;
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
@@ -181,7 +181,7 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		return indicators;
 	}
 
-    public AmpActivity getActivityId() {
+    public AmpActivityVersion getActivityId() {
         return activityId;
     }
 
@@ -210,7 +210,7 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		this.indlevel = indlevel;
 	}
 
-	public void setActivityId(AmpActivity activityId) {
+	public void setActivityId(AmpActivityVersion activityId) {
         this.activityId = activityId;
     }
 

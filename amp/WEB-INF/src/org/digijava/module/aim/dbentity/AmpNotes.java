@@ -10,7 +10,7 @@ public class AmpNotes
 	private String description ;
 	private String language ;
 	private String version ;
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	
 
 	/**
@@ -97,12 +97,12 @@ public class AmpNotes
 	public void setVersion(String string) {
 		version = string;
 	}
-	public void setAmpActivityId(AmpActivity a ) 
+	public void setAmpActivityId(AmpActivityVersion a ) 
 	{
 		this.ampActivityId = a ;
 	}
 		
-	public AmpActivity getAmpActivityId() 
+	public AmpActivityVersion getAmpActivityId() 
 	{
 		return ampActivityId;
 		}

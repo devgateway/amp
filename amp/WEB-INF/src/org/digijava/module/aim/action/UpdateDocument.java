@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -35,7 +36,7 @@ extends Action {
 		
 		if (!rlForm.isValuesSet()) {
 			CMSContentItem cmsItem = DbUtil.getCMSContentItem(rlForm.getDocId());
-			AmpActivity activity = ActivityUtil.getProjectChannelOverview(rlForm.getActivityId());
+			AmpActivityVersion activity = ActivityUtil.getProjectChannelOverview(rlForm.getActivityId());
 			rlForm.setActivityName(activity.getName());
 			rlForm.setTitle(cmsItem.getTitle());
 			rlForm.setDocDescription(cmsItem.getDescription());

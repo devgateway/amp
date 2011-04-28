@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -74,7 +74,7 @@ public class LuceneIndex extends Action {
 				  Hits hits = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
 				  for(int i = 0; i < hits.length(); i++) {
 					   Document doc = hits.doc(i);
-					   AmpActivity act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
+					   AmpActivityVersion act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
 					   logger.info(doc.get("id") + "[" + act.getAmpId() + "] " + act.getName());
 				  }
 				  

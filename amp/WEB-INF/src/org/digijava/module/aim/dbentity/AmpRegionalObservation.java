@@ -12,7 +12,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 
 	private Long ampRegionalObservationId;
 	private String name;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
 	private Date observationDate;
 
@@ -24,11 +24,11 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 		this.name = name;
 	}
 
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
 
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 
@@ -98,7 +98,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 	}
 
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpRegionalObservation aux = (AmpRegionalObservation) clone();
 		aux.activity = newActivity;
 		aux.ampRegionalObservationId = null;

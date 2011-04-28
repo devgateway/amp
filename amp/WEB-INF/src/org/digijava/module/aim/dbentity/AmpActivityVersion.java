@@ -1,13 +1,38 @@
+/**
+ * Copyright (c) 2011 Development Gateway (www.developmentgateway.org)
+ */
 package org.digijava.module.aim.dbentity;
 
-public class AmpActivityVersion extends AmpActivity implements Cloneable {
+import java.util.Date;
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		try {
-			return (AmpActivityVersion) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError(e.toString());
-		}
+/**
+ * @author aartimon@dginternational.org
+ * @since Apr 27, 2011
+ */
+public class AmpActivityVersion extends AmpActivityFields{
+	
+	/**
+	 * 
+	 * NOTE:
+	 *    All new fields should be added in {@link AmpActivityFields}
+	 *    
+	 */
+	
+	public AmpActivityVersion() {
+	}
+
+	public AmpActivityVersion(Long ampActivityId, String name, Date updatedDate, AmpTeamMember updateBy, String ampid) {
+		this.ampActivityId=ampActivityId;
+		this.name=name;
+		//this.budget=budget;
+		this.updatedDate=updatedDate;
+		this.updatedBy=updateBy;
+		this.ampId=ampid;
+	}
+
+	public AmpActivityVersion(Long ampActivityId, String name, String ampid) {
+		this.ampActivityId=ampActivityId;
+		this.name=name;
+		this.ampId=ampid;
 	}
 }

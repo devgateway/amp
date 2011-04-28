@@ -167,7 +167,7 @@ public class ActivityUtil {
    */
 public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//Retrieving parameters
-	AmpActivity activity = rsp.getActivity();
+	AmpActivityVersion activity = rsp.getActivity();
 	Long oldActivityId = rsp.getOldActivityId();
 	boolean edit = rsp.isEdit();
 	//edit = false;
@@ -188,7 +188,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
-    AmpActivity oldActivity = null;
+    AmpActivityVersion oldActivity = null;
 
     Long activityId = null;
     Set fundSet		= null;
@@ -205,7 +205,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           memberId);
 
       if (oldActivityId != null) {
-          oldActivity = (AmpActivity) session.load(AmpActivity.class, oldActivityId);
+          oldActivity = (AmpActivityVersion) session.load(AmpActivity.class, oldActivityId);
       }
      
       if (edit) { /* edit an existing activity */        
@@ -1479,13 +1479,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                                            Long activityId) {
     Session session = null;
     Transaction tx = null;
-    AmpActivity oldActivity = null;
+    AmpActivityVersion oldActivity = null;
 
     try {
       session = PersistenceManager.getRequestDBSession();
       tx = session.beginTransaction();
 
-      oldActivity = (AmpActivity) session.load(AmpActivity.class, activityId);
+      oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 
       if (oldActivity == null) {
         logger.debug("Previous Activity is null");
@@ -1516,13 +1516,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   public static void updateActivityDocuments(Long activityId, Set documents) {
 		Session session = null;
 		Transaction tx = null;
-		AmpActivity oldActivity = null;
+		AmpActivityVersion oldActivity = null;
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
 
-			oldActivity = (AmpActivity) session.load(AmpActivity.class,
+			oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
 					activityId);
 
 			if (oldActivity == null) {
@@ -1613,14 +1613,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * @return list of activities.
    * @throws DgException
    */
-  public static Collection<AmpActivity> searchActivities(Long ampThemeId,
+  public static Collection<AmpActivityVersion> searchActivities(Long ampThemeId,
       String statusCode,
       String donorOrgId,
       Date fromDate,
       Date toDate,
       Long locationId,
       TeamMember teamMember,Integer pageStart,Integer rowCount) throws DgException{
-    Collection<AmpActivity> result = null;
+    Collection<AmpActivityVersion> result = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
@@ -1964,7 +1964,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         col.add(org.getName());
       }
 
-      AmpActivity act = (AmpActivity) session.load(AmpActivity.class, actId);
+      AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actId);
 
       if (act.getOrgrole() != null) {
 
@@ -1993,25 +1993,25 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * @return
    * @throws DgException
    */
-  public static AmpActivity loadActivity(Long id) throws DgException {
-		AmpActivity result = null;
+  public static AmpActivityVersion loadActivity(Long id) throws DgException {
+		AmpActivityVersion result = null;
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			session.flush();
-			result = (AmpActivity) session.get(AmpActivity.class, id);
+			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 			session.evict(result);
-			result = (AmpActivity) session.get(AmpActivity.class, id);
+			result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
 		} catch (ObjectNotFoundException e) {
-			logger.debug("AmpActivity with id=" + id + " not found");
+			logger.debug("AmpActivityVersion with id=" + id + " not found");
 		} catch (Exception e) {
-			throw new DgException("Cannot load AmpActivity with id " + id, e);
+			throw new DgException("Cannot load AmpActivityVersion with id " + id, e);
 		}
 		return result;
 	}
   
   
   //WTF!!!!
-  public static AmpActivity getAmpActivity(Long id) {
+  public static AmpActivityVersion getAmpActivity(Long id) {
 	  //TODO: This is a mess, shouldn't be here. Check where it is used and change it.
 
 	  /**
@@ -2060,13 +2060,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		return activity;
 	}
 
-  public static AmpActivity getChannelOverview(Long actId) {
+  public static AmpActivityVersion getChannelOverview(Long actId) {
     Session session = null;
-    AmpActivity activity = null;
+    AmpActivityVersion activity = null;
 
     try {
       session = PersistenceManager.getSession();
-      activity = (AmpActivity) session.load( AmpActivity.class, actId);
+      activity = (AmpActivityVersion) session.load( AmpActivityVersion.class, actId);
 //      Collection act = qry.list();
 //      Iterator actItr = act.iterator();
 //
@@ -2358,13 +2358,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getSession();
-      String queryString = "select a from " + AmpActivity.class.getName() +
+      String queryString = "select a from " + AmpActivityVersion.class.getName() +
           " a " + "where (a.ampActivityId=:actId)";
       Query qry = session.createQuery(queryString);
       qry.setParameter("actId", actId, Hibernate.LONG);
       Iterator itr = qry.list().iterator();
       if (itr.hasNext()) {
-        AmpActivity act = (AmpActivity) itr.next();
+        AmpActivityVersion act = (AmpActivityVersion) itr.next();
         Set set = act.getSectors();
         if (set != null) {
           Iterator sectItr = set.iterator();
@@ -2524,7 +2524,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getSession();
-      AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
       Set comp = activity.getComponents();
       if (comp != null && comp.size() > 0) {
         Iterator itr1 = comp.iterator();
@@ -2856,7 +2856,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
 			Set regObs = activity.getRegionalObservations();
 			Iterator<AmpRegionalObservation> iRegObs = regObs.iterator();
 			while (iRegObs.hasNext()) {
@@ -2885,7 +2885,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
     try {
       session = PersistenceManager.getSession();
-      AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
       Set issues = activity.getIssues();
       if (issues != null && issues.size() > 0) {
         Iterator iItr = issues.iterator();
@@ -2945,7 +2945,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
     try {
       session = PersistenceManager.getRequestDBSession();
-      AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
       col = activity.getRegionalFundings();
     }
     catch (Exception e) {
@@ -2961,7 +2961,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
     try {
       session = PersistenceManager.getRequestDBSession();
-      AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
+      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
       col = activity.getRegionalFundings();
       ArrayList temp = new ArrayList(col);
       Iterator itr = temp.iterator();
@@ -3080,7 +3080,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         if (tm.getTeamType().equalsIgnoreCase("DONOR")) {
           // DONOR team leader
           AmpTeam team = (AmpTeam) session.load(AmpTeam.class, tm.getTeamId());
-          AmpActivity act = new AmpActivity();
+          AmpActivityVersion act = new AmpActivityVersion();
           act.setAmpActivityId(actId);
           if (team.getActivityList().contains(act))
             canView = true;
@@ -3089,7 +3089,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           // MOFED team leader
           //logger.info("Mofed team leader");
           //logger.info("loading activity " + actId);
-          AmpActivity act = (AmpActivity) session.load(AmpActivity.class, actId);
+          AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actId);
           if (act.getTeam().getAmpTeamId().equals(tm.getTeamId())) {
             logger.debug("Can view " + actId + " , team " + tm.getTeamId());
             canView = true;
@@ -3102,7 +3102,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       else {
         AmpTeamMember ampTeamMem = (AmpTeamMember) session.load(AmpTeamMember.class,
             tm.getMemberId());
-        AmpActivity act = new AmpActivity();
+        AmpActivityVersion act = new AmpActivityVersion();
         act.setAmpActivityId(actId);
         if (ampTeamMem.getActivities().contains(act))
           canView = true;
@@ -3131,7 +3131,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
     try {
       session = PersistenceManager.getSession();
-      AmpActivity act = (AmpActivity) session.load(AmpActivity.class, actId);
+      AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actId);
       if (act.getFunding() != null) {
         Iterator itr = act.getFunding().iterator();
         while (itr.hasNext()) {
@@ -3169,7 +3169,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       session = PersistenceManager.getSession();
 
       String queryString = "select max(act.ampActivityId) from "
-          + AmpActivity.class.getName() + " act";
+          + AmpActivityVersion.class.getName() + " act";
       Query qry = session.createQuery(queryString);
       Iterator itr = qry.list().iterator();
       if (itr.hasNext()) {
@@ -3195,9 +3195,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return maxId;
   }
 
-  public static AmpActivity getProjectChannelOverview(Long id) {
+  public static AmpActivityVersion getProjectChannelOverview(Long id) {
     Session session = null;
-    AmpActivity activity = null;
+    AmpActivityVersion activity = null;
 
     try {
       logger.debug("Id is " + id);
@@ -3210,7 +3210,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           + " a " + "where (a.ampActivityId=:id)";
       Query qry = session.createQuery(queryString);
       qry.setLong("id", id);
-      activity =(AmpActivity)qry.uniqueResult();
+      activity =(AmpActivityVersion)qry.uniqueResult();
       // end
     }
     catch (Exception ex) {
@@ -3418,7 +3418,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  return execRate;
   	}
 
-  	public static List<AmpActivity> getLastUpdatedActivities(AmpTeam team) {
+  	public static List<AmpActivityVersion> getLastUpdatedActivities(AmpTeam team) {
 		List col = null;
 		Session session = null;
 		Query qry = null;
@@ -3427,19 +3427,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			session = PersistenceManager.getRequestDBSession();
 			//String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct group by ampAct.ampActivityGroup having count(*) > 1 order by ampAct.ampActivityGroup";
 			//String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct order by ampAct.ampActivityId desc";
+			/*
 			String queryString = "select ampAct from "
 					+ AmpActivityVersion.class.getName()
-					+ " ampAct, "
-					/*+ AmpTeam.class.getName()
-					+ " ampTeam, "*/
+					+ " ampAct left outer join "
 					+ AmpActivityGroup.class.getName()
-					+ " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion and ampAct.team.ampTeamId = ? order by ampAct.ampActivityId desc";
+					+ " ampGroup where ampAct.ampActivityId = ampGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
+			*/
+			String queryString = "select ampAct from "
+				+ AmpActivityVersion.class.getName()
+				+ " ampAct"
+				+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
-			qry.setParameter(0, team.getAmpTeamId());
+			qry.setLong("teamId", team.getAmpTeamId());
+			//qry.setParameter(0, team.getAmpTeamId());
 			col = qry.list();
 		} catch (Exception e1) {
-			logger.error("Could not retrieve the activities list from getLastUpdatedActivities");
-			e1.printStackTrace();
+			logger.error("Could not retrieve the activities list from getLastUpdatedActivities", e1);
+			//e1.printStackTrace();
 		}
 		return col;
 	}	
@@ -3513,8 +3518,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
 
-      AmpActivity ampAct = (AmpActivity) session.load(
-          AmpActivity.class, ampActId);
+      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(
+          AmpActivityVersion.class, ampActId);
 
       if (ampAct == null)
 			logger.debug("Activity is null. Hence no activity with id : " + ampActId);
@@ -3525,7 +3530,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			qry.executeUpdate();
 
 			// Delete group info.
-			qry = session.createQuery("UPDATE " + AmpActivity.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
+			qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
 			qry.executeUpdate();
 			ampAct.setAmpActivityGroup(null);
 			// TODO: relink ampActivityPreviousVersion if needed (when
@@ -3876,7 +3881,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
-  public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity, Session session) throws Exception {
+  public static void deleteActivityIndicators(Collection activityInd, AmpActivityVersion activity, Session session) throws Exception {
     
 			if (activityInd != null && activityInd.size() > 0) {
 				for (Object indAct : activityInd) {
@@ -4004,7 +4009,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
   }
 
-  public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
+  public static ActivityAmounts getActivityAmmountIn(AmpActivityVersion act,
       String tocode,Long percent) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
@@ -4088,23 +4093,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   public static class HelperAmpActivityNameComparator
         implements Comparator {
         public int compare(Object obj1, Object obj2) {
-            AmpActivity act1 = (AmpActivity) obj1;
-            AmpActivity act2 = (AmpActivity) obj2;
+            AmpActivityVersion act1 = (AmpActivityVersion) obj1;
+            AmpActivityVersion act2 = (AmpActivityVersion) obj2;
             return (act1.getName()!=null && act2.getName()!=null)?act1.getName().compareTo(act2.getName()):0; 
         }
     }
 
   /**
-   * Comparator for AmpActivity class.
+   * Comparator for AmpActivityVersion class.
    * Compears activities by its ID's.
-   * AmpActivity is comparable itself, but it is comparable by names,
+   * AmpActivityVersion is comparable itself, but it is comparable by names,
    * so this class was created to compeare them with ID's
-   * @see AmpActivity#compareTo(AmpActivity)
+   * @see AmpActivityVersion#compareTo(AmpActivityVersion)
    */
   public static class ActivityIdComparator
-      implements Comparator<AmpActivity> {
+      implements Comparator<AmpActivityVersion> {
 
-    public int compare(AmpActivity act1, AmpActivity act2) {
+    public int compare(AmpActivityVersion act1, AmpActivityVersion act2) {
       return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
     }
   }
@@ -4533,7 +4538,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		String [] retValue=null;
     		try {
                 session=PersistenceManager.getRequestDBSession();
-                queryString = "select distinct a.budgetCodeProjectID from " + AmpActivity.class.getName() + " a";    			  			
+                queryString = "select distinct a.budgetCodeProjectID from " + AmpActivityVersion.class.getName() + " a";    			  			
     			query=session.createQuery(queryString);    			
     			activities=query.list(); 		
     		}catch(Exception ex) { 
@@ -4597,7 +4602,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  Session session=null;
     	  try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString=" select act.modifiedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
+			queryString=" select act.modifiedBy from " + AmpActivityVersion.class.getName()+" act where act.ampActivityId="+actId;
 			query=session.createQuery(queryString);
 			updator=(AmpTeamMember)query.uniqueResult();
 		} catch (Exception e) {
@@ -4619,7 +4624,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   		Long sector=null;
   		try {
   			session=PersistenceManager.getRequestDBSession();
-  			queryString= "select a.budgetsector  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+  			queryString= "select a.budgetsector  from " + AmpActivityVersion.class.getName()+ " a where a.ampActivityId="+actId;
   			query=session.createQuery(queryString);    			
   			sector=(Long)query.uniqueResult();    			
   		}catch(Exception ex) { 
@@ -4636,7 +4641,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		Long program=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select a.budgetprogram  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			queryString= "select a.budgetprogram  from " + AmpActivityVersion.class.getName()+ " a where a.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			program=(Long)query.uniqueResult();    			
     		}catch(Exception ex) { 
@@ -4652,7 +4657,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		Long org=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select a.budgetorganization  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			queryString= "select a.budgetorganization  from " + AmpActivityVersion.class.getName()+ " a where a.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			org=(Long)query.uniqueResult();    			
     		}catch(Exception ex) { 
@@ -4668,7 +4673,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		Long department=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select a.budgetdepartment  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			queryString= "select a.budgetdepartment  from " + AmpActivityVersion.class.getName()+ " a where a.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			department=(Long)query.uniqueResult();    			
     		}catch(Exception ex) { 

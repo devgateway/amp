@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -31,7 +31,7 @@ public class ViewLastVersions extends TilesAction {
 		if (tm != null) {
 			currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 		}
-		List<AmpActivity> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam);
+		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam);
 		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
 		return null;
 	}

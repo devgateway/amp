@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 import sun.util.logging.resources.logging;
 
@@ -27,7 +28,7 @@ public class AmpCommentTab<T extends AmpFieldPanel<?>> extends AbstractTab {
 	
 	private Class<AmpCommentPanel> panelClass;
 	private String fmName;
-	private IModel<AmpActivity> activityModel;
+	private IModel<AmpActivityVersion> activityModel;
 
 	@Override
 	public Panel getPanel(String panelId) {
@@ -50,7 +51,7 @@ public class AmpCommentTab<T extends AmpFieldPanel<?>> extends AbstractTab {
 		return null;
 	}
 
-	public AmpCommentTab(String title, String fmName, IModel<AmpActivity> activityModel, Class<AmpCommentPanel> panelClass) {
+	public AmpCommentTab(String title, String fmName, IModel<AmpActivityVersion> activityModel, Class<AmpCommentPanel> panelClass) {
 		super(new Model(title));
 		this.panelClass = panelClass;
 		this.fmName = fmName;

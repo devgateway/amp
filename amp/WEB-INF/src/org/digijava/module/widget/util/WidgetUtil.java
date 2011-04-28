@@ -7,13 +7,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -22,7 +21,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -568,7 +566,7 @@ public class WidgetUtil {
                         Object[] rowData = (Object[]) row;
                         AmpActivitySector activitySector = (AmpActivitySector) rowData[0];
                         AmpSector sector = activitySector.getSectorId();
-                        AmpActivity activity = activitySector.getActivityId();
+                        AmpActivityVersion activity = activitySector.getActivityId();
                         Long activityId = activitySector.getActivityId().getAmpActivityId();
                         AmpOrganisation org = (AmpOrganisation) rowData[1];
                         /*we are not interested in all sectors of activity, only selected ones,
@@ -639,7 +637,7 @@ public class WidgetUtil {
 
     @SuppressWarnings("unchecked")
     public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
-        AmpActivity activity = activityFundngObj.getActivity();
+        AmpActivityVersion activity = activityFundngObj.getActivity();
         List<AmpSector> sectors = activityFundngObj.getSectors();
         List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
         Long[] sectorIDs = new Long[sectors.size()];

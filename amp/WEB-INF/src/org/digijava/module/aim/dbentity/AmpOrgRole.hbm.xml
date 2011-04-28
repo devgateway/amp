@@ -10,7 +10,7 @@
 		</id>
 		<property name="percentage" column="percentage" type="java.lang.Double"></property>
 		<property name="additionalInfo" column="additional_info" type="java.lang.String" />
-		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivity"
+		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 			cascade="none" />
 		<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation"
 			cascade="none" />

@@ -16,7 +16,7 @@
 		<many-to-one name="totalCostCurrency" column="total_cost_currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 
 		<set name="contributions" cascade="all" table="EU_ACTIVITY_CONTRIBUTIONS" inverse="false" lazy="false">
 			<cache usage="read-write" />

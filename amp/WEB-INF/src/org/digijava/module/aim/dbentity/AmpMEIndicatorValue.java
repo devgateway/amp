@@ -7,7 +7,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @Deprecated
 public class AmpMEIndicatorValue {
 	private Long ampMeIndValId;
-	private AmpActivity activityId;
+	private AmpActivityVersion activityId;
 	private AmpMEIndicators meIndicatorId;
 	private Float baseVal;  // BASE
 	private Date baseValDate;
@@ -31,13 +31,13 @@ public class AmpMEIndicatorValue {
 	/**
 	 * @return Returns the activityId.
 	 */
-	public AmpActivity getActivityId() {
+	public AmpActivityVersion getActivityId() {
 		return activityId;
 	}
 	/**
 	 * @param activityId The activityId to set.
 	 */
-	public void setActivityId(AmpActivity activityId) {
+	public void setActivityId(AmpActivityVersion activityId) {
 		this.activityId = activityId;
 	}
 	/**

@@ -10,7 +10,7 @@ public class AmpActivityInternalId implements Serializable, Versionable {
 	private static final long serialVersionUID = 469552292854192522L;
 	private Long id;
 	private AmpOrganisation organisation;
-	private AmpActivity ampActivity;
+	private AmpActivityVersion ampActivity;
 	private String internalId;
 
 	public Long getId() {
@@ -29,11 +29,11 @@ public class AmpActivityInternalId implements Serializable, Versionable {
 		this.organisation = organisation;
 	}
 
-	public AmpActivity getAmpActivity() {
+	public AmpActivityVersion getAmpActivity() {
 		return ampActivity;
 	}
 
-	public void setAmpActivity(AmpActivity ampActivity) {
+	public void setAmpActivity(AmpActivityVersion ampActivity) {
 		this.ampActivity = ampActivity;
 	}
 
@@ -72,7 +72,7 @@ public class AmpActivityInternalId implements Serializable, Versionable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivityVersion newActivity) {
 		this.ampActivity = newActivity;
 		return this;
 	}

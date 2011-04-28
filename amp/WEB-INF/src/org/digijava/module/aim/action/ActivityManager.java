@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -143,8 +144,8 @@ public class ActivityManager extends Action {
 
 		switch (sortBy) {
 		case 1:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
+			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
+				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
 					String s1	= a1.getName();
 					String s2	= a2.getName();
 					if ( s1 == null )
@@ -158,8 +159,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		case 2:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) 
+			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
+				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) 
 				{
 					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
 					String c1="";
@@ -172,8 +173,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		case 3:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
+			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
+				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
                                 String s1 = "";
                                 String s2 = "";
                                 if (a1.getTeam() != null) {
@@ -198,8 +199,8 @@ public class ActivityManager extends Action {
 			});
 			break;
 		default:
-			Collections.sort(activities, new Comparator<AmpActivity>(){
-				public int compare(AmpActivity a1, AmpActivity a2) {
+			Collections.sort(activities, new Comparator<AmpActivityVersion>(){
+				public int compare(AmpActivityVersion a1, AmpActivityVersion a2) {
 					return a1.getName().compareTo(a2.getName());
 				}
 			});
@@ -219,7 +220,7 @@ public class ActivityManager extends Action {
 		String tIds=request.getParameter("tIds");
 		List<Long> topicsIds=getActsIds(tIds.trim());
 		for (Long ampActId : topicsIds) {
-			AmpActivity activity = ActivityUtil.loadActivity(ampActId);
+			AmpActivityVersion activity = ActivityUtil.loadActivity(ampActId);
 			AuditLoggerUtil.logObject(session, request, activity, "delete");
 			ActivityUtil.deleteActivity(ampActId);
 		}

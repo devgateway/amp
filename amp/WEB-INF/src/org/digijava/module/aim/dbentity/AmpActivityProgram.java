@@ -11,7 +11,7 @@ public class AmpActivityProgram implements Versionable, Serializable {
         private Long ampActivityProgramId;
         private Long programPercentage;
         private AmpTheme program;
-        private AmpActivity activity;
+        private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {
                 return ampActivityProgramId;
@@ -25,7 +25,7 @@ public class AmpActivityProgram implements Versionable, Serializable {
                 return program;
         }
 
-        public AmpActivity getActivity() {
+        public AmpActivityVersion getActivity() {
                 return activity;
         }
 
@@ -45,7 +45,7 @@ public class AmpActivityProgram implements Versionable, Serializable {
                 this.program = program;
         }
 
-        public void setActivity(AmpActivity activity) {
+        public void setActivity(AmpActivityVersion activity) {
                 this.activity = activity;
         }
 
@@ -87,7 +87,7 @@ public class AmpActivityProgram implements Versionable, Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivityVersion newActivity) {
 		this.activity = newActivity;
 		return this;
 	}

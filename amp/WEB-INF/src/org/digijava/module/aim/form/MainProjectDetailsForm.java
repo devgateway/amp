@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -457,12 +457,12 @@ public class MainProjectDetailsForm extends ValidatorForm
     public boolean getActivityExists() throws DgException {
         boolean exists = true;
         try {
-            AmpActivity activity = ActivityUtil.loadActivity(getAmpActivityId());
+            AmpActivityVersion  activity = ActivityUtil.loadActivity(getAmpActivityId());
             if (activity == null) {
                 exists = false;
             }
         } catch (DgException e) {
-           throw new DgException("Cannot load AmpActivity with id " + getAmpActivityId(), e);
+           throw new DgException("Cannot load AmpActivityVersion  with id " + getAmpActivityId(), e);
         }
         return exists;
     }

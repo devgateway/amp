@@ -22,7 +22,7 @@
 			inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_categoryvalue_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 				column="amp_activity_id" />
 		</set>
 		<set name="usedValues" table="AMP_CATEGORY_VALUES_USED" lazy="false">

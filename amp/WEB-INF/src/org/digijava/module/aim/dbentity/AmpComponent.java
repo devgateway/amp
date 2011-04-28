@@ -170,7 +170,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpComponent aux = (AmpComponent) clone();
 		aux.activities = new HashSet();
 		aux.activities.add(newActivity);

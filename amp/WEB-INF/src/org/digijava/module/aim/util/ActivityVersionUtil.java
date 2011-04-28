@@ -147,8 +147,8 @@ public class ActivityVersionUtil {
 
 		Comparator VersionActivityComparator = new Comparator() {
 			public int compare(Object a, Object b) {
-				AmpActivity auxA = (AmpActivity) a;
-				AmpActivity auxB = (AmpActivity) b;
+				AmpActivityVersion auxA = (AmpActivityVersion) a;
+				AmpActivityVersion auxB = (AmpActivityVersion) b;
 
 				// Dec.
 				return auxA.getAmpActivityId().compareTo(auxB.getAmpActivityId()) * -1;
@@ -193,8 +193,8 @@ public class ActivityVersionUtil {
 		return ret;
 	}
 
-	public static AmpActivity getLastActivityFromGroup(Long groupId) throws Exception {
-		AmpActivity auxActivity = null;
+	public static AmpActivityVersion getLastActivityFromGroup(Long groupId) throws Exception {
+		AmpActivityVersion auxActivity = null;
 		Session session = PersistenceManager.getSession();
 		auxActivity = ((AmpActivityGroup) session.load(AmpActivityGroup.class, groupId)).getAmpActivityLastVersion();
 		return auxActivity;
@@ -217,7 +217,7 @@ public class ActivityVersionUtil {
 	}
 
 	/**
-	 * Create a copy of the {@link AmpActivity} with all Collections linked with
+	 * Create a copy of the {@link AmpActivityVersion} with all Collections linked with
 	 * it and ready to save.
 	 * 
 	 * @param in
@@ -225,8 +225,8 @@ public class ActivityVersionUtil {
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	public static AmpActivity cloneActivity(AmpActivity in, AmpTeamMember member) throws CloneNotSupportedException {
-		AmpActivity out = (AmpActivityVersion) in.clone();
+	public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
+		AmpActivityVersion out = (AmpActivityVersion) in.clone();
 
 		// Contacts.
 		if (out.getActivityContacts() != null && out.getActivityContacts().size() > 0) {
@@ -478,7 +478,7 @@ public class ActivityVersionUtil {
 	}
 
 	/**
-	 * Initialize all collections (up to level 2) for an {@link AmpActivity}
+	 * Initialize all collections (up to level 2) for an {@link AmpActivityVersion}
 	 * object. Use it to prevent exceptions with lazy collections.
 	 * 
 	 * @param act
@@ -488,10 +488,10 @@ public class ActivityVersionUtil {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public static AmpActivity initializeActivity(AmpActivity act) throws DgException, IllegalArgumentException,
+	public static AmpActivityVersion initializeActivity(AmpActivityVersion act) throws DgException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException {
 		Session session = PersistenceManager.getRequestDBSession();
-		Method[] methods = AmpActivity.class.getDeclaredMethods();
+		Method[] methods = AmpActivityVersion.class.getDeclaredMethods();
 		for (int i = 0; i < methods.length; i++) {
 			if (methods[i].getName().contains("get") && methods[i].getReturnType().getName().contains("java.util.Set")) {
 				Object methodValue = methods[i].invoke(act, null);

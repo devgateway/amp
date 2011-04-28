@@ -14,7 +14,7 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 
 	private Long ampIssueId ;
 	private String name ;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private Set measures;
 	private Date issueDate;
  
@@ -31,10 +31,10 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 		this.ampIssueId = ampIssueId;
 	}
 	
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 
@@ -93,7 +93,7 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpIssues aux = (AmpIssues) clone();
 		aux.activity = newActivity;
 		aux.ampIssueId = null;

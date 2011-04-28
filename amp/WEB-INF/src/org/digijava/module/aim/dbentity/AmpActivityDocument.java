@@ -13,7 +13,7 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
  */
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
 	private Long id;
-	private AmpActivity ampActivity;
+	private AmpActivityVersion ampActivity;
 	private String documentType;
 	
 	
@@ -23,10 +23,10 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
 	}
-	public AmpActivity getAmpActivity() {
+	public AmpActivityVersion getAmpActivity() {
 		return ampActivity;
 	}
-	public void setAmpActivity(AmpActivity ampActivity) {
+	public void setAmpActivity(AmpActivityVersion ampActivity) {
 		this.ampActivity = ampActivity;
 	}
 	public Long getId() {
@@ -74,7 +74,7 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
 	}
 
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpActivityDocument aux = (AmpActivityDocument) clone();
 		aux.id = null;
 		aux.ampActivity = newActivity;

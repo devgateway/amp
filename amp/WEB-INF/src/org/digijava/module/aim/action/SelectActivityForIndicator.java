@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.util.ActivityUtil;
 
@@ -36,13 +37,13 @@ public class SelectActivityForIndicator
                 
                 if(selInds != null){
                 	for(int i=0; i<selInds.length; i++){
-                		AmpActivity act = ActivityUtil.loadActivity(selInds[i]);
+                		AmpActivityVersion act = ActivityUtil.loadActivity(selInds[i]);
                 		activities.add(act);
                 	}
                 }
 		       if(activities != null){
 		    	   for(Iterator activity = activities.iterator(); activity.hasNext(); ){
-		    		   AmpActivity act = (AmpActivity) activity.next();
+		    		   AmpActivityVersion act = (AmpActivityVersion) activity.next();
 		  
 		    		   LabelValueBean lbv=null;
 		                

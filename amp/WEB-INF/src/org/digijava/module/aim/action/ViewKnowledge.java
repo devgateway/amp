@@ -12,7 +12,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.form.KnowledgeForm;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.TeamMember;
@@ -58,7 +58,7 @@ public class ViewKnowledge extends TilesAction {
 				formBean.setDocuments(DbUtil.getKnowledgeDocuments(id));
 
 				/* Content Repository */
-				 AmpActivity act	 				= ActivityUtil.loadActivity(id);
+				 AmpActivityVersion  act	 				= ActivityUtil.loadActivity(id);
 				 SelectDocumentDM.clearContentRepositoryHashMap(request);
                  if (act.getActivityDocuments() != null) {
                  	ActivityDocumentsUtil.injectActivityDocuments(request, act.getActivityDocuments() );
@@ -66,7 +66,7 @@ public class ViewKnowledge extends TilesAction {
 				/* END - Content Repository */
 
                 if (DocumentUtil.isDMEnabled()) {
-                    AmpActivity activity = ActivityUtil.loadActivity(id);
+                    AmpActivityVersion  activity = ActivityUtil.loadActivity(id);
                     Site currentSite = RequestUtils.getSite(request);
                     formBean.setManagedDocuments(DocumentUtil.
                                                  getDocumentsForActivity(

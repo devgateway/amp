@@ -18,7 +18,7 @@
 		<set name="activities" table="AMP_ACTIVITY_COMPONENTS" lazy="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_component_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 				column="amp_activity_id" />
 		</set>
 

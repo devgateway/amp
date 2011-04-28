@@ -58,7 +58,7 @@
 		</set>
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 			
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

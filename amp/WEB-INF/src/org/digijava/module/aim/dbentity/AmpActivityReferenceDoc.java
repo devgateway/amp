@@ -9,16 +9,16 @@ public class AmpActivityReferenceDoc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private AmpCategoryValue categoryValue;
 	private String comment;
 	private Date created;
 	private Date lastEdited;
 	
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	public String getComment() {

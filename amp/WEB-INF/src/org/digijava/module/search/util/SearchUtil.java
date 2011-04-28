@@ -20,6 +20,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -201,7 +202,7 @@ public class SearchUtil {
 			while (it.hasNext()) {
 				Long activityId = (Long) it.next();
 
-				AmpActivity act = ActivityUtil.loadActivity(activityId);
+				AmpActivityVersion act = ActivityUtil.loadActivity(activityId);
 				resultList.add(act);
 
 			}

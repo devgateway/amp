@@ -218,7 +218,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     activityContact.setContactType(contactType);
                     newContact.getActivityContacts().add(activityContact);
                     
-                    AmpAddContactFeaturePanel tempContactDetailsPanel =new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact", activityContact,true);
+                    AmpAddContactFeaturePanel tempContactDetailsPanel = new AmpAddContactFeaturePanel("createContactContainer", activity, "Add Contact", activityContact,true);
                     newContactDetails.replaceWith(tempContactDetailsPanel);
                     newContactDetails=tempContactDetailsPanel;
 

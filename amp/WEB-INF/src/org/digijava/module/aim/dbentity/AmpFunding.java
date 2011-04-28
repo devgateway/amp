@@ -16,7 +16,7 @@ import org.digijava.module.aim.util.Output;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Long ampFundingId;
 	private AmpOrganisation ampDonorOrgId;
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	private Long crsTransactionNo;
 	private String financingId;
 	private String fundingTermsCode;
@@ -259,11 +259,11 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		version = string;
 	}
 
-	public void setAmpActivityId(AmpActivity a) {
+	public void setAmpActivityId(AmpActivityVersion a) {
 		this.ampActivityId = a;
 	}
 
-	public AmpActivity getAmpActivityId() {
+	public AmpActivityVersion getAmpActivityId() {
 		return ampActivityId;
 	}
 
@@ -596,7 +596,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpFunding aux = (AmpFunding) clone();
 		aux.ampActivityId = newActivity;
 		aux.ampFundingId = null;

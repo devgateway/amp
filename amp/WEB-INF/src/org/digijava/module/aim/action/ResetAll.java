@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -196,7 +196,7 @@ public class ResetAll extends Action
 	    }
 		else
 	    {
-	    	AmpActivity activity = ActivityUtil.loadActivity(eaForm.getActivityId());
+	    	AmpActivityVersion activity = ActivityUtil.loadActivity(eaForm.getActivityId());
 			if(eaForm.getStep().equals("1"))
 		    {
 				eaForm.getIdentification().setTitle(activity.getName().trim());

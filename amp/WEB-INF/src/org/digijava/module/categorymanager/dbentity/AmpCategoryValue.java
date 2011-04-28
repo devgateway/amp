@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
@@ -23,7 +23,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private Integer index;
-	private Set<AmpActivity> activities;
+	private Set<AmpActivityVersion> activities;
 	//private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;
@@ -160,8 +160,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activities = new HashSet<AmpActivity>();
+	public Object prepareMerge(AmpActivityVersion newActivity) {
+		this.activities = new HashSet<AmpActivityVersion>();
 		this.activities.add(newActivity);
 		return this;
 	}

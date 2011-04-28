@@ -9,11 +9,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -28,7 +26,6 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -85,14 +82,14 @@ public class CompareActivityVersions extends DispatchAction {
 		vForm.setOldActivity(vForm.getActivityOne());
 
 		// Retrieve annotated for versioning fields.
-		Field[] fields = AmpActivity.class.getDeclaredFields();
+		Field[] fields = AmpActivityVersion.class.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
 			//logger.info(fields[i]);
 			CompareOutput output = new CompareOutput();
 
 			if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class,
 						"get");
 
 				// Compare values from 2 versions.
@@ -171,7 +168,7 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 			if (fields[i].isAnnotationPresent(VersionableFieldTextEditor.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class,
 						"get");
 
 				// Compare values from 2 versions.
@@ -204,7 +201,7 @@ public class CompareActivityVersions extends DispatchAction {
 			}
 			if (fields[i].isAnnotationPresent(VersionableCollection.class)) {
 				// Obtain "get" method from field.
-				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivity.class,
+				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class,
 						"get");
 				// Get values from 2 versions.
 				// Sometimes I have a problem with lazy collections and
@@ -460,9 +457,9 @@ public class CompareActivityVersions extends DispatchAction {
 			TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
 
-			AmpActivity oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
+			AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
 					.getOldActivity().getAmpActivityId());
-			AmpActivity auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
+			AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
 			auxActivity.setAmpActivityId(null);
 			session.save(auxActivity);
 			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
@@ -485,7 +482,7 @@ public class CompareActivityVersions extends DispatchAction {
 			while (iter.hasNext()) {
 				CompareOutput co = iter.next();
 				Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
-						AmpActivity.class, "set");
+						AmpActivityVersion.class, "set");
 				// Get value as object.
 				Object auxOriginalValueObject = co.getOriginalValueOutput()[0];
 				// Check if implements Versionable and call prepareMerge.
@@ -497,7 +494,7 @@ public class CompareActivityVersions extends DispatchAction {
 					Class[] params = auxMethod.getParameterTypes();
 					if (params != null && params[0].getName().contains("java.util.Set")) {
 						Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
-								AmpActivity.class, "get");
+								AmpActivityVersion.class, "get");
 						Set auxSet = (Set) auxGetMethod.invoke(auxActivity);
 						if (auxSet == null) {
 							auxSet = new HashSet();

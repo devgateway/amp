@@ -1724,9 +1724,9 @@ public class TeamUtil {
 
  
     
-    public static Collection getAllTeamActivities(Long teamId, String keyword) {
+    public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, String keyword) {
     	Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpActivityVersion> col = new ArrayList();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -1752,14 +1752,14 @@ public class TeamUtil {
 			ArrayList al=(ArrayList) qry.list();
 			Iterator itr = al.iterator();
 
-			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
+			HashMap<Long, AmpActivityVersion> holder = new HashMap<Long, AmpActivityVersion>();
 			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
 			while (itr.hasNext()) {
 				Object[] act = (Object[]) itr.next();
 				//AmpActivity act = (AmpActivity) itr.next();
-				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (String) act[2] );
+				AmpActivityVersion activity = new AmpActivityVersion((Long) act[0], (String) act[1], (String) act[2] );
 				//AmpActivity activity = (AmpActivity)itr.next();
-				AmpActivity tmp = holder.get(activity.getAmpActivityId());
+				AmpActivityVersion tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);
 				}
@@ -1781,7 +1781,7 @@ public class TeamUtil {
 				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
 			}
 
-			for (AmpActivity activity : holder.values()) {
+			for (AmpActivityVersion activity : holder.values()) {
 
 				String donors = "";
 

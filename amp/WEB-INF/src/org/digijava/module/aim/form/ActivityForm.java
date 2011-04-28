@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ActivityForm extends ActionForm implements Serializable {
 

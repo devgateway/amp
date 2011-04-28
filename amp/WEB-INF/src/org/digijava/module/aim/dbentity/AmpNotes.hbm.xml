@@ -14,6 +14,6 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -28,6 +28,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -142,7 +143,7 @@ public class AuditLoggerUtil {
 		return null;
 	}
 
-	public static void logActivityUpdate(HttpServletRequest request, AmpActivity activity, List<String> details){
+	public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details){
 		Session session = null;
 		Transaction tx = null;
 		HttpSession hsession = request.getSession();
@@ -310,7 +311,7 @@ public class AuditLoggerUtil {
 					+ AmpAuditLogger.class.getName()
 					+ " f where f.objectType=:objectType and f.objectId=:objectId order by f.modifyDate desc";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("objectType", AmpActivity.class.getCanonicalName(), Hibernate.STRING);
+			qry.setParameter("objectType", AmpActivityVersion.class.getCanonicalName(), Hibernate.STRING);
 			qry.setParameter("objectId", activityId, Hibernate.STRING);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -327,14 +328,14 @@ public class AuditLoggerUtil {
 		return col;
 	}
 
-	public static List<String> generateLogs(AmpActivity activity,
+	public static List<String> generateLogs(AmpActivityVersion activity,
 			Long activityId) {
 		List<String> auditTrail = new ArrayList<String>();
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			AmpActivity oldActivity = (AmpActivity) session.load(
-					AmpActivity.class, activityId);
+			AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(
+					AmpActivityVersion.class, activityId);
 			if (oldActivity.getName() != null
 					&& !oldActivity.getName().equals(activity.getName())) {
 				auditTrail.add("Name changed");

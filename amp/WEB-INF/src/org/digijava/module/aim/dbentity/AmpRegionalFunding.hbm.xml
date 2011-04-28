@@ -19,7 +19,7 @@
 		<property name="expenditureCategory" column="exp_category" type="java.lang.String" />
 
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<many-to-one name="reportingOrganization" column="rep_organization_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id"

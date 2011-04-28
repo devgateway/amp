@@ -46,7 +46,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
 	public String getObjectName() {
 		/*Object o=AuditLoggerUtil.loadObject(this.objectId,this.objectType);
 		if(o instanceof AmpActivity) {
-			AmpActivity a=(AmpActivity)o;
+			AmpActivityVersion a=(AmpActivityVersion)o;
 			return a.getAmpId()+" "+a.getName();
 		}
 		if(o instanceof AmpReports) {

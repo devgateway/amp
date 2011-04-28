@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
 import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -26,7 +24,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -94,12 +92,12 @@ public class ExportWorkspaceManager2XSL extends Action {
             
             for (String teamId :  teams) {
                 AmpTeam team=TeamUtil.getAmpTeam(Long.valueOf(teamId));
-                List<AmpActivity> activityList =null;
+                List<AmpActivityVersion> activityList =null;
                 if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                    activityList =new ArrayList<AmpActivity>(TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null));
+                    activityList =new ArrayList<AmpActivityVersion>(TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null));
 
                 } else {
-                    activityList = new ArrayList<AmpActivity>(TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null));
+                    activityList = new ArrayList<AmpActivityVersion>(TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null));
 
                 }
                 List<TeamMember> teamMembers = new ArrayList<TeamMember>(TeamMemberUtil.getAllTeamMembers(team.getAmpTeamId()));

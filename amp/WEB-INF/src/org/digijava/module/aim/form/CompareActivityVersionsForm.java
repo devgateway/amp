@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class CompareActivityVersionsForm extends ActionForm {
 
@@ -14,15 +15,15 @@ public class CompareActivityVersionsForm extends ActionForm {
 
 	private List<CompareOutput> outputCollection;
 
-	private AmpActivity activityOne;
+	private AmpActivityVersion activityOne;
 
-	private AmpActivity activityTwo;
+	private AmpActivityVersion activityTwo;
 
 	private boolean showMergeColumn;
 
 	private String method;
 
-	private AmpActivity oldActivity;
+	private AmpActivityVersion oldActivity;
 
 	private String[] mergedValues = new String[] {};
 
@@ -44,19 +45,19 @@ public class CompareActivityVersionsForm extends ActionForm {
 		this.activityTwoId = activityTwoId;
 	}
 
-	public AmpActivity getActivityOne() {
+	public AmpActivityVersion getActivityOne() {
 		return activityOne;
 	}
 
-	public void setActivityOne(AmpActivity activityOne) {
+	public void setActivityOne(AmpActivityVersion activityOne) {
 		this.activityOne = activityOne;
 	}
 
-	public AmpActivity getActivityTwo() {
+	public AmpActivityVersion getActivityTwo() {
 		return activityTwo;
 	}
 
-	public void setActivityTwo(AmpActivity activityTwo) {
+	public void setActivityTwo(AmpActivityVersion activityTwo) {
 		this.activityTwo = activityTwo;
 	}
 
@@ -84,11 +85,11 @@ public class CompareActivityVersionsForm extends ActionForm {
 		this.method = method;
 	}
 
-	public AmpActivity getOldActivity() {
+	public AmpActivityVersion getOldActivity() {
 		return oldActivity;
 	}
 
-	public void setOldActivity(AmpActivity oldActivity) {
+	public void setOldActivity(AmpActivityVersion oldActivity) {
 		this.oldActivity = oldActivity;
 	}
 

@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -61,7 +61,7 @@ import org.digijava.module.editor.exception.EditorException;
 
 public class ExportBuilder {
 
-	private AmpActivity ampActivity = null;
+	private AmpActivityVersion ampActivity = null;
 
 	private ObjectFactory objectFactory = new ObjectFactory();
 
@@ -69,7 +69,7 @@ public class ExportBuilder {
 
 	private String[] exportLog = null;
 	
-	public ExportBuilder(AmpActivity ampActivity, String siteId){
+	public ExportBuilder(AmpActivityVersion ampActivity, String siteId){
 		this.ampActivity = ampActivity;
 		this.siteId = siteId;
 	}
@@ -783,7 +783,7 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private void addToLog(AmpActivity activity, String error){
+	private void addToLog(AmpActivityVersion activity, String error){
 		this.exportLog = new String[3];
 		
 		this.exportLog[0] = activity.getAmpId();

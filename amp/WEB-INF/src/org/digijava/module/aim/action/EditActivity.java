@@ -45,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -155,7 +156,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     
     
 
-    AmpActivity activity = null;
+    AmpActivityVersion activity = null;
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
         GLOBALSETTINGS_COMPUTE_TOTALS);
 
@@ -2025,7 +2026,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     return mapping.findForward("forward");
   }
 
-  private EditActivityForm setComponentesToForm(EditActivityForm form,AmpActivity activity){
+  private EditActivityForm setComponentesToForm(EditActivityForm form,AmpActivityVersion activity){
 		Collection<AmpActivityComponente> componentes = activity.getComponentes();
 
 		if (componentes != null && componentes.size() > 0) {
@@ -2084,7 +2085,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		return form;
   }
 
-  private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivity activity) {
+  private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
 		Collection sectors = activity.getSectors();
 
 		if (sectors != null && sectors.size() > 0) {
@@ -2157,7 +2158,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
  * @param eaForm
  * @param componets
  */
-	private void getComponents(AmpActivity activity, EditActivityForm eaForm, String toCurrCode) {
+	private void getComponents(AmpActivityVersion activity, EditActivityForm eaForm, String toCurrCode) {
 
 		Collection componets = activity.getComponents();
 		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();

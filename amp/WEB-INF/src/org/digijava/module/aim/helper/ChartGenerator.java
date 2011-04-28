@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -289,7 +289,7 @@ public class ChartGenerator {
 		          values.add(indConn);
 			}			
 		}else{
-			AmpActivity activity=ActivityUtil.loadActivity(actId);
+			AmpActivityVersion  activity=ActivityUtil.loadActivity(actId);
 			values=activity.getIndicators();
 		}
 		

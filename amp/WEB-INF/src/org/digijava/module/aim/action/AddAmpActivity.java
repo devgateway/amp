@@ -15,13 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
@@ -42,7 +40,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -1052,7 +1050,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	        }
 	        else {
-	          AmpActivity activity = ActivityUtil.loadActivity(eaForm.
+	          AmpActivityVersion activity = ActivityUtil.loadActivity(eaForm.
 	              getActivityId());
 	          if("edit".equals(action)) {
 	          	//check if we have edit permissin for this activity

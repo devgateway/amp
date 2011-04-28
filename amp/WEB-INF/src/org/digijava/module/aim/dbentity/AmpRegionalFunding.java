@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.Output;
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
 	
 	private Long ampRegionalFundingId;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private Integer transactionType;
 	private Integer adjustmentType;
 	private Date transactionDate;
@@ -31,13 +31,13 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 	/**
 	 * @return Returns the activity.
 	 */
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
 	/**
 	 * @param activity The activity to set.
 	 */
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	/**
@@ -239,7 +239,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpRegionalFunding aux = (AmpRegionalFunding) clone();
 		aux.activity = newActivity;
 		aux.ampRegionalFundingId = null;

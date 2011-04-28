@@ -3,7 +3,6 @@ package org.digijava.module.message.jobs;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;

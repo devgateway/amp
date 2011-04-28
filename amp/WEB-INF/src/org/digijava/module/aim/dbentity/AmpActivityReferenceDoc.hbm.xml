@@ -15,7 +15,7 @@
 		<property name="lastEdited" column="lastEdited" type="java.util.Date" />
 
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 
 		<many-to-one name="categoryValue" column="categoryValueId"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />

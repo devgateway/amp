@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 
@@ -37,7 +38,7 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
      *
      */
     private static final long serialVersionUID = 1L;
-    private AmpActivity act;
+    private transient AmpActivityVersion act;
     private AmpActivityContact actContact;
     private AmpContactOrganizationFeaturePanel contactOrganizations;
     private AmpContactDetailFeaturePanel detailFax;
@@ -46,8 +47,12 @@ public class AmpAddContactFeaturePanel extends AmpFeaturePanel<AmpActivityContac
 
 
 
-
-    public AmpAddContactFeaturePanel(String id, final AmpActivity ampActivity,
+    /**
+     * TODO:
+     * TODO: change to use model to reference ampActivity
+     * TODO: 
+     */
+    public AmpAddContactFeaturePanel(String id, final AmpActivityVersion ampActivity,
             String fmName,  final AmpActivityContact activityContact, boolean visible) throws Exception {
         super(id, fmName);
         act = ampActivity;

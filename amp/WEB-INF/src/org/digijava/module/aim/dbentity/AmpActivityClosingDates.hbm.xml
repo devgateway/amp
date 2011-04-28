@@ -16,6 +16,6 @@
 		<property name="comments" column="comments" type="text" />
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" not-null="true" />
 	</class>
 </hibernate-mapping>

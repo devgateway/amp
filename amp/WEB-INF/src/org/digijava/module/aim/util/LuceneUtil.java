@@ -54,7 +54,7 @@ import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.help.helper.HelpSearchData;
@@ -728,7 +728,7 @@ public class LuceneUtil implements Serializable {
 			}
 			IndexWriter indexWriter = null;
 			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
-			AmpActivity act = ActivityUtil.loadActivity(id);
+			AmpActivityVersion act = ActivityUtil.loadActivity(id);
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);

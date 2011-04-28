@@ -8,7 +8,7 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityClosingDates implements Serializable, Versionable, Cloneable {
 		
 	private Long ampActivityClosingDateId;
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	private Integer type;
 	private String comments;
     private Date closingDate;
@@ -27,13 +27,13 @@ public class AmpActivityClosingDates implements Serializable, Versionable, Clone
 	/**
 	 * @return Returns the ampActivityId.
 	 */
-	public AmpActivity getAmpActivityId() {
+	public AmpActivityVersion getAmpActivityId() {
 		return ampActivityId;
 	}
 	/**
 	 * @param ampActivityId The ampActivityId to set.
 	 */
-	public void setAmpActivityId(AmpActivity ampActivityId) {
+	public void setAmpActivityId(AmpActivityVersion ampActivityId) {
 		this.ampActivityId = ampActivityId;
 	}
 	/**
@@ -99,7 +99,7 @@ public class AmpActivityClosingDates implements Serializable, Versionable, Clone
 		return this.type.toString()+this.closingDate;
 	}
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpActivityClosingDates aux = (AmpActivityClosingDates) clone();
 		aux.ampActivityId = newActivity;
 		aux.ampActivityClosingDateId = null;

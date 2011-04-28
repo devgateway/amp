@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 public class ChannelOverviewForm extends MainProjectDetailsForm
 {
 	private Long id ;
@@ -47,7 +47,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection modal;
 	private boolean canView;
 	private HashMap allComments;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private Long implemLocationLevel;
 	private int numImplLocationLevels	= 0;
 	private String buttonText;  // added by Akash for activity approval
@@ -512,13 +512,13 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	/**
 	 * @return Returns the activity.
 	 */
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
 	/**
 	 * @param activity The activity to set.
 	 */
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	/**

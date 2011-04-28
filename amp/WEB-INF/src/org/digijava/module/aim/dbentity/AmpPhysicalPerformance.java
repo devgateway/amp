@@ -15,7 +15,7 @@ public class AmpPhysicalPerformance implements Serializable, Versionable, Clonea
 	private String description ;
 	private Date reportingDate ;
 	private AmpOrganisation reportingOrgId;
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	private String language ;	
 	private AmpComponent component;
 	
@@ -119,12 +119,12 @@ public class AmpPhysicalPerformance implements Serializable, Versionable, Clonea
 		language = string;
 	}
 
-	public void setAmpActivityId(AmpActivity a ) 
+	public void setAmpActivityId(AmpActivityVersion a ) 
 	{
 		this.ampActivityId = a ;
 	}
 		
-	public AmpActivity getAmpActivityId() 
+	public AmpActivityVersion getAmpActivityId() 
 	{
 		return ampActivityId;
 		}
@@ -201,7 +201,7 @@ public class AmpPhysicalPerformance implements Serializable, Versionable, Clonea
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpPhysicalPerformance aux = (AmpPhysicalPerformance) clone();
 		aux.ampActivityId = newActivity;
 		aux.ampPpId = null;

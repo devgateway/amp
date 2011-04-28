@@ -18,7 +18,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
@@ -88,7 +88,7 @@ public class ViewRelatedLinks extends Action {
 			Iterator activitiesIterator = collectionActivities.iterator();
 			while(activitiesIterator.hasNext())
 			{
-				AmpActivity currentActivity = (AmpActivity)activitiesIterator.next();
+				AmpActivityVersion  currentActivity = (AmpActivityVersion )activitiesIterator.next();
 		        /* Injecting documents into session */
 		        SelectDocumentDM.clearContentRepositoryHashMap(request);
 		        if (currentActivity.getActivityDocuments() != null && currentActivity.getActivityDocuments().size() > 0 )
@@ -124,7 +124,7 @@ public class ViewRelatedLinks extends Action {
 				
 				Long actId = doc.getActivityId();
 				Long docId = doc.getDocId();
-				AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
+				AmpActivityVersion  activity = ActivityUtil.getProjectChannelOverview(actId);
 				Set docList = new HashSet();
 				if (activity != null) {
 					Iterator itr = DbUtil.getActivityDocuments(actId).iterator();

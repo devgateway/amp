@@ -9,7 +9,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
 	private Long ampActivitySectorId;
 	
-	private AmpActivity activityId;
+	private AmpActivityVersion activityId;
 	
 	private AmpSector sectorId;
 	
@@ -34,11 +34,11 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 		this.ampActivitySectorId = ampActivitySectorId;
 	}
 
-	public AmpActivity getActivityId() {
+	public AmpActivityVersion getActivityId() {
 		return activityId;
 	}
 
-	public void setActivityId(AmpActivity activityId) {
+	public void setActivityId(AmpActivityVersion activityId) {
 		this.activityId = activityId;
 	}
 
@@ -102,7 +102,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpActivitySector aux = (AmpActivitySector) clone();
 		aux.activityId = newActivity;
 		aux.ampActivitySectorId = null;

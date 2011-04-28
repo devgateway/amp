@@ -27,7 +27,7 @@
 		<subclass name="org.digijava.module.aim.dbentity.IndicatorActivity"
 			discriminator-value="a" lazy="false">
 			<many-to-one name="activity" column="activity_id"
-				class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+				class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 			<many-to-one name="risk" column="risk"
 				class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
 		</subclass>

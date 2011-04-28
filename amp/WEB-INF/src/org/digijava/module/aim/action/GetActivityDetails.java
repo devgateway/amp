@@ -19,8 +19,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ChannelOverviewForm;
@@ -85,7 +85,7 @@ public class GetActivityDetails extends Action {
 			coForm.setAdd(true);
 		}
 
-		AmpActivity activity = ActivityUtil.getProjectChannelOverview(id);
+		AmpActivityVersion activity = ActivityUtil.getProjectChannelOverview(id);
 
 
 		Collection dbReturnSet = null;

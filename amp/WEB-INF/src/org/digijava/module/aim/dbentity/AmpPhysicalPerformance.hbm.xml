@@ -19,7 +19,7 @@
 		<property column="comments" name="comments" type="text" />
 
 		<many-to-one   name="ampActivityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<many-to-one name="reportingOrgId" column="reporting_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="component" column="amp_component_id"

@@ -18,7 +18,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * Model for retrieving and writing {@link AmpCategoryValue}S of a specific {@link AmpCategoryClass} to a collection that can have values from multiple {@link AmpCategoryClass}S
  * The {@link AmpCategoryClass} filtering is done by using the {@link AmpCategoryClass#getKeyName()}  
  * Upon writing, the previous {@link AmpCategoryValue}S of that Class are retained and the fresh set received is added
- * @see AmpActivity#getCategories()
+ * @see AmpActivityVersion#getCategories()
  * @author mpostelnicu@dgateway.org
  * since Sep 24, 2010
  */

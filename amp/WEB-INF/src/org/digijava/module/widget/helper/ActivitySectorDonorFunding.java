@@ -3,7 +3,7 @@ package org.digijava.module.widget.helper;
 
 import java.util.List;
 
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -13,7 +13,7 @@ public class ActivitySectorDonorFunding {
     private DecimalWraper commitment;
     private DecimalWraper disbursement;
     private DecimalWraper expenditure;
-    private AmpActivity activity;
+    private AmpActivityVersion activity;
     private List<AmpSector> sectors;
     private List<AmpOrganisation> donorOrgs;
 
@@ -34,7 +34,7 @@ public class ActivitySectorDonorFunding {
     }
    
 
-    public AmpActivity getActivity() {
+    public AmpActivityVersion getActivity() {
         return activity;
     }
 
@@ -75,7 +75,7 @@ public class ActivitySectorDonorFunding {
         return fmtExpenditure;
     }
 
-    public void setActivity(AmpActivity activity) {
+    public void setActivity(AmpActivityVersion activity) {
         this.activity = activity;
     }
 

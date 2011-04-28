@@ -38,6 +38,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
@@ -6031,7 +6032,7 @@ public class DbUtil {
         return survey;
     }
 
-    public static void updateSurvey(AmpAhsurvey survey, AmpActivity activity) {
+    public static void updateSurvey(AmpAhsurvey survey, AmpActivityVersion activity) {
         Session session = null;
         Transaction tx = null;
 
@@ -6073,7 +6074,7 @@ public class DbUtil {
         }
     }
     
-    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity) throws DgException {
+    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivityVersion activity) throws DgException {
 		Session session = PersistenceManager.getRequestDBSession();
 
 		AmpAhsurvey newSurvey = new AmpAhsurvey();
@@ -6101,7 +6102,7 @@ public class DbUtil {
 		// session.saveOrUpdate(newSurvey);
 	}
 
-	public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity, List<Indicator> indicators)
+	public static void saveNewSurvey(AmpAhsurvey survey, AmpActivityVersion activity, List<Indicator> indicators)
 			throws DgException {
 		Session session = null;
 		if (survey == null /* || survey.getAmpAHSurveyId()==null */) {
@@ -6360,7 +6361,7 @@ public class DbUtil {
 		try {
 
 			Collection<IndicatorActivity> activityInd = null;
-			AmpActivity activity = ActivityUtil.loadActivity(ampActId);
+			AmpActivityVersion activity = ActivityUtil.loadActivity(ampActId);
 			if (activity != null) {
 				activityInd = activity.getIndicators();
 			}

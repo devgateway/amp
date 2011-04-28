@@ -98,7 +98,7 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
 		return out;
 	}
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivityVersion newActivity) {
 		// TODO Auto-generated method stub
 		return this;
 	}

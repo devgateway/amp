@@ -33,6 +33,7 @@ import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -2017,8 +2018,8 @@ public class ProgramUtil {
     	return "../ampTemplate/images/arrow_right.gif";
     }
 
-    public static Collection<AmpActivity> checkActivitiesUsingProgram( Long programId ) {
-    	ArrayList<AmpActivity> activities	= new ArrayList<AmpActivity>();
+    public static Collection<AmpActivityVersion> checkActivitiesUsingProgram( Long programId ) {
+    	ArrayList<AmpActivityVersion> activities	= new ArrayList<AmpActivityVersion>();
     	 Session sess = null;
          Collection col = null;
          try {

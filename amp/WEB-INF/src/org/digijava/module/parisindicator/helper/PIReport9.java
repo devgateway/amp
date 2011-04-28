@@ -12,7 +12,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -79,7 +79,7 @@ public class PIReport9 extends PIAbstractReport {
 			Iterator<AmpAhsurvey> iterCommonData = commonData.iterator();
 			while (iterCommonData.hasNext()) {
 				AmpAhsurvey auxAmpAhsurvey = iterCommonData.next();
-				AmpActivity auxActivity = auxAmpAhsurvey.getAmpActivityId();
+				AmpActivityVersion auxActivity = auxAmpAhsurvey.getAmpActivityId();
 				AmpOrganisation auxOrganisation = auxAmpAhsurvey.getAmpDonorOrgId();
 				AmpOrganisation auxPoDD = auxAmpAhsurvey.getPointOfDeliveryDonor();
 

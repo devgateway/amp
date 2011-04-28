@@ -18,7 +18,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.FinancialOverviewForm;
@@ -59,7 +59,7 @@ public class ViewFinancialOverview extends TilesAction {
 				logger.debug("ampFundingId : " + ampFundingId);
 
 			Long id = new Long(formBean.getAmpActivityId());
-			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
+			AmpActivityVersion  ampActivity = ActivityUtil.getProjectChannelOverview(id);
 
 			Collection temp = null;
 			Iterator iter = null;

@@ -19,6 +19,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.JCRRepositoryService;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ManagedDocument;
 
@@ -84,7 +85,7 @@ public class DocumentUtil {
         node.setProperty("cm:name", name);
     }
 
-    public static Node getActivitySpaceNode(Site site, AmpActivity activity) throws
+    public static Node getActivitySpaceNode(Site site, AmpActivityVersion activity) throws
         DgException, RepositoryException, AimException {
         if(activity.getDocumentSpace() == null ||
            activity.getDocumentSpace().trim().length() == 0) {
@@ -151,7 +152,7 @@ public class DocumentUtil {
 
 
     public static List getDocumentsForActivity(Site site,
-        AmpActivity activity) throws RepositoryException, DgException {
+        AmpActivityVersion activity) throws RepositoryException, DgException {
         Node spaceNode = getActivitySpaceNode(site, activity);
         if (spaceNode == null) {
             // Not configured yet

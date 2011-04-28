@@ -28,7 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -154,7 +154,7 @@ public class ViewChannelOverview extends TilesAction {
 			    logger.debug("Classification Config Not Found.");
 			}
 			
-			AmpActivity activity = null;
+			AmpActivityVersion activity = null;
 			try {
 				activity = ActivityUtil.loadActivity(id);
 			} catch (DgException e) {
@@ -563,7 +563,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 
 	private ChannelOverviewForm setUniqueModalitiesToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+			ChannelOverviewForm formBean, AmpActivityVersion activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> modalities = new ArrayList<AmpCategoryValue>();
@@ -593,7 +593,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 	
 	private ChannelOverviewForm setFundingStatusesToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+			ChannelOverviewForm formBean, AmpActivityVersion activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> fundingStatuses = new ArrayList<AmpCategoryValue>();
@@ -607,7 +607,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 	
 	private ChannelOverviewForm setModesOfPaymentToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+			ChannelOverviewForm formBean, AmpActivityVersion activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> modesOfPayment = new ArrayList<AmpCategoryValue>();
@@ -621,7 +621,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 
 	private ChannelOverviewForm setCrossCuttingIssuesToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+			ChannelOverviewForm formBean, AmpActivityVersion activity) {
 
 		formBean.setEqualOpportunity(activity.getEqualOpportunity());
 		formBean.setMinorities(activity.getMinorities());
@@ -630,7 +630,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 
 	private ChannelOverviewForm setTypesOfAssistanceToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+			ChannelOverviewForm formBean, AmpActivityVersion activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> typesOfAssistance = new ArrayList<AmpCategoryValue>();
@@ -643,7 +643,7 @@ public class ViewChannelOverview extends TilesAction {
 		return formBean;
 	}
 
-	private void createWarnings (AmpActivity activity, boolean isTeamHead, ChannelOverviewForm formBean, boolean hasTeamLead) {
+	private void createWarnings (AmpActivityVersion activity, boolean isTeamHead, ChannelOverviewForm formBean, boolean hasTeamLead) {
 		if (activity.getDraft()!=null && activity.getDraft()) {
 			formBean.addError("error.aim.draftActivity", 
 					"This is a draft activity");
@@ -658,7 +658,7 @@ public class ViewChannelOverview extends TilesAction {
 			}
 		}
 	}
-	  private ChannelOverviewForm setSectorsToForm(ChannelOverviewForm form, AmpActivity activity) {
+	  private ChannelOverviewForm setSectorsToForm(ChannelOverviewForm form, AmpActivityVersion activity) {
 			Collection sectors = activity.getSectors();
 
 			if (sectors != null && sectors.size() > 0) {

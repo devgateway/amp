@@ -8,7 +8,7 @@ package org.digijava.module.aim.dbentity;
  */
 public class AmpActivityComponente {
 	private Long id;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private AmpSector sector;
 	private Float percentage;
 
@@ -18,10 +18,10 @@ public class AmpActivityComponente {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	public AmpSector getSector() {

@@ -5,7 +5,7 @@ import java.util.Set;
 public class AmpActivityGroup {
 
 	private Long ampActivityGroupId;
-	private AmpActivity ampActivityLastVersion;
+	private AmpActivityVersion ampActivityLastVersion;
 	private Set<AmpActivityVersion> activities;
 
 	public Long getAmpActivityGroupId() {
@@ -16,11 +16,11 @@ public class AmpActivityGroup {
 		this.ampActivityGroupId = ampActivityGroupId;
 	}
 
-	public AmpActivity getAmpActivityLastVersion() {
+	public AmpActivityVersion getAmpActivityLastVersion() {
 		return ampActivityLastVersion;
 	}
 
-	public void setAmpActivityLastVersion(AmpActivity ampActivityLastVersion) {
+	public void setAmpActivityLastVersion(AmpActivityVersion ampActivityLastVersion) {
 		this.ampActivityLastVersion = ampActivityLastVersion;
 	}
 

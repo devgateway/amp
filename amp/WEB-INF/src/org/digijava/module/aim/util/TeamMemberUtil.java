@@ -24,6 +24,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -574,14 +575,14 @@ public class TeamMemberUtil {
 			// desc:used select query instead of
 			// session.load
 			// start
-			String queryString = "select a from " + AmpActivity.class.getName()
+			String queryString = "select a from " + AmpActivityVersion.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", activityId, Hibernate.LONG);
 			Iterator itrTemp = qry.list().iterator();
-			AmpActivity ampActivity = null;
+			AmpActivityVersion ampActivity = null;
 			while (itrTemp.hasNext()) {
-				ampActivity = (AmpActivity) itrTemp.next();
+				ampActivity = (AmpActivityVersion) itrTemp.next();
 			}
 			// end
 
@@ -604,18 +605,18 @@ public class TeamMemberUtil {
 		return col;
 	}
 
-	public static Collection<AmpActivity> getAllMemberActivities(Long memberId) {
+	public static Collection<AmpActivityVersion> getAllMemberActivities(Long memberId) {
 		Session session = null;
-		Collection<AmpActivity> col = null;
+		Collection<AmpActivityVersion> col = null;
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, memberId);
 
-			Iterator<AmpActivity> itr = ampMember.getActivities().iterator();
-			col = new ArrayList<AmpActivity>();
+			Iterator<AmpActivityVersion> itr = ampMember.getActivities().iterator();
+			col = new ArrayList<AmpActivityVersion>();
 			while (itr.hasNext()) {
-				AmpActivity activity = itr.next();
+				AmpActivityVersion activity = itr.next();
 				Iterator<AmpOrgRole> orgItr = activity.getOrgrole().iterator();
 				String donors = "";
 				while (orgItr.hasNext()) {
@@ -1143,8 +1144,8 @@ public class TeamMemberUtil {
 				tx = session.beginTransaction();
 				for (int i = 0;i < activities.length;i ++) {
 					if (activities[i] != null) {
-						AmpActivity activity = (AmpActivity)session.load(
-								AmpActivity.class,activities[i]);
+						AmpActivityVersion activity = (AmpActivityVersion)session.load(
+								AmpActivityVersion.class,activities[i]);
 						member.getActivities().add(activity);
 					}
 				}
@@ -1184,8 +1185,8 @@ public class TeamMemberUtil {
 				tx = session.beginTransaction();
 				for (int i = 0;i < activities.length;i ++) {
 					if (activities[i] != null) {
-						AmpActivity activity = (AmpActivity)session.load(
-								AmpActivity.class,activities[i]);
+						AmpActivityVersion activity = (AmpActivityVersion)session.load(
+								AmpActivityVersion.class,activities[i]);
 						member.getActivities().remove(activity);
 					}
 				}

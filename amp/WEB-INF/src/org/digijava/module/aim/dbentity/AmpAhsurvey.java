@@ -26,7 +26,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 	//private AmpFunding ampFundingId;
 	//private Integer surveyYear;
 	//point of delivery donor
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
 	private Set<AmpAhsurveyResponse> responses;
@@ -58,13 +58,13 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 	/**
 	 * @return Returns the ampActivityId.
 	 */
-	public AmpActivity getAmpActivityId() {
+	public AmpActivityVersion getAmpActivityId() {
 		return ampActivityId;
 	}
 	/**
 	 * @param ampActivityId The ampActivityId to set.
 	 */
-	public void setAmpActivityId(AmpActivity ampActivityId) {
+	public void setAmpActivityId(AmpActivityVersion ampActivityId) {
 		this.ampActivityId = ampActivityId;
 	}
 	/**
@@ -184,7 +184,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpAhsurvey aux = (AmpAhsurvey) clone();
 		aux.ampActivityId = newActivity;
 		aux.ampAHSurveyId = null;

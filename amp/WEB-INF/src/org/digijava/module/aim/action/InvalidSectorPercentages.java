@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.InvalidDataListsForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.InvalidDataUtil;
@@ -38,7 +38,7 @@ public class InvalidSectorPercentages extends Action{
 	}
 
 	private void makeActivityDraft(Long actId) throws Exception{
-		AmpActivity activity=ActivityUtil.loadActivity(actId);
+		AmpActivityVersion activity=ActivityUtil.loadActivity(actId);
 		activity.setDraft(true);
 		PersistenceManager.updateObject(activity);
 	}

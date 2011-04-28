@@ -11,7 +11,7 @@
 		</id>
 		
 		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id"
-			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
 			not-null="true" />
 
 		<set name="activities" inverse="true" lazy="true">

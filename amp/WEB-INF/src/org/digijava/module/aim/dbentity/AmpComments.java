@@ -16,7 +16,7 @@ import org.digijava.module.aim.util.DbUtil;
 public class AmpComments implements Serializable {
 	
 	private Long ampCommentId;
-	private AmpActivity ampActivityId;
+	private AmpActivityVersion ampActivityId;
 	private AmpField ampFieldId;
 	private AmpTeamMember memberId;
 	private Date commentDate;
@@ -38,13 +38,13 @@ public class AmpComments implements Serializable {
 	/**
 	 * @return Returns the ampActivityId.
 	 */
-	public AmpActivity getAmpActivityId() {
+	public AmpActivityVersion getAmpActivityId() {
 		return ampActivityId;
 	}
 	/**
 	 * @param ampActivityId The ampActivityId to set.
 	 */
-	public void setAmpActivityId(AmpActivity ampActivityId) {
+	public void setAmpActivityId(AmpActivityVersion ampActivityId) {
 		this.ampActivityId = ampActivityId;
 	}
 	/**

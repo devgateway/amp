@@ -13,7 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -57,7 +57,7 @@ extends Action {
 			Documents document = new Documents();
 			NodeWrapper nodeWrapper = new NodeWrapper(org.digijava.module.contentrepository.util.DocumentManagerUtil.getReadNode(uuid, request));
 			
-			AmpActivity activity = ActivityUtil.getProjectChannelOverview(aId);
+			AmpActivityVersion activity = ActivityUtil.getProjectChannelOverview(aId);
 			document.setActivityId(activity.getAmpActivityId());
 			document.setActivityName(activity.getName());
 			document.setTitle(nodeWrapper.getTitle());

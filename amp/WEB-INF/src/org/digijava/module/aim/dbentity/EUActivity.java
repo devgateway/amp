@@ -32,7 +32,7 @@ public class EUActivity implements Serializable, Identifiable {
 	private String assumptions;
 	private String progress;
 	private Date dueDate;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 
 	private Long desktopCurrencyId;
 
@@ -61,12 +61,12 @@ public class EUActivity implements Serializable, Identifiable {
 		return finalAmount;
 	}
 
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
 
 
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 

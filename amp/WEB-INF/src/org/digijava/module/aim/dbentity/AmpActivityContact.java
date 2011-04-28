@@ -8,15 +8,15 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
 	
 	private Long id;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private AmpContact contact;
 	private Boolean primaryContact;
 	private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information
 	
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	public AmpContact getContact() {
@@ -82,7 +82,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpActivityContact aux = (AmpActivityContact) clone();
 		aux.activity = newActivity;
 		aux.id = null;

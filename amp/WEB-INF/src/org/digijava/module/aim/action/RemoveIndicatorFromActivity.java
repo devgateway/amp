@@ -10,7 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
@@ -26,7 +26,7 @@ public class RemoveIndicatorFromActivity extends Action {
 		
 		HttpSession session = request.getSession();
 		if(actForm.getActivityId()!=null){
-			AmpActivity activity=ActivityUtil.loadActivity(actForm.getActivityId());
+			AmpActivityVersion activity=ActivityUtil.loadActivity(actForm.getActivityId());
 			if(activity!=null){
 				activityInd = activity.getIndicators();
 				if(activityInd!=null && activityInd.size()>0){

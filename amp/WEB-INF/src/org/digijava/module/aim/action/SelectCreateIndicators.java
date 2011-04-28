@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.IndicatorForm;
@@ -44,7 +45,7 @@ public class SelectCreateIndicators extends Action {
         }
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
-		AmpActivity activity=null;
+		AmpActivityVersion activity=null;
               
 //		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm.getActivityId());
 		if(indForm.getActivityId() != null && indForm.getActivityId() != 0){

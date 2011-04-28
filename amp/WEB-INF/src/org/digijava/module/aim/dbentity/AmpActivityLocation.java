@@ -12,7 +12,7 @@ import org.digijava.module.aim.util.Output;
  */
 public class AmpActivityLocation implements Versionable,Serializable {
 	private Long id;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private AmpLocation location;
 	private Float locationPercentage;
 	
@@ -22,10 +22,10 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	public AmpLocation getLocation() {
@@ -66,7 +66,7 @@ public class AmpActivityLocation implements Versionable,Serializable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
+	public Object prepareMerge(AmpActivityVersion newActivity) {
 		this.activity = newActivity;
 		return this;
 	}

@@ -19,5 +19,5 @@ public interface Versionable {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Object prepareMerge(AmpActivity newActivity) throws Exception;
+	public abstract Object prepareMerge(AmpActivityVersion newActivity) throws Exception;
 }

@@ -329,7 +329,7 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpLocation aux = (AmpLocation) clone();
 		if (aux.activities == null) {
 			aux.activities = new HashSet();

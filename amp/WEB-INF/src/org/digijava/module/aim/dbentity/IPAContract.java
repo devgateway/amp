@@ -60,7 +60,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private Double totalNationalContribIFIAmount;
     private Double totalPrivateContribAmount;
     private transient Set disbursements;
-    private transient AmpActivity activity;
+    private transient AmpActivityVersion activity;
     private transient AmpOrganisation organization;
     private transient Set<AmpOrganisation> organizations;
     private transient AmpCategoryValue status;
@@ -117,11 +117,11 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         this.organization = organization;
     }
 
-    public AmpActivity getActivity() {
+    public AmpActivityVersion getActivity() {
         return activity;
     }
 
-    public void setActivity(AmpActivity activity) {
+    public void setActivity(AmpActivityVersion activity) {
         this.activity = activity;
     }
 
@@ -730,7 +730,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	};
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		IPAContract aux = (IPAContract) clone();
 		aux.activity = newActivity;
 		aux.id = null;

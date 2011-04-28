@@ -7,16 +7,14 @@ package org.digijava.module.aim.action;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Constants;
@@ -41,7 +39,7 @@ extends Action {
 		
 		if (actId == null || docId == null) return mapping.findForward("index");
 	
-		AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
+		AmpActivityVersion activity = ActivityUtil.getProjectChannelOverview(actId);
 		Set docList = new HashSet();
 		if (activity != null) {
 			Iterator itr = DbUtil.getActivityDocuments(actId).iterator();

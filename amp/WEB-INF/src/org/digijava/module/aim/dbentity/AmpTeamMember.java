@@ -20,7 +20,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 	private User user;
 	private AmpTeam ampTeam;
 	private AmpTeamMemberRoles ampMemberRole;
-	private Set<AmpActivity> activities;
+	private Set<AmpActivityVersion> activities;
 	private Set reports;
 	private Set links;
 	private Set logs;
@@ -98,11 +98,11 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	
 
-	public Set<AmpActivity> getActivities() {
+	public Set<AmpActivityVersion> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(Set<AmpActivity> activities) {
+	public void setActivities(Set<AmpActivityVersion> activities) {
 		this.activities = activities;
 	}
 
@@ -180,8 +180,8 @@ public class AmpTeamMember implements Serializable, Versionable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) {
-		this.activities = new HashSet<AmpActivity>();
+	public Object prepareMerge(AmpActivityVersion newActivity) {
+		this.activities = new HashSet<AmpActivityVersion>();
 		this.activities.add(newActivity);
 		return this;
 	}

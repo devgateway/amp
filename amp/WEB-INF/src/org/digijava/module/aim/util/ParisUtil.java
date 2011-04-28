@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
@@ -414,7 +414,7 @@ public class ParisUtil {
 			tx = session.beginTransaction();
 			
 			ahs.getAmpDonorOrgId().getSurvey().remove(ahs);
-			AmpActivity act=ahs.getAmpActivityId();
+			AmpActivityVersion act=ahs.getAmpActivityId();
 			act.getSurvey().remove(ahs);
 			ahs.setAmpActivityId(null);
 			ahs.setPointOfDeliveryDonor(null);

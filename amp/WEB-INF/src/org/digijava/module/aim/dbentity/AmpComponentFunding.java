@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
 public class AmpComponentFunding implements Versionable, Cloneable {
 	
 	private Long ampComponentFundingId;
-	private AmpActivity activity;
+	private AmpActivityVersion activity;
 	private Integer transactionType;
 	private Integer adjustmentType;
 	private Date transactionDate;
@@ -29,13 +29,13 @@ public class AmpComponentFunding implements Versionable, Cloneable {
 	/**
 	 * @return Returns the activity.
 	 */
-	public AmpActivity getActivity() {
+	public AmpActivityVersion getActivity() {
 		return activity;
 	}
 	/**
 	 * @param activity The activity to set.
 	 */
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion activity) {
 		this.activity = activity;
 	}
 	/**
@@ -240,7 +240,7 @@ public class AmpComponentFunding implements Versionable, Cloneable {
 	}
 	
 	@Override
-	public Object prepareMerge(AmpActivity newActivity) throws CloneNotSupportedException {
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpComponentFunding aux = (AmpComponentFunding) clone();
 		aux.activity = newActivity;
 		aux.ampComponentFundingId = null;

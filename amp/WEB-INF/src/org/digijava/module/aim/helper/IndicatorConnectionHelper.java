@@ -3,7 +3,7 @@ package org.digijava.module.aim.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -20,7 +20,7 @@ public class IndicatorConnectionHelper {
 	private Long connectionId;
 	private AmpIndicator indicator; 
 	private AmpTheme theme;
-	private AmpActivity activity;
+	private AmpActivityVersion  activity;
 	private List<IndicatorValuesBean> values;
 	
 	public IndicatorConnectionHelper(){
@@ -69,10 +69,10 @@ public class IndicatorConnectionHelper {
 	public void setValues(List<IndicatorValuesBean> values) {
 		this.values = values;
 	}
-	public AmpActivity getActivity() {
+	public AmpActivityVersion  getActivity() {
 		return activity;
 	}
-	public void setActivity(AmpActivity activity) {
+	public void setActivity(AmpActivityVersion  activity) {
 		this.activity = activity;
 	}
 	

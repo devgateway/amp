@@ -13,13 +13,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
@@ -29,7 +27,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
@@ -158,7 +155,7 @@ public class SaveActivity extends Action {
 	private String siteId;
 	private String locale;
 	
-	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
+	private void processPreStep(EditActivityForm eaForm, AmpActivityVersion activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
 		// if the activity is being added from a users workspace,
 		// associate the
 		// activity with the team of the current member.
@@ -197,11 +194,11 @@ public class SaveActivity extends Action {
 	 * 
 	 * these are required informations for an activity to be able to be created as draft
 	 */ 
-	private void processActivityMustHaveInfo(EditActivityForm eaForm, AmpActivity activity) throws Exception, AMPException{
+	private void processActivityMustHaveInfo(EditActivityForm eaForm, AmpActivityVersion activity) throws Exception, AMPException{
 		activity.setName(eaForm.getIdentification().getTitle());
 	}
 	
-	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -553,7 +550,7 @@ public class SaveActivity extends Action {
 		//activity.getInternalIds().clear();
 		activity.setInternalIds(internalIds);
 
-		/* Saving categories to AmpActivity */
+		/* Saving categories to AmpActivityVersion */
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProcurementSystem(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getReportingSystem(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAuditSystem(), activity.getCategories() );
@@ -568,7 +565,7 @@ public class SaveActivity extends Action {
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectImplUnitId(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getBudgetCV(), activity.getCategories());
-		/* END - Saving categories to AmpActivity */
+		/* END - Saving categories to AmpActivityVersion */
 			
         
 		
@@ -582,7 +579,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -629,7 +626,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request, HttpSession session) throws Exception, AMPException{
+	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request, HttpSession session) throws Exception, AMPException{
 		
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
@@ -1020,7 +1017,7 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1263,7 +1260,7 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1513,7 +1510,7 @@ public class SaveActivity extends Action {
 	}
 	
 
-	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1578,7 +1575,7 @@ public class SaveActivity extends Action {
 
     
 
-	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPException{
+	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1618,7 +1615,7 @@ public class SaveActivity extends Action {
 			}
 		}
 		
-		/* Saving related documents into AmpActivity */
+		/* Saving related documents into AmpActivityVersion */
         HashSet<String>UUIDs				= new HashSet<String>();
         Collection<DocumentData> tempDocs	= TemporaryDocumentData.retrieveTemporaryDocDataList(request);
         Iterator<DocumentData> docIter			= tempDocs.iterator();
@@ -1647,13 +1644,13 @@ public class SaveActivity extends Action {
 			}
 		}
 		SelectDocumentDM.clearContentRepositoryHashMap(request);
-		/* END -Saving related documents into AmpActivity */
+		/* END -Saving related documents into AmpActivityVersion */
 
 
 	}
 
     
-	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1833,7 +1830,7 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		ActivityContactInfo contactInfo=eaForm.getContactInformation();
@@ -1989,7 +1986,7 @@ public class SaveActivity extends Action {
 		}
 	}
 	
-	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -2058,7 +2055,7 @@ public class SaveActivity extends Action {
 		}
 	}
 
-	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -2095,7 +2092,7 @@ public class SaveActivity extends Action {
 
 	}
 	
-	private void processStep14(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors,
+	private void processStep14(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors,
 			HttpServletRequest request) throws Exception, AMPException {
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
@@ -2165,12 +2162,12 @@ public class SaveActivity extends Action {
 		}
 	}
 	
-	private void processPostStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm){
+	private void processPostStep(EditActivityForm eaForm, AmpActivityVersion activity, TeamMember tm){
 		Long teamId=null;
 		
 		if (eaForm.isEditAct() || eaForm.getActivityId()!=null && eaForm.getActivityId()!=0) {
 		
-			//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
+			//AmpActivityVersion act = ActivityUtil.getActivityByName(eaForm.getTitle());
 			// Setting approval status of activity
 			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
 			activity.setApprovalDate(eaForm.getIdentification().getApprovalDate());
@@ -2180,7 +2177,7 @@ public class SaveActivity extends Action {
 			//AMP-3464
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
 			//doesn't need to be approved again!
-			AmpActivity aAct = null;
+			AmpActivityVersion aAct = null;
 			try {
 				aAct = ActivityUtil.loadActivity(eaForm.getActivityId());
 			} catch (DgException e) {
@@ -2275,7 +2272,7 @@ public class SaveActivity extends Action {
 	 * 
 	 * @author Arty
 	 */
-	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
+	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivityVersion activity, ActionMessages errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		if (check){
@@ -2299,7 +2296,7 @@ public class SaveActivity extends Action {
 		throw err;
 	}
 	
-	private void processStepX(int stepNumber, boolean check, EditActivityForm eaForm, AmpActivity activity, 
+	private void processStepX(int stepNumber, boolean check, EditActivityForm eaForm, AmpActivityVersion activity, 
 			ActionMessages errors, HttpServletRequest request, HttpSession session,
 			Collection relatedLinks, String stepText[]) throws Exception, AMPException{
 		
@@ -2506,7 +2503,7 @@ public class SaveActivity extends Action {
 			int badSteps = 0;
 			
 			//we try to add each step to the amp activity and after adding each step we try to save
-			//if the save fails we exclude the step, and we rebuild the AmpActivity without that step
+			//if the save fails we exclude the step, and we rebuild the AmpActivityVersion without that step
 			boolean rebuild = false;
 			logger.debug("Building savable activity!");
 			while (currentStep < rsp.getNoOfSteps() || rebuild){
@@ -2534,7 +2531,7 @@ public class SaveActivity extends Action {
 						aue.addTag(MODULE_TAG);
 						throw aue;
 					}				
-					//We rebuild AmpActivity including all steps lower than currentStep
+					//We rebuild AmpActivityVersion including all steps lower than currentStep
 					logger.debug("Adding previous steps!");
 					for (int i = 0; i < currentStep; i++)
 						if (!rsp.getStepFailure()[i])
@@ -2695,9 +2692,9 @@ public class SaveActivity extends Action {
 		String toDelete = request.getParameter("delete");
 		Long idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity");
 		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
-			AmpActivity act = null;
+			AmpActivityVersion act = null;
 			if (eaForm.isEditAct() == false) {
-				/*AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
+				/*AmpActivityVersion act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
 				if (act != null) {
 				//storing original id is needed if user decides not to overwrite activity,but cancel.
 				//otherwise incorrect actId is set in form and editing/create will work incorrect
@@ -2846,7 +2843,7 @@ public class SaveActivity extends Action {
 			String additionalDetails="approved";
 			//if validation is off in team setup no messages should be generated
 			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
-				AmpActivity aAct = ActivityUtil.loadActivity(actId);
+				AmpActivityVersion aAct = ActivityUtil.loadActivity(actId);
                 if (aAct.getDraft() != null && !aAct.getDraft() &&
                 		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
                     if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
@@ -2944,7 +2941,7 @@ public class SaveActivity extends Action {
 			activity = rsp.getActivity();
 			String additionalDetails="approved";
                         
-			AmpActivity aAct=ActivityUtil.loadActivity(actId);
+			AmpActivityVersion aAct=ActivityUtil.loadActivity(actId);
 			//get member, who previously edited activity. Needed for approved activity trigger
         	AmpTeamMember previouslyUpdatedBy=ActivityUtil.getActivityUpdator(eaForm.getActivityId());
 			//if validation is off in team setup no messages should be generated
@@ -3148,7 +3145,7 @@ public class SaveActivity extends Action {
 	 * @param eaForm
 	 * @param activity
 	 */
-	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
+	private void proccessComponents(EditActivityForm eaForm, AmpActivityVersion activity) {
 		activity.setComponents(new HashSet());
 		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
 		if (eaForm.getComponents().getSelectedComponents() != null) {

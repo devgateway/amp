@@ -10,11 +10,14 @@ public class SimpleLocation {
 	private String GeoId;
 	private String commitments;
 	private String disbursements;
+	private String expenditures;
+	private String pledges;
 	private String lat;
 	private String lon;
 	private Boolean islocated = false;
 	private String implementation_location;
-
+	private String percentage;
+	
 	public String getName() {
 		return name;
 	}
@@ -69,9 +72,10 @@ public class SimpleLocation {
 	}
 
 	public Boolean getIslocated() {
-		if (this.lat != null || this.lon != null) {
+		if (this.lat == null || this.lon == null || "".equals(this.lat) || "".equalsIgnoreCase(this.lon="")) {
+			this.islocated = false;
+		}else{
 			this.islocated = true;
-			return islocated;
 		}
 		return islocated;
 	}
@@ -86,5 +90,29 @@ public class SimpleLocation {
 
 	public String getImplementation_location() {
 		return implementation_location;
+	}
+
+	public String getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(String percentage) {
+		this.percentage = percentage;
+	}
+
+	public String getExpenditures() {
+		return expenditures;
+	}
+
+	public void setExpenditures(String expenditures) {
+		this.expenditures = expenditures;
+	}
+
+	public String getPledges() {
+		return pledges;
+	}
+
+	public void setPledges(String pledges) {
+		this.pledges = pledges;
 	}
 }

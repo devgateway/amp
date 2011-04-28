@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.NewAddLocationForm;
 import org.digijava.module.aim.helper.Constants;
@@ -68,31 +69,38 @@ public class MapHelper extends MultiAction{
 		maphelperform.getFilter().setTeamMember(tm);
 		
 		JSONArray jsonArray = new JSONArray();
-		 List<AmpActivity> list = new ArrayList<AmpActivity>();
+		 List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		 list = DbHelper.getActivities(maphelperform.getFilter());
-		 for (Iterator<AmpActivity> iterator = list.iterator(); iterator.hasNext();) {
+		 Boolean isaggregatable=true;
+		 for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			 ActivityPoint ap = new ActivityPoint();
-			 AmpActivity aA = (AmpActivity) iterator.next();
+			 AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			 ap.setActivityname(aA.getName());
 			 
 			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
 			for (Iterator iterator2 =aA.getLocations().iterator(); iterator2.hasNext();) {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
-				SimpleLocation sl = new SimpleLocation();
-				sl.setName(alocation.getLocation().getLocation().getName());
-				sl.setGeoId(alocation.getLocation().getLocation().getCode());
-				sl.setLat(alocation.getLocation().getLocation().getGsLat());
-				sl.setLon(alocation.getLocation().getLocation().getGsLong());
-				sl.setImplementation_location(alocation.getLocation().getLocation().getParentCategoryValue().getValue());
-				//This has to be manage by the filter
-				if (sl.getImplementation_location() != CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey()){
+				if (!alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey())){
+					isaggregatable=true;
+					SimpleLocation sl = new SimpleLocation();
+					sl.setName(alocation.getLocation().getLocation().getName());
+					sl.setGeoId(alocation.getLocation().getLocation().getCode());
+					sl.setLat(alocation.getLocation().getLocation().getGsLat());
+					sl.setLon(alocation.getLocation().getLocation().getGsLong());
+					sl.setImplementation_location(alocation.getLocation().getLocation().getParentCategoryValue().getValue());
+					sl.setPercentage(alocation.getLocationPercentage().toString());
+					
 					sla.add(sl);
+				}else{
+					isaggregatable = false;
+					break;
 				}
 			}
-			
-			ap.setLocations(sla);
-			jsonArray.add(ap);
-		}
+				if (isaggregatable){
+					ap.setLocations(sla);
+					jsonArray.add(ap);
+				}
+			}
 	
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());

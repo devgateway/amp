@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -20,9 +21,9 @@ import org.hibernate.Session;
 public class DbHelper {
 	private static Logger logger = Logger.getLogger(DbHelper.class);
 
-	public static List<AmpActivity> getActivities(MapFilter filter)throws DgException {
+	public static List<AmpActivityVersion> getActivities(MapFilter filter)throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
-		List<AmpActivity> activities = null;
+		List<AmpActivityVersion> activities = null;
 		Long[] orgIds = filter.getOrgIds();
 
 		int transactionType = filter.getTransactionType();

@@ -1,5 +1,4 @@
-
-dojo.require("dijit.dijit"); // optimize: load dijit layer
+dojo.require("dijit.dijit"); // Optimize: load dijit layer
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("esri.map");
@@ -12,9 +11,10 @@ dojo.require("dijit.Toolbar");
 dojo.require("esri.tasks.find");
 dojo.require("esri.tasks.geometry");
 
-
-
-var map, navToolbar,geometryService;
+var map, navToolbar,geometryService,findTask,findParams;
+var totallocations = 0;
+var features = new Array();
+var timer_on = 0;
 function init() {
 	//This have to be replaced with Global Settings values
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
@@ -22,8 +22,6 @@ function init() {
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
 	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.50});
 
-	//Geometry service for operations with graphics
-	geometryService = new esri.tasks.GeometryService("http://4.79.228.117:8399/arcgis/rest/services/Geometry/GeometryServer");
 	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
@@ -65,13 +63,24 @@ function createMapAddLayers(myService1, myService2) {
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
+		dojo.connect(map, "onMouseMove", showCoordinates);
+	    dojo.connect(map, "onMouseDrag", showCoordinates);
 	});
-
+	
 	map.addLayer(myService1);
 	map.addLayer(myService2);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
 }
+
+function showCoordinates(evt) {
+    //get mapPoint from event
+    //The map is in web mercator - modify the map point to display the results in geographic
+    var mp = esri.geometry.webMercatorToGeographic(evt.mapPoint);
+    //display mouse coordinates
+    //console.log(mp.x + ", " + mp.y);
+     
+  }
 
 function extentHistoryChangeHandler() {
 	dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
@@ -99,6 +108,7 @@ function getContent() {
 		handleAs : "json",
 		   load: function(jsonData) {
 		        // For every item we received...
+			   totallocations=0;
 		        dojo.forEach(jsonData,function(activity) {
 		        	MapFind(activity);
 		        });
@@ -107,20 +117,24 @@ function getContent() {
 			// Error hanlder
 		}
 	}
-
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
 }
+
 function MapFind(activity){
-	
+	 map.graphics.clear();
     findTask = new esri.tasks.FindTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer");
     //create find parameters and define known values
     findParams = new esri.tasks.FindParameters();
     findParams.returnGeometry = true;
     findParams.layerIds = [0,1];
-    findParams.searchFields = ["FIRST_FIRS"];
+    findParams.contains = false;
+    //Let's configure the search field in global settings
+    
+    findParams.searchFields = ["FIRST_FIRS","DNAME"];
     dojo.forEach(activity.locations,function(location) {
     	execute(location.name);
+    	totallocations ++;
     });
 }
 
@@ -128,24 +142,39 @@ function execute(searchText) {
     //set the search text to find parameters
     findParams.searchText = searchText;
     findTask.execute(findParams, showResults);
+    var t=setTimeout("drawpoints()",10000);
+    timer_on = 1;
   }
 
-function showResults(results) {
-    //symbology for graphics
-    var markerSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255, 0, 0]), 1), new dojo.Color([0, 255, 0, 0.25]));
-    var lineSymbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 1);
-    var polygonSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_NONE, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASHDOT, new dojo.Color([255, 0, 0]), 2), new dojo.Color([255, 255, 0, 0.25]));
 
+function showResults(results) {
     //find results return an array of findResult.
-    
     dojo.forEach(results, function(result) {
       var graphic = result.feature;
-      geometryService.simplify([graphic.geometry ],scallback);
-     // var pgraphic = new esri.Graphic(point, markerSymbol);
-      //map.graphics.add(pgraphic);
-    });
+      console.log("Found : " + result.layerName + "," + result.foundFieldName + "," + result.value);
+      var point =  graphic.geometry.getExtent().getCenter();
+      
+      features.push(point);
+  	  totallocations--;
+  	});
 }
 
-function scallback(geometries) {
-    alert("Number of Rings returned by Simplify operation = " + geometries[0].rings.length);
-  }  
+function drawpoints(){
+	if (timer_on){
+	  var cL = new esri.ux.layers.ClusterLayer({
+			displayOnPan: false,
+			map: map,
+			features: features,
+			infoWindow: {
+				template: new esri.InfoTemplate('${api_number}', '<b>Operator:</b> ${operator_n}'),
+			width: 225,
+			height: 85
+		},
+		flareLimit: 15,
+		flareDistanceFromCenter: 20
+	});
+	map.addLayer(cL);
+	timer_on=0;
+	}
+
+}

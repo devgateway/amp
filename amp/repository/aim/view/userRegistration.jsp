@@ -184,7 +184,7 @@
 </script>
 <center>
 <div class="reg_form_container">
-<div class="reg_form_title"><h2><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></h2></div>
+<div class="home_sec_title"><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></div>
 <digi:instance property="aimUserRegisterForm" />
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
   <html:hidden property="orgType" />
@@ -195,13 +195,12 @@
     <td width="100%" valign="top" align="left">
     <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
-        <td width="5%">&nbsp;</td>
-        <td align=left valign="top" width="60%"><br>
-          <table border="0" cellPadding=5 cellspacing="0" width="100%">
+        <td align=left valign="top" width="60%">
+          <table border="0" cellPadding=3 cellspacing="0" width="100%">
             <logic:notEmpty name="aimUserRegisterForm" property="errors" >
               <tr>
                 <td width="5%">&nbsp;</td>
-                <td align=left class=title noWrap colspan="2"><!-- digi:errors /-->
+                <td align=left class=title noWrap colspan="33"><!-- digi:errors /-->
                   <font color="red">
                   <ul>
                     <logic:iterate id="element"	name="aimUserRegisterForm" property="errors">
@@ -215,11 +214,7 @@
                   </font> </td>
               </tr>
             </logic:notEmpty>
-            <tr>
-              <td width="3%">&nbsp;</td>
-              <td align=left class="subtitle-blue" noWrap colspan="5">
-              </td>
-            </tr>
+
             <tr>
               <td width="3%">&nbsp;</td>
               <td align=left class=title noWrap colspan="5"><digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B>*</B></FONT> are required. </digi:trn>
@@ -370,7 +365,7 @@
               <td align="left" colspan="3"><c:set var="btnSubmit">
                   <digi:trn key="btn:submit">Submit</digi:trn>
                 </c:set>
-                <html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate();"/>
+                <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();"/>
               </td>
             </tr>
             <tr>

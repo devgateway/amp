@@ -1346,7 +1346,7 @@ window.onload=initPanel;
 function initDashboard(){
 	//Initialize First Chart
 	var dashboardType = document.getElementById("dashboardType").value;
-	//changeChart(null, 'bar', 'FundingChart');
+	changeChart(null, 'bar', 'FundingChart');
 	changeChart(null, 'bar', 'AidPredictability');
 	changeChart(null, 'bar', 'AidType');
 	changeChart(null, 'bar', 'FinancingInstrument');

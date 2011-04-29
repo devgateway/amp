@@ -90,7 +90,7 @@ public class AmpMessageWorker {
                 		e.getTrigger().equals(AwaitingApprovalCalendarTrigger.class)) {
                     newMsg = processApprovedCalendarEvent(e, newApproval, template);
                 } else if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
-                    newMsg = processNotApprovedActivityEvent(e, newApproval, template);
+                	newMsg = processNotApprovedActivityEvent(e, newApproval, template);                    
                 }else if (e.getTrigger().equals(ActivityActualStartDateTrigger.class)) {
                     newMsg = processActivityActualStartDateEvent(e, newAlert, template);
                 }else if (e.getTrigger().equals(ActivityCurrentCompletionDateTrigger.class)) {
@@ -276,7 +276,7 @@ public class AmpMessageWorker {
      *	Not Approved Activity Event processing
      */
     private static Approval processNotApprovedActivityEvent(Event e, Approval approval, TemplateAlert template) {
-     
+    	
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(NotApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
@@ -567,12 +567,16 @@ public class AmpMessageWorker {
         state.setReceiver(msgSender);
         createMsgState(state, approval,false);
         if (triggerClass.equals(NotApprovedActivityTrigger.class)) {
-            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(teamId);
-            emailReceivers.add(teamHead.getUser().getEmail());
+            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(teamId);            
             if (teamHead != null) {
-                state = new AmpMessageState();
-                state.setReceiver(teamHead);
-                createMsgState(state, approval,false);
+            	String activityURL = approval.getObjectURL();
+            	List<AmpMessageState> unreadMsg = AmpMessageUtil.getUnreadMessagesRelatedToActivity(activityURL, teamHead.getAmpTeamMemId());
+            	if (unreadMsg == null || unreadMsg.size() == 0) {
+            		emailReceivers.add(teamHead.getUser().getEmail());
+            		state = new AmpMessageState();
+                    state.setReceiver(teamHead);
+                    createMsgState(state, approval,false);
+            	}                
             }
         }        
         //define emails and receivers
@@ -812,4 +816,5 @@ public class AmpMessageWorker {
             }
     	}
     }
-}
+
+    }

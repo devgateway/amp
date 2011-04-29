@@ -23,9 +23,11 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 public class AmpMessageUtil {
 	private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -955,6 +957,27 @@ public class AmpMessageUtil {
 			}
 		}
 		
+		return retVal;
+	}
+	
+	public static List<AmpMessageState> getUnreadMessagesRelatedToActivity (String activityURL , Long teamMemberId) {
+		List<AmpMessageState> retVal = null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session =  PersistenceManager.getRequestDBSession();
+			Criteria criteria = session.createCriteria(AmpMessageState.class).createAlias("message","msg").createAlias("receiver", "receiver")
+			.add(Restrictions.ilike("msg.objectURL", activityURL)).add(Restrictions.eq("read", false)).add(Restrictions.eq("receiver.ampTeamMemId", teamMemberId));
+			retVal =  criteria.list();			
+//			queryString = " select state from " + AmpMessageState.class.getName() +" state where state.receiver=:teamMemberId and state.read is false and state.message.objectURL like '"+activityURL +"'";
+//			query=session.createQuery(queryString);
+//			query.setLong("teamMemberId", teamMemberId);
+//			retVal = query.list();
+		} catch (Exception e) {
+			logger.error("couldn't get messages " + e.getMessage());	
+			e.printStackTrace(); 
+		}
 		return retVal;
 	}
 }

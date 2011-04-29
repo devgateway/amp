@@ -1331,7 +1331,7 @@ public class DbUtil {
             boolean primary = (primarySchemeId != null && primarySchemeId.equals(scheme.getAmpSecSchemeId()));
            if ( (sectorFilterMode == GisSettings.SECTOR_SCHEME_AUTOMATIC &&
                    (primary || (multySectorSchemIDs.contains(scheme.getAmpSecSchemeId()) && showSecondarySectorSchemes)))
-              || (sectorFilterMode == GisSettings.SECTOR_SCHEME_CONFIGURABLE && scheme.getShowInRMFilters())) {
+              || (sectorFilterMode == GisSettings.SECTOR_SCHEME_CONFIGURABLE && scheme.getShowInRMFilters() != null && scheme.getShowInRMFilters())) {
 
             XML schemeNode = new XML("scheme");
             schemeNode.addAttribute("name", scheme.getSecSchemeName());

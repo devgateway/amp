@@ -1213,6 +1213,8 @@ public class GetFoundingDetails extends Action {
                     fundingForSector.setDisbursement(totalFunding.getDisbursement().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
                     fundingForSector.setExpenditure(totalFunding.getExpenditure().multiply(new BigDecimal(percentsForSectorSelected / 100f)));
 
+
+
                     Set locations = activity.getLocations();
                     Iterator<AmpActivityLocation> locIt = locations.iterator();
 
@@ -1286,11 +1288,57 @@ public class GetFoundingDetails extends Action {
 
                     }
 
-                    //    Set activiactivity.getFunding();
+                    //Regional funding calculations (Ethiopian issue AMP-9960)
+                    if (activity.getRegionalFundings() != null && !activity.getRegionalFundings().isEmpty()) {
+                        for (Object regFndObj : activity.getRegionalFundings()) {
+                            AmpRegionalFunding regFnd = (AmpRegionalFunding) regFndObj;
+                            String regCode = regFnd.getRegionLocation().getName().trim();
+                            if ((level == GisMap.MAP_LEVEL_REGION &&
+                                    regFnd.getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region"))
+                                    || (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                    regFnd.getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone"))) {
+                                if (locationFundingMap.containsKey(regCode)) {
+                                    FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
+
+                                    FundingData newVal = new FundingData();
+
+                                    //Constants.COMMITMENT
+
+                                    switch (regFnd.getTransactionType()) {
+                                        case Constants.COMMITMENT:
+                                            newVal.setCommitment(existingVal.getCommitment().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            newVal.setDisbursement(existingVal.getDisbursement().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
+                                        case Constants.EXPENDITURE:
+                                            newVal.setExpenditure(existingVal.getExpenditure().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
+                                    }
+                                    locationFundingMap.put(regCode, newVal);
+                                } else {
+                                    if (regFnd.getTransactionAmount() > 0) {
+                                        FundingData newVal = new FundingData();
+
+                                        switch (regFnd.getTransactionType()) {
+                                        case Constants.COMMITMENT:
+                                            newVal.setCommitment(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            newVal.setDisbursement(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
+                                        case Constants.EXPENDITURE:
+                                            newVal.setExpenditure(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
+                                        }
+                                        locationFundingMap.put(regCode, newVal);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-
             }
-
         }
         Object[] retVal = new Object[2];
         retVal[0] = locationFundingMap;

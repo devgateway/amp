@@ -15,7 +15,6 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ taglib uri="/taglib/gateperm" prefix="gateperm" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -518,9 +517,7 @@
                                                 <td>
                                                   <table cellSpacing="0" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
-                                                      <gateperm:putInScope key="currentOrgRole" value="DN"/>
                                                       <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
-                                                        <gateperm:putInScope key="currentOrg" name="fundingOrganization">
                                                         <tr>
                                                           <td>
 	                                                          	<table>
@@ -1004,9 +1001,8 @@
 																		</field:display>
 																	</td>
 																</tr>
-																</gateperm:putInScope>
+
 																</logic:iterate>
-															
 																<tr><td>&nbsp;</td></tr>
 
 																<tr>

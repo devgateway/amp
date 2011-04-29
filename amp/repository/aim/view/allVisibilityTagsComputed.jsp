@@ -713,7 +713,12 @@
 <field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 
 <field:display name="View Schemes Link" feature="Sectors"></field:display> 
-<field:display name="Vote" feature="Budget"></field:display> 
+<field:display name="Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Sub-Vote" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Project Code" feature="Budget"></field:display>
+<field:display name="Validate Mandatory Sub-Program" feature="Budget"></field:display>
+ 
 <field:display name="Web Resource Description" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Document Type" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Notes" feature="Web Resources"></field:display> 

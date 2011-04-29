@@ -436,7 +436,7 @@
 	<page page="selectPledgeProgram" name="selectPledgeProgram" title="AMP - Select Location" />
 
 <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
-	
+	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
 </secondary-pages>
 <module>
 

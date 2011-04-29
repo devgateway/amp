@@ -850,6 +850,9 @@ target.style.cursor = "default"
 										<field:display name="Vote" feature="Budget" >
 											<tr valign="top"  id="Vote" align="left" >
 												<td>
+												<field:display name="Validate Mandatory Vote" feature="Budget">
+	 	 		                                	<FONT color="red">*</FONT>
+	                                            </field:display>
 													<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
 													<digi:trn key="aim:actVote">
 													Vote
@@ -865,6 +868,9 @@ target.style.cursor = "default"
 											<field:display name="Sub-Vote" feature="Budget">
 											<tr valign="top" id="Sub-Vote" align="left" >
 												<td>
+												<field:display name="Validate Mandatory Sub-Vote" feature="Budget">
+	 	 		                                	<FONT color="red">*</FONT>
+	                                            </field:display>
 													<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
 													<digi:trn key="aim:actSub-Vote">
 													Sub-Vote
@@ -880,6 +886,9 @@ target.style.cursor = "default"
 									<field:display name="Sub-Program" feature="Budget">
 										<tr valign="top" id="Sub-Program" align="left">
 											<td>
+											<field:display name="Validate Mandatory Sub-Program" feature="Budget">
+	 	 		                            	<FONT color="red">*</FONT>
+	                                         </field:display>
 												<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
 												<digi:trn key="aim:actSubProgram">
 												Sub-Program
@@ -895,6 +904,9 @@ target.style.cursor = "default"
 									<field:display name="Project Code" feature="Budget">
 										<tr valign="top" id="ProjectCode" align="left" >
 											<td>
+											<field:display name="Validate Mandatory Project Code" feature="Budget">
+	 	 		                                	<FONT color="red">*</FONT>
+	                                        </field:display>
 												<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
 												<digi:trn key="aim:actProjectCode">
 												Project Code

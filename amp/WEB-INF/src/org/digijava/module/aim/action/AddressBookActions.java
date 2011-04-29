@@ -46,6 +46,9 @@ public class AddressBookActions extends DispatchAction {
     		myForm.setCurrentAlpha(null);
     		myForm.setCurrentPage(1);
     		myForm.setKeyword(null);
+    		myForm.setSortBy(null);
+    		myForm.setSortDir(null);
+    		myForm.setStartIndex(null);
     	}
     	String alpha=null;
     	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
@@ -116,6 +119,11 @@ public class AddressBookActions extends DispatchAction {
 		//pagination options
 		String startIndex = request.getParameter("startIndex");
 		String results = request.getParameter("results");
+		
+		myForm.setSortBy(sortBy);
+		myForm.setSortDir(sortDir);
+		myForm.setStartIndex(new Integer(startIndex));
+		myForm.setResultsPerPage(new Integer(results));
 		//get contacts
 		List<AmpContact> pagedContacts=ContactInfoUtil.getPagedContacts(new Integer(startIndex).intValue(), new Integer(results).intValue(), sortBy,sortDir,myForm.getKeyword(),alpha);
 
@@ -211,6 +219,19 @@ public class AddressBookActions extends DispatchAction {
 			}
 		}
 		return null;
+	}
+	
+	public ActionForward viewPrintPreview (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		AddressBookForm myForm=(AddressBookForm)form;
+		//total amount of contacts
+		String alpha=null;
+    	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
+    		alpha=myForm.getCurrentAlpha();
+    	}
+		//get contacts
+		List<AmpContact> pagedContacts=ContactInfoUtil.getPagedContacts(myForm.getStartIndex().intValue(),myForm.getResultsPerPage().intValue(), myForm.getSortBy(),myForm.getSortDir(),myForm.getKeyword(),alpha);
+		myForm.setContactsForPage(pagedContacts);
+		return mapping.findForward("printPreview");
 	}
 	
 	public ActionForward searchContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {

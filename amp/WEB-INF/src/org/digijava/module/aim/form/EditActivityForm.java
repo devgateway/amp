@@ -138,14 +138,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String[] primaryProjCoordContIds;
 		private String[] primarySecMinContIds;
 		private String[] primaryImplExecutingContIds;
-
-        private String primaryDonorContId;
-		private String primaryMofedContId;
-		private String primaryProjCoordContId;
-		private String primarySecMinContId;
-		private String primaryImplExecutingContId;
-
-
+		
+		private String primaryDonorContId;
+	 	private String primaryMofedContId;
+	 	private String primaryProjCoordContId;
+	 	private String primarySecMinContId;
+	 	private String primaryImplExecutingContId;
+		
 		private Boolean resetDonorIds;
 		private Boolean resetMofedIds;
 		private Boolean resetProjCoordIds;
@@ -406,6 +405,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
 		private String budgetCodeProjectID;
+		private String budgetCheckbox;
 		private Boolean governmentApprovalProcedures;
 		private Boolean jointCriteria;
 		private Boolean humanitarianAid;
@@ -468,7 +468,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String statusReason = null;
 		
 		private Long projectImplUnitId;
-		
+		public String getBudgetCheckbox() {
+			return budgetCheckbox;
+		}
+
+		public void setBudgetCheckbox(String budgetCheckbox) {
+			this.budgetCheckbox = budgetCheckbox;
+		}
 	
 		public List<LabelValueBean> getYearsRange() {
 			return yearsRange;

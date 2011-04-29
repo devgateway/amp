@@ -233,6 +233,10 @@
 		<taglib-location>/WEB-INF/digijava.tld</taglib-location>
 	</taglib>
 	<taglib>
+		<taglib-uri>/taglib/gateperm</taglib-uri>
+		<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
+	</taglib>
+	<taglib>
 		<taglib-uri>/taglib/category</taglib-uri>
 		<taglib-location>/WEB-INF/category.tld</taglib-location>
 	</taglib>

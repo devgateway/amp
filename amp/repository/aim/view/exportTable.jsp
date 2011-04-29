@@ -83,11 +83,17 @@
                         <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/excel.gif" border="0" alt="${translationxls}" />
                     </a>
                 </td>
-
-                <td noWrap align=left valign="middle">
+				<!-- 
+				<td noWrap align=left valign="middle">
                     <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
                         <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="${translationPrinter}"/>
                     </digi:link>
+                </td>
+				 -->
+                <td noWrap align=left valign="middle">
+                    <a href="javascript:myPrint()">
+                        <digi:img width="17" height="20" hspace="2" vspace="2" src="/TEMPLATE/ampTemplate/imagesSource/common/printer.gif" border="0" alt="${translationPrinter}"/>
+                    </a>
                 </td>
             </tr>
         </table>

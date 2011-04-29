@@ -173,7 +173,7 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
- 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
+ 	 	if (FeaturesUtil.isVisibleField("Primary Sector", ampContext)){                
  	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
  	 	rootAmpSectors.setLabel("Primary Sectors");
  	 	rootAmpSectors.setUniqueId(0 + "");

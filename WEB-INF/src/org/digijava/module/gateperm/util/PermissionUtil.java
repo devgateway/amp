@@ -158,16 +158,6 @@ public final class PermissionUtil {
 	  return  scope.get(key);	    
 	}
 	
-	/**
-	 * Removes the object associated with the given key, if any, from the permissions scope
-	 * @param session
-	 * @param key the key used to put the object in the scope with putInScope
-	 * @see PermissionUtil#putInScope(HttpSession, MetaInfo, Object)
-	 */
-	public static void removeFromScope(HttpSession session,MetaInfo key) {
-	    Map scope=getScope(session);
-	    scope.remove(key);	    
-	}
 	
 	
 	/**

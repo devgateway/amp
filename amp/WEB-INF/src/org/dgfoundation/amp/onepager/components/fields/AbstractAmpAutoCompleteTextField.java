@@ -68,7 +68,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 	 */
 	public abstract Integer getChoiceLevel(CHOICE choice);
 
-	public static final String DEFAULT_SEARCH_TEXT = "type a keyword here";
+	public static final String DEFAULT_SEARCH_TEXT = "press down arrow to view all";
 	protected String input;
 
 	/**
@@ -139,8 +139,8 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		settings.setAdjustInputWidth(false);
 		
 //		settings.setThrottleDelay(1000);
-		settings.setShowCompleteListOnFocusGain(true);
-		settings.setShowListOnFocusGain(true);
+//		settings.setShowCompleteListOnFocusGain(true);
+//		settings.setShowListOnFocusGain(true);
 		
 		autoCompleteBehavior = createAutoCompleteBehavior(renderer,
 				settings);

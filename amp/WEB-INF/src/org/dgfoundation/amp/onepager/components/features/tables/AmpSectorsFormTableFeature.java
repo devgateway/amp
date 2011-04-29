@@ -5,9 +5,11 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -20,10 +22,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageValidationHiddenField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 
@@ -63,14 +68,29 @@ public class AmpSectorsFormTableFeature extends
 			}
 		};
 
+		final AmpPercentageValidationHiddenField<AmpActivitySector> percentageValidationField=
+			new AmpPercentageValidationHiddenField<AmpActivitySector>("sectorPercentageTotal",setModel,"sectorPercentageTotal") {
+				@Override
+				public Number getPercentage(AmpActivitySector item) {
+					return item.getSectorPercentage();
+				}
+		};
+		
+		add(percentageValidationField);
+		
+		
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivitySector> item) {
 				final MarkupContainer listParent = this.getParent();
-				item.add(new TextField<String>("percentage",
-						new PropertyModel<String>(item.getModel(),
-								"sectorPercentage")));
+				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"sectorPercentage");
+				
+				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",
+						percModel,"sectorPercentage",percentageValidationField);				
+			
+				item.add(percentageField);
+						
 				item.add(new Label("sectorLabel", item.getModelObject()
 						.getSectorId().getName()));
 
@@ -104,10 +124,12 @@ public class AmpSectorsFormTableFeature extends
 				AmpActivitySector activitySector = new AmpActivitySector();
 				activitySector.setSectorId(choice);
 				activitySector.setActivityId(am.getObject());
+				activitySector.setSectorPercentage(0f);
 				activitySector.setClassificationConfig(sectorClassification);
 				setModel.getObject().add(activitySector);
 				list.removeAll();
 				target.addComponent(list.getParent());
+				target.addComponent(percentageValidationField);
 			}
 
 			@Override

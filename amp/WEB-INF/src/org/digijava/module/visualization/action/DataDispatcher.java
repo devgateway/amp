@@ -36,6 +36,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -273,7 +274,7 @@ public class DataDispatcher extends DispatchAction {
 		rootSelSubSectors.put("list", selSubSectors);
 		children.add(rootSelSubSectors);
 		
-		Map<AmpActivity, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
+		Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
 		List list = null;
 		if (projectsList!=null) {
 			list = new LinkedList(projectsList.entrySet());

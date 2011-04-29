@@ -20,6 +20,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -66,8 +67,8 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpActivity, BigDecimal> getRankActivities (Collection<AmpActivity> actList,  DashboardFilter filter) throws DgException{
-		Map<AmpActivity, BigDecimal> map = new HashMap<AmpActivity, BigDecimal>();
+	public static Map<AmpActivityVersion, BigDecimal> getRankActivities (Collection<AmpActivityVersion> actList,  DashboardFilter filter) throws DgException{
+		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
         Date endDate = getEndDate(fiscalCalendarId, filter.getYear().intValue());
@@ -75,8 +76,8 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-		for (Iterator<AmpActivity> iterator = actList.iterator(); iterator.hasNext();) {
-			AmpActivity ampActivity = (AmpActivity) iterator.next();
+		for (Iterator<AmpActivityVersion> iterator = actList.iterator(); iterator.hasNext();) {
+			AmpActivityVersion ampActivity = (AmpActivityVersion) iterator.next();
 			//Long oldActivityId = filter.getActivityId();
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setActivityId(ampActivity.getAmpActivityId());
@@ -160,7 +161,7 @@ public class DashboardUtil {
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
         }
-		Collection<AmpActivity> activityList = DbUtil.getActivities(filter);
+		Collection<AmpActivityVersion> activityList = DbUtil.getActivities(filter);
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);

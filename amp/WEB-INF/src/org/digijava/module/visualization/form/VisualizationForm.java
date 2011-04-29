@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -116,8 +117,8 @@ public class VisualizationForm extends ActionForm {
 	public class RanksInformation {
 		private Map<AmpOrganisation, BigDecimal> topDonors;
 		private Map<AmpOrganisation, BigDecimal> fullDonors;
-		private Map<AmpActivity, BigDecimal> topProjects;
-		private Map<AmpActivity, BigDecimal> fullProjects;
+		private Map<AmpActivityVersion, BigDecimal> topProjects;
+		private Map<AmpActivityVersion, BigDecimal> fullProjects;
 		private Map<AmpCategoryValueLocations, BigDecimal> topRegions;
 		private Map<AmpCategoryValueLocations, BigDecimal> fullRegions;
 		private Map<AmpSector, BigDecimal> topSectors;
@@ -140,16 +141,16 @@ public class VisualizationForm extends ActionForm {
 				this.topDonors = null;
 			}
 		}
-		public Map<AmpActivity, BigDecimal> getTopProjects() {
+		public Map<AmpActivityVersion, BigDecimal> getTopProjects() {
 			return topProjects;
 		}
-		public void setTopProjects(Map<AmpActivity, BigDecimal> topProjects) {
+		public void setTopProjects(Map<AmpActivityVersion, BigDecimal> topProjects) {
 			this.topProjects = topProjects;
 		}
-		public Map<AmpActivity, BigDecimal> getFullProjects() {
+		public Map<AmpActivityVersion, BigDecimal> getFullProjects() {
 			return fullProjects;
 		}
-		public void setFullProjects(Map<AmpActivity, BigDecimal> fullProjects) {
+		public void setFullProjects(Map<AmpActivityVersion, BigDecimal> fullProjects) {
 			this.fullProjects = fullProjects;
 			if (fullProjects!=null) {
 				this.topProjects = getTop(fullProjects);

@@ -12,6 +12,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -208,6 +209,7 @@ public class DbUtil {
 
         oql += "  where  "
                 + "   fd.adjustmentType = 1 ";
+        oql += " inner join act.ampActivityGroup actGroup ";
         if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
             oql += " and fd.transactionType =:transactionType  ";
         } else {
@@ -236,6 +238,8 @@ public class DbUtil {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
         
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
         Query query = session.createQuery(oql);
         query.setDate("startDate", startDate);
         query.setDate("endDate", endDate);
@@ -291,6 +295,7 @@ public class DbUtil {
 	            oql += "   inner join f.ampActivityId act ";
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
+	            oql += " inner join act.ampActivityGroup actGroup ";
 	            if (sectorCondition) {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
@@ -324,8 +329,10 @@ public class DbUtil {
 					oql += ActivityUtil.getApprovedActivityQueryString("act");
 				}
 	            oql += "  and parcv.value = 'Region'";// get only regions
-	            
+	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
 	            oql+=" order by loc.parentCategoryValue";
+	            
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
@@ -384,6 +391,7 @@ public class DbUtil {
 	                    + " as fd inner join fd.ampFundingId f ";
 	            oql += "   inner join f.ampActivityId act ";
 	            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            oql += " inner join act.ampActivityGroup actGroup ";
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
@@ -420,6 +428,8 @@ public class DbUtil {
 	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.name = 'Primary') " 
 	            	+ " and sec.parentSectorId is null";// get only primary sectors
 	            
+	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
@@ -441,9 +451,9 @@ public class DbUtil {
     	}
      }
     
-    public static List<AmpActivity> getActivities(DashboardFilter filter) throws DgException {
+    public static List<AmpActivityVersion> getActivities(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
-        List<AmpActivity> activities = null;
+        List<AmpActivityVersion> activities = null;
         Long[] orgIds= filter.getOrgIds();
         
         int transactionType = filter.getTransactionType();
@@ -468,6 +478,7 @@ public class DbUtil {
                     + " as fd inner join fd.ampFundingId f ";
             oql += "   inner join f.ampActivityId act ";
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+            oql += " inner join act.ampActivityGroup actGroup ";
             if (locationCondition) {
                 oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
             }
@@ -506,7 +517,9 @@ public class DbUtil {
             if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
 				oql += ActivityUtil.getApprovedActivityQueryString("act");
 			}
-           
+            
+            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -568,6 +581,7 @@ public class DbUtil {
 	            oql += "   inner join f.ampActivityId act ";
 	            oql += "   inner join f.ampDonorOrgId donor ";
 	            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            oql += " inner join act.ampActivityGroup actGroup ";
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
@@ -607,6 +621,8 @@ public class DbUtil {
 					oql += ActivityUtil.getApprovedActivityQueryString("act");
 				}
 	           
+	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
@@ -672,6 +688,7 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+        oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
@@ -718,6 +735,8 @@ public class DbUtil {
         {
             oql += DashboardUtil.getTeamQuery(tm);
         }
+
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;

@@ -11,6 +11,7 @@ public class NotApprovedActivityTrigger extends Trigger {
     public static final String PARAM_SAVE_DATE="saveDate";
     public static final String PARAM_URL="url";
     public static final String PARAM_ACTIVIY_CREATOR_TEAM="creator_team";
+    public static final String PARAM_ACTIVIY_ID="activity_id";
 
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_SAVED_BY,PARAM_SAVE_DATE,PARAM_URL};
 
@@ -35,6 +36,7 @@ public class NotApprovedActivityTrigger extends Trigger {
         e.getParameters().put(PARAM_ACTIVIY_CREATOR_TEAM, act.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_SAVE_DATE, new Date());
         e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
+        e.getParameters().put(PARAM_ACTIVIY_ID,act.getAmpActivityId());
     return e;
     }
 

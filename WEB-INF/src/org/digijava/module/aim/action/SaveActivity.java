@@ -223,6 +223,56 @@ public class SaveActivity extends Action {
 				}
 			}
 			
+
+			if (eaForm.getIdentification().getVote() == null || eaForm.getIdentification().getVote().trim().length() == 0){
+				//is validate mandatory and activity is on budget then add a new error
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Vote", ampContext)){
+					errors.add("budgetVoteMissing",
+							new ActionMessage("error.aim.addActivity.budgetVoteMissing", TranslatorWorker.translateText("Please enter Vote under identification section",locale,siteId)));
+				}else{
+					activity.setVote(new String(" "));
+				}
+			}else{
+				activity.setVote(eaForm.getIdentification().getVote());
+			}
+			
+			if (eaForm.getIdentification().getSubVote() == null || eaForm.getIdentification().getSubVote().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Vote", ampContext)){
+					errors.add("budgetSubVoteMissing",
+							new ActionMessage("error.aim.addActivity.budgetSubVoteMissing", TranslatorWorker.translateText("Please enter Sub-Vote under identification section",locale,siteId)));
+				}else{
+					activity.setSubVote(new String(" "));
+				}
+			}else{
+				activity.setSubVote(eaForm.getIdentification().getSubVote());
+			}
+			
+			if (eaForm.getIdentification().getSubProgram() == null || eaForm.getIdentification().getSubProgram().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Program", ampContext)){
+					errors.add("budgetSubProgramMissing",
+							new ActionMessage("error.aim.addActivity.budgetSubProgramMissing", TranslatorWorker.translateText("Please enter Sub Program under identification section",locale,siteId)));
+				}else{
+					activity.setSubProgram(new String(" "));
+				}
+			}else{
+				activity.setSubProgram(eaForm.getIdentification().getSubProgram());
+			}
+			
+			if (eaForm.getIdentification().getProjectCode() == null || eaForm.getIdentification().getProjectCode().trim().length() == 0){
+				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
+						&& FeaturesUtil.isVisibleField("Validate Mandatory Project Code", ampContext)){
+					errors.add("budgetProjectCodeMissing",
+							new ActionMessage("error.aim.addActivity.budgetProjectCodeMissing", TranslatorWorker.translateText("Please enter Project Code under identification section",locale,siteId)));
+				}else{
+					activity.setProjectCode(new String(" "));
+				}
+			}else{
+				activity.setProjectCode(eaForm.getIdentification().getProjectCode());
+			}
+			
 			
 			end:
 			if (errors.size() > 0){
@@ -368,30 +418,7 @@ public class SaveActivity extends Action {
 			activity.setFY(fy);
 		}
 		
-
-		if (eaForm.getIdentification().getVote() == null
-				|| eaForm.getIdentification().getVote().trim().length() == 0)
-			activity.setVote(new String(" "));
-		else
-			activity.setVote(eaForm.getIdentification().getVote());
 		
-		if (eaForm.getIdentification().getSubVote() == null
-				|| eaForm.getIdentification().getSubVote().trim().length() == 0)
-			activity.setSubVote(new String(" "));
-		else
-			activity.setSubVote(eaForm.getIdentification().getSubVote());
-		
-		if (eaForm.getIdentification().getSubProgram() == null
-				|| eaForm.getIdentification().getSubProgram().trim().length() == 0)
-			activity.setSubProgram(new String(" "));
-		else
-			activity.setSubProgram(eaForm.getIdentification().getSubProgram());
-		
-		if (eaForm.getIdentification().getProjectCode() == null
-				|| eaForm.getIdentification().getProjectCode().trim().length() == 0)
-			activity.setProjectCode(new String(" "));
-		else
-			activity.setProjectCode(eaForm.getIdentification().getProjectCode());
 		
 		activity.setGovernmentApprovalProcedures(eaForm.getIdentification().getGovernmentApprovalProcedures());
 

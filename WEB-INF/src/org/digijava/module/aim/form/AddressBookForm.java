@@ -41,6 +41,8 @@ public class AddressBookForm   extends ActionForm {
 	private Integer resultsPerPage;	
 	private String sortBy;
 	private String[] contactNames;
+	private String sortDir;
+	private Integer startIndex;
 	 /**
 	  * selected letter
 	  */
@@ -135,24 +137,6 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setOrganisationName(String organisationName) {
 		this.organisationName = organisationName;
-	}
-	public String getKeyword() {
-		return keyword;
-	}
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-	public Integer getResultsPerPage() {
-		return resultsPerPage;
-	}
-	public void setResultsPerPage(Integer resultsPerPage) {
-		this.resultsPerPage = resultsPerPage;
-	}
-	public String getSortBy() {
-		return sortBy;
-	}
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
 	}
 	public List<AmpContact> getContactsForPage() {
 		return contactsForPage;
@@ -264,5 +248,44 @@ public class AddressBookForm   extends ActionForm {
 	public void setOrganizations(List<AmpOrganisation> organizations) {
 		this.organizations = organizations;
 	}
-	
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public Integer getResultsPerPage() {
+		return resultsPerPage;
+	}
+
+	public void setResultsPerPage(Integer resultsPerPage) {
+		this.resultsPerPage = resultsPerPage;
+	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public String getSortDir() {
+		return sortDir;
+	}
+
+	public void setSortDir(String sortDir) {
+		this.sortDir = sortDir;
+	}
+
+	public Integer getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(Integer startIndex) {
+		this.startIndex = startIndex;
+	}	
 }

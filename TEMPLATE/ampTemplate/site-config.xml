@@ -692,6 +692,7 @@
                 <page>editbudgetsector</page>
                 <page>setbudgetprogram</page>
                 <page>editdepartment</page>
+                <page>contactsPrintPreview</page>
             </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

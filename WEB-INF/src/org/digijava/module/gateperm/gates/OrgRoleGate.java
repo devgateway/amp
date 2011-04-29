@@ -7,19 +7,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
 
-import org.hibernate.Session;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.RelOrganization;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.hibernate.Session;
 
 /**
  * Implements logic for organization roles user access filtering. users are assigned to organizations through the um
@@ -100,7 +99,15 @@ public class OrgRoleGate extends Gate {
 
 	String paramRoleCode = parameters.poll().trim();
 
-	
+	//check if the scope has a funding organisation, if it does use that directly
+	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
+	if(org!=null) {
+		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
+		if(roleCode.equals(paramRoleCode) && org.getAmpOrgId().equals(user.getAssignedOrgId())) return true;
+		//an org was in the scope, do not continue with the logic and deny access
+		return false;
+	}
 	
 	// iterate the assigned orgs:
 	if (ampa != null) {	    

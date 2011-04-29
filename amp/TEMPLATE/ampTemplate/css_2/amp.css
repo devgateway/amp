@@ -78,12 +78,11 @@ html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_
 
 /* HEADER */
 .header { height:51px;text-align:center;overflow:hidden;}
-.centering {width:1000px; margin:0 auto;text-align:left;}
-.logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;}
+.logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 20px;}
 .amp_label {padding-top:5px;float:left;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
-.login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;}
+.login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
 html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:relative;}
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
@@ -96,7 +95,7 @@ html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000;
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
-.main_menu {height:25px;  width:1000px; margin:0 auto;text-align:center;border:none;position:relative;}
+.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px 0px 0px 20px;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}

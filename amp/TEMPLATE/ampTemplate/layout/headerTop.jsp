@@ -68,11 +68,10 @@ ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <!-- HEADER START-->
-<center>
-<div id="ampcontainer">
+
+
 <div class="header">
 
-	<div class="centering">
 		<div class="login_nav">
 			
 			<digi:insert attribute="loginWidget"/>

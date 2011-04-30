@@ -7,6 +7,7 @@
 
 </div>
 <!-- FOOTER START -->
+
 	<div class="footer">
 		
 			<img src="img_2/logo_footer.gif" /> AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
@@ -18,7 +19,7 @@
 			</logic:notEmpty>
 	
 	 </div>
-	  
+	 </center> 
 <!-- FOOTER END  -->
 	
 

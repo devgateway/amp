@@ -227,7 +227,7 @@
 
 	<input type="hidden" name="actionFlag" value="">
 
-	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705>
+	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705  class="inside">
 		<tr>
 			<td width=14>&nbsp;</td>
 			<td align=left valign="top" width=752>
@@ -267,18 +267,18 @@
 				</tr>
 				<tr>
 					<td noWrap width=616 vAlign="top">
-						<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
+						<table class="contentbox_border" width="75%" border="0" >
                             <tr>			
                                <td align="center">
                              	  <table width="100%">
                                       <tr>
-                                    	<td style="background-color: #CCDBFF;height: 18px;"/>
+                                    	<td style="height: 18px;"/>
                                       </tr>
                                   </table>
                                </td>
                             </tr>
 					   		<tr>
-							  <td valign="top" bgcolor="#f4f4f2" align="center">
+							  <td valign="top"  align="center">
 								  <table border="0" cellpadding="0" cellspacing="0" width=772>
 	
 									<tr>

@@ -46,10 +46,10 @@ function banUser(txt) {
 <!-- End of Logo -->
 
 
-  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
+  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center >
     <tr>
       <td align=left valign="top">
-        <table cellPadding=5 cellspacing="0" width="100%">
+        <table cellPadding=5 cellspacing="0" width="100%" >
           <tr>
             <!-- Start Navigation -->
             <td height=33 colspan=8>
@@ -71,7 +71,9 @@ function banUser(txt) {
             <!-- End navigation -->
           </tr>
           <tr>
-            <td bgcolor=#c7d4db align=center colspan=8>
+            <td bgcolor=#c7d4db align=center colspan=8 style=" background-color: #F2F2F2;
+    border: 1px solid #D0D0D0;
+    padding: 5px;">
               <digi:errors/> 
               <span style="font-size:12px; font-weight:bold;">
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
@@ -87,10 +89,10 @@ function banUser(txt) {
 			<digi:instance property="umViewAllUsersForm" />
 		<digi:context name="digiContext" property="context" />
 		<digi:form action="/viewAllUsers.do" method="post">
-          <tr style="width:50%;">
+          <tr  style=" background-color: #F2F2F2; padding: 5px;">
           	<c:choose>
           		<c:when test="${umViewAllUsersForm.showBanned}">
-          		<td width="160" colspan=5>
+          		<td width="160" colspan=5 style="border-left: 1px solid #D0D0D0;border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
@@ -105,7 +107,7 @@ function banUser(txt) {
 	              </td>
           		</c:when>
           		<c:otherwise>
-	            <td width="160">
+	            <td width="160" class="usersSelectForm"  colspan=3 style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
@@ -134,13 +136,13 @@ function banUser(txt) {
 	              </td>
 	              </c:otherwise>
               </c:choose>
-              <td width="150">
+              <td width="250" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
 	              <digi:trn key="um:viewAllUsers:keyword">
 	              keyword:
 	              </digi:trn>
 	              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
               </td>
-              <td width="100">
+              <td width="100" class="usersSelectForm" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
               	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
 				<html:select property="tempNumResults" styleClass="inp-text">
 					<html:option value="10">10</html:option>
@@ -149,7 +151,7 @@ function banUser(txt) {
 					<html:option value="-1">ALL</html:option>
 				</html:select>
               </td>
-			  <td width="260">
+			  <td width="260" style="border-top: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;">
 	              <c:set var="translation">
 	                <digi:trn key="um:viewAllUsers:showButton">
 	                Show
@@ -159,28 +161,28 @@ function banUser(txt) {
             </td>
           </tr>
           <tr>
-            <td noWrap width=967 vAlign="top" colspan="7">
-              <table width="100%" cellspacing="1" cellspacing="1">
+            <td noWrap width=967 vAlign="top" colspan="7" style="border-left: 1px solid #D0D0D0;border-right: 1px solid #D0D0D0;border-bottom: 1px solid #D0D0D0;">
+              <table width="100%" cellspacing="1" cellspacing="1" >
 					<tr>
 						<td noWrap width=700 vAlign="top">
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="100%">
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0">
+										<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="90%" border="0" >
 											<tr>
 												<td bgColor=#ffffff>
-													<table border="0" cellpadding="1" cellspacing="1" width="100%">
+													<table border="0" cellpadding="0" cellspacing="0" width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
+															<td bgColor=#f2f2f2 height="25" align="center" colspan="5" style="border:1px solid #ebebeb;"><B>
 																<digi:trn key="um:users">Users</digi:trn>
                                                               </b>
 															</td>
 															<!-- end header -->
 														</tr>		
  														<tr>
-															<td width="100%" class="report">
-																<table width="734" border="1" bordercolor="cccccc" RULES=ALL FRAME=VOID  bgColor="#f4f4f2">
+															<td width="100%">
+																<table width="734" RULES=ALL FRAME=VOID id="viewAllUsers" border="0" cellspacing="1" cellpadding="1" >
 																	
 																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
@@ -191,7 +193,7 @@ function banUser(txt) {
 																		</tr>
 							                                        </c:if>
 																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
-																	<thead>
+																	<thead background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
 																		<tr>
 																			<td height="30" width="220">
 																				<digi:link href="/viewAllUsers.do?sortBy=name&reset=false"><b>
@@ -211,7 +213,8 @@ function banUser(txt) {
 																			</td>																		
 																		</tr>
 																		</thead>
-																		<tbody class="yui-dt-data">
+                                                                        
+																		<tbody>
 																	<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
 	                                                           			<tr>
 		                                                           			<td height="30">
@@ -266,6 +269,7 @@ function banUser(txt) {
 																	</tbody>
 																</c:if>
 															</table>
+                                                            
 														</td>
 													</tr>
 												 <!-- end page logic -->

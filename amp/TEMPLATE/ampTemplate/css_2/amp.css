@@ -364,3 +364,6 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
     padding: 2px;}
 	
 .home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;} 
+table#viewAllUsers, table#viewAllUsers tr td{border:1px solid #ebebeb;padding:3px;font-size:11px; color:#000;}
+table#viewAllUsers tr td table tr td {border:none;}
+td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}

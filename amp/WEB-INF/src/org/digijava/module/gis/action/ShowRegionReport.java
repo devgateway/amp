@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -262,10 +263,14 @@ public class ShowRegionReport extends Action {
                                 }
 
 
-                        if (level == GisMap.MAP_LEVEL_REGION &&
+                        if ((level == GisMap.MAP_LEVEL_REGION &&
                             loc.getLocation().getRegionLocation().
                             getParentCategoryValue().getEncodedValue().equals(
-                                "Region")) {
+                                "Region")) ||
+                                (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                   loc.getLocation().getRegionLocation().
+                                   getParentCategoryValue().getEncodedValue().
+                                   equals("Zone"))) {
 
 
 
@@ -398,159 +403,117 @@ public class ShowRegionReport extends Action {
                                     }
                                 }
                             }
-                        } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
-                                   loc.getLocation().getRegionLocation().
-                                   getParentCategoryValue().getEncodedValue().
-                                   equals("Zone")) {
+                         }
+                        }
+                    }
+                }
+
+                //Regional funding calculations (Ethiopian issue AMP-9960)
+                    if (activity.getRegionalFundings() != null && !activity.getRegionalFundings().isEmpty()) {
+
+                        Set donorOrg = new HashSet();
 
 
-                            if (regCode.equals(regLocCode)) {
+                        for (Object regFndObj : activity.getRegionalFundings()) {
+                            AmpRegionalFunding regFnd = (AmpRegionalFunding) regFndObj;
+//                            String regCode = regFnd.getRegionLocation().getName().trim();
+
+
+                            Long regCode = regFnd.getRegionLocation().getId();
+
+
+                            if (regFnd.getReportingOrganization() != null) {
+                                donorOrg.add(regFnd.getReportingOrganization().getName());
+                            }
+
+                            if (((level == GisMap.MAP_LEVEL_REGION &&
+                                    regFnd.getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region"))
+                                    || (level == GisMap.MAP_LEVEL_DISTRICT &&
+                                    regFnd.getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone"))) && regCode.equals(regLocCode)) {
+
+
                                 if (locationFundingMap.containsKey(regCode)) {
-                                    FundingData existingVal = (FundingData)
-                                            locationFundingMap.get(
-                                            regCode);
-
-                                    FundingData newVal = new FundingData();
-                                    newVal.setActivityLocationFundingList(
-                                            existingVal.
-                                            getActivityLocationFundingList());
-                                    newVal.setCommitment(existingVal.
-                                            getCommitment().add(
-                                            fundingForSector.
-                                            getCommitment().multiply(new
-                                            BigDecimal(loc.
-                                            getLocationPercentage() / 100f))));
-                                    newVal.setDisbursement(existingVal.
-                                            getDisbursement().add(
-                                            fundingForSector.getDisbursement().
-                                            multiply(new BigDecimal(loc.
-                                            getLocationPercentage() / 100f))));
-                                    newVal.setExpenditure(existingVal.
-                                            getExpenditure().add(
-                                            fundingForSector.
-                                            getExpenditure().multiply(new
-                                            BigDecimal(loc.
-                                            getLocationPercentage() / 100f))));
-
-                                    ActivityLocationFunding
-                                            activityLocationFunding = new
-                                            ActivityLocationFunding(
-                                            fundingForSector.getCommitment().
-                                            multiply(new BigDecimal(loc.
-                                            getLocationPercentage() / 100f)),
-                                            fundingForSector.getDisbursement().
-                                            multiply(new BigDecimal(loc.
-                                            getLocationPercentage() / 100f)),
-                                            fundingForSector.getExpenditure().
-                                            multiply(new BigDecimal(loc.
-                                            getLocationPercentage() / 100f)),
-                                            activity);
-                                    activityLocationFunding.setDonorOrgs(donorOrg);
-                                    activityLocationFunding.setTopSectors(topLevelSectorNames);
 
 
-                                    newVal.getActivityLocationFundingList().add(
-                                            activityLocationFunding);
+                                    FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
 
-                                    if (activityLocationFunding.
-                                            getCommitment().intValue() != 0) {
-                                        activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(
-                                        		activityLocationFunding.getCommitment().intValue()));
-                                    } else {
-                                        activityLocationFunding.setFmtCommitment(null);
+                                    switch (regFnd.getTransactionType()) {
+                                        case Constants.COMMITMENT:
+                                            existingVal.setCommitment(existingVal.getCommitment().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            existingVal.setDisbursement(existingVal.getDisbursement().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
+                                        case Constants.EXPENDITURE:
+                                            existingVal.setExpenditure(existingVal.getExpenditure().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            break;
                                     }
 
-                                    if (activityLocationFunding.getDisbursement().intValue() != 0) {
-                                        activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
-                                        		activityLocationFunding.getDisbursement().doubleValue()));
-                                    } else {
-                                        activityLocationFunding.setFmtDisbursement(null);
-                                    }
-
-                                    if (activityLocationFunding.getExpenditure().intValue() != 0) {
-                                        activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(
-                                        		activityLocationFunding.getExpenditure().doubleValue()));
-                                    } else {
-                                        activityLocationFunding.
-                                                setFmtExpenditure(null);
-                                    }
-
-                                    locationFundingMap.put(regCode, newVal);
                                 } else {
-                                    if (fundingForSector.getCommitment().
-                                        floatValue() !=
-                                        0f ||
-                                        fundingForSector.getDisbursement().
-                                        floatValue() != 0f ||
-                                        fundingForSector.getExpenditure().
-                                        floatValue() != 0f) {
-
+                                    if (regFnd.getTransactionAmount() > 0) {
                                         FundingData newVal = new FundingData();
-                                        newVal.setActivityLocationFundingList(new
-                                                ArrayList());
 
-                                        newVal.setCommitment(fundingForSector.
-                                                getCommitment().multiply(new
-                                                BigDecimal(loc.
-                                                getLocationPercentage() / 100f)));
-                                        newVal.setDisbursement(fundingForSector.
-                                                getDisbursement().multiply(new
-                                                BigDecimal(loc.
-                                                getLocationPercentage() / 100f)));
-                                        newVal.setExpenditure(fundingForSector.
-                                                getExpenditure().multiply(new
-                                                BigDecimal(loc.
-                                                getLocationPercentage() / 100f)));
 
-                                        ActivityLocationFunding
-                                                activityLocationFunding = new
-                                                ActivityLocationFunding(
-                                                fundingForSector.getCommitment().
-                                                multiply(new BigDecimal(loc.
-                                                getLocationPercentage() / 100f)),
-                                                fundingForSector.
-                                                getDisbursement().multiply(new
-                                                BigDecimal(loc.
-                                                getLocationPercentage() / 100f)),
-                                                fundingForSector.getExpenditure().
-                                                multiply(new BigDecimal(loc.
-                                                getLocationPercentage() / 100f)),
-                                                activity);
-                                        activityLocationFunding.setDonorOrgs(donorOrg);
-                                        activityLocationFunding.setTopSectors(topLevelSectorNames);
-
-                                        if (activityLocationFunding.getCommitment().intValue() != 0) {
-                                            activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(
-                                            		activityLocationFunding.getCommitment().doubleValue()));
-                                        } else {
-                                            activityLocationFunding.setFmtCommitment(null);
+                                        switch (regFnd.getTransactionType()) {
+                                        case Constants.COMMITMENT:
+                                            newVal.setCommitment(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
+                                        case Constants.DISBURSEMENT:
+                                            newVal.setDisbursement(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
+                                        case Constants.EXPENDITURE:
+                                            newVal.setExpenditure(new BigDecimal(regFnd.getTransactionAmount()));
+                                            break;
                                         }
 
-                                        if (activityLocationFunding.getDisbursement().intValue() != 0) {
-                                            activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
-                                            		activityLocationFunding.getDisbursement().doubleValue()));
-                                        } else {
-                                            activityLocationFunding.setFmtDisbursement(null);
-                                        }
-                                        
-                                        if (activityLocationFunding.getExpenditure().intValue() != 0) {
-                                            activityLocationFunding.setFmtExpenditure(FormatHelper.formatNumber(
-                                            		activityLocationFunding.getExpenditure().doubleValue()));
-                                        } else {
-                                            activityLocationFunding.
-                                                    setFmtExpenditure(null);
-                                        }
-                                        newVal.getActivityLocationFundingList().
-                                                add(activityLocationFunding);
+
 
                                         locationFundingMap.put(regCode, newVal);
                                     }
                                 }
                             }
                         }
+                        //Set activity
+                        FundingData existingVal = (FundingData) locationFundingMap.get(regLocCode);
+                        ActivityLocationFunding activityLocationFunding = new ActivityLocationFunding();
+                        activityLocationFunding.setActivity(activity);
+                        activityLocationFunding.setDonorOrgs(donorOrg);
+                        activityLocationFunding.setTopSectors(topLevelSectorNames);
+
+
+                        activityLocationFunding.setCommitment(existingVal.getCommitment());
+                        activityLocationFunding.setExpenditure(existingVal.getExpenditure());
+                        activityLocationFunding.setDisbursement(existingVal.getDisbursement());
+
+
+                        if (activityLocationFunding.getCommitment() != null && activityLocationFunding.getCommitment().intValue() != 0) {
+                            activityLocationFunding.setFmtCommitment(FormatHelper.formatNumber(activityLocationFunding.
+                                    getCommitment().doubleValue()));
+                        } else {
+                            activityLocationFunding.
+                                    setFmtCommitment(null);
                         }
+                        if (activityLocationFunding.getDisbursement() != null && activityLocationFunding.getDisbursement().intValue() != 0) {
+                            activityLocationFunding.setFmtDisbursement(FormatHelper.formatNumber(
+                                    activityLocationFunding.getDisbursement().doubleValue()));
+                        } else {
+                            activityLocationFunding.
+                                    setFmtDisbursement(null);
+                        }
+                        if (activityLocationFunding.getExpenditure() != null && activityLocationFunding.getExpenditure().intValue() != 0) {
+                            activityLocationFunding.setFmtExpenditure(FormatHelper.
+                                    formatNumber(activityLocationFunding.getExpenditure().doubleValue()));
+                        } else {
+                            activityLocationFunding.
+                                    setFmtExpenditure(null);
+                        }
+                        if (existingVal.getActivityLocationFundingList() == null) {
+                            existingVal.setActivityLocationFundingList(new ArrayList());
+                        }
+                        existingVal.getActivityLocationFundingList().add(activityLocationFunding);
+
+
                     }
-                }
             }
         }
 

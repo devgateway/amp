@@ -453,6 +453,21 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementing/Executing Agency Contact Fax" feature="Reports Contact Information"></field:display>
 <field:display name="Implementing/Executing Agency Contact Title" feature="Reports Contact Information"></field:display>
 
+<field:display feature="Donor Contact Information" name="Add Donor Contact Button"></field:display>
+<field:display feature="Donor Contact Information" name="Make as Primary Donor Contact"></field:display>
+<field:display feature="Donor Contact Information" name="Edit Donor Contact"></field:display>
+<field:display feature="Donor Contact Information" name="Delete Donor Contact"></field:display>
+
+<field:display feature="Government Contact Information" name="Add Government Contact Button"></field:display>
+<field:display feature="Government Contact Information" name="Make as Primary Government Contact"></field:display>
+<field:display feature="Government Contact Information" name="Edit Government Contact"></field:display>
+<field:display feature="Government Contact Information" name="Delete Government Contact"></field:display>
+
+<field:display feature="Sector Ministry Contact Information" name="Add Sector Ministry Contact Button"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Make as Primary Sector Ministry Contact"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Edit Sector Ministry Contact"></field:display>
+<field:display feature="Sector Ministry Contact Information" name="Delete Sector Ministry Contact"></field:display>
+
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 

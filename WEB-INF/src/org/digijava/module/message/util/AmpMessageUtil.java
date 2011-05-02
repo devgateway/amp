@@ -370,7 +370,7 @@ public class AmpMessageUtil {
 		return retValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page,int msgStoragePerMsgType) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page,int msgStoragePerMsgType,String sortBy) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -380,7 +380,12 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false order by msg.creationDate";	
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false ";
+			if (sortBy==null || sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_DATE)){
+				queryString+=" order by msg.creationDate";
+			}else if (sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_NAME)) {
+				queryString+=" order by msg.name desc";
+			}
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.
@@ -409,7 +414,7 @@ public class AmpMessageUtil {
                         // after we delete the all rows we need to move to previous page
                         if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
                             page[0]--;
-                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType);
+                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType,sortBy);
                         }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
@@ -420,7 +425,7 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,Integer[] page) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,Integer[] page, String sortBy) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -430,7 +435,12 @@ public class AmpMessageUtil {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where "+
-			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" order by msg.creationDate ";
+			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" ";
+			if (sortBy==null || sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_DATE)){
+				queryString+=" order by msg.creationDate";
+			}else if (sortBy.equalsIgnoreCase(MessageConstants.SORT_BY_NAME)) {
+				queryString+=" order by msg.name";
+			}
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
@@ -449,7 +459,7 @@ public class AmpMessageUtil {
                          // after we delete the all rows we need to move to previous page
                         if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
                             page[0]--;
-                            returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page);
+                            returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page,sortBy);
                         }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	

@@ -99,6 +99,12 @@ public class MessageConstants {
 	 */
 	public static final int MESSAGES_PER_PAGE=15;
 	public static final int PAGES_TO_SHOW=5;
+	
+	/**
+	 * Sorting options for Messages
+	 */
+	public static final String SORT_BY_NAME="name";
+	public static final String SORT_BY_DATE="creationDate";
 
 	/**
 	 * Template Alert helper fields

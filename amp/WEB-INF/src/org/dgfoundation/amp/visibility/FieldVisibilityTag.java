@@ -18,7 +18,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -162,7 +162,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
    			    
    				//AMP-9768
-   				AmpActivity editedActivity=(AmpActivity) PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY);
+   				AmpActivityVersion editedActivity=(AmpActivityVersion) PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY);
    				boolean sameTeamAsEditedActivity=false;
    				if(editedActivity!=null && editedActivity.getTeam().getAmpTeamId().equals(teamMember.getTeamId())) sameTeamAsEditedActivity=true;
    				

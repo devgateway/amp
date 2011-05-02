@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpActivityFields">
+	<class name="org.digijava.module.aim.dbentity.AmpActivityFields" abstract="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
 			<generator class="native">
@@ -318,34 +318,19 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 		</set>
 
-		
-
-
 		<!-- Subclass declaration of AmpActivityVersion -->
 		<union-subclass name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version" >
-			<!-- 
-				<subselect>
-				select  amp_activity_version.*  
-				from (amp_activity_version join amp_activity_group)
-				where (amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id)
-				</subselect>
-				
-				<synchronize table="amp_activity_version" />
-				<synchronize table="amp_activity_group" />
-			<key column="ampActivityId" />
-			-->
+			
 		</union-subclass>
 
-		<!-- Subclass declaration of AmpActivity -->
-		<union-subclass name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" >
+		<!-- Subclass declaration of AmpActivity 
+		-->
+		<union-subclass name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" check="false">
 			<subselect>
-				select  amp_activity_version.*  
-				from amp_activity_version, amp_activity_group
-				where amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id
+				select  amp_activity.*  
+				from amp_activity
 			</subselect>
-			
-			<synchronize table="amp_activity_version" />
-			<synchronize table="amp_activity_group" />
+			<synchronize table="amp_activity" />
 		</union-subclass>
 	</class>
 </hibernate-mapping>

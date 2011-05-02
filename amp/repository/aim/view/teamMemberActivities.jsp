@@ -321,7 +321,7 @@
 													<%--
 													<logic:notEmpty name="aimMemberActivitiesForm" property="activities">
 													<logic:iterate name="aimMemberActivitiesForm" property="activities" id="activities" 
-													type="org.digijava.module.aim.dbentity.AmpActivity">
+													type="org.digijava.module.aim.dbentity.AmpActivityVersion">
 													<tr>
 														<td>
 															<html:multibox property="selActivities" >

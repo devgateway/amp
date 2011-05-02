@@ -20,7 +20,7 @@ public class AmpActivity extends AmpActivityVersion implements Cloneable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		try {
-			return (AmpActivityVersion) super.clone();
+			return (AmpActivity) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError(e.toString());
 		}

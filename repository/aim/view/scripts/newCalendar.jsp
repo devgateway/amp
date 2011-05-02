@@ -90,6 +90,9 @@
 		}	
 		
 		references.myDate.value = result;
+                if(references.mySameDate!=null){
+                    references.mySameDate.value = result;
+                }
 		calendarObjForForm.hide();			
 	}	
 
@@ -108,9 +111,27 @@
 			calendarObjForForm.display();
 		}		
 	}
+        function pickDateWithSameAs(buttonObj,inputObject,clearObj,sameAsInput,sameCheckBox,clearObjSame) //also sets visibility for clear button after the selection has been done
+	{
+		pickDateWithClear(buttonObj,inputObject,clearObj);
+                var checkbox = document.getElementById(sameCheckBox);
+                var objSame=calendarObjForForm.htmlElementReferences.mySameDate;
+                 if(objSame!=null){
+                        calendarObjForForm.htmlElementReferences.mySameDate=null;
+                 }
+                if(checkbox!=null&&checkbox.checked){
+                    calendarObjForForm.addHtmlElementReference('mySameDate', sameAsInput);
+                    var clrSameButton = document.getElementById(clearObjSame);
+                    clrSameButton.style.display="inline";
+                }// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
+	}
 	
 	function pickDateWithClear(buttonObj,inputObject,clearObj) //also sets visibility for clear button after the selection has been done
 	{
+                var objSame=calendarObjForForm.htmlElementReferences.mySameDate;
+                if(objSame!=null){
+                    calendarObjForForm.htmlElementReferences.mySameDate=null;
+                }
 		var butt = document.getElementById(buttonObj);
 		var clr = document.getElementById(clearObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);

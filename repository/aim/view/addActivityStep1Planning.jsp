@@ -150,7 +150,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																<a id="clear3" href='javascript:clearDate(document.getElementById("originalStartDate"), "clear3")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
-																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
+																<a id="date3" href='javascript:pickDateWithSameAs("date3",document.getElementById("originalStartDate"), "clear3",document.getElementById("revisedStartDate"),"sameAs2","clear4")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
@@ -215,7 +215,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
+																<a id="date1" href='javascript:pickDateWithSameAs("date1",document.getElementById("originalAppDate"),"clear1",document.getElementById("revisedAppDate"),"sameAs1","clear2")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>

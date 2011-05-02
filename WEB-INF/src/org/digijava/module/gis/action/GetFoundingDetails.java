@@ -1315,20 +1315,6 @@ public class GetFoundingDetails extends Action {
                                             break;
                                     }
 
-                                    /*
-                                    switch (regFnd.getTransactionType()) {
-                                        case Constants.COMMITMENT:
-                                            newVal.setCommitment(existingVal.getCommitment().add(new BigDecimal(regFnd.getTransactionAmount())));
-                                            break;
-                                        case Constants.DISBURSEMENT:
-                                            newVal.setDisbursement(existingVal.getDisbursement().add(new BigDecimal(regFnd.getTransactionAmount())));
-                                            break;
-                                        case Constants.EXPENDITURE:
-                                            newVal.setExpenditure(existingVal.getExpenditure().add(new BigDecimal(regFnd.getTransactionAmount())));
-                                            break;
-                                    }
-                                    locationFundingMap.put(regCode, newVal);
-                                    */
                                 } else {
                                     if (regFnd.getTransactionAmount() > 0) {
                                         FundingData newVal = new FundingData();

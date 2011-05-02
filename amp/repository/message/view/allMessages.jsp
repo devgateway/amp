@@ -66,6 +66,18 @@
 	font-size:8pt !important;
 	padding:2px;
 }
+
+.trHeading {
+	
+	font-size:11pt;
+	padding:2px;
+}
+
+.trPagination {
+	font-size:11pt;
+	padding:2px;
+}
+
 .contentbox_border{
         border: 1px solid black;
 	border-width: 0px 1px 1px 1px; 
@@ -133,6 +145,11 @@ background-color:yellow;
 	var lastTimeStamp;
 	//used to hold already rendered messages
 	var myArray=new Array();
+
+	//for sorting
+	var sortByName='name';
+	var sortByDate='creationDate';
+	var sortedBy='creationDate';
 	
 	window.onload=getMessages;
 		
@@ -269,7 +286,18 @@ background-color:yellow;
 	       msgIds=msgIds.substring(0,msgIds.length-1);
 		}
 	    return msgIds;
-	}     
+	}  
+
+	function getAllMessagesIds() {
+		var msgIds='';
+		$("input[id^='delChkbox_']").each(function(){
+	        msgIds+=this.value+',';
+	    })            
+		if(msgIds.length>0){
+	       msgIds=msgIds.substring(0,msgIds.length-1);
+		}
+	    return msgIds;
+	}   
 	
 	function deleteMessage(msgId) {
             var flag=false;
@@ -504,6 +532,30 @@ background-color:yellow;
 			deselectAllCheckboxes();
 		}
 	}
+
+
+	function sortBy(sort){
+		if(myArray!=null && myArray.length>0){
+			myArray.splice(0,myArray.length);
+		}
+		//creating table
+		var tbl=document.getElementById('msgsList');
+		var tblBody=tbl.getElementsByTagName('tbody')[0];	
+		if(tblBody.childNodes!=null && tblBody.childNodes.length>0){
+			while (tblBody.childNodes.length>0){
+				tblBody.removeChild(tblBody.childNodes[0]);
+			}
+		}				
+		currentPage=0;
+		sortedBy = sort;
+		
+		lastTimeStamp = new Date().getTime();
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&sortBy='+sort+'&timeStamp='+lastTimeStamp);			
+		var async=new Asynchronous();
+		async.complete=buildMessagesList;
+		async.call(url);
+	}
+
 	
 	function getMessages(){
 		lastTimeStamp = new Date().getTime();
@@ -561,9 +613,45 @@ background-color:yellow;
 					return;
                                
 				} else {
-                       
+					
+					var tablBody= tbl.getElementsByTagName("tbody");   
 					messages=root.childNodes;
-                                
+					
+					// create a header row here
+					if(document.getElementById("headingTr")==null){
+						var headingTR = document.createElement('TR');
+	                    headingTR.id="headingTr";
+	                    headingTR.className = "trHeading";
+	                    	var mshTitleTD = document.createElement('TD');
+	                    	mshTitleTD.align='center';
+	                    	mshTitleTD.setAttribute("colSpan","2");
+	                    	var sp=document.createElement('SPAN');
+	                    	if(sortedBy=='name'){
+	                    		sp.innerHTML='<strong>Message Name</strong>';	
+		                    }else {
+		                    	sp.innerHTML='<A href="javascript:sortBy(\''+sortByName+'\')"; title="something">Message Name</A>';
+			                }
+	                    	
+	                    	mshTitleTD.appendChild(sp);
+	                    	headingTR.appendChild(mshTitleTD);
+
+	                    	var msgDateTD = document.createElement('TD');
+	                    	msgDateTD.align='center';
+	                    	msgDateTD.setAttribute("nowrap","nowrap");
+	                    	sp=document.createElement('SPAN');
+	                    	if(sortedBy=='creationDate'){
+	                    		sp.innerHTML='<strong>Received</strong>';
+		                    }else {
+		                    	sp.innerHTML='<A href="javascript:sortBy(\''+sortByDate+'\')"; title="something">Received</A>';
+			                }
+	                    	
+	                    	msgDateTD.appendChild(sp);
+	                    	headingTR.appendChild(msgDateTD);
+	                    	
+	                    	
+	                    tablBody[0].appendChild(headingTR);
+					}
+                              
                   
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
@@ -631,11 +719,12 @@ background-color:yellow;
                         	}
                             msgTr=paintTr(msgTr,i);
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
-        	                var tablBody= tbl.getElementsByTagName("tbody");
+        	                // var tablBody= tbl.getElementsByTagName("tbody"); test commenting and moving up !
                             tablBody[0].appendChild(myTR);            																				
 						}//end of for loop
 					}			
 				}//messages end
+				
 				
 				//pagination start			
 				if(paginationTag!=null){
@@ -656,6 +745,7 @@ background-color:yellow;
 	function setupPagionation (paginationTag,page,allPages){
 		currentPage=page;
 		var paginationTR=document.getElementById('paginationPlace');
+		paginationTR.className = "trPagination"
 		while(paginationTR.firstChild != null){
 			paginationTR.removeChild(paginationTR.firstChild);
 		}
@@ -663,7 +753,7 @@ background-color:yellow;
 		var paginationParams=paginationTag.childNodes[0];
 		if(paginationParams!=null){
 			var paginationTD=document.createElement('TD');
-			var paginationTDContent=pagesTrn+':';
+			var paginationTDContent='<strong>'+pagesTrn+'</strong> :';
 				if(currentPage>1){
 					var prPage=currentPage-1;
 					paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
@@ -684,14 +774,14 @@ background-color:yellow;
 						toIndex=currentPage+2;
 					}
 					for(var i=fromIndex;i<=toIndex;i++){
-						if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
-						if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
+						if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>&nbsp;&nbsp;|&nbsp;&nbsp;';}
+						if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>&nbsp;&nbsp;|&nbsp;&nbsp;'; }
 					}
 				}
 				if(page<allPages){
 					var nextPg=page+1;									
-					paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-					paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
+					paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>&nbsp;&nbsp;';
+					paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a> &nbsp;&nbsp;|&nbsp;';
 				}	
 				paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 			paginationTD.innerHTML=	paginationTDContent;						
@@ -771,6 +861,14 @@ background-color:yellow;
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
+
+
+		//getting received date
+		var receivedTD=document.createElement('TD');
+		receivedTD.vAlign="top";
+		var received=message.getAttribute('received');
+		receivedTD.innerHTML=received; //appending happens below, so date appears after message Name
+		
 					
 		//creating hidden div for message description.It'll become visible after user clicks on twistie
 		var descDiv=document.createElement('DIV');
@@ -845,11 +943,12 @@ background-color:yellow;
 		receivedTR.appendChild(receivedTD1);
 							
 		//getting received date
-		var receivedTD2=document.createElement('TD');
-		var received=message.getAttribute('received');
-		receivedTD2.innerHTML=received;
-		receivedTR.appendChild(receivedTD2);
-		divTblBody.appendChild(receivedTR);						
+		//var receivedTD2=document.createElement('TD');
+		//var received=message.getAttribute('received');
+		//receivedTD2.innerHTML=received;
+		//receivedTR.appendChild(receivedTD2);
+		//divTblBody.appendChild(receivedTR);		
+						
 		var priorityTR=document.createElement('TR');
 		var priorityTD1=document.createElement('TD');
 		priorityTD1.innerHTML='<strong>'+prLevel+'</strong>';
@@ -921,6 +1020,7 @@ background-color:yellow;
         descDiv.appendChild(divTable);	
         nameTD.appendChild(descDiv);
         msgTr.appendChild(nameTD);
+        msgTr.appendChild(receivedTD);
       
         if(fwdOrEditDel){
         
@@ -1374,6 +1474,7 @@ $(document).ready(function(){
 								</TABLE>
 							</TD>
 						</TR>
+						<tr height="3px"><td colspan="7">&nbsp;</td></tr>
                                                 <TR>
                                                       
                                                

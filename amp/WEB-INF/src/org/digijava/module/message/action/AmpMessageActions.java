@@ -89,6 +89,7 @@ public class AmpMessageActions extends DispatchAction {
     	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 
     	AmpMessageForm messageForm=(AmpMessageForm)form;
+    	messageForm.setSortBy(null);
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
     	if(settings!=null && settings.getMsgRefreshTime()!=null && settings.getMsgRefreshTime().longValue()>0){
     		messageForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
@@ -214,38 +215,38 @@ public class AmpMessageActions extends DispatchAction {
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
-    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page,maxStorage);
+    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
-    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, false,page);
+    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, false,page,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("draft")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),true,false);
-    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, true,page);
+    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, true,page,messageForm.getSortBy());
     		}
     	}else if(tabIndex==2){// <--alerts
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
-    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page,maxStorage);
+    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
-    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, false,page);
+    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, false,page,messageForm.getSortBy());
     		}else if(childTab.equalsIgnoreCase("draft")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),true,false);
-    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, true,page);
+    			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, true,page,messageForm.getSortBy());
     		}
     	}else if(tabIndex==3){// <---approvals
     		//how many messages are in db. used for pagination
 			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false,maxStorage);
-    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(Approval.class,teamMember.getMemberId(),-1,page,maxStorage);
+    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(Approval.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     	}else if(tabIndex==4){// <--calendar events
     		//how many messages are in db. used for pagination
 			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false,maxStorage);
-    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page,maxStorage);
+    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     	}
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
@@ -315,7 +316,8 @@ public class AmpMessageActions extends DispatchAction {
     		messageForm.setPagesToShow(MessageConstants.PAGES_TO_SHOW);
 
     	messageForm.setPagedMessagesForTm(msgs);
-
+    	
+    	
     	response.setContentType("text/xml");
            OutputStreamWriter outputStream = new OutputStreamWriter(response.
                                             getOutputStream(), "UTF-8");
@@ -913,6 +915,7 @@ public class AmpMessageActions extends DispatchAction {
          form.setSelectedAct(null);
          form.setInboxFull(false);
          form.setReceivesrsNameMail(null);
+         form.setSortBy(null);
 	 }
 
 	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long id,boolean isStateId) throws Exception{

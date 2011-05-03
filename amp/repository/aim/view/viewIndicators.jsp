@@ -95,6 +95,7 @@ a.itr:hover {
 	  
 	}
 </script>
+<div id="viewIndicatorsContainer">
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">
@@ -158,7 +159,7 @@ a.itr:hover {
                                     <td>
                                       <b><digi:trn key="aim:indsector">Sector</digi:trn>:</b>
                                     </td>
-                                    <td>
+                                    <td id="sectorSelectContainer">
                                       <html:select property="sectorId" styleClass="inp-text">
                                       			<html:option value="-1">-<digi:trn key="aim:selsector">Select sector-</digi:trn></html:option>
 												<c:if test="${!empty aimViewIndicatorsForm.sectors}">
@@ -170,20 +171,20 @@ a.itr:hover {
                                 	<td nowrap="nowrap">
                                       <b><digi:trn key="aim:indsearchkey">Keyword</digi:trn>:</b>
                                     </td>
-                                    <td>
+                                    <td  id="sectorKeywordContainer">
                                       <html:text property="keyword" style="width:120px;font-family:verdana;font-size:11px;" />
                                     </td>
                                     <td>
                                     <c:set var="trngo">
                     					  <digi:trn key="aim:searchindbykey">Go</digi:trn>
                     				 </c:set>
-                                      <input type="submit" value="${trngo}" class="dr-menu"/>
+                                      <input  class="buttonx" type="submit" value="${trngo}" class="dr-menu"/>
                                     </td>
                                     <td>
                                      <c:set var="trnviewall">
                     					  <digi:trn key="aim:viewallind">View All</digi:trn>
                     				 </c:set>
-                                      <input type="submit" value="${trnviewall}" onclick="viewall();" class="dr-menu" />
+                                      <input class="buttonx" type="submit" value="${trnviewall}" onclick="viewall();" class="dr-menu" />
                                     </td>
                                   </tr>
                                   <tr>
@@ -284,6 +285,7 @@ a.itr:hover {
     </tr>
   </table>
 </digi:form>
+</div>
 <style>
 
 .tableEven {

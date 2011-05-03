@@ -78,7 +78,7 @@ html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_
 
 /* HEADER */
 .header { height:51px;text-align:center;overflow:hidden;width:1000px;margin:0 auto;}
-.logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 20px;}
+.logo {padding-top:10px; color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:10px 0px 0px 0px;}
 .amp_label {padding-top:5px;float:left;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
@@ -88,7 +88,9 @@ html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
-.workspace_info {width:220px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
+.workspace_info {width:220px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;float:right;text-align:right;}
+.workspace_info a{font-weight:bold;text-decoration:none;}
+.workspace_info a{font-weight:bold;text-decoration:underline;}
 .workspace_info select{width:150px;font-size:10px;}
 html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
@@ -367,3 +369,5 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
 table#viewAllUsers, table#viewAllUsers tr td{border:1px solid #ebebeb;padding:3px;font-size:11px; color:#000;}
 table#viewAllUsers tr td table tr td {border:none;}
 td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
+#viewIndicatorsContainer{margin:0 auto;width:1000px;}
+td#sectorSelectContainer select, td#sectorKeywordContainer input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}

@@ -298,6 +298,7 @@ function IsEmpty(){
 .whiteThing { background-color: #FFF; }
 
 </style>
+<center>
 <digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
 <table bgColor=#ffffff cellPadding=2 cellSpacing=2 width=772 border="0">
 	<tr>
@@ -432,7 +433,7 @@ function IsEmpty(){
 	
 </table>
  </digi:form>
- 
+ </center>
  <script type="text/javascript">
 	initFileUploads();
 	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {

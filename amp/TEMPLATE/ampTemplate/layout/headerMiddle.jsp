@@ -307,9 +307,9 @@ function adminHelp(){
                           </li>
                           </module:display>            
                         </ul>            
-                  </div>
-              </div>
-            </div>
+                  </div>                 
+              </div>               
+            </div>            
 		</logic:equal>
 </logic:present>
 
@@ -713,6 +713,25 @@ function adminHelp(){
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
                                       <ul>
+                                      	<feature:display name="Language Option" module="Tools">
+                                      		<li style="_width:300px">
+		                                        <a class="yuiampmenuitemlabel" href="#">
+		                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+		                                        </a>
+		                                          <div id="reports2" class="yuiampmenu">
+		                                              <div class="bd">                    
+		                                                  <ul>
+		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
+		                                                  </ul>
+		                                              </div>
+		                                          </div>                              
+		                                    </li>
+                                      	</feature:display>                                     
+                                      	  
+                                      	
+                                      	
+                                      	
+                                      
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li class="yuiampmenuitem_drop">
 	                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">

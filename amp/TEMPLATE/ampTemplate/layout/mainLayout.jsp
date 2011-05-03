@@ -69,6 +69,11 @@
 	<center>
 	<div class="main_menu"style="height:25px;" >
 		<digi:insert attribute="headerMiddle"/>
+		<div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
+   			<digi:link styleClass="loginWidget" href="/j_acegi_logout" module="aim">
+				<digi:trn key="aim:logout">LOGOUT</digi:trn>
+			</digi:link>
+		</div>
 	</div></center>
 
 <div class="breadcrump_1">&nbsp;</div>	

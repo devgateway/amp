@@ -42,6 +42,7 @@
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   	 	<div style="position:absolute; top:10px; z-Index:999;">
   	 		<input type="button" value="Activities" onclick="getContent();" />
+  	 		<input type="button" value="Highlight" onclick="getHighlights();" />
   	 	</div>
   	 	
   	 	<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:20px; top:10px; z-Index:999;">

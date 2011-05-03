@@ -178,3 +178,101 @@ function drawpoints(){
 	}
 
 }
+
+//FFerreyra Functions
+var locations = new Array();
+
+function getHighlights() {
+	var xhrArgs = {
+			url : "/esrigis/maphelper.do?showhighlights=true",
+			handleAs : "json",
+			   load: function(jsonData) {
+			        // For every item we received...
+			        dojo.forEach(jsonData,function(location) {
+			        	locations.push(location);
+			        });
+		        	MapFindLocation();
+			    },
+			error : function(error) {
+				// Error handler
+			}
+		};
+	// Call the asynchronous xhrGet
+	var deferred = dojo.xhrGet(xhrArgs);
+}
+
+function MapFindLocation(){
+	map.graphics.clear();
+    var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/0");
+    var query = new esri.tasks.Query();
+    query.where = "COUNTY <> ''";
+    query.outSpatialReference = {wkid:map.spatialReference.wkid};
+    query.returnGeometry = true;
+    query.outFields = ["COUNT", "COUNTY"];
+    queryTask.execute(query, addResultsToMap);
+}
+
+function addResultsToMap(featureSet) {
+    var symbol = new esri.symbol.SimpleFillSymbol();
+    symbol.setColor(new dojo.Color([255, 255, 255, 0.5]));
+    var numRanges = 40;
+    //Generate array of colors
+    var colors = new Array();
+    for(var i=0; i < numRanges; i++){
+    	colors.unshift(new dojo.Color([0, 0, 150 + Math.round((i*(150/numRanges))), 0.3]));
+    }
+    var max = getMaxValue(locations, "commitments");
+    var min = getMinValue(locations, "commitments");
+    var breaks = (max - min) / numRanges;
+
+    var renderer = new esri.renderer.ClassBreaksRenderer(symbol, "COUNT");
+    for (var i=0; i<numRanges; i++) {
+        renderer.addBreak(parseFloat(min + (i*breaks)),
+                parseFloat(min + ((i+1)*breaks)),
+                new esri.symbol.SimpleFillSymbol().setColor(colors[i]));
+      }
+
+    resultTemplate = new esri.InfoTemplate("County", "<tr><td>${FIRST_FIRS}</td></tr><br/><tr><td>${COUNT}</td></tr>");
+
+    dojo.forEach(featureSet.features,function(feature){
+      map.graphics.add(feature);
+    });
+    updateLocationAttributes();
+    map.graphics.setRenderer(renderer);
+    map.setExtent(map.extent.expand(1.01));
+  }
+
+function getMaxValue(array, measure){
+	var maxValue = 0;
+	for(var i=0; i < array.length; i++){
+		var currentMeasure = parseFloat(array[i][measure]);
+		if(currentMeasure > maxValue)
+			maxValue = currentMeasure; 
+	}
+	return maxValue+10;
+}
+
+function getMinValue(array, measure){
+	var minValue = 0;
+	for(var i=0; i < array.length; i++){
+		var currentMeasure = parseFloat(array[i][measure]);
+		if(minValue == 0) minValue = currentMeasure; 
+		if(currentMeasure < minValue)
+			minValue = currentMeasure; 
+	}
+	return minValue-10;
+}
+
+function updateLocationAttributes(){
+    var count = map.graphics.graphics.length;
+    for(var i=0;i<count;i++) {
+      var g = map.graphics.graphics[i];
+      for(var j=0;j<locations.length;j++){
+    	  var currentLocation = locations[j];
+          if(g.attributes["COUNTY"] == currentLocation.name){
+        	  g.attributes["COUNT"] = currentLocation.commitments;
+        	  break;
+          }
+      }
+    }
+}

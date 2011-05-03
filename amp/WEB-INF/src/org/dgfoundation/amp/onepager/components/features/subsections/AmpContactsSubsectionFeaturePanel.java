@@ -160,33 +160,32 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                     AmpActivityVersion act = am.getObject();
                     aaContact.setActivity(act);
                     RadioGroup<AmpContact> group=contactDuplicationTable.getContactsGroup();
-				    if(group.getDefaultModelObject()==null){
-				    	  info("Please select contact!");
-				    }
-				    else{
-				    	Session.get().cleanupFeedbackMessages(); 
-				    	AmpContact choice =  (AmpContact) group.getDefaultModelObject();
-	                    aaContact.setContact(choice);
-	                    if (act.getActivityContacts() == null) {
-	                        act.setActivityContacts(new HashSet<AmpActivityContact>());
-	                    }
-	                    aaContact.setContactType(contactType);
-	                    act.getActivityContacts().add(aaContact);
-	                    idsList.removeAll();
-	                    form.clearInput();
-	                    contactname.setDefaultModel(new Model<String>());
-	                    contactname.setDefaultModelObject(null);
-	                    contactLast.setDefaultModel(new Model<String>());
-	                    contactLast.setDefaultModelObject(null);
-	                    buttonsContainer.setVisible(false);
-	                    contactDuplicationTable.setVisible(false);
-	                    target.addComponent(form);
-	                    target.addComponent(AmpContactsSubsectionFeaturePanel.this);
-	                    //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
-	                    target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
-				    	
-				    }
-				    target.addComponent(feedback);
+                    if (group.getModelObject() == null) {
+                        info("Please select contact!");
+                    } else {
+                        Session.get().cleanupFeedbackMessages();
+                        AmpContact choice = (AmpContact) group.getDefaultModelObject();
+                        aaContact.setContact(choice);
+                        if (act.getActivityContacts() == null) {
+                            act.setActivityContacts(new HashSet<AmpActivityContact>());
+                        }
+                        aaContact.setContactType(contactType);
+                        act.getActivityContacts().add(aaContact);
+                        idsList.removeAll();
+                        form.clearInput();
+                        contactname.setDefaultModel(new Model<String>());
+                        contactname.setDefaultModelObject(null);
+                        contactLast.setDefaultModel(new Model<String>());
+                        contactLast.setDefaultModelObject(null);
+                        buttonsContainer.setVisible(false);
+                        contactDuplicationTable.setVisible(false);
+                        target.addComponent(form);
+                        target.addComponent(AmpContactsSubsectionFeaturePanel.this);
+                        //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
+                        target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
+
+                    }
+                    target.addComponent(feedback);
                     
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
@@ -273,7 +272,7 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
             }
         };
         searchContact.getButton().setDefaultFormProcessing(false);
-        addContact.setDefaultFormProcessing(false);
+        //addContact.setDefaultFormProcessing(false);
         createContact.setDefaultFormProcessing(false);
        
 

@@ -7,7 +7,7 @@
 		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:organization">organization</wicket:trn></b></td>			
 		<td background="images/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:phone">phone</wicket:trn></b></td>	
 	</tr>
-	<div wicket:id="contactsContainer">
+	<wicket:container wicket:id="contactsContainer">
 	<tr wicket:id="contactsList">
 		<td  class="inside"><input type="radio"  wicket:id="contactId"></td>
 		<td class="inside"><span wicket:id="firstname">John</span></td>
@@ -28,6 +28,6 @@
 		</ul>
 		</td>
 	</tr>
-	</div>
+	</wicket:container>
 </wicket:extend>
 

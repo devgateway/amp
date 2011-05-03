@@ -29,10 +29,11 @@ public class AmpContactFormTableFeature extends AmpFormTableFeaturePanel{
 
 			@Override
 			protected void populateItem(final ListItem<AmpContact> item) {	
-				IModel<AmpContact> contactModel=item.getModel();
-				AmpContact contact = item.getModel().getObject();
-				item.add(new Radio<AmpContact>("contactId",contactModel));
-				Label name=new Label("firstname", contact.getName());
+                            IModel<AmpContact> contactModel=item.getModel();
+                            AmpContact contact = contactModel.getObject();
+                            Radio radio = new Radio<AmpContact>("contactId",contactModel,group);
+			    item.add(radio);
+                            Label name=new Label("firstname", contact.getName());
 			    item.add(name);
 			    item.add(new Label("lastname", contact.getLastname()));
 			    List<AmpContactProperty> emails=new ArrayList<AmpContactProperty>();
@@ -103,7 +104,7 @@ public class AmpContactFormTableFeature extends AmpFormTableFeaturePanel{
 		//contactContainer.setOutputMarkupId(true);
 		//contactContainer.add(list);
 		group.add(list);
-		group.setOutputMarkupId(true);
+		//group.setOutputMarkupId(true);
 		add(group);
 		
 	}

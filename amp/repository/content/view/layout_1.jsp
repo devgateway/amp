@@ -30,14 +30,33 @@
       <div id="amphomesidebar">
       <digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
       <c:if test="${thumbnailCount > 0}">
-         
+         <br/>
+          <table width="100%" cellpadding="0" cellspacing="0"  class="layoutTable" style="vertical-align:bottom;padding-top:10px;clear:both;">
+           <tr>
               <c:forEach var='index' begin='0' end='${thumbnailCount-1}'>
-               <a style="cursor: pointer">
-                  <digi:secure authenticated="false"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
-                  <digi:secure authenticated="true"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}&isAdmin=true" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
-                  </a> 
+              	<c:choose>
+                    <c:when test="${index%2 == 0}">	                    
+			              	</tr>
+			              	<tr>
+			              	<td>
+			               		<a style="cursor: pointer">
+			                  		<digi:secure authenticated="false"><img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
+			                  		<digi:secure authenticated="true"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}&isAdmin=true" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
+			                 	</a> 
+			                </td>
+                    </c:when>
+                    <c:otherwise>
+			              	<td>
+			               		<a style="cursor: pointer">
+			                  		<digi:secure authenticated="false"><img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
+			                  		<digi:secure authenticated="true"> <img id="displayThumbnail_${index}" src="${displayThumbnail}?index=${index}&pageCode=${param.pageCode}&isAdmin=true" align="middle" width="110" style="border:1px solid #cecece" onload="attachFuncToThumbnail(${index}, '${param.pageCode}')"> </digi:secure>
+			                 	</a> 
+			                </td>
+                    </c:otherwise>
+                </c:choose>
               </c:forEach>
-           
+   		 </tr>
+          </table>
       <br />
       </c:if>
     </div> 

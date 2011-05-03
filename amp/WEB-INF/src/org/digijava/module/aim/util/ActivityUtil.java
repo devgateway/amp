@@ -25,13 +25,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -1674,7 +1672,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
-      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
+      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(latestAct,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
     
       
@@ -1720,7 +1718,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    Integer result = null;
 	    try {
 	      Session session = PersistenceManager.getRequestDBSession();
-	      String oql = "select count(distinct act) from " + AmpActivityProgram.class.getName() + " prog ";
+	      String oql = "select count(distinct latestAct) from " + AmpActivityProgram.class.getName() + " prog ";
 	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
 	      Query query = session.createQuery(oql);
 
@@ -1762,18 +1760,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  oql += " inner join prog.program as theme ";
       }
       oql+=" inner join prog.activity as  act ";
+      oql+=" inner join act.ampActivityGroup grp";
+      oql+=" inner join grp.ampActivityLastVersion latestAct";
       if (statusCode!=null && !"".equals(statusCode.trim())){
-    	  oql+=" join  act.categories as categories ";
+    	  oql+=" join  latestAct.categories as categories ";
       }
       if(teamMember!=null&&teamMember.getComputation()!=null&&teamMember.getComputation()){
-          oql+=" inner join act.orgrole role ";
+          oql+=" inner join latestAct.orgrole role ";
       }
       oql+=" where 1=1 ";
       if (ampThemeId != null) {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
         }
       if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
-        String s = " and act in (select f.ampActivityId from " +
+        String s = " and latestAct in (select f.ampActivityId from " +
              AmpFunding.class.getName() + " f inner join f.ampDonorOrgId org " +
             " where org.ampOrgId in ("+donorOrgId+")) ";
         oql += s;
@@ -1782,13 +1782,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oql += " and categories.id in ("+statusCode+") ";
       }
       if (fromDate != null) {
-        oql += " and (act.actualStartDate >= :FromDate or (act.actualStartDate is null and act.proposedStartDate >= :FromDate) )";
+        oql += " and (latestAct.actualStartDate >= :FromDate or (latestAct.actualStartDate is null and latestAct.proposedStartDate >= :FromDate) )";
       }
       if (toDate != null) {
-        oql += " and (act.actualStartDate <= :ToDate or (act.actualStartDate is null and act.proposedStartDate <= :ToDate) ) ";
+        oql += " and (latestAct.actualStartDate <= :ToDate or (latestAct.actualStartDate is null and latestAct.proposedStartDate <= :ToDate) ) ";
       }
       if (locationId != null) {
-        oql += " and act.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
+        oql += " and latestAct.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
       }
       if (teamMember != null) {
           //oql += " and " +getTeamMemberWhereClause(teamMember);
@@ -1803,15 +1803,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
               }
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
-              oql += "  and ( act.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
+              oql += "  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
               }
           }
           else{
-               oql += " and ( act.team.ampTeamId =:teamId ) ";
+               oql += " and ( latestAct.team.ampTeamId =:teamId ) ";
           }
         
       }
-        oql+=" and act.team is not NULL ";
+        oql+=" and latestAct.team is not NULL ";
 	  return oql;
   }
 

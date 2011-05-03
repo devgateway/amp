@@ -9,17 +9,18 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.*;
-import org.digijava.kernel.translator.*;
 
 /**
  * Activity helper bean.
@@ -74,13 +75,13 @@ public class ActivityItem implements Comparable<ActivityItem>{
     // percent of specific program assigned
     private Long percent;
     // used only for program percent applying
-    private AmpActivity act;
+    private AmpActivityVersion act;
 
-    public AmpActivity getAct() {
+    public AmpActivityVersion getAct() {
         return act;
     }
 
-    public void setAct(AmpActivity act) {
+    public void setAct(AmpActivityVersion act) {
         this.act = act;
     }
 
@@ -101,7 +102,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
      * @see ActivityItem#ActivityItem(AmpActivity)
 	 */
 
-    public ActivityItem(AmpActivity act,Long percent) {
+    public ActivityItem(AmpActivityVersion act,Long percent) {
         this.act=act;
         this.percent=percent;
 
@@ -113,11 +114,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity bean
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
-	public ActivityItem(AmpActivity entity, HttpServletRequest request) throws Exception{
+	public ActivityItem(AmpActivityVersion entity, HttpServletRequest request) throws Exception{
 		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null, request);
 	}
 
-    public ActivityItem(AmpActivity entity,String curenncyCode,Long percent, HttpServletRequest request) throws Exception{
+    public ActivityItem(AmpActivityVersion entity,String curenncyCode,Long percent, HttpServletRequest request) throws Exception{
         this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent, request);
 	}
 
@@ -127,7 +128,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Long percent, HttpServletRequest request) throws Exception {
+	public ActivityItem(AmpActivityVersion entity,DateFormat frmt,String curenncyCode,Long percent, HttpServletRequest request) throws Exception {
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				

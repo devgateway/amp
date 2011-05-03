@@ -148,17 +148,19 @@ function unload() {
 												<digi:trn key="aim:teamName">Team Name</digi:trn>
 											<% } else { %>
 												<digi:trn key="aim:role">Role</digi:trn>
-											<% }
-											   i++;
-											%>
+											<% } %>
 										</td>
 										<td bgcolor="#f4f4f2" class="text1" width="500px">
+										<% if ((i%2) == 0) { %>
+											<bean:write name="info"/>
+										<% } else { %>	
 										<logic:equal value="Workspace Manager" name="info">
 											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
 										</logic:equal>
 										<logic:equal value="Workspace Member" name="info">
 											<digi:trn key="aim:workspaceMember">Workspace Member</digi:trn>
 										</logic:equal>
+										<% }  i++; %>
 										</td>
 									</tr>
 									</c:forEach>

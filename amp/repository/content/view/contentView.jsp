@@ -59,6 +59,7 @@
 <c:set var="htmlblock_1" value="${contentForm.htmlblock_1}"/>
 <c:set var="htmlblock_2" value="${contentForm.htmlblock_2}"/>
 <c:set var="pageCode" value="${contentForm.pageCode}"/>
+<c:set var="thumbnailCount" value="${fn:length(contentForm.contentThumbnails)}"/>
 
 
 <c:import url="/repository/content/view/layout_${layout}.jsp">

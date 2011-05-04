@@ -21,9 +21,19 @@ function toggleRows(caller,hideId){
 	
 	//Get the project name div
 	var parentdiv = caller.parentNode.parentNode.childNodes[5];
+	//Get the project name tr
+	var parentTR = document.getElementById(hideId);
+	var title=parentTR.title
 	
 	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[1].children[0];
-	var amountcell_2 = caller.parentNode.parentNode.parentNode.children[2].children[0];
+	var amountcell_2;
+	if(caller.parentNode.parentNode.parentNode.children[2]!=null){
+		amountcell_2 = caller.parentNode.parentNode.parentNode.children[2].children[0];
+	}
+	var len = tb.rows.length;
+	var found=false;
+	var hideDepth=getRowLevel(title);
+	var hideRelat=getRowRelativeNo(title);
 
 	//hideAllRows();
 	if(caller.alt=='hidden') {
@@ -31,32 +41,51 @@ function toggleRows(caller,hideId){
 		caller.src=minus_sign;
 		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name'); 
 		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name_op');
-		
+		if(hideDepth!=2){
+			YAHOO.util.Dom.addClass(parentTR, 'desktop_project_name_op_levels');
+			YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name_op_levels');
+		}
+		else{
+			YAHOO.util.Dom.addClass(parentTR, 'desktop_project_name_op_level1');
+			YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name_op_level1');
+		}	
 		YAHOO.util.Dom.removeClass(amountcell_1, 'desktop_project_count');
-		YAHOO.util.Dom.removeClass(amountcell_2, 'desktop_project_count');
 		YAHOO.util.Dom.addClass(amountcell_1, 'desktop_project_count_bolder');
-		YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count_bolder');
-		
+		if(typeof amountcell_2 != 'undefined') {
+			YAHOO.util.Dom.removeClass(amountcell_2, 'desktop_project_count');
+			YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count_bolder');
+		}
+			
 		
 	} else {
 		caller.alt='hidden'; 
 		caller.src=plus_sign;
-		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op'); 
+		if(hideDepth!=2){
+			YAHOO.util.Dom.removeClass(parentTR, 'desktop_project_name_op_levels');
+			YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op_levels');
+		}
+		else{
+			YAHOO.util.Dom.removeClass(parentTR, 'desktop_project_name_op_level1');
+			YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op_level1');
+		}	
+		YAHOO.util.Dom.removeClass(parentdiv, 'desktop_project_name_op');
 		YAHOO.util.Dom.addClass(parentdiv, 'desktop_project_name');
 		
 		YAHOO.util.Dom.removeClass(amountcell_1, 'desktop_project_count_bolder');
-		YAHOO.util.Dom.removeClass(amountcell_2, 'desktop_project_count_bolder');
 		YAHOO.util.Dom.addClass(amountcell_1, 'desktop_project_count');
-		YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count');
+		if (typeof amountcell_2 != 'undefined') {
+			YAHOO.util.Dom.removeClass(amountcell_2,
+					'desktop_project_count_bolder');
+			YAHOO.util.Dom.addClass(amountcell_2, 'desktop_project_count');
+		}
+		
+		
 	}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
 
 
-	var len = tb.rows.length;
-	var found=false;
-	var hideDepth=getRowLevel(document.getElementById(hideId).title);
-	var hideRelat=getRowRelativeNo(document.getElementById(hideId).title);
+	
 	
 	//writeError(+"<br/>", true);
 	var notLevelTooGreat = false;
@@ -92,7 +121,12 @@ function toggleRows(caller,hideId){
 			tb.rows[i].style.display = display;
 			var first=tb.rows[i].children[0].children[0].children[0];
 			var amountdiv_1=tb.rows[i].children[1].children[0];
-			var amountdiv_2=tb.rows[i].children[2].children[0];
+			if(tb.rows[i].children[2]!=null){
+				var amountdiv_2=tb.rows[i].children[2].children[0];
+				YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
+				YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');	
+			}
+			
 			if (amountdiv_1.nodeName!='FONT'){
 				YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
 				YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
@@ -101,9 +135,6 @@ function toggleRows(caller,hideId){
 				YAHOO.util.Dom.removeClass(first, 'desktop_project_count');
 				YAHOO.util.Dom.addClass(first, 'desktop_project_name_sel');
 			}
-			
-			YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
-			YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');
 		}
 		}
 

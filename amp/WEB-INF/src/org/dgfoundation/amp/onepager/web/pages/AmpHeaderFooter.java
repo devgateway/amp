@@ -53,6 +53,8 @@ public class AmpHeaderFooter extends WebPage {
 		add(JavascriptPackageResource.getHeaderContribution(
 				AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
 		String changeTrnMode = "Enable TrnMode";
+		/*
+		 * 
 		add(new AjaxLink("changeTrnMode", new Model(changeTrnMode)) {
 
 			@Override
@@ -77,6 +79,7 @@ public class AmpHeaderFooter extends WebPage {
 				setResponsePage(OnePager.class);
 			}
 		});
+		 */
 	}
 	
 	public HttpServletRequest getServletRequest(){

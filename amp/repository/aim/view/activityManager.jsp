@@ -257,7 +257,7 @@
 													<tbody class="yui-dt-data">
 															<logic:iterate name="aimActivityForm"
 																property="activityList" id="activities"
-																type="org.digijava.module.aim.dbentity.AmpActivity">
+																type="org.digijava.module.aim.dbentity.AmpActivityVersion">
 																<tr bgcolor="#ffffff">
 																	<logic:notEmpty name="activities" property="team">
 																		<td width="9" height="15" class="inside"><img

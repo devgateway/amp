@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
@@ -37,9 +38,9 @@ public class ActivityProposedApprovalDateJob implements StatefulJob {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String exDt=sdf.format(dateAfterDays);
-        List<AmpActivity> actList=ActivityUtil.getAllActivitiesList();
+        List<AmpActivityVersion> actList=ActivityUtil.getAllActivitiesList();
         if(actList!=null){
-            for (AmpActivity act : actList) {
+            for (AmpActivityVersion act : actList) {
                 if (act.getProposedApprovalDate() != null) {
                     String dt = sdf.format(act.getProposedApprovalDate());
                     if (dt.equals(exDt)) {

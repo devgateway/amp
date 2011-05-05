@@ -12,9 +12,9 @@ public class ActivityForm extends ActionForm implements Serializable {
 
 	public final String SortByColumn_ActivityName = "activityName";
 
-	private List<AmpActivity> activityList;
+	private List<AmpActivityVersion> activityList;
 	
-	private List<AmpActivity> allActivityList;
+	private List<AmpActivityVersion> allActivityList;
 
 	private String sortByColumn;
 
@@ -37,7 +37,7 @@ public class ActivityForm extends ActionForm implements Serializable {
 	/**
 	 * @return Returns the activityList.
 	 */
-	public List<AmpActivity> getActivityList() {
+	public List<AmpActivityVersion> getActivityList() {
 		return activityList;
 	}
 
@@ -45,7 +45,7 @@ public class ActivityForm extends ActionForm implements Serializable {
 	 * @param activityList
 	 *            The activityList to set.
 	 */
-	public void setActivityList(List<AmpActivity> activityList) {
+	public void setActivityList(List<AmpActivityVersion> activityList) {
 		this.activityList = activityList;
 	}
 
@@ -83,11 +83,11 @@ public class ActivityForm extends ActionForm implements Serializable {
 		return page;
 	}
 
-	public void setAllActivityList(List<AmpActivity> allActivityList) {
+	public void setAllActivityList(List<AmpActivityVersion> allActivityList) {
 		this.allActivityList = allActivityList;
 	}
 
-	public List<AmpActivity> getAllActivityList() {
+	public List<AmpActivityVersion> getAllActivityList() {
 		return allActivityList;
 	}
 

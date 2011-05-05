@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -36,10 +37,10 @@ public class SimpleExportAction extends Action {
 		//
 		StringBuffer buffer = new StringBuffer();
 		//
-		List<AmpActivity> list = ActivityUtil.getAllActivitiesByName("");
-		AmpActivity activity = null;
+		List<AmpActivityVersion> list = ActivityUtil.getAllActivitiesByName("");
+		AmpActivityVersion activity = null;
 		//		
-		for (Iterator<AmpActivity> it = list.iterator(); it.hasNext();) {
+		for (Iterator<AmpActivityVersion> it = list.iterator(); it.hasNext();) {
 			activity = it.next();
 			//
 			List<AmpFunding> fundings = DbUtil.getAmpFunding(activity.getAmpActivityId());

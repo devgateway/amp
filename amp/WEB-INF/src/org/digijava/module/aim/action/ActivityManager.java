@@ -82,11 +82,11 @@ public class ActivityManager extends Action {
 	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> allActivities = actForm.getAllActivityList();
-		List<AmpActivity> pageList = actForm.getActivityList();
+		List<AmpActivityVersion> allActivities = actForm.getAllActivityList();
+		List<AmpActivityVersion> pageList = actForm.getActivityList();
 		int pageSize = actForm.getTempNumResults();
 		if (pageList == null) {
-			pageList = new ArrayList<AmpActivity>();
+			pageList = new ArrayList<AmpActivityVersion>();
 			actForm.setActivityList(pageList);
 		}
 
@@ -107,14 +107,14 @@ public class ActivityManager extends Action {
 
 		Double totalPages = 0.0;
 		if(pageSize != -1){
-			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
+			for (Iterator<AmpActivityVersion> iterator = allActivities.listIterator(idx);
 					iterator.hasNext() && i < pageSize; i++) {
 				pageList.add(iterator.next());
 			}
         	totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
 		}
 		else{
-			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
+			for (Iterator<AmpActivityVersion> iterator = allActivities.listIterator(idx);
 				iterator.hasNext(); i++) {
 				pageList.add(iterator.next());
 	       }
@@ -125,13 +125,13 @@ public class ActivityManager extends Action {
 	}
 
 	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
+		List<AmpActivityVersion> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
 		actForm.setAllActivityList(activities);
 		sortActivities(actForm,request);
 	}
 
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> activities = actForm.getAllActivityList();
+		List<AmpActivityVersion> activities = actForm.getAllActivityList();
 
 		int sortBy = 0;
 		if("activityName".equals(actForm.getSortByColumn())){

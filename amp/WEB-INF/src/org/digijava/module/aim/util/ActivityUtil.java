@@ -3453,14 +3453,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * get the list of all the activities
    * to display in the activity manager of Admin
    */
-  public static List<AmpActivity> getAllActivitiesList() {
+  public static List<AmpActivityVersion> getAllActivitiesList() {
     List col = null;
     Session session = null;
     Query qry = null;
 
     try {
       session = PersistenceManager.getRequestDBSession();
-      String queryString = "select ampAct from " + AmpActivity.class.getName() +
+      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
           " ampAct";
       qry = session.createQuery(queryString);
       col = qry.list();
@@ -3477,14 +3477,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * get the list of all the activities
    * to display in the activity manager of Admin
    */
-  public static List<AmpActivity> getAllActivitiesByName(String name) {
+  public static List<AmpActivityVersion> getAllActivitiesByName(String name) {
     List col = null;
     Session session = null;
     Query qry = null;
 
     try {
       session = PersistenceManager.getSession();
-      String queryString = "select ampAct from " + AmpActivity.class.getName() +
+      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
           " ampAct where upper(ampAct.name) like upper(:name)";
       qry = session.createQuery(queryString);
       qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
@@ -3506,6 +3506,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
     }
     return col;
+  }
+  
+  public static List <AmpActivityGroup> getActivityGroups(Session session , Long actId){
+	  List <AmpActivityGroup> retVal=null;
+	  //Session session = null;
+	  Query qry = null;
+	  try {
+		  //session = PersistenceManager.getRequestDBSession();	      
+	      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
+	      qry = session.createQuery(queryString);
+	      retVal = qry.list();
+	} catch (Exception e) {
+		logger.error("Could not retrieve groups list");
+	    e.printStackTrace(System.out);
+	}
+	  return retVal;
   }
 
   /* functions to DELETE an activity by Admin start here.... */
@@ -3530,9 +3546,34 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			qry.executeUpdate();
 
 			// Delete group info.
+			AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
 			qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
 			qry.executeUpdate();
 			ampAct.setAmpActivityGroup(null);
+			
+			
+			session.update(ampAct);
+	    	auxGroup.getActivities().remove(ampAct);
+	    	session.update(auxGroup);
+	    	session.update(ampAct);
+	    	
+	    	// Delete group info.
+	      	List<AmpActivityGroup> groups=getActivityGroups(session , ampAct.getAmpActivityId());
+	      	if(groups!=null && groups.size()>0){
+	      		for (AmpActivityGroup ampActivityGroup : groups) {
+	      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
+	      			if(activityversions!=null && activityversions.size()>0){
+	      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
+	      					AmpActivityVersion ampActivityVersion=iterator.next();
+	      					ampActivityVersion.setAmpActivityGroup(null);
+	      					session.update(ampActivityVersion);
+						}
+	      			}
+	  				session.delete(ampActivityGroup);
+	  			}
+	      	}
+			
+			
 			// TODO: relink ampActivityPreviousVersion if needed (when
 			// deleting drafts to older non-draft versions).
           

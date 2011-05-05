@@ -1669,7 +1669,7 @@ public class TeamMemberUtil {
                     AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
                     
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
-                    removeLinksFromATMToActivity(session,relatedActivities, ampMember, teamHead);
+                    removeLinksFromATMToActivity(session,relatedActivities, ampMember, teamHead);                    
                    
                     String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
                     qry = session.createQuery(queryString);
@@ -1777,6 +1777,8 @@ public class TeamMemberUtil {
             			EntityHelper.DeleteReport(report);
 					}
                     session.delete(ampMember);
+                    
+                   
                 }
             }
             tx.commit();
@@ -1896,7 +1898,7 @@ public class TeamMemberUtil {
     	}
     	Iterator iter 	= activities.iterator();
     	while ( iter.hasNext() ) {
-    		AmpActivity act	= (AmpActivity) iter.next();
+    		AmpActivityVersion act	= (AmpActivityVersion) iter.next();
     		if ( act.getModifiedBy() != null && act.getModifiedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setModifiedBy(null);
     		}

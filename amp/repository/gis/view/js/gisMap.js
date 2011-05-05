@@ -955,7 +955,7 @@
 			markup.push ("<tr><td>");
 			markup.push ("<div style='width:500px;' class='sec_scheme_selector_outer_frame'>");
 			
-			markup.push ("<div id='sec_scheme_id_");
+			markup.push ("<div style='font-size:12px;' id='sec_scheme_id_");
 			markup.push (curSecScheme.attributes.getNamedItem("id").value);
 			markup.push ("' ");
 			
@@ -988,9 +988,9 @@
 			
 				if (curSecScheme.hasChildNodes()) {
 					if (isPrimary) {
-						markup.push ("<div class='child_sector_container' style='border:1px solid black; display:block; height:200px; width:500px; overflow:auto;'>");
+						markup.push ("<div class='child_sector_container' style='border:1px solid black; display:block; height:200px; width:500px; overflow:auto; font-size:12px;'>");
 					} else {
-						markup.push ("<div class='child_sector_container' style='border:1px solid black; background-color:white; display:none; height:200px; width:500px; overflow:auto;'>");
+						markup.push ("<div class='child_sector_container' style='border:1px solid black; background-color:white; display:none; height:200px; width:500px; overflow:auto; font-size:12px;'>");
 					}
 					buildSectorsRecursively (curSecScheme.childNodes, markup, true);
 					markup.push ("</div>");
@@ -1009,7 +1009,7 @@
 			markup.push ("<tr><td>");
 			markup.push ("<div style='width:500px;' class='sec_scheme_selector_outer_frame'>");
 			
-			markup.push ("<div id='prj_id_");
+			markup.push ("<div style='font-size:12px;' id='prj_id_");
 			markup.push (topLevelPrg.attributes.getNamedItem("id").value);
 			markup.push ("' class='sec_scheme_selector sec_scheme_selector_default'>");
 			markup.push ("(");
@@ -1073,7 +1073,7 @@
 				markup.push ("&nbsp;");
 				markup.push ("</td><td nowrap>");
 			}
-			markup.push ("<div id='sec_id_");
+			markup.push ("<div style='font-size:12px;' id='sec_id_");
 			markup.push (curSector.attributes.getNamedItem("id").value);
 			
 			

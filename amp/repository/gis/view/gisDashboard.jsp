@@ -214,10 +214,10 @@
 	<div id="filter_dialog" class="sec_map_filter_outer_frame" style="position:absolute;z-index:101;">
 		<div class="sec_map_filter_container">
 			<table bgcolor="white" border="0" cellspacing="5" cellpadding="5" style="border-collapse:collapse;">
-				<tr><td colspan="3" class="sec_map_filter_title"><digi:trn>Map filters</digi:trn></td></tr>
+				<tr><td colspan="3" class="sec_map_filter_title" style="font-size:12px;"><digi:trn>Map filters</digi:trn></td></tr>
 				<field:display name="Source of Data" feature="GIS DASHBOARD">
 				<tr>
-					<td>
+					<td style="font-size:12px;">
 						<digi:trn>Source of Data</digi:trn>
 					</td>
 					<td align="right">
@@ -234,7 +234,7 @@
 				
 				
 				<tr id="fundingTypeRow">
-					<td>
+					<td style="font-size:12px;">
 						<digi:trn>Funding type</digi:trn>
 					</td>
 					<td align="right">
@@ -256,7 +256,7 @@
 				</tr>
 				
 				<tr>
-	        <td>
+	        <td style="font-size:12px;">
 	             <digi:trn>Select Donor</digi:trn>:
 	        </td>
 					<td align="right">
@@ -275,7 +275,7 @@
 				
 				<field:display name="Show fundings only from curent WS" feature="GIS DASHBOARD">
 				<tr>
-					<td>
+					<td style="font-size:12px;">
 						<digi:trn>Show data only for workspace selected</digi:trn>
 					</td>
 					<td align="right">
@@ -297,7 +297,7 @@
 						
 						
 				<tr>
-					<td colspan="2">
+					<td colspan="2" style="font-size:12px;">
 						<digi:trn>Select Sector</digi:trn>
 					</td>
 					<td width="10">
@@ -313,9 +313,9 @@
 				</tr>
 				
 				<tr><td align='right' colspan="3">
-				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()'>
+				<input type='button' value='<digi:trn>Apply</digi:trn>' onClick='applySectorFilter()' class="buttonx">
 					&nbsp;
-				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()'>
+				<input type='button' value='<digi:trn>Cancel</digi:trn>' onClick='closeSectorFilter()' class="buttonx">
 				</td></tr>
 				
 				
@@ -650,11 +650,11 @@
     
     <tr>
        <td nowrap width="200" style="font-size:12px">
-            <digi:trn>Selected Donor</digi:trn>:
+            <b><digi:trn>Selected Donor</digi:trn>:</b>
         </td>    
-        <td id="donorSelected">&nbsp;
+        <td id="donorSelected" style="font-size:12px;">&nbsp;
         	<%--
-        <select id="donorsCombo" onchange="" style="width:250px">    
+        <select id="donorsCombo" onchange="" style="width:250px; font-size:12px;">    
             <option value=-1><digi:trn>All donors</digi:trn></option>
         </select>
         --%>
@@ -662,7 +662,7 @@
     </tr>
     
     <tr>
-    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()"></td>
+    	<td><input type="button" value="<digi:trn>Show filters</digi:trn>" onClick = "showFinFilters()" class="buttonx"></td>
     </tr>
     
     <c:set var="translation">

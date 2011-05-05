@@ -795,11 +795,13 @@ span.extContactDropdownEmail {
 	<div class="create_message">
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 		  <tr>
-  		  <td valign="top"><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
+  		  <td valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Receivers</digi:trn></b>
   		  	<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,tmHelp],Style[15])" onmouseout="htm()"/>
   		  </td>
-    		<td style="font-size:11px;">
 
+  </tr>
+  <tr>
+  <td colspan=2>
 					<div class="msg_receivers">
 						
 						
@@ -817,7 +819,7 @@ span.extContactDropdownEmail {
 											</div>
 											<div class="msg_grp_mem_name">
 												<c:forEach var="tm" items="${team.members}">
-													<input type="checkbox" name="receiversIds" id="t:${team.id} type="checkbox" value="m:${tm.memberId}"/>${tm.memberName}<br/>
+													<input name="receiversIds" id="t:${team.id}" type="checkbox" value="m:${tm.memberId}" />${tm.memberName}<br/>
 												</c:forEach>
 											</div>
 										</div>
@@ -840,79 +842,73 @@ span.extContactDropdownEmail {
 			
 				<div id="guest_user_container">
 				</div>
-	</td>
+</td>
   </tr>
 <tr>
 <td colspan=2><hr class="hr_3"></td>
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width="20"0 valign="top"><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b>
-	    	<br/>
-	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
-	    	<div class="charcounter-progress-container">
+	    <td width="20" valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">* <span style="font-size:11px;" id="titleCharCounter"></span>	
+	    	<div class="charcounter-progress-container" >
 	    		<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 	    	</div>
 	    </td>
-	    <td valign="top"><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/>
+	  </tr>
+	  <tr>
+	  <td colspan=2><html:text property="messageName" style="width:100%;" styleClass="inputx" styleId="titleMax"/></td>
 	  </tr>
 	</field:display>
   <tr>
-    <td valign="top"><b style="font-size:12px;"><digi:trn>Description</digi:trn></b>
-    	<br/>
-	    <span style="font-size:11px;" id="descCharCounter"></span>
+    <td valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Description</digi:trn></b> <span style="font-size:11px;" id="descCharCounter"></span>
 	    <div class="charcounter-progress-container">
 	    	<div id="descProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 	    </div>
     </td>
-    <td valign="top">
-    	<html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/>
+  </tr>
+  <tr>
+  <td colspan=2><html:textarea name="messageForm" property="description"  rows="5"  styleClass="inputx" style="width:100%; height:85px;" styleId="descMax"/></td>
+  </tr>
+  <tr>
+    <td valign="top" colspan=2>
+    	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b> &nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,relatedActivityHelpText],Style[15])" onmouseout="htm()"/>
     </td>
   </tr>
   <tr>
-    <td valign="top">
-    	<b style="font-size:12px;"><digi:trn>Related Activity</digi:trn></b>
-    	&nbsp;<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" onmouseover="stm([messageHelp,relatedActivityHelpText],Style[15])" onmouseout="htm()"/>
-  		
-      
-      
-    </td>
-    <td>
-      <div>
+  <td colspan=2><div>
         <div style="width:100%;" class="">
             <html:text property="selectedAct" name="messageForm" style="width:100%;"  styleId="statesinput"></html:text>
             <div id="statesautocomplete"></div>
         </div>
         <br>
-      </div>
-        
-    </td>
+      </div></td>
   </tr>
   <tr>
-    <td><b style="font-size:12px;"><digi:trn>Priority Level</digi:trn></b></td>
-    <td>
-    	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
+    <td colspan="2"><b style="font-size:12px;"><digi:trn>Priority Level</digi:trn></b></td>
+  </tr>
+  <tr>
+  <td colspan=2>    	<html:select property="priorityLevel" styleClass="dropdwn_sm" style="width:140px">
     		<html:option value="0"><digi:trn>none</digi:trn> </html:option>
         <html:option value="1"><digi:trn>low</digi:trn> </html:option>
         <html:option value="2"><digi:trn>Medium</digi:trn> </html:option>
         <html:option value="3"><digi:trn>Critical</digi:trn> </html:option>
-      </html:select>
-		</td>
+      </html:select></td>
   </tr>
   <tr>
-    <td><b style="font-size:12px;"><digi:trn>Set as alert</digi:trn></b></td>
-    <td>
-    	<html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">																							
+    <td colspan="2"><b style="font-size:12px;"><digi:trn>Set as alert</digi:trn></b></td>
+  </tr>
+  <tr>
+  <td colspan=2><html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">																							
 				<html:option value="0"><digi:trn>No</digi:trn> </html:option>
 				<html:option value="1"><digi:trn>Yes</digi:trn> </html:option>																																														
 	  	</html:select>
-    </td>
+</td>
   </tr>
-  
   <tr>
   	<td valign="top"><b style="font-size:12px;"><digi:trn>Attachment</digi:trn></b></td>
-		<td>
-			<table width="100%" border="0">
+	</tr>
+  <tr>
+  <td colspan=2><table width="100%" border="0">
 			<c:if test="${not empty messageForm.sdmDocument}">
 				<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
 					<tr>
@@ -943,12 +939,8 @@ span.extContactDropdownEmail {
 					<input type="submit" value="<digi:trn>Upload</digi:trn>" class="buttonx" align="right" onclick="return validateFile()"/>
 				</td>
 			</tr>
-		</table>
-		
-		
-		</td>
-	</tr>
-  
+		</table></td>
+  </tr>
   
   <tr>
     <td colspan="2" align="center">

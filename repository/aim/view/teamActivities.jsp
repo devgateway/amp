@@ -261,7 +261,7 @@ function setHoveredTable(tableId, hasHeaders) {
 															bgcolor="#f4f4f2">
 																<tr><td bgcolor="#f4f4f2" align="center">
 																	<digi:trn key="aim:noNonDraftActivitiesPresent">
-																		No non-draft activities present
+																		No activities present. You cannot reassign draft activities.
 																	</digi:trn>
 																</td></tr>
 															</table>

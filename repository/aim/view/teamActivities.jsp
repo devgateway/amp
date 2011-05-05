@@ -260,8 +260,8 @@ function setHoveredTable(tableId, hasHeaders) {
 															<table width="100%" cellSpacing=0 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#f4f4f2">
 																<tr><td bgcolor="#f4f4f2" align="center">
-																	<digi:trn key="aim:noActivitiesPresent">
-																		No activities present
+																	<digi:trn key="aim:noNonDraftActivitiesPresent">
+																		No non-draft activities present
 																	</digi:trn>
 																</td></tr>
 															</table>

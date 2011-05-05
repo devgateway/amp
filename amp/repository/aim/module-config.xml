@@ -145,7 +145,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpImputation</hibernate-class>
 		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityFields</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityVersion</hibernate-class>
 		
 		<!-- Pledges classes -->
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledges</hibernate-class>

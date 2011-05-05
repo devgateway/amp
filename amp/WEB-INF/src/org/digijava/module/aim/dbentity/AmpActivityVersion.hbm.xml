@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpActivityFields" abstract="true">
-		<cache usage="read-write" />
-		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
-			</generator>
-		</id>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" [
+	<!ENTITY activityFields
+	'
 		<property name="ampId" column="amp_id" type="java.lang.String" />
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="govAgreementNumber" column="gov_agreement_number" type="java.lang.String" />
@@ -317,20 +311,36 @@
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 		</set>
+	' 
+	>
+]>
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version">
+		<cache usage="read-write" />
+		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			</generator>
+		</id>
+		
+		&activityFields;
+	</class>
+	
+	<class name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" polymorphism="explicit">
+		<cache usage="read-write" />
+		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			</generator>
+		</id>
+		<!-- 
+		<subselect>
+			select * from amp_activity
+		</subselect>
+		<synchronize table="amp_activity"/>
+		<id column="amp_activity_id" />
+		 -->		
 
-		<!-- Subclass declaration of AmpActivityVersion -->
-		<union-subclass name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version" >
-			
-		</union-subclass>
-
-		<!-- Subclass declaration of AmpActivity 
-		-->
-		<union-subclass name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" check="false">
-			<subselect>
-				select  amp_activity.*  
-				from amp_activity
-			</subselect>
-			<synchronize table="amp_activity" />
-		</union-subclass>
+		&activityFields;		
 	</class>
 </hibernate-mapping>

@@ -16,9 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -1264,7 +1262,7 @@ public class TeamMemberUtil {
 			col1 = new ArrayList();
 			Iterator itr = col.iterator();
 			while (itr.hasNext()) {
-				AmpActivity activity = (AmpActivity) itr.next();
+				AmpActivityVersion activity = (AmpActivityVersion) itr.next();
 				Iterator orgItr = activity.getOrgrole().iterator();
 				String donors = "";
 

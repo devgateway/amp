@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,6 +71,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 
 public class AmpARFilter extends PropertyListable {
+	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
 	private boolean justSearch=false;
@@ -751,6 +754,33 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";
 
+		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+
+		if(dateFilterHidesProjects && fromDate.length()>0) {
+			String FROM_DATE_FILTER=null;
+			try {
+				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
+					+ sdfOut.format(sdfIn.parse(fromDate)) + "'";
+
+			} catch (ParseException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
+			
+			queryAppend(FROM_DATE_FILTER);
+		}
+		if(dateFilterHidesProjects && toDate.length()>0) {
+			String TO_DATE_FILTER=null;
+			try {
+				TO_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date<='"
+					+  sdfOut.format(sdfIn.parse(toDate)) + "'";
+			} catch (ParseException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}		
+			queryAppend(TO_DATE_FILTER);
+		}
+		
 		/*
 		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
 		 * Logic.getInstance().getAmpARFilterHelper(); String

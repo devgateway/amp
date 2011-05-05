@@ -69,4 +69,6 @@ public class GlobalSettingsConstants {
     
     public static final String PROJECT_TITLE_HIRARCHY = "Project Title Hierarchy";
     
+    public static final String DATE_FILTER_HIDES_PROJECTS = "Filter by date hides projects";
+    
 }

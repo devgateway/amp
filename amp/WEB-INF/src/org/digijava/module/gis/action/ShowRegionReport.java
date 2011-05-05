@@ -192,7 +192,7 @@ public class ShowRegionReport extends Action {
             Iterator<Object[]> actIt = activityList.iterator();
             while (actIt.hasNext()) {
                 Object[] actData = actIt.next();
-                AmpActivity activity = (AmpActivity) actData[0];
+                AmpActivityVersion activity = (AmpActivityVersion) actData[0];
 
                 Set topLevelSectorNames = new HashSet();
                 Iterator secIt = activity.getSectors().iterator();

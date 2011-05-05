@@ -41,18 +41,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -430,17 +419,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			}
 
-                Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
+            Long tmpId = sectorQueryType == org.digijava.module.gis.util.DbUtil.SELECT_PROGRAM ? prgId : secId;
 
-			if (mapCode != null && mapCode.trim().length() > 0) {
+            if (mapCode != null && mapCode.trim().length() > 0) {
 
-                if (mapCode != null && mapCode.trim().length() > 0) {
-
-                    outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
-                } else {
-                    outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+                outMapByteArray = getMapImageFinancial (mapCode, tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
+            } else {
+                outMapByteArray = getMapImageFinancial ("TZA", tmpId, sectorQueryType, Long.parseLong(request.getParameter("donorId")), request.getParameter("fundingType"), fStartDate.getTime(), fEndDate.getTime(), mapLevel);
                 }
-        }
 
 
 		// Get the Map Image
@@ -2067,7 +2053,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		Iterator<Object[]> actIt = activityList.iterator();
 		while (actIt.hasNext()) {
 			Object[] actData = actIt.next();
-			AmpActivity activity = (AmpActivity) actData[0];
+			AmpActivityVersion activity = (AmpActivityVersion) actData[0];
 			Float percentsForSectorSelected = (Float) actData[1];
 			FundingData totalFunding = getActivityTotalFundingInBaseCurrency(activity);
 
@@ -2231,7 +2217,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return retVal;
 	}
 
-	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity) {
+	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity) {
 		FundingData retVal = null;
 		Set fundSet = activity.getFunding();
 		Iterator<AmpFunding> fundIt = fundSet.iterator();

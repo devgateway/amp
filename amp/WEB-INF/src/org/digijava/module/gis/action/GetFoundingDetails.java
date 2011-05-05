@@ -1161,7 +1161,7 @@ public class GetFoundingDetails extends Action {
             Iterator<Object[]> actIt = activityList.iterator();
             while (actIt.hasNext()) {
                 Object[] actData = actIt.next();
-                AmpActivity activity = (AmpActivity) actData[0];
+                AmpActivityVersion activity = (AmpActivityVersion) actData[0];
                 Float percentsForSectorSelected = (Float) actData[1];
                 
                 if (percentsForSectorSelected != null) {
@@ -1376,12 +1376,12 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity,
             Date start, Date end) {
     	return getActivityTotalFundingInBaseCurrency(activity, start, end, null);
     }
     
-    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivity activity,
+    public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity,
             Date start, Date end, Long donorId) {
         FundingData retVal = null;
         Set fundSet = activity.getFunding();

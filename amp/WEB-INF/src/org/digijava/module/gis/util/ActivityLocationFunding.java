@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ActivityLocationFunding {
 
@@ -14,7 +15,7 @@ public class ActivityLocationFunding {
     public ActivityLocationFunding(BigDecimal commitment,
                                    BigDecimal disbursement,
                                    BigDecimal expenditure,
-                                   AmpActivity activity)
+                                   AmpActivityVersion activity)
     {
         this.commitment = commitment;
         this.disbursement = disbursement;
@@ -30,12 +31,12 @@ public class ActivityLocationFunding {
     private BigDecimal commitment;
     private BigDecimal disbursement;
     private BigDecimal expenditure;
-    private AmpActivity activity;
+    private AmpActivityVersion activity;
 
     private Set donorOrgs;
     private Set topSectors;
 
-    public AmpActivity getActivity() {
+    public AmpActivityVersion getActivity() {
         return activity;
     }
 

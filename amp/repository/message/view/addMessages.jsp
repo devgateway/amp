@@ -801,7 +801,7 @@ span.extContactDropdownEmail {
 
   </tr>
   <tr>
-  <td colspan=2>
+  <td colspan=2 style="font-size:12px;">
 					<div class="msg_receivers">
 						
 						
@@ -836,10 +836,8 @@ span.extContactDropdownEmail {
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
 				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
-				<br><br>
-				
+				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
-			
 				<div id="guest_user_container">
 				</div>
 </td>
@@ -849,7 +847,7 @@ span.extContactDropdownEmail {
 </tr>
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
-	    <td width="20" valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">* <span style="font-size:11px;" id="titleCharCounter"></span>	
+	    <td width="20" valign="top" colspan=2><b style="font-size:12px;"><digi:trn>Title</digi:trn></b> <b class="mand">*</b> <span style="font-size:11px;" id="titleCharCounter"></span>	
 	    	<div class="charcounter-progress-container" >
 	    		<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 	    	</div>
@@ -880,7 +878,6 @@ span.extContactDropdownEmail {
             <html:text property="selectedAct" name="messageForm" style="width:100%;"  styleId="statesinput"></html:text>
             <div id="statesautocomplete"></div>
         </div>
-        <br>
       </div></td>
   </tr>
   <tr>
@@ -908,7 +905,7 @@ span.extContactDropdownEmail {
   	<td valign="top"><b style="font-size:12px;"><digi:trn>Attachment</digi:trn></b></td>
 	</tr>
   <tr>
-  <td colspan=2><table width="100%" border="0">
+  <td colspan=2><table border="0">
 			<c:if test="${not empty messageForm.sdmDocument}">
 				<c:forEach var="attachedDoc" items="${messageForm.sdmDocument.items}">
 					<tr>

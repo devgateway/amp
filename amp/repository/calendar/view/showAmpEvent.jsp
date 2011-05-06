@@ -651,9 +651,7 @@ function submitForm(thisform){
 			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                                
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
-			                    		<td align="left" style="width: 220px;vertical-align: top;">
-			                    			<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
-			                    		</td>
+			                    		<td align="left" style="width:220px;vertical-align: top;">&nbsp;</td>
 			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
 			                    			<td  style="text-align: center;" valign="top">
@@ -662,17 +660,27 @@ function submitForm(thisform){
 											
 																				
 				                    		<td width="2px">&nbsp;</td>
-				                    		<td align="left" valign="top">
-				                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
+				                    		<td align="left" valign="top">&nbsp;
+				                    		
+				                    		</td>				                    		
+				                    		<td valign="top">&nbsp;
+				                    				
+				                    		</td>
+			                    		</feature:display>			                    		
+			                    	</tr>
+									<tr>
+									<td><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/></td>
+									<td>aaaa</td>
+									<td>aaaa</td>
+									<td>aaaa</td>
+									<td>	 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
 														</logic:iterate>
 													</logic:notEmpty>
-				                                 </html:select>
-				                    		</td>				                    		
-				                    		<td valign="top">
-				                    			<table cellSpacing="1" cellPadding="1">
+				                                 </html:select></td>
+									<td><table cellSpacing="1" cellPadding="1">
 				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
 															<td>
@@ -690,31 +698,39 @@ function submitForm(thisform){
 															</td> 
 														</tr>
 													</field:display>													
-												</table>	
-				                    		</td>
-			                    		</feature:display>			                    		
-			                    	</tr>
+												</table></td>
+									<td>aaaa</td>
+									<td>aaaa</td>
+									</tr>
 			                    	<tr>
-			                    		<td nowrap="nowrap" style="text-align: right;">
+			                    		<td nowrap="nowrap">
 			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
-			                    		<td align="left">
-			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                    		<td align="left">&nbsp;</td>	
+										<td>&nbsp;</td>	
+										<td>&nbsp;</td>
+										<td>&nbsp;</td> 
+										<td>&nbsp;</td>  
+										<td>aaa</td>                 		
+			                    	</tr>
+									<tr>
+									<td><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
 				                                        	<html:option value="${type.value}">${type.label}</html:option>
 		                                           </c:forEach>
 			                                     </c:if>
-			                                 </html:select>
-			                    		</td>	
-										<td>&nbsp;</td>	
-										<td>&nbsp;</td>
-										<td>&nbsp;</td> 
-										<td>&nbsp;</td>  
-										<td>&nbsp;</td>                 		
-			                    	</tr>
+			                                 </html:select></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									</tr>
 			                    	
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
@@ -722,14 +738,8 @@ function submitForm(thisform){
 				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>
 				                    		</td>
 				                    		<td width="2px">&nbsp;</td>
-				                    		<td align="left" valign="top" rowspan="1">
-				                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
-				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
-				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
-				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;"><digi:trn>${evType.name}</digi:trn></html:option>
-				                                        </c:forEach>
-				                                 	</c:if>
-				                                 </html:select>
+				                    		<td align="left" valign="top" rowspan="1">&nbsp;
+				                    			
 				                    		</td>
 			                    		</feature:display>
 			                    		<td width="30px"><div style="width:30px;">&nbsp;</div> </td>			                    		
@@ -737,18 +747,43 @@ function submitForm(thisform){
 			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
-			                    		<td style="width: 220px" align="left">
-			                    			<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
+			                    		<td style="width: 220px" align="left">&nbsp;
+			                    			
 			                    		</td>
 			                    		<td>&nbsp;</td>			                    		
-			                    	</tr>			                    	
+			                    	</tr>	
+									<tr>
+									<td bgcolor=#990000> <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
+				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
+				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
+				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;"><digi:trn>${evType.name}</digi:trn></html:option>
+				                                        </c:forEach>
+				                                 	</c:if>
+				                                 </html:select></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									</tr>		                    	
 			                    	<tr style="height: 25px;">
 			                    		<td nowrap="nowrap" style="vertical-align: top;" >
 			                    			<digi:trn key="calendar:StDate"><b>Start date</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px" valign="top">&nbsp;</td>
-			                    		<td align="left" style="width: 220px;vertical-align: top;">
-			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                    		<td align="left" style="width: 220px;vertical-align: top;">&nbsp;
+			                    			
+			                    		</td>			                    		
+			                    		<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+			                    	</tr>	
+									<tr>
+									<td><c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
 			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
 			                                            <table cellpadding="0" cellspacing="0">
@@ -873,21 +908,31 @@ function submitForm(thisform){
 			                                                </td>
 			                                              </tr>
 			                                            </table>
-			                                          </c:if>
+			                                          </c:if></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									</tr>		                    	
+			                    	<tr height="25px;">
+			                    		<td  nowrap="nowrap">
+			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>
+			                    		</td>
+			                    		<td width="2px" valign="top">&nbsp;</td>
+			                    		<td>&nbsp;
+			                    			
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-			                    	</tr>			                    	
-			                    	<tr height="25px;">
-			                    		<td  nowrap="nowrap">
-			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>
-			                    		</td>
-			                    		<td width="2px" valign="top">&nbsp;</td>
-			                    		<td>
-			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                    	</tr>
+			                    	<tr>
+									<td><c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
@@ -1011,26 +1056,26 @@ function submitForm(thisform){
 			                                                </td>
 			                                              </tr>
 			                                            </table>
-			                                          </c:if>
-			                    		</td>			                    		
-			                    		<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-			                    	</tr>
-			                    	
+			                                          </c:if></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									</tr>
 			                    	<tr height="25px;">
-			                    		<td>&nbsp;</td>
-										<td>&nbsp;</td>
-			                    		<td style="vertical-align: top">
-			                    			<html:hidden name="calendarEventForm" property="privateEvent"/>
+			                    		<td><html:hidden name="calendarEventForm" property="privateEvent"/>
 			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" /> 
 				                                          <c:if test="${!calendarEventForm.privateEvent }">
 				                                          	CHECKED
 				                                          </c:if>                                          
 			                                          />
-			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
+			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn></td>
+										<td>&nbsp;</td>
+			                    		<td style="vertical-align: top">&nbsp;
+			                    			
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>	
 										<td>&nbsp;</td>

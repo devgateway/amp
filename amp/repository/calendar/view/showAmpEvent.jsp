@@ -644,7 +644,7 @@ function submitForm(thisform){
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table border="2" align="center" cellpadding="3" cellspacing="3" class="t_mid">
+			                    <table border="0" align="center" cellpadding="3" cellspacing="3" class="t_mid">
 			                    	<tr>
 			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=48%>
 			                    			<digi:trn key="calendar:evntTitle"><div style="margin-bottom:5px;"><font color="red" size="3px">*</font><b>Event title</b></div></digi:trn><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/><br /><br /><digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b>Calendar type</b></div></digi:trn><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>

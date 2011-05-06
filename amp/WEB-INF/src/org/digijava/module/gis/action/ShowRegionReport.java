@@ -24,6 +24,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -188,6 +189,12 @@ public class ShowRegionReport extends Action {
         Map locationFundingMap = new HashMap();
         FundingData totalFundingForSector = new FundingData();
         Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+        String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if ( baseCurr == null ){
+            baseCurr	= "USD";
+        }
+
         //Calculate total funding
         if (activityList != null) {
             Iterator<Object[]> actIt = activityList.iterator();
@@ -416,12 +423,7 @@ public class ShowRegionReport extends Action {
 
                         for (Object regFndObj : activity.getRegionalFundings()) {
                             AmpRegionalFunding regFnd = (AmpRegionalFunding) regFndObj;
-//                            String regCode = regFnd.getRegionLocation().getName().trim();
-
-
                             Long regCode = regFnd.getRegionLocation().getId();
-
-
                             if (regFnd.getReportingOrganization() != null) {
                                 donorOrg.add(regFnd.getReportingOrganization().getName());
                             }
@@ -432,6 +434,16 @@ public class ShowRegionReport extends Action {
                                     regFnd.getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone"))) && regCode.equals(regLocCode)) {
 
 
+                                List regionalFundingCalculations = new ArrayList();
+                                AmpFundingDetail forCalculations = new AmpFundingDetail();
+                                forCalculations.setAmpCurrencyId(regFnd.getCurrency());
+                                forCalculations.setTransactionAmount(regFnd.getTransactionAmount());
+                                forCalculations.setTransactionDate(regFnd.getTransactionDate());
+                                forCalculations.setTransactionType(regFnd.getTransactionType());
+                                regionalFundingCalculations.add(forCalculations);
+
+                                fch.doCalculations(regionalFundingCalculations, baseCurr);
+
                                 if (locationFundingMap.containsKey(regCode)) {
 
 
@@ -439,13 +451,13 @@ public class ShowRegionReport extends Action {
 
                                     switch (regFnd.getTransactionType()) {
                                         case Constants.COMMITMENT:
-                                            existingVal.setCommitment(existingVal.getCommitment().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            existingVal.setCommitment(existingVal.getCommitment().add(fch.getTotActualComm().getValue()));
                                             break;
                                         case Constants.DISBURSEMENT:
-                                            existingVal.setDisbursement(existingVal.getDisbursement().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            existingVal.setDisbursement(existingVal.getDisbursement().add(fch.getTotActualDisb().getValue()));
                                             break;
                                         case Constants.EXPENDITURE:
-                                            existingVal.setExpenditure(existingVal.getExpenditure().add(new BigDecimal(regFnd.getTransactionAmount())));
+                                            existingVal.setExpenditure(existingVal.getExpenditure().add(fch.getTotActualExp().getValue()));
                                             break;
                                     }
 
@@ -456,13 +468,13 @@ public class ShowRegionReport extends Action {
 
                                         switch (regFnd.getTransactionType()) {
                                         case Constants.COMMITMENT:
-                                            newVal.setCommitment(new BigDecimal(regFnd.getTransactionAmount()));
+                                            newVal.setCommitment(fch.getTotActualComm().getValue());
                                             break;
                                         case Constants.DISBURSEMENT:
-                                            newVal.setDisbursement(new BigDecimal(regFnd.getTransactionAmount()));
+                                            newVal.setDisbursement(fch.getTotActualDisb().getValue());
                                             break;
                                         case Constants.EXPENDITURE:
-                                            newVal.setExpenditure(new BigDecimal(regFnd.getTransactionAmount()));
+                                            newVal.setExpenditure(fch.getTotActualExp().getValue());
                                             break;
                                         }
 
@@ -479,7 +491,6 @@ public class ShowRegionReport extends Action {
                         activityLocationFunding.setActivity(activity);
                         activityLocationFunding.setDonorOrgs(donorOrg);
                         activityLocationFunding.setTopSectors(topLevelSectorNames);
-
 
                         activityLocationFunding.setCommitment(existingVal.getCommitment());
                         activityLocationFunding.setExpenditure(existingVal.getExpenditure());

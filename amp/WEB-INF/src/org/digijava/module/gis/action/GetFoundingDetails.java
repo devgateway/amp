@@ -1611,6 +1611,24 @@ public class GetFoundingDetails extends Action {
                 }
             }
 
+            //Regional fundings
+            if (activity.getRegionalFundings() != null && !activity.getRegionalFundings().isEmpty()) {
+                for (Object regFndObj : activity.getRegionalFundings()) {
+                    AmpRegionalFunding regFnd = (AmpRegionalFunding) regFndObj;
+                    if ((regFnd.getTransactionDate().after(startTs) || regFnd.getTransactionDate().equals(startTs)) &&
+                                (regFnd.getTransactionDate().before(endTs)) || regFnd.getTransactionDate().equals(endTs)) {
+
+                            AmpFundingDetail forCalculations = new AmpFundingDetail();
+                            forCalculations.setAmpCurrencyId(regFnd.getCurrency());
+                            forCalculations.setTransactionAmount(regFnd.getTransactionAmount());
+                            forCalculations.setTransactionDate(regFnd.getTransactionDate());
+                            forCalculations.setTransactionType(regFnd.getTransactionType());
+                            fundDetSet.add(forCalculations);
+                        }
+
+                }
+            }
+
             String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
             if ( baseCurr == null ){
                 baseCurr	= "USD";

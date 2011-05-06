@@ -89,16 +89,16 @@
       <value>/j_acegi_security_check</value>
     </property>
     <property name="authenticationFailureUrl">
-      <value>/showLayout.do?layout=login&amp;loginError=invalidLogin</value>
+      <value>/aim/getLoginStatus.do?loginError=invalidLogin</value>
     </property>
    <property name="exceptionMappings">
      <props>
-       <prop key="org.digijava.module.aim.auth.InvalidUserException">/showLayout.do?layout=login&amp;loginError=invalidUser</prop>
-       <prop key="org.digijava.module.aim.auth.NotTeamMemberException">/showLayout.do?layout=login&amp;loginError=noTeamMember</prop>
+       <prop key="org.digijava.module.aim.auth.InvalidUserException">/aim/getLoginStatus.do?loginError=invalidUser</prop>
+       <prop key="org.digijava.module.aim.auth.NotTeamMemberException">/aim/getLoginStatus.do?loginError=noTeamMember</prop>
      </props>
     </property>
     <property name="defaultTargetUrl">
-      <value>/index.do</value>
+      <value>/aim/getLoginStatus.do?loginError=noError</value>
     </property>
     <property name="alwaysUseDefaultTargetUrl">
       <value>true</value>
@@ -145,7 +145,7 @@
     <property name="accessDeniedHandler">
       <bean class="org.acegisecurity.ui.AccessDeniedHandlerImpl">
         <property name="errorPage">
-           <value>/showLayout.do?layout=login&amp;loginError=noTeamMember</value>
+           <value>/aim/getLoginStatus.do?loginError=noTeamMember</value>
         </property>
       </bean>
 </property>

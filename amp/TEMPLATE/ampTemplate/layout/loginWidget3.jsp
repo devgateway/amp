@@ -30,9 +30,54 @@
 			});			
 			
         });	
+	      
+
+	        var loginFailed = function(data, status) {
+	            $(".error").remove();
+	            $('#result').before('<div class="error">Login failed, please try again.</div>');
+	        };
+
+	        
+	function ajaxLogin() {
+		$
+				.ajax({
+					url : "/j_acegi_security_check",
+					type : "POST",
+					data : $("#loginForm").serialize(),
+					success : function(data) {
+						var error = jQuery.trim(data);
+						$(".error_text_login").remove();
+						switch (error) {
+						case 'invalidLogin':
+							$('#result')
+									.before(
+											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>');
+							break;
+						case 'userBanned':
+							$('#result')
+									.before(
+											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>User is banned</digi:trn>.</div>');
+							break;
+						case 'noTeamMember':
+							$('#result')
+									.before(
+											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>');
+							break;
+						case 'invalidUser':
+							$('#result')
+									.before(
+											'<div class="error_text_login"><img src="/TEMPLATE/ampTemplate/img_2/login_error.gif" style="vertical-align:middle;">&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>');
+							break;
+						case 'noError':
+							location.href = '/index.do';
+							break;
+						}
+					}
+				});
+	}
 </script>
 <div id="show_login_pop_box">
-						<form action="/j_acegi_security_check" method="post" style="margin:0;z-index:9999">
+						<form action="/j_acegi_security_check" id="loginForm" method="post" style="margin:0;z-index:9999">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
 				    				</label>
@@ -44,16 +89,14 @@
     							
 	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
 	    				
-	    							<html:submit  styleClass="buttonx_sm_lgn" property="submitButton">
-  										<digi:trn key="btn:signIn">Login</digi:trn>
-  									</html:submit>
+	    							<input type="button"  class="buttonx_sm_lgn"  onclick="ajaxLogin();" value='<digi:trn>Login in</digi:trn>'>
+  									
 	    			</form>
-		
-	
-    </div>
+			<div id="result">
+				<div class="error_text_login"></div>
+			</div>
+		</div>
 <div id="logincontainer">
-
-	
   					<div class="login_here">
   						<div class="login_here_cont">
   							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;" >
@@ -86,6 +129,7 @@
                    
 					</div>
 					</div>
+					<!--
 	<c:if test="${param['loginError'] != null}">
 		<div class="error_login">
 			<c:if test="${param['loginError'] == 'invalidLogin'}">
@@ -109,6 +153,7 @@
 			</c:if>
 		</div>
 	</c:if>
+	-->
 					
 </logic:notPresent>
 </digi:secure>

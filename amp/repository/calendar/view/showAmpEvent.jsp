@@ -650,14 +650,11 @@ function submitForm(thisform){
 			                    			<font color="red" size="3px">*</font>
 			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                    		</td>
 			                    		<td width="2">&nbsp;</td>
-			                    		<td align="left" width=30>&nbsp;</td>
+			                    		<td width="20" align="left">&nbsp;</td>
 			                    		<td>&nbsp;</td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
-			                    			<td colspan="2" valign="top" width=50%>
-			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>				                    		</td>
-											
-				                    		<td align="left" valign="top">&nbsp;				                    		</td>				                    		
-				                    		<td valign="top">&nbsp;</td>
+			                    			<td colspan="4" valign="top" width=50%>
+			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>				                    						                    		</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
 									<tr>
@@ -665,7 +662,7 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td width="50%">	 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
+									<td>	 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
@@ -689,8 +686,6 @@ function submitForm(thisform){
 														</tr>
 													</field:display>													
 												</table>	</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>
 			                    	<tr>
 			                    		<td nowrap="nowrap">
@@ -700,9 +695,7 @@ function submitForm(thisform){
 										<td>&nbsp;</td>	
 										<td>&nbsp;</td>
 										<td>&nbsp;</td> 
-										<td>&nbsp;</td>  
-										<td>&nbsp;</td>                 		
-			                    	</tr>
+									</tr>
 									<tr>
 									<td><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
@@ -712,8 +705,6 @@ function submitForm(thisform){
 		                                           </c:forEach>
 			                                     </c:if>
 			                                 </html:select></td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
@@ -732,9 +723,7 @@ function submitForm(thisform){
 			                    		<td  nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>			                    		</td>
 			                    		<td width="2">&nbsp;</td>
-			                    		<td style="width: 220px" align="left">&nbsp;</td>
-			                    		<td>&nbsp;</td>			                    		
-			                    	</tr>	
+		                    		</tr>	
 									<tr>
 									<td> <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
@@ -748,8 +737,6 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></td>
 									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>		                    	
 			                    	<tr style="height: 25px;">
 			                    		<td nowrap="nowrap" style="vertical-align: top;" >
@@ -759,9 +746,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-			                    	</tr>	
+									</tr>	
 									<tr>
 									<td><c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
@@ -882,8 +867,6 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>		                    	
 			                    	<tr height="25px;">
 			                    		<td  nowrap="nowrap">
@@ -893,9 +876,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-			                    	</tr>
+									</tr>
 			                    	<tr>
 									<td><c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                            <table cellpadding="0" cellspacing="0">
@@ -1014,8 +995,6 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>
 			                    	<tr height="25px;">
 			                    		<td><html:hidden name="calendarEventForm" property="privateEvent"/>
@@ -1029,9 +1008,7 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>	
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-										<td>&nbsp;</td>		
-										<td>&nbsp;</td>                    		
-			                    	</tr>
+									</tr>
 			                    	<tr height="25px;">
 			                    		<td colspan="8">
 										

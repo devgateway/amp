@@ -648,31 +648,21 @@ function submitForm(thisform){
 			                    	<tr>
 			                    		<td nowrap="nowrap" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
-			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                                
-			                    		</td>
-			                    		<td width="2px">&nbsp;</td>
-			                    		<td align="left" style="width:220px;vertical-align: top;">&nbsp;</td>
-			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
+			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                    		</td>
+			                    		<td colspan="2" rowspan="11">aaaaaaaa				                    					                    					                    					                    		</td>
+			                    		
 			                    		<feature:display name="Donors" module="Calendar">			                    			
 			                    			<td  style="text-align: center;" valign="top">
-				                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>
-				                    		</td>
+				                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>				                    		</td>
 											
 																				
-				                    		<td width="2px">&nbsp;</td>
-				                    		<td align="left" valign="top">&nbsp;
-				                    		
-				                    		</td>				                    		
-				                    		<td valign="top">&nbsp;
-				                    				
-				                    		</td>
+				                    		<td width="2">&nbsp;</td>
+				                    		<td align="left" valign="top">&nbsp;				                    		</td>				                    		
+				                    		<td valign="top" row>&nbsp;				                    		</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
 									<tr>
 									<td><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/></td>
-									<td>aaaa</td>
-									<td>aaaa</td>
-									<td>aaaa</td>
 									<td>	 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -684,8 +674,7 @@ function submitForm(thisform){
 				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
 															<td>
-																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="buttonx"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
-															</td>
+																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="buttonx"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>															</td>
 														</tr>
 				                    				</field:display>
 												
@@ -694,8 +683,7 @@ function submitForm(thisform){
 															<td>
 																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="buttonx" style="width:110px">
 																	<digi:trn key="btn:remove">Remove</digi:trn>
-																</html:button>
-															</td> 
+																</html:button>															</td> 
 														</tr>
 													</field:display>													
 												</table></td>
@@ -704,12 +692,8 @@ function submitForm(thisform){
 									</tr>
 			                    	<tr>
 			                    		<td nowrap="nowrap">
-			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>
-			                    		</td>
-			                    		<td width="2px">&nbsp;</td>
-			                    		<td align="left">&nbsp;</td>	
-										<td>&nbsp;</td>	
-										<td>&nbsp;</td>
+			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>			                    		</td>
+			                    		<td>&nbsp;</td>
 										<td>&nbsp;</td> 
 										<td>&nbsp;</td>  
 										<td>aaa</td>                 		
@@ -727,29 +711,17 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>
 			                    	
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
 			                    			<td valign="top" nowrap="nowrap" rowspan="1">
-				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>
-				                    		</td>
-				                    		<td width="2px">&nbsp;</td>
-				                    		<td align="left" valign="top" rowspan="1">&nbsp;
-				                    			
-				                    		</td>
+				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>				                    		</td>
 			                    		</feature:display>
-			                    		<td width="30px"><div style="width:30px;">&nbsp;</div> </td>			                    		
 			                    		<td  nowrap="nowrap">
-			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>
-			                    		</td>
-			                    		<td width="2px">&nbsp;</td>
-			                    		<td style="width: 220px" align="left">&nbsp;
-			                    			
-			                    		</td>
+			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>			                    		</td>
+			                    		<td width="2">&nbsp;</td>
+			                    		<td style="width: 220px" align="left">&nbsp;</td>
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>	
 									<tr>
@@ -763,21 +735,12 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									</tr>		                    	
 			                    	<tr style="height: 25px;">
 			                    		<td nowrap="nowrap" style="vertical-align: top;" >
-			                    			<digi:trn key="calendar:StDate"><b>Start date</b></digi:trn>
-			                    		</td>
-			                    		<td width="2px" valign="top">&nbsp;</td>
-			                    		<td align="left" style="width: 220px;vertical-align: top;">&nbsp;
-			                    			
-			                    		</td>			                    		
+			                    			<digi:trn key="calendar:StDate"><b>Start date</b></digi:trn>			                    		</td>
 			                    		<td>&nbsp;</td>
-										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
@@ -789,11 +752,8 @@ function submitForm(thisform){
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
-			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>
-			                                                </td>
-			                                                <td>&nbsp;
-			                                                
-			                                                </td>
+			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>			                                                </td>
+			                                                <td>&nbsp;			                                                </td>
 			                                                <!-- <td>
 			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
 			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
@@ -804,9 +764,7 @@ function submitForm(thisform){
 			                                                </td> -->
 			                                                <td>
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
-			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-			                                                  </a>
-			                                                </td>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">			                                                  </a>			                                                </td>
 			                                                <td>&nbsp;&nbsp;</td>
 			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
@@ -818,8 +776,7 @@ function submitForm(thisform){
 			                                                  	<script type="text/javascript">
 			                                                  	if(document.getElementById('selectedStartTime') != null)
 				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-				                                                </script>	                                                  
-			                                                </td>
+				                                                </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
 			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
@@ -831,8 +788,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedStartTime')!= null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                              </tr>
 			                                            </table>
                                           </c:if>
@@ -845,8 +801,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td>
 			                                                  <select id="selectedStartMonth" onchange="updateDate(document.getElementById('selectedStartDate'), 'month', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="13">
@@ -864,8 +819,7 @@ function submitForm(thisform){
 			                                                  if(document.getElementById('selectedStartDate') != null){
 			                                                  selectOptionByValue(document.getElementById('selectedStartMonth'), get('month', document.getElementById('selectedStartDate').value));
 			                                                  }
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td>
 			                                                   <select id="selectedStartDay" onchange="updateDate(document.getElementById('selectedStartDate'), 'day', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="30">
@@ -878,8 +832,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartDay'), get('day', document.getElementById('selectedStartDate').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
 			                                                <td>
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
@@ -891,8 +844,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
 			                                                <td>
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
@@ -904,8 +856,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                              </tr>
 			                                            </table>
 			                                          </c:if></td>
@@ -913,20 +864,11 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									</tr>		                    	
 			                    	<tr height="25px;">
 			                    		<td  nowrap="nowrap">
-			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>
-			                    		</td>
-			                    		<td width="2px" valign="top">&nbsp;</td>
-			                    		<td>&nbsp;
-			                    			
-			                    		</td>			                    		
+			                    			<digi:trn key="calendar:EndDate"><b>End Date</b></digi:trn>			                    		</td>
 			                    		<td>&nbsp;</td>
-										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
@@ -936,11 +878,8 @@ function submitForm(thisform){
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
-			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px" styleClass="inp-text"/>
-			                                                </td>
-			                                                <td>&nbsp;
-			                                                
-			                                                </td>
+			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px" styleClass="inp-text"/>			                                                </td>
+			                                                <td>&nbsp;			                                                </td>
 			                                                <!-- <td>
 			                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
 			                                                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this transaction"/>
@@ -951,12 +890,9 @@ function submitForm(thisform){
 			                                                </td>-->
 			                                                <td>
 			                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
-			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-			                                                  </a>
-			                                                </td>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">			                                                  </a>			                                                </td>
 			                                                <td>
-			                                                &nbsp;&nbsp;
-			                                                </td>
+&nbsp;&nbsp;			                                                </td>
 			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
@@ -970,8 +906,7 @@ function submitForm(thisform){
 			                                                  if(document.getElementById('selectedEndTime') != null){
 			                                                  	selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
 			                                                  }
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
 			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
@@ -984,8 +919,7 @@ function submitForm(thisform){
 			                                                  if(document.getElementById('selectedEndTime') != null){
 			                                                  	selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
 			                                                  }
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                              </tr>
 			                                            </table>
                                           </c:if>
@@ -998,8 +932,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedEndYear'), document.getElementById('selectedEndDate').value);
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td>
 			                                                  <select id="selectedEndMonth" onchange="updateDate(document.getElementById('selectedEndDate'), 'month', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="13">
@@ -1014,8 +947,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMonth'), get('month', document.getElementById('selectedEndDate').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td>
 			                                                  <select id="selectedEndDay" onchange="updateDate(document.getElementById('selectedEndDate'), 'day', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="30">
@@ -1026,8 +958,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndDay'), get('day', document.getElementById('selectedEndDate').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
 			                                                <td>
 			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
@@ -1039,8 +970,7 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
 			                                                <td>
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
@@ -1052,14 +982,10 @@ function submitForm(thisform){
 			                                                  <script type="text/javascript">
 			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
-			                                                  </script>
-			                                                </td>
+			                                                  </script>			                                                </td>
 			                                              </tr>
 			                                            </table>
 			                                          </c:if></td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
@@ -1069,15 +995,9 @@ function submitForm(thisform){
 			                    		<td><html:hidden name="calendarEventForm" property="privateEvent"/>
 			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" /> 
 				                                          <c:if test="${!calendarEventForm.privateEvent }">
-				                                          	CHECKED
-				                                          </c:if>                                          
+				                                          	CHECKED				                                          </c:if>                                          
 			                                          />
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn></td>
-										<td>&nbsp;</td>
-			                    		<td style="vertical-align: top">&nbsp;
-			                    			
-			                    		</td>			                    		
-			                    		<td>&nbsp;</td>	
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>		
@@ -1119,12 +1039,9 @@ function submitForm(thisform){
 			<div class="msg_add">
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
-				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
-	</td>
+				<input type="button" value="Add" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">	</td>
   </tr>
-</table>
-
-</td>
+</table></td>
 			                    	</tr>
 			                    	<!--<tr>
 			                    		<td colspan="2">&nbsp;</td>
@@ -1187,16 +1104,12 @@ function submitForm(thisform){
 			                          <td colspan="8" style="text-align:center;">
 			                          	<feature:display name="Preview Event button" module="Calendar">
 			                          		<input type="submit" class="buttonx" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
-			                            	&nbsp;
-			                          	</feature:display>                           
+&nbsp;			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
 			                            	<input type="submit" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
-			                            	&nbsp;
-			                            </feature:display>
+&nbsp;			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
-			                            </feature:display>
-			                          </td>
+			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>			                            </feature:display>			                          </td>
 			                        </tr>
 		                      </table>
 			                </div>

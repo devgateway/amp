@@ -218,7 +218,7 @@
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
 <digi:instance property="umAddUserForm" />
-
+<center>
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
 
 	<html:hidden property="orgType" />
@@ -227,7 +227,7 @@
 
 	<input type="hidden" name="actionFlag" value="">
 
-	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705  class="inside">
+	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705>
 		<tr>
 			<td width=14>&nbsp;</td>
 			<td align=left valign="top" width=752>
@@ -258,36 +258,27 @@
 				    </td>
 					<!-- End navigation -->
 				</tr>
+			
 				<tr>
-					<td colspan="2"><span class=subtitle-blue> 
-					<digi:trn key="aim:viewEditUser:AddEditUserHeader">
-			          Add user
-			        </digi:trn> </span>
+					<td vAlign="top" colspan="2">
+						<table style="border:1px solid #dddddd;" border="0" cellpadding=0 cellspacing=0>
+                        	<tr>
+								<td colspan="2"  height="25" bgcolor="#C7D4DB" align="center" style="font-size:12px; font-weight:bold;border-bottom:1px solid 	 		 								#dddddd;"><span class=subtitle-blue> 
+								<digi:trn key="aim:viewEditUser:AddEditUserHeader">Add user</digi:trn> </span>
 			        </td>
 				</tr>
-				<tr>
-					<td noWrap width=616 vAlign="top">
-						<table class="contentbox_border" width="75%" border="0" >
-                            <tr>			
-                               <td align="center">
-                             	  <table width="100%">
-                                      <tr>
-                                    	<td style="height: 18px;"/>
-                                      </tr>
-                                  </table>
-                               </td>
-                            </tr>
+                        
 					   		<tr>
 							  <td valign="top"  align="center">
-								  <table border="0" cellpadding="0" cellspacing="0" width=772>
+								  <table border="0" cellpadding="0" cellspacing="0" width=772 id="addUserContainer">
 	
 									<tr>
-										<td width=14>&nbsp;</td>
+										
 										<td align=left valign="top" width=520><br>
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
+												
+												<td align=left class=title noWrap colspan="4">
 												<!-- digi:errors /-->
 												<logic:notEmpty name="umAddUserForm" property="errors">
 													<font color="red">
@@ -305,25 +296,23 @@
 												</logic:notEmpty>
 												</td>
 											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
-												<digi:trn key="um:userAccountInformation">User Account information</digi:trn>
-												</td>
-											</tr>
-											<tr>
-												<td width="3%">&nbsp;</td>
-												<td align=left class=title noWrap colspan="2">
-													<digi:trn key="um:allMarkedRequiredField">
+                                            <tr>
+                                            	<td colspan="3"bgcolor="#C7D4DB" align="center" style="background-color: #F0F0F0;">
+                                                <digi:trn key="um:userAccountInformation">User Account information</digi:trn>
+                                                <digi:trn key="um:allMarkedRequiredField">
 														All fields marked with an 
 														<FONT color=red><B><BIG>*</BIG> </B></FONT> are required.
 	 												</digi:trn> 
-	 												<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>
-												</td>
-											</tr>
+	 												<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn><br/><br/>
+                                                </td>
+                                            </tr>
+												<tr>
+                                                	<td><br/></td>
+                                                </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap width="40%">
+                                                
 													<FONT color=red>*</FONT> 
 													<digi:trn key="um:firstName">First Name</digi:trn>
 												</td>
@@ -487,12 +476,12 @@
 											</tr>
 											<tr>
 												<td>&nbsp;</td>
-												<td align="right">
+												<td align="right" class="addUserButContainer">
 													<c:set var="btnSubmit">
 														<digi:trn key="btn:submit">Submit</digi:trn>
 													</c:set> 
 													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>
-												<td align="left">
+												<td align="left" class="addUserButContainer">
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</c:set> 
@@ -517,3 +506,4 @@
 		</tr>
 	</table>
 </digi:form>
+</center>

@@ -373,3 +373,19 @@ table#viewAllUsers tr td table tr td {border:none;}
 td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
 #viewIndicatorsContainer{margin:0 auto;width:1000px;}
 td#sectorSelectContainer select, td#sectorKeywordContainer input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
+table#addUserContainer tr td{color: #000000;
+    font-size: 12px;}
+table#addUserContainer input.inp-text, table#addUserContainer select, table#addUserContainer input#userPassword,  table#addUserContainer input#userPasswordConfirmationm, td#viewUserEditContainer table tr td.inputcontainer input {color: #767676;
+    font-size: 11px;
+    margin: 5px;
+    padding: 2px;}
+	
+td.addUserButContainer input	{background-color: #5E8AD1;
+    border-color: #99BAF1 #225099 #225099 #99BAF1;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: bold;
+    height: 25px;
+    padding: 3px 5px;}

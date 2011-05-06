@@ -82,6 +82,7 @@ function isInvalid(field){
 	return false;
 }
 </script>
+<center>
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
 
@@ -121,18 +122,23 @@ function isInvalid(field){
 					</td>
 					<!-- End navigation -->
 				</tr>
-			    <tr>
-			      <td colspan="2">
+			   
+    			
+   				<tr>
+					<td noWrap width="100%" vAlign="top">
+					<table width="740" cellspacing="1" cellSpacing="1">
+                    
+					<tr>
+						<td noWrap width="616" vAlign="top">
+							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0"  width="100%">
+								 <tr>
+			      <td colspan="2" height="25" bgcolor="#C7D4DB" align="center" style="font-size:12px; font-weight:bold;border-bottom:1px solid 	 		 								#dddddd;">
 			        <span class=subtitle-blue>
 			          <digi:trn key="aim:viewEditUser:EditUserHeader">
 			          Edit user
 			          </digi:trn>
 			        </span>
-			      </td>
-			    </tr>
-    			<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
-						<digi:errors/>
+                    <digi:errors/>
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >
@@ -142,34 +148,23 @@ function isInvalid(field){
 					            </digi:trn>
 					          </b>
 					        </logic:equal></span>
-					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;
-						
-					</td>
+			      </td>
 			    </tr>
-   				<tr>
-					<td noWrap width="100%" vAlign="top">
-					<table width="740" cellspacing="1" cellSpacing="1">
-					<tr>
-						<td noWrap width="616" vAlign="top">
-							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0"  width="100%">
-								
 								<tr bgColor="#f4f4f2">
 									<td valign="top">
 										<table align="center" bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="562" border="0" >
+                                        
 											<tr>
 												<td bgColor="#ffffff" class="box-border" width="560">
 													<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
 														<tr bgColor="#dddddb">
-															<td bgColor="#dddddb" height="20" align="center" colspan="5">
+															<td bgColor="#dddddb" height="25" align="center" colspan="5" style="font-size:12px; font-weight:normal;">
 																 <b><digi:trn key="aim:viewEditUser:edit">Edit</digi:trn> ${umViewEditUserForm.name}</b>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">
+															<td width="100%" id="viewUserEditContainer">
 																<table width="563" border="0" bgColor="#f4f4f2" height="363" >
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px;
@@ -321,7 +316,7 @@ function isInvalid(field){
 																	
 																	<tr>
 																		<td width="169" align="right" height="30">&nbsp;</td>
-																		<td>
+																		<td class="addUserButContainer">
 		 	 	 	 		                                                <input type="button" value="Add Organisation" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
 	 	                                                                </td>
 																	</tr>
@@ -349,7 +344,7 @@ function isInvalid(field){
                                                                     
                                                                     <tr>
 																		<td width="169" align="right" height="30">&nbsp;</td>
- 	 	 	 															<td>
+ 	 	 	 															<td class="addUserButContainer">
 																			<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
 																				<input type="button" value="Remove Organisations" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																			</logic:notEmpty>                                                                                                                                                       
@@ -389,7 +384,7 @@ function isInvalid(field){
 															            <td>&nbsp;</td>
 															          </tr>
 																	<tr>
-																	    <td width="380" height="30" colspan="2" align="center"style="font-size: 11px;
+																	    <td  class="addUserButContainer" width="380" height="30" colspan="2" align="center"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                               				<c:set var="translation">
 																                <digi:trn key="aim:viewEditUser:saveButton" jsFriendly="true">Save</digi:trn>
@@ -418,7 +413,7 @@ function isInvalid(field){
     font-weight: bold; color:#000;">
                                                                    			<digi:trn key="aim:viewEditUser:password">Password:</digi:trn>
 																		</td>
-																	    <td width="380" height="30" colspan="2">
+																	    <td width="380" height="30" colspan="2" class="inputcontainer">
                                                                     		<html:password name="umViewEditUserForm" property="newPassword" />
                                                                			</td>
 																	</tr>
@@ -427,7 +422,7 @@ function isInvalid(field){
     font-weight: bold; color:#000;">
                                                                    			<digi:trn key="aim:viewEditUser:confirmPassword">Confirm:</digi:trn>
 																		</td>
-																	    <td width="380" height="30" colspan="2">
+																	    <td width="380" height="30" colspan="2"  class="inputcontainer">
                                                                     		<html:password name="umViewEditUserForm" property="confirmNewPassword" />
                                                                			</td>
 																	</tr>
@@ -437,10 +432,10 @@ function isInvalid(field){
 																              Either fields are blank or their values do not match
 																            </digi:trn>
 																        </c:set>
-																	    <td width="270" height="30" coslpan="2" align="right">
+																	    <td  class="addUserButContainer" width="270" height="30" coslpan="2" align="right">
                                                               				<input type="button" value="${translation}" onclick="validate('${errMsg}','changePassword');" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
-																		<td width="169" height="30" colspan="2" align="left">
+																		<td   class="addUserButContainer" width="169" height="30" colspan="2" align="left">
 																			<c:set var="translation">
 																                <digi:trn key="aim:viewEditUser:resetPasswordButton" jsFriendly="true">Reset </digi:trn>
 																              </c:set>
@@ -469,7 +464,7 @@ function isInvalid(field){
   </table>
         <br />
 </digi:form>
-
+</center>
 
 
 

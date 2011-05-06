@@ -648,7 +648,23 @@ function submitForm(thisform){
 			                    	<tr>
 			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=50%>
 			                    			<font color="red" size="3px">*</font>
-			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn>			                    		</td>
+			                    			<digi:trn key="calendar:evntTitle"><b>Event title</b></digi:trn><br /><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/><br /><br /><digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn><br /><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
+			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
+			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
+				                                        	<html:option value="${type.value}">${type.label}</html:option>
+		                                           </c:forEach>
+			                                     </c:if>
+			                                 </html:select><br /><br /><digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn><br />
+											 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
+				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
+				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
+				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;"><digi:trn>${evType.name}</digi:trn></html:option>
+				                                        </c:forEach>
+				                                 	</c:if>
+				                                 </html:select>
+											
+											</td>
 			                    		<td width="2">&nbsp;</td>
 			                    		<td width="20" align="left">&nbsp;</td>
 			                    		<td>&nbsp;</td>
@@ -678,21 +694,14 @@ function submitForm(thisform){
 																</html:button>															</td> 
 														</tr>
 													</field:display>													
-												</table>	</div></div>
-														                    						                    		</td>
+												</table>	</div></div>														                    						                    		</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
 									<tr>
-									<td><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/></td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td></td>
-									<td></td>
+									<td colspan="6">&nbsp;</td>
 									</tr>
 			                    	<tr>
-			                    		<td nowrap="nowrap">
-			                    			<digi:trn key="calendar:cType"><b>Calendar type</b></digi:trn>			                    		</td>
+			                    		<td nowrap="nowrap">&nbsp;</td>
 			                    		<td width="2">&nbsp;</td>
 			                    		<td align="left">&nbsp;</td>	
 										<td>&nbsp;</td>	
@@ -700,14 +709,7 @@ function submitForm(thisform){
 										<td>&nbsp;</td> 
 									</tr>
 									<tr>
-									<td><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" styleId="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
-			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
-			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
-				                                        	<html:option value="${type.value}">${type.label}</html:option>
-		                                           </c:forEach>
-			                                     </c:if>
-			                                 </html:select></td>
+									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
@@ -717,8 +719,7 @@ function submitForm(thisform){
 			                    	
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
-			                    			<td valign="top" nowrap="nowrap" rowspan="1">
-				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>				                    		</td>
+			                    			<td valign="top" nowrap="nowrap" rowspan="1">&nbsp;</td>
 				                    		<td width="2">&nbsp;</td>
 				                    		<td align="left" valign="top">&nbsp;</td>
 			                    		</feature:display>
@@ -729,13 +730,7 @@ function submitForm(thisform){
 			                    		<td width="2">&nbsp;</td>
 		                    		</tr>	
 									<tr>
-									<td> <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
-				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
-				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
-				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;"><digi:trn>${evType.name}</digi:trn></html:option>
-				                                        </c:forEach>
-				                                 	</c:if>
-				                                 </html:select></td>
+									<td> &nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>

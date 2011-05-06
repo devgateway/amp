@@ -657,7 +657,7 @@ function submitForm(thisform){
 			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>				                    		</td>
 											
 				                    		<td align="left" valign="top">&nbsp;				                    		</td>				                    		
-				                    		<td valign="top">				                    		</td>
+				                    		<td valign="top">&nbsp;</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
 									<tr>
@@ -689,8 +689,8 @@ function submitForm(thisform){
 														</tr>
 													</field:display>													
 												</table>	</td>
-									<td></td>
-									<td></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
 									</tr>
 			                    	<tr>
 			                    		<td nowrap="nowrap">
@@ -701,7 +701,7 @@ function submitForm(thisform){
 										<td>&nbsp;</td>
 										<td>&nbsp;</td> 
 										<td>&nbsp;</td>  
-										<td></td>                 		
+										<td>&nbsp;</td>                 		
 			                    	</tr>
 									<tr>
 									<td><html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
@@ -726,13 +726,13 @@ function submitForm(thisform){
 			                    			<td valign="top" nowrap="nowrap" rowspan="1">
 				                    			<digi:trn key="calendar:eventsType"><b>Event type</b></digi:trn>				                    		</td>
 				                    		<td width="2">&nbsp;</td>
-				                    		<td align="left" valign="top" rowspan="1"></td>
+				                    		<td align="left" valign="top">&nbsp;</td>
 			                    		</feature:display>
 			                    		<td>&nbsp;</td>			                    		
 			                    		<td  nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>			                    		</td>
 			                    		<td width="2">&nbsp;</td>
-			                    		<td style="width: 220px" align="left">			                    		</td>
+			                    		<td style="width: 220px" align="left">&nbsp;</td>
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>	
 									<tr>

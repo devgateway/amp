@@ -654,22 +654,15 @@ function submitForm(thisform){
 			                    		<td>&nbsp;</td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
 			                    			<td colspan="4" valign="top" width=50%>
-			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>				                    						                    		</td>
-			                    		</feature:display>			                    		
-			                    	</tr>
-									<tr>
-									<td><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/></td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-									<td>	 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
+			                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>	
+											<br />
+											<div style="margin-top:7px;"><html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
 														</logic:iterate>
 													</logic:notEmpty>
-				                                 </html:select></td>
-									<td><table cellSpacing="1" cellPadding="1">
+				                                 </html:select><div style="float:right;"><table cellSpacing="1" cellPadding="1">
 				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
 															<td>
@@ -685,7 +678,17 @@ function submitForm(thisform){
 																</html:button>															</td> 
 														</tr>
 													</field:display>													
-												</table>	</td>
+												</table>	</div></div>
+														                    						                    		</td>
+			                    		</feature:display>			                    		
+			                    	</tr>
+									<tr>
+									<td><html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td></td>
+									<td></td>
 									</tr>
 			                    	<tr>
 			                    		<td nowrap="nowrap">
@@ -721,7 +724,8 @@ function submitForm(thisform){
 			                    		</feature:display>
 			                    		<td>&nbsp;</td>			                    		
 			                    		<td  nowrap="nowrap">
-			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>			                    		</td>
+			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn><br />
+											<div style="margin-top:7px;"><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></div></td>
 			                    		<td width="2">&nbsp;</td>
 		                    		</tr>	
 									<tr>
@@ -735,7 +739,7 @@ function submitForm(thisform){
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
-									<td><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></td>
+									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									</tr>		                    	
 			                    	<tr style="height: 25px;">

@@ -644,7 +644,7 @@ function submitForm(thisform){
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                    <table cellpadding="3" cellspacing="3" class="t_mid" align="center">
+			                    <table border="2" align="center" cellpadding="3" cellspacing="3" class="t_mid">
 			                    	<tr>
 			                    		<td nowrap="nowrap" style="vertical-align: text-top">
 			                    			<font color="red" size="3px">*</font>
@@ -656,11 +656,13 @@ function submitForm(thisform){
 			                    		</td>
 			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
 			                    		<feature:display name="Donors" module="Calendar">			                    			
-			                    			<td rowspan="2" style="text-align: center;" valign="top">
+			                    			<td  style="text-align: center;" valign="top">
 				                    			<digi:trn key="cal:organizations"><b>Organizations</b></digi:trn>
 				                    		</td>
+											
+																				
 				                    		<td width="2px">&nbsp;</td>
-				                    		<td rowspan="2" align="left" valign="top">
+				                    		<td align="left" valign="top">
 				                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
 														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -669,7 +671,7 @@ function submitForm(thisform){
 													</logic:notEmpty>
 				                                 </html:select>
 				                    		</td>				                    		
-				                    		<td rowspan="2" valign="top">
+				                    		<td valign="top">
 				                    			<table cellSpacing="1" cellPadding="1">
 				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
@@ -678,6 +680,7 @@ function submitForm(thisform){
 															</td>
 														</tr>
 				                    				</field:display>
+												
 													<field:display name="Remove Donor Button" feature="Donors">
 														<tr>
 															<td>
@@ -702,10 +705,15 @@ function submitForm(thisform){
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
 				                                        	<html:option value="${type.value}">${type.label}</html:option>
-				                                        </c:forEach>
+		                                           </c:forEach>
 			                                     </c:if>
 			                                 </html:select>
-			                    		</td>			                    		
+			                    		</td>	
+										<td>&nbsp;</td>	
+										<td>&nbsp;</td>
+										<td>&nbsp;</td> 
+										<td>&nbsp;</td>  
+										<td>&nbsp;</td>                 		
 			                    	</tr>
 			                    	
 			                    	<tr style="height:25px">
@@ -725,11 +733,11 @@ function submitForm(thisform){
 				                    		</td>
 			                    		</feature:display>
 			                    		<td width="30px"><div style="width:30px;">&nbsp;</div> </td>			                    		
-			                    		<td rowspan="4" nowrap="nowrap">
+			                    		<td  nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description"><b>Description</b></digi:trn>
 			                    		</td>
 			                    		<td width="2px">&nbsp;</td>
-			                    		<td style="width: 220px" align="left" rowspan="4">
+			                    		<td style="width: 220px" align="left">
 			                    			<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
 			                    		</td>
 			                    		<td>&nbsp;</td>			                    		
@@ -792,7 +800,7 @@ function submitForm(thisform){
 			                                                </td>
 			                                              </tr>
 			                                            </table>
-			                                          </c:if>
+                                          </c:if>
 			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
 			                                            <html:hidden styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate"/>
 			                                            <table cellpadding="0" cellspacing="0">
@@ -868,6 +876,10 @@ function submitForm(thisform){
 			                                          </c:if>
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
 			                    	</tr>			                    	
 			                    	<tr height="25px;">
 			                    		<td  nowrap="nowrap">
@@ -931,7 +943,7 @@ function submitForm(thisform){
 			                                                </td>
 			                                              </tr>
 			                                            </table>
-			                                          </c:if>
+                                          </c:if>
 			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
 			                                            <html:hidden styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate"/>
 			                                            <table cellpadding="0" cellspacing="0">
@@ -1002,10 +1014,15 @@ function submitForm(thisform){
 			                                          </c:if>
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
 			                    	</tr>
 			                    	
 			                    	<tr height="25px;">
-			                    		<td colspan="2">&nbsp;</td>
+			                    		<td>&nbsp;</td>
+										<td>&nbsp;</td>
 			                    		<td style="vertical-align: top">
 			                    			<html:hidden name="calendarEventForm" property="privateEvent"/>
 			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" /> 
@@ -1015,7 +1032,11 @@ function submitForm(thisform){
 			                                          />
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
 			                    		</td>			                    		
-			                    		<td>&nbsp;</td>			                    		
+			                    		<td>&nbsp;</td>	
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>		
+										<td>&nbsp;</td>                    		
 			                    	</tr>
 			                    	<tr height="25px;">
 			                    		<td colspan="8">
@@ -1132,7 +1153,7 @@ function submitForm(thisform){
 			                            </feature:display>
 			                          </td>
 			                        </tr>
-			                    </table>
+		                      </table>
 			                </div>
 			            </td>
         			</tr>       

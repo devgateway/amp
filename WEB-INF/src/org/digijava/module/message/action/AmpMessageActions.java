@@ -248,7 +248,9 @@ public class AmpMessageActions extends DispatchAction {
 			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false,maxStorage);
     		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     	}
+        if(allMessages!=null){
     	Collections.reverse(allMessages);
+        }
     	messageForm.setMessagesForTm(allMessages);
 
     	messageForm.setAllmsg(count);

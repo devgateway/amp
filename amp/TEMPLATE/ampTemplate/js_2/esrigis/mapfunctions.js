@@ -181,17 +181,19 @@ function drawpoints(){
 
 //FFerreyra Functions
 var locations = new Array();
-
-function getHighlights() {
+var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"},
+                           {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}
+                          ];
+function getHighlights(level) {
 	var xhrArgs = {
-			url : "/esrigis/maphelper.do?showhighlights=true",
+			url : "/esrigis/maphelper.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
 			   load: function(jsonData) {
 			        // For every item we received...
 			        dojo.forEach(jsonData,function(location) {
 			        	locations.push(location);
 			        });
-		        	MapFindLocation();
+		        	MapFindLocation(implementationLevel[level]);
 			    },
 			error : function(error) {
 				// Error handler
@@ -201,38 +203,39 @@ function getHighlights() {
 	var deferred = dojo.xhrGet(xhrArgs);
 }
 
-function MapFindLocation(){
+function MapFindLocation(level){
 	map.graphics.clear();
-    var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/0");
+    var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
     var query = new esri.tasks.Query();
-    query.where = "COUNTY <> ''";
+    query.where = level.mapField + " <> ''";
     query.outSpatialReference = {wkid:map.spatialReference.wkid};
     query.returnGeometry = true;
-    query.outFields = ["COUNT", "COUNTY"];
+    query.outFields = ["COUNT", level.mapField, "GEO_ID"];
     queryTask.execute(query, addResultsToMap);
 }
 
 function addResultsToMap(featureSet) {
-    var symbol = new esri.symbol.SimpleFillSymbol();
-    symbol.setColor(new dojo.Color([255, 255, 255, 0.5]));
-    var numRanges = 40;
-    //Generate array of colors
-    var colors = new Array();
-    for(var i=0; i < numRanges; i++){
-    	colors.unshift(new dojo.Color([0, 0, 150 + Math.round((i*(150/numRanges))), 0.3]));
-    }
+    var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([150,150,150]), 1);
+    var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([150, 150, 150, 0.5]));
+    var colors = colorsOrange;
+    var numRanges = colors.length;
+
+    //Using logarithmic scale
+    var maxLog = Math.log(getMaxValue(locations, "commitments"));
+    var minLog = Math.log(getMinValue(locations, "commitments"));
+
     var max = getMaxValue(locations, "commitments");
     var min = getMinValue(locations, "commitments");
-    var breaks = (max - min) / numRanges;
+
+    var breaks = (maxLog - minLog) / numRanges;
 
     var renderer = new esri.renderer.ClassBreaksRenderer(symbol, "COUNT");
     for (var i=0; i<numRanges; i++) {
+    	rangeColors[i] = parseFloat(min + (i*breaks)) + " - " + parseFloat(min + ((i+1)*breaks));
         renderer.addBreak(parseFloat(min + (i*breaks)),
                 parseFloat(min + ((i+1)*breaks)),
-                new esri.symbol.SimpleFillSymbol().setColor(colors[i]));
+                new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
       }
-
-    resultTemplate = new esri.InfoTemplate("County", "<tr><td>${FIRST_FIRS}</td></tr><br/><tr><td>${COUNT}</td></tr>");
 
     dojo.forEach(featureSet.features,function(feature){
       map.graphics.add(feature);
@@ -240,7 +243,31 @@ function addResultsToMap(featureSet) {
     updateLocationAttributes();
     map.graphics.setRenderer(renderer);
     map.setExtent(map.extent.expand(1.01));
+    showLegend();
   }
+
+var rangeColors = [];
+
+var colorsBlue = [
+		new dojo.Color([ 222, 235, 247, 0.7]),
+		new dojo.Color([ 198, 219, 239, 0.7]),
+		new dojo.Color([ 158, 202, 225, 0.7]),
+		new dojo.Color([ 107, 174, 214, 0.7]),
+		new dojo.Color([ 66, 146, 198, 0.7]),
+		new dojo.Color([ 33, 113, 181, 0.7]),
+		new dojo.Color([ 8, 81, 156, 0.7]),
+		new dojo.Color([ 8, 48, 107, 0.7])];
+
+var colorsOrange = [
+		new dojo.Color([255, 247, 236, 1]),
+		new dojo.Color([254, 232, 200, 1]),
+		new dojo.Color([253, 212, 158, 1]),
+		new dojo.Color([253, 187, 132, 1]),
+		new dojo.Color([252, 141, 89, 1]),
+		new dojo.Color([239, 101, 72, 1]),
+		new dojo.Color([215, 48, 31, 1]),
+		new dojo.Color([179, 0, 0 , 1]),
+		new dojo.Color([127, 0, 0, 1])];
 
 function getMaxValue(array, measure){
 	var maxValue = 0;
@@ -269,10 +296,12 @@ function updateLocationAttributes(){
       var g = map.graphics.graphics[i];
       for(var j=0;j<locations.length;j++){
     	  var currentLocation = locations[j];
-          if(g.attributes["COUNTY"] == currentLocation.name){
-        	  g.attributes["COUNT"] = currentLocation.commitments;
+          if(g.attributes["GEO_ID"] == currentLocation.geoId){
+        	  g.attributes["COUNT"] = Math.log(currentLocation.commitments);
         	  break;
           }
       }
     }
 }
+
+

@@ -118,7 +118,7 @@ public class DbHelper {
 
 	}
 
-    public static List<AmpCategoryValueLocations> getRegions(MapFilter filter) throws DgException {
+    public static List<AmpCategoryValueLocations> getLocations(MapFilter filter, String implementationLevel) throws DgException {
     	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
     	if (filter.getSelLocationIds()!=null && filter.getSelLocationIds().length > 0 && filter.getSelLocationIds()[0] != -1) {
 			if (filter.getSelLocationIds().length == 1) {
@@ -190,7 +190,104 @@ public class DbHelper {
 	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
 					oql += ActivityUtil.getApprovedActivityQueryString("act");
 				}
-	            oql += "  and parcv.value = 'Region'";// get only regions
+	            oql += "  and parcv.value = :implementationLevel";
+	            
+	            oql+=" order by loc.parentCategoryValue";
+	            Session session = PersistenceManager.getRequestDBSession();
+	            Query query = session.createQuery(oql);
+	            query.setDate("startDate", startDate);
+	            query.setDate("endDate", endDate);
+	            query.setDate("endDate", endDate);
+	            query.setString("implementationLevel", implementationLevel);
+	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
+	            //    query.setLong("orgGroupId", orgGroupId);
+	            //}
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                query.setLong("transactionType", transactionType);
+	            }
+	            locations = query.list();
+	        }
+	        catch (Exception e) {
+	            logger.error(e);
+	            throw new DgException("Cannot load regions from db", e);
+	        }
+	        return locations;
+		}
+     }
+
+    public static List<AmpCategoryValueLocations> getZones(MapFilter filter) throws DgException {
+    	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
+    	if (filter.getSelLocationIds()!=null && filter.getSelLocationIds().length > 0 && filter.getSelLocationIds()[0] != -1) {
+			if (filter.getSelLocationIds().length == 1) {
+				AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[0]);
+				locations.addAll(loc.getChildLocations());
+				return locations;
+			} else {
+				for (int i = 0; i < filter.getSelLocationIds().length; i++) {
+					AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[i]);
+					locations.add(loc);
+				}
+				return locations;
+			}
+		} else {
+			
+	        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+	        Long[] orgIds = filter.getOrgIds();
+	        
+	        int transactionType = filter.getTransactionType();
+	        TeamMember teamMember = filter.getTeamMember();
+	        // apply calendar filter
+	        Long fiscalCalendarId = filter.getFiscalCalendarId();
+	        
+	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Long[] sectorIds = filter.getSelSectorIds();
+	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        /*
+	         * We are selecting regions which are funded
+	         * In selected year by the selected organization
+	         *
+	         */
+	        try {
+	            String oql = "select distinct loc  from ";
+	            oql += AmpFundingDetail.class.getName()
+	                    + " as fd inner join fd.ampFundingId f ";
+	            oql += "   inner join f.ampActivityId act ";
+	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+	            oql += " inner join loc.parentCategoryValue parcv ";
+	            if (sectorCondition) {
+	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+	            }
+	            oql += "  where fd.adjustmentType = 1";
+	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
+	                oql += " and fd.transactionType =:transactionType  ";
+	            } else {
+	                oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
+	            }
+	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                }
+	            } else {
+	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	            }
+	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+	            
+	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
+	                oql += DashboardUtil.getTeamQueryManagement();
+	            }
+	            else
+	            {
+	                oql += DashboardUtil.getTeamQuery(teamMember);
+	            }
+	            if (sectorCondition) {
+	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	            }
+	
+	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
+					oql += ActivityUtil.getApprovedActivityQueryString("act");
+				}
+	            oql += "  and parcv.value = 'Zone'";// get only regions
 	            
 	            oql+=" order by loc.parentCategoryValue";
 	            Session session = PersistenceManager.getRequestDBSession();
@@ -207,7 +304,7 @@ public class DbHelper {
 	        }
 	        catch (Exception e) {
 	            logger.error(e);
-	            throw new DgException("Cannot load regions from db", e);
+	            throw new DgException("Cannot load zones from db", e);
 	        }
 	        return locations;
 		}

@@ -124,7 +124,7 @@ public class DataDispacher extends MultiAction{
 	public ActionForward modeShowHighlights(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
 		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
-		/* 
+		
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		MapFilter filter = maphelperform.getFilter();
@@ -133,23 +133,34 @@ public class DataDispacher extends MultiAction{
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+		String implementationLevel = "";
+		if(request.getParameter("level") != null && request.getParameter("level").equals("Region")){ // TODO: Remove hardcoding
+			implementationLevel = "Region";
+		}
+		else
+		{
+			implementationLevel = "Zone";
+		}
 
         //TODO: Move this to a helper, see how to make Filters compatible and use just one class to access database with Visualization
 
 		JSONArray jsonArray = new JSONArray();
 
 		//Get list of locations
-        //List<AmpCategoryValueLocations> locations = DbHelper.getRegions(filter);
-        //Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
+		
+//        List<AmpCategoryValueLocations> locations = DbHelper.getRegions(filter);
+        List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
+        Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
         
-       while (locationsIt.hasNext()) {
+        while (locationsIt.hasNext()) {
             AmpCategoryValueLocations location = locationsIt.next();
 
             Long[] ids = {location.getId()};
 			MapFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
-            BigDecimal amount = fundingCal.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             String keyName = "";
             String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
             if (location.getParentCategoryValue().getValue().equals(implLocation)) {
@@ -172,14 +183,17 @@ public class DataDispacher extends MultiAction{
             }
             SimpleLocation locationJSON = new SimpleLocation();
             locationJSON.setName(keyName);
-            locationJSON.setCommitments(amount.toPlainString());
+            locationJSON.setGeoId(location.getGeoCode());
+            locationJSON.setCommitments(amountCommitments.toPlainString());
+            locationJSON.setDisbursements(amountDisbursements.toPlainString());
+            locationJSON.setExpenditures(amountExpenditures.toPlainString());
             jsonArray.add(locationJSON);
         }
 
         PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();
-		pw.close();	*/
+		pw.close();
 		return null;
 	}
 

@@ -98,7 +98,7 @@
 					</tr>
 			</table>
 		</div>
-		<digi:instance property="datadispacherform"/>
+		<digi:instance property="datadispatcherform"/>
 		<digi:form action="/mainmap.do">
 		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 700px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>

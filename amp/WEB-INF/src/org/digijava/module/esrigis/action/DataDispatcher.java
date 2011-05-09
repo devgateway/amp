@@ -40,8 +40,8 @@ import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.util.DbUtil;
 
-public class DataDispacher extends MultiAction{
-	private static Logger logger = Logger.getLogger(DataDispacher.class);
+public class DataDispatcher extends MultiAction{
+	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {

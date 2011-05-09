@@ -129,7 +129,7 @@ function getActivities(clear) {
 		cL.clear();
 	}
 	var xhrArgs = {
-		url : "/esrigis/datadipacher.do?showactivities=true",
+		url : "/esrigis/datadispatcher.do?showactivities=true",
 		handleAs : "json",
 		   load: function(jsonData) {
 		        // For every item we received...
@@ -264,7 +264,7 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
 function getHighlights(level) {
 	$('#legenddiv').hide('slow');
 	var xhrArgs = {
-			url : "/esrigis/datadipacher.do?showhighlights=true&level=" + implementationLevel[level].name,
+			url : "/esrigis/datadispatcher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
 			   load: function(jsonData) {
 			        // For every item we received...
@@ -324,14 +324,14 @@ function addResultsToMap(featureSet) {
     map.graphics.setRenderer(renderer);
     map.setExtent(map.extent.expand(1.01));
     hideLoading();
-    showLegend(rangeColors);
+    showLegend(rangeColors, colors);
   }
 
 function showLegend(rangeColors){
 	var htmlDiv = "";
 	for(var i=0; i< rangeColors.length; i++){
-		htmlDiv += "<div style='margin-right:10px;border:2px solid black;display:block;width:30px;height:20px;float:left;background-color:rgba(" + colorsBlue[i].toRgba() + ");' ></div>"
-				+ "<div style='font-size:8pt;color:white;margin-left:10px;height:20px;'>" + Math.ceil(rangeColors[i][0]) + "-" + Math.floor(rangeColors[i][1]) + "</div><br/>";
+		htmlDiv += "<div class='legendContentValue' style='background-color:rgba(" + colorsBlue[i].toRgba() + ");' ></div>"
+				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + "-" + Math.floor(rangeColors[i][1]) + "</div><br/>";
 	}
 	$('#legenddiv').html(htmlDiv);
 	$('#legenddiv').show('slow');

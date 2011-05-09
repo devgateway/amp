@@ -112,10 +112,26 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
 	position:absolute;
 	z-Index:100;
-	margin-left: 50px;
+	margin-left: 100px;
 	margin-top: 100px;
 	display: none;
 	width:180px;
 	padding:10px;    
     
+}
+
+.legendContentValue {
+	margin-right:10px;
+	border:2px solid black;
+	display:block;
+	width:30px;
+	height:20px;
+	float:left;
+}
+
+.legendContentLabel {
+	font-size:8pt;
+	color:white;
+	margin-left:10px;
+	height:20px;
 }

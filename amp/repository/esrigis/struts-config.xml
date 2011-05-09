@@ -3,12 +3,12 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="mainmapform" type="org.digijava.module.esrigis.form.MainMapForm"/>
-		<form-bean name="datadispacherform" type="org.digijava.module.esrigis.form.DataDispatcherForm"/>
+		<form-bean name="datadispatcherform" type="org.digijava.module.esrigis.form.DataDispatcherForm"/>
 	</form-beans>
 	<action-mappings>
-		<action name="mainmapform" path="/esrigis/mainmap" scope="session" type="org.digijava.module.esrigis.action.MainMap">
+		<action name="datadispatcherform" path="/esrigis/mainmap" scope="session" type="org.digijava.module.esrigis.action.MainMap">
 			<forward name="forward" path="/showLayout.do?layout=mainmap" />
 		</action>
-		<action name="datadispacherform" path="/esrigis/datadipacher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispacher"></action>
+		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispatcher"></action>
 	</action-mappings>
 </struts-config>

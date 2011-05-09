@@ -431,7 +431,6 @@ RowSelector.prototype.colorRow	= function (color) {
 }
 
 RowSelector.prototype.markRow	= function (forever) {
-	debugger;
 	if ( forever ) {
 		this.colorRow( this.markerColor );
 		this.forever	= true;

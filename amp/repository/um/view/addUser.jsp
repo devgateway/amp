@@ -218,7 +218,8 @@
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
 <digi:instance property="umAddUserForm" />
-
+<center>
+<div class="ampFormContainer">
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
 
 	<html:hidden property="orgType" />
@@ -506,3 +507,5 @@
 		</tr>
 	</table>
 </digi:form>
+</div>
+</center>

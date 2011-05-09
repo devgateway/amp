@@ -390,3 +390,7 @@ td.addUserButContainer input	{background-color: #5E8AD1;
     font-weight: bold;
     height: 25px;
     padding: 3px 5px;}
+	.ampFormContainer
+	{width:1000px;
+	margin:0 auto;
+	text-align:left;}

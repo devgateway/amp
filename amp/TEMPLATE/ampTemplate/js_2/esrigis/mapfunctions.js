@@ -260,7 +260,7 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
                           ];
 function getHighlights(level) {
 	var xhrArgs = {
-			url : "/esrigis/maphelper.do?showhighlights=true&level=" + implementationLevel[level].name,
+			url : "/esrigis/datadipacher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
 			   load: function(jsonData) {
 			        // For every item we received...
@@ -291,7 +291,7 @@ function MapFindLocation(level){
 function addResultsToMap(featureSet) {
     var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([150,150,150]), 1);
     var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([150, 150, 150, 0.5]));
-    var colors = colorsOrange;
+    var colors = colorsBlue;
     var numRanges = colors.length;
 
     //Using logarithmic scale
@@ -305,9 +305,9 @@ function addResultsToMap(featureSet) {
 
     var renderer = new esri.renderer.ClassBreaksRenderer(symbol, "COUNT");
     for (var i=0; i<numRanges; i++) {
-    	rangeColors[i] = parseFloat(min + (i*breaks)) + " - " + parseFloat(min + ((i+1)*breaks));
-        renderer.addBreak(parseFloat(min + (i*breaks)),
-                parseFloat(min + ((i+1)*breaks)),
+    	rangeColors[i] = parseFloat(minLog + (i*breaks)) + " - " + parseFloat(minLog + ((i+1)*breaks));
+        renderer.addBreak(parseFloat(minLog + (i*breaks)),
+                parseFloat(minLog + ((i+1)*breaks)),
                 new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
       }
 
@@ -317,7 +317,7 @@ function addResultsToMap(featureSet) {
     updateLocationAttributes();
     map.graphics.setRenderer(renderer);
     map.setExtent(map.extent.expand(1.01));
-    showLegend();
+//    showLegend();
   }
 
 var rangeColors = [];

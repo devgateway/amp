@@ -86,7 +86,8 @@
 					<tr>
 						<td id="toolsbtn" valign="middle" align="right" style="cursor: pointer;">Tools</td>
 						<td id="filterbtn" valign="middle" align="right" style="cursor: pointer;">Filter</td>
-						<td valign="middle" align="center" onclick="getHighlights();" style="cursor: pointer;">Highlight</td>
+						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
+						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight counties</td>
 						<td valign="middle" align="center" onclick="getActivities();" style="cursor: pointer;">Activities</td>
 					</tr>
 			</table>

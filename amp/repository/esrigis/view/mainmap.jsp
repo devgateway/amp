@@ -1,4 +1,12 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   
@@ -52,13 +60,11 @@
      	});
 	});
 </script>
-    
-    
-  </head> 
+ </head> 
   <body class="soria">
+   <img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;" />
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   		<div id="map" dojotype="dijit.layout.ContentPane" class="roundedCorners" region="center">
-       		<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute; right:512px; top:256px; z-index:100;" />
        </div>
        <div class="headerBackground"> </div>
        <div class="header">
@@ -87,14 +93,17 @@
 						<td id="toolsbtn" valign="middle" align="right" style="cursor: pointer;">Tools</td>
 						<td id="filterbtn" valign="middle" align="right" style="cursor: pointer;">Filter</td>
 						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
-						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight counties</td>
-						<td valign="middle" align="center" onclick="getActivities();" style="cursor: pointer;">Activities</td>
+						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
+						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
 					</tr>
 			</table>
 		</div>
-		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 900px;margin-top: 50px;display: none;">
+		<digi:instance property="datadispacherform"/>
+		<digi:form action="/mainmap.do">
+		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 700px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
+ 		</digi:form>
         <div id="legenddiv" class="legendContent">
         
         </div>
@@ -109,4 +118,5 @@
  		</div>
     </div>  
   </body>
+  
 </html>

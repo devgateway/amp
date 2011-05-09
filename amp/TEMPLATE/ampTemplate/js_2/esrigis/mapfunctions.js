@@ -18,6 +18,7 @@ var features = new Array();
 var timer_on = 0;
 var activitiesarray = new Array();
 var loading;
+var cL;
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
@@ -123,7 +124,10 @@ function resizeMap() {
 // show map on load
 dojo.addOnLoad(init);
 
-function getActivities() {
+function getActivities(clear) {
+	if (clear){
+		cL.clear();
+	}
 	var xhrArgs = {
 		url : "/esrigis/datadipacher.do?showactivities=true",
 		handleAs : "json",
@@ -150,7 +154,6 @@ function getActivities() {
 }
 
 function MapFind(activity){
-	map.graphics.clear();
 	dojo.forEach(activity.locations,function(location) {
     	//If the location has lat and lon not needs to find the point in the map
 		if (location.islocated==false){
@@ -236,7 +239,7 @@ function showResults(results) {
 function drawpoints(){
 	if (timer_on){
 	 hideLoading();
-	  var cL = new esri.ux.layers.ClusterLayer({
+	  	cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,
 			map: map,
 			features: features,
@@ -280,8 +283,7 @@ function getHighlights(level) {
 
 function MapFindLocation(level){
 	showLoading();
-	map.graphics.clear();
-    var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
+	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
     var query = new esri.tasks.Query();
     query.where = level.mapField + " <> ''";
     query.outSpatialReference = {wkid:map.spatialReference.wkid};

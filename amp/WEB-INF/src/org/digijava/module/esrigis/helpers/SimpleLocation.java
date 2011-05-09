@@ -15,9 +15,10 @@ public class SimpleLocation {
 	private String lat;
 	private String lon;
 	private Boolean islocated = false;
-	private String implementation_location;
 	private String percentage;
-	
+    //This field is used only in the view to mark the location. 
+    private String isdisplayed;
+
 	public String getName() {
 		return name;
 	}
@@ -72,26 +73,14 @@ public class SimpleLocation {
 	}
 
 	public Boolean getIslocated() {
-		if (this.lat == null || this.lon == null || "".equals(this.lat) || "".equalsIgnoreCase(this.lon="")) {
-			this.islocated = false;
-		}else{
-			this.islocated = true;
-		}
-		return islocated;
+		return this.islocated;
 	}
 
 	public void setIslocated(Boolean islocated) {
 		this.islocated = islocated;
 	}
 
-	public void setImplementation_location(String implementation_location) {
-		this.implementation_location = implementation_location;
-	}
-
-	public String getImplementation_location() {
-		return implementation_location;
-	}
-
+	
 	public String getPercentage() {
 		return percentage;
 	}
@@ -114,5 +103,13 @@ public class SimpleLocation {
 
 	public void setPledges(String pledges) {
 		this.pledges = pledges;
+	}
+
+	public void setIsdisplayed(String isdisplayed) {
+		this.isdisplayed = isdisplayed;
+	}
+
+	public String getIsdisplayed() {
+		return isdisplayed;
 	}
 }

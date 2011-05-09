@@ -46,7 +46,8 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         dojo.connect(this, 'onLoad', this.handleLayerLoaded);
         dojo.connect(this, 'onMouseOver', this.handleMouseOver);
         dojo.connect(this, 'onMouseOut', this.handleMouseOut);
-
+        //dojo.connect(this, 'onMouseClick', this.handleMouseClick);
+        
         //default symbol bank for clusters and single graphics
         //TODO: allow for user supplied symbol bank to override.  just use an ESRI renderer somehow?
         this.symbolBank = {
@@ -126,12 +127,12 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     //this function may not be needed exactly as is below.  somehow, the attributes need to be mapped to the points.
     setFeatures: function(features) {
         this._features = [];
-        var wkid = features[0].spatialReference.wkid;
+        var wkid = features[0].geometry.spatialReference.wkid;
         if (wkid != 102100) {
             if (wkid == 4326 || wkid == 4269 || wkid == 4267) {
                 dojo.forEach(features, function(feature) {
-                    point = esri.geometry.geographicToWebMercator(feature);
-                    //point.attributes = feature.attributes;
+                    point = esri.geometry.geographicToWebMercator(feature.geometry);
+                    point.attributes = feature.attributes;
                     this._features.push(point);
                 }, this);
             } else {
@@ -141,7 +142,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         } else {
             dojo.forEach(features, function(feature) {
                 point = feature.geometry;
-                //point.attributes = feature.attributes;
+                point.attributes = feature.attributes;
                 this._features.push(point);
             }, this);
         }
@@ -360,7 +361,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                     if (col) {
                         if ((colIndex >= minColIdx) & (colIndex <= maxColIdx)) {
                             var pointsToBeAdded = [];
-                            if (col.length > 2) { //clustered graphic
+                            if (col.length > 1) { //clustered graphic
 
                                 var tileCenterPoint = df.reduce(col, tileCenterPointF);
                                 var sym;

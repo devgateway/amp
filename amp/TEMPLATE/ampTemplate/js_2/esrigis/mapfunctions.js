@@ -10,17 +10,21 @@ dojo.require("dijit.form.Button");
 dojo.require("dijit.Toolbar");
 dojo.require("esri.tasks.find");
 dojo.require("esri.tasks.geometry");
+dojo.require("esri.dijit.BasemapGallery");
 
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
 var features = new Array();
 var timer_on = 0;
+var activitiesarray = new Array();
+var loading;
 function init() {
 	//This have to be replaced with Global Settings values
+	loading = dojo.byId("loadingImg");
 	var basemapUrl = "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer";
-	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer";
+	var mapurl = "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Map_Test/MapServer";
 	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
-	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.50});
+	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
 
 	
 	var layerLoadCount = 0;
@@ -63,15 +67,32 @@ function createMapAddLayers(myService1, myService2) {
 
 	dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
-		dojo.connect(map, "onMouseMove", showCoordinates);
-	    dojo.connect(map, "onMouseDrag", showCoordinates);
-	});
-	
+		//dojo.connect(map, "onMouseMove", showCoordinates);
+		//dojo.connect(map, "onMouseDrag", showCoordinates);
+		//dojo.connect(map,"onUpdateStart",showLoading);
+		//dojo.connect(map,"onUpdateEnd",hideLoading);
+        dojo.byId('map_zoom_slider').style.top = '80px';
+        getActivities();
+    });
 	map.addLayer(myService1);
 	map.addLayer(myService2);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
 }
+
+
+function showLoading() {
+    esri.show(loading);
+    map.disableMapNavigation();
+    map.hideZoomSlider();
+  }
+
+  function hideLoading(error) {
+    esri.hide(loading);
+    map.enableMapNavigation();
+    map.showZoomSlider();
+  
+  }
 
 function showCoordinates(evt) {
     //get mapPoint from event
@@ -102,39 +123,66 @@ function resizeMap() {
 // show map on load
 dojo.addOnLoad(init);
 
-function getContent() {
+function getActivities() {
 	var xhrArgs = {
-		url : "/esrigis/maphelper.do?showactivities=true",
+		url : "/esrigis/datadipacher.do?showactivities=true",
 		handleAs : "json",
 		   load: function(jsonData) {
 		        // For every item we received...
 			   totallocations=0;
-		        dojo.forEach(jsonData,function(activity) {
+		       features = []; 
+			   dojo.forEach(jsonData,function(activity) {
+		        	activitiesarray.push(activity);
 		        	MapFind(activity);
 		        });
-		    },
+			   if (totallocations==0){
+					timer_on = 1;
+					drawpoints();
+				}
+		   },
 		error : function(error) {
-			// Error hanlder
+			console.log(error);
 		}
 	}
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
+	showLoading();
 }
 
 function MapFind(activity){
-	 map.graphics.clear();
-    findTask = new esri.tasks.FindTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer");
-    //create find parameters and define known values
-    findParams = new esri.tasks.FindParameters();
-    findParams.returnGeometry = true;
-    findParams.layerIds = [0,1];
-    findParams.contains = false;
-    //Let's configure the search field in global settings
-    
-    findParams.searchFields = ["FIRST_FIRS","DNAME"];
-    dojo.forEach(activity.locations,function(location) {
-    	execute(location.name);
-    	totallocations ++;
+	map.graphics.clear();
+	dojo.forEach(activity.locations,function(location) {
+    	//If the location has lat and lon not needs to find the point in the map
+		if (location.islocated==false){
+    		findTask = new esri.tasks.FindTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer");
+    	    //create find parameters and define known values
+    	    findParams = new esri.tasks.FindParameters();
+    	    findParams.returnGeometry = true;
+    	    findParams.layerIds = [0,1];
+    	    findParams.contains = false;
+    	    //Configure the search field in global settings
+    	    findParams.searchFields = ["GEO_ID"];
+    		execute(location.geoId);
+    		totallocations ++;
+    	}else{
+    		//Create a graphic point based on the x y coordinates wkid(Well-known ID) 4326 for GCS_WGS_1984 projection
+    		var pt = new esri.geometry.Point(location.lat,location.lon,new esri.SpatialReference({"wkid":4326}));
+    		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
+    		var attr = {"Temp":"Temporal Attribute"};
+    		var infoTemplate = new esri.InfoTemplate("");   
+    		var pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
+    		var exit = false;
+    		pgraphic.setAttributes( {
+  				  "Activity":activity.activityname,
+  				  "Location":location.name,
+  				  "commitments":location.commitments,
+  				  "disbursements":location.disbursements,
+  				  "expenditures":location.expenditures,
+  				  "percentage":location.percentage
+  				  });
+  			location.isdisplayed = true;
+  			features.push(pgraphic);
+    	}
     });
 }
 
@@ -153,22 +201,49 @@ function showResults(results) {
       var graphic = result.feature;
       console.log("Found : " + result.layerName + "," + result.foundFieldName + "," + result.value);
       var point =  graphic.geometry.getExtent().getCenter();
+      var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));
+      var attr = {"Location":result.value};
+      var infoTemplate = new esri.InfoTemplate("");   
+      var pgraphic = new esri.Graphic(point,sms,attr,infoTemplate);
       
-      features.push(point);
+      //Iterate over the activities array and assign the attributes to each point
+      var exit = false;
+      for ( var int = 0; int < activitiesarray.length; int++) {
+    	var activity = activitiesarray[int];
+    	for ( var int2 = 0; int2 < activitiesarray[int].locations.length; int2++) {
+			var loc = activitiesarray[int].locations[int2];
+			if (loc.name==result.value && loc.isdisplayed!=true){
+  			  pgraphic.setAttributes( {
+  				  "Activity":activity.activityname,
+  				  "Location":loc.name});
+  			  loc.isdisplayed = true;
+  			  exit = true;
+  			}
+		}
+    	if (exit==true){
+			break;
+		}
+      }
+      features.push(pgraphic);
   	  totallocations--;
+
+  	  if (totallocations == 0){
+  		  drawpoints();
+  	  }
   	});
 }
 
 function drawpoints(){
 	if (timer_on){
+	 hideLoading();
 	  var cL = new esri.ux.layers.ClusterLayer({
 			displayOnPan: false,
 			map: map,
 			features: features,
 			infoWindow: {
-				template: new esri.InfoTemplate('${api_number}', '<b>Operator:</b> ${operator_n}'),
-			width: 225,
-			height: 85
+				template: new esri.InfoTemplate("Attributes", "${*}"),
+			width: 300,
+			height: 250
 		},
 		flareLimit: 15,
 		flareDistanceFromCenter: 20
@@ -176,7 +251,6 @@ function drawpoints(){
 	map.addLayer(cL);
 	timer_on=0;
 	}
-
 }
 
 //FFerreyra Functions

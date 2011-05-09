@@ -1,37 +1,109 @@
-  html, body { 
-        height: 100%; width: 100%; margin: 0; 
-      } 
-      body{
-        background-color:white; overflow:hidden; 
-        font-family: "Trebuchet MS"; 
-      }
-      .roundedCorners{
-        -moz-border-radius: 4px;      
-      }
-      #header {
-        border: solid 2px #7EABCD;
-        background-color:white; color:peru; font-size:18pt; 
-        text-align:center; font-weight:bold; height:60px;
-      }
-      #subheader {
-        font-size:small;
-        color: peru;
-      }
-      #rightPane{
-        background-color:white;
-        color:peru;
-        border: solid 2px cornflowerblue;
-        width:20%;
-        overflow:hidden;
-      }
-      #map {
-        background-color:white;
-        border:solid 2px cornflowerblue;
-      }
-      #footer {
-        border: solid 2px #7EABCD;
-        background-color:white;color:peru;font-size:10pt; text-align:center; height:0px;
-      }
-      .soria .dojoxGridHeader .dojoxGridCell   {
-        color:peru !important;
-      }
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: white;
+    overflow: hidden;
+    font-family: "Trebuchet MS";
+}
+
+.roundedCorners {
+    -moz-border-radius: 2px;
+}
+
+#header {
+    border: solid 1px #7EABCD;
+    background-color: white;
+    color: peru;
+    font-size: 18pt;
+    text-align: center;
+    font-weight: bold;
+    height: 60px;
+}
+
+#subheader {
+    font-size: small;
+    color: peru;
+}
+
+#rightPane {
+    background-color: white;
+    color: peru;
+    border: solid 1px cornflowerblue;
+    width: 20%;
+    overflow: hidden;
+}
+
+#map {
+    background-color: white;
+    border: solid 1px cornflowerblue;
+}
+
+#footer {
+    border: solid 1px #7EABCD;
+    background-color: white;
+    color: peru;
+    font-size: 10pt;
+    text-align: center;
+    height: 0px;
+}
+
+.soria .dojoxGridHeader .dojoxGridCell {
+    color: peru !important;
+}
+
+.headerBackground {
+    background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x top;
+	height: 55px;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.header {
+    background-color: transparent;
+    background-position: left top;
+    background-repeat: no-repeat;
+    color: White;
+    height: 55px;
+    left: 90px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+.headerContent {
+    background-color: transparent;
+    color: White;
+    height: 55px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+.headerIcon {
+    background-color: transparent;
+    left: 5px;
+    position: absolute;
+    top: 0;
+    width: 75px;
+    z-index: 100;
+}
+.basemapThumbnail {
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 0 7px #000000;
+    cursor: pointer;
+    height: 65px;
+    margin: 1px;
+    width: 100px;
+}
+.baseMapContainerNode {
+    float: left;
+    margin: 10px;
+    width: 100px;
+}

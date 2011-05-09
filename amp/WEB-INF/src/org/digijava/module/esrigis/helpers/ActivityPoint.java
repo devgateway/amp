@@ -21,8 +21,8 @@ public class ActivityPoint {
 	private String disbursements;
 	private ArrayList<SimpleLocation> locations;
     private String implementationlevel;
-	
-	public ActivityPoint() {
+
+    public ActivityPoint() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

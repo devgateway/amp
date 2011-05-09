@@ -764,6 +764,9 @@
                 <page>printPreviewPopupLayout</page>
                  <page>printViewPopupLayout</page>
             </module>
+            <module name="esrigis">
+				<page>mainmap</page>
+            </module>
 		</page-group>
 	</site-layout>
 </site-config>

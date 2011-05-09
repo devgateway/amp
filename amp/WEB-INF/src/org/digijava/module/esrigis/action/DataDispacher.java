@@ -1,5 +1,6 @@
 package org.digijava.module.esrigis.action;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -21,23 +24,28 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.esrigis.form.MapHelpForm;
+import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.QueryUtil;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
+import org.digijava.module.visualization.form.VisualizationForm;
+import org.digijava.module.visualization.util.DbUtil;
 
-public class MapHelper extends MultiAction{
+public class DataDispacher extends MultiAction{
+	private static Logger logger = Logger.getLogger(DataDispacher.class);
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
-			MapHelpForm maphelperform = (MapHelpForm)form;
+		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
 			MapFilter filter = maphelperform.getFilter(); 
 			if (filter == null || !filter.isIsinitialized()){
 				maphelperform.setFilter(QueryUtil.getNewFilter());
@@ -61,7 +69,7 @@ public class MapHelper extends MultiAction{
 	
 	public ActionForward modeShowActivities(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
-		MapHelpForm maphelperform = (MapHelpForm)form;
+		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
 		
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
@@ -81,14 +89,19 @@ public class MapHelper extends MultiAction{
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				if (!alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey())){
 					isaggregatable=true;
+					String lat=alocation.getLocation().getLocation().getGsLat();
+					String lon=alocation.getLocation().getLocation().getGsLong();
 					SimpleLocation sl = new SimpleLocation();
 					sl.setName(alocation.getLocation().getLocation().getName());
-					sl.setGeoId(alocation.getLocation().getLocation().getCode());
-					sl.setLat(alocation.getLocation().getLocation().getGsLat());
-					sl.setLon(alocation.getLocation().getLocation().getGsLong());
-					sl.setImplementation_location(alocation.getLocation().getLocation().getParentCategoryValue().getValue());
+					sl.setGeoId(alocation.getLocation().getLocation().getGeoCode());
+					sl.setLat(lat);
+					sl.setLon(lon);
+					if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)){
+						sl.setIslocated(false);
+					}else{
+						sl.setIslocated(true);
+					}
 					sl.setPercentage(alocation.getLocationPercentage().toString());
-					
 					sla.add(sl);
 				}else{
 					isaggregatable = false;
@@ -107,10 +120,11 @@ public class MapHelper extends MultiAction{
 		pw.close();
 		return null;
 	}
+	
 	public ActionForward modeShowHighlights(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
-		MapHelpForm maphelperform = (MapHelpForm)form;
-		
+		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
+		/* 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		MapFilter filter = maphelperform.getFilter();
@@ -119,34 +133,23 @@ public class MapHelper extends MultiAction{
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
-		String implementationLevel = "";
-		if(request.getParameter("level") != null && request.getParameter("level").equals("Region")){ // TODO: Remove hardcoding
-			implementationLevel = "Region";
-		}
-		else
-		{
-			implementationLevel = "Zone";
-		}
 
         //TODO: Move this to a helper, see how to make Filters compatible and use just one class to access database with Visualization
 
 		JSONArray jsonArray = new JSONArray();
 
 		//Get list of locations
-		
-//        List<AmpCategoryValueLocations> locations = DbHelper.getRegions(filter);
-        List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
-        Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
+        //List<AmpCategoryValueLocations> locations = DbHelper.getRegions(filter);
+        //Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
         
-        while (locationsIt.hasNext()) {
+       while (locationsIt.hasNext()) {
             AmpCategoryValueLocations location = locationsIt.next();
 
             Long[] ids = {location.getId()};
 			MapFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(ids);
-            BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.COMMITMENT, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-            BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-            BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.EXPENDITURE, Constants.ACTUAL).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            DecimalWraper fundingCal = DbHelper.getFunding(newFilter, startDate, endDate, null, null, Constants.DISBURSEMENT, Constants.ACTUAL);
+            BigDecimal amount = fundingCal.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             String keyName = "";
             String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
             if (location.getParentCategoryValue().getValue().equals(implLocation)) {
@@ -169,17 +172,104 @@ public class MapHelper extends MultiAction{
             }
             SimpleLocation locationJSON = new SimpleLocation();
             locationJSON.setName(keyName);
-            locationJSON.setGeoId(location.getGeoCode());
-            locationJSON.setCommitments(amountCommitments.toPlainString());
-            locationJSON.setDisbursements(amountDisbursements.toPlainString());
-            locationJSON.setExpenditures(amountExpenditures.toPlainString());
+            locationJSON.setCommitments(amount.toPlainString());
             jsonArray.add(locationJSON);
         }
 
         PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();
-		pw.close();
+		pw.close();	*/
+		return null;
+	}
+
+	public ActionForward getJSONObject(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm)form;
+		
+		String parentId = request.getParameter("parentId");
+		String objectType = request.getParameter("objectType");
+
+        JSONObject root = new JSONObject();
+	    JSONArray children = new JSONArray();
+
+	    //Gets children object according to objectType
+		
+		if(parentId != null && objectType != null && (objectType.equals("Organization") || objectType.equals("Organizations")))
+		{
+			//Get list of sub organizations
+	        Long orgGroupId = Long.parseLong(parentId);
+
+	        List<AmpOrganisation> orgs;
+	        try {
+	            orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, false); //TODO: Second parameter for public view
+				JSONObject child = new JSONObject();
+				Iterator<AmpOrganisation> it = orgs.iterator();
+				while(it.hasNext()){
+					AmpOrganisation org = it.next();
+					child.put("ID", org.getAmpOrgId());
+					child.put("name", org.getName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+	        } catch (Exception e) {
+	            logger.error("unable to load organizations", e);
+	        }
+		} else if (parentId != null && objectType != null && (objectType.equals("Sector") || objectType.equals("Sectors"))) {
+			Long sectorId = Long.parseLong(parentId);
+	        List<AmpSector> sectors;
+	        try {
+	        	sectors = DbUtil.getSubSectors(sectorId); 
+				JSONObject child = new JSONObject();
+				Iterator<AmpSector> it = sectors.iterator();
+				while(it.hasNext()){
+					AmpSector sector = it.next();
+					child.put("ID", sector.getAmpSectorId());
+					child.put("name", sector.getName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+	        } catch (Exception e) {
+	            logger.error("unable to load organizations", e);
+	        }
+		} else if (parentId != null && objectType != null && (objectType.equals("Region") || objectType.equals("Regions"))){
+			Long regionId = Long.parseLong(parentId);
+	        List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
+
+	        if (regionId != null && regionId != -1) {
+                AmpCategoryValueLocations region = LocationUtil.getAmpCategoryValueLocationById(regionId);
+                if (region.getChildLocations() != null) {
+    				JSONObject child = new JSONObject();
+                	Iterator<AmpCategoryValueLocations> it = region.getChildLocations().iterator();
+    				while(it.hasNext()){
+    					AmpCategoryValueLocations loc = it.next();
+    					child.put("ID", loc.getId());
+    					child.put("name",loc.getName());
+    					children.add(child);
+    				}
+                }
+            }
+			root.put("ID", parentId);
+			root.put("objectType", objectType);
+			root.put("children", children);
+		}
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
 		return null;
 	}
 }

@@ -43,3 +43,16 @@ tr.reportHeader, td.reportHeader {
 	cursor: pointer;
 	
 }
+
+table.html2ReportTable {
+	border-collapse: collapse;
+}
+
+.clsTableCellDataHtml {
+    border-bottom: 1px solid #E0E0E0;
+    border-right: 1px solid #E0E0E0;
+    color: black;
+    cursor: default;
+    font: 12px "Arial";
+}
+

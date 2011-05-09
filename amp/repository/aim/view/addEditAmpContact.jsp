@@ -536,25 +536,19 @@
 				<html:hidden property="contactId"/>
 				<div class="required_fields t_mid">All fields marked with <b style="color:#ff0000">*</b> are required</div>
 <hr />
-	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin-top:10px;">
+<div style="background-color:#F8F8F8; border:1px solid #CCCCCC;">
+	<table cellspacing="0" cellpadding="0" width="100%" id="config_table" style="margin:10px;">
 <tbody><tr>
-    <td class="t_mid"><digi:trn>Title</digi:trn></td>
-    <td>
-      <c:set var="translation">
+    <td class="t_mid"><digi:trn><b>Title</b></digi:trn><br />
+	      <c:set var="translation">
        <digi:trn>Please select from below</digi:trn>
        </c:set>
-     <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>
-     </td>
- 
-    <td class="t_mid">Organization</td>
-    <td valign="top"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
+     <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>     </td>
+    <td class="t_mid"><b>Organization</b>:<br />
+	<div style="float:right;"><html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
 <digi:trn>Add Organizations</digi:trn>
-</aim:addOrganizationButton> 
-</tr>
-<tr>
-<td colspan="2">&nbsp;</td>
-<td  colspan="2" align="center">
-<c:if test="${not empty addressbookForm.organizations}">
+</aim:addOrganizationButton></div>
+	<c:if test="${not empty addressbookForm.organizations}">
 <table width="100%" cellspacing="1" cellPadding=5 class="added_org_nc">
 <c:forEach var="organization" items="${addressbookForm.organizations}">
 <tr>
@@ -571,16 +565,15 @@
 <input  type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' /></td>
 </tr>
 </table>
-</c:if>
-
-</td>
+</c:if></td>
 </tr>
+
 <tr>
-<td class="t_mid"><digi:trn>Firstname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-							<td><html:text property="name" styleId="name" size="33"
+<td class="t_mid"><digi:trn><b>Firstname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
+<html:text property="name" styleId="name" size="33"
 										styleClass="inputx insidex" readonly="${readonly}" /></td>
-							<td class="t_mid"><digi:trn>Phone Number</digi:trn>:</td>
-<td id="phonesPlace"><logic:notEmpty name="addressbookForm" property="phones">
+							<td class="t_mid" id="phonesPlace"><digi:trn><b>Phone Number</b></digi:trn>:<br />
+							<logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 <div id="div_phone_${ctr}"><c:set var="translationNone">
 <digi:trn>None</digi:trn>
@@ -593,8 +586,7 @@
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="phoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
-</c:if>
+<a id="phoneBtn" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a></c:if>
 </div>
 </logic:iterate>
 </logic:notEmpty> 
@@ -602,15 +594,14 @@
 <c:set var="trnadd">
 <digi:trn>Add</digi:trn>
 </c:set>
-<a id="phoneBtnEmpty" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a>
-</logic:empty></td>
+<a id="phoneBtnEmpty" href="#" onclick="addNewData('phone');return false;" class="l_mid_b">${trnadd}</a></logic:empty></td>
 </tr>
 <tr>
-  <td class="t_mid"><digi:trn>Lastname</digi:trn><b style="color: rgb(255, 0, 0);">*</b>:</td>
-  <td><html:text property="lastname" styleId="lastname" size="33"
+  <td class="t_mid"><digi:trn><b>Lastname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
+  <html:text property="lastname" styleId="lastname" size="33"
 										styleClass="inputx insidex" readonly="${readonly}"/></td>
-  <td class="t_mid"><digi:trn>Fax</digi:trn>:</td>
-  <td id="faxesPlace">
+  <td class="t_mid" id="faxesPlace"><digi:trn><b>Fax</b></digi:trn>:<br /><br />
+
   <logic:notEmpty name="addressbookForm" property="faxes">
 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
 <div id=id="div_fax_${ctr}">
@@ -618,45 +609,38 @@
 <a href="javascript:removeData('fax',${ctr})"><img src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0"/></a>
 <c:if test="${ctr==0}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
- <a href="#" id="faxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
-</c:if>
+ <a href="#" id="faxBtn" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a></c:if>
 </div>
 <br>
 </logic:iterate>
 </logic:notEmpty>
 <logic:empty name="addressbookForm" property="faxes">
- <a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a>
-</logic:empty>
-  </td>
-</tr>
+ <a href="#" id="faxBtnEmpty" onclick="addNewData('fax');return false;" class="l_mid_b"> ${trnadd}</a></logic:empty></td>
+  </tr>
 <tr>
-  <td class="t_mid"><digi:trn>Email</digi:trn>:</td>
-  <td valign="top" id="emailsPlace">
-  <logic:notEmpty name="addressbookForm" property="emails">
+  <td class="t_mid"><digi:trn><b>Email</b></digi:trn>:<br />
+    <logic:notEmpty name="addressbookForm" property="emails">
 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
 <div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
  <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 
  <c:if test="${ctr==0}">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="emailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a>
-</c:if>
+<a href="#" id="emailBtn" class="l_mid_b" onclick="addNewData('email');return false;">${trnadd}</a></c:if>
 </div>
 </logic:iterate>
 </logic:notEmpty> 
 <logic:empty name="addressbookForm" property="emails">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
-<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a>
-</logic:empty>
-</td>
-  <td class="t_mid"><digi:trn>Office Address</digi:trn>:</td>
-  <td rowspan="2" valign="top"><html:textarea property="officeaddress" styleClass="address_textarea" cols="40" /></td>
-</tr>
+<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a></logic:empty></td>
+  <td class="t_mid"><digi:trn><b>Office Address</b></digi:trn>:<br />
+<html:textarea property="officeaddress" styleClass="address_textarea" cols="40" /></td>
+  </tr>
 <tr>
-  <td class="t_mid"><digi:trn>Function</digi:trn>:</td>
-  <td valign="top"><html:text property="function" size="33" styleClass="inputx insidex"/></td>
+  <td class="t_mid"><digi:trn>Function</digi:trn>:<br /><html:text property="function" size="33" styleClass="inputx insidex"/></td>
   <td align="right" valign="top">&nbsp;</td>
   </tr>
 </tbody></table>
+</div>
 <hr />
 			<c:choose>
 				<c:when test="${not empty addressbookForm.probablyDuplicatedContacs}">

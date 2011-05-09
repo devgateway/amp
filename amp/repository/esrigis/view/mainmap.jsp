@@ -95,6 +95,9 @@
 		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 900px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
+        <div id="legenddiv" class="legendContent">
+        
+        </div>
  		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:20px; top:10px; z-Index:999;display: none;margin-top: 45px;">
 			<div dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);">Zoom In</div>
 			<div dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);">Zoom Out</div>

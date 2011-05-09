@@ -259,6 +259,7 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
                            {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}
                           ];
 function getHighlights(level) {
+	$('#legenddiv').hide('slow');
 	var xhrArgs = {
 			url : "/esrigis/datadipacher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
@@ -278,6 +279,7 @@ function getHighlights(level) {
 }
 
 function MapFindLocation(level){
+	showLoading();
 	map.graphics.clear();
     var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
     var query = new esri.tasks.Query();
@@ -301,13 +303,15 @@ function addResultsToMap(featureSet) {
     var max = getMaxValue(locations, "commitments");
     var min = getMinValue(locations, "commitments");
 
-    var breaks = (maxLog - minLog) / numRanges;
+    var breaksLog = (maxLog - minLog) / numRanges;
+    var breaks = (max - min) / numRanges;
 
+    var rangeColors = new Array();
     var renderer = new esri.renderer.ClassBreaksRenderer(symbol, "COUNT");
     for (var i=0; i<numRanges; i++) {
-    	rangeColors[i] = parseFloat(minLog + (i*breaks)) + " - " + parseFloat(minLog + ((i+1)*breaks));
-        renderer.addBreak(parseFloat(minLog + (i*breaks)),
-                parseFloat(minLog + ((i+1)*breaks)),
+    	rangeColors.push([parseFloat(min + (i*breaks)), parseFloat(min + ((i+1)*breaks))]);
+        renderer.addBreak(parseFloat(minLog + (i*breaksLog)),
+                parseFloat(minLog + ((i+1)*breaksLog)),
                 new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
       }
 
@@ -317,10 +321,19 @@ function addResultsToMap(featureSet) {
     updateLocationAttributes();
     map.graphics.setRenderer(renderer);
     map.setExtent(map.extent.expand(1.01));
-//    showLegend();
+    hideLoading();
+    showLegend(rangeColors);
   }
 
-var rangeColors = [];
+function showLegend(rangeColors){
+	var htmlDiv = "";
+	for(var i=0; i< rangeColors.length; i++){
+		htmlDiv += "<div style='margin-right:10px;border:2px solid black;display:block;width:30px;height:20px;float:left;background-color:rgba(" + colorsBlue[i].toRgba() + ");' ></div>"
+				+ "<div style='font-size:8pt;color:white;margin-left:10px;height:20px;'>" + Math.ceil(rangeColors[i][0]) + "-" + Math.floor(rangeColors[i][1]) + "</div><br/>";
+	}
+	$('#legenddiv').html(htmlDiv);
+	$('#legenddiv').show('slow');
+}
 
 var colorsBlue = [
 		new dojo.Color([ 222, 235, 247, 0.7]),
@@ -342,6 +355,7 @@ var colorsOrange = [
 		new dojo.Color([215, 48, 31, 1]),
 		new dojo.Color([179, 0, 0 , 1]),
 		new dojo.Color([127, 0, 0, 1])];
+
 
 function getMaxValue(array, measure){
 	var maxValue = 0;

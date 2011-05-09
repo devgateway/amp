@@ -107,3 +107,15 @@ body {
     margin: 10px;
     width: 100px;
 }
+
+.legendContent {
+    background-color: rgba(0, 0, 0, 0.5);
+	position:absolute;
+	z-Index:100;
+	margin-left: 50px;
+	margin-top: 100px;
+	display: none;
+	width:180px;
+	padding:10px;    
+    
+}

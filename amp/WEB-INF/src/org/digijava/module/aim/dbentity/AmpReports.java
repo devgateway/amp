@@ -487,6 +487,13 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
 	}
 	
+	public int getNumOfHierarchies() {
+			int ret	= 0;
+			if ( this.hierarchies != null )
+				ret	= this.hierarchies.size();
+			return ret;
+	}
+	
 	public String getHierarchiesPath() {
 		String ret	= "";
 		try{

@@ -151,6 +151,10 @@ public abstract class ReportData extends Viewable {
 	
 	protected AmpReports reportMetadata;
 	
+	private int rowSpan;
+	
+	private static String [] htmlClassNames 	= {"firstLevel", "secondLevel", "thirdLevel"};
+	
 	public abstract Collection getOwnerIds();
 
 	public abstract Integer getSourceColsCount();
@@ -166,6 +170,10 @@ public abstract class ReportData extends Viewable {
 	public abstract void applyLevelSorter();
 	
 	public abstract void removeEmptyChildren();
+	
+	public abstract List<Column> getColumns();
+	
+	public abstract int getNumOfHierarchyRows();
 	
 	public String getNameTrn(){
 		return this.name.toLowerCase().replaceAll(" ", "");
@@ -384,5 +392,18 @@ public abstract class ReportData extends Viewable {
 	    this.columnsToBeRemoved = columnsToBeRemoved;
 	}
 	
+	public String getHtmlClassName() {
+		return htmlClassNames[(getLevelDepth()-2)%htmlClassNames.length];
+	}
+
+	public int getRowSpan() {
+		return rowSpan;
+	}
+
+	public void setRowSpan(int rowSpan) {
+		this.rowSpan = rowSpan;
+	}
+	
+	public abstract void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) ;
 	
 }

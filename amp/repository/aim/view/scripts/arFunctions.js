@@ -420,10 +420,10 @@ RowSelector.prototype.colorRow	= function (color) {
 	if (children!=null && children.length!=null) {
 		for (var i=0; i<children.length; i++) {
 			var child		= children[i];
-			//var childYuiEl	= new YAHOO.util.Element(child);
+			var childYuiEl	= new YAHOO.util.Element(child);
 			//alert("childYuiEl: " + childYuiEl);
-			//if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(this.skippedClass) ) ) {
-			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null ) ) {
+			if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null || !childYuiEl.hasClass(this.skippedClass) ) ) {
+			//if ( child.nodeName.toLowerCase()=="td" && (this.skippedClass==null ) ) {
 				child.style.backgroundColor	= color;
 			}
 		}
@@ -431,6 +431,7 @@ RowSelector.prototype.colorRow	= function (color) {
 }
 
 RowSelector.prototype.markRow	= function (forever) {
+	debugger;
 	if ( forever ) {
 		this.colorRow( this.markerColor );
 		this.forever	= true;

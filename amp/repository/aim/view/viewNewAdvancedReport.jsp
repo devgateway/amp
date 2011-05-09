@@ -17,7 +17,10 @@
   
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+
+<digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
+
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
@@ -64,7 +67,7 @@ function toggleSettings(){
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
-<div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto;">
+<div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 </div>
 <%
@@ -461,6 +464,9 @@ session.setAttribute("progressValue", counter);
 					</logic:equal>
 					<c:set var="lastPage">0</c:set>
 		            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
+						<logic:equal name="viewFormat" value="html2">
+							<a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+						</logic:equal>
 		                  <logic:equal name="viewFormat" value="html">
 		                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
 		                  </logic:equal>
@@ -594,6 +600,9 @@ session.setAttribute("progressValue", counter);
 						</logic:equal>
 						<c:set var="lastPage">0</c:set>
 			            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
+			            	<logic:equal name="viewFormat" value="html2">
+								<a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+							</logic:equal>
 			                  <logic:equal name="viewFormat" value="html">
 			                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
 			                  </logic:equal>

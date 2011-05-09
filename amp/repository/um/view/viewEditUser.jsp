@@ -82,7 +82,7 @@ function isInvalid(field){
 	return false;
 }
 </script>
-<center>
+
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
 
@@ -464,7 +464,7 @@ function isInvalid(field){
   </table>
         <br />
 </digi:form>
-</center>
+
 
 
 

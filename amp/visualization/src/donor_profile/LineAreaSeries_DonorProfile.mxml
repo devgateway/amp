@@ -53,6 +53,7 @@
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+			import com.exportUtil.*;
 			
 			import org.axiis.data.DataSet;
 
@@ -79,8 +80,24 @@
 				hAxis.invalidateDataProvider();
 				// Has to be called any time the dataCanvas dp is changed
 				dc.invalidateDisplayList();
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				
 			}
 			
+			private function captureSnapshot():void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strDomain = curUrl.split('/')[2];
+				}
+				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "5");
+			}
 			/**
 			 * This function is called when the % data slider changes.
 			 * It's merely using the current slider value to slice the underlying array

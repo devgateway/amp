@@ -49,6 +49,7 @@
 			import mx.events.SliderEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+			import com.exportUtil.*;
 			
 			import org.axiis.core.AxiisSprite;
 			import org.axiis.data.DataSet;
@@ -79,9 +80,24 @@
 				dataProvider = service.lastResult.aidtype;
 
 				dc.invalidateDisplayList();
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				
 			}
-
-
+			
+			private function captureSnapshot():void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strDomain = curUrl.split('/')[2];
+				}
+				FlexExporter.ExportToImage(dc,"png", "http://" + strDomain + strUrl, "3");
+			}
 			//Used to rotate wedge labels 180 degrees for readability
 			private function transposeLabel1(wedge:Object):Boolean
 			{
@@ -138,7 +154,6 @@
 				start();
 			}
 
-			
 			protected function updateAllYears():void
 			{
 				// TODO Auto-generated method stub
@@ -149,6 +164,7 @@
 					params["typeofaid"] = "true";
 					params["donut"] = "true";
 					service.send(params);
+					var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 				}
 				else
 				{
@@ -167,6 +183,7 @@
 				params["typeofaid"] = "true";
 				params["donut"] = "true";
 				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
 			}
 
 		]]>

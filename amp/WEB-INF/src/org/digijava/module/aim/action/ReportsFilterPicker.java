@@ -146,7 +146,27 @@ public class ReportsFilterPicker extends MultiAction {
 		if (teamMember != null)
 			filterForm.setTeamAccessType(teamMember.getTeamAccessType());
 
-		// create filter dropdowns
+		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
+		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
+
+
+		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
+		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+	
+		if (filterForm.getCountYear() == null) {
+			filterForm.setCountYear(countYear);
+		}
+
+		if (filterForm.getCountYearFrom() == null) {
+			filterForm.setCountYearFrom(yearFrom);
+		}
+
+		
+		for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
+			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
+			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
+		}
+		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 	     //Only currencies havening exchanges rates AMP-2620
 	      Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -158,9 +178,29 @@ public class ReportsFilterPicker extends MultiAction {
 				 filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 					}
 			}
+		
+	     Collection allFisCalenders = DbUtil.getAllFisCalenders();
+		 filterForm.setCalendars(allFisCalenders);
+			
 	      
-		Collection allFisCalenders = DbUtil.getAllFisCalenders();
-
+		if(request.getParameter("init")!=null) return null; else 
+		return modeRefreshDropdowns(mapping, form, request, response);
+		}
+	
+	public ActionForward modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String ampReportId 	= request.getParameter("ampReportId");
+		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
+		ServletContext ampContext = getServlet().getServletContext();
+		HttpSession httpSession = request.getSession();
+		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+	 	Site site = RequestUtils.getSite(request);
+ 	 	String siteId = site.getId().toString();
+ 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+ 	 	
+		// create filter dropdowns
+		
+	      
+		
 		/**
  	 	* For filterPicker ver2
  	 	*/
@@ -635,12 +675,9 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allIndicatorRisks = meRisks;
 		// Collection regions=LocationUtil.getAllVRegions();
 		//filterForm.setCurrencies(currency);
-		filterForm.setCalendars(allFisCalenders);
 		// filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);
 		
-		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
-		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 
 		filterForm.setFromMonths(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToMonths(new ArrayList<BeanWrapperImpl>());
@@ -655,16 +692,6 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setCalendar(Long.parseLong(calValue));
 		}
 		
-		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-	
-		if (filterForm.getCountYear() == null) {
-			filterForm.setCountYear(countYear);
-		}
-
-		if (filterForm.getCountYearFrom() == null) {
-			filterForm.setCountYearFrom(yearFrom);
-		}
 		
 		
 		
@@ -676,10 +703,6 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getCountYears().add(new BeanWrapperImpl(new Long(i)));
 		}
 
-		for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
-			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
-		}
 
 		if (filterForm.getFromYear() == null) {
 			// Long
@@ -813,7 +836,7 @@ public class ReportsFilterPicker extends MultiAction {
 		return modeApply(mapping, form, request, response);
 	}
 
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {	
 		if (request.getParameter("apply") != null && request.getAttribute("apply") == null)
 			return modeApply(mapping, form, request, response);
 		if (request.getParameter("reset") != null && request.getAttribute("reset") == null)

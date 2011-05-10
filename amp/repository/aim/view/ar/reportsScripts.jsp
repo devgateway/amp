@@ -12,6 +12,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
+	<!-- Jquery Base Library -->
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-1.4.2.min.js"/>"></script>
+
+
 <logic:present name="reportMeta" scope="session">
 	<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 </logic:present>
@@ -299,13 +303,12 @@ saveReportEngine	= null;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 
-		document.getElementById("listFiltersDiv").height = "90px";
-		document.getElementById("spanUseFilters").visibility = "visible";		
-		 
 		filterForm.submit();
 	}
 	
 	function showFilter() {
+		$("#myFilter").empty().html('<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>');
+		$("#myFilter").load("/aim/reportsFilterPicker.do");
 		YAHOO.amptab.init();
 		YAHOO.amptab.afterFiltersLoad();
 		var element = document.getElementById("myFilter");

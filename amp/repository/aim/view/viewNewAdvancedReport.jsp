@@ -79,7 +79,9 @@ session.setAttribute("progressValue", counter);
 <logic:notEqual name="viewFormat" scope="request" value="print">
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none; height: 100%; overflow: hidden;" >
-		<jsp:include page="/aim/reportsFilterPicker.do" />
+		<jsp:include page="/aim/reportsFilterPicker.do">
+		 <jsp:param name="init" value=""/>
+		</jsp:include>
 	</div>
 	<div id="myRange" style="display: none">
 		<jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />

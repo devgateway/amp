@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -36,9 +37,9 @@ public class AmpMTEFProjectionSubsectionFeature extends
 		mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
 		add(mtefTableFeature);
 		
-		AmpButtonField addMTEF=new AmpButtonField("addMTEF","Add Projection") {
+		AmpAjaxLinkField addMTEF=new AmpAjaxLinkField("addMTEF","Add Projection","Add Projection") {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onClick(AjaxRequestTarget target) {
 				AmpFundingMTEFProjection projection= new AmpFundingMTEFProjection();
 				projection.setAmpFunding(model.getObject());
 				projection.setAmount(0d);

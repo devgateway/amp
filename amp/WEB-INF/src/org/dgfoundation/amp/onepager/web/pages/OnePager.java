@@ -75,7 +75,6 @@ public class OnePager extends OnePagerWrapper {
 			AmpRelatedOrganizationsFormSectionFeature relatedOrganizations = new AmpRelatedOrganizationsFormSectionFeature(
 					"relatedOrganizations", "Related Organizations", am);
 			activityForm.add(relatedOrganizations);
-			
 			AmpComponentsFormSectionFeature components = new AmpComponentsFormSectionFeature("components", "Components", am);
 			activityForm.add(components);
 			

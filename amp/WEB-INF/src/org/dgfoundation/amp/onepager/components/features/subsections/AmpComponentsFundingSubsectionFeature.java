@@ -6,10 +6,15 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.Date;
 import java.util.Set;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentsFundingFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -55,9 +60,9 @@ public class AmpComponentsFundingSubsectionFeature extends
 		tableFeature = new AmpComponentsFundingFormTableFeature("tableFeature", componentModel, compFundsModel, activityModel, transactionTypeName + " Table", transactionType);
 		add(tableFeature);
 		
-		AmpButtonField addCommit=new AmpButtonField("add","Add " + transactionTypeName) {
+		AmpAjaxLinkField addButton=new AmpAjaxLinkField("add", "Add " + transactionTypeName, "Add " + transactionTypeName) {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				AmpComponentFunding cf = new AmpComponentFunding();
 				cf.setActivity(activityModel.getObject());
 				cf.setAdjustmentType(Constants.ACTUAL);
@@ -73,7 +78,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 				target.addComponent(tableFeature);
 			}
 		};
-		add(addCommit);
+		add(addButton);
 	}
 
 }

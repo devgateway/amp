@@ -19,6 +19,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpContractsItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -68,7 +69,7 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 		add(list);
 		
 
-		AjaxLink addbutton = new AjaxLink("add") {
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("add", "Add Contract", "Add Contract") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				IPAContract comp = new IPAContract();

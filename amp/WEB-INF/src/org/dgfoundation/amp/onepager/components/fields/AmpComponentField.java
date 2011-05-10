@@ -5,9 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Set;
-
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentsFundingSubsectionFeature;
@@ -24,14 +22,13 @@ import org.digijava.module.aim.helper.Constants;
 public class AmpComponentField extends AmpFieldPanel<Boolean>{
 
 	private static final long serialVersionUID = 0L;
-	private RadioChoice<Boolean> choiceContainer;
 
 	public AmpComponentField(String id,	IModel<AmpActivityVersion> activityModel, 
 			IModel<AmpComponent> componentModel, String fmName){
 		super(id,fmName, true);
 		
 		final PropertyModel<Set<AmpComponentFunding>> componentsSetModel=new 
-		PropertyModel<Set<AmpComponentFunding>>(activityModel, "componentFundings");
+				PropertyModel<Set<AmpComponentFunding>>(activityModel, "componentFundings");
 
 		try {
 			WebMarkupContainer componentFunding = new WebMarkupContainer("componentFunding");
@@ -64,8 +61,7 @@ public class AmpComponentField extends AmpFieldPanel<Boolean>{
 			expeditures.setOutputMarkupId(true);
 			expeditures.setOutputMarkupPlaceholderTag(true);
 			componentFunding.add(expeditures);
-
-
+	
 			add(componentFunding);
 		} catch (Exception e) {
 			e.printStackTrace();

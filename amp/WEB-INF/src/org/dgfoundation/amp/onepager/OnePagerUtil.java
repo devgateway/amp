@@ -35,4 +35,23 @@ public final class OnePagerUtil {
 		};
 
 	}
+
+	/**
+	 * Returns an {@link AbstractReadOnlyModel} wrapping a list from a source ArrayList.
+	 * Useful to return a {@link ListView} compliant model out of a Hibernate Set 
+	 * @param <T> The type of object in the set
+	 * @param list
+	 * @return the returned model
+	 */
+	public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromArray(final ArrayList<T> list) {
+		return new AbstractReadOnlyModel<List<T>>() {
+			private static final long serialVersionUID = 3706184421459839210L;
+
+			@Override
+			public List<T> getObject() {
+				return list;
+			}
+		};
+
+	}
 }

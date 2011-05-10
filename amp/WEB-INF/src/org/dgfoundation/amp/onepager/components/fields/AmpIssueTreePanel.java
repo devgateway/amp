@@ -161,7 +161,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 					}
 				}
 			};
-			list.setReuseItems(true);
+			list.setReuseItems(false);
 			add(list);
 		}
 		else{

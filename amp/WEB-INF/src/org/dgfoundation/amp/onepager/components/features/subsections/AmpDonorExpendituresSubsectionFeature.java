@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitmentsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorExpendituresFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -37,9 +38,9 @@ public class AmpDonorExpendituresSubsectionFeature extends
 		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table");
 		add(expTableFeature);
 		
-		AmpButtonField addCommit=new AmpButtonField("addExp","Add Expenditure") {
+		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionAmount(0d);

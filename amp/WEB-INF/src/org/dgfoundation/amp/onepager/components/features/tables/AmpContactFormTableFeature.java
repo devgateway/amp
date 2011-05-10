@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -31,9 +34,10 @@ public class AmpContactFormTableFeature extends AmpFormTableFeaturePanel{
 			protected void populateItem(final ListItem<AmpContact> item) {	
                             IModel<AmpContact> contactModel=item.getModel();
                             AmpContact contact = contactModel.getObject();
-                            Radio radio = new Radio<AmpContact>("contactId",contactModel,group);
-			    item.add(radio);
-                            Label name=new Label("firstname", contact.getName());
+                Radio radio = new Radio<AmpContact>("contactId",contactModel,group);
+                item.add(radio);
+			    
+			    Label name=new Label("firstname", contact.getName());
 			    item.add(name);
 			    item.add(new Label("lastname", contact.getLastname()));
 			    List<AmpContactProperty> emails=new ArrayList<AmpContactProperty>();
@@ -104,6 +108,13 @@ public class AmpContactFormTableFeature extends AmpFormTableFeaturePanel{
 		//contactContainer.setOutputMarkupId(true);
 		//contactContainer.add(list);
 		group.add(list);
+		group.add(new AjaxFormComponentUpdatingBehavior("onselect"){
+			@Override
+			protected void onUpdate(AjaxRequestTarget arg0) {
+				//only to update the underneath model
+			}
+		});
+		
 		//group.setOutputMarkupId(true);
 		add(group);
 		

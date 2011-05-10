@@ -1,23 +1,21 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 
-public class AmpComponentType implements ARDimensionable{
+public class AmpComponentType implements ARDimensionable, Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private Long type_id;
-	
-	
 	private String name;
-	
 	private String code;
-	
 	private Boolean enable;
-	
 	private Boolean selectable;
 
-	private Set<AmpComponent> components;
+	private transient Set<AmpComponent> components;
 
 	public Set<AmpComponent> getComponents() {
 		return components;

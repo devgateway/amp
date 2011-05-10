@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -41,9 +42,9 @@ public class AmpIssuesFormSectionFeature extends
 		final PropertyModel<Set<AmpIssues>> setModel=new PropertyModel<Set<AmpIssues>>(am,"issues");
 		final ListView<AmpIssues> list;
 
-		AmpButtonField addbutton = new AmpButtonField("addbutton", "Add Issue") {
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Issue", "Add Issue") {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> arg1) {
+			protected void onClick(AjaxRequestTarget target) {
 				AmpIssues issues = new AmpIssues();
 				issues.setName(new String(""));
 				issues.setIssueDate(new Date());

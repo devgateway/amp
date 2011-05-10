@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -16,10 +17,12 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -60,8 +63,16 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 		
 		final IModel<Set<AmpComponent>> setModel = new PropertyModel<Set<AmpComponent>>(activityModel, "components");
 
-		ArrayList<AmpComponentType> ampComponentTypes  = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		final DropDownChoice<AmpComponentType> compTypes = new DropDownChoice<AmpComponentType>("compTypes", new PropertyModel<AmpComponentType>(componentModel, "type"), ampComponentTypes, new ChoiceRenderer("name")){
+		final DropDownChoice<AmpComponentType> compTypes = new DropDownChoice<AmpComponentType>(
+				"compTypes", new PropertyModel<AmpComponentType>(componentModel, "type"), 
+				new LoadableDetachableModel<List<AmpComponentType>>() {
+					@Override
+					protected List<AmpComponentType> load() {
+						return new ArrayList(ComponentsUtil.getAmpComponentTypes());
+					}
+					
+				},
+				new ChoiceRenderer("name")){
 			@Override
 			protected boolean isDisabled(AmpComponentType object, int index, String selected) {
 				if (object.getSelectable())
@@ -87,14 +98,8 @@ public class AmpComponentIdentificationFormTableFeature extends AmpFormTableFeat
 				handleChanges(target, componentModel);
 			}
 		};
-		nameOnChange.setThrottleDelay(Duration.milliseconds(1000l));
+		nameOnChange.setThrottleDelay(Duration.milliseconds(300l));
 		name.add(nameOnChange);
-		name.add(new OnChangeAjaxBehavior() {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				handleChanges(target, componentModel);
-			}
-			});
 		add(name);
 
 		AmpButtonField addbutton = new AmpButtonField("deleteComponent", "Delete Component") {

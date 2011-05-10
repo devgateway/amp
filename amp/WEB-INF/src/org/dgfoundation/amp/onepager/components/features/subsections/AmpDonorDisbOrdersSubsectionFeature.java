@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbOrdersFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbursementsFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -98,10 +99,10 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				"disbOrdersTableFeature", model, "Disbursement Orders Table");
 		add(disbOrdersTableFeature);
 
-		AmpButtonField addCommit = new AmpButtonField("addDisbOrder",
-				"Add Disbursement Order") {
+		AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addDisbOrder",
+				"Add Disbursement Order", "Add Disbursement Order") {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd = new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
 				fd.setTransactionAmount(0d);

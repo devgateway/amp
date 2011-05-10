@@ -36,6 +36,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAddContactFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpContactFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -148,12 +149,12 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         buttonsContainer.setOutputMarkupPlaceholderTag(true);
         buttonsContainer.setOutputMarkupId(true);
         
-        final AjaxButton  addContact = new  AjaxButton("addContactButton") {
+        final AmpAjaxLinkField addContact = new AmpAjaxLinkField("addContactButton", "Add Contact", "Add Contact") {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
 
                 try {
                     AmpActivityContact aaContact = new AmpActivityContact();
@@ -172,18 +173,15 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                         aaContact.setContactType(contactType);
                         act.getActivityContacts().add(aaContact);
                         idsList.removeAll();
-                        form.clearInput();
                         contactname.setDefaultModel(new Model<String>());
                         contactname.setDefaultModelObject(null);
                         contactLast.setDefaultModel(new Model<String>());
                         contactLast.setDefaultModelObject(null);
                         buttonsContainer.setVisible(false);
                         contactDuplicationTable.setVisible(false);
-                        target.addComponent(form);
                         target.addComponent(AmpContactsSubsectionFeaturePanel.this);
                         //target.appendJavascript(OnePagerConst.getToggleJS(AmpContactsSubsectionFeaturePanel.this.getSlider()));
                         target.appendJavascript(OnePagerConst.getToggleChildrenJS(AmpContactsSubsectionFeaturePanel.this));
-
                     }
                     target.addComponent(feedback);
                     
@@ -195,15 +193,12 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
         };
 
 
-        final AjaxButton createContact = new AjaxButton("createContactButton") {
-
+        final AmpAjaxLinkField createContact = new AmpAjaxLinkField("createContactButton", "Create New Contact", "Create New Contact") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
+            public void onClick(AjaxRequestTarget target) {
                 try {
-
                     AmpContact newContact = new AmpContact();
                     TextField<String> name=contactname.getTextContainer();
                     TextField<String> lastname=contactLast.getTextContainer();
@@ -240,12 +235,11 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
             }
         };
 
-        AmpButtonField searchContact = new AmpButtonField("searchContact", "Search Contact") {
-
+        AmpAjaxLinkField searchContact = new AmpAjaxLinkField("searchContact", "Search Contact", "Search Contact") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 String name =(String) contactname.getTextContainer().getDefaultModelObject();
                 String lastname = (String) contactLast.getTextContainer().getDefaultModelObject();
                 try {
@@ -271,11 +265,6 @@ public class AmpContactsSubsectionFeaturePanel extends AmpSubsectionFeaturePanel
                 }
             }
         };
-        searchContact.getButton().setDefaultFormProcessing(false);
-        //addContact.setDefaultFormProcessing(false);
-        createContact.setDefaultFormProcessing(false);
-       
-
         add(feedback);
         add(contactname);
         add(contactLast);

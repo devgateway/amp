@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpPIItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -55,7 +56,7 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
 		list.setOutputMarkupId(true);
 		add(list);
 		
-		AjaxLink addbutton = new AjaxLink("updateSurveys") {
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("updateSurveys", "Update Available Surveys", "Update Available Surveys") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				updateSurveySet(am);

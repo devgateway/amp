@@ -20,6 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -139,9 +140,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		current.setOutputMarkupId(true);
 		add(current);
 		
-		AjaxButton setValue = new AjaxButton("setValues", new Model<String>("Set Value")) {
+		AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
 			@Override
-			protected void onSubmit(AjaxRequestTarget art, Form<?> arg1) {
+			protected void onClick(AjaxRequestTarget art) {
 				AmpCategoryValue logFrame = logFrameModel.getObject();
 				AmpIndicatorRiskRatings riskVal = riskModel.getObject();
 				

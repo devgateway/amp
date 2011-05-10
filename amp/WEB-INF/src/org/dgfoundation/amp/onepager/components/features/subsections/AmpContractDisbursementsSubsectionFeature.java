@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -93,9 +94,9 @@ public class AmpContractDisbursementsSubsectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		AmpButtonField addbutton = new AmpButtonField("add", "Add Disbursement") {
+		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("add", "Add Disbursement", "Add Disbursement") {
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			public void onClick(AjaxRequestTarget target) {
 				IPAContractDisbursement comp = new IPAContractDisbursement();
 				comp.setContract(model.getObject());
 				disbModel.getObject().add(comp);

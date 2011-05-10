@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpMEItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -217,7 +218,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				"searchSectors", "Search " + fmName, autoCompleteSectors);
 		add(searchSectors);
 		
-		AjaxLink addIndicator = new AjaxLink("addIndicator") {
+		AmpAjaxLinkField addIndicator = new AmpAjaxLinkField("addIndicator", "Add Indicator", "Add Indicator") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				try {

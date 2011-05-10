@@ -8,7 +8,7 @@
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
  <digi:ref href="css/dhtmlxtree.css" type="text/css" rel="stylesheet" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_xw.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_ed.js"/>"></script>

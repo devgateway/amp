@@ -98,7 +98,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	                           	catch (DgException ex) {throw new JspException(ex);}
 	                     }
 	                    else {
-	                    	logger.info("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
+	                    	logger.debug("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
 	                    	return SKIP_BODY;
 	                    }
 	 				  }

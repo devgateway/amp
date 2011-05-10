@@ -92,7 +92,7 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxscheduler_year_view.js"/>" language="JavaScript" type="text/javascript"></script>
- <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+ <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 

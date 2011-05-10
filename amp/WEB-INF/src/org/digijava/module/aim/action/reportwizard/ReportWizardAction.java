@@ -521,7 +521,7 @@ public class ReportWizardAction extends MultiAction {
 							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
 							{
 								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
-								System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
+								//System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
 								if (type == ArConstants.PLEDGES_TYPE){
 									if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)|| 
 											aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)||aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){

@@ -93,7 +93,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 							synchronized (this) {
 								if(FeaturesUtil.getModuleVisibility(name)==null){
 									FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
-									logger.info("Inserting module: " + this.getName());
+									logger.debug("Inserting module: " + this.getName());
 									AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
@@ -108,13 +108,13 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 									//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
 									synchronized (this) {
 										if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
-											logger.info("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+											logger.debug("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 											AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
 											if(moduleAux!=null)
 												if(moduleAux.getId()!=null)
 												{
 													FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
-													logger.info(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+													logger.debug(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 												}
 										}
 									}

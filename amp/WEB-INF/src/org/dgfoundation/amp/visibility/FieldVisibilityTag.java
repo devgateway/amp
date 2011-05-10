@@ -94,7 +94,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                          	throw new JspException(ex);	
 		                           	}
 		                     } else {
-		                    	 logger.info("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
+		                    	 logger.debug("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
 			                    return SKIP_BODY;
 		                     }
 					  }

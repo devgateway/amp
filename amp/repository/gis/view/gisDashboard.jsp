@@ -837,7 +837,7 @@
     </div>
 </c:if>
 
-<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script language="JavaScript" src="/repository/gis/view/js/gisMap.js"></script>
 
 

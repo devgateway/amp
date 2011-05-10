@@ -1,5 +1,7 @@
 package org.digijava.module.visualization.form;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -28,7 +30,8 @@ public class VisualizationForm extends ActionForm {
 	private DashboardFilter filter = new DashboardFilter();
 	private SummaryInformation summaryInformation;
 	private RanksInformation ranksInformation;
-
+	private ExportData exportData;
+	
 	public void setFilter(DashboardFilter filter) {
 		this.filter = filter;
 	}
@@ -211,4 +214,226 @@ public class VisualizationForm extends ActionForm {
 		}
 	}
 
+	public void setExportData(ExportData exportData) {
+		this.exportData = exportData;
+	}
+
+	public ExportData getExportData() {
+		if(this.exportData==null){
+			this.exportData=new ExportData();
+		}
+		return this.exportData;
+	}
+
+	public class ExportData {
+		private BufferedImage fundingGraph;
+		private BufferedImage aidPredictabilityGraph;
+		private BufferedImage aidTypeGraph;
+		private BufferedImage financingInstGraph;
+		private BufferedImage donorGraph;
+		private BufferedImage sectorGraph;
+		private BufferedImage regionGraph;
+		private String fundingTableData;
+		private String aidPredicTableData;
+		private String aidTypeTableData;
+		private String financingInstTableData;
+		private String donorTableData;
+		private String sectorTableData;
+		private String regionTableData;
+		private int fundingOpt = 3;
+		private int aidPredicOpt = 3;
+		private int aidTypeOpt = 3;
+		private int financingInstOpt = 3;
+		private int donorOpt = 3;
+		private int sectorOpt = 3;
+		private int regionOpt = 3;
+		private int summaryOpt = 1;	
+		private int typeOpt = 0;
+
+		public BufferedImage getAidPredictabilityGraph() {
+			return aidPredictabilityGraph;
+		}
+
+		public void setAidPredictabilityGraph(BufferedImage aidPredictabilityGraph) {
+			this.aidPredictabilityGraph = aidPredictabilityGraph;
+		}
+
+		public BufferedImage getFundingGraph() {
+			return fundingGraph;
+		}
+
+		public void setFundingGraph(BufferedImage fundingGraph) {
+			this.fundingGraph = fundingGraph;
+		}
+
+		public BufferedImage getAidTypeGraph() {
+			return aidTypeGraph;
+		}
+
+		public void setAidTypeGraph(BufferedImage aidTypeGraph) {
+			this.aidTypeGraph = aidTypeGraph;
+		}
+
+		public BufferedImage getFinancingInstGraph() {
+			return financingInstGraph;
+		}
+
+		public void setFinancingInstGraph(BufferedImage financingInstGraph) {
+			this.financingInstGraph = financingInstGraph;
+		}
+
+		public BufferedImage getDonorGraph() {
+			return donorGraph;
+		}
+
+		public void setDonorGraph(BufferedImage donorGraph) {
+			this.donorGraph = donorGraph;
+		}
+
+		public BufferedImage getSectorGraph() {
+			return sectorGraph;
+		}
+
+		public void setSectorGraph(BufferedImage sectorGraph) {
+			this.sectorGraph = sectorGraph;
+		}
+
+		public BufferedImage getRegionGraph() {
+			return regionGraph;
+		}
+
+		public void setRegionGraph(BufferedImage regionGraph) {
+			this.regionGraph = regionGraph;
+		}
+
+		public String getFundingTableData() {
+			return fundingTableData;
+		}
+
+		public void setFundingTableData(String fundingTableData) {
+			this.fundingTableData = fundingTableData;
+		}
+
+		public String getAidPredicTableData() {
+			return aidPredicTableData;
+		}
+
+		public void setAidPredicTableData(String aidPredicTableData) {
+			this.aidPredicTableData = aidPredicTableData;
+		}
+
+		public String getAidTypeTableData() {
+			return aidTypeTableData;
+		}
+
+		public void setAidTypeTableData(String aidTypeTableData) {
+			this.aidTypeTableData = aidTypeTableData;
+		}
+
+		public String getFinancingInstTableData() {
+			return financingInstTableData;
+		}
+
+		public void setFinancingInstTableData(String financingInstTableData) {
+			this.financingInstTableData = financingInstTableData;
+		}
+
+		public String getDonorTableData() {
+			return donorTableData;
+		}
+
+		public void setDonorTableData(String donorTableData) {
+			this.donorTableData = donorTableData;
+		}
+
+		public String getSectorTableData() {
+			return sectorTableData;
+		}
+
+		public void setSectorTableData(String sectorTableData) {
+			this.sectorTableData = sectorTableData;
+		}
+
+		public String getRegionTableData() {
+			return regionTableData;
+		}
+
+		public void setRegionTableData(String regionTableData) {
+			this.regionTableData = regionTableData;
+		}
+
+		public int getFundingOpt() {
+			return fundingOpt;
+		}
+
+		public void setFundingOpt(int fundingOpt) {
+			this.fundingOpt = fundingOpt;
+		}
+
+		public int getAidPredicOpt() {
+			return aidPredicOpt;
+		}
+
+		public void setAidPredicOpt(int aidPredicOpt) {
+			this.aidPredicOpt = aidPredicOpt;
+		}
+
+		public int getAidTypeOpt() {
+			return aidTypeOpt;
+		}
+
+		public void setAidTypeOpt(int aidTypeOpt) {
+			this.aidTypeOpt = aidTypeOpt;
+		}
+
+		public int getFinancingInstOpt() {
+			return financingInstOpt;
+		}
+
+		public void setFinancingInstOpt(int financingInstOpt) {
+			this.financingInstOpt = financingInstOpt;
+		}
+
+		public int getDonorOpt() {
+			return donorOpt;
+		}
+
+		public void setDonorOpt(int donorOpt) {
+			this.donorOpt = donorOpt;
+		}
+
+		public int getSectorOpt() {
+			return sectorOpt;
+		}
+
+		public void setSectorOpt(int sectorOpt) {
+			this.sectorOpt = sectorOpt;
+		}
+
+		public int getRegionOpt() {
+			return regionOpt;
+		}
+
+		public void setRegionOpt(int regionOpt) {
+			this.regionOpt = regionOpt;
+		}
+
+		public int getSummaryOpt() {
+			return summaryOpt;
+		}
+
+		public void setSummaryOpt(int summaryOpt) {
+			this.summaryOpt = summaryOpt;
+		}
+
+		public int getTypeOpt() {
+			return typeOpt;
+		}
+
+		public void setTypeOpt(int typeOpt) {
+			this.typeOpt = typeOpt;
+		} 
+	
+		
+	}
 }

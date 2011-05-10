@@ -122,8 +122,8 @@ var panelStart=0;
 
 function initPanel() {
 	
-    var msg='\n<digi:trn>Advanced Filters</digi:trn>';
-	myPanel.setHeader(msg);
+    //var msg='\n<digi:trn>Advanced Filters</digi:trn>';
+	//myPanel.setHeader(msg);
 	myPanel.setBody("");
 	myPanel.beforeHideEvent.subscribe(function() {
 		panelStart=1;
@@ -133,6 +133,8 @@ function initPanel() {
 }
 
 function showPopin() {
+	var msg='\n<digi:trn>Advanced Filters</digi:trn>';
+	myPanel.setHeader(msg);
 	var element = document.getElementById("dialog2");
 	element.style.display 	= "inline";
 	myPanel.setBody(element);
@@ -149,6 +151,63 @@ function hidePopin() {
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		allGraphs[idx].style.display = "";
 	}
+}
+
+function showExport() {
+	var msg='\n<digi:trn>Export Options</digi:trn>';
+	myPanel.setHeader(msg);
+	var element = document.getElementById("exportPopin");
+	element.style.display 	= "inline";
+	myPanel.setBody(element);
+	myPanel.show();
+	var allGraphs = document.getElementsByName("flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		allGraphs[idx].style.display = "none";
+	}
+}
+function hideExport() {
+	myPanel.hide();
+	var allGraphs = document.getElementsByName("flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		allGraphs[idx].style.display = "";
+	}
+}
+
+function doExport(){
+	var options = "?";
+	options += "typeOpt=" + getOptionChecked("export_type_");
+	options += "&summaryOpt=" + getOptionChecked("export_summary_");
+	options += "&fundingOpt=" + getOptionChecked("export_funding_");
+	options += "&aidPredicOpt=" + getOptionChecked("export_aid_pred_");
+	options += "&aidTypeOpt=" + getOptionChecked("export_aid_type_");
+	options += "&financingInstOpt=" + getOptionChecked("export_fin_inst_");
+	options += "&donorOpt=" + getOptionChecked("export_donor_");
+	options += "&sectorOpt=" + getOptionChecked("export_sector_");
+	options += "&regionOpt=" + getOptionChecked("export_region_");
+	var type = "" + getOptionChecked("export_type_");
+	if (type=="0") {
+		<digi:context name="url1" property="/visualization/pdfExport.do"/>
+		document.visualizationform.action="${url1}" + options ;
+		document.visualizationform.target="_blank";
+		document.visualizationform.submit();
+	} else {
+		<digi:context name="url2" property="/visualization/wordExport.do"/>
+		document.visualizationform.action="${url2}" + options ;
+		document.visualizationform.target="_blank";
+		document.visualizationform.submit();
+	}
+	hideExport();
+}
+
+function getOptionChecked (elements){
+	var cnt = 0;
+	while (document.getElementById("" + elements + cnt) != null) {
+		if (document.getElementById("" + elements + cnt).checked == true) {
+			return document.getElementById("" + elements + cnt).value;
+		}
+		cnt++;
+	}
+	return 0;
 }
 
 function resetToDefaults(){
@@ -401,6 +460,116 @@ function changeTab (selected){
 </table>
 <!-- POPUPS END -->
 
+<table>
+<tr>
+<td>
+<div id="exportPopin" class="dialog" title="Export Options">
+<div id="popinContent2" class="content">
+	<div id="exportDiv" class="yui-navset">
+		<table width="100%" height=400 cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="inside" width="45%" >
+				<div class="selector_type_sel">Export Type</div>
+				<div>
+		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" "><br />
+		            <html:radio property="exportData.typeOpt" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif" "><br />
+		        </div>
+		        </td>
+		        <td class="inside" width="45%" >
+				<div class="selector_type_sel">Summary</div>
+				<div>
+		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
+		            <html:radio property="exportData.summaryOpt" styleId="export_summary_1" value="1"><digi:trn>Inculde Summary</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		    </tr>
+		    <tr>
+				<td class="inside" width="45%" >
+				<div class="selector_type_sel">Funding</div>
+				<div>
+		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.fundingOpt" styleId="export_funding_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.fundingOpt" styleId="export_funding_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.fundingOpt" styleId="export_funding_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		        <td class="inside" width="45%" >
+				<div class="selector_type_sel">Aid Predictability</div>
+				<div>
+		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		    </tr>
+		    <tr>
+				<td class="inside" width="45%" >
+				<div class="selector_type_sel">Aid Type</div>
+				<div>
+		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		        <td class="inside" width="45%" >
+				<div class="selector_type_sel">Financing Instrument</div>
+				<div>
+		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		    </tr>
+		    <tr>
+				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+    			<td class="inside" width="45%" >
+				<div class="selector_type_sel">Donor Profile</div>
+				<div>
+		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.donorOpt" styleId="export_donor_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.donorOpt" styleId="export_donor_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.donorOpt" styleId="export_donor_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		        </c:if>
+		        <c:if test="${visualizationform.filter.dashboardType ne '3' }">
+    			<td class="inside" width="45%" >
+				<div class="selector_type_sel">Sector</div>
+				<div>
+		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.sectorOpt" styleId="export_sector_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.sectorOpt" styleId="export_sector_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.sectorOpt" styleId="export_sector_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		        </c:if>
+		        <c:if test="${visualizationform.filter.dashboardType ne '2' }">
+    			<td class="inside" width="45%" >
+				<div class="selector_type_sel">Region</div>
+				<div>
+		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.regionOpt" styleId="export_region_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.regionOpt" styleId="export_region_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.regionOpt" styleId="export_region_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		        </div>
+		        </td>
+		        </c:if>
+		    </tr>
+		</table>
+	</div>
+	</div>
+
+<input type="button" value="Export" class="buttonx" onclick="doExport()" style="margin-right:10px; margin-top:10px;">
+<input type="button" value="Close" class="buttonx" onclick="hideExport()" style="margin-right:10px; margin-top:10px;">
+
+</div>
+</td>
+</tr>
+</table>
+
 <!-- MAIN CONTENT PART START -->
 
 <html:hidden property="filter.decimalsToShow" styleId="decimalsToShow" />
@@ -434,7 +603,7 @@ function changeTab (selected){
     		</c:if>
     	</div>
     </td>
-    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to PDF</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_word_1.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export to DOC</a></div></div> <div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href=# class="l_sm">Export Options</a></div></div></td>
+    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export</a></div></div></td>
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>

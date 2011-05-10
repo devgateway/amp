@@ -1,5 +1,13 @@
 package org.digijava.module.visualization.action;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -18,6 +26,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -71,6 +82,8 @@ import org.jfree.data.UnknownKeyException;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+
+import sun.misc.BASE64Decoder;
 
 public class DataDispatcher extends DispatchAction {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -464,7 +477,7 @@ public class DataDispatcher extends DispatchAction {
         }
         int yearsInRange=filter.getYearsInRange()-1;
 
-        if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+        //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
             try {
                 List<AmpSector> sectors = DbUtil.getSectors(filter);
                 Iterator<AmpSector> sectorIter = sectors.iterator();
@@ -496,9 +509,9 @@ public class DataDispatcher extends DispatchAction {
             }
             
             dataSetSorted.putAll(dataSet);
-            
+            StringBuffer xmlString = null;
     		if(format != null && format.equals("xml")){
-    			StringBuffer xmlString = new StringBuffer();
+    			xmlString = new StringBuffer();
     			if(sectorTotal.compareTo(BigDecimal.ZERO) == 1){
     		        Set<String> keysSet = dataSetSorted.keySet();
     				//Loop funding types
@@ -532,11 +545,11 @@ public class DataDispatcher extends DispatchAction {
     			}
 
     			
-    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    					response.getOutputStream(), "UTF-8"), true);
-    			out.println(xmlString.toString());
-    			out.close();
-    			return null;
+    			//PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    			//		response.getOutputStream(), "UTF-8"), true);
+    			//out.println(xmlString.toString());
+    			//out.close();
+    			//return null;
     		}
             else
             {
@@ -571,14 +584,13 @@ public class DataDispatcher extends DispatchAction {
             		
         		PrintWriter out = new PrintWriter(new OutputStreamWriter(
             			response.getOutputStream(), "UTF-8"), true);
-
-            	out.println(csvString.toString());
-
-            	out.close();
+        		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+	            	out.println(csvString.toString());
+	            	out.close();
+	            	return null;
+        		}
             }
-        }
-        else
-        {
+        //} else {
             HashMap<Long[],BigDecimal> dataSetCSV = new HashMap<Long[],BigDecimal>();
             ValueComparatorLongs bvcl =  new ValueComparatorLongs(dataSetCSV);
             TreeMap<Long[],BigDecimal> dataSetSortedCSV = new TreeMap<Long[],BigDecimal>(Collections.reverseOrder(bvcl));
@@ -612,17 +624,19 @@ public class DataDispatcher extends DispatchAction {
             
             Set<Long[]> keysSet = dataSetSortedCSV.keySet();
             StringBuffer csvString = new StringBuffer();
-
+            String sectorData = "";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
             
             Iterator<Long[]> it = keysSet.iterator();
             int index = 0;
             // Take the top 5
             csvString.append("Year,");
+            sectorData += "<Year>";
             while(it.hasNext() && index <= 4){
                 Long[] key = it.next();
                 csvString.append(sectorList.get(key[0]));
                 csvString.append(",");
+                sectorData += sectorList.get(key[0]) + ">";
                 for (Long i = year - yearsInRange; i <= year; i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
         			newFilter.setSelSectorIds(key);
@@ -647,7 +661,8 @@ public class DataDispatcher extends DispatchAction {
             HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
             csvString.append("Others");
             csvString.append("\n");
-
+            sectorData += "Others";
+            
             while(it.hasNext()){
                 Long[] key = it.next();
     			DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -669,33 +684,52 @@ public class DataDispatcher extends DispatchAction {
             for (Long i = year - yearsInRange; i <= year; i++) {
             	csvString.append(i);
             	csvString.append(",");
-            	csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
+            	sectorData += "<" + i + ">";
+                csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
             	csvString.append(",");
+            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+            	sectorData += ">";
             	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
             	csvString.append(",");
+            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+            	sectorData += ">";
             	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
             	csvString.append(",");
+            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+            	sectorData += ">";
             	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
             	csvString.append(",");
+            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+            	sectorData += ">";
             	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
             	csvString.append(",");
+            	sectorData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+            	sectorData += ">";
             	csvString.append(othersYearlyValue.get(i));
             	csvString.append("\n");
+            	sectorData += othersYearlyValue.get(i);
             }
-            
-    		PrintWriter out = new PrintWriter(new OutputStreamWriter(
-        			response.getOutputStream(), "UTF-8"), true);
+            visualizationForm.getExportData().setSectorTableData(sectorData);
+    		
 
-        	out.println(csvString.toString());
-
-        	out.close();
+    		if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+            			response.getOutputStream(), "UTF-8"), true);
+    			out.println(xmlString.toString());
+    			out.close();
+    			return null;
+    			
+    		} else {
+    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    					response.getOutputStream(), "UTF-8"), true);
+	        	out.println(csvString.toString());
+	        	out.close();
+	        	return null;
+    		}
             
+        //}
             
-        }
-            
-        
-        
-		return null;
+		//return null;
 	}	
 	
 	private BigDecimal getPercentage(BigDecimal currentSector, BigDecimal sectorTotal) {
@@ -846,9 +880,6 @@ public class DataDispatcher extends DispatchAction {
 
         	out.close();
         }
-
-        
-        
 		return null;
 	}	
 	
@@ -937,9 +968,11 @@ public class DataDispatcher extends DispatchAction {
 			}
 			else
 			{
-				//Loop funding types
+				String aidTypeData = "";
+				
 				for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
 					xmlString.append("<year name=\"" + i + "\">\n");
+					aidTypeData += "<" + i;
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
@@ -952,11 +985,16 @@ public class DataDispatcher extends DispatchAction {
 		                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(),Constants.ACTUAL);
 		                }
 						xmlString.append("<aidtype category=\"" + value.getValue() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+						aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 					xmlString.append("</year>\n");
 				}
+				if (typeOfAid) {
+			        visualizationForm.getExportData().setAidTypeTableData(aidTypeData);
+				} else {
+					visualizationForm.getExportData().setFinancingInstTableData(aidTypeData);
+				}
 			}
-			
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
@@ -1066,18 +1104,22 @@ public class DataDispatcher extends DispatchAction {
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
 			//Loop funding types
-			
+			String aidPredData = "";
 			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
 				xmlString.append("<year name=\"" + i + "\">\n");
+				aidPredData += "<" + i;
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.PLANNED);
 				xmlString.append("<fundingtype category=\"Planned\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
-	            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
+				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), Constants.ACTUAL);
 				xmlString.append("<fundingtype category=\"Actual\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				xmlString.append("</year>\n");
 			}
 			
+			visualizationForm.getExportData().setAidPredicTableData(aidPredData);
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
 
@@ -1217,9 +1259,10 @@ public class DataDispatcher extends DispatchAction {
 		//TODO: Change this to use XML DOM Object
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
-
+			String fundingData = "";
 			for (int i = year.intValue() - yearsInRange; i <= year.intValue(); i++) {
 				xmlString.append("<year name=\"" + i + "\">\n");
+				fundingData += "<" + i;
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 
@@ -1228,17 +1271,20 @@ public class DataDispatcher extends DispatchAction {
 						Constants.DISBURSEMENT, Constants.ACTUAL);
 				xmlString
 				.append("<fundingtype category=\"Disbursements\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+				fundingData += ">Disbursements>"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				DecimalWraper fundingComm = DbUtil
 				.getFunding(filter, startDate, endDate, null, null,
 						Constants.COMMITMENT, Constants.ACTUAL);
 				xmlString
 				.append("<fundingtype category=\"Commitments\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+				fundingData += ">Commitments>"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				if (filter.isExpendituresVisible()) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, Constants.ACTUAL);
 					xmlString
 					.append("<fundingtype category=\"Expenditures\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					fundingData += ">Expenditures>"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
 				if (filter.isPledgeVisible()) {
@@ -1247,10 +1293,12 @@ public class DataDispatcher extends DispatchAction {
 							currCode);
 					xmlString
 					.append("<fundingtype category=\"Pledges\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"/>\n");
+					fundingData += ">Pledges>"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				xmlString.append("</year>\n");
 			}
 
+			visualizationForm.getExportData().setFundingTableData(fundingData);
 			
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
 					response.getOutputStream(), "UTF-8"), true);
@@ -1494,7 +1542,7 @@ public class DataDispatcher extends DispatchAction {
         }
         int yearsInRange=filter.getYearsInRange()-1;
 
-        if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+        //if(!lineChart){ // Line Chart needs a special treatment (yearly values)
             try {
                 List<AmpCategoryValueLocations> locations = DbUtil.getRegions(filter);
                 Iterator<AmpCategoryValueLocations> regionIter = locations.iterator();
@@ -1548,9 +1596,9 @@ public class DataDispatcher extends DispatchAction {
             }
             
             dataSetSorted.putAll(dataSet);
-            
+            StringBuffer xmlString = null;
     		if(format != null && format.equals("xml")){
-    			StringBuffer xmlString = new StringBuffer();
+    			xmlString = new StringBuffer();
     			if(regionalTotal.compareTo(BigDecimal.ZERO) == 1){
     		        Set<String> keysSet = dataSetSorted.keySet();
     				//Loop funding types
@@ -1583,12 +1631,11 @@ public class DataDispatcher extends DispatchAction {
     				xmlString.append("</region>\n");
     			}
 
-    			
-    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-    					response.getOutputStream(), "UTF-8"), true);
-    			out.println(xmlString.toString());
-    			out.close();
-    			return null;
+    			//PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    			//		response.getOutputStream(), "UTF-8"), true);
+    			//out.println(xmlString.toString());
+    			//out.close();
+    			//return null;
     		}
             else
             {
@@ -1620,17 +1667,17 @@ public class DataDispatcher extends DispatchAction {
             		csvString.append(othersValue.setScale(10, RoundingMode.HALF_UP));
             		csvString.append("\n");
                 }
-            		
-        		PrintWriter out = new PrintWriter(new OutputStreamWriter(
-            			response.getOutputStream(), "UTF-8"), true);
-
-            	out.println(csvString.toString());
-
-            	out.close();
+            	
+                if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+	        		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+	            			response.getOutputStream(), "UTF-8"), true);
+	
+	            	out.println(csvString.toString());
+	            	out.close();
+	            	return null;
+                }
             }
-        }
-        else
-        {
+        //} else {
             HashMap<Long[],BigDecimal> dataSetCSV = new HashMap<Long[],BigDecimal>();
             ValueComparatorLongs bvcl =  new ValueComparatorLongs(dataSetCSV);
             TreeMap<Long[],BigDecimal> dataSetSortedCSV = new TreeMap<Long[],BigDecimal>(Collections.reverseOrder(bvcl));
@@ -1686,17 +1733,19 @@ public class DataDispatcher extends DispatchAction {
             
             Set<Long[]> keysSet = dataSetSortedCSV.keySet();
             StringBuffer csvString = new StringBuffer();
-
+            String regionData = "";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
             
             Iterator<Long[]> it = keysSet.iterator();
             int index = 0;
             // Take the top 5
             csvString.append("Year,");
+            regionData += "<Year>";
             while(it.hasNext() && index <= 4){
                 Long[] key = it.next();
                 csvString.append(regionList.get(key[0]));
                 csvString.append(",");
+                regionData += regionList.get(key[0]) + ">";
                 for (Long i = year - yearsInRange; i <= year; i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
         			newFilter.setSelLocationIds(key);
@@ -1721,7 +1770,8 @@ public class DataDispatcher extends DispatchAction {
             HashMap<Long, BigDecimal> othersYearlyValue = new HashMap<Long, BigDecimal>();
             csvString.append("Others");
             csvString.append("\n");
-
+            regionData += "Others";
+            
             while(it.hasNext()){
                 Long[] key = it.next();
     			DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -1743,33 +1793,51 @@ public class DataDispatcher extends DispatchAction {
             for (Long i = year - yearsInRange; i <= year; i++) {
             	csvString.append(i);
             	csvString.append(",");
+            	regionData += "<" + i + ">";
             	csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
             	csvString.append(",");
+            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString();
+            	regionData += ">";
             	csvString.append(allData.get(i)[1].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString());
             	csvString.append(",");
+            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[1].toPlainString();
+            	regionData += ">";
             	csvString.append(allData.get(i)[2].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString());
             	csvString.append(",");
+            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[2].toPlainString();
+            	regionData += ">";
             	csvString.append(allData.get(i)[3].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString());
             	csvString.append(",");
+            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[3].toPlainString();
+            	regionData += ">";
             	csvString.append(allData.get(i)[4].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString());
             	csvString.append(",");
+            	regionData += allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[4].toPlainString();
+            	regionData += ">";
             	csvString.append(othersYearlyValue.get(i));
             	csvString.append("\n");
+            	regionData += othersYearlyValue.get(i);
             }
+            visualizationForm.getExportData().setRegionTableData(regionData);
+            if(!lineChart){ // Line Chart needs a special treatment (yearly values)
+    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+            			response.getOutputStream(), "UTF-8"), true);
+    			out.println(xmlString.toString());
+    			out.close();
+    			return null;
+    			
+    		} else {
+    			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    					response.getOutputStream(), "UTF-8"), true);
+	        	out.println(csvString.toString());
+	        	out.close();
+	        	return null;
+    		}
             
-    		PrintWriter out = new PrintWriter(new OutputStreamWriter(
-        			response.getOutputStream(), "UTF-8"), true);
-
-        	out.println(csvString.toString());
-
-        	out.close();
             
-            
-        }
-            
+        //}
         
-        
-		return null;
+		//return null;
 	}	
 	
 	
@@ -1798,4 +1866,82 @@ public class DataDispatcher extends DispatchAction {
 			return base.get(a).compareTo(base.get(b));
 		}
 	}
+	
+	public ActionForward setChartImageFromSnapshot(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+		 
+		VisualizationForm vForm = (VisualizationForm) form;
+		int i = 0;
+        int k = 0;
+        int maxLength = request.getContentLength();
+        byte[] bytes = new byte[maxLength];
+        String method = request.getParameter("method");
+        String name = request.getParameter("name");
+        String type = request.getParameter("type");
+        int graph = Integer.valueOf(request.getParameter("graph"));
+        ServletInputStream si = request.getInputStream();
+        while (true){
+            k = si.read(bytes,i,maxLength);
+            i += k;
+            if (k <= 0)
+            break;
+        }
+
+        if (bytes != null && bytes.length>0) {
+            if (type==null||type.equals("")) {
+                ServletOutputStream stream = response.getOutputStream();
+                response.setContentType("application/pdf");
+                response.setContentLength(bytes.length);
+                response.setHeader("Content-Disposition",method + ";filename=" + name);
+                stream.write(bytes);
+                stream.flush();
+                stream.close();
+            }
+
+            if (type!=null&&(type.equals("jpg")||type.equals("png"))) {
+                BASE64Decoder decoder = new BASE64Decoder();
+                byte[] imagen=decoder.decodeBuffer(new String(bytes));
+                InputStream in = new ByteArrayInputStream(imagen);
+                BufferedImage image =  ImageIO.read(in);
+               switch (graph) {
+				case 1:
+					vForm.getExportData().setFundingGraph(image);			
+					break;
+				
+				case 2:
+					vForm.getExportData().setAidPredictabilityGraph(image);
+					break;
+				
+				case 3:
+					vForm.getExportData().setAidTypeGraph(image);
+					break;
+				
+				case 4:
+					vForm.getExportData().setFinancingInstGraph(image);
+					break;
+				
+				case 5:
+					vForm.getExportData().setDonorGraph(image);
+					break;
+				
+				case 6:
+					vForm.getExportData().setSectorGraph(image);
+					break;
+				
+				case 7:
+					vForm.getExportData().setRegionGraph(image);
+					break;
+				
+				}
+                
+            }
+        } else {
+        	response.setContentType("text");
+        	response.getWriter().write("bytes is null");
+        }
+	        
+		return null;
+	}
+	
 }

@@ -27,5 +27,8 @@
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
     
+    	<action name="visualizationform" path="/visualization/pdfExport" type="org.digijava.module.visualization.action.ExportToPDF"/>
+    	<action name="visualizationform" path="/visualization/wordExport" type="org.digijava.module.visualization.action.ExportToWord"/>
+    
 	</action-mappings>
 </struts-config>

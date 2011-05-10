@@ -137,159 +137,10 @@ function hidePopin() {
 <br/>
 <!-- BREADCRUMB END -->
 
-<!-- POPUPS START -->
-<div id="dialog2" class="dialog" title="Advanced Filters">
-<div id="popinContent" class="content">
-	<div id="selectDiv" class="yui-navset">
-		<table class="inside" width="100%" height=400 cellpadding="0" cellspacing="0">
-			<tr>
-				<td width=40% height=25 align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b class="ins_header">Grouping Selector</b></td>
-				<td width=60% background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside" align="center"><b class="ins_header">Grouping Details</b></td>
-			</tr>
-			<tr>
-			    <td class="inside" style="background-color:#F9F9F9;" valign="top">
-			    <ul class="yui-nav" style="width: 70%; position: static;">
-					<div class="selector_type_sel"><div class="selector_type_cont">General</div></div>
-					<div class="selector_type"><div class="selector_type_cont"><a href="#divOrganizationsFilter">Organizations</a></div></div>
-					<div class="selector_type"><div class="selector_type_cont"><a href="#divRegionsFilter">Regions</a></div></div>
-					<div class="selector_type"><div class="selector_type_cont"><a href="#divSectorsFilter">Sectors</a></div></div>
-				</ul>
-				</td>
-				<td class="inside" valign="top" style="background-color:#F9F9F9;">
-					<div id="divGeneralFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;">
-						
-						<input name="" type="checkbox" value="" /> <b>Show Data From All Workspaces</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />  &nbsp;&nbsp;<input name="" type="checkbox" value="" /> <b>Show Decimals</b>
-						<hr />
-						<b>For Time Series Comparison, what data do you want to show?</b> <img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<input name="" type="checkbox" value="" />Commitements &nbsp;&nbsp;<input name="" type="checkbox" value="" />Distributements&nbsp;&nbsp;<input name="" type="checkbox" value="" />Expenditures&nbsp;&nbsp;<input name="" type="checkbox" value="" />Pledges<br />
-						<b>What data should the dashboard show? </b><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
-						<input name="" type="radio" value="" />Commitements&nbsp;&nbsp;<input name="" type="radio" value="" />Distributements&nbsp;&nbsp;<input name="" type="radio" value="" />Expenditures&nbsp;&nbsp;<input name="" type="radio" value="" />Pledges
-						<hr />
-							<table border="0" cellspacing="0" cellpadding="0">
-								<tr>
-								  	<td><b>Currency Type:</b></td>
-								  	<td>	
-									  	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-									 		<option value="Na">US Dollar</option>
-										</select>
-									</td>
-								   	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-								</tr>
-							    <tr>
-								    <td><b>Fiscal Calendar:</b></td>
-								    <td>
-								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-							  				<option value="Na">Gregorian Calendar</option>
-										</select>
-									</td>
-							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							 	</tr>
-							    <tr>
-							    	<td><b>Fiscal Year Start:</b></td>
-							    	<td>
-							    		<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-							  				<option value="Na">Gregorian Calendar</option>
-										</select>
-									</td>
-							    	<td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-							  	</tr>
-				      			<tr>
-								    <td><b>Time Scale:</b></td>
-								    <td>
-								    	<select name="select" class=dropdwn_sm style="width:200px; margin-left:7px; margin-right:7px;">
-								 			<option value="Na">Gregorian Calendar</option>
-										</select>
-									</td>
-								    <td><img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<!-- 
-					<div id="divOrganizationsFilter">
-						<div class="selector_content_org_prof" style="line-height:25px;">
-						<b>Organization Group:</b><br />
-							<select name="select" class=dropdwn_sm style="width:200px;">
-		  						<option value="Na">China</option>
-							</select> 
-							<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" />
-							<hr />
-						<b>Organization:</b><br />
-							<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;">
-		  						<option value="Na">Organization 1</option>
-		  						<option value="Na">Organization 2</option>
-		   						<option value="Na">Organization 3</option>
-							</select>		
-						</div>
-					</div>
-					<div id="divRegionsFilter">
-					    <td class="inside" valign="top" style="background-color:#F9F9F9;">
-							<div class="selector_content_org_prof" style="line-height:25px;">
-								<b>Region:</b> <img src="images/ico_quest.gif" /><br />
-									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-					  					<option value="Na">Region 1</option>
-					  					<option value="Na">Region  2</option>
-					   					<option value="Na">Region 3</option>
-									</select>		
-								<hr />
-								<b>Zone:</b><br />
-									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-						  				<option value="Na">Zone 1</option>
-						  				<option value="Na">Zone 2</option>
-						   				<option value="Na">Zone 3</option>
-									</select>		
-								<hr />
-								<b>District:</b><br />
-									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-										  <option value="Na">District 1</option>
-										  <option value="Na">District 2</option>
-										  <option value="Na">District 3</option>
-									</select>
-							</div>
-						</td>
-					</div>
-					<div id="divSectorsFilter">
-						<td class="inside" valign="top" style="background-color:#F9F9F9;">
-							<div class="selector_content_org_prof" style="line-height:25px;">
-								<b>Sector:</b> <img src="images/ico_quest.gif" /><br />
-									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-									  	<option value="Na">Sector 1</option>
-									  	<option value="Na">Sector  2</option>
-									  	<option value="Na">Sector 3</option>
-									</select>		
-								<hr />
-								<b>Sub-Sectors:</b><br />
-									<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-					  					<option value="Na">Sub Sector 1</option>
-					  					<option value="Na">Sub Sector 2</option>
-					   					<option value="Na">Sub Sector 3</option>
-									</select>		
-								<hr />
-								<b>Sub-Sub-Sectors:</b><br />
-								<select name="" multiple="multiple" class="dropdwn_sm" style="width:475px;"> 
-					  				<option value="Na">Sub sub Sector 1</option>
-					  				<option value="Na">Sub sub Sector 2</option>
-					   				<option value="Na">Sub sub Sector 3</option>
-								</select>
-							</div>
-						</td>
-					</div>
-					 -->
-				</td>
-			</tr>
-		</table>
-	</div>
-	</div>
-<center><input type="button" value="Apply" class="buttonx" style="margin-right:10px; margin-top:10px;"><input type="button" value="Reset to defaults" class="buttonx" style="margin-top:10px;"></center>
-
-</div>
-
-
-<!-- POPUPS END -->
 
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/filters.do">
+<jsp:include page="advancedFilter.jsp"/>
 <html:hidden property="filter.year" styleId="currentYear"/>
 <html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
 <center> 
@@ -356,11 +207,11 @@ function hidePopin() {
    <tr>
     <td><digi:trn>Region</digi:trn>:</td>
     <td align=right>
-       <html:select property="filter.selRegionIds" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+       <!--<html:select property="filter.selRegionIds" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
            <html:optionsCollection property="filter.regions" value="id" label="name" />
        </html:select>
-	</td>
+	--></td>
   </tr> 
    <tr>
     <td><digi:trn>Zone</digi:trn>:</td>
@@ -392,7 +243,7 @@ function hidePopin() {
 	<center>
 	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
 	<hr />
-<!--	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>-->
+	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>
 	</center>
 	</fieldset>
 	

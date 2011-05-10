@@ -181,7 +181,7 @@ function banUser(txt) {
 															<!-- end header -->
 														</tr>		
  														<tr>
-															<td width="100%">
+															<td width="100%" class="report">
 																<table width="734" RULES=ALL FRAME=VOID id="viewAllUsers" border="0" cellspacing="1" cellpadding="1" >
 																	
 																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
@@ -214,7 +214,7 @@ function banUser(txt) {
 																		</tr>
 																		</thead>
                                                                         
-																		<tbody>
+																		<tbody class="yui-dt-data">
 																	<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
 	                                                           			<tr>
 		                                                           			<td height="30">

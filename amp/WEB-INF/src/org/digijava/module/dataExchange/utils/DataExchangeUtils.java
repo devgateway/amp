@@ -983,10 +983,10 @@ public class DataExchangeUtils {
 
 	public static void generateHashMapTypes(HashMap<String, NullableType> hmType) {
 		// TODO Auto-generated method stub
-		hmType.put(DataExchangeConstants.COLUMN_KEY_ID, Hibernate.LONG);
-		hmType.put(DataExchangeConstants.COLUMN_KEY_AMPID, Hibernate.STRING);
-		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, Hibernate.STRING);
-		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, Hibernate.STRING);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_ID, Hibernate.LONG);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_AMPID, Hibernate.STRING);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, Hibernate.STRING);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, Hibernate.STRING);
 		
 	}
 

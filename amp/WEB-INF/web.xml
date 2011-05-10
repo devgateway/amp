@@ -24,7 +24,11 @@
 		        
 	<!--  ADD ENTRIES BELOW -->
 
-
+	<!-- Correct EhCache shutdown -->
+ 	<listener>
+          <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
+     </listener>
+     
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>

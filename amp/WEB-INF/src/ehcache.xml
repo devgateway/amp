@@ -1,6 +1,7 @@
-<ehcache>
+<ehcache maxBytesOnHeap="100m" maxBytesOffHeap="100m" maxBytesOnDisk="500m" >
 
-    <!-- Sets the path to the directory where cache .data files are created.
+
+	 <!-- Sets the path to the directory where cache .data files are created.
 
          If the path is a Java System Property it is replaced by
          its value in the running VM.
@@ -44,10 +45,11 @@
     <defaultCache
         maxElementsInMemory="1000"
         eternal="false"
-        overflowToDisk="false"
+        overflowToDisk="true"
         timeToIdleSeconds="1800"
         timeToLiveSeconds="3600"
-        diskPersistent="false"
+        diskPersistent="true"
+        maxElementsOnDisk="10000"
         diskExpiryThreadIntervalSeconds="120"/>
 	
 	<!-- 
@@ -55,9 +57,12 @@
 	-->
 	<cache
 		name="org.digijava.kernel.entity.Message.id_cache"
-		maxElementsInMemory="2000000"
+		maxElementsInMemory="1000"
 		eternal="true"
-		overflowToDisk="false"/>
+		overflowToDisk="true"
+		diskPersistent="true"
+		maxElementsOnDisk="100000"
+		/>
 
 	<!-- 
 		This cache is used by SiteCache (for version synchs) and by DigiPolicy (Permission Storage)
@@ -73,16 +78,19 @@
 	-->
 	<cache
 		name="org.digijava.kernel.persistence.PersistenceManager.precache_region"
-		maxElementsInMemory="10000"
+		maxElementsInMemory="1000"
 		eternal="true"
-		overflowToDisk="false"/>
+		overflowToDisk="true"
+		diskPersistent="true"
+		maxElementsOnDisk="10000"
+		/>
 
 	<!-- 
 		This cache is used to share login information
 	-->
 	<cache
 		name="org.digijava.kernel.login_region"
-		maxElementsInMemory="50000"
+		maxElementsInMemory="1000"
 		eternal="true"
 		overflowToDisk="false"/>
 		
@@ -93,8 +101,10 @@
 	<cache
 		name="EXCHANGE_RATES_CACHE"
 		maxElementsInMemory="50000"
-		eternal="true"
-		overflowToDisk="false"/>
+		overflowToDisk="true"
+		diskPersistent="true"
+		maxElementsOnDisk="1000000"
+		/>
 		
     <!-- See http://ehcache.sourceforge.net/documentation/#mozTocId258426 for how to configure caching for your objects -->
 </ehcache>

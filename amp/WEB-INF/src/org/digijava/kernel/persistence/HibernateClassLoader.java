@@ -227,18 +227,5 @@ class LocalHibernateConfig extends Configuration {
 		return stream;
 	}
 
-	/**
-	 * @see org.hibernate.cfg.Configuration#add(org.dom4j.Document)
-	 */
-	protected void add(org.dom4j.Document doc) {
-		List nodes = doc.selectNodes("//*/cache[@usage='read-write']");
-		if (nodes != null) {
-			Iterator iter = nodes.iterator();
-			while (iter.hasNext()) {
-				Element item = (Element) iter.next();
-				item.attribute("usage").setValue("transactional");
-			}
-		}
-		super.add(doc);
-	}
+	
 }

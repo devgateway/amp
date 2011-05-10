@@ -539,12 +539,12 @@
 <div style="background-color:#F8F8F8; border:1px solid #CCCCCC;">
 	<table cellspacing="0" cellpadding="0" width="96%" id="config_table" style="margin:10px;">
 <tbody><tr>
-    <td width="50%" valign="top" class="t_mid"><digi:trn><b>Title</b></digi:trn><br />
+    <td width="50%" valign="top" class="t_mid"><digi:trn><b style="padding-left:5px;">Title</b></digi:trn><br />
 	      <c:set var="translation">
        <digi:trn>Please select from below</digi:trn>
        </c:set>
      <category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>     </td>
-    <td valign="top" class="t_mid"><b>Organization</b>:<br />
+    <td valign="top" class="t_mid"><b style="padding-left:5px;">Organization</b>:<br />
 	<html:text property="organisationName"  size="33" styleClass="inputx insidex"/> <aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
 <digi:trn>Add Organizations</digi:trn>
 </aim:addOrganizationButton>
@@ -572,10 +572,10 @@
 	</tr>
 
 <tr>
-<td valign="top" class="t_mid"><digi:trn><b>Firstname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
+<td valign="top" class="t_mid"><digi:trn><b style="padding-left:5px;">Firstname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
 <html:text property="name" styleId="name" size="33"
 										styleClass="inputx insidex" readonly="${readonly}" /></td>
-							<td valign="top" class="t_mid" id="phonesPlace"><digi:trn><b>Phone Number</b></digi:trn>:<br />
+							<td valign="top" class="t_mid" id="phonesPlace" style="padding-left:5px;"><digi:trn><b>Phone Number</b></digi:trn>:<br />
 							<logic:notEmpty name="addressbookForm" property="phones">
 <logic:iterate name="addressbookForm" property="phones" id="foo" indexId="ctr">
 <div id="div_phone_${ctr}"><c:set var="translationNone">
@@ -604,10 +604,10 @@
 	<td colspan="2"><hr /></td>
 	</tr>
 <tr>
-  <td valign="top" class="t_mid"><digi:trn><b>Lastname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
+  <td valign="top" class="t_mid"><digi:trn><b style="padding-left:5px;">Lastname</b></digi:trn><b style="color: rgb(255, 0, 0);">*</b>:<br />
   <html:text property="lastname" styleId="lastname" size="33"
 										styleClass="inputx insidex" readonly="${readonly}"/></td>
-  <td valign="top" class="t_mid" id="faxesPlace"><digi:trn><b>Fax</b></digi:trn>:<br /><br />
+  <td valign="top" class="t_mid" id="faxesPlace" style="padding-left:5px;"><digi:trn><b>Fax</b></digi:trn>:<br />
 
   <logic:notEmpty name="addressbookForm" property="faxes">
 <logic:iterate name="addressbookForm" property="faxes" id="foo" indexId="ctr">
@@ -629,7 +629,7 @@
 	<td colspan="2"><hr /></td>
 	</tr>
 <tr>
-  <td valign="top" class="t_mid"><digi:trn><b>Email</b></digi:trn>:<br />
+  <td valign="top" class="t_mid" id="emailsPlace"><digi:trn><b style="padding-left:5px;">Email</b></digi:trn>:<br />
     <logic:notEmpty name="addressbookForm" property="emails">
 <logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
 <div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
@@ -643,12 +643,17 @@
 <logic:empty name="addressbookForm" property="emails">
 <c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>
 <a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b">${trnadd}</a></logic:empty></td>
-  <td valign="top" class="t_mid"><digi:trn><b>Office Address</b></digi:trn>:<br />
+  <td valign="top" class="t_mid" style="padding-left:5px;"><digi:trn><b>Office Address</b></digi:trn>:<br />
 <html:textarea property="officeaddress" styleClass="address_textarea" cols="40" /></td>
   <td rowspan="2" valign="top"></td>
 </tr>
+	<tr>
+	<td colspan="2"><hr /></td>
+	</tr>
 <tr>
-  <td valign="top" class="t_mid"><digi:trn>Function</digi:trn>:<br /><html:text property="function" size="33" styleClass="inputx insidex"/></td>
+  <td valign="top" class="t_mid"><digi:trn><b style="padding-left:5px;">Function</b></digi:trn>
+    <b>:</b><br />
+    <html:text property="function" size="33" styleClass="inputx insidex"/></td>
   <td align="right" valign="top">&nbsp;</td>
   </tr>
 </tbody></table>

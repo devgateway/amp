@@ -61,7 +61,7 @@
 		eternal="true"
 		overflowToDisk="true"
 		diskPersistent="true"
-		maxElementsOnDisk="100000"
+		maxElementsOnDisk="10000"
 		/>
 
 	<!-- 

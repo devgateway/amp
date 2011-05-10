@@ -29,7 +29,9 @@ import org.xml.sax.InputSource;
 
 public class ExportAdminTable extends Action {
 
-    @Override
+    private static final String BULLET = "\u2022";
+
+	@Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -66,16 +68,25 @@ public class ExportAdminTable extends Action {
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setColor(HSSFColor.BLACK.index);
-        cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
         cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
         HSSFDataFormat df = wb.createDataFormat();
         cs.setDataFormat(df.getFormat("General"));
+        
 
         cs.setFont(font);
         cs.setWrapText(true);
         cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        
+        // ordinary cells
+        HSSFCellStyle csLastCell = wb.createCellStyle();
+
+        csLastCell.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setFont(font);
+        csLastCell.setWrapText(true);
+        csLastCell.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
         String data = exportForm.getData();
         DOMParser parser = new DOMParser();
@@ -95,8 +106,10 @@ public class ExportAdminTable extends Action {
                 String textContent;
                 if (cells.item(j).getNodeName().equalsIgnoreCase("cell")) {
                     textContent = cells.item(j).getTextContent().trim();
-                    if (textContent.contains("\u2022")) {
-                      String[] splitedText = textContent.split("\u2022");
+                    if (textContent.contains(BULLET)) {
+                    int firstBullet=textContent.indexOf(BULLET);
+                    textContent=textContent.substring(firstBullet+BULLET.length());
+                      String[] splitedText = textContent.split(BULLET);
                         if (maxMerge < splitedText.length) {
                             maxMerge = splitedText.length;
                         }
@@ -112,25 +125,32 @@ public class ExportAdminTable extends Action {
                 int cellIndex = 0;
                 for (int key = 0; key < cellSize; key++) {
                     String[] splitedText = columnsPerRow.get(key);
+                    HSSFCell bulletCell;
                     if (splitedText.length >j) {
-                        HSSFCell bulletCell = row.createCell(cellIndex++);
+                        bulletCell = row.createCell(cellIndex++);
                         String cellValue = null;
                         if (splitedText.length > 1) {
-                            cellValue = "\u2022" + splitedText[j];
+                            cellValue = BULLET + splitedText[j];
                         } else {
                             cellValue = splitedText[0];
                         }
-                        if (i == 0) { //title cells
-                            bulletCell.setCellStyle(titleCS);
-                        } else {
-                            bulletCell.setCellStyle(cs);
-                        }
+                       
                         HSSFRichTextString text = new HSSFRichTextString(cellValue);
                         bulletCell.setCellValue(text);
                         
                     } else {
-                       row.createCell(cellIndex++);
-
+                    	bulletCell =  row.createCell(cellIndex++);
+                    }
+                    if (i == 0) { //title cells
+                        bulletCell.setCellStyle(titleCS);
+                    } else {
+                    	if(j==maxMerge-1){ // last cell from merged cells
+                    		bulletCell.setCellStyle(csLastCell);
+                    	}
+                    	else{
+                    		bulletCell.setCellStyle(cs);
+                    	}
+                       
                     }
 
                 }

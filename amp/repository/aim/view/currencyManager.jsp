@@ -297,7 +297,7 @@ function submitPages(){
 															<digi:trn>${curr.countryLocation.name}</digi:trn>
 														</c:if> </a></td>
 														<!--  tds marked with class "ignore" will be ignored during export -->
-														<td align="right" class="inside"><a
+														<td align="right" class="inside ignore"><a
 															href="javascript:deleteCurrency('${curr.currencyCode}')">
 														<digi:img src="../ampTemplate/images/deleteIcon.gif"
 															border="0" alt="Delete this Currency" /> </a></td>

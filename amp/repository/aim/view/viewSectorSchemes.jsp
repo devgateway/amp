@@ -109,7 +109,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="10%" align="center" class="inside">
+														<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -123,7 +123,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="10%" align="left" class="inside">
+														<td bgcolor="#ffffff" width="10%" align="left" class="inside ignore">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">

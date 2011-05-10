@@ -1,8 +1,12 @@
 package org.digijava.module.aim.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -23,134 +27,120 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-
 public class ExportAdminTable extends Action {
 
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
         response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Export.xls");
-        ExportTableForm exportForm=(ExportTableForm)form;
- 
-		HSSFWorkbook wb = new HSSFWorkbook();
+        response.setHeader("Content-disposition", "inline; filename=Export.xls");
+        ExportTableForm exportForm = (ExportTableForm) form;
+
+        HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
-        
-        //title cells
+
+        // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
         titleCS.setWrapText(true);
         titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
-        //titleCS.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+        // titleCS.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontHeader.setFontHeightInPoints((short)10);
+        fontHeader.setFontHeightInPoints((short) 10);
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         titleCS.setBorderBottom(HSSFCellStyle.BORDER_THIN);
         titleCS.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         titleCS.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        titleCS.setBorderTop(HSSFCellStyle.BORDER_THIN);       
+        titleCS.setBorderTop(HSSFCellStyle.BORDER_THIN);
         titleCS.setFont(fontHeader);
-        
-               
-        
-//        HSSFFont fontHeader = wb.createFont();
-//        fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-//        fontHeader.setFontHeightInPoints((short) 12);
-//        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
-        //ordinary cells
+        // HSSFFont fontHeader = wb.createFont();
+        // fontHeader.setFontName(HSSFFont.FONT_ARIAL);
+        // fontHeader.setFontHeightInPoints((short) 12);
+        // fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+
+        // ordinary cells
         HSSFCellStyle cs = wb.createCellStyle();
-		HSSFFont font= wb.createFont();
-		font.setFontName(HSSFFont.FONT_ARIAL);
-		font.setColor( HSSFColor.BLACK.index );
-		cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
-		HSSFDataFormat df = wb.createDataFormat();
-		cs.setDataFormat(df.getFormat("General"));
-	
-		cs.setFont(font);
-		cs.setWrapText(true);
-		cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);       
-        
+        HSSFFont font = wb.createFont();
+        font.setFontName(HSSFFont.FONT_ARIAL);
+        font.setColor(HSSFColor.BLACK.index);
+        cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        HSSFDataFormat df = wb.createDataFormat();
+        cs.setDataFormat(df.getFormat("General"));
 
-        String data=exportForm.getData();
+        cs.setFont(font);
+        cs.setWrapText(true);
+        cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+
+        String data = exportForm.getData();
         DOMParser parser = new DOMParser();
         parser.parse(new InputSource(new java.io.StringReader(data)));
         Document doc = parser.getDocument();
-        NodeList rows=doc.getElementsByTagName("row");
-        int cellAmountForEachRow = rows.item(0).getChildNodes().getLength();
-        int [] cellSizes=new int[cellAmountForEachRow];
-        int [] count=new int[cellAmountForEachRow];
-        for(int i=0;i<rows.getLength();i++){
-           Node nodeRow=rows.item(i);
-           HSSFRow row = sheet.createRow(i);
-           float rowHeight = 12.75f;
-           
-           NodeList cells=nodeRow.getChildNodes();
-           for(short j=0;j<cells.getLength();j++){
-               HSSFCell cell =row.createCell(j);
-               if(cells.item(j).getNodeName().equalsIgnoreCase("cell")){
-            	   String textContent =cells.item(j).getTextContent();
-            	   int largestTextItemLength=0;
-            	   if(textContent.trim().contains("\u2022")){
-            		   String[] splitedText = textContent.trim().split("\u2022");
-            		   textContent="";
-            		   if(splitedText.length >2 && splitedText.length*11 > rowHeight){
-            			   rowHeight=splitedText.length*11;
-            		   }
-            		   for(int k=0;k<splitedText.length;k++){
-            			   if(splitedText[k].length()>0){
-            				   textContent+="\u2022"+splitedText[k]+"\n";
-            			   }
-            			   largestTextItemLength =splitedText[k].length()>largestTextItemLength?splitedText[k].length():largestTextItemLength; 
-            		   }
-            	   }else{
-            		   if(textContent.length()>10){
-            			   largestTextItemLength = textContent.length()>largestTextItemLength?textContent.length():largestTextItemLength;
-            		   }
-            	   }
-            	             	   
-                   HSSFRichTextString value=new HSSFRichTextString(textContent);
-                   if(largestTextItemLength>10){
-                	   cellSizes[j] +=largestTextItemLength;
-                	   count[j]++;
-                   }
-                   if(i==0){ //title cells
-                	   cell.setCellStyle(titleCS);
-                   }
-                   else{
-                	   cell.setCellStyle(cs);
-                   }                   
-                  cell.setCellValue(value);
-                  
-               }
-           } 
-           
-           row.setHeightInPoints(rowHeight);
+        int cellSize=0;
+        NodeList rows = doc.getElementsByTagName("row");
+        int rowIndex = 0;
+        float rowHeight = 12.75f;
+        for (int i = 0; i < rows.getLength(); i++) {
+            int maxMerge = 1;
+            Node nodeRow = rows.item(i);
+            NodeList cells = nodeRow.getChildNodes();
+            Map<Integer, String[]> columnsPerRow = new HashMap<Integer, String[]>();
+            cellSize = cells.getLength();
+            for (int j = 0; j < cells.getLength(); j++) {
+                String textContent;
+                if (cells.item(j).getNodeName().equalsIgnoreCase("cell")) {
+                    textContent = cells.item(j).getTextContent().trim();
+                    if (textContent.contains("\u2022")) {
+                      String[] splitedText = textContent.split("\u2022");
+                        if (maxMerge < splitedText.length) {
+                            maxMerge = splitedText.length;
+                        }
+                       columnsPerRow.put(j, splitedText);
+                    } else {
+                         columnsPerRow.put(j, new String[]{textContent});
+                    }
+                }
+            }
+            for (int j = 0; j < maxMerge; j++) {
+                HSSFRow row = sheet.createRow(rowIndex++);
+                row.setHeightInPoints(rowHeight);
+                int cellIndex = 0;
+                for (int key = 0; key < cellSize; key++) {
+                    String[] splitedText = columnsPerRow.get(key);
+                    if (splitedText.length >j) {
+                        HSSFCell bulletCell = row.createCell(cellIndex++);
+                        String cellValue = null;
+                        if (splitedText.length > 1) {
+                            cellValue = "\u2022" + splitedText[j];
+                        } else {
+                            cellValue = splitedText[0];
+                        }
+                        if (i == 0) { //title cells
+                            bulletCell.setCellStyle(titleCS);
+                        } else {
+                            bulletCell.setCellStyle(cs);
+                        }
+                        HSSFRichTextString text = new HSSFRichTextString(cellValue);
+                        bulletCell.setCellValue(text);
+                        
+                    } else {
+                       row.createCell(cellIndex++);
 
-        }        
+                    }
 
-        
-        for(int k=0;k<count.length;k++){
-        	int countVal = count[k];
-        	if(countVal > 0){
-        		int cellSize = cellSizes[k]/countVal;
-        		cellSize+=5;
-        		
-        		int val;
-				if ((cellSize*256) < 2560)
-					val = 2560; //at least 10 chars
-				else
-					val = cellSize*256;
-								
-				sheet.setColumnWidth(k, val);
-        	}else if(countVal==0){
-        		sheet.setColumnWidth(k, 2560);
-        	}
+                }
+            }
         }
-        	
+        for(int i=0;i<cellSize;i++){
+            sheet.autoSizeColumn(i); //adjust width of the first column
+        }
+
+
         wb.write(response.getOutputStream());
         return null;
     }

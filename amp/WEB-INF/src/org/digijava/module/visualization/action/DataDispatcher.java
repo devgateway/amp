@@ -1906,31 +1906,38 @@ public class DataDispatcher extends DispatchAction {
                 BufferedImage image =  ImageIO.read(in);
                switch (graph) {
 				case 1:
-					vForm.getExportData().setFundingGraph(image);			
+					vForm.getExportData().setFundingGraph(image);
+					logger.info("Creating image from Funding graph");
 					break;
 				
 				case 2:
 					vForm.getExportData().setAidPredictabilityGraph(image);
+					logger.info("Creating image from Aid Predictability graph");
 					break;
 				
 				case 3:
 					vForm.getExportData().setAidTypeGraph(image);
+					logger.info("Creating image from Aid Type graph");
 					break;
 				
 				case 4:
 					vForm.getExportData().setFinancingInstGraph(image);
+					logger.info("Creating image from Financing Instrument graph");
 					break;
 				
 				case 5:
 					vForm.getExportData().setDonorGraph(image);
+					logger.info("Creating image from Donor graph");
 					break;
 				
 				case 6:
 					vForm.getExportData().setSectorGraph(image);
+					logger.info("Creating image from Sector graph");
 					break;
 				
 				case 7:
 					vForm.getExportData().setRegionGraph(image);
+					logger.info("Creating image from Region graph");
 					break;
 				
 				}

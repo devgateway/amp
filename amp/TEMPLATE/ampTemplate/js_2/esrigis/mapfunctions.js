@@ -286,6 +286,12 @@ function getHighlights(level) {
 	var deferred = dojo.xhrGet(xhrArgs);
 }
 
+function closeHide(){
+	$('#legenddiv').hide('slow');
+	map.graphics.clear()
+//	cL.clear();
+}
+
 function MapFindLocation(level){
 	showLoading();
 	var queryTask = new esri.tasks.QueryTask("http://4.79.228.117:8399/arcgis/rest/services/Liberia/MapServer/" + level.mapId);
@@ -300,7 +306,7 @@ function MapFindLocation(level){
 function addResultsToMap(featureSet) {
     var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([150,150,150]), 1);
     var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([150, 150, 150, 0.5]));
-    var colors = colorsBlue;
+    var colors = colorsOrange;
     var numRanges = colors.length;
 
     //Using logarithmic scale
@@ -332,12 +338,13 @@ function addResultsToMap(featureSet) {
     showLegend(rangeColors, colors);
   }
 
-function showLegend(rangeColors){
+function showLegend(rangeColors, colors){
 	var htmlDiv = "";
 	for(var i=0; i< rangeColors.length; i++){
-		htmlDiv += "<div class='legendContentValue' style='background-color:rgba(" + colorsBlue[i].toRgba() + ");' ></div>"
+		htmlDiv += "<div class='legendContentValue' style='background-color:rgba(" + colors[i].toRgba() + ");' ></div>"
 				+ "<div class='legendContentLabel'>" + Math.ceil(rangeColors[i][0]) + "-" + Math.floor(rangeColors[i][1]) + "</div><br/>";
 	}
+	htmlDiv += "<div onclick='closeHide()' style='color:white;'>Close</div>";
 	$('#legenddiv').html(htmlDiv);
 	$('#legenddiv').show('slow');
 }
@@ -353,15 +360,15 @@ var colorsBlue = [
 		new dojo.Color([ 8, 48, 107, 0.7])];
 
 var colorsOrange = [
-		new dojo.Color([255, 247, 236, 1]),
-		new dojo.Color([254, 232, 200, 1]),
-		new dojo.Color([253, 212, 158, 1]),
-		new dojo.Color([253, 187, 132, 1]),
-		new dojo.Color([252, 141, 89, 1]),
-		new dojo.Color([239, 101, 72, 1]),
-		new dojo.Color([215, 48, 31, 1]),
-		new dojo.Color([179, 0, 0 , 1]),
-		new dojo.Color([127, 0, 0, 1])];
+		new dojo.Color([255, 255, 229, 0.8]),
+		new dojo.Color([255, 247, 188, 0.8]),
+		new dojo.Color([254, 227, 145, 0.8]), 
+		new dojo.Color([254, 196, 79, 0.8]), 
+		new dojo.Color([254, 153, 41, 0.8]), 
+		new dojo.Color([236, 112, 20, 0.8]), 
+		new dojo.Color([204, 76, 2, 0.8]), 
+		new dojo.Color([153, 52, 4, 0.8]), 
+		new dojo.Color([102, 37, 6 , 0.8])];
 
 
 function getMaxValue(array, measure){

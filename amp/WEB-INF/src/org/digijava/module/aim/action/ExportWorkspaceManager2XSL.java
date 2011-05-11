@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -58,16 +59,46 @@ public class ExportWorkspaceManager2XSL extends Action {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
         String[] teams=request.getParameterValues("team");
-
+        
+     // title cells
+        HSSFCellStyle titleCS = wb.createCellStyle();
+        titleCS.setWrapText(true);
+        titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
-        fontHeader.setFontHeightInPoints((short) 12);
+        fontHeader.setFontHeightInPoints((short) 10);
         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        titleCS.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        titleCS.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        titleCS.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        titleCS.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        titleCS.setFont(fontHeader);
 
+        // ordinary cells
+        HSSFCellStyle cs = wb.createCellStyle();
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
-        font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setColor(HSSFColor.BLACK.index);
+        cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        HSSFDataFormat df = wb.createDataFormat();
+        cs.setDataFormat(df.getFormat("General"));
+        
+
+        cs.setFont(font);
+        cs.setWrapText(true);
+        cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        
+        // ordinary cells with bottom border
+        HSSFCellStyle csLastCell = wb.createCellStyle();
+
+        csLastCell.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setFont(font);
+        csLastCell.setWrapText(true);
+        csLastCell.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
 
         HSSFCellStyle style =wb.createCellStyle();
         style.setFont(font);
@@ -77,16 +108,16 @@ public class ExportWorkspaceManager2XSL extends Action {
         HSSFRow titleRow = sheet.createRow(rowIndex++);
         HSSFCell cellName = titleRow.createCell(cellIndex++);
         HSSFRichTextString nameTitle = new HSSFRichTextString(TranslatorWorker.translateText("Name",locale,siteId));
-        nameTitle.applyFont(fontHeader);
         cellName.setCellValue(nameTitle);
+        cellName.setCellStyle(titleCS);
         HSSFCell membersTitleCell = titleRow.createCell(cellIndex++);
         HSSFRichTextString membersTitle = new HSSFRichTextString(TranslatorWorker.translateText("Team Members",locale,siteId));
-        membersTitle.applyFont(fontHeader);
         membersTitleCell.setCellValue(membersTitle);
+        membersTitleCell.setCellStyle(titleCS);
         HSSFCell activitiesTitleCell = titleRow.createCell(cellIndex++);
         HSSFRichTextString activitiesTitle = new HSSFRichTextString(TranslatorWorker.translateText("Activities",locale,siteId));
-        activitiesTitle.applyFont(fontHeader);
         activitiesTitleCell.setCellValue(activitiesTitle);
+        activitiesTitleCell.setCellStyle(titleCS);
 
         if (teams != null) {
             
@@ -116,34 +147,65 @@ public class ExportWorkspaceManager2XSL extends Action {
                 HSSFCell nameCell = row.createCell(cellIndex++);
                 HSSFRichTextString teamName = new HSSFRichTextString(team.getName());
                 nameCell.setCellValue(teamName);
-                row.createCell(cellIndex++);
-                row.createCell(cellIndex++);
-
+                HSSFCell emptyCell=row.createCell(cellIndex++);
+                HSSFCell emptyCell2=row.createCell(cellIndex++);
+                if(merge>1){
+                	nameCell.setCellStyle(cs); 
+                	emptyCell.setCellStyle(cs);
+                	emptyCell2.setCellStyle(cs);
+                }
+                else{
+                	nameCell.setCellStyle(csLastCell);
+                	emptyCell.setCellStyle(csLastCell);
+                	emptyCell2.setCellStyle(csLastCell);
+                }
+              
                 for(int j=1;j<merge;j++){
 
                     row = sheet.createRow(rowIndex++);
                     cellIndex = 0;
-                    row.createCell(cellIndex++);
+                    HSSFCell workspaceNameCell=row.createCell(cellIndex++);
+                    boolean isLastCellInColumn = j==merge-1;
+					if(isLastCellInColumn){ // last cell from merged cells
+                    	 workspaceNameCell.setCellStyle(csLastCell);
+                	}
+                	else{
+                		 workspaceNameCell.setCellStyle(cs);
+                	}
+                    HSSFCell membCell;
                     if (memberSize > j) {
-                        HSSFCell membCell = row.createCell(cellIndex++);
+                        membCell = row.createCell(cellIndex++);
                         String teamMembersString = BULLETCHAR + teamMembers.get(j-1).getMemberName();
                         HSSFRichTextString membValue = new HSSFRichTextString(teamMembersString);
                         membCell.setCellStyle(style);
                         membCell.setCellValue(membValue);
                     }
                     else{
-                        row.createCell(cellIndex++);
+                    	membCell=row.createCell(cellIndex++);
                     }
+                    if(isLastCellInColumn){ // last cell from merged cells
+                    	membCell.setCellStyle(csLastCell);
+                	}
+                	else{
+                		membCell.setCellStyle(cs);
+                	}
+                    HSSFCell activityCell;
                     if (activitySize > j) {
-                        HSSFCell activityCell = row.createCell(cellIndex++);
+                    	activityCell = row.createCell(cellIndex++);
                         String activityName = BULLETCHAR + activityList.get(j-1).getName();
                         HSSFRichTextString membValue = new HSSFRichTextString(activityName);
                         activityCell.setCellStyle(style);
                         activityCell.setCellValue(membValue);
                     }
                     else{
-                        row.createCell(cellIndex++);
+                    	 activityCell=row.createCell(cellIndex++);
                     }
+                    if(isLastCellInColumn){ // last cell from merged cells
+                    	activityCell.setCellStyle(csLastCell);
+                	}
+                	else{
+                		activityCell.setCellStyle(cs);
+                	}
 
                 }
                           

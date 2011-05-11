@@ -11,7 +11,7 @@
          user.dir - User's current working directory
          java.io.tmpdir - Default temp file path -->
          
-    <diskStore path="java.io.tmpdir"/>
+    <diskStore path="java.io.tmpdir/ampehcache"/>
 
 
     <!--Default Cache configuration. These will applied to caches programmatically created through

@@ -82,6 +82,15 @@ body {
 	margin-right: 0px;
 	margin-bottom: 0px;
 }
+
+.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+table.inside, td.inside {border-color: #CCC; border-style: solid; font-size:12px;}
+table.inside1, td.inside1 {border: 0; font-size:12px;}
+table.inside, td.inside_zebra {}
+table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
+td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
+td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
+
 -->
 </style>
 <body onLoad="myOnload()">
@@ -91,11 +100,11 @@ body {
 
 <html:hidden property="check" />
 	<html:hidden property="id" />
-	<font color=red>* 
+	<font color=red style="font-family:Arial, Helvetica, sans-serif; font-size:11px; padding:10px; display:block;">* 
 								    <digi:trn
 										key="aim:addNewComponent:mandatoryFields"> Mandatory fields </digi:trn>
 									</font>
-	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
+	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-top:15px;font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 		<!--<tr>
 			<td height="30"><span class=subtitle-blue> <digi:trn
 				key="aim:addNewComponentType"><b>Add A New Component Type</b></digi:trn> </span></td>
@@ -110,7 +119,7 @@ body {
 						width="100%">
 						<tr bgColor=#dddddb>
 							<!-- header -->
-							<td bgColor=#c7d4db height="20" align="center" colspan="5"><digi:trn
+							<td bgColor=#c7d4db height="25" align="center" colspan="5" style="font-size:12px;"><digi:trn
 								key="aim:addType"><b>Add Type</b></digi:trn> <B> <!-- end header -->
 						</tr>
 						<!-- Page Logic -->
@@ -119,30 +128,30 @@ body {
 							<table width="100%" border="0" class="inside" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
-									<td width="35%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
-										key="aim:typeName">Name</digi:trn>
+									<td width="50%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
+										key="aim:typeName"><b>Name</b></digi:trn>
 								    &nbsp;</td>
-								  <td width="65%" class="inside"><html:text property="name" size="40"/></td>
+								  <td width="50%" class="inside"><html:text property="name" size="40"/></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Code" feature="Admin - Component Type">
 								<tr>
 									<td width="35%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
-										key="aim:typeCode"> Code</digi:trn>
+										key="aim:typeCode"> <b>Code</b></digi:trn>
 								    &nbsp;</td>
 								  <td width="65%" class="inside"><html:text property="code" size="10" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Enable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable">Enabled</digi:trn>
+									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable"><b>Enabled</b></digi:trn>
 &nbsp;									</td>
 								  <td width="65%" class="inside"><html:checkbox property="enable" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Selectable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable">Selectable</digi:trn>
+									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable"><b>Selectable</b></digi:trn>
 &nbsp;									</td>
 								  <td width="65%" class="inside"><html:checkbox property="selectable" /></td>
 								</tr>

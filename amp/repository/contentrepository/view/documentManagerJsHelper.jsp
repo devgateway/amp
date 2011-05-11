@@ -421,7 +421,7 @@ myTable.enhanceMarkup = function(markupName) {
 			                           		{key: "actions"}
 		                           		     	] 
 	                           		     	};
-    alert (myDataSource) ;
+    
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
 	
 	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);

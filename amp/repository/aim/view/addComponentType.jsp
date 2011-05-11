@@ -126,35 +126,35 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 						<!-- Page Logic -->
 						<tr>
 							<td width="100%">
-							<table width="100%" border="0" class="inside" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
+							<table width="100%" border="0" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
-									<td width="50%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
+									<td width="50%" height="22" align="right"><font color=red>*</font> <digi:trn
 										key="aim:typeName"><b>Name</b></digi:trn>
 								    &nbsp;</td>
-								  <td width="50%" class="inside"><html:text property="name" size="40"/></td>
+								  <td width="50%"><html:text property="name" size="40"/></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Code" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
+									<td height="22" align="right"><font color=red>*</font> <digi:trn
 										key="aim:typeCode"> <b>Code</b></digi:trn>
 								    &nbsp;</td>
-								  <td width="65%" class="inside"><html:text property="code" size="10" /></td>
+								  <td><html:text property="code" size="10" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Enable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable"><b>Enabled</b></digi:trn>
+									<td height="22" align="right"><digi:trn key="aim:typeEbable"><b>Enabled</b></digi:trn>
 &nbsp;									</td>
-								  <td width="65%" class="inside"><html:checkbox property="enable" /></td>
+								  <td><html:checkbox property="enable" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Selectable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable"><b>Selectable</b></digi:trn>
+									<td height="22" align="right"><digi:trn key="aim:typeEbable"><b>Selectable</b></digi:trn>
 &nbsp;									</td>
-								  <td width="65%" class="inside"><html:checkbox property="selectable" /></td>
+								  <td><html:checkbox property="selectable" /></td>
 								</tr>
 								</field:display>
 								<tr>

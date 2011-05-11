@@ -149,7 +149,7 @@ border-right: 1px solid rgb(208, 208, 208);
 </style>
 
 <script language="javascript">
- var uploadDoc="<digi:trn jsFriendly='true'>Upload doc</digi:trn>";
+ var uploadDoc="<digi:trn jsFriendly='true'>Upload Doc</digi:trn>";
  var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
  var createFromTemplate="<digi:trn jsFriendly='true'>Create From Template</digi:trn>";
 function setHoveredTable(tableId, hasHeaders) {

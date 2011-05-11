@@ -10,9 +10,9 @@
 .yui-tt{ background: LightYellow; border-color: black }
 .yui-skin-sam .yui-dt th{background:#C7D4DB}
 
-.all_markup table {border-collapse:collapse;border: 1px solid #CCCCCC;  width: 100%}
-.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px; background-color:#FFFFFF;}
-.all_markup th {padding:.25em;background-color:#E1E1E1; font-size:12px; color: black; text-align: center;border-right: #CCCCCC 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 100%}
+.all_markup td {padding:.25em;font-family:	Arial,sans-serif;font-size:11px;letter-space:2px;}
+.all_markup th {padding:.25em;background-color:#000000; font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
 .all_markup .yui-dt {width: 100%;} 
@@ -26,7 +26,7 @@
 
 
 .versions_markup {margin:1em; overflow: auto; } 
-.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #CCCCCC;} 
+.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
 .versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
@@ -56,6 +56,17 @@
     width:450px; overflow: auto;      
      
 }
+
+.showActions {
+	white-space: nowrap;
+}
+
+div.actionsDivItem a span {
+color : #376091;
+font-size : 11 px;
+font-weight : bold;
+}
+
 </style>
 
 <!-- this is style for labels -->
@@ -81,10 +92,10 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ActionsMenu.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+
 
 
 <%@page import="java.net.URLDecoder"%>
@@ -94,10 +105,10 @@
 </c:set>
 
 <c:set var="headerVersion">
-	<digi:trn>Version</digi:trn>
+				<digi:trn>Version</digi:trn>
 </c:set>
 <c:set var="headerType">
-	<digi:trn>Type</digi:trn>
+				<digi:trn>Type</digi:trn>
 </c:set>
 
 <c:set var="headerFileName">
@@ -109,11 +120,11 @@
 </c:set>
 
 <c:set var="headerFileSize">
-	<digi:trn>Size (MB)</digi:trn>
+				<digi:trn>Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
-	<digi:trn>Notes</digi:trn>
+				<digi:trn>Notes</digi:trn>
 </c:set>
 
 <c:set var="headerAction">
@@ -353,7 +364,7 @@ myTable.enhanceMarkup = function(markupName) {
         	    {key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true},
 	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
             	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	            {key:"labels",label:"${trans_headerLabels}",sortable:false,width:100},
+	            {key:"labels",label:"${trans_headerLabels}",sortable:false},
 	            {key:"actions",label:"${trans_headerActions}",sortable:false}
 	    ];
 	}
@@ -410,7 +421,7 @@ myTable.enhanceMarkup = function(markupName) {
 			                           		{key: "actions"}
 		                           		     	] 
 	                           		     	};
-    
+    alert (myDataSource) ;
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
 	
 	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
@@ -422,6 +433,7 @@ myTable.enhanceMarkup = function(markupName) {
 	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 
+	
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
 		dataTable.showEmptyMessage();
 	}

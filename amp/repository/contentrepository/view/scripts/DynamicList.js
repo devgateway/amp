@@ -113,7 +113,8 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	this.createReqString();
 	
 	var callbackObj		= getCallbackForOtherDocuments(this.containerEl, null, this.thisObjName +"DivId");
-//	alert(this.reqString);
+	//alert(this.reqString);
+	
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do?ajaxDocumentList=true&dynamicList='+this.thisObjName+
 			this.reqString, callbackObj );
 	if ( this.fPanel != null)
@@ -216,9 +217,6 @@ DynamicList.prototype.createReqString	= function () {
 	
 	return this.reqString;
 }
-
-
-
 
 /**
  * SharedDynamicList class

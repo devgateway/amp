@@ -14,9 +14,12 @@ function ActionsMenu(objectId,nameprefix,isTeamMenu){
 }
 
 ActionsMenu.prototype.render=function (){
-	this.overlay 	= new YAHOO.widget.Overlay(this.nameprefix, { context:[this.objectId,"tl","bl"],
+	this.overlay 	= new YAHOO.widget.Panel(this.nameprefix, { context:[this.objectId,"tl","bl"],
 		  visible:false,
 		  width:"150px" } );
+	
+	this.overlay.setHeader('Add Resource');
+	
 	var bigDiv		= document.createElement("div");
 	var divEl	= document.createElement("div");
 	var brEl		= document.createElement("br");
@@ -29,10 +32,11 @@ ActionsMenu.prototype.render=function (){
 		var teamView=this.teamView;
 		// add resources link
 		var addResLinkEl	= "<a  style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";
-		addResLinkEl+=uploadDoc; // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :(
+		addResLinkEl+='<span>'+ uploadDoc +'</span>'; // we use var instead of digi:trn because ie adds <?xml:namespace prefix=digi/> :(		
 		addResLinkEl+="</a>";		
 		
-		var addResdivEl = document.createElement("div");		
+		var addResdivEl = document.createElement("div");
+		addResdivEl.setAttribute("class", "actionsDivItem");
 		var clickActionsForAddDoc	= function (e, addResdivEl) {
 			if(teamView!=null && ! teamView){
 				menuPanelForUser.toggleUserView();
@@ -46,13 +50,17 @@ ActionsMenu.prototype.render=function (){
 		createActionDiv(addResdivEl,addResLinkEl,clickActionsForAddDoc);
 		divEl.appendChild(addResdivEl);
 		
+		var hr1 = document.createElement("hr");
+		hr1.height = '1px';
+		divEl.appendChild(hr1);
 		
 		//add web url link
-		var addUrlLinkEl	= "<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";		
-		addUrlLinkEl+=addWebLink;
+		var addUrlLinkEl	= "<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\" >";
+		addUrlLinkEl+='<span>'+ addWebLink +'</span>';
 		addUrlLinkEl+="</a>";
 		
 		var addURLdivEl = document.createElement("div");
+		addURLdivEl.setAttribute("class", "actionsDivItem");
 		var clickActionsForAddLink = function (e, addURLdivEl) {
 			if(teamView!=null && ! teamView){
 				menuPanelForUser.toggleUserView();
@@ -66,13 +74,17 @@ ActionsMenu.prototype.render=function (){
 		createActionDiv(addURLdivEl,addUrlLinkEl,clickActionsForAddLink);
 		divEl.appendChild(addURLdivEl);
 		
+		var hr2 = document.createElement("hr");
+		hr2.height = '1px';
+		divEl.appendChild(hr2);
 		
 		//if(this.teamView!=null && ! this.teamView){
 			//create from template link
 			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";
-			createFromTemplateLinkEl+=createFromTemplate;
+			createFromTemplateLinkEl+='<span>'+createFromTemplate+'</span>';
 			createFromTemplateLinkEl+="</a>";
 			var createFromTempldivEl	= document.createElement("div");
+			createFromTempldivEl.setAttribute("class", "actionsDivItem");
 			var clickActionsForTemplate = function (e, createFromTempldivEl) {
 				if(teamView!=null && ! teamView){
 					menuPanelForUser.toggleUserView();
@@ -82,19 +94,23 @@ ActionsMenu.prototype.render=function (){
 				addFromTemplate(ownType);
 			};
 			createActionDiv(createFromTempldivEl,createFromTemplateLinkEl,clickActionsForTemplate);
-			divEl.appendChild(createFromTempldivEl);
+			divEl.appendChild(createFromTempldivEl);		
+			
 		//}
 	
-	divEl.style.border	= "1px solid gray";
+	
 	divEl.style.backgroundColor="white";
 	//divEl.setAttribute("class", "res_opt_cont");
 	
 	
-	//bigDiv.style.border	= "1px solid gray";
-	bigDiv.appendChild(divEl);
+	/*
+	 * bigDiv.appendChild(divEl);
 	bigDiv.appendChild(brEl);
-	
 	this.overlay.setBody(bigDiv);
+	 * */
+	
+	
+	this.overlay.setBody(divEl);
 	this.overlay.render(document.body);
 }
 

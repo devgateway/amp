@@ -81,7 +81,6 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 				divEl.appendChild(spanEl);
 				divEl.style.padding	= "2px";
 				divEl.style.backgroundColor	= "white";
-	//			divEl.style.border			= "1px solid black";
 				
 				label.divEl			= divEl;
 				label.parentObj		= this;
@@ -137,33 +136,7 @@ FilterAsYouTypePanel.prototype.createBody	= function() {
 		cancelSpanEl.setAttribute("class", "buttonx_sm");
 		buttonsDiv.appendChild(cancelSpanEl);
 		
-		retArray.push(buttonsDiv);
-		
-		
-		//test with buttons
-		//var buttonsDiv= document.createElement("div");
-		//buttonsDiv.style.backgroundColor	= "white";
-		//buttonsDiv.style.padding			= "2px";
-		//buttonsDiv.style.textAlign			= "center";
-		
-		//var applyBtn= document.createElement("input");
-		//applyBtn.id="ApllyBtn";
-		//applyBtn.type="button";
-		//applyBtn.value="Apply";
-		//applyBtn.setAttribute("class", "buttonx_sm");
-		//YAHOO.util.Event.addListener(applyBtn, "click", clickCallbackObj.applyClick, clickCallbackObj, true);
-		
-		//buttonsDiv.appendChild(applyBtn);
-		//buttonsDiv.appendChild(emptySpan);
-		
-		//var cancelBtn= document.createElement("input");
-		//cancelBtn.id="CancelBtn";
-		//cancelBtn.type="button";
-		//cancelBtn.value="Close";
-		//cancelBtn.setAttribute("class", "buttonx_sm");
-		//buttonsDiv.appendChild(cancelBtn);
-		
-		//retArray.push(buttonsDiv);
+		retArray.push(buttonsDiv);	
 		
 		hrDivEl			= document.createElement("div");
 		hrDivEl.style.backgroundColor	= "white";
@@ -183,16 +156,19 @@ FilterAsYouTypePanel.prototype.render	= function() {
 		this.labelMap[l.uuid]	= l;
 	}
 	
-	this.overlay 	= new YAHOO.widget.Overlay(this.nameprefix, { context:[this.alignElId,"tl","bl"],
-		  visible:false,
-		  width:"150px" } );
+//	this.overlay 	= new YAHOO.widget.Overlay(this.nameprefix, { context:[this.alignElId,"tl","bl"],
+//		  visible:false,
+//		  width:"150px" } );
+	this.overlay 		= 
+		new YAHOO.widget.Panel("LabelPanel"+this.nameprefix, { width:"150px", visible:true, draggable:true, close:true, modal:false, 
+			context:[this.alignElId,"tl","bl"]} );
+	
+	this.overlay.setHeader('Labels');
 	var divArray	= this.createBody();
 	var textboxEl	= document.createElement("input");
-	var brEl		= document.createElement("br");
 	
 	this.textboxEl	= textboxEl;
 	textboxEl.type			= "text";
-	textboxEl.style.border	= "1px solid lightgrey";
 	textboxEl.style.width	= "140px";;
 	var textboxElDiv		= document.createElement("div");
 	textboxElDiv.appendChild(textboxEl);
@@ -202,11 +178,9 @@ FilterAsYouTypePanel.prototype.render	= function() {
 	YAHOO.util.Event.addListener(textboxEl, "keyup", this.onSearch, this, true);
 	YAHOO.util.Event.addListener(document,"click", this.outsideClickHide, this, true );
 	
-	this.bigDiv.style.border			= "1px solid gray";
 	this.bigDiv.style.backgroundColor	= "white";
 	this.bigDiv.style.padding			= "2px";
 	this.bigDiv.appendChild(textboxElDiv);
-	this.bigDiv.appendChild(brEl);
 	
 	
 	this.overlay.setBody(this.bigDiv);
@@ -248,12 +222,16 @@ FilterAsYouTypePanel.prototype.toggleView	= function() {
 	}
 }
 
-FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {
+FilterAsYouTypePanel.prototype.outsideClickHide	= function (e) {	
 	var clickedEl	= e.target;
 	if ( !clickedEl )
 		clickedEl	= e.srcElement;
 	var nodeName	= clickedEl.nodeName.toLowerCase();		
-	if (nodeName != "button" && nodeName != "a" && nodeName != "input") {
+	//alert(nodeName);
+	//if (nodeName != "button" && nodeName != "a" && nodeName != "input") {
+	//	this.hide();
+	//}
+	if (nodeName=="span") {
 		this.hide();
 	}
 	if (nodeName=="input" && clickedEl.id=="ApllyBtn" || clickedEl.id=="CancelBtn"){

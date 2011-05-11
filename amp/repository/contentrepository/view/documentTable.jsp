@@ -150,13 +150,39 @@
 									</script> --%>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
-								<td>
+								
+								<%--
+									<td>
+									<select name="ku" onchange="doAction('lala')" id="lala">
+											<option value="-1">-actions-
+													</option>
+											<c:choose>
+												<c:when test="${documentData.webLink == null}">
+													<option value="downloadFile('<bean:write name='documentData' property='nodeVersionUUID' />');">
+														<digi:trn>Download</digi:trn>
+													</option>
+												</c:when>
+												<c:otherwise>
+													<option value="window.open('${documentData.webLink }');">
+														<digi:trn>Follow the Link</digi:trn>
+													</option>
+												</c:otherwise>
+											</c:choose>
+											
+										
+									</select>
+								</td>
+								 --%>
+								
+								
+									<td>
 									 		<c:set var="translation">
 												<digi:trn>Click here to see possible actions</digi:trn>
 											</c:set> 
-											<a style="cursor:pointer; text-decoration:none; color: blue" id="Actions<bean:write name='documentData' property='uuid' />"
+											<a style="cursor:pointer; text-decoration:none; color: blue; white-space: nowrap;" id="Actions<bean:write name='documentData' property='uuid' />"
 											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}','${dynamicListLocal}',${currentTimeInMillis})" title="${translation}">
-												<digi:trn>Show Actions</digi:trn>
+												&nbsp;-<digi:trn>Actions</digi:trn>-
+												<!-- <img src="/repository/contentrepository/view/images/dropdown_arrow.png"  height="100%"> -->																								
 											</a>
 									<div id="ActionsDiv${documentData.uuid}" style="display:none; border:1px solid lightgray; background-color:white; padding: 3px;position: absolute;" class="resource_popin">
 									<c:choose>

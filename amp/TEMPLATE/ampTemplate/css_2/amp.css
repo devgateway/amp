@@ -17,14 +17,16 @@ h1 {text-transform:uppercase;}
 .l_big_b {font-size:14px; font-weight:bold;}
 .se` {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}
-.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+.buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_dis {background-color:#979797; border-top: 1px solid #C5C5C5; border-left:1px solid #C5C5C5; border-right:1px solid #5D5D5D; border-bottom:1px solid #5D5D5D; font-size:11px; color:#D9D9D9; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;}
 .buttonx_sm_lgn {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; margin-right:10px;}
 .button_green {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:15px;}
 .button_green_btm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:5px;}
 .button_green_btm_sm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:9px; color:#FFFFFF; font-weight:bold; padding-left:1px; padding-right:1px; padding-top:1px; padding-bottom:1px; margin-top:5px; margin-bottom:5px;}
-.inputx {border:1px solid #D0D0D0; background-color:#FFFFFF}
+.inputx, td input.inp-text, table#addUserContainer tr td input,   td select {border:1px solid #D0D0D0; background-color:#FFFFFF}
+table#addUserContainer tr td input {border:1px solid #D0D0D0; background-color:#FFFFFF;margin:0px 0px 0px 5px; width:150px;}
+table tr td.f-names{font-weight:bold;}
 .insidex{font-size:11px;color:#767676;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
 .dropdwn_sm_wksp {border:1px solid #CCCCCC; font-size:11px; background-color:#FFFFFF; color:#000000;}
@@ -376,12 +378,12 @@ td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr 
 td#sectorSelectContainer select, td#sectorKeywordContainer input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
 table#addUserContainer tr td{color: #000000;
     font-size: 12px;}
-table#addUserContainer input.inp-text, table#addUserContainer select, table#addUserContainer input#userPassword,  table#addUserContainer input#userPasswordConfirmationm, td#viewUserEditContainer table tr td.inputcontainer input {color: #767676;
+table#addUserContainer input.inp-text, table#addUserContainer select, table#addUserContainer input#userPassword,  table#addUserContainer input#userPasswordConfirmationm, td#viewUserEditContainer table tr td.inputcontainer input, td.inputcontainer input {color: #767676;
     font-size: 11px;
     margin: 5px;
     padding: 2px;}
 	
-td.addUserButContainer input	{background-color: #5E8AD1;
+table#addUserContainer td.addUserButContainer input, td.addUserButContainer input 	{background-color: #5E8AD1;
     border-color: #99BAF1 #225099 #225099 #99BAF1;
     border-style: solid;
     border-width: 1px;
@@ -394,3 +396,6 @@ td.addUserButContainer input	{background-color: #5E8AD1;
 	{width:1000px;
 	margin:0 auto;
 	text-align:left;}
+	.formCheckContainer{text-align:right;font-weight:bold;}
+.formCheckContainer input
+	{float:right;}

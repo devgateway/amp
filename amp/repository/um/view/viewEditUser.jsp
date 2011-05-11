@@ -131,7 +131,7 @@ function isInvalid(field){
                     
 					<tr>
 						<td noWrap width="616" vAlign="top">
-							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0"  width="100%">
+							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0"  width="100%" style="border: 1px solid #DDDDDD;">
 								 <tr>
 			      <td colspan="2" height="25" bgcolor="#C7D4DB" align="center" style="font-size:12px; font-weight:bold;border-bottom:1px solid 	 		 								#dddddd;">
 			        <span class=subtitle-blue>
@@ -150,23 +150,23 @@ function isInvalid(field){
 					          </b>
 					        </logic:equal></span>
 			      </td>
-			    </tr>
-								<tr bgColor="#f4f4f2">
-									<td valign="top">
-										<table align="center" bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="562" border="0" >
-                                        
-											<tr>
-												<td bgColor="#ffffff" class="box-border" width="560">
-													<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
-														<tr bgColor="#dddddb">
+			    </tr><tr >
 															<td bgColor="#dddddb" height="25" align="center" colspan="5" style="font-size:12px; font-weight:normal;">
 																 <b><digi:trn key="aim:viewEditUser:edit">Edit</digi:trn> ${umViewEditUserForm.name}</b>
 															</td>
 														</tr>
+								<tr>
+									<td valign="top" colspan="3">
+										<table align="center"  cellPadding="0" cellSpacing="0" width="562" border="0" >
+                                        
+											<tr>
+												<td bgColor="#ffffff" class="box-border" width="560">
+													<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
+														
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%" id="viewUserEditContainer">
-																<table width="563" border="0" bgColor="#f4f4f2" height="363" >
+																<table width="563" border="0"  height="363" >
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
@@ -444,6 +444,7 @@ function isInvalid(field){
 																		</td>
 																	</tr>
 																</table>
+                                                                <br/>
 															</td>
 														</tr>
 													<!-- end page logic -->

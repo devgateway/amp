@@ -443,36 +443,33 @@
 	
 											</tr>
 											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												<td class=f-names>
+												<td  width="3%">&nbsp;</td>
+												<td align="right" class="formCheckContainer"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
+												<td class=f-names align="left">
 													<html:checkbox property="pledger" styleClass="inp-text">
-														<digi:trn key="um:pledgesUser">Pledges User</digi:trn>
+														
 													</html:checkbox></td>
 											</tr>
 											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												<td class=f-names>
+												<td  width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn></td>
+												<td class=f-names align="left">
 
 												<c:if test="${umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" >
-														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
 													</html:checkbox></td>
 												</c:if>
 												<c:if test="${!umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
-														<digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn>
 													</html:checkbox></td>
 												</c:if>
 													
 											</tr>
 											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												<td class=f-names>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
+												<td class=f-names align="left">
 													<html:checkbox property="addWorkspace" styleClass="inp-text">
-														<digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn>
 													</html:checkbox></td>
 											</tr>
 											<tr>

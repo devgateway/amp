@@ -97,7 +97,7 @@
 
 
 	//String url = "/filterDesktopActivities.do";
-	String url = "/aim/showDesktop.do";
+	String url = "/";
 
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
 

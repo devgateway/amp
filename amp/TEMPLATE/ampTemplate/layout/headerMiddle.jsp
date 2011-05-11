@@ -386,7 +386,7 @@ function adminHelp(){
                                   <div class="bd bd_drop">
                                       <ul>
                                   		<li class="yuiampmenuitem_drop">
-                                            <a class="yuiampmenuitemlabel" href="/showDesktop.do">
+                                            <a class="yuiampmenuitemlabel" href="/">
                                             	<digi:trn>My Desktop</digi:trn>
                                             </a>
                                        	</li>

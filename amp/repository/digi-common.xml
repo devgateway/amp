@@ -43,7 +43,7 @@
 		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
-		<hibernate-class precache="true" region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Message</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>

@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -30,20 +32,21 @@ public class AmpTreeVisibility implements Serializable{
 	// key-> name
 	// object-> AmpTreeVisibility(template,module,feature,field)
 
-	private HashMap items;
+	private ConcurrentHashMap items;
 
 	private LinkedHashMap sorteditems;
 
-	public HashMap getItems() {
+	public Map getItems() {
 		/*
 		 * TreeMap mySet=new TreeMap(FeaturesUtil.ALPHA_AMP_TREE_ORDER);
 		 * mySet.putAll(this.getItems()); LinkedHashMap sortedItems=new
 		 * LinkedHashMap(); sortedItems.putAll(mySet); return sortedItems;
 		 */
 		return items;
+	
 	}
 
-	public void setItems(HashMap items) {
+	public void setItems(ConcurrentHashMap items) {
 		this.items = items;
 	}
 
@@ -57,7 +60,7 @@ public class AmpTreeVisibility implements Serializable{
 
 	public AmpTreeVisibility() {
 		super();
-		items = new HashMap();
+		items = new ConcurrentHashMap();
 		sorteditems = new LinkedHashMap();
 		// root=new AmpObjectVisibility();
 		// TODO Auto-generated constructor stub
@@ -66,7 +69,7 @@ public class AmpTreeVisibility implements Serializable{
 	public boolean buildAmpTreeVisibilityMultiLevel(
 			AmpObjectVisibility ampObjVis) {
 		this.root = ampObjVis;
-		this.setItems(new LinkedHashMap());
+		this.setItems(new ConcurrentHashMap());
 		boolean existSubmodules = false;
 		for (Iterator it = ampObjVis.getAllItems().iterator(); it.hasNext();) {
 			boolean notEmpty = false;
@@ -76,7 +79,7 @@ public class AmpTreeVisibility implements Serializable{
 				existSubmodules = true;
 			if (module.getParent() == null) {
 				moduleNode.setRoot(module);
-				moduleNode.setItems(new LinkedHashMap());
+				moduleNode.setItems(new ConcurrentHashMap());
 				getModuleTree(moduleNode);
 				notEmpty = true;
 			}
@@ -103,7 +106,7 @@ public class AmpTreeVisibility implements Serializable{
 						.next();
 				AmpTreeVisibility featureNode = new AmpTreeVisibility();
 				featureNode.setRoot(feature);
-				featureNode.setItems(new LinkedHashMap());
+				featureNode.setItems(new ConcurrentHashMap());
 				for (Iterator kt = feature.getSortedAlphaItems().iterator(); kt
 						.hasNext();)// getItems
 				{
@@ -134,7 +137,7 @@ public class AmpTreeVisibility implements Serializable{
 	public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis) {
 		// buildAmpTreeVisibilityMultiLevel(ampObjVis);
 		this.root = ampObjVis;
-		this.setItems(new HashMap());
+		this.setItems(new ConcurrentHashMap());
 		if (ampObjVis.getAllItems() != null)
 			if (ampObjVis.getAllItems().iterator() != null)
 				for (Iterator it = ampObjVis.getAllItems().iterator(); it.hasNext();) {
@@ -218,8 +221,8 @@ public class AmpTreeVisibility implements Serializable{
 	}
 
 	public AmpFeaturesVisibility getFeatureByNameFromRoot(String featureName) {
-		for (Iterator it = this.getItems().values().iterator(); it.hasNext();) {
-			AmpTreeVisibility module = (AmpTreeVisibility) it.next();
+		for(Object obj : this.getItems().values()  ) {
+			AmpTreeVisibility module = (AmpTreeVisibility) obj;
 			if (module.getItems().containsKey(featureName))
 				return (AmpFeaturesVisibility) ((AmpTreeVisibility) module
 						.getItems().get(featureName)).getRoot();

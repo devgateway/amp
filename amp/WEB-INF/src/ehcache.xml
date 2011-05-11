@@ -1,4 +1,4 @@
-<ehcache maxBytesOnHeap="100m" maxBytesOffHeap="100m" maxBytesOnDisk="500m" >
+<ehcache maxBytesOnHeap="50m" maxBytesOffHeap="100m" maxBytesOnDisk="500m" >
 
 
 	 <!-- Sets the path to the directory where cache .data files are created.
@@ -49,8 +49,8 @@
         timeToIdleSeconds="1800"
         timeToLiveSeconds="3600"
         diskPersistent="true"
-        maxElementsOnDisk="10000"
-        diskExpiryThreadIntervalSeconds="120"/>
+        maxElementsOnDisk="100000"
+    />
 	
 	<!-- 
 		This cache contains translations (2 mil entries should be enough)
@@ -61,7 +61,7 @@
 		eternal="true"
 		overflowToDisk="true"
 		diskPersistent="true"
-		maxElementsOnDisk="10000"
+		maxElementsOnDisk="50000"
 		/>
 
 	<!-- 
@@ -82,7 +82,7 @@
 		eternal="true"
 		overflowToDisk="true"
 		diskPersistent="true"
-		maxElementsOnDisk="10000"
+		maxElementsOnDisk="50000"
 		/>
 
 	<!-- 

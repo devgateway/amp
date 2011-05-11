@@ -144,13 +144,12 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         message.setSiteId(siteId);
         //search message
         Object obj = messageCache.get(message);   
-        /*if(obj==null) {
+        if(obj==null) {
         	//try loading it from db
         	Session ses;
 			try {
 				ses = PersistenceManager.getRequestDBSession();
 				Message realMsg = (Message) ses.get(Message.class, message);
-				PersistenceManager.releaseSession(ses);
 				if(realMsg!=null) {
 					obj=realMsg;
 					Serializable identifier=PersistenceManager.getSessionFactory().getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
@@ -159,14 +158,11 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (DgException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }*/
+        }
         
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");

@@ -1283,10 +1283,10 @@ function commentWin(val, commentId) {
 													
 													
 													<module:display name="Contact Information"	parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Donor Contact Information"module="Contact Information">
+														<feature:display name="Donor Contact Information" module="Contact Information">
 															<TR>
 																<TD>
-																<TABLE width="100%" cellPadding="3" cellSpacing="1"vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="top" bgcolor="#aaaaaa">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; 
 																			<IMG height="10"src="/TEMPLATE/ampTemplate/imagesSource/arrows/arrow-014E86.gif" width="15"/>
@@ -1322,7 +1322,7 @@ function commentWin(val, commentId) {
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display module="Contact Information"name="Government Contact Information">
+														<feature:display module="Contact Information" name="Government Contact Information">
 															<TR>
 																<TD>
 																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
@@ -1383,7 +1383,7 @@ function commentWin(val, commentId) {
 																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Project Coordinator Contact Information"name="Project Coordinator Email">
+																	<field:display feature="Project Coordinator Contact Information" name="Project Coordinator Email">
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
@@ -1423,7 +1423,7 @@ function commentWin(val, commentId) {
 																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Sector Ministry Contact Information"name="Sector Ministry Contact Email">
+																	<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email">
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn key="aim:contactPersonEmail">Email</digi:trn></i>: 
@@ -1463,7 +1463,7 @@ function commentWin(val, commentId) {
 																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Implementing/Executing Agency Contact Information"name="Implementing/Executing Agency Contact Email">
+																	<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact Email">
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																				<i><digi:trn>Email</digi:trn></i>: 

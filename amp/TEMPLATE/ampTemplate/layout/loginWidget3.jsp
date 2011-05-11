@@ -17,6 +17,7 @@
 				e.preventDefault();
                 $("div#show_login_pop_box").toggle();
 				$("#show_login_pop").toggleClass("menu-open");
+				$("#j_username").focus();
             });
 			
 			$("div#show_login_pop_box").mouseup(function() {
@@ -89,7 +90,7 @@
     							
 	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
 	    				
-	    							<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login in</digi:trn>'>
+	    							<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login</digi:trn>'>
   									
 	    			</form>
 			<div id="result">

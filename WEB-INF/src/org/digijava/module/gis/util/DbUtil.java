@@ -1422,10 +1422,11 @@ public class DbUtil {
         boolean oneOfSecsHasFounding = false;
         for (AmpSector sector : sectors) {
             XML sectorTag = new XML("sector");
-            sectorTag.addAttribute("name", sector.getName());
+            String name = sector.getName().indexOf("&") > -1 ? sector.getName().replaceAll("&","&amp;") : sector.getName();
+            sectorTag.addAttribute("name", name);
             sectorTag.addAttribute("id", sector.getAmpSectorId());
 
-            boolean curentSectorHasFunding = usedSectorSublist.contains(sector.getAmpSectorId());
+            boolean curentSectorHasFunding = usedSectorSublist != null && usedSectorSublist.contains(sector.getAmpSectorId());
             boolean oneOfChildrenHasFounding = false;
             if (!oneOfSecsHasFounding && curentSectorHasFunding) {
                 oneOfSecsHasFounding = true;

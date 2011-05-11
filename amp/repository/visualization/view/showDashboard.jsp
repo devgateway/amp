@@ -92,15 +92,25 @@ yuiLoadingPanel.prototype = {
 -->
 </script>
 
+<digi:instance property="visualizationform"/>
+<digi:form action="/filters.do">
 
 <!-- BREADCRUMB START -->
 <div class="centering">
-<span class="sec_name"><digi:trn>Donor Profile Dashboard</digi:trn></span><span class="breadcrump_sep">|</span><a href=# class="l_sm"><digi:trn>Dashboards</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
+ <digi:trn>Dashboards</digi:trn><span class="breadcrump_sep"><b>»</b></span>
+ 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+ 		<span class="bread_sel"><digi:trn>Donor Profile Dashboard</digi:trn></span>
+ 	</c:if>
+ 	<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+ 		<span class="bread_sel"><digi:trn>Region Profile Dashboard</digi:trn></span>
+ 	</c:if>
+ 	<c:if test="${visualizationform.filter.dashboardType eq '3' }">
+ 		<span class="bread_sel"><digi:trn>Sector Profile Dashboard</digi:trn></span>
+ 	</c:if>
 </div>
 <br/>
 <!-- BREADCRUMB END -->
-<digi:instance property="visualizationform"/>
-<digi:form action="/filters.do">
+
 <!-- POPUPS START -->
 <script language="javascript">
 <!--
@@ -469,14 +479,14 @@ function changeTab (selected){
 		<table width="100%" height=400 cellpadding="0" cellspacing="0">
 			<tr>
 				<td class="inside" width="45%" >
-				<div class="selector_type_sel">Export Type</div>
+				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif" "><br />
 		            <html:radio property="exportData.typeOpt" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif" "><br />
 		        </div>
 		        </td>
 		        <td class="inside" width="45%" >
-				<div class="selector_type_sel">Summary</div>
+				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_1" value="1"><digi:trn>Inculde Summary</digi:trn></html:radio><br />
@@ -485,7 +495,7 @@ function changeTab (selected){
 		    </tr>
 		    <tr>
 				<td class="inside" width="45%" >
-				<div class="selector_type_sel">Funding</div>
+				<div class="selector_type"><b><digi:trn>Funding</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -494,7 +504,7 @@ function changeTab (selected){
 		        </div>
 		        </td>
 		        <td class="inside" width="45%" >
-				<div class="selector_type_sel">Aid Predictability</div>
+				<div class="selector_type"><b><digi:trn>Aid Predictability</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -505,7 +515,7 @@ function changeTab (selected){
 		    </tr>
 		    <tr>
 				<td class="inside" width="45%" >
-				<div class="selector_type_sel">Aid Type</div>
+				<div class="selector_type"><b><digi:trn>Aid Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -514,7 +524,7 @@ function changeTab (selected){
 		        </div>
 		        </td>
 		        <td class="inside" width="45%" >
-				<div class="selector_type_sel">Financing Instrument</div>
+				<div class="selector_type"><b><digi:trn>Financing Instrument</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -526,7 +536,7 @@ function changeTab (selected){
 		    <tr>
 				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
     			<td class="inside" width="45%" >
-				<div class="selector_type_sel">Donor Profile</div>
+				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.donorOpt" styleId="export_donor_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -537,7 +547,7 @@ function changeTab (selected){
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '3' }">
     			<td class="inside" width="45%" >
-				<div class="selector_type_sel">Sector</div>
+				<div class="selector_type"><b><digi:trn>Sector</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.sectorOpt" styleId="export_sector_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -548,7 +558,7 @@ function changeTab (selected){
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '2' }">
     			<td class="inside" width="45%" >
-				<div class="selector_type_sel">Region</div>
+				<div class="selector_type"><b><digi:trn>Region</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
 		            <html:radio property="exportData.regionOpt" styleId="export_region_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
@@ -603,7 +613,7 @@ function changeTab (selected){
     		</c:if>
     	</div>
     </td>
-    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export</a></div></div></td>
+    <td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm">Export Options</a></div></div></td>
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>

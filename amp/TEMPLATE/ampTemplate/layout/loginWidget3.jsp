@@ -77,7 +77,7 @@
 	}
 </script>
 <div id="show_login_pop_box">
-						<form action="/j_acegi_security_check" id="loginForm" method="post" style="margin:0;z-index:9999">
+						<form action="/j_acegi_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
 				    				</label>
@@ -89,7 +89,7 @@
     							
 	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
 	    				
-	    							<input type="button"  class="buttonx_sm_lgn"  onclick="ajaxLogin();" value='<digi:trn>Login in</digi:trn>'>
+	    							<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login in</digi:trn>'>
   									
 	    			</form>
 			<div id="result">

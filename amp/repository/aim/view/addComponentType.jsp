@@ -90,6 +90,7 @@ table.inside, td.inside_zebra {}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #fff; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;}
+hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 
 -->
 </style>
@@ -160,7 +161,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 									<td height="22" colspan="2" align="right"><hr></td>
 								</tr>
 								<tr>
-									<td colspan="2" class="inside">
+									<td colspan="2">
 									<table width="100%" cellspacing="5">
 										<tr>
 											<td height="25" align="center" colspan="2">

@@ -151,10 +151,10 @@ Default Hierarchy
 <tr>
 <td colspan="2" class="inside" align=center>
 <hr />
-<c:set var="trn"><digi:trn key="aim:btnsave" styleClass="buttonx">Save</digi:trn></c:set>
+<c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
 <html:submit property="save" value="${trn}" onclick="return validateSave()"/>
-<c:set var="tran"><digi:trn key="aim:btncancel" styleClass="buttonx">Cancel</digi:trn></c:set>
-<c:set var="resetTrn"><digi:trn key="aim:btnreset" styleClass="buttonx">Reset</digi:trn></c:set>
+<c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
+<c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" value="${resetTrn}" />
   <html:button property="cancel" value="${tran}"  onclick="return cancelSaving();"/>
 </td>

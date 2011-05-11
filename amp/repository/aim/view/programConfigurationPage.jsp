@@ -43,7 +43,7 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center style="font-size:12px;">
 <tr>
 	<!-- Start Navigation -->
 	<td height=33><span class=crumb>
@@ -64,34 +64,34 @@
 
 
 <tr>
-<td height=16 valign="center" width=571>
-
+<td height=25 valign="center" width=571 align=center bgcolor=#c7d4db> 
+ 
 <span class=subtitle-blue style="padding-top:0px;padding-bottom:0px">
-						<digi:trn key="aim:adminconfigurationsettings">Configuration Settings
-						</digi:trn>
-						</span>
-					</td>
+						<digi:trn key="aim:adminconfigurationsettings"><b>Configuration Settings
+						</b></digi:trn>
+	  </span>
+	</td>
 </tr>
 <tr>
 					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
-				</tr>
+  </tr>
 <tr>
 <tr>
 <td>
-<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" >
+<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" class="inside">
 <tr>
-<td><b><digi:trn key="aim:programNameSetting">The Name of the Setting</digi:trn></b></td>
-<td><b><digi:trn key="aim:defaultHierarchy">Default Hierarchy</digi:trn></b></td>
-<td><b><digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn></b></td>
+<td class="inside"><b><digi:trn key="aim:programNameSetting">The Name of the Setting</digi:trn></b></td>
+<td class="inside"><b><digi:trn key="aim:defaultHierarchy">Default Hierarchy</digi:trn></b></td>
+<td class="inside"><b><digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn></b></td>
 </tr>
 <logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="setting">
 <tr>
-<td>
+<td class="inside">
 <digi:trn key="aim:${setting.name}"> <c:out value="${setting.name}"/></digi:trn>
 </td>
-<td>
+<td class="inside">
 <c:if test="${empty setting.defaultHierarchy}">
 <digi:trn key="aim:none"> None</digi:trn>
 </c:if>
@@ -104,7 +104,7 @@
 	</c:if>
 </c:if>
 </td>
-<td>
+<td class="inside">
 <c:if test="${setting.allowMultiple}">
 <digi:trn key="aim:yes"> Yes</digi:trn>
 </c:if>
@@ -120,20 +120,20 @@
 <td>
 <digi:form action="/programConfigurationPage.do" method="post">
 
-<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" >
+<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
 <logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList">
 <tr>
-<td colspan="2" bgColor=#d7eafd class=box-title height="20" align="left" >
+<td colspan="2" bgColor=#f2f2f2 class=box-title height="20" align="center">
 <digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
 </td>
 </tr>
 <tr>
-<td width="20%">
+<td width="50%" class="inside" align=right>
 <digi:trn key="aim:defaultHierarchy">
 Default Hierarchy
 </digi:trn>
 </td>
-<td>
+<td class="inside">
 
 <html:select name="settingsList" property="defaultHierarchyId" indexed="true">
   <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
@@ -142,18 +142,19 @@ Default Hierarchy
 </td>
 </tr>
 <tr>
-<td colspan="2" >
+<td colspan="2" class="inside" align=center>
 <digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsList" property="allowMultiple" indexed="true" />
 </td>
 </tr>
 </logic:iterate>
 
 <tr>
-<td colspan="2">
-<c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
+<td colspan="2" class="inside" align=center>
+<hr />
+<c:set var="trn"><digi:trn key="aim:btnsave" styleClass="buttonx">Save</digi:trn></c:set>
 <html:submit property="save" value="${trn}" onclick="return validateSave()"/>
-<c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
-<c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
+<c:set var="tran"><digi:trn key="aim:btncancel" styleClass="buttonx">Cancel</digi:trn></c:set>
+<c:set var="resetTrn"><digi:trn key="aim:btnreset" styleClass="buttonx">Reset</digi:trn></c:set>
   <html:reset property="reset" value="${resetTrn}" />
   <html:button property="cancel" value="${tran}"  onclick="return cancelSaving();"/>
 </td>

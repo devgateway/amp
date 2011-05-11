@@ -157,7 +157,7 @@ if (onDelete()){
                     <c:set var="translation">
                       <digi:trn key="btn:componentTypeManagerAddType">Add Type</digi:trn>
                     </c:set>
-                    <html:button styleClass="inputx" value="${translation}" property="submitButton"  onclick="addType()">
+                    <html:button styleClass="buttonx" value="${translation}" property="submitButton"  onclick="addType()">
                       <digi:trn key="aim:clickToAddComponent">Click here to add a type</digi:trn>
                     </html:button></td>
               </tr>

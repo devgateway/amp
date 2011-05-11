@@ -1875,6 +1875,7 @@ public class DataDispatcher extends DispatchAction {
 		int i = 0;
         int k = 0;
         int maxLength = request.getContentLength();
+        logger.info("About to create image from swf");
         byte[] bytes = new byte[maxLength];
         String method = request.getParameter("method");
         String name = request.getParameter("name");

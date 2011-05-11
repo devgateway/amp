@@ -2041,7 +2041,7 @@ public class TeamUtil {
                        + AmpTeamReports.class.getName() 
                        + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
                       if (name != null) {
-                       queryString += " and r.name like :name ";
+                       queryString += " and lower(r.name) like lower(:name) ";
                    }
 
                    queryString +=  " order by r.name";
@@ -2065,7 +2065,7 @@ public class TeamUtil {
                        + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
                        + "  where " + tabFilter + " (tr.team=:teamId)";
                       if (name != null) {
-                       queryString += " and r.name like :name ";
+                       queryString += " and lower(r.name) like lower(:name) ";
                    }
 
                    queryString +=  " order by r.name";
@@ -2090,7 +2090,7 @@ public class TeamUtil {
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                   if(name!=null){
-                           queryString += " and r.name like :name";
+                           queryString += " and lower(r.name) like lower(:name)";
                   }
             	  qry = session.createQuery(queryString); 
             	  qry.setLong("ampTeamMemId", memberId);

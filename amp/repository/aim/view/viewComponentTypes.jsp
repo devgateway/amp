@@ -51,14 +51,13 @@ if (onDelete()){
   <!-- End of Logo -->
 
 
-  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+  <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
     <tr>
-      <td class=r-dotted-lg width=14>&nbsp;</td>
       <td align=left class=r-dotted-lg valign="top" width=750>
         <table cellPadding=5 cellspacing="0" width="100%" border="0">
           <tr>
             <!-- Start Navigation -->
-            <td height=33><span class="crumb">
+            <td height=33 colspan="5"><span class="crumb">
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>
@@ -78,11 +77,11 @@ if (onDelete()){
            <digi:trn key="aim:componentTypesTitle">Component Types Manager</digi:trn>
           </c:set>
 
-            <td height=16 valign="center" width=571><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
+            <td height=16 valign="center" width=571 colspan="5"><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
       </td>
           </tr>
           <tr>
-            <td height=16 valign="center" width=571>
+            <td height=16 valign="center" width=571 colspan="5">
               <digi:errors />
             </td>
           </tr>
@@ -90,21 +89,21 @@ if (onDelete()){
             <td noWrap width="100%" vAlign="top">
             
           <tr>
-            <td noWrap width=600 vAlign="top"><table bgcolor="#d7eafd" cellpadding="3" cellspacing="0" width="100%" valign="top">
+            <td noWrap width=600 vAlign="top"><table cellpadding="3" cellspacing="0" width="100%" valign="top" style="font-size:12px;">
               <tr bgcolor="#ffffff">
                 <td valign="top" width="100%"><table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
                     <tr>
-                      <td bgcolor="#d7eafd" class="box-title" height="20"><!-- Table title -->
+                      <td bgcolor="#c7d4db" class="box-title" height="25" align=center><!-- Table title -->
                           <digi:trn key="aim:componentTypes">
-                            <h3>Component Types </h3>
+                            <b>Component Types</b>
                           </digi:trn>
                           <!-- end table title -->                      </td>
                     </tr>
                     <tr>
-                      <td><table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" bgcolor="#d7eafd">
+                      <td><table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" class="inside">
                           <logic:empty name="aimComponentsTypeForm" property="componentTypesList">
                             <tr bgcolor="#ffffff">
-                              <td colspan="5" align="center"><b>
+                              <td colspan="5" align="center" class="inside"><b>
                                 <digi:trn key="aim:noTypes"> No types present </digi:trn>
                               </b></td>
                             </tr>
@@ -113,7 +112,7 @@ if (onDelete()){
                             <logic:iterate name="aimComponentsTypeForm" property="componentTypesList" id="componentTypesList"
                             type="org.digijava.module.aim.dbentity.AmpComponentType">
                               <tr>
-                                <td height="20" bgcolor="#ffffff">
+                                <td height="20" class="inside">
                                 
                             <jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 	                                    <c:set var="ToEditComponents">
@@ -122,7 +121,7 @@ if (onDelete()){
 	                                    <bean:write  name="componentTypesList" property="code"/>                                     </td>
                                 <td height="20" bgcolor="#ffffff" td>
                                 <bean:write  name="componentTypesList" property="name"/>                                </td>
-                                <td width="100" height="20" align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                <td width="100" height="20" align="center" nowrap="nowrap" bgcolor="#ffffff" class="inside">
                                   <c:set var="ToEditType">
                                   <digi:trn key="aim:clickToEditType">Click here to Edit Type</digi:trn>
                                 </c:set>
@@ -154,11 +153,11 @@ if (onDelete()){
                 </table></td>
               </tr>
               <tr>
-                <td height="20" bgcolor="#d7eafd" class="box-title" align="center"><B>
+                <td height="20" align="center"><B>
                     <c:set var="translation">
                       <digi:trn key="btn:componentTypeManagerAddType">Add Type</digi:trn>
                     </c:set>
-                    <html:button styleClass="dr-menu" value="${translation}" property="submitButton"  onclick="addType()">
+                    <html:button styleClass="inputx" value="${translation}" property="submitButton"  onclick="addType()">
                       <digi:trn key="aim:clickToAddComponent">Click here to add a type</digi:trn>
                     </html:button></td>
               </tr>
@@ -169,25 +168,23 @@ if (onDelete()){
     <tr>
       <td>
         <!-- Other Links -->
-        <table cellpadding="0" cellspacing="0" width="10"0>
+        <table cellpadding="0" cellspacing="0" width="100">
           <tr>
-            <td bgColor=#c9c9c7 class=box-title>
+            <td bgColor=#c9c9c7>
               <digi:trn key="aim:otherLinks">
-              Other links
+              <b style="padding-left:5px;">Other links</b>
               </digi:trn>
             </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-            
-            </td>
+            <td background="module/aim/images/corner-r.gif" height="17" width=17></td>
           </tr>
         </table>
       </td>
     </tr>
     <tr>
       <td bgColor=#ffffff class=box-border>
-        <table cellPadding=5 cellspacing="1" width="100%">
+        <table cellPadding=5 cellspacing="1" width="100%" class="inside">
           <tr>
-            <td nowrap="nowrap">
+            <td nowrap="nowrap" class="inside">
               <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

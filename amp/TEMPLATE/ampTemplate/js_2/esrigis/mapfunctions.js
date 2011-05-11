@@ -11,6 +11,7 @@ dojo.require("dijit.Toolbar");
 dojo.require("esri.tasks.find");
 dojo.require("esri.tasks.geometry");
 dojo.require("esri.dijit.BasemapGallery");
+dojo.require("esri.arcgis.utils");
 
 var map, navToolbar,geometryService,findTask,findParams;
 var totallocations = 0;
@@ -19,6 +20,8 @@ var timer_on = 0;
 var activitiesarray = new Array();
 var loading;
 var cL;
+var basemapGallery;
+
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
@@ -79,6 +82,8 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(myService2);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
+	mapPrinter = new MapPrinter(map, "http://localhost:8080/getpdf.out");
+	createBasemapGallery();
 }
 
 

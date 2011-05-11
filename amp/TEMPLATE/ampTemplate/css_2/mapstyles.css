@@ -135,3 +135,11 @@ body {
 	margin-left:10px;
 	height:20px;
 }
+.esriBasemapGallery {
+	position:absolute;
+	z-index:100;
+	margin-top:5%;
+	margin-left:90%;
+	font-size: 10px;
+	display:none;
+}

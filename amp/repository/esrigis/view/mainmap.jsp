@@ -33,6 +33,8 @@
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/MapPrinter.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
@@ -70,6 +72,19 @@
      		$('#navToolbar').toggle('slow');
      	});
 	});
+
+	$(function(){
+  		$('#basemap').click(function(){
+     		$('#basemapGallery').toggle('slow');
+     	});
+	});
+	
+	  var print = function() {
+	    var title = dojo.byId("reportTitle").value;
+	    var report = dojo.byId("report").value;
+	    var params = dojo.byId("reportParams").value;
+	    mapPrinter.generatePdf(title, report, params);
+	  };
 </script>
  </head> 
   <body class="soria">
@@ -77,6 +92,7 @@
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   		<div id="map" dojotype="dijit.layout.ContentPane" class="roundedCorners" region="center">
        </div>
+       <div id="basemapGallery"></div>
        <div class="headerBackground"> </div>
        <div class="header">
             <table style="height: 100%;">
@@ -106,14 +122,17 @@
 						<td valign="middle" align="center" onclick="getHighlights(0);" style="cursor: pointer;">Highlight regions</td>
 						<td valign="middle" align="center" onclick="getHighlights(1);" style="cursor: pointer;">Highlight Zones</td>
 						<td valign="middle" align="center" onclick="getActivities(true);" style="cursor: pointer;">Activities</td>
+						<td id="basemap" valign="middle" align="center" style="cursor: pointer;">
+							<img src="/TEMPLATE/ampTemplate/img_2/imgBaseMap.png" align=left height="20px" width="20px" alt="Select base Map">
+						</td>
 					</tr>
 			</table>
 		</div>
 		<div id="filterdiv" style="position:absolute;z-Index:100;margin-left: 700px;margin-top: 50px;display: none;">
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
+ 		 
         <div id="legenddiv" class="legendContent">
-        
         </div>
  		<div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:20px; top:10px; z-Index:999;display: none;margin-top: 45px;">
 			<div dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);">Zoom In</div>
@@ -126,5 +145,8 @@
  		</div>
     </div>  
   </body>
+  <script type="text/javascript">
+  	new dijit.form.Button({ label: "Generate PDF", onClick: print }, "printButton");
   
+  </script>
 </html>

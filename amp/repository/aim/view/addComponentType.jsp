@@ -91,91 +91,88 @@ body {
 
 <html:hidden property="check" />
 	<html:hidden property="id" />
-	<table width="100%" border="0" align="center" cellpadding="0"
-		cellspacing="0">
-		<tr>
+	<font color=red>* 
+								    <digi:trn
+										key="aim:addNewComponent:mandatoryFields"> Mandatory fields </digi:trn>
+									</font>
+	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
+		<!--<tr>
 			<td height="30"><span class=subtitle-blue> <digi:trn
-				key="aim:addNewComponentType">Add A New Component Type</digi:trn> </span></td>
-		</tr>
+				key="aim:addNewComponentType"><b>Add A New Component Type</b></digi:trn> </span></td>
+		</tr>-->
 		<tr>
 			<td>
 			<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0"
-				width="100%" border="0">
+				width="100%" border="0" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 				<tr>
 					<td bgColor=#ffffff class=box-border>
 					<table border="0" cellpadding="1" cellspacing="1" class=box-border
 						width="100%">
 						<tr bgColor=#dddddb>
 							<!-- header -->
-							<td bgColor=#dddddb height="20" align="center" colspan="5"><digi:trn
-								key="aim:addType">Add Type</digi:trn> <B> <!-- end header -->
+							<td bgColor=#c7d4db height="20" align="center" colspan="5"><digi:trn
+								key="aim:addType"><b>Add Type</b></digi:trn> <B> <!-- end header -->
 						</tr>
 						<!-- Page Logic -->
 						<tr>
 							<td width="100%">
-							<table width="100%" border="0" bgColor=#f4f4f2>
+							<table width="100%" border="0" class="inside" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
-									<td width="35%" height="22" align="right"><font color=red>*</font> <digi:trn
+									<td width="35%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
 										key="aim:typeName">Name</digi:trn>
 								    &nbsp;</td>
-								  <td width="65%"><html:text property="name" size="40"/></td>
+								  <td width="65%" class="inside"><html:text property="name" size="40"/></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Code" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right"><font color=red>*</font> <digi:trn
+									<td width="35%" height="22" align="right" class="inside"><font color=red>*</font> <digi:trn
 										key="aim:typeCode"> Code</digi:trn>
 								    &nbsp;</td>
-								  <td width="65%"><html:text property="code" size="10" /></td>
+								  <td width="65%" class="inside"><html:text property="code" size="10" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Enable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right"><digi:trn key="aim:typeEbable">Enabled</digi:trn>
+									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable">Enabled</digi:trn>
 &nbsp;									</td>
-								  <td width="65%"><html:checkbox property="enable" /></td>
+								  <td width="65%" class="inside"><html:checkbox property="enable" /></td>
 								</tr>
 								</field:display>
 								<field:display name="Admin - Component Type Selectable checkbox" feature="Admin - Component Type">
 								<tr>
-									<td width="35%" height="22" align="right"><digi:trn key="aim:typeEbable">Selectable</digi:trn>
+									<td width="35%" height="22" align="right" class="inside"><digi:trn key="aim:typeEbable">Selectable</digi:trn>
 &nbsp;									</td>
-								  <td width="65%"><html:checkbox property="selectable" /></td>
+								  <td width="65%" class="inside"><html:checkbox property="selectable" /></td>
 								</tr>
 								</field:display>
 								<tr>
-									<td width=35% height="22" align="right"><font color=red>* 
-								    <digi:trn
-										key="aim:addNewComponent:mandatoryFields"> Mandatory fields </digi:trn>
-									</font></td>
-									<td width="65%">&nbsp;</td>
+									<td height="22" colspan="2" align="right"><hr></td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td colspan="2" class="inside">
 									<table width="100%" cellspacing="5">
 										<tr>
-											<td bgColor=#dddddb height="25" align="center" colspan="2">
+											<td height="25" align="center" colspan="2">
 											<field:display name="Admin - Component Type Save Button" feature="Admin - Component Type">
-											  <input class="dr-menu" id="addBtn" type="button"
+											  <input class="buttonx" id="addBtn" type="button"
 												value='<digi:trn key="btn:save">Save</digi:trn>'
 												onClick="return updateComponentsType()">
 											</field:display>
 											<field:display name="Admin - Component Type Cancel Button" feature="Admin - Component Type">
-											  <html:reset styleClass="dr-menu" property="submitButton">
+											  <html:reset styleClass="buttonx" property="submitButton">
 												<digi:trn key="btn:reset">Reset</digi:trn></html:reset>
 											</field:display> 	
 											<field:display name="Admin - Component Type Close Button" feature="Admin - Component Type">					
             								  <html:button
-												styleClass="dr-menu" property="submitButton"
+												styleClass="buttonx" property="submitButton"
 												onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn>
 											  </html:button>
-											</field:display>
-											</td>
+											</field:display>											</td>
 										</tr>
-									</table>
-								  </td>
+									</table>								  </td>
 								</tr>
 							</table>
 						  </td>

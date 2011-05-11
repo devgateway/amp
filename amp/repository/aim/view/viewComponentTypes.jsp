@@ -86,14 +86,14 @@ if (onDelete()){
             </td>
           </tr>
           <tr>
-            <td noWrap width="100%" vAlign="top">
+            <td noWrap width="100%" vAlign="top" colspan=5>
             
           <tr>
-            <td noWrap width=600 vAlign="top"><table cellpadding="3" cellspacing="0" width="100%" valign="top" style="font-size:12px;">
+            <td noWrap width=450 vAlign="top"><table cellpadding="3" cellspacing="0" width="100%" valign="top" style="font-size:12px;">
               <tr bgcolor="#ffffff">
                 <td valign="top" width="100%"><table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
                     <tr>
-                      <td bgcolor="#c7d4db" class="box-title" height="25" align=center><!-- Table title -->
+                      <td bgcolor="#c7d4db" class="box-title" height="25" align=center style="font-size:12px;"><!-- Table title -->
                           <digi:trn key="aim:componentTypes">
                             <b>Component Types</b>
                           </digi:trn>
@@ -119,7 +119,7 @@ if (onDelete()){
 	                                      <digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
 	                                    </c:set>
 	                                    <bean:write  name="componentTypesList" property="code"/>                                     </td>
-                                <td height="20" bgcolor="#ffffff" td>
+                                <td height="20" bgcolor="#ffffff" class="inside">
                                 <bean:write  name="componentTypesList" property="name"/>                                </td>
                                 <td width="100" height="20" align="center" nowrap="nowrap" bgcolor="#ffffff" class="inside">
                                   <c:set var="ToEditType">
@@ -168,7 +168,7 @@ if (onDelete()){
     <tr>
       <td>
         <!-- Other Links -->
-        <table cellpadding="0" cellspacing="0" width="100">
+        <table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
           <tr>
             <td bgColor=#c9c9c7>
               <digi:trn key="aim:otherLinks">
@@ -184,7 +184,7 @@ if (onDelete()){
       <td bgColor=#ffffff class=box-border>
         <table cellPadding=5 cellspacing="1" width="100%" class="inside">
           <tr>
-            <td nowrap="nowrap" class="inside">
+            <td nowrap="nowrap" class="inside" style="font-size:12px;">
               <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>

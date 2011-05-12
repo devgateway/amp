@@ -114,10 +114,10 @@
     <classpath refid="xjc.classpath" />
   </taskdef>
 
-	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask">
+	<taskdef name="start" classname="org.apache.catalina.ant.StartTask">
 		<classpath location="${external-lib}/catalina-ant.jar"/> 
 	</taskdef>
-	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask">
+	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
 		<classpath path="${external-lib}/catalina-ant.jar"/> 
 	</taskdef>
 	

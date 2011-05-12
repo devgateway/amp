@@ -1869,7 +1869,7 @@ public class DataDispatcher extends DispatchAction {
 	
 	public ActionForward setChartImageFromSnapshot(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws java.lang.Exception {
+			HttpServletResponse response) {
 		 
 		VisualizationForm vForm = (VisualizationForm) form;
 		int i = 0;
@@ -1881,75 +1881,79 @@ public class DataDispatcher extends DispatchAction {
         String name = request.getParameter("name");
         String type = request.getParameter("type");
         int graph = Integer.valueOf(request.getParameter("graph"));
-        ServletInputStream si = request.getInputStream();
-        while (true){
-            k = si.read(bytes,i,maxLength);
-            i += k;
-            if (k <= 0)
-            break;
-        }
-
-        if (bytes != null && bytes.length>0) {
-            if (type==null||type.equals("")) {
-                ServletOutputStream stream = response.getOutputStream();
-                response.setContentType("application/pdf");
-                response.setContentLength(bytes.length);
-                response.setHeader("Content-Disposition",method + ";filename=" + name);
-                stream.write(bytes);
-                stream.flush();
-                stream.close();
-            }
-
-            if (type!=null&&(type.equals("jpg")||type.equals("png"))) {
-                BASE64Decoder decoder = new BASE64Decoder();
-                byte[] imagen=decoder.decodeBuffer(new String(bytes));
-                InputStream in = new ByteArrayInputStream(imagen);
-                BufferedImage image =  ImageIO.read(in);
-               switch (graph) {
-				case 1:
-					vForm.getExportData().setFundingGraph(image);
-					logger.info("Creating image from Funding graph");
-					break;
-				
-				case 2:
-					vForm.getExportData().setAidPredictabilityGraph(image);
-					logger.info("Creating image from Aid Predictability graph");
-					break;
-				
-				case 3:
-					vForm.getExportData().setAidTypeGraph(image);
-					logger.info("Creating image from Aid Type graph");
-					break;
-				
-				case 4:
-					vForm.getExportData().setFinancingInstGraph(image);
-					logger.info("Creating image from Financing Instrument graph");
-					break;
-				
-				case 5:
-					vForm.getExportData().setDonorGraph(image);
-					logger.info("Creating image from Donor graph");
-					break;
-				
-				case 6:
-					vForm.getExportData().setSectorGraph(image);
-					logger.info("Creating image from Sector graph");
-					break;
-				
-				case 7:
-					vForm.getExportData().setRegionGraph(image);
-					logger.info("Creating image from Region graph");
-					break;
-				
-				}
-                
-            }
-        } else {
-        	response.setContentType("text");
-        	response.getWriter().write("bytes is null");
-        }
-	        
+        try {
+			ServletInputStream si = request.getInputStream();
+	        while (true){
+	            k = si.read(bytes,i,maxLength);
+	            i += k;
+	            if (k <= 0)
+	            break;
+	        }
+	
+	        if (bytes != null && bytes.length>0) {
+	           /*if (type==null||type.equals("")) {
+	                ServletOutputStream stream = response.getOutputStream();
+	                response.setContentType("application/pdf");
+	                response.setContentLength(bytes.length);
+	                response.setHeader("Content-Disposition",method + ";filename=" + name);
+	                stream.write(bytes);
+	                stream.flush();
+	                stream.close();
+	            }
+				*/
+	            if (type!=null&&(type.equals("jpg")||type.equals("png"))) {
+	                BASE64Decoder decoder = new BASE64Decoder();
+	                byte[] imagen=decoder.decodeBuffer(new String(bytes));
+	                InputStream in = new ByteArrayInputStream(imagen);
+	                BufferedImage image =  ImageIO.read(in);
+	               switch (graph) {
+					case 1:
+						vForm.getExportData().setFundingGraph(image);
+						logger.info("Creating image from Funding graph");
+						break;
+					
+					case 2:
+						vForm.getExportData().setAidPredictabilityGraph(image);
+						logger.info("Creating image from Aid Predictability graph");
+						break;
+					
+					case 3:
+						vForm.getExportData().setAidTypeGraph(image);
+						logger.info("Creating image from Aid Type graph");
+						break;
+					
+					case 4:
+						vForm.getExportData().setFinancingInstGraph(image);
+						logger.info("Creating image from Financing Instrument graph");
+						break;
+					
+					case 5:
+						vForm.getExportData().setDonorGraph(image);
+						logger.info("Creating image from Donor graph");
+						break;
+					
+					case 6:
+						vForm.getExportData().setSectorGraph(image);
+						logger.info("Creating image from Sector graph");
+						break;
+					
+					case 7:
+						vForm.getExportData().setRegionGraph(image);
+						logger.info("Creating image from Region graph");
+						break;
+					
+					}
+	                
+	            }
+	        } else {
+	        	response.setContentType("text");
+	        	response.getWriter().write("bytes is null");
+	        }
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
+        
 	
 }

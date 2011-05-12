@@ -3,6 +3,7 @@
 
     <!-- Local system paths -->
     <property file="digijava.properties"/>
+	<property file="${user.home}/ant-global.properties"/>
 		
 	<property file="compat.properties"/>
     <!-- NOTE: If "dist" target is used, a local
@@ -122,14 +123,14 @@
 	</taskdef>
 	
 	<target name="start" description="Start Tomcat application">
-	        <start url="${tomcat.manager.url}"
+	        <start url="${amp.url}/manager"
 	            username="${tomcat.username}"
 	            password="${tomcat.password}"
 	            path="/"/>
 	</target>
 	
 	<target name="stop" description="Stop Tomcat application">
-	        <stop url="${tomcat.manager.url}"
+	        <stop url="${amp.url}/manager"
 	            username="${tomcat.username}"
 	            password="${tomcat.password}"
 	            path="/"/>

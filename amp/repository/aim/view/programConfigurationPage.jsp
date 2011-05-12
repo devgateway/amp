@@ -123,7 +123,7 @@
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
 <logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList">
 <tr>
-<td colspan="2" bgColor=#f2f2f2 class=box-title height="20" align="center">
+<td colspan="2" bgColor=#f2f2f2 class="inside" height="20" align="center" style="font-weight:bold;">
 <digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
 </td>
 </tr>
@@ -150,13 +150,12 @@ Default Hierarchy
 
 <tr>
 <td colspan="2" class="inside" align=center>
-<hr />
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" onclick="return validateSave()"/>
-<c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
+<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return validateSave()"/>
+<c:set var="tran"><digi:trn key="aim:btncancel" styleClass="buttonx">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
-  <html:reset property="reset" value="${resetTrn}" />
-  <html:button property="cancel" value="${tran}"  onclick="return cancelSaving();"/>
+  <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />
+  <html:button property="cancel" styleClass="buttonx" value="${tran}" onclick="return cancelSaving();"/>
 </td>
 </tr>
 </table>

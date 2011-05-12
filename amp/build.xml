@@ -125,14 +125,14 @@
 	        <start url="${tomcat.manager.url}"
 	            username="${tomcat.username}"
 	            password="${tomcat.password}"
-	            path="/${webapp.name}"/>
+	            path="/"/>
 	</target>
 	
 	<target name="stop" description="Stop Tomcat application">
 	        <stop url="${tomcat.manager.url}"
 	            username="${tomcat.username}"
 	            password="${tomcat.password}"
-	            path="/${webapp.name}"/>
+	            path="/"/>
 	 </target>
 	
     <!-- Check timestamp on files -->

@@ -14,7 +14,7 @@
     <!-- Project settings -->
     <property name="project.title" value="DiGiJava "/>
     <property name="project.distname" value="amp"/>
-    <property name="project.version" value="1.15.0"/>
+    <property name="project.version" value="2.0.0"/>
     <property name="lib" location="./WEB-INF/lib" />
     <property name="webinf" location="./WEB-INF" />
 	<property name="metainf" location="./META-INF" />		
@@ -114,6 +114,27 @@
     <classpath refid="xjc.classpath" />
   </taskdef>
 
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask">
+		<classpath location="${external-lib}/catalina-ant.jar"/> 
+	</taskdef>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask">
+		<classpath path="${external-lib}/catalina-ant.jar"/> 
+	</taskdef>
+	
+	<target name="start" description="Start Tomcat application">
+	        <start url="${tomcat.manager.url}"
+	            username="${tomcat.username}"
+	            password="${tomcat.password}"
+	            path="/${webapp.name}"/>
+	</target>
+	
+	<target name="stop" description="Stop Tomcat application">
+	        <stop url="${tomcat.manager.url}"
+	            username="${tomcat.username}"
+	            password="${tomcat.password}"
+	            path="/${webapp.name}"/>
+	 </target>
+	
     <!-- Check timestamp on files -->
     <target name="prepare" depends="check-jvm">
         <tstamp/>
@@ -521,7 +542,6 @@
 		<delete file="${webinf}/jboss-web.xml"/>
 		<delete dir="${metainf}"/>
 		<mkdir dir="${metainf}"/>
-		<delete dir="${jackrabbit}"/>
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
 		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>	
 		<xslt in="context.xml" out="${metainf}/context.xml" style="context.xsl">

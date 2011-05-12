@@ -267,7 +267,7 @@ var implementationLevel = [{"name": "Region", "mapId": "0", "mapField": "COUNTY"
                            {"name": "Zone", "mapId": "1", "mapField": "DISTRICT"}
                           ];
 function getHighlights(level) {
-	$('#legenddiv').hide('slow');
+	closeHide();
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showhighlights=true&level=" + implementationLevel[level].name,
 			handleAs : "json",
@@ -288,7 +288,10 @@ function getHighlights(level) {
 
 function closeHide(){
 	$('#legenddiv').hide('slow');
-	map.graphics.clear()
+	try{
+		map.removeLayer(map.getLayer("highlightMap"));
+	}
+	catch(e){}
 //	cL.clear();
 }
 
@@ -308,6 +311,7 @@ function addResultsToMap(featureSet) {
     var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([150, 150, 150, 0.5]));
     var colors = colorsOrange;
     var numRanges = colors.length;
+    var localGraphicLayer = esri.layers.GraphicsLayer({displayOnPan: true, id: "highlightMap", visible: true});
 
     //Using logarithmic scale
     var maxLog = Math.log(getMaxValue(locations, "commitments"));
@@ -329,10 +333,13 @@ function addResultsToMap(featureSet) {
       }
 
     dojo.forEach(featureSet.features,function(feature){
-      map.graphics.add(feature);
+    	localGraphicLayer.add(feature);
     });
-    updateLocationAttributes();
-    map.graphics.setRenderer(renderer);
+    
+    localGraphicLayer = updateLocationAttributes(localGraphicLayer);
+    localGraphicLayer.setRenderer(renderer);
+    map.addLayer(localGraphicLayer);
+    map.reorderLayer(map.getLayer("highlightMap"),0);
     map.setExtent(map.extent.expand(1.01));
     hideLoading();
     showLegend(rangeColors, colors);
@@ -392,10 +399,10 @@ function getMinValue(array, measure){
 	return minValue-10;
 }
 
-function updateLocationAttributes(){
-    var count = map.graphics.graphics.length;
+function updateLocationAttributes(graphicLayer){
+    var count = graphicLayer.graphics.length;
     for(var i=0;i<count;i++) {
-      var g = map.graphics.graphics[i];
+      var g = graphicLayer.graphics[i];
       for(var j=0;j<locations.length;j++){
     	  var currentLocation = locations[j];
           if(g.attributes["GEO_ID"] == currentLocation.geoId){
@@ -404,6 +411,7 @@ function updateLocationAttributes(){
           }
       }
     }
+    return graphicLayer;
 }
 
 

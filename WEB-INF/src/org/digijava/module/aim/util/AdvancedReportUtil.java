@@ -127,73 +127,73 @@ public final class AdvancedReportUtil {
 				//session.save(ampTeamMember);
 //			}
 
-			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-			//logger.info( " Filter Query...:: " + queryString);
-			query = session.createQuery(queryString);
-			if(query!=null)
-			{
-				iter = query.list().iterator();
-				while(iter.hasNext())
-				{
-					AmpFilters filt = (AmpFilters) iter.next();
-					if(filt.getFilterName().compareTo("Region") != 0 && 
-						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
-						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
-					{
-						//logger.info("Insertd : " + filt.getFilterName());
-						pageFilters.add(filt);
-					}
-				}
-			}
-
-			AmpPages ampPages = new AmpPages();
-			ampPages.setFilters(pageFilters);
-			ampPages.setPageName(ampReports.getName());
-			//logger.info(" Page Name  : " + ampPages.getPageName());
-				
-			String pageCode = "" + ampReports.getName().trim().charAt(0);
-			for(int j=0; j <ampReports.getName().length(); j++)
-			{
-				if(ampReports.getName().charAt(j) == ' ')
-						pageCode = pageCode + ampReports.getName().charAt(j+1);
-			}
-			ampPages.setPageCode(pageCode);
-			ampPages.setAmpTeamId(ampTeamId);
-			session.save(ampPages);
-			
-			
-			pageFilters = ampPages.getFilters();
-			Iterator itr = pageFilters.iterator();
-			while (itr.hasNext()) {
-				AmpFilters filt = (AmpFilters) itr.next();
-				AmpTeamPageFilters tpf = new AmpTeamPageFilters();
-				tpf.setFilter(filt);
-				tpf.setTeam(ampTeam);
-				tpf.setPage(ampPages);
-				session.save(tpf);
-			
-			}
-			
-			ampReports.setAmpPage(ampPages);
-			
-			queryString = "select t from " + AmpTeam.class.getName() + " t " +
-					"where t.accessType = 'Management'";
-			query = session.createQuery(queryString);
-			itr = query.list().iterator();
-			while (itr.hasNext()) {
-				AmpTeam t = (AmpTeam) itr.next();
-				pageFilters = ampPages.getFilters();
-				Iterator itr1 = pageFilters.iterator();
-				while (itr1.hasNext()) {
-					AmpFilters filt = (AmpFilters) itr1.next();
-					AmpTeamPageFilters tpf = new AmpTeamPageFilters();
-					tpf.setFilter(filt);
-					tpf.setTeam(t);
-					tpf.setPage(ampPages);
-					session.save(tpf);
-			
-				}
-			}
+//			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
+//			//logger.info( " Filter Query...:: " + queryString);
+//			query = session.createQuery(queryString);
+//			if(query!=null)
+//			{
+//				iter = query.list().iterator();
+//				while(iter.hasNext())
+//				{
+//					AmpFilters filt = (AmpFilters) iter.next();
+//					if(filt.getFilterName().compareTo("Region") != 0 && 
+//						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
+//						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
+//					{
+//						//logger.info("Insertd : " + filt.getFilterName());
+//						pageFilters.add(filt);
+//					}
+//				}
+//			}
+//
+//			AmpPages ampPages = new AmpPages();
+//			ampPages.setFilters(pageFilters);
+//			ampPages.setPageName(ampReports.getName());
+//			//logger.info(" Page Name  : " + ampPages.getPageName());
+//				
+//			String pageCode = "" + ampReports.getName().trim().charAt(0);
+//			for(int j=0; j <ampReports.getName().length(); j++)
+//			{
+//				if(ampReports.getName().charAt(j) == ' ')
+//						pageCode = pageCode + ampReports.getName().charAt(j+1);
+//			}
+//			ampPages.setPageCode(pageCode);
+//			ampPages.setAmpTeamId(ampTeamId);
+//			session.save(ampPages);
+//			
+//			
+//			pageFilters = ampPages.getFilters();
+//			Iterator itr = pageFilters.iterator();
+//			while (itr.hasNext()) {
+//				AmpFilters filt = (AmpFilters) itr.next();
+//				AmpTeamPageFilters tpf = new AmpTeamPageFilters();
+//				tpf.setFilter(filt);
+//				tpf.setTeam(ampTeam);
+//				tpf.setPage(ampPages);
+//				session.save(tpf);
+//			
+//			}
+//			
+//			ampReports.setAmpPage(ampPages);
+//			
+//			queryString = "select t from " + AmpTeam.class.getName() + " t " +
+//					"where t.accessType = 'Management'";
+//			query = session.createQuery(queryString);
+//			itr = query.list().iterator();
+//			while (itr.hasNext()) {
+//				AmpTeam t = (AmpTeam) itr.next();
+//				pageFilters = ampPages.getFilters();
+//				Iterator itr1 = pageFilters.iterator();
+//				while (itr1.hasNext()) {
+//					AmpFilters filt = (AmpFilters) itr1.next();
+//					AmpTeamPageFilters tpf = new AmpTeamPageFilters();
+//					tpf.setFilter(filt);
+//					tpf.setTeam(t);
+//					tpf.setPage(ampPages);
+//					session.save(tpf);
+//			
+//				}
+//			}
 			
 			tx.commit(); 
 
@@ -527,22 +527,22 @@ public final class AdvancedReportUtil {
 	                session.delete(ampTeamReports);
 	            }
 	            // Remove reference from AmpTeamPageFilters
-	            if(ampReports.getAmpPage()!=null){
-		            queryString = "select tpf from " + AmpTeamPageFilters.class.getName()
-		                + " tpf" + " where (tpf.page=:pageId)";
-		            qry = session.createQuery(queryString);
-		            qry.setLong("pageId", ampReports.getAmpPage().getAmpPageId());
-		            itr = qry.list().iterator();
-		            while(itr.hasNext()) {
-		                AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
-		                session.delete(tpf);
-		            }
-	            }
-	
-	            if(ampReports.getAmpPage()!=null){
-	            	AmpPages ampPage = ampReports.getAmpPage();
-	            	session.delete(ampPage);
-	            }
+//	            if(ampReports.getAmpPage()!=null){
+//		            queryString = "select tpf from " + AmpTeamPageFilters.class.getName()
+//		                + " tpf" + " where (tpf.page=:pageId)";
+//		            qry = session.createQuery(queryString);
+//		            qry.setLong("pageId", ampReports.getAmpPage().getAmpPageId());
+//		            itr = qry.list().iterator();
+//		            while(itr.hasNext()) {
+//		                AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
+//		                session.delete(tpf);
+//		            }
+//	            }
+//	
+//	            if(ampReports.getAmpPage()!=null){
+//	            	AmpPages ampPage = ampReports.getAmpPage();
+//	            	session.delete(ampPage);
+//	            }
 	            
 	            /**
 	             * Removing link between reports and AmpTeamMember entity

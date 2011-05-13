@@ -249,7 +249,10 @@ public class AmpMessageActions extends DispatchAction {
     		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page,maxStorage,messageForm.getSortBy());
     	}
         if(allMessages!=null){
-    	Collections.reverse(allMessages);
+    	 if(allMessages!=null){
+    		 Collections.reverse(allMessages);
+    	 }
+    	
         }
     	messageForm.setMessagesForTm(allMessages);
 

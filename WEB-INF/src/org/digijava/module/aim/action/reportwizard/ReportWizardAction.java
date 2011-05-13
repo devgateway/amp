@@ -604,7 +604,7 @@ public class ReportWizardAction extends MultiAction {
 			session.close();
 			
 			ampReport.setAmpReportId(null);
-			ampReport.setAmpPage(null);
+			//ampReport.setAmpPage(null);
 			ampReport.setFilterDataSet(null);
 			ampReport.setUpdatedDate(null);
 			ampReport.setLogs(null);

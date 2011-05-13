@@ -27,8 +27,8 @@
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		<property name="updatedDate" column="updated_date" type="java.util.Date" />
 
-		<many-to-one name="ampPage" column="ampPageId"
-			class="org.digijava.module.aim.dbentity.AmpPages" />
+		<!--  <many-to-one name="ampPage" column="ampPageId"
+			class="org.digijava.module.aim.dbentity.AmpPages" /> -->
 
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->

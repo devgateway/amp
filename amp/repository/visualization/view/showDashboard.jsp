@@ -239,7 +239,7 @@ function resetToDefaults(){
 	document.getElementById("transaction_type_0").value = true;
 	document.getElementById("transaction_type_1").value = false;
 	document.getElementById("transaction_type_2").value = false;
-	
+
 	applyFilterPopin();
 }
 
@@ -890,7 +890,7 @@ function changeTab (selected){
 	<div class="yui-content">
 	<div id="tab1">
 		<fieldset>
-			<legend><span class=legend_label>Commitments, Disbursements, Expenditures, Pledges</span></legend>
+			<legend><span id="fundingChartTitle" class=legend_label></span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FundingChart')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FundingChart')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FundingChart')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -902,7 +902,7 @@ function changeTab (selected){
 			</div>
 		</fieldset>
 		<fieldset>
-			<legend><span class=legend_label>Aid Predictability</span></legend>
+			<legend><span id="aidPredChartTitle" class=legend_label></span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidPredictability')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidPredictability')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidPredictability')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -914,7 +914,7 @@ function changeTab (selected){
 			</div>
 		</fieldset>
 		<fieldset>
-			<legend><span class=legend_label>Aid Type</span></legend>
+			<legend><span id="aidTypeChartTitle" class=legend_label></span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'AidType')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'AidType')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'AidType')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'AidType')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -926,7 +926,7 @@ function changeTab (selected){
 			</div>
 		</fieldset>
 		<fieldset>
-			<legend><span class=legend_label>Financing Instrument</span></legend>
+			<legend><span id="finInstChartTitle" class=legend_label></span></legend>
 			<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'FinancingInstrument')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'FinancingInstrument')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'FinancingInstrument')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'FinancingInstrument')">Data View</a></div>
 			<br />
 			<div class="flashcontent" name="flashContent">
@@ -939,7 +939,7 @@ function changeTab (selected){
 		</fieldset>
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
  			<fieldset>
-				<legend><span class=legend_label>Donor Profile</span></legend>
+				<legend><span id="donorChartTitle" class=legend_label></span></legend>
 				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'DonorProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'DonorProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'DonorProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'DonorProfile')">Data View</a></div>
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -953,7 +953,7 @@ function changeTab (selected){
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '3' }">
 			<fieldset>
-				<legend><span class=legend_label>Sector Profile</span></legend>
+				<legend><span id="sectorChartTitle" class=legend_label></span></legend>
 				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'SectorProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'SectorProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'SectorProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'SectorProfile')">Data View</a></div>
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -967,7 +967,7 @@ function changeTab (selected){
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 			<fieldset>
-				<legend><span class=legend_label>Region Profile</span></legend>
+				<legend><span id="regionChartTitle" class=legend_label></span></legend>
 				<div class="dash_graph_opt"><a onclick="changeChart(event, 'bar', 'RegionProfile')" class="sel_sm_b">Bar Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'donut', 'RegionProfile')">Donut</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'line', 'RegionProfile')">Line Chart</a><span class="breadcrump_sep">|</span><a onclick="changeChart(event, 'dataview', 'RegionProfile')">Data View</a></div>
 				<br />
 				<div class="flashcontent" name="flashContent">
@@ -1268,6 +1268,17 @@ function refreshBoxes(o){
 	var valNumOfSecs="";
 	var valNumOfRegs="";
 	var valAvgProjSize="";
+	var trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
+	var trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
+	var trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
+	var trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
+	
+	var trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	var trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
+	var trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
+	var trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	var trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
+	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
 	
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
@@ -1500,6 +1511,61 @@ function refreshBoxes(o){
 		var name1 = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
 		var name2 = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 		namePlaceholder.innerHTML = name1 + "<br/><span style=\"font-size:16px\">" + name2 + "</span>";
+	}
+
+	div = document.getElementById("fundingChartTitle");
+	inner = "";
+	if (document.getElementById("commitments_visible").checked==true) {
+		inner = inner + trnCommitments + " - ";
+		}
+	if (document.getElementById("disbursements_visible").checked==true) {
+		inner = inner + trnDisbursements + " - ";
+		}
+	if (document.getElementById("expenditures_visible").checked==true) {
+		inner = inner + trnExpenditures + " - ";
+		}
+	if (document.getElementById("pledge_visible").checked==true) {
+		inner = inner + trnPledges;
+	}
+	div.innerHTML = inner;
+
+	var type = "" + getOptionChecked("transaction_type_");
+	var fundType = "";
+	if (type=="0") {
+		fundType = trnCommitments;
+	}
+	if (type=="1") {
+		fundType = trnDisbursements;
+	}
+	if (type=="2") {
+		fundType = trnExpenditures;
+	}
+	div = document.getElementById("aidPredChartTitle");
+	inner = trnAidPredictability + " - " + fundType;
+	div.innerHTML = inner;
+
+	div = document.getElementById("aidTypeChartTitle");
+	inner = trnAidType + " - " + fundType;
+	div.innerHTML = inner;
+
+	var div = document.getElementById("finInstChartTitle");
+	inner = trnFinancingInstrument + " - " + fundType;
+	div.innerHTML = inner;
+
+	if (dashboardType!=1) {
+		div = document.getElementById("donorChartTitle");
+		inner = trnDonorProfile + " - " + fundType;
+		div.innerHTML = inner;
+	}
+	if (dashboardType!=3) {
+		div = document.getElementById("sectorChartTitle");
+		inner = trnSectorProfile + " - " + fundType;
+		div.innerHTML = inner;
+	}
+	if (dashboardType!=2) {
+		div = document.getElementById("regionChartTitle");
+		inner = trnRegionProfile + " - " + fundType;
+		div.innerHTML = inner;
 	}
 	
 }

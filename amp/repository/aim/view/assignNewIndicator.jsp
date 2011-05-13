@@ -6,7 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
+.inp-text {font-size:500px;}
+a {color:#376091;}
+</style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="javascript">
 function setOverImg(index){
@@ -220,18 +226,18 @@ function closeWindow()
         <table cellPadding=5 cellspacing="0" width="100%" border="0">
             <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+		<table cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left valign="top">
-					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:searchind">
-								Search Indicators</digi:trn>
-							</td></tr>
+					<table cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding style="font-size:12px;">
+						<tr bgcolor="#c7d4db">
+						  <td vAlign="center" width="100%" align ="center" class="textalb" height="25">
+							  <digi:trn key="aim:searchind">
+							    <b>Search Indicators</b></digi:trn>							</td>
+						</tr>
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
-								<table cellSpacing=2 cellPadding=2>
+								<table cellSpacing=2 cellPadding=2 style="font-size:12px;">
 									<tr>
 									<td>
 									<digi:trn key="aim:selsector">
@@ -270,19 +276,19 @@ function closeWindow()
 										<td align="center" colspan=2>
 											&nbsp;
 											<!-- <input type="submit" value="Go" style="font-family:verdana;font-size:11px;" /> -->
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="return searchindicators()">
+											<html:button  styleClass="buttonx" property="submitButton" onclick="return searchindicators()">
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:button>
 											&nbsp;
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="clearform()" >
+											<html:button  styleClass="buttonx" property="submitButton" onclick="clearform()" >
 												<digi:trn key="btn:clear">Clear</digi:trn> 
 											</html:button>
 											&nbsp;
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
+											<html:button  styleClass="buttonx" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 
 											</html:button>
 											&nbsp;
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewall()">
+											<html:button  styleClass="buttonx" property="submitButton" onclick="viewall()">
 												<digi:trn key="btn:viewall">View all</digi:trn>
 											</html:button>
 										</td>
@@ -291,7 +297,7 @@ function closeWindow()
 							</td>
 						</tr>
 					</table>
-              <table width="100%" cellspacing="0" cellspacing="0" border="0">
+              <table width="100%" cellspacing="0" border="0">
                 <tr>
                   <td noWrap  vAlign="top">
                     <table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
@@ -304,10 +310,10 @@ function closeWindow()
                                   <tr>
                                     <td colspan="11" width="100%" align="center">
                                       <table width="100%" align="center" border="0" style="font-family:verdana;font-size:11px;">
-                                        <tr bgcolor="#006699">
-	                                        <td vAlign="center" width="100%" align ="center" class="textalb" height="20" colspan="2">
+                                        <tr bgcolor="#c7d4db">
+	                                        <td vAlign="center" width="100%" align ="center" class="textalb" height="30" colspan="2" style="font-size:12px;">
 												<digi:trn key="aim:listofprgIndicators">
-													List Of Program Indicators
+													<b>List Of Program Indicators</b>
 												</digi:trn>
 											</td>
 										</tr>
@@ -323,31 +329,21 @@ function closeWindow()
                                     <logic:iterate name="aimThemeForm" id="indicators" property="pagedCol"
 									type="org.digijava.module.aim.dbentity.AmpIndicator">
 										<tr>
-											<td bgcolor=#ECF3FD width="10%">
+											<td bgcolor=#f2f2f25 width="10%">
 											<html:multibox property="indid">
 													<bean:write name="indicators" property="indicatorId" />
 											</html:multibox>
 											</td>
-											<td bgcolor=#ECF3FD width="90%">
+											<td bgcolor=#f2f2f2 width="90%">
 											<bean:write name="indicators" property="name" />
 											</td>
-										</tr>
-										<tr>
-										<td>
-										 &nbsp;
-										</td>
 										</tr>
 									
 									</logic:iterate>
 									
                                         <tr>
                                           <td colspan="10" align="center">
-                                            &nbsp;
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td colspan="10" align="center">
-                                          <html:button  styleClass="dr-menu" property="submitButton"  onclick="return selectIndicators()">
+                                          <html:button  styleClass="buttonx" property="submitButton"  onclick="return selectIndicators()">
 															<digi:trn key="btn:add">Add</digi:trn> 
 										</html:button>
                                           </td>
@@ -388,8 +384,8 @@ function closeWindow()
 									   <logic:notEmpty name="aimThemeForm" property="alphaPages">
 											<tr>
 												<td align="center">
-													<table width="90%">
-													<tr><td>
+													<table width="90%" style="font-size:12px;">
+													<tr><td align=center>
 													<!-- <bean:define id="translation">
 															<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 														</bean:define>
@@ -426,13 +422,5 @@ function closeWindow()
                         </td>
                       </tr>
                     </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+
 </digi:form>

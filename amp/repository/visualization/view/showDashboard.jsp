@@ -221,6 +221,12 @@ function getOptionChecked (elements){
 }
 
 function resetToDefaults(){
+	var allGraphs = document.getElementsByName("flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		allGraphs[idx].style.display = "none";
+	}
+	loadingPanel.show();
+	
 	document.getElementById("org_group_dropdown_ids").selectedIndex = 0;
 	document.getElementById("region_dropdown_ids").selectedIndex = 0;
 	document.getElementById("sector_dropdown_ids").selectedIndex = 0;
@@ -239,7 +245,12 @@ function resetToDefaults(){
 	document.getElementById("transaction_type_0").value = true;
 	document.getElementById("transaction_type_1").value = false;
 	document.getElementById("transaction_type_2").value = false;
-
+	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
+	document.getElementById("region_dropdown_id").selectedIndex = 0;
+	document.getElementById("sector_dropdown_id").selectedIndex = 0;
+	removeOptions("org_dropdown_id");
+	removeOptions("zone_dropdown_id");
+	removeOptions("sub_sector_dropdown_id");
 	applyFilterPopin();
 }
 
@@ -763,6 +774,7 @@ function changeTab (selected){
 
 	<center>
 	<input type="button" value="Filter" class="buttonx" style="margin-top:10px;" id="applyButton">
+	<input type="button" value="Reset" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 	<hr />
 	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm">Advanced Filters</a></div></div>
 	</center>

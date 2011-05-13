@@ -1930,7 +1930,7 @@ public class ProgramUtil {
 			
 			// visible div start
 			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
-			retVal += " <table class=\"inside\" width=\"100%\"  border=\"0\">";
+			retVal += " <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">";
 			if (rc++%2 == 0){
 				retVal += "<tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
 			}else{

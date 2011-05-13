@@ -107,14 +107,13 @@ public class ShowWidgetChart extends Action {
                         if( sectorClassConfigId==null|| sectorClassConfigId==0){
                             sectorClassConfigId=SectorUtil.getPrimaryConfigClassification().getId();
                         }
-                        String schemeName = SectorUtil.getClassificationConfigById(sectorClassConfigId).getClassification().getSecSchemeName();
-                        title = schemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        title = SectorUtil.getClassificationConfigById(sectorClassConfigId).getClassification().getSecSchemeName();
                         opt.setTitle(title);
                         
                         chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue(),sectorClassConfigId);
                         break;
                     case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN:
-                        title = TranslatorWorker.translateText("Regional Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        title = TranslatorWorker.translateText("Regional", opt.getLangCode(), opt.getSiteId());
                         opt.setTitle(title);
                         chart = ChartWidgetUtil.getDonutChart(opt, filter,wForm.getChartType().intValue(),sectorClassConfigId);
                         break;

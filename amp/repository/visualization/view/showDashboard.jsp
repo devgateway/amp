@@ -1291,76 +1291,78 @@ function refreshBoxes(o){
 	var trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
 	var trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
-	
+	var trnShowTop5="<digi:trn jsFriendly='true'>Show Top 5</digi:trn>"; 
+	var trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
+
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
 		switch(child.type){
 			case "ProjectsList":
-				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>Hide Full List</a> <hr />";
+				inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 				for(var i = 0; i < child.list.length; i++){
 					inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 				}
-				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>Hide Full List</a>";
+				inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop5+"</a>";
 				var div = document.getElementById("divFullProjects");
 				div.innerHTML = inner;
 				inner = "";
 				for(var i = 0; i < child.top.length; i++){
 					inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
 				}
-				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>Show Full List</a>";
+				inner = inner + "<a href='javascript:showFullProjects()' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
 				div.innerHTML = inner;
 				break;
 			case "DonorsList":
 				if (dashboardType!=1) {
-					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>Hide Full List</a> <hr />";
+					inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>Hide Full List</a>";
+					inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullDonors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:showFullDonors()' style='float:right;'>Show Full List</a>";
+					inner = inner + "<a href='javascript:showFullDonors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
 					div.innerHTML = inner;
 				}
 				break;
 			case "SectorsList":
 				if (dashboardType!=3) {
-					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>Hide Full List</a> <hr />";
+					inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>Hide Full List</a>";
+					inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullSectors");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:showFullSectors()' style='float:right;'>Show Full List</a>";
+					inner = inner + "<a href='javascript:showFullSectors()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
 					div.innerHTML = inner;
 				}
 				break;
 			case "RegionsList":
 				if (dashboardType!=2) {
-					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>Hide Full List</a> <hr />";
+					inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a> <br />";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + (i+1) + ". " + child.list[i].name + "  <b>" + child.list[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>Hide Full List</a>";
+					inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop5+"</a>";
 					var div = document.getElementById("divFullRegions");
 					div.innerHTML = inner;
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>" + child.top[i].value + "</b> <hr />";
 					}
-					inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>Show Full List</a>";
+					inner = inner + "<a href='javascript:showFullRegions()' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");
 					div.innerHTML = inner;
 				}

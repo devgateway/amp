@@ -5,7 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
+</style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
@@ -108,30 +112,30 @@ function validation(){
 <digi:form action="/addEditData.do" method="post">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
-<table  width=572 cellPadding=4 cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0">
+<table  width=572 cellPadding=4 cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
   <tr>
-    <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
-    <digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn>: ${aimThemeForm.indicatorName}
+    <td bgColor=#c7d4db class=box-title height="25" align="center" colspan="7">
+    <digi:trn key="aim:addIndicator:add"><b>Add/Edit data</b></digi:trn><b>: ${aimThemeForm.indicatorName}</b>
     </td>
   </tr>
-  <tr bgcolor="#003366" class="textalb">
+  <tr bgcolor="#F2F2F2" class="textalb">
     <td align="center" valign="middle" width="75">
-      <b><font color="white"><digi:trn key="aim:addeditdata:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
+      <b><digi:trn key="aim:addeditdata:actualbasetarget">Actual/Base/<br>Target</digi:trn></b>
     </td>
     <td align="center" valign="middle" width="120">
-      <b><font color="white"><digi:trn key="aim:addeditdata:value">Value</digi:trn></font></b>
+      <b><digi:trn key="aim:addeditdata:value">Value</digi:trn></b>
     </td>
     <td align="center" valign="middle" width="120">
-      <b><font color="white"><digi:trn key="aim:addData:creationdate">Date</digi:trn></font></b>
+      <b><digi:trn key="aim:addData:creationdate">Date</digi:trn></b>
     </td>
     <td align="center" valign="middle" width="120" colspan="3">
-      <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>
+      <b><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></b>
     </td>
   </tr>
   <c:if test="${!empty aimThemeForm.prgIndValues}">
     <c:forEach var="ind" varStatus="index" items="${aimThemeForm.prgIndValues}">
         <tr>
-          <td bgColor=#d7eafd  height="10" align="center" width="10%">
+          <td bgColor=#ffffff  height="10" align="center" width="10%">
             <html:select name="ind" property="valueType" styleClass="inp-text">
               <html:option value="1"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></html:option>
               <html:option value="2"><digi:trn key="aim:addeditdata:base">Base</digi:trn></html:option>
@@ -139,11 +143,11 @@ function validation(){
             </html:select>
           </td>
 
-          <td bgColor=#d7eafd height="10" align="center" width="10%">
+          <td bgColor=#ffffff height="10" align="center" width="10%">
             <html:text name="ind" property="valAmount" styleId="txtName" styleClass="amt" onblur="chkNumeric(this)"/>
           </td>
 
-          <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">
+          <td bgColor=#ffffff  height="10" align="center" nowrap="nowrap">
             <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
 			<a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
 				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"> 
@@ -151,7 +155,7 @@ function validation(){
 
           </td>
 
-          <td bgColor=#d7eafd width="100%">
+          <td bgColor=#ffffff width="100%">
             <c:if test="${ind.location!=null&&ind.location.location!=null}">
                 ${ind.location.location.name}
             </c:if>
@@ -160,14 +164,14 @@ function validation(){
             </c:if>
           </td>
 
-          <td bgColor=#d7eafd  height="10" nowrap="nowrap">
+          <td bgColor=#ffffff  height="10" nowrap="nowrap">
             [<a href="javascript:selectLocation('${index.count-1}')">
             	<digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
               <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
             </a>]
           </td>
 
-          <td bgColor=#d7eafd>
+          <td bgColor=#ffffff>
             <a href="javascript:deleteData('${index.count-1}')">
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
@@ -177,33 +181,27 @@ function validation(){
   </c:if>
 
   <c:if test="${empty aimThemeForm.programIndicators}">
-    <tr align="center" bgcolor="#ffffff"><td><b>
+    <tr align="center" bgcolor="#ffffff"><td colspan=6><b>
       <digi:trn key="aim:noIndicatorsPresent">No data present</digi:trn></b></td>
-    </tr>
-    <tr bgColor="#d7eafd">
-      <td>
-      &nbsp;
-      </td>
-    </tr>
   </c:if>
   <tr>
     <td height="25" align="center" colspan="6">
       <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <input id="addDataBtn" style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}">&nbsp;&nbsp;
+      <input id="addDataBtn" style="font-family:verdana;font-size:11px;" type="button" class="buttonx" name="addValBtn" value="${trnadd}">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>
-    <td bgColor=#dddddb height="25" align="center" colspan="6">
+    <td height="25" align="center" colspan="6" style="padding-top:15px;">
       <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>
       <c:set var="trncancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>
       <c:set var="trnclose"><digi:trn key="aim:btn:close">Close</digi:trn></c:set>
       
-      <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
-      <input class="dr-menu" type="reset" value="${trncancel}">
-      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="window.close();">
+      <input class="buttonx" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
+      <input class="buttonx" type="reset" value="${trncancel}">
+      <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="window.close();">
     </td>
   </tr>
-   <tr><td width="100%" colspan="6"><br>
+   <tr><td width="100%" colspan="6" align=center style="font-size:10px;"><br>
    		<font color="red"> *<digi:trn key="aim:addEditData:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn></font> 
    </td></tr>
 </table>

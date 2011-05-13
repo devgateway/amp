@@ -146,10 +146,6 @@ padding-right: 7px;
 border-right: 1px solid rgb(208, 208, 208);
 }
 
-.yui-dt-paginator {
-	margin: 10px 0;
-}
-
 </style>
 
 <script language="javascript">
@@ -546,9 +542,11 @@ function setHoveredTable(tableId, hasHeaders) {
 									<%}%>
 										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId').show();">
 								    		<digi:trn>Filters</digi:trn>
+								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 								    	<button id="teamLabelButtonId" class="buttonx" type="button" onclick="teamFPanel.toggleView();">
 								    		<digi:trn>Labels</digi:trn>
+								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
 									</td>
 								</tr>						

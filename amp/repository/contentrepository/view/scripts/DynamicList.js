@@ -178,6 +178,9 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId) {
 		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0],"click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1],"click", this.fPanel.hide, this.fPanel, true);
+	}else{
+		this.fPanel.hide();
+		this.fPanel = null;
 	}
 	return this.fPanel;
 }
@@ -252,3 +255,4 @@ PublicDynamicList.prototype.constructor	= PublicDynamicList;
 function PublicDynamicList(containerEl, thisObjName, fDivId) {
 	this.parent.call(this, containerEl, thisObjName, fDivId);
 }
+

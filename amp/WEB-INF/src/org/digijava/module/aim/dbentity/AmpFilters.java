@@ -9,6 +9,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+@Deprecated
 public class AmpFilters implements Comparable, Serializable {
 
 		  private Long ampFilterId;

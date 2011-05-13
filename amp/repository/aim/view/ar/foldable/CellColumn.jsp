@@ -14,11 +14,11 @@
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 <logic:equal name="columnNo" value="0">
 <bean:define id="reportData" name="cellColumn" property="parent" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="page"/>
-<td style=" padding-top: 1px; padding-bottom: 1px; padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" >
+<td style=" padding-top: 1px; padding-bottom: 1px; padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"#F2F2F2":"ffffff" %>" class="reportsBorderTD" >
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 
-<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#dbe5f1":"#ffffff" %>" >
+<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#F2F2F2":"#ffffff" %>" >
 </logic:notEqual> 
 <% if(c!=null) {
 	request.setAttribute("cell",c);

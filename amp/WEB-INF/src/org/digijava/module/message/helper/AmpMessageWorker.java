@@ -330,7 +330,9 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getUser().getEmail());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getUser().getEmail());
+        }        
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
         alert.setSenderId( ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
@@ -342,7 +344,9 @@ public class AmpMessageWorker {
     private static AmpAlert processActivityActualStartDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_NAME));
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }        
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL));
@@ -354,7 +358,9 @@ public class AmpMessageWorker {
     private static AmpAlert processActivityCurrentCompletionDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_NAME));
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }        
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL));
@@ -368,7 +374,10 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
+        
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL));
@@ -381,7 +390,9 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL));
@@ -394,7 +405,9 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL));
@@ -407,7 +420,9 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL));
@@ -420,7 +435,9 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL));
@@ -450,7 +467,9 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
         //creator
-        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_CREATED_BY)).getUser().getName());
+        if (e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY) != null ) {
+        	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
+        }
         //url
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL) + "\">activity URL</a>");
         alert.setObjectURL("/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -16,7 +17,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
@@ -64,24 +64,32 @@ public class ExportHelper {
 		return retValue.toString();
 	}
 	
-	public static String renderActivityTree(AmpColumnEntry node) {
+	public static String renderActivityTree(AmpColumnEntry node, HttpServletRequest request) {
 
 		
 		StringBuffer retValue = new StringBuffer();
 
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()"));
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()", request));
 
 		return retValue.toString();
 	}
 
-	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode) {
+	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode, HttpServletRequest request) {
+		
+		String nodeName		= null;
+		try {
+			nodeName	= (request!=null)?TranslatorWorker.translateText(node.getName(), request):node.getName();
+		} catch (WorkerException e) {
+			nodeName	= node.getName();
+			e.printStackTrace();
+		}
 		
 		Pattern pattern = Pattern.compile("[\\]\\[.]");
 		Matcher matcher = pattern.matcher(node.getKey());
 		String key = matcher.replaceAll("");
 		StringBuffer retValue = new StringBuffer();
 		String nodeVarName = "atn_"+ key;
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + node.getName() + "\", " + parentNode + ", ");
+		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + nodeName + "\", " + parentNode + ", ");
 		retValue.append("false , ");
 		retValue.append(Boolean.toString(node.isSelect()) + ", ");
 		retValue.append(Boolean.toString(node.isMandatory()) + ", ");
@@ -92,7 +100,7 @@ public class ExportHelper {
 		if (node.getElements() != null){
 			for (AmpColumnEntry subNode : node.getElements()) {
 				retValue.append("\n");
-				retValue.append(renderActivityTreeNode(subNode, nodeVarName));
+				retValue.append(renderActivityTreeNode(subNode, nodeVarName, request));
 				retValue.append("\n");
 			}
 		}			

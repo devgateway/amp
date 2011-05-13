@@ -140,6 +140,7 @@ public class AddressBookActions extends DispatchAction {
             System.out.print("a");
         }
 		JSONArray jsonArray = new JSONArray();
+		
 		//fill array
 		if(pagedContacts!=null && pagedContacts.size() > 0){
 			for (Iterator<AmpContact> it = pagedContacts.iterator(); it.hasNext();) {
@@ -201,7 +202,13 @@ public class AddressBookActions extends DispatchAction {
 			}			
 		}
     	
-		json.put("recordsReturned", pagedContacts.size());
+		
+		if (pagedContacts!=null) {
+			json.put("recordsReturned", pagedContacts.size());
+		}else{
+			json.put("recordsReturned", 0);
+		}
+		
 		json.put("totalRecords", contactsAmount);
 		json.put("startIndex", startIndex);
 		json.put("sort", null);

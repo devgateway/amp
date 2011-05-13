@@ -781,7 +781,7 @@ function changeTab (selected){
 </fieldset>
 	
 <fieldset>
-	<legend><span class=legend_label>Top Projects</span></legend>
+	<legend><span id="topProjectsTitle" class=legend_label></span></legend>
 	<div id="divTopProjects" class="field_text">
 		<c:set var="index" value="0"/>
 		<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
@@ -807,7 +807,7 @@ function changeTab (selected){
 </fieldset>
 <c:if test="${visualizationform.filter.dashboardType ne '1' }">
 	<fieldset>
-		<legend><span class=legend_label>Top Donors</span></legend>
+		<legend><span id="topDonorsTitle" class=legend_label></span></legend>
 		<div id="divTopDonors" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topDonors}" var="donorItem">
@@ -834,7 +834,7 @@ function changeTab (selected){
 </c:if>
 <c:if test="${visualizationform.filter.dashboardType ne '3' }">
 	<fieldset>
-		<legend><span class=legend_label>Top Sectors</span></legend>
+		<legend><span id="topSectorsTitle" class=legend_label></span></legend>
 		<div id="divTopSectors" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topSectors}" var="sectorItem">
@@ -861,7 +861,7 @@ function changeTab (selected){
 </c:if>
 <c:if test="${visualizationform.filter.dashboardType ne '2' }">
 	<fieldset>
-		<legend><span class=legend_label>Top Regions</span></legend>
+		<legend><span id="topRegionsTitle" class=legend_label></span></legend>
 		<div id="divTopRegions" class="field_text">
 			<c:set var="index" value="0"/>
 			<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">
@@ -1293,7 +1293,11 @@ function refreshBoxes(o){
 	var trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
 	var trnShowTop5="<digi:trn jsFriendly='true'>Show Top 5</digi:trn>"; 
 	var trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
-
+	var trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
+	var trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
+	var trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
+	var trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
 		switch(child.type){
@@ -1562,7 +1566,7 @@ function refreshBoxes(o){
 	inner = trnAidType + " - " + fundType;
 	div.innerHTML = inner;
 
-	var div = document.getElementById("finInstChartTitle");
+	div = document.getElementById("finInstChartTitle");
 	inner = trnFinancingInstrument + " - " + fundType;
 	div.innerHTML = inner;
 
@@ -1581,7 +1585,45 @@ function refreshBoxes(o){
 		inner = trnRegionProfile + " - " + fundType;
 		div.innerHTML = inner;
 	}
-	
+	var currentYear = document.getElementById("currentYear").value;
+	var yearsInRange = document.getElementById("yearsInRange").value;
+	var startYear =  "" + (currentYear - yearsInRange + 1);
+	var endYear =  "" + currentYear;
+
+	div = document.getElementById("topProjectsTitle");
+	if (yearsInRange == 1) {
+		inner = trnTopProjects + " (" + startYear + ")";
+	} else {
+		inner = trnTopProjects + " (" + startYear + "-" + endYear + ")";
+	}
+	div.innerHTML = inner;
+	if (dashboardType!=2) {
+		div = document.getElementById("topSectorsTitle");
+		if (yearsInRange == 1) {
+			inner = trnTopSectors + " (" + startYear + ")";
+		} else {
+			inner = trnTopSectors + " (" + startYear + "-" + endYear + ")";
+		}
+		div.innerHTML = inner;
+	}
+	if (dashboardType!=1) {
+		div = document.getElementById("topDonorsTitle");
+		if (yearsInRange == 1) {
+			inner = trnTopDonors + " (" + startYear + ")";
+		} else {
+			inner = trnTopDonors + " (" + startYear + "-" + endYear + ")";
+		}
+		div.innerHTML = inner;
+	}
+	if (dashboardType!=3) {
+		div = document.getElementById("topRegionsTitle");
+		if (yearsInRange == 1) {
+			inner = trnTopRegions + " (" + startYear + ")";
+		} else {
+			inner = trnTopRegions + " (" + startYear + "-" + endYear + ")";
+		}
+		div.innerHTML = inner;
+	}
 }
 
 

@@ -1932,9 +1932,9 @@ public class ProgramUtil {
 			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
 			retVal += " <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">";
 			if (rc++%2 == 0){
-				retVal += "<tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
+				retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
 			}else{
-				retVal += "<tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
+				retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
 			}
 			retVal += "   <td class=\"inside\" width=\"1%\" >";
 			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n";

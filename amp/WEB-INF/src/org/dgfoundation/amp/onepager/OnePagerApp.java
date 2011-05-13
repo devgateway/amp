@@ -13,7 +13,8 @@ import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.dgfoundation.amp.onepager.translation.AmpComponentResolver;
+import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
+import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.hibernate.SessionFactory;
@@ -60,7 +61,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //MetaDataRoleAuthorizationStrategy.authorizeAll(OnePager.class);
 		 MetaDataRoleAuthorizationStrategy.authorize(PermissionManager.class, "ROLE_AUTHENTICATED");
 		 
-		 getPageSettings().addComponentResolver(new AmpComponentResolver());
+		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
+		 getPageSettings().addComponentResolver(new JspResolver());
 		 mountBookmarkablePage("onepager", OnePager.class);
 		 mountBookmarkablePage("permmanager", PermissionManager.class);
 		 

@@ -6,18 +6,18 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/util.js"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/relatedLinks.js"></script>
+<script language="JavaScript1.2" type="text/javascript" src="/repository/aim/view/scripts/dscript120.js"></script>
+<script language="JavaScript1.2" type="text/javascript" src="/repository/aim/view/scripts/dscript120_ar_style.js"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/arFunctions.js"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/ajaxtabs/ajaxtabs.js"></script>
+<script type="text/javascript" src="/repository/aim/view/scripts/ajax.js"></script>
 
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
+<script type="text/javascript" src="/repository/aim/view/scripts/separateFiles/dhtmlSuite-common.js"></script>
+<script type="text/javascript" src="/repository/aim/view/scripts/separateFiles/dhtmlSuite-dynamicContent.js"></script>
+<script type="text/javascript" src="/repository/aim/view/scripts/separateFiles/dhtmlSuite-modalMessage.js"></script>
 
 
 <script type="text/javascript">
@@ -49,7 +49,7 @@
 	}
 </script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="/TEMPLATE/ampTemplate/script/tooltip/wz_tooltip.js"></script>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amptab");

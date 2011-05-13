@@ -26,12 +26,12 @@ import org.slf4j.LoggerFactory;
  * @author aartimon@dginternational.org
  * since Oct 6, 2010
  */
-public class AmpComponentResolver implements IComponentResolver {
+public class TranslationComponentResolver implements IComponentResolver {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = LoggerFactory
-			.getLogger(AmpComponentResolver.class);
+			.getLogger(TranslationComponentResolver.class);
 	public static final String TRANSLATION_COMPONENT_PREFIX = "translation_";
 	public final static MetaDataKey TRANSLATION_KEY = new MetaDataKey(){
 		private static final long serialVersionUID = 1L;

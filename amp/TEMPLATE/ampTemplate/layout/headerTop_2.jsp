@@ -58,7 +58,7 @@
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>
 	function showUserProfile(id){
-		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
+		<digi:context name="information" property="/aim/userProfile.do" />
 		openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 	}
 	function help(){
@@ -102,7 +102,7 @@
 <div class="header">
 	<div class="centering">
 		<div class="logo">
-			<img src="img_2/amp_logo.gif" align=left>
+			<img src="/TEMPLATE/ampTemplate/img_2/amp_logo.gif" align=left>
 			<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 		</div>
 		
@@ -130,7 +130,7 @@
 		<div id="usr_menu_logged">
 			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>	
 			
-			<img src="img_2/top_sep.gif" class="top_sep">
+			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">
 			<logic:present name="ampAdmin" scope="session">
 				<logic:equal name="ampAdmin" value="no">
 					<logic:notEmpty name="currentMember" scope="session">

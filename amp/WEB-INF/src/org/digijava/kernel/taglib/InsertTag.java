@@ -84,7 +84,7 @@ public class InsertTag
 
         ServletContext servletContext = request.getSession().getServletContext();
 
-        String folderName = siteDomain.getSite().getFolder();
+        //String folderName = siteDomain.getSite().getFolder();
 
         // get file link instance if is first call then new
         refLinkManager = RefLinkManager.getInstance();

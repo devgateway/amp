@@ -228,9 +228,8 @@ public class ExportToPDF extends Action {
                              charttitle+="|Expenditures";
                         }
                         String pledgesCommDisbExp = TranslatorWorker.translateText(charttitle, langCode, siteId);
-                        String regionBreakdown = TranslatorWorker.translateText("Regional Breakdown", langCode, siteId);
-                        String primarySectorSchemeName = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
-                        String sectorBreakdown = primarySectorSchemeName + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                        String regionBreakdown = TranslatorWorker.translateText("Regional", langCode, siteId);
+                        String sectorBreakdown = SectorUtil.getPrimaryConfigClassification().getClassification().getSecSchemeName();
                         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                             amountInThousands = "," + TranslatorWorker.translateText("Amounts in thousands", langCode, siteId) + " ";
                         }
@@ -370,12 +369,12 @@ public class ExportToPDF extends Action {
                                     for (AmpClassificationConfiguration config : congifs) {
                                         if (config.getName().equals("Secondary") && FeaturesUtil.isVisibleSectors("Secondary", ampContext)) {
                                             secondaryConfigId = config.getId();
-                                            secondarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                                            secondarySectorBreakdown = config.getClassification().getSecSchemeName() ;
 
                                         } else {
                                             if (config.getName().equals("Tertiary") && FeaturesUtil.isVisibleSectors("Tertiary", ampContext)) {
                                                 tertiaryConfigId = config.getId();
-                                                tertiarySectorBreakdown = config.getClassification().getSecSchemeName() + " " + TranslatorWorker.translateText("Breakdown ", opt.getLangCode(), opt.getSiteId());
+                                                tertiarySectorBreakdown = config.getClassification().getSecSchemeName();
 
                                             }
 

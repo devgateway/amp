@@ -272,9 +272,9 @@
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
 														<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
 												</td>											
-											
+											 
 											<tr align="center" bgcolor="#ffffff">
-												<td style="padding-top:20px; padding-bottom:20px;">
+												<td style="padding-top:20px; padding-bottom:20px;" class="inside">
 												<input class="buttonx" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
 													<input class="buttonx" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
                                                                                                         <input class="buttonx" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
@@ -282,7 +282,7 @@
 											</tr>
 											<tr>
 											
-												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
+												<td  width="20%" nowrap="nowrap" align=center style="padding-bottom:15px; padding-top:15px;" class="inside"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
 												<img src= "../ampTemplate/images/tree_plus.gif" border="0"><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
 												<img src= "../ampTemplate/images/square1.gif" border="0"><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
 												<img src= "../ampTemplate/images/square2.gif" border="0"><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,

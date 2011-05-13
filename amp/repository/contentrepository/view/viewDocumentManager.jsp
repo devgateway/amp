@@ -146,6 +146,10 @@ padding-right: 7px;
 border-right: 1px solid rgb(208, 208, 208);
 }
 
+.yui-dt-paginator {
+	margin: 10px 0;
+}
+
 </style>
 
 <script language="javascript">

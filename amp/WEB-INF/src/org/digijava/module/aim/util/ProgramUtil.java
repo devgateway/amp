@@ -1919,46 +1919,46 @@ public class ProgramUtil {
 		 if (themes == null || themes.size() == 0)
 			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
-		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
+		retVal = "<table class=\"inside\" width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
 		int rc = 0;
 		while (iter.hasNext()) {
 			TreeItem item = (TreeItem) iter.next();
 			AmpTheme theme = (AmpTheme) item.getMember();
-			retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
+			retVal += "<tr><td class=\"inside\">&nbsp;</td><td width=\"100%\" class=\"inside\">\n";
 
 			
 			// visible div start
 			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
-			retVal += " <table width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
+			retVal += " <table class=\"inside\" width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
 			if (rc++%2 == 0){
 				retVal += "<tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
 			}else{
 				retVal += "<tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
 			}
-			retVal += "   <td width=\"1%\" >";
+			retVal += "   <td class=\"inside\" width=\"1%\" >";
 			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n";
 			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
 			retVal += "   </td>";
 			if (level>1){
-				retVal += "   <td width=\"1%\">";
+				retVal += "   <td class=\"inside\" width=\"1%\">";
 				retVal += "     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n";
 				retVal += "   </td>";
-				retVal += "   <td width=\"1%\">";
+				retVal += "   <td class=\"inside\" width=\"1%\">";
 				retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
 				retVal += "   </td>";
 			}
-			retVal += "   <td  class=\"progName\">";
+			retVal += "   <td  class=\"progName inside\">";
 			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\">"+getTrn("aim:admin:themeTree:theme_name",((AmpTheme) item.getMember()).getEncodeName(), request)+"</a>\n";
 			retVal += "   </td>";
-			retVal += "   <td class=\"progCode\"  width=\"45%\" nowrap=\"nowrap\">("+ ((AmpTheme) item.getMember()).getThemeCode() + ")</td>";
-			retVal += "   <td nowrap=\"nowrap\" width=\"10%\">";
+			retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ ((AmpTheme) item.getMember()).getThemeCode() + ")</td>";
+			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
 			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+theme.getEncodeName()+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> |\n";
 			retVal += "   </td>";
-			retVal += "   <td nowrap=\"nowrap\" width=\"10%\">";
+			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
 			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
 			retVal += "   </td>";
-			retVal += "   <td width=\"12\">";
+			retVal += "   <td class=\"inside\" width=\"12\">";
 			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
 			retVal += "   </td>";
 			retVal += " </tr></table>";

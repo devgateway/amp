@@ -291,9 +291,8 @@ function closeWindow(){
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <body >
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 border="0" align="center">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr><%-- Start Navigation --%>
@@ -332,10 +331,10 @@ function closeWindow(){
 					</td>
 				</tr>
 	
-		<table  width=772 cellpadding="1" cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0">
+		<table  width=772 cellpadding="1" cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
 				<tr>
-					 <td bgColor="#d7eafd" class="box-title" height="10" align="center">
-						<digi:trn key="aim:manageindicators">Manage Indicators</digi:trn>: ${aimThemeForm.themeName}
+					 <td bgColor="#c7d4db" class="box-title" height="25" align="center">
+						<digi:trn key="aim:manageindicators"><b>Manage Indicators</b></digi:trn><b>: ${aimThemeForm.themeName}</b>
 					 </td>
 				 </tr>
 					 <tr>
@@ -353,21 +352,21 @@ function closeWindow(){
 				<logic:notEmpty name="aimThemeForm" property="programIndicators">
 				<tr>
 					<td>
-						<table  bgColor="#d7eafd" cellPadding=5 cellspacing="1" border="0" align="center" width=772>
+						<table cellPadding=5 cellspacing="1" border="0" align="center" width=1000 class="inside">
 						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.programIndicators}">
 								<tr>
-									<td width="1" bgcolor="white" colspan="7">
+									<td width="1" bgcolor="white" colspan="7" class="inside">
 									
 									</td>
 								</tr>
 						    	<tr>
-									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.indicatorThemeId},menu1sign${prgIndicatorItr.indicatorThemeId})" >
+									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.indicatorThemeId},menu1sign${prgIndicatorItr.indicatorThemeId})" class="inside">
 												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
 									</td>
-									<td align="left" width="60%" bgcolor="#f4f4f2">
+									<td align="left" width="60%" bgcolor="#f4f4f2" class="inside">
 										<b>${prgIndicatorItr.indicator.name}</b>
 									</td>
-					                <td  height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap">
+					                <td height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
 										  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="prgIndicatorId">
 														${prgIndicatorItr.indicatorThemeId}
@@ -380,57 +379,56 @@ function closeWindow(){
 														<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
 												</bean:define>												
 									</td>
-                  					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap">
+                  					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
                   						<c:set var="trn"><digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn></c:set>
 												<a href="javascript:addData('${prgIndicatorItr.indicatorThemeId}')">${trn}</a>
 									</td>									
-									<td bgcolor="#f4f4f2" height="2%">
+									<td bgcolor="#f4f4f2" height="2%" class="inside">
 									 <html:multibox property="indicatorsId">
 									 ${prgIndicatorItr.indicatorThemeId}
 									 </html:multibox>
 									</td>
 								</tr>
                                 <tr>
-									<td width="25" height="15" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none; background-color:#f4f4f2;">
-										 <table border="0" width="70%" class="box-border">
+									<td width="25" height="15" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none; background-color:#ffffff;" class="inside">
+										 <table border="0" width="80%" class="inside">
 											<tr bgcolor="white">
-													  <td  width="20%"></td>
-													  <td bgcolor="white" width="5%"><b></b></td>
+													  <td  width="20%" colspan=7 class="inside"></td>
 											</tr>
 											<tr>
-    										      <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
+    										      <td bgColor="#c7d4db" class="inside" height="10" align="center" colspan="7" >
     														<b>Data</b>
     												</td>
   											</tr>
-											<tr bgcolor="#003366" class="textalb">
-                                                 <td align="center" valign="middle" width="75">
-                                                  <b><font color="white"><digi:trn key="aim:addtheme:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
+											<tr bgcolor="#F2F2F2">
+                                                 <td align="center" valign="middle" width="75" class="inside">
+                                                  <b><digi:trn key="aim:addtheme:actualbasetarget">Actual/Base/<br>Target</digi:trn></b>
                                                  </td>
-                                                 <td align="center" valign="middle" width="120">
-                                                   <b><font color="white"><digi:trn key="aim:addtheme:totalamount">Total Amount</digi:trn></font></b>
+                                                 <td align="center" valign="middle" width="120" class="inside">
+                                                   <b><digi:trn key="aim:addtheme:totalamount">Total Amount</digi:trn></b>
                                                  </td>
-                                                 <td align="center" valign="middle" width="120">
-                                                   <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
+                                                 <td align="center" valign="middle" width="120" class="inside">
+                                                   <b><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></b>
                                                  </td>
-                                                 <td align="center" valign="middle" width="120" colspan="3">
-                                                   <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
+                                                 <td align="center" valign="middle" width="120" colspan="3" class="inside">
+                                                   <b><digi:trn key="aim:addtheme:location">Location</digi:trn></b>
                                                  </td>
                                             </tr>
                                         <logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
                                            <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
                                             <tr bgcolor="#ffffff">
-                                                <td width="40" bgcolor="#f4f4f2" align="center">																		
+                                                <td width="40" bgcolor="#ffffff" align="center" class="inside">																		
                                                     <c:if test="${prgIndicatorValues.valueType=='0'}"><digi:trn key="aim:addeditdata:target">Target</digi:trn></c:if>
                                                     <c:if test="${prgIndicatorValues.valueType=='1'}"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></c:if>
                                                     <c:if test="${prgIndicatorValues.valueType=='2'}"><digi:trn key="aim:addeditdata:base">Base</digi:trn></c:if>
                                                 </td>
-                                                <td align="center" width="10%" bgcolor="#f4f4f2"><b>
+                                                <td align="center" width="10%" bgcolor="#ffffff" class="inside"><b>
                                                     <bean:write name="prgIndicatorValues" property="valAmount"/></b>
                                                 </td>
-                                                <td bgcolor="#f4f4f2" align="center">
+                                                <td bgcolor="#ffffff" align="center" class="inside">
                                                     <bean:write name="prgIndicatorValues" property="creationDate"/></b>
                                                 </td>
-                                                <td bgcolor="#f4f4f2" align="center">
+                                                <td bgcolor="#ffffff" align="center" class="inside">
                                                     <c:if test="${not empty prgIndicatorValues.location}">
                                                         <bean:define id="loc" name="prgIndicatorValues" property="location"></bean:define>
                                                         <c:if test="${!empty loc.location.name}">
@@ -453,19 +451,18 @@ function closeWindow(){
 				</tr>
 				</logic:notEmpty>
 				<logic:empty name="aimThemeForm" property="programIndicators">
-						<tr align="center" bgcolor="#ffffff"><td><b>
+						<tr align="center" bgcolor="#ffffff">
+						<td><b>
 								<digi:trn key="aim:noIndicatorsPresent">No Indicators present</digi:trn></b></td>
 						</tr>
 				</logic:empty>
 				<tr>
 				<td align="center" colspan="6" bgcolor="white">
-				<input type="button" class="dr-menu" onclick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
+				<input type="button" class="dr-menu" onClick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
 				<input class="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
 				</td>
 				</tr>
 		</table>
-	</td>
-</tr>
-</table>
+
 </body>
 </digi:form> 

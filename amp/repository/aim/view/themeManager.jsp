@@ -154,9 +154,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <%-- End of Logo--%>
 
-	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772 border="1">
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 border="0" align=center>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750 border="0">
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr><%-- Start Navigation --%>
@@ -174,7 +173,7 @@
 						</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:multiprogramanmanager">
@@ -182,7 +181,7 @@
 						</digi:trn>
 						</span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height=16 valign="center" width=571>
 						<digi:errors />
@@ -192,27 +191,27 @@
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					
-					<table width="100%" cellspacing="0" cellspacing="0" border="0">
+					<table width="100%" cellspacing="0" border="0">
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellpadding="0" cellspacing="0" width="100%" valign="top">
+						<table cellpadding="0" cellspacing="0" width="100%">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left>
+									<table width="100%" cellspacing="0" cellpadding="0" align=left>
 										<!-- AMP-1655 -->
 				<tr>
 					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0" class="r-dotted-lg">
+					<table width="100%" cellspacing="1" border="0" class="r-dotted-lg">
 					<tr><td noWrap width=600 vAlign="top">
-							<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
+							<table cellpadding="1" cellspacing="1" width="100%">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
-										<table align=left valign="top" cellpadding="1" cellspacing="1" width="100%">
+										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside">
 												<tr><td>
 													<digi:errors/>
 												</td></tr>
-												<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+												<tr><td bgColor=#c7d4db class=box-title height="25" align="center">
 														<digi:trn key="aim:listofPrograms">
-																List of Programs
+																<b>List of Programs</b>
 														</digi:trn>
 												</td></tr>
 												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
@@ -263,9 +262,9 @@
 																<font color="red"><b><digi:trn key="aim:cannotadd">
 																		program with this name already exists
 																</digi:trn></b></font>
-															</c:if>
+															
 														</td>
-													</tr>
+													</tr></c:if>
 											<tr>
 												<td>
 												
@@ -276,9 +275,9 @@
 											
 											<tr align="center" bgcolor="#ffffff">
 												<td>
-													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
-													<input class="button" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
-                                                                                                        <input class="button" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
+													<input class="buttonx" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
+													<input class="buttonx" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
+                                                                                                        <input class="buttonx" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>
@@ -316,6 +315,5 @@
 	</td>
 	</tr>
 </table>
-</body>
 </td></tr></table></td></tr></table>
 </digi:form>

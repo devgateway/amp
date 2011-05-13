@@ -10,7 +10,7 @@
 body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
 .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
-.inp-text {font-size:500px;}
+.inp-text {width:500px;}
 a {color:#376091;}
 </style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -236,7 +236,7 @@ function closeWindow()
 							    <b>Search Indicators</b></digi:trn>							</td>
 						</tr>
 						<tr>
-							<td align="center" bgcolor=#ECF3FD>
+							<td align="center" bgcolor=#f2f2f2>
 								<table cellSpacing=2 cellPadding=2 style="font-size:12px;">
 									<tr>
 									<td>
@@ -260,7 +260,7 @@ function closeWindow()
 											Enter a keyword</digi:trn>
 										</td>
 										<td>
-										<html:text property="keyword" style="width:140px;font-family:verdana;font-size:11px;" />
+										<html:text property="keyword" style="width:140px;font-family:arial;font-size:11px;" />
 										</td>
 									</tr>
 									<tr>
@@ -306,10 +306,10 @@ function closeWindow()
                           <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
                             <tr>
                               <td>
-                                <table style="font-family:verdana;font-size:11px;" width="100%">
+                                <table style="font-family:arial;font-size:12px;" width="100%" cellspacing=0 cellpadding=0>
                                   <tr>
                                     <td colspan="11" width="100%" align="center">
-                                      <table width="100%" align="center" border="0" style="font-family:verdana;font-size:11px;">
+                                      <table width="100%" align="center" border="0" style="font-family:arial;font-size:12px; margin-bottom:15px; margin-top:15px;" cellspacing=0 cellpadding=0>
                                         <tr bgcolor="#c7d4db">
 	                                        <td vAlign="center" width="100%" align ="center" class="textalb" height="30" colspan="2" style="font-size:12px;">
 												<digi:trn key="aim:listofprgIndicators">
@@ -329,12 +329,12 @@ function closeWindow()
                                     <logic:iterate name="aimThemeForm" id="indicators" property="pagedCol"
 									type="org.digijava.module.aim.dbentity.AmpIndicator">
 										<tr>
-											<td bgcolor=#f2f2f25 width="10%">
+											<td bgcolor=#f2f2f2 width=10>
 											<html:multibox property="indid">
 													<bean:write name="indicators" property="indicatorId" />
 											</html:multibox>
 											</td>
-											<td bgcolor=#f2f2f2 width="90%">
+											<td bgcolor=#f2f2f2 width="100%">
 											<bean:write name="indicators" property="name" />
 											</td>
 										</tr>
@@ -342,7 +342,7 @@ function closeWindow()
 									</logic:iterate>
 									
                                         <tr>
-                                          <td colspan="10" align="center">
+                                          <td colspan="10" align="center" style="padding-top:10px; padding-bottom:10px;">
                                           <html:button  styleClass="buttonx" property="submitButton"  onclick="return selectIndicators()">
 															<digi:trn key="btn:add">Add</digi:trn> 
 										</html:button>

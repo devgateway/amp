@@ -1919,13 +1919,13 @@ public class ProgramUtil {
 		 if (themes == null || themes.size() == 0)
 			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
-		retVal = "<table class=\"inside\" width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
+		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
 		int rc = 0;
 		while (iter.hasNext()) {
 			TreeItem item = (TreeItem) iter.next();
 			AmpTheme theme = (AmpTheme) item.getMember();
-			retVal += "<tr><td class=\"inside\">&nbsp;</td><td width=\"100%\" class=\"inside\">\n";
+			retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
 
 			
 			// visible div start

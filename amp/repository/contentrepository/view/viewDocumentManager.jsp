@@ -489,7 +489,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif"> 
 							        	</button>
-								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId').show();">
+								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId')">
 								    		<digi:trn>Filters</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
@@ -540,7 +540,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										 -->
 										
 									<%}%>
-										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId').show();">
+										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId');">
 								    		<digi:trn>Filters</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>

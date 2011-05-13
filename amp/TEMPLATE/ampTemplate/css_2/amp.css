@@ -91,15 +91,15 @@ html.ie .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
 .workspace_info {width:220px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;float:right;text-align:right;}
-.workspace_info a{font-weight:bold;text-decoration:none;}
 .workspace_info a{font-weight:bold;text-decoration:underline;}
+.loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}
 html.ie .workspace_info {width:230px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px;float:right;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
-.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px 0px 0px 20px;width:1000px;margin:0 auto;}
+.main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}

@@ -7,6 +7,12 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+
+</style>
 <c:set var="msgValidNumbers">
     <digi:trn key="aim:msgEnterNumericValues">Please enter numeric values for field </digi:trn>
 </c:set>
@@ -167,9 +173,9 @@
 <html:hidden property="prgLevel"/>
 
 
- 				<table width="100%" align="center" cellPadding=3 cellspacing="0">
+ 				<table width="100%" align="center" cellPadding=3 cellspacing="0" style="font-size:12px;">
 			  <tr bgColor=#dddddb>
-				<td height="10" colspan="3" align="center" valign="middle" bgColor=#dddddb>
+				<td height="30" colspan="3" align="center" valign="middle" bgColor=#c7d4db>
 						            <strong>
 <logic:empty name="aimThemeForm" property="parentId"> 						  
           <digi:trn key="aim:addEditProgram">
@@ -316,13 +322,12 @@
 				  <td width="2" align="left">&nbsp;</td>
 			      <td align="left"><html:checkbox property="showInRMFilters"/></td>
 				</tr>
-				<tr bgcolor=#ffffff><td height="5"></td></tr>	
-				<tr bgColor=#ffffff><td height="30" colspan="3"></td></tr>
-				<tr bgColor=#dddddb>
-				<td bgColor=#dddddb height="25" align="center" colspan="3">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
+				<tr>
+				<td height="25" align="center" colspan="3" bgcolor=#ffffff>
+				<hr />
+						<input class="buttonx" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
+						<input class="buttonx" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>">&nbsp;&nbsp;
+						<input class="buttonx" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
 				</tr>	
   </table>
 

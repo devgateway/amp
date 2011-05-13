@@ -19,11 +19,12 @@ function toggleRows(caller,hideId){
 	if(caller.alt=='shown') 
 		closing=true;
 	
-	//Get the project name div
-	var parentdiv = caller.parentNode.parentNode.childNodes[5];
+	
 	//Get the project name tr
-	var parentTR = document.getElementById(hideId);
-	var title=parentTR.title
+	var parentTR =$("tr[id='"+hideId+"']")[0];
+	//Get the project name div
+	var parentdiv =$("tr[id='"+hideId+"'] td:eq(0) div:eq(1)")[0];
+	var title=parentTR.title;
 	
 	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[1].children[0];
 	var amountcell_2;

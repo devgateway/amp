@@ -549,7 +549,7 @@ session.setAttribute("progressValue", counter);
 			</table>
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
-		<table id='reportTable' class="html2ReportTable" width="100%" cellpadding="0" cellspacing="0">
+		<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
 			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
 			</tr>

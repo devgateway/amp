@@ -6,6 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+
+<style>
+body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
+</style>
 <script language="javascript">
 
 function closeWindow() {
@@ -98,19 +104,19 @@ function countryChanged() {
   <html:hidden property="fill" />
   <table width="100%" vAlign="top" border="0">
 	<tr><td vAlign="top" width="100%">
-		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+		<table cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr width="100%">
 				<td align=left valign="top" width="100%">
-					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+					<table cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding style="font-size:12px;">
+						<tr bgcolor="#c7d4db">
+							<td vAlign="center" width="100%" align ="center" class="textalb" height="30">
 								<digi:trn key="aim:selectLocation">
-								Select Location</digi:trn>
+								<b>Select Location</b></digi:trn>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<table width="100%" cellpadding="2">
+								<table width="100%" cellpadding="2" cellspacing="2" style="font-size:12px;">
 									<tr>
 										<td align="right" width="50%"><digi:trn key="aim:pleaseSelectLevel">Select level</digi:trn></td>
 										<td align="left" width="50%">
@@ -169,23 +175,23 @@ function countryChanged() {
 									</c:if>
 								</c:if>
 									
-								</table>
+							  </table>
 							</td>
 						</tr>
 
-						<tr bgcolor="#ECF3FD">
+						<tr>
 							<td align="center">
 								<table cellPadding=3 cellSpacing=3>
 									<tr>
 										<td>
-											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
-											onclick="selectLocation()">
+											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="buttonx"
+											onclick="selectLocation()" >
 										</td>
 										<td>
-											<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
+											<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="buttonx">
 										</td>
 										<td>
-											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
+											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="buttonx" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>orgProfile</name>
+	<security login-required="false" default="READ">
+		<action login-required="false" pattern="/showOrgProfile" /> 
+	</security>
+</module-config>

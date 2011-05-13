@@ -1,0 +1,1 @@
+insert into amp_columns(columnName, aliasName, cellType, extractorView, relatedContentPersisterClass) values("Sub-Sub-Sub Sector", "subsubsector", "org.dgfoundation.amp.ar.cell.TextCell","v_sub_sub_sectors", NULL);

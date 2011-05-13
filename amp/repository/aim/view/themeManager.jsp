@@ -266,7 +266,7 @@
 														</td>
 													</tr></c:if>
 											<tr>
-												<td>
+												<td class="inside">
 												
 												<!-- AMP-2204 -->
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>

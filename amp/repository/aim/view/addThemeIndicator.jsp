@@ -316,7 +316,7 @@ function closeWindow(){
 							</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571>
 						<span class="subtitle-blue">
 							<digi:trn key="aim:manageindicators">
@@ -324,7 +324,7 @@ function closeWindow(){
 							</digi:trn>
 						</span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height="16" vAlign="center" width="571">
 						<digi:errors />
@@ -366,7 +366,7 @@ function closeWindow(){
 									<td align="left" width="60%" bgcolor="#f4f4f2" class="inside">
 										<b>${prgIndicatorItr.indicator.name}</b>
 									</td>
-					                <td height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
+					                <td height="15" width="25%"bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
 										  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="prgIndicatorId">
 														${prgIndicatorItr.indicatorThemeId}
@@ -378,8 +378,8 @@ function closeWindow(){
 												<bean:define id="translation">
 														<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
 												</bean:define>												
-									</td>
-                  					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap" class="inside">
+								  </td>
+                  					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap" class="inside" align=center>
                   						<c:set var="trn"><digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn></c:set>
 												<a href="javascript:addData('${prgIndicatorItr.indicatorThemeId}')">${trn}</a>
 									</td>									
@@ -390,15 +390,12 @@ function closeWindow(){
 									</td>
 								</tr>
                                 <tr>
-									<td width="25" height="15" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none; background-color:#ffffff;" class="inside">
-										 <table border="0" width="80%" class="inside">
-											<tr bgcolor="white">
-													  <td  width="20%" colspan=7 class="inside"></td>
-											</tr>
-											<tr>
+									<td width="25" height="15" align="Center" colspan="5" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none; background-color:#ffffff;" class="inside">
+										 <table border="0" width="80%" class="inside" style="margin-top:20px; margin-bottom:20px;">
+
     										      <td bgColor="#c7d4db" class="inside" height="10" align="center" colspan="7" >
     														<b>Data</b>
-    												</td>
+											  </td>
   											</tr>
 											<tr bgcolor="#F2F2F2">
                                                  <td align="center" valign="middle" width="75" class="inside">
@@ -440,13 +437,13 @@ function closeWindow(){
                                                     </c:if>
                                                 </td>
                                             </tr>
-                                            </logic:iterate>
+                                          </logic:iterate>
                                         </logic:notEmpty>
 										</table>
 	                                </td>
                                 </tr>
-								</c:forEach>
-						 </table>
+						  </c:forEach>
+					  </table>
 					</td>
 				</tr>
 				</logic:notEmpty>
@@ -457,7 +454,7 @@ function closeWindow(){
 						</tr>
 				</logic:empty>
 				<tr>
-				<td align="center" colspan="6" bgcolor="white">
+				<td align="center" colspan="6" bgcolor="white" style="padding-top:15px;">
 				<input type="button" class="dr-menu" onClick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
 				<input class="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
 				</td>

@@ -404,7 +404,7 @@ myTable.enhanceMarkup = function(markupName) {
     var oConfigs = { 
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
-	         MSG_EMPTY: "${trans_no_resources}" 
+	         MSG_EMPTY: "No data" 
 	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];
@@ -423,9 +423,6 @@ myTable.enhanceMarkup = function(markupName) {
 	                           		     	};
     
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
-	
-	//var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
-	//dataTable.width='100%';
 
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
@@ -434,10 +431,7 @@ myTable.enhanceMarkup = function(markupName) {
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 
 	
-	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
-		dataTable.showEmptyMessage();
-	}
-    return dataTable;
+	return dataTable;
 };
 
 function hideCategories(){
@@ -1474,4 +1468,3 @@ YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
 
 </script>
-

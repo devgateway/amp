@@ -33,8 +33,7 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css"> 
-
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -503,7 +502,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>
 											<div style="width: 80%; float: left" class="t_sm" id="privateFilterInfo"></div>
-											<div class="show_legend" align="right" style="width: 15%; float: left">
+											<div class="show_legend" align="right" style="width: 15%; float: left;padding-top: 0px;">
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
 														<td style="font-size: 11px;font-family: Arial,sans-serif">
@@ -512,7 +511,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									          		</tr>
 									          	</table>
 											</div>
-											<br />
+											<br /><br />
 											<div id="my_markup" align="left" style="clear: both;" >
 											</div>
 									</td>
@@ -554,7 +553,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<tr>
 									<td>									
 											<div style="width: 80%; float: left" id="teamFilterInfo" class="t_sm"></div>
-											<div class="show_legend" align="right" style="width: 15%; float: left">
+											<div class="show_legend" align="right" style="width: 15%; float: left;padding-top: 0px;">
 												<table border="0" cellspacing="0" cellpadding="0">
 													<tr>
 														<td style="font-size: 11px;font-family: Arial,sans-serif">
@@ -563,7 +562,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									          		</tr>
 									          	</table>
 											</div>
-											<br />
+											<br /><br />
 											<div id="team_markup" align="left"  class="all_markup">
 											</div>
 									</td>

@@ -125,16 +125,6 @@ public class AmpFiscalCalendar implements Serializable, Identifiable {
 
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj != null) {
-			AmpFiscalCalendar target = (AmpFiscalCalendar) obj;
-			return target.getAmpFiscalCalId().doubleValue() == this
-					.getAmpFiscalCalId().doubleValue();
-		}
-
-		return false;
-	}
 
 	public Boolean getIsFiscal() {
 		return isFiscal;

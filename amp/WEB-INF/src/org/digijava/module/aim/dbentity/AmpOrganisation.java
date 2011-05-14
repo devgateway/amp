@@ -356,16 +356,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		}
 	}
 	
-	public boolean equals(Object obj) {
-		if (obj == null) throw new NullPointerException();
-		
-		if (!(obj instanceof AmpOrganisation)) throw new ClassCastException();
-		
-		AmpOrganisation temp = (AmpOrganisation) obj;
-		if (temp.getAmpOrgId() == null)
-			return false;
-		return (temp.getAmpOrgId().equals(this.getAmpOrgId()));
-	}
+	//do not implement equals, implement compareTo and use treeset!
+	
 	/**
 	 * @return Returns the address.
 	 */

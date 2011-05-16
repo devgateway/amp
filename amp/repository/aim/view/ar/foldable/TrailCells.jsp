@@ -18,9 +18,9 @@
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
 <% if (reportData.getLevelDepth() < 3) { %>		
-		<td class="inside"; style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
+		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% } else { %>	
-		<td class="inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
+		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% } %>			
 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -50,9 +50,9 @@
 		<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<c:if test="${cell!=null}">
 		<% if (reportData.getLevelDepth() < 3) { %>
-			<td class="inside">
+			<td class="report_inside">
 		<% } else { %>	
-			<td class="inside">
+			<td class="report_inside">
 		<% } %>
 			<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
@@ -64,9 +64,9 @@
 		<c:if test="${cell==null}">
 			<c:if test="${firstCell==false}">
 					<% if (reportData.getLevelDepth() < 3) { %>
-						<td class="inside">
+						<td class="report_inside">
 					<% } else { %>	
-						<td class="inside">
+						<td class="report_inside">
 					<% } %>
 					
 					</td>

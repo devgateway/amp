@@ -1881,7 +1881,7 @@ public class DataDispatcher extends DispatchAction {
         String type = request.getParameter("type");
         String length = request.getParameter("length");
         int graph = Integer.valueOf(request.getParameter("graph"));
-        logger.info("About to create image from swf - " + " Type:" + type + " Graph:" + graph + " Length:" + length);
+        logger.info("About to create image from swf - " + " Type:" + type + " Graph:" + graph + " Length:" + bytes.length);
         try {
 			ServletInputStream si = request.getInputStream();
 	        while (true){

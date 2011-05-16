@@ -7,6 +7,7 @@
 	<xsl:param name="serverName"/>
 	<xsl:param name="mysql.db"/>
 	<xsl:param name="mysql.port"/>
+	<xsl:param name="antilock"/>
 
 	<xsl:template match="@url">
 		<xsl:attribute name="url">jdbc:mysql://localhost:<xsl:value-of select="$mysql.port"/>/<xsl:value-of select="$mysql.db"/>?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
@@ -22,6 +23,14 @@
 	
 	<xsl:template match="@prefix">
 		<xsl:attribute name="prefix"><xsl:value-of select="$serverName"/></xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="@antiJARLocking">
+		<xsl:attribute name="antiJARLocking"><xsl:value-of select="$antilock"/></xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="@antiResourceLocking">
+		<xsl:attribute name="antiResourceLocking"><xsl:value-of select="$antilock"/></xsl:attribute>
 	</xsl:template>
 	
 

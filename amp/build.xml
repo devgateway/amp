@@ -54,6 +54,13 @@
 	 		<isset property="mysql.port"/>                              
 	 	</not>
 	 </condition>
+	
+	<condition property="antilock" value="false">
+		 	<not>
+		 		<isset property="antilock"/>                              
+		 	</not>
+	</condition>
+	
 	<fail unless="mysql.db" message="mysql.db parameter is missing. This is required to build the DBCP datasource"/>
 
 	<property name="mysql.url" value="jdbc:mysql://localhost"/>
@@ -545,6 +552,7 @@
 		      	  <param name="mysql.db" expression="${mysql.db}"/>
 		  	  	  <param name="serverName" expression="${serverName}"/>
 		  	  	  <param name="mysql.port" expression="${mysql.port}"/>
+				  <param name="antilock" expression="${antilock}"/>
 		</xslt>
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>

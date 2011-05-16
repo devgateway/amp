@@ -10,6 +10,7 @@
 	<xsl:param name="dbName"/>
 	<xsl:param name="jdbc.driverClassName"/>
 	
+	<xsl:param name="antilock"/>
 
 	<xsl:template match="@url">
 		<xsl:attribute name="url">jdbc:<xsl:value-of select="$dbName"/>://localhost:<xsl:value-of select="$jdbc.port"/>/<xsl:value-of select="$jdbc.db"/>?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
@@ -25,6 +26,14 @@
 	
 	<xsl:template match="@prefix">
 		<xsl:attribute name="prefix"><xsl:value-of select="$serverName"/></xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="@antiJARLocking">
+		<xsl:attribute name="antiJARLocking"><xsl:value-of select="$antilock"/></xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="@antiResourceLocking">
+		<xsl:attribute name="antiResourceLocking"><xsl:value-of select="$antilock"/></xsl:attribute>
 	</xsl:template>
 	
 

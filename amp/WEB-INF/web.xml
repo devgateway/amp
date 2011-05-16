@@ -29,6 +29,11 @@
           <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
      </listener>
      
+    <context-param>
+		<param-name>log4jExposeWebAppRoot</param-name>
+		<param-value>false</param-value>
+	</context-param>
+     
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>
@@ -125,6 +130,9 @@
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
 		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>

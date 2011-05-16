@@ -56,6 +56,13 @@
 	 		<isset property="jdbc.port"/>                              
 	 	</not>
 	 </condition>
+	
+	<condition property="antilock" value="false">
+		 	<not>
+		 		<isset property="antilock"/>                              
+		 	</not>
+	</condition>
+	
 	<fail unless="jdbc.db" message="jdbc.db parameter is missing. This is required to build the DBCP datasource"/>
 
 	<property name="jdbc.url" value="jdbc:mysql://localhost"/>
@@ -553,6 +560,7 @@
 		  	  	  <param name="jdbc.port" expression="${jdbc.port}"/>
 				  <param name="dbName" expression="${dbName}"/>
 				  <param name="jdbc.driverClassName" expression="${jdbc.driverClassName}"/>
+				  <param name="antilock" expression="${antilock}"/>
 		</xslt>
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>

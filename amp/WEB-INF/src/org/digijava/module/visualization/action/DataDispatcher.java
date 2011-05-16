@@ -86,7 +86,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import sun.misc.BASE64Decoder;
 
 public class DataDispatcher extends DispatchAction {
-	private static Logger logger = Logger.getLogger(DbUtil.class);
+	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 	
 	//This class will return the XMLs or CSVs needed for each kind of graph
 	//It will use an instance of VisualizationFilter to handle all filters
@@ -1875,12 +1875,12 @@ public class DataDispatcher extends DispatchAction {
 		int i = 0;
         int k = 0;
         int maxLength = request.getContentLength();
-        logger.info("About to create image from swf");
         byte[] bytes = new byte[maxLength];
         String method = request.getParameter("method");
         String name = request.getParameter("name");
         String type = request.getParameter("type");
         int graph = Integer.valueOf(request.getParameter("graph"));
+        logger.info("About to create image from swf - " + " Type:" + type + " Graph:" + graph + " Length:" + bytes.length);
         try {
 			ServletInputStream si = request.getInputStream();
 	        while (true){

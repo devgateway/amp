@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
@@ -206,7 +207,7 @@ public class GetTeamActivitiesJSON
     			Collection col =  taForm.getAllActivities();
 
     			for (Iterator it = col.iterator(); it.hasNext();) {
-    				AmpActivity act = (AmpActivity) it.next();
+    				AmpActivityVersion act = (AmpActivityVersion) it.next();
     				JSONObject jact = new JSONObject();
     				jact.put("ID", act.getAmpActivityId());
     				jact.put("name", act.getName());

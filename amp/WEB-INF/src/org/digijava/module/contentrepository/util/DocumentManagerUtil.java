@@ -126,7 +126,7 @@ public class DocumentManagerUtil {
 	}
 	
 	public static Session getWriteSession(HttpServletRequest request) {
-		return getReadSession(request.getSession());
+		return getWriteSession(request.getSession());
 	}
 	
 	public static Session getWriteSession(HttpSession httpSession) {

@@ -39,16 +39,16 @@ package com.exportUtil
 			}
 			ohSnap = ImageSnapshot.captureImage(displayObject, 0, imgEnc);
 			var buffer:String = ImageSnapshot.encodeImageAsBase64(ohSnap);
-			saveImg(buffer, type, url, "inline","testImg","", graph); //aca apuntar al action que va a generar la imagen
+			saveImg(buffer, type, url, "inline","testImg","", graph); 
 		}
 		
 		private static function saveImg ( buffer:String, type:String='jpg', url:String='', downloadMethod:String='inline', fileName:String='generated', frame:String="_blank", graph:String='1' ):void {
 			var header:URLRequestHeader = new URLRequestHeader ("Content-type","application/octet-stream");
-			var myRequest:URLRequest = new URLRequest (url+'&name='+fileName+'&type='+type+'&method='+downloadMethod +'&graph='+graph);
+			var myRequest:URLRequest = new URLRequest (url+'&name='+fileName+'&type='+type+'&method='+downloadMethod +'&graph='+graph+'&length='+buffer.length);
 			myRequest.requestHeaders.push (header);
 			myRequest.method = URLRequestMethod.POST;
 			myRequest.data = buffer;
-			
+			Alert.show("Sending image for graph " + graph + " with length " + buffer.length);
 			var loader:URLLoader = new URLLoader();
 			
 			loader.load(myRequest);
